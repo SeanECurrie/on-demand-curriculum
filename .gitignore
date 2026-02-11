@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Sensitive data
+*.env
+credentials/
+secrets/
+
+# Raw scrape cache (large, regenerable)
+research/scrapes/raw/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
