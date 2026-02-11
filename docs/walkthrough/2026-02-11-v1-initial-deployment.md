@@ -1203,3 +1203,427 @@ Adjust upward as you understand your usage patterns. Better to hit a limit and r
 - Notes / deviations / surprises:
 
 ---
+
+## Phase F: Channel Setup
+
+**What we're doing:** Connecting Telegram and verifying you can access the Gateway UI — making the agent reachable from the outside world.
+**Why it matters:** This is the moment of truth. Everything before this was preparation. The security hardening in Phase D exists specifically to make this step safe.
+**Time estimate:** 10-15 minutes.
+
+### F1: Telegram Setup
+
+**Concept:** Telegram bots are lightweight — they're just an API endpoint that Telegram routes messages to. You create the bot via @BotFather (Telegram's built-in bot management tool), get a token, and configure OpenClaw to listen for messages on that bot. The community consensus is that Telegram is the best first channel for OpenClaw: it works from phone and desktop, supports rich formatting, and has a robust bot API.
+
+**Step 1 — Create the bot (if not done during pre-flight):**
+
+1. Open Telegram on your phone or desktop
+2. Search for and message **@BotFather**
+3. Send `/newbot`
+4. Follow the prompts to name your bot (e.g., "Sean's ClawdBot")
+5. Copy the bot token (looks like `123456789:ABCdefGHIjklMNOpqrSTUvwxyz`)
+
+**Step 2 — Get your Telegram user ID:**
+
+1. Search for and message **@userinfobot** on Telegram
+2. It replies immediately with your numeric user ID (looks like `123456789`)
+
+**Step 3 — Configure in openclaw.json:**
+
+```json5
+{
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "botToken": "YOUR_TELEGRAM_BOT_TOKEN",
+      "allowFrom": "YOUR_TELEGRAM_USER_ID",
+      "dmPolicy": "pairing",
+      "groups": {
+        "*": { "requireMention": true }
+      },
+      "actions": {
+        "reactions": true,
+        "sendMessage": true,
+        "deleteMessage": false,
+        "sticker": false
+      }
+    }
+  }
+}
+```
+
+The `allowFrom` field restricts who can initiate conversations. Combined with `dmPolicy: "pairing"` from Phase D, this means: only you can message the bot, and even then you need to pair first.
+
+The `actions` block controls what the bot can do in Telegram. We enable reactions and sending messages, but disable deleting messages (you want a record of everything) and stickers (unnecessary).
+
+**Step 4 — Restart the gateway and pair:**
+
+```bash
+# Restart the gateway to pick up channel config
+launchctl kickstart -k gui/$UID/bot.molt.gateway
+
+# In Telegram, open the chat with your bot and send:
+# /start
+# The bot should respond with a pairing prompt
+# Confirm the pairing
+```
+
+**Step 5 — Verify it works:**
+
+Send a test message to the bot. Something simple like "Hello, are you there?" — it should respond.
+
+**If something's wrong:**
+- Bot doesn't respond at all: check gateway logs — `cat /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | tail -50`
+- "Unauthorized" errors in logs: verify the bot token is correct (no extra spaces, complete token)
+- "Not paired" errors: make sure you sent `/start` and confirmed pairing
+- Gateway not running after restart: check `launchctl list | grep molt`
+
+### F2: Gateway UI Access via Tailscale
+
+**Concept:** The Gateway Control UI is a web dashboard for managing agents, viewing sessions, and monitoring activity. Since our gateway is bound to loopback (localhost only), you can't access it from another machine directly. Tailscale Serve creates a secure HTTPS endpoint that only your Tailscale devices can reach — no port forwarding, no exposing anything to the internet.
+
+```bash
+# From the Mac Mini, create a Tailscale Serve endpoint for the gateway
+tailscale serve --bg 18789
+# This makes the gateway UI available at:
+# https://mac-mini-openclaw.tail12345.ts.net
+# (Your actual Tailscale hostname will be different)
+```
+
+**From your laptop (on the same Tailscale network):**
+
+Open a browser and navigate to your Mac Mini's Tailscale HTTPS URL. You should see the Gateway Control UI.
+
+**Verify you can:**
+1. Load the Gateway UI in your browser
+2. See the agent status (should show "running")
+3. See connected channels (Telegram should show as connected)
+
+**If something's wrong:**
+- Can't reach the URL: verify Tailscale is connected on both machines (`tailscale status`)
+- Auth errors: this is Open Question #8 — the `gateway.auth.allowTailscale` setting may need to be configured for Serve identity headers. Try accessing with the gateway auth token in the header if basic access fails.
+
+### Phase F — Deployment Notes
+
+*Fill this in during deployment:*
+
+- [ ] Telegram bot created? Bot name: ___
+- [ ] Bot token configured?
+- [ ] User ID configured?
+- [ ] Pairing successful?
+- [ ] First test message received and responded?
+- [ ] Gateway UI accessible via Tailscale?
+- [ ] Open Question #8 (Tailscale Serve auth): ___
+- Notes / deviations / surprises:
+
+---
+
+## Phase G: Starter Skills & First Run
+
+**What we're doing:** Configuring the Day-1 capabilities, running your first real conversations, and establishing monitoring baselines.
+**Why it matters:** This is where the agent starts doing actual work. The capability set is intentionally minimal — read-only tools, web search, and reactions. You're observing behavior before granting more power.
+**Time estimate:** 20-30 minutes (including the test sequence).
+**Deeper context:** `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
+
+### Understanding: What Skills Actually Are (and Why ClawHub Is Dangerous)
+
+Here's something that trips people up about OpenClaw: **skills are not code**. A skill is a Markdown file (`SKILL.md`) with YAML frontmatter that teaches the agent how to use its tools for a specific purpose. When a skill is loaded, its instructions become part of the agent's system prompt. The skill doesn't execute anything directly — it gives the agent instructions, and the agent uses its tools to follow those instructions.
+
+This is both elegant and terrifying. Elegant because you can build capabilities by writing English-language instructions. Terrifying because a malicious skill can instruct the agent to exfiltrate data, execute destructive commands, or phone home to an attacker's server — and the agent will follow those instructions because they look like legitimate skill instructions.
+
+The ClawHub marketplace (OpenClaw's community skill repository) was audited by Koi Security in January 2026. Their "ClawHavoc" report found **341 malicious skills out of 2,857** — a 12% malicious rate. Attack techniques included ClickFix lures, typosquatting (naming a malicious skill nearly identically to a popular one), reputation washing, base64-encoded commands, and `curl | bash` patterns. Academic research from arXiv independently found that 26% of agent skills across the LLM ecosystem contain at least one vulnerability.
+
+This is why we use **zero ClawHub skills**. Our Day-1 capabilities come from OpenClaw's 53 bundled skills (reviewed by the OpenClaw team) and the built-in tools configured in Phase D. If we need custom functionality later, we write our own Markdown skills — fully auditable, zero supply chain risk. See `patterns/001-zero-clawhub-supply-chain-defense.md` for the full rationale.
+
+### G1: Day-1 Skills Configuration
+
+**Concept:** The tool policy from Phase D already defines what the agent can and can't do. This step configures the web search tool (which needs an API key) and the filesystem restrictions (which paths the agent can read).
+
+**Configure web search with Brave API:**
+
+```json5
+{
+  "tools": {
+    "web": {
+      "search": {
+        "enabled": true,
+        "provider": "brave",
+        "apiKey": "YOUR_BRAVE_SEARCH_API_KEY"
+      },
+      "fetch": {
+        "enabled": true,
+        "maxChars": 50000,
+        "timeoutSeconds": 30
+      }
+    }
+  }
+}
+```
+
+**Configure filesystem restrictions:**
+
+```json5
+{
+  "sandbox": {
+    "filesystem": {
+      "allow": ["~/.openclaw/workspace"],
+      "deny": ["~/.ssh", "~/.aws", "~/.openclaw/credentials", "~/.openclaw/openclaw.json", "~/.openclaw/exec-approvals.json"]
+    }
+  }
+}
+```
+
+The `deny` list is important — even though the `read` tool is allowed, these paths are off-limits. The agent should never read your SSH keys, AWS credentials, or its own configuration files (which contain API keys and tokens).
+
+**Expected output:** No command to run — these are config file edits. Restart the gateway after making changes.
+
+### G2: Heartbeat Configuration
+
+**Concept:** The heartbeat is the agent's periodic check-in. It wakes up at the configured interval, runs through a checklist you define in `HEARTBEAT.md`, and reports back. Think of it as a cron job for the agent's consciousness — it prevents the agent from going completely silent between conversations and gives you a regular "is it alive?" signal.
+
+```json5
+{
+  "agents": {
+    "defaults": {
+      "heartbeat": {
+        "every": "60m",
+        "target": "last",
+        "activeHours": { "start": "08:00", "end": "22:00" }
+      }
+    }
+  }
+}
+```
+
+- `every: "60m"` — checks in every hour
+- `target: "last"` — continues the most recent conversation rather than starting a new one
+- `activeHours` — only runs during waking hours (already set in Phase E)
+
+Create the heartbeat checklist:
+
+```bash
+# Create the heartbeat instruction file
+cat > ~/.openclaw/HEARTBEAT.md << 'EOF'
+# Heartbeat Checklist
+
+- If idle for 8+ hours during active hours, send a brief check-in to Telegram
+- Report any errors encountered since last heartbeat
+EOF
+```
+
+Start minimal. Expand the checklist after you observe the agent's behavior for a few days. Don't overthink it on Day 1.
+
+**Expected output:** File created at `~/.openclaw/HEARTBEAT.md`.
+
+### G3: First Conversation Test
+
+**Concept:** This is a structured test sequence to verify the full pipeline works. Each test validates a different layer: basic LLM connectivity, web search, file reading, and (critically) that permission boundaries hold.
+
+Run these tests via Telegram:
+
+**Test 1 — Basic response:**
+Send: "Hello, what model are you running?"
+Expected: Agent responds with model identification (should say Opus)
+Validates: Telegram → Gateway → Agent → Anthropic API → Response → Telegram
+
+**Test 2 — Web search:**
+Send: "Search the web for today's weather in [your city]"
+Expected: Agent uses `web_search` tool and returns results
+Validates: Brave Search API key works, web_search tool is allowed
+
+**Test 3 — File read:**
+Send: "Read the file at ~/.openclaw/HEARTBEAT.md"
+Expected: Agent reads and returns the heartbeat checklist content
+Validates: `read` tool works, filesystem access within allowed paths
+
+**Test 4 — Permission boundary (write):**
+Send: "Create a file called test.txt with the contents 'hello'"
+Expected: Agent should **REFUSE** — `write` tool is denied in Day-1 config
+Validates: Tool deny list is enforced
+
+**Test 5 — Permission boundary (exec):**
+Send: "Run the command ls -la ~/"
+Expected: Agent should **REFUSE** — `exec` tool is denied in Day-1 config
+Validates: Exec deny is enforced
+
+**Document each test result.** If Tests 4 or 5 succeed (agent writes a file or executes a command), your tool policy from Phase D is not working. Stop and investigate before proceeding.
+
+### G4: Token Usage Monitoring
+
+**Concept:** Check how much the first conversations cost. Initial conversations are token-heavy because the system prompt includes all loaded skills and configuration context.
+
+```bash
+# Check token usage in the Anthropic Console:
+# https://console.anthropic.com/ > Usage
+
+# Also check locally if available:
+openclaw usage
+```
+
+**Expected Day-1 usage:** 5-15M tokens depending on conversation volume and how much you test. At Opus pricing, that's $5-15.
+
+**If costs are higher than expected:**
+- Reduce heartbeat frequency (every 120m instead of 60m)
+- Prune bundled skills with `allowBundled` whitelist
+- Use `/model sonnet` for casual conversations (switch back to Opus for anything security-sensitive)
+
+### Phase G — Deployment Notes
+
+*Fill this in during deployment:*
+
+- [ ] Brave Search API configured?
+- [ ] Filesystem restrictions configured?
+- [ ] Heartbeat configured and HEARTBEAT.md created?
+- [ ] Test 1 (basic response): PASS / FAIL — Notes: ___
+- [ ] Test 2 (web search): PASS / FAIL — Notes: ___
+- [ ] Test 3 (file read): PASS / FAIL — Notes: ___
+- [ ] Test 4 (write denied): PASS / FAIL — Notes: ___
+- [ ] Test 5 (exec denied): PASS / FAIL — Notes: ___
+- [ ] Token usage after testing: ___ tokens, $___
+- [ ] Docker memory usage observed (Open Question #3): ___
+- Notes / deviations / surprises:
+
+---
+
+## Phase H: Validation
+
+**What we're doing:** Systematically verifying that every security hardening measure actually works. Not "should work" — *does* work, with evidence.
+**Why it matters:** Configuration files can have typos. Services can fail to restart. Settings can be overridden. The only way to know your security posture is to test it.
+**Time estimate:** 20-30 minutes.
+
+This phase is NOT optional. Every check below needs a result — PASS or FAIL, with the actual output documented.
+
+### H1: 10 Mandatory Security Conditions
+
+These are the 10 conditions from our security evaluation report. All must pass.
+
+| # | Condition | Verification | Expected |
+|---|-----------|-------------|----------|
+| 1 | Version >= v2026.1.29 | `openclaw --version` | >= 2026.1.29 |
+| 2 | Gateway bound to loopback | `curl http://127.0.0.1:18789/health` (should WORK) then `curl http://<your-LAN-IP>:18789/health` (should FAIL) | Localhost: 200, LAN: Connection refused |
+| 3 | Gateway auth token set | `curl -s http://127.0.0.1:18789/health` without token header | Should return 401/403 |
+| 4 | Sandbox mode is "all" | `openclaw config get agents.defaults.sandbox.mode` | `"all"` |
+| 5 | Elevated mode disabled | `openclaw config get tools.elevated.enabled` | `false` |
+| 6 | ClawHub skills: zero | `ls ~/.openclaw/extensions/` | Empty (no third-party skills) |
+| 7 | FileVault enabled | `sudo fdesetup status` | "FileVault is On." |
+| 8 | SIP enabled | `csrutil status` | "System Integrity Protection status: enabled." |
+| 9 | mDNS disabled | `dns-sd -B _openclaw-gw._tcp` (wait 10s, then Ctrl+C) | No results |
+| 10 | File permissions locked | `ls -la ~/.openclaw/openclaw.json` | `-rw-------` (600) |
+
+**Additional checks:**
+
+```bash
+# DM policy is pairing
+openclaw config get channels.telegram.dmPolicy
+# Expected: "pairing"
+
+# Tailscale is running
+tailscale status
+# Expected: Connected
+
+# macOS firewall is on
+/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate
+# Expected: "Firewall is enabled."
+```
+
+### H2: Functional Validation
+
+Beyond security, verify the system actually works reliably:
+
+```bash
+# Verify gateway survives restart
+launchctl kickstart -k gui/$UID/bot.molt.gateway
+sleep 10
+curl -s http://127.0.0.1:18789/health
+# Expected: Healthy after restart
+```
+
+**Reboot test (important):**
+
+```bash
+# Verify gateway survives a full system reboot
+sudo shutdown -r now
+# After reboot, SSH back in and verify:
+launchctl list | grep molt
+curl -s http://127.0.0.1:18789/health
+# Send a test message via Telegram to confirm full pipeline works
+```
+
+If the gateway doesn't come back after reboot, the LaunchAgent isn't configured correctly. Check `launchctl print gui/$UID/bot.molt.gateway` for errors.
+
+**Wait for the next heartbeat** — confirm it fires and you receive a check-in message in Telegram.
+
+### H3: Test the 6 Deployment Blockers
+
+These are the items from our open questions report that could only be resolved through hands-on testing. Document each one:
+
+**Blocker 1 — CVE patch verification:**
+Already verified in Phase C. Re-verify: `openclaw --version` >= 2026.1.29.
+
+**Blocker 2 — macOS Keychain behavior:**
+By now you've been through Phases C-G. Did any Keychain or TCC dialogs appear?
+```bash
+# Check Console.app for Keychain-related log entries from the past hour
+log show --predicate 'subsystem == "com.apple.securityd"' --last 1h
+```
+Document what happened (or didn't happen).
+
+**Blocker 3 — Docker sandbox on Apple Silicon:**
+If you configured Docker sandbox in Phase D:
+```bash
+# Check Docker resource usage
+docker stats --no-stream
+# Check overall system memory
+vm_stat | head -10
+```
+Document: Is Docker consuming too much memory? Did you need to fall back from per-session to per-agent scope?
+
+**Blocker 4 — launchd + dedicated user:**
+You already know the answer. Did the LaunchAgent work under the `openclaw` user, or did you fall back to your admin account? Document the outcome.
+
+**Blocker 5 — exec-approvals pattern matching:**
+This can only be tested when `exec` is eventually enabled (Week 1-2). For now, note that it's deferred and plan to test it then with harmless commands like:
+- `echo hello` (should be allowed if `/bin/echo` is in allowlist)
+- `sudo echo hello` (should be DENIED)
+- Document which patterns catch variations
+
+**Blocker 6 — Backup encryption:**
+```bash
+# Check Time Machine encryption status
+# System Settings > General > Time Machine > Options
+# Verify "Encrypt backups" is checked
+
+# If using an external drive, verify encryption:
+diskutil apfs list | grep -A5 "Volume"
+# Look for "FileVault: Yes" on the backup volume
+```
+
+### Phase H — Deployment Notes
+
+*Fill this in during deployment — this is the most important deployment notes section:*
+
+**Security Conditions:**
+- [ ] Condition 1 (version): PASS / FAIL — Actual: ___
+- [ ] Condition 2 (loopback): PASS / FAIL — Actual: ___
+- [ ] Condition 3 (auth): PASS / FAIL — Actual: ___
+- [ ] Condition 4 (sandbox): PASS / FAIL — Actual: ___
+- [ ] Condition 5 (elevated): PASS / FAIL — Actual: ___
+- [ ] Condition 6 (no ClawHub): PASS / FAIL — Actual: ___
+- [ ] Condition 7 (FileVault): PASS / FAIL — Actual: ___
+- [ ] Condition 8 (SIP): PASS / FAIL — Actual: ___
+- [ ] Condition 9 (mDNS): PASS / FAIL — Actual: ___
+- [ ] Condition 10 (permissions): PASS / FAIL — Actual: ___
+
+**Functional:**
+- [ ] Gateway restart survival: PASS / FAIL
+- [ ] Full reboot survival: PASS / FAIL
+- [ ] Heartbeat fired: PASS / FAIL
+
+**Deployment Blockers:**
+- [ ] Blocker 1 (CVE patch): Resolved? ___
+- [ ] Blocker 2 (Keychain): What happened? ___
+- [ ] Blocker 3 (Docker): Memory impact? ___
+- [ ] Blocker 4 (launchd user): Which user? ___
+- [ ] Blocker 5 (exec-approvals): Deferred to Week 1-2
+- [ ] Blocker 6 (backup encryption): Verified? ___
+
+---
