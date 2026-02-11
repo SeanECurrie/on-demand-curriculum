@@ -48,3 +48,5 @@ Lightweight breadcrumbs. What happened, when.
 | 2026-02-11 | Code review fix #2: Extracted 5 reusable patterns into patterns/ (was empty). Patterns: zero-ClawHub defense, per-agent routing, reader agent, webhook n8n, local GGUF embeddings. |
 | 2026-02-11 | Code review fix #3: Fixed broken source reference in community-findings.md — added inline source index. |
 | 2026-02-11 | Code review fix #4: Documented scrapes gap in CONTEXT.md. Added patterns section and known gaps section. |
+| 2026-02-11 | Brainstorming session (superpowers:brainstorming) for deployment walkthrough. 4 design questions answered: depth (explain concept + command), project relationship (part of research project), location (docs/walkthrough/), execution model (read-ahead guide + check-in). |
+| 2026-02-11 | Deployment walkthrough design document written: docs/plans/2026-02-11-deployment-walkthrough-design.md. 9 phases, educational framing, state-of-research snapshots, deployment notes sections. |
