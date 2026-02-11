@@ -5,85 +5,66 @@
 
 ## Current Status
 
-- **Phase:** 2 COMPLETE — ready for Phase 3 (Deployment Plan) pending Sean's review
-- **OpenClaw deployment:** NOT YET — research complete, deployment planning next. CRITICAL: Must deploy version >= 2026.1.29.
-- **Skill chain position:** brainstorming COMPLETED → writing-plans COMPLETED → subagent-driven-development IN PROGRESS (Phases 0-2 done, Phase 3 pending)
+- **Phase:** RESEARCH COMPLETE — all 3 phases done. Living system framework established.
+- **OpenClaw deployment:** NOT YET — deployment plan ready at `knowledge-base/04-deployment/mac-mini-deployment-plan.md`. Deploy when ready.
+- **CRITICAL:** Must deploy version >= 2026.1.29 (CVE patches).
 
-## Phase 1 Summary (100+ sources)
+## What This Project Produced
 
-- Context7 foundation + Bright Data sweeps across community, Mac Mini, landscape, security
-- 5 synthesis reports produced, 28 strategic insights
-- **Verdicts:** Mac Mini GO, OpenClaw GO with hardening, right category choice, stack = OpenClaw + n8n + Langfuse
-
-## Phase 2 Summary (Architecture Deep-Dive)
-
-**Architecture deep-dive (Task 13) — 903 lines, 16 sources:**
-- 7 of 7 open architecture questions resolved
-- Model routing is failover-based, NOT intelligent task-based routing
-- Local embeddings (GGUF) keep memory search on-device via M4 Neural Engine
-- Config "duplication" was legacy artifact — openclaw.json is single source of truth
-- Sub-agents have limited context (AGENTS.md + TOOLS.md only), max 8 concurrent
-- Webhook API provides clean n8n integration path
-- Elevated mode should be replaced by per-agent routing architecture
-
-**Skills & integrations (Task 14) — 1,346 lines across 2 files:**
-- Skills are Markdown instructions, not code — tool policy IS the security boundary
-- Lobster runtime provides deterministic workflows with approval gates
-- Heartbeat + Cron are complementary scheduling mechanisms
-- n8n integration confirmed via webhook API (no custom code needed)
-- Phased starter roadmap: 7 Day-1 items → 4 Week 1-2 → 4 Week 3-4 → 5 do-not-enable
-- 5 custom skills to build (zero supply chain risk)
-
-## What Exists
-
-### Knowledge Base (7 buckets)
-- `01-landscape/` — Competitive landscape (16 sources)
-- `02-architecture/` — Official docs + adjacent tech + **deep-dive findings** (903 lines)
-- `03-security/` — Security posture analysis (48+ sources, 798 lines)
-- `04-deployment/` — macOS official docs + Mac Mini community findings (42 sources)
-- `05-skills-and-integrations/` — **Skill system reference** (832 lines) + **Starter skills roadmap** (514 lines)
-- `06-community-intelligence/` — Community findings (41 sources)
-- `07-operations/` — Empty (Phase 3 target)
+### Knowledge Base (all 7 buckets populated)
+| Bucket | Content | Lines |
+|--------|---------|-------|
+| `01-landscape/` | Competitive landscape (16 sources) | — |
+| `02-architecture/` | Official docs + adjacent tech + deep-dive findings | 903 |
+| `03-security/` | Security posture analysis (48+ sources) | 798 |
+| `04-deployment/` | macOS official + community findings + **deployment plan** | 1,454 |
+| `05-skills-and-integrations/` | Skill system reference + starter roadmap | 1,346 |
+| `06-community-intelligence/` | Community findings (41 sources) | — |
+| `07-operations/` | Operational runbook template + research cadence | 2,076 |
 
 ### Research Reports (Phase 1)
-- `01-landscape-report.md` — AI agent landscape
-- `02-architecture-reference.md` — Architecture reference
-- `03-mac-mini-feasibility.md` — Mac Mini feasibility (GO)
-- `04-security-evaluation.md` — Security evaluation (GO with hardening)
-- `05-open-questions.md` — 30 unresolved questions, 6 deployment blockers
+- `01-landscape-report.md` — OpenClaw is right category choice
+- `02-architecture-reference.md` — Architecture reference (docs + reality)
+- `03-mac-mini-feasibility.md` — Mac Mini M4 GO
+- `04-security-evaluation.md` — GO with mandatory hardening
+- `05-open-questions.md` — 30 questions, 6 deployment blockers
 
-## What's Next
-
-1. **Phase 2 checkpoint with Sean** — present architecture and skills findings
-2. **Phase 3: Deployment Plan** (Tasks 16-18)
-   - Task 16: Create Mac Mini deployment plan (synthesize all research)
-   - Task 17: Execute deployment (when approved — last gate before touching Mac Mini)
-   - Task 18: Establish living system (operational runbook, research cadence)
-
-## Open Questions (Deployment Blockers — Updated)
-
-1. CVE-2026-25253 patch verification — MUST confirm version >= 2026.1.29
-2. macOS Keychain access behavior — investigate during onboarding
-3. Docker sandbox on Apple Silicon — test if VM-based containers work cleanly on M4
-4. launchd + dedicated non-admin user interaction — verify this works
-5. exec-approvals pattern matching — test denylist against command variations
-6. Backup encryption posture — confirm Time Machine encryption
-7. (NEW) Resource consumption with Docker sandbox on 16GB M4 — main RAM consumer
-8. (NEW) Tailscale Serve + OpenClaw auth header integration on macOS
+### Key Verdicts
+- **Mac Mini:** GO — community-validated, overpowered for this use case
+- **OpenClaw:** GO with mandatory hardening — 2 critical CVEs, 12% malicious skills ecosystem
+- **Landscape:** Right category choice — no true competitor for self-hosted agent product
+- **Stack:** OpenClaw + n8n (deterministic workflows) + Langfuse (observability)
 
 ## Key Decisions
 
-- OpenClaw as primary tool (landscape confirms right category)
-- M4 Mac Mini deployment (community-validated, Tailscale configured)
-- Zero ClawHub skills — custom skills only (Markdown, zero supply chain risk)
-- Elevated mode DISABLED — use per-agent routing instead
-- Model routing via per-agent assignment + routing bindings (not automatic)
+- Zero ClawHub skills — custom Markdown skills only
+- Elevated mode DISABLED — per-agent routing instead
+- Model routing via per-agent assignment (failover-based, not intelligent)
 - n8n integration via webhook API (POST /hooks/<path>)
-- Local embeddings via GGUF for on-device memory search
+- Local GGUF embeddings for on-device memory search
+- Security hardening BEFORE channel connection
+
+## Open Questions (Resolve During Deployment)
+
+1. CVE-2026-25253 patch verification — confirm version >= 2026.1.29
+2. macOS Keychain access behavior — document during onboarding
+3. Docker sandbox on Apple Silicon — test on M4
+4. launchd + dedicated non-admin user — verify works
+5. exec-approvals pattern matching — test denylist
+6. Time Machine encryption — confirm enabled
+7. Docker sandbox resource consumption on 16GB
+8. Tailscale Serve + OpenClaw auth header integration
+
+## How to Use This Project
+
+1. **Ready to deploy?** Follow `knowledge-base/04-deployment/mac-mini-deployment-plan.md`
+2. **Need to check security?** Read `knowledge-base/03-security/security-posture-analysis.md`
+3. **Choosing skills?** Read `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
+4. **Staying current?** Follow `knowledge-base/07-operations/research-cadence.md`
+5. **Something breaks?** Check `knowledge-base/07-operations/operational-runbook-template.md`
 
 ## Infrastructure
 
 - **Target hardware:** Apple M4 Mac Mini, 16GB RAM
 - **Networking:** Tailscale VPN between Mac Minis + laptop, SSH configured
-- **Current state:** Minimal software, ready to clean/configure
-- **Pre-deployment:** macOS gotcha checklist, security hardening, UPS recommended ($30-50)
+- **Current state:** Minimal software, ready to deploy when Sean is ready

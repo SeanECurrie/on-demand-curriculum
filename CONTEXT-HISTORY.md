@@ -61,3 +61,24 @@
 - Local GGUF embeddings for on-device memory search
 - n8n integration via webhook API
 - Model routing via per-agent assignment with routing bindings
+
+## 2026-02-11 — Phase 3 Complete (Deployment Plan + Living System Framework)
+
+### Deployment Plan (Task 16) — 1,454 lines
+- Step-by-step Mac Mini deployment: 9 phases (A through I), 35+ discrete steps
+- Every step has specific commands, expected outcomes, and source citations
+- Exact JSON config snippets from security analysis embedded
+- Security hardening before channel connection — non-negotiable
+- 10 mandatory security conditions addressed
+- 6 deployment blockers flagged inline for hands-on testing
+- Tim's VPS approach compared at each divergence point
+
+### Living System Framework
+- Research cadence: weekly (security watch), biweekly (community sweep), monthly (deep sweep)
+- Trigger-based research for CVEs, new versions, incidents
+- Operational runbook template: service management, monitoring, backup, emergency procedures, troubleshooting
+
+### Scope Correction
+- Tasks 17 (execute deployment) and 18 (post-deployment) were correctly identified as beyond research project scope
+- Deployment execution is a separate activity Sean will do when ready, following the plan
+- Research project deliverables are COMPLETE

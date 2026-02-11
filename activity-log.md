@@ -18,6 +18,7 @@ Lightweight breadcrumbs. What happened, when.
 | 2026-02-11 | Context7: Queried OpenClaw security docs, sandboxing configuration, exec-approvals. Full official security page scraped. |
 | 2026-02-11 | Bright Data scrapes: SOCRadar CVE-2026-25253 analysis, Semgrep security engineer's cheat sheet, Kaspersky vulnerability analysis, knolli.ai exec-approvals docs, official security docs. |
 | 2026-02-11 | CRITICAL FINDING: Two CVEs (CVE-2026-25253, CVE-2026-24763) discovered, both patched in v2026.1.29. Must deploy patched version. |
+| 2026-02-11 | Operational templates created: research-cadence.md (periodic research sweeps, staleness rules, trigger-based research, tools reference) and operational-runbook-template.md (service management, updates, skills, monitoring, backup/recovery, emergency procedures, troubleshooting). Both in knowledge-base/07-operations/. |
 | 2026-02-11 | CRITICAL FINDING: ClawHub skills ecosystem 12% malicious (341/2857 per Koi Security). Zero ClawHub skills policy recommended. |
 | 2026-02-11 | Security posture analysis written: knowledge-base/03-security/security-posture-analysis.md |
 | 2026-02-11 | Intelligence log updated with 11 strategic security insights. |
@@ -37,3 +38,7 @@ Lightweight breadcrumbs. What happened, when.
 | 2026-02-11 | Recommended starter skills written: knowledge-base/05-skills-and-integrations/recommended-starter-skills.md. 4-week phased roadmap: 7 Day-1 items, 4 Week 1-2 items, 4 Week 3-4 items, 5 do-not-enable items. 5 custom skills to build. Cost considerations included. |
 | 2026-02-11 | Intelligence log updated with 8 strategic insights from skill system research. |
 | 2026-02-11 | **PHASE 2 COMPLETE.** Tasks 13-15 done. Architecture deep-dive (903 lines) + skills reference (832 lines) + starter roadmap (514 lines). 15 new intelligence entries. All committed. Ready for Phase 3. |
+| 2026-02-11 | Phase 3 Task 16: Mac Mini deployment plan written. Synthesized all Phase 1-2 research (130+ sources) into step-by-step deployment plan: 9 phases (A-I), 35+ discrete steps, exact commands at every step, JSON config snippets from security analysis, 6 deployment blockers flagged inline for testing. File: knowledge-base/04-deployment/mac-mini-deployment-plan.md. |
+| 2026-02-11 | Phase 3: Research cadence framework written (knowledge-base/07-operations/research-cadence.md). Weekly/biweekly/monthly sweep schedules + trigger-based research. |
+| 2026-02-11 | Phase 3: Operational runbook template written (knowledge-base/07-operations/operational-runbook-template.md). Service management, monitoring, backup, emergency procedures. |
+| 2026-02-11 | **RESEARCH PROJECT COMPLETE.** All 3 phases done. 7 KB buckets populated. 5 reports. 45+ intelligence entries. 17 git commits. Living system framework established. Deployment plan ready for when Sean decides to deploy. |
