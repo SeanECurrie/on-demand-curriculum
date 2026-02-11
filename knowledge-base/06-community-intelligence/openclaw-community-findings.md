@@ -120,4 +120,19 @@ YouTube creator documents security vulnerabilities including sleeper agents, ski
 
 ## Full Source Index
 
-See `research/sources.md` for complete URL list with credibility tiers (41 sources documented).
+See `research/sources.md` for consolidated source tracking across all research phases.
+
+Key sources for this document (41 sources across Reddit, official docs, security guides, blogs, YouTube, LinkedIn):
+
+| Source | Type | Tier | Key Finding |
+|--------|------|------|-------------|
+| r/LocalLLM (140+ comments) | Reddit | 4 | "J.A.R.V.I.S." experience, "vibe-coded" codebase, strong model required |
+| r/selfhosted (130+ comments) | Reddit | 4 | "Agentic Home Assistant", TypeScript/Node.js confirmed |
+| r/AgentsOfAI (80+ comments) | Reddit | 4 | "Root-level shell via chat" security warning |
+| r/ClaudeAI (60+ comments) | Reddit | 4 | macOS Keychain access dialogs — user uninstalled |
+| nxcode.io | Tech blog | 2 | Branding confusion: Clawdbot → Moltbot → OpenClaw |
+| lumadock.com | Security blog | 2 | Prompt injection via content agent reads |
+| Auth0 | Security guide | 2 | "Enable the sandbox (padded room)" |
+| hostinger.com | Tutorial | 3 | Gateway exposed without auth by default |
+| YouTube (Wes Roth) | Video | 5 | Sleeper agent / skill manipulation attacks |
+| LinkedIn (anonymous reviewer) | Social | 4 | "Developer-grade experiment packaged as product" |

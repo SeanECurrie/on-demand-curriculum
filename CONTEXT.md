@@ -55,6 +55,20 @@
 7. Docker sandbox resource consumption on 16GB
 8. Tailscale Serve + OpenClaw auth header integration
 
+## Reusable Patterns (extracted from research)
+
+5 patterns in `patterns/`:
+1. `001-zero-clawhub-supply-chain-defense.md` — Zero external skills policy
+2. `002-per-agent-routing-over-elevated-mode.md` — Agent routing > elevated mode
+3. `003-reader-agent-prompt-injection-defense.md` — Read-only agent for untrusted content
+4. `004-webhook-n8n-integration.md` — n8n ↔ OpenClaw via webhook API
+5. `005-local-gguf-embeddings.md` — On-device memory search via M4 Neural Engine
+
+## Known Gaps
+
+- **`research/scrapes/` is empty.** Raw Bright Data outputs were consumed in real-time during research sessions but not persisted to disk. Individual KB files include source URLs that can be re-scraped if needed. Future research cycles should save raw scrape outputs before synthesizing.
+- **Community findings source references.** The 41 community intelligence sources are referenced inline throughout the document but lack full URL attribution for most entries. Key sources were added in the inline index on 2026-02-11.
+
 ## How to Use This Project
 
 1. **Ready to deploy?** Follow `knowledge-base/04-deployment/mac-mini-deployment-plan.md`

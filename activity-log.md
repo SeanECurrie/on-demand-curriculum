@@ -42,3 +42,9 @@ Lightweight breadcrumbs. What happened, when.
 | 2026-02-11 | Phase 3: Research cadence framework written (knowledge-base/07-operations/research-cadence.md). Weekly/biweekly/monthly sweep schedules + trigger-based research. |
 | 2026-02-11 | Phase 3: Operational runbook template written (knowledge-base/07-operations/operational-runbook-template.md). Service management, monitoring, backup, emergency procedures. |
 | 2026-02-11 | **RESEARCH PROJECT COMPLETE.** All 3 phases done. 7 KB buckets populated. 5 reports. 45+ intelligence entries. 17 git commits. Living system framework established. Deployment plan ready for when Sean decides to deploy. |
+| 2026-02-11 | Invoked superpowers:verification-before-completion. Line-by-line check against design document. 5 issues identified (3 bookkeeping, 2 process deviations). |
+| 2026-02-11 | Invoked superpowers:requesting-code-review. Full project review (14 commits, 22 files, 9,298 lines). Verdict: strong execution, zero critical issues, 3 important bookkeeping gaps. |
+| 2026-02-11 | Code review fix #1: Consolidated 130+ sources from KB files into research/sources.md (was 1 entry). |
+| 2026-02-11 | Code review fix #2: Extracted 5 reusable patterns into patterns/ (was empty). Patterns: zero-ClawHub defense, per-agent routing, reader agent, webhook n8n, local GGUF embeddings. |
+| 2026-02-11 | Code review fix #3: Fixed broken source reference in community-findings.md — added inline source index. |
+| 2026-02-11 | Code review fix #4: Documented scrapes gap in CONTEXT.md. Added patterns section and known gaps section. |
