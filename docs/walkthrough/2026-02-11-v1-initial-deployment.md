@@ -1627,3 +1627,344 @@ diskutil apfs list | grep -A5 "Volume"
 - [ ] Blocker 6 (backup encryption): Verified? ___
 
 ---
+
+## Phase I: Post-Deployment
+
+**What we're doing:** Setting up ongoing monitoring, backups, and documentation so the system stays healthy after Day 1.
+**Why it matters:** Deployment isn't the finish line — it's the starting line. An unmonitored agent with stale security is worse than no agent.
+**Time estimate:** 15-20 minutes.
+
+### I1: Monitoring Setup
+
+**Concept:** Monitoring is manual for Day 1. You're building habits, not automating yet. These are the commands to run regularly to check that everything is healthy.
+
+**Daily checks:**
+
+```bash
+# Is the gateway running?
+launchctl list | grep molt
+
+# Is it healthy?
+curl -s http://127.0.0.1:18789/health
+
+# Anything weird in today's logs?
+cat /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | tail -100
+
+# Any unexpected tool calls?
+grep -i "tool" /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | tail -20
+```
+
+**Weekly checks:**
+
+```bash
+# Full security audit
+openclaw security audit --deep
+
+# Any OpenClaw updates available?
+npm outdated -g openclaw
+
+# Review session transcripts for anomalies
+ls -la ~/.openclaw/agents/*/sessions/*.jsonl
+
+# How much disk space is OpenClaw using?
+du -sh ~/.openclaw/
+```
+
+**Monthly checks:**
+
+```bash
+# Rotate the gateway auth token
+openclaw doctor --generate-gateway-token
+# Update the token in openclaw.json after rotation
+
+# Check for new CVEs
+# Search: https://nvd.nist.gov/vuln/search?query=openclaw
+
+# Review old session transcripts (keep last 30 days)
+find ~/.openclaw/agents/*/sessions/ -name "*.jsonl" -mtime +30 -exec ls -la {} \;
+# Review before deleting — do NOT auto-delete without checking
+```
+
+You don't need to memorize these — they're also in the operational runbook template (`knowledge-base/07-operations/operational-runbook-template.md`) and the research cadence (`knowledge-base/07-operations/research-cadence.md`).
+
+### I2: Backups
+
+**Concept:** The `~/.openclaw/` directory contains everything — credentials, config, session history, agent data. Losing it means starting from scratch. We use two backup strategies: Time Machine for everything (encrypted), and git for configuration files only (no secrets).
+
+**Strategy 1 — Time Machine (encrypted):**
+
+```bash
+# Verify Time Machine is configured with encryption
+# System Settings > General > Time Machine
+# Ensure "Encrypt backups" is checked
+# Connect an external drive or network backup destination
+```
+
+Time Machine captures everything, including credentials and session transcripts. The encryption ensures that a stolen backup drive doesn't expose your API keys and chat history.
+
+**Strategy 2 — Configuration as code (git):**
+
+```bash
+# Create a git repo for OpenClaw configuration (NOT credentials)
+mkdir -p ~/openclaw-config-backup && cd ~/openclaw-config-backup
+git init
+
+# Create a backup script
+cat > backup-config.sh << 'BACKUP_EOF'
+#!/bin/bash
+# Backup OpenClaw configuration (excluding credentials and session data)
+BACKUP_DIR="$HOME/openclaw-config-backup"
+cp ~/.openclaw/openclaw.json "$BACKUP_DIR/"
+cp ~/.openclaw/exec-approvals.json "$BACKUP_DIR/"
+cp ~/.openclaw/HEARTBEAT.md "$BACKUP_DIR/" 2>/dev/null
+mkdir -p "$BACKUP_DIR/agents"
+# Copy agent configs (not session data)
+find ~/.openclaw/agents -name "*.json" -not -path "*/sessions/*" -exec cp {} "$BACKUP_DIR/agents/" \;
+cd "$BACKUP_DIR"
+git add -A
+git commit -m "Config backup $(date +%Y-%m-%d-%H%M)"
+BACKUP_EOF
+chmod +x backup-config.sh
+
+# Run it after any config change
+./backup-config.sh
+```
+
+**What goes where:**
+- **Time Machine:** Everything (encrypted, includes credentials and transcripts)
+- **Git repo:** Configuration only (no API keys, no tokens, no session data)
+- **Neither:** Never put API keys in a git repo, even a local one
+
+### I3: Document What Actually Happened
+
+**Concept:** This walkthrough was written based on research. Now you've done the actual deployment. The gap between "what we planned" and "what actually happened" is the most valuable intelligence the project can capture.
+
+After completing all phases, take 10 minutes to write a brief post-deployment summary. The key things to capture:
+
+1. **Actual version installed** (and was it >= 2026.1.29?)
+2. **Which open questions were resolved** (and what were the answers?)
+3. **Any unexpected issues** (things the research didn't predict)
+4. **TCC/Keychain dialogs observed** (for Open Question #2)
+5. **Docker sandbox: used or skipped** (and why)
+6. **Actual resource usage** (RAM, CPU, disk)
+7. **Time to complete deployment** (vs our 2-3 hour estimate)
+8. **Deviations from this walkthrough** (what you did differently and why)
+
+This goes into `knowledge-base/07-operations/post-deployment-findings.md` — feeding back into the research knowledge base.
+
+### Phase I — Deployment Notes
+
+*Fill this in during deployment:*
+
+- [ ] Daily monitoring commands tested?
+- [ ] Weekly security audit tested?
+- [ ] Time Machine configured and encrypting?
+- [ ] Config backup git repo created?
+- [ ] Post-deployment findings documented?
+- Notes / deviations / surprises:
+
+---
+
+## After Deployment
+
+### Verification Checklist
+
+One final review — confirm all of these before considering deployment "done":
+
+- [ ] OpenClaw version >= 2026.1.29
+- [ ] Non-admin user running gateway (or documented fallback)
+- [ ] FileVault enabled and encrypting
+- [ ] exec-approvals.json configured with denylist
+- [ ] Sandbox mode "all" with Docker (or documented fallback)
+- [ ] Elevated mode disabled
+- [ ] All 10 mandatory security conditions passed
+- [ ] All 6 deployment blockers tested and documented
+- [ ] First conversation completed successfully
+- [ ] Gateway survives reboot
+- [ ] Heartbeat fires on schedule
+- [ ] Monitoring commands work
+- [ ] Backups configured
+
+### Report Back
+
+When deployment is done (or stuck), check back in with:
+
+- **What phase you completed through** (A-I, or where you stopped)
+- **Any deviations from the walkthrough** (what you did differently)
+- **Open questions that were resolved** (and the answers)
+- **New questions that came up** (things we didn't anticipate)
+- **Anything that surprised you**
+
+We'll update the project together:
+- `activity-log.md` — what happened
+- `intelligence-log.md` — what we learned
+- `CONTEXT.md` — current state
+- This walkthrough — annotate with "what actually happened"
+- `knowledge-base/07-operations/post-deployment-findings.md` — detailed findings
+
+The living system continues.
+
+---
+
+## Appendix
+
+### Key File Locations
+
+| File | Purpose |
+|------|---------|
+| `~/.openclaw/openclaw.json` | Main configuration (gateway, agents, channels, tools, sandbox) |
+| `~/.openclaw/exec-approvals.json` | Command execution allowlist/denylist |
+| `~/.openclaw/HEARTBEAT.md` | Heartbeat checklist |
+| `~/.openclaw/credentials/` | API keys and OAuth tokens |
+| `~/.openclaw/agents/<agentId>/` | Per-agent configuration and state |
+| `~/.openclaw/agents/<agentId>/sessions/*.jsonl` | Session transcripts (sensitive) |
+| `~/.openclaw/extensions/` | Installed skills/extensions (should be empty) |
+| `~/.openclaw/sandboxes/` | Sandbox workspace data |
+| `~/Library/LaunchAgents/bot.molt.gateway.plist` | launchd service configuration |
+| `/tmp/openclaw/openclaw-YYYY-MM-DD.log` | Gateway log files |
+| `/etc/pf.anchors/openclaw.rules` | macOS firewall rules |
+
+### Key Commands Reference
+
+```bash
+# Gateway management
+openclaw gateway install              # Install LaunchAgent
+openclaw gateway uninstall            # Remove LaunchAgent
+launchctl list | grep molt            # Check if running
+launchctl kickstart -k gui/$UID/bot.molt.gateway  # Restart gateway
+launchctl bootout gui/$UID/bot.molt.gateway        # Stop gateway
+
+# Security
+openclaw security audit               # Basic security audit
+openclaw security audit --deep         # Deep audit with live probes
+openclaw security audit --fix          # Auto-fix common issues
+openclaw --version                     # Check installed version
+
+# Configuration
+openclaw config get <key>              # Read a config value
+openclaw config set <key> <value>      # Set a config value
+openclaw doctor                        # Health check
+openclaw doctor --generate-gateway-token  # Generate new auth token
+
+# Monitoring
+openclaw usage                         # Token usage statistics
+openclaw skills list                   # List installed skills
+
+# In-conversation
+/model <model-name>                    # Switch model during conversation
+```
+
+### Emergency Procedures
+
+**If compromise is suspected:**
+
+```bash
+# 1. CONTAIN — Stop the gateway immediately
+launchctl bootout gui/$UID/bot.molt.gateway
+
+# 2. FREEZE — Disable all inbound surfaces
+# Edit ~/.openclaw/openclaw.json:
+# Set all channel configs to: "enabled": false
+
+# 3. ROTATE — Assume ALL secrets are compromised
+# - Regenerate gateway auth token (openclaw doctor --generate-gateway-token)
+# - Revoke and regenerate Anthropic API key (console.anthropic.com)
+# - Revoke and regenerate Telegram bot token (@BotFather > /revoke)
+# - Revoke and regenerate Brave Search API key
+# - Change Tailscale auth keys if applicable
+
+# 4. AUDIT
+# Check logs:
+cat /tmp/openclaw/openclaw-*.log | grep -i "error\|warn\|exec\|tool"
+# Review recent session transcripts:
+ls -lt ~/.openclaw/agents/*/sessions/*.jsonl | head -10
+# Check for unauthorized config changes:
+diff ~/.openclaw/openclaw.json ~/openclaw-config-backup/openclaw.json
+# Check for unexpected extensions:
+ls -la ~/.openclaw/extensions/
+
+# 5. DOCUMENT
+# Record: timestamp, OS version, OpenClaw version, what happened,
+# what the attacker sent, what the agent did, whether gateway was
+# exposed beyond loopback
+```
+
+**If gateway won't start after reboot:**
+
+```bash
+# Check if LaunchAgent plist exists
+ls -la ~/Library/LaunchAgents/bot.molt.gateway.plist
+
+# Check launchd error
+launchctl print gui/$UID/bot.molt.gateway
+
+# Try manual start
+openclaw gateway start
+
+# Check logs for errors
+cat /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | tail -50
+
+# Nuclear option: reinstall LaunchAgent
+openclaw gateway uninstall && openclaw gateway install
+```
+
+**If locked out of the Mac Mini:**
+
+```bash
+# From your primary Mac (via Tailscale SSH):
+ssh openclaw@<mac-mini-tailscale-ip>
+
+# If Tailscale SSH fails:
+# 1. Physical access: connect keyboard/monitor
+# 2. Recovery mode: hold power button on boot > Terminal
+# 3. Last resort: reinstall macOS (FileVault recovery key needed)
+```
+
+### Week 1-2 Roadmap
+
+This is NOT part of Day-1 deployment. These are the next steps after Day 1 is validated and stable.
+
+| Day | Action | Prerequisite |
+|-----|--------|-------------|
+| Day 2-3 | Monitor logs, token usage, resource consumption | Day 1 complete |
+| Day 3-4 | Enable `exec` tool with strict exec-approvals allowlist | Comfortable with agent behavior |
+| Day 4-5 | Enable `write` and `edit` tools with filesystem restrictions | exec working correctly |
+| Day 5-7 | Configure first cron job (morning briefing) | write tools working |
+| Week 1 | Enable memory plugin (LanceDB) | Comfortable with tool behavior |
+| Week 1 | Build first custom skill (personal briefing) | Cron + write working |
+| Week 2 | Configure model routing (Sonnet for heartbeat, Opus for work) | Cost data from Week 1 |
+| Week 2 | Build research assistant custom skill | First custom skill working |
+| Week 2 | Evaluate Tailscale Serve integration (Open Question #8) | Basic deployment stable |
+| Week 3+ | Lobster workflow runtime, webhooks, n8n integration | All Week 1-2 items stable |
+
+### What This Walkthrough Does NOT Cover
+
+These are deferred to future phases:
+- **n8n installation** — Deterministic workflow automation (Phase 2 of the stack)
+- **Langfuse** — LLM observability (Phase 3 of the stack)
+- **Custom skill development** — Writing your own SKILL.md files
+- **Multi-agent architecture** — Multiple agents with different permissions
+- **Reader agent pattern** — Advanced prompt injection defense for untrusted content
+- **Browser automation** — Indefinitely deferred due to critical attack surface
+- **ClawShield** — Third-party hardening tool (test after base deployment is stable)
+- **nono kernel sandbox** — Likely Linux-only (uses Landlock LSM)
+
+### Sources That Informed This Walkthrough
+
+This walkthrough synthesizes findings from 130+ sources across 4 credibility tiers. Full source index: `research/sources.md`
+
+| Key Source | Contribution |
+|-----------|-------------|
+| `knowledge-base/04-deployment/mac-mini-deployment-plan.md` | Every command, expected outcome, and citation |
+| `knowledge-base/03-security/security-posture-analysis.md` | Security rationale for every hardening step |
+| `knowledge-base/02-architecture/deep-dive-findings.md` | Architecture concepts for Understanding sections |
+| `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md` | Phased capability roadmap |
+| `patterns/` | Reusable security and architecture patterns |
+| `research/reports/05-open-questions.md` | The 6 deployment blockers |
+| `operator/sean-currie-profile.md` | Infrastructure details and context |
+
+---
+
+**End of Walkthrough v1**
+
+*Written 2026-02-11. Based on ClawdBot Research Project — 130+ sources, 3 research phases, 52 intelligence log entries. The research project continues as a living system.*

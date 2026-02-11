@@ -5,8 +5,9 @@
 
 ## Current Status
 
-- **Phase:** RESEARCH COMPLETE — all 3 phases done. Living system framework established.
-- **OpenClaw deployment:** NOT YET — deployment plan ready at `knowledge-base/04-deployment/mac-mini-deployment-plan.md`. Deploy when ready.
+- **Phase:** DEPLOYMENT WALKTHROUGH READY — research complete, educational walkthrough written.
+- **OpenClaw deployment:** NOT YET — walkthrough at `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (1,970 lines, 9 phases A-I).
+- **Deployment plan (reference):** `knowledge-base/04-deployment/mac-mini-deployment-plan.md`
 - **CRITICAL:** Must deploy version >= 2026.1.29 (CVE patches).
 
 ## What This Project Produced
@@ -71,11 +72,12 @@
 
 ## How to Use This Project
 
-1. **Ready to deploy?** Follow `knowledge-base/04-deployment/mac-mini-deployment-plan.md`
-2. **Need to check security?** Read `knowledge-base/03-security/security-posture-analysis.md`
-3. **Choosing skills?** Read `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
-4. **Staying current?** Follow `knowledge-base/07-operations/research-cadence.md`
-5. **Something breaks?** Check `knowledge-base/07-operations/operational-runbook-template.md`
+1. **Ready to deploy?** Follow `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (educational walkthrough with concepts + commands)
+2. **Need the raw reference?** `knowledge-base/04-deployment/mac-mini-deployment-plan.md` (commands-only, no educational context)
+3. **Need to check security?** Read `knowledge-base/03-security/security-posture-analysis.md`
+4. **Choosing skills?** Read `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
+5. **Staying current?** Follow `knowledge-base/07-operations/research-cadence.md`
+6. **Something breaks?** Check `knowledge-base/07-operations/operational-runbook-template.md`
 
 ## Infrastructure
 

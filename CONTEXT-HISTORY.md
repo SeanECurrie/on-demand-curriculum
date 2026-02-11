@@ -106,3 +106,29 @@
 - `patterns/`: 5 patterns extracted (zero-ClawHub, per-agent routing, reader agent, webhook n8n, local GGUF)
 - `community-findings.md`: Inline source index added to replace broken reference
 - `CONTEXT.md`: Known gaps documented, patterns section added
+
+## 2026-02-11 — Deployment Walkthrough Written
+
+### Brainstorming (superpowers:brainstorming)
+- 4 design questions answered:
+  - Tutorial depth: "Explain the concept, then the command" with deeper dives on important topics
+  - Project relationship: Part of the existing research project (not separate)
+  - Content location: `docs/walkthrough/` with timestamped versions and state-of-research snapshots
+  - Execution model: Read-ahead guide + check-in during deployment
+- Design document: `docs/plans/2026-02-11-deployment-walkthrough-design.md`
+
+### Implementation (superpowers:writing-plans + superpowers:executing-plans)
+- 11 tasks across 4 batches, executed sequentially
+- Phase D (security hardening, 454 lines) delegated to subagent for efficiency
+- Total walkthrough: 1,970 lines at `docs/walkthrough/2026-02-11-v1-initial-deployment.md`
+
+### Walkthrough Structure
+- **State of Research snapshot** — frozen-in-time context at top
+- **9 phases (A-I):** macOS hardening → runtime → install → security → models → channels → skills → validation → operations
+- **5 Understanding sections:** macOS as server, gateway architecture, defense in depth, model routing, skill security model
+- **Deployment Notes sections** in every phase for Sean to fill in during actual deployment
+- **Post-deployment checklist** and report-back template
+- **Appendix:** Key file locations, command reference, emergency procedures, Week 1-2 roadmap
+
+### Key Characteristic
+This walkthrough is the *culmination* of the research project — it synthesizes all 130+ sources, 7 KB buckets, 5 patterns, and 52 intelligence entries into a single read-ahead guide. It is educational (explains WHY, not just WHAT) and living (deployment notes feed back into the project).
