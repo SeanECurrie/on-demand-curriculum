@@ -6,7 +6,7 @@
 ## Current Status
 
 - **Phase:** DEPLOYMENT WALKTHROUGH READY (v1.1) — research complete, walkthrough updated with Phase 0 for existing Mac Mini prep.
-- **OpenClaw deployment:** NOT YET — walkthrough at `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (1,970 lines, 9 phases A-I).
+- **OpenClaw deployment:** NOT YET — walkthrough at `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (10 phases, 0-I).
 - **Deployment plan (reference):** `knowledge-base/04-deployment/mac-mini-deployment-plan.md`
 - **CRITICAL:** Must deploy version >= 2026.1.29 (CVE patches).
 - **Mac Mini current state:** v1 DevHub build (Homebrew, Docker Desktop, Ollama, Tailscale, FastAPI projects, monitoring containers). Phase 0 added to walkthrough for prep without wipe.
