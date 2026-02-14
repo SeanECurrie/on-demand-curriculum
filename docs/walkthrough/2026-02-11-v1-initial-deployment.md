@@ -410,6 +410,8 @@ Tim's VPS ran Debian Linux — an OS built for servers. It doesn't sleep, doesn'
 
 The other thing that's different is the security model. On Linux, the root/non-root separation is sharp and well-understood. On macOS, there are "admin" users and "standard" users, plus a hidden root account, plus System Integrity Protection (SIP) preventing even root from modifying system files, plus Gatekeeper checking app signatures. We're going to use all of these layers. The dedicated non-admin user means the OpenClaw process can't `sudo` — so even if an attacker gets code execution through the agent, they can't escalate to system-level access.
 
+One advantage you have: your Mac Mini isn't starting from zero. The Phase 0 prep you just completed means Homebrew is already installed and healthy, Tailscale is already configured and running, and Docker Desktop is clean and ready for sandbox use. The server hardening steps in this phase still apply in full — sleep prevention, FileVault, firewall rules, SIP verification — but you won't be installing foundational tools alongside them.
+
 ### A1: Create a Dedicated Non-Admin User
 
 **Concept:** OpenClaw will run under its own user account that has no admin privileges. Think of it as a fence — the agent can do things within its own space, but it can't install software, modify system settings, or access other users' files. The official docs recommend this even on dedicated machines.
@@ -445,6 +447,14 @@ dscl . -read /Groups/admin GroupMembership
 **Concept:** macOS will sleep, turn off the display, and spin down the disk by default. All of these break a 24/7 agent. We're disabling every power-saving mode and adding a belt-and-suspenders approach with `caffeinate` — a macOS utility that asserts "keep this machine awake" at the system level.
 
 Community reports confirm sleep/wake issues are the #1 headless Mac Mini gotcha (GitHub Discussion #7700).
+
+**Check current state first** (some of these may already be configured from previous use):
+
+```bash
+pmset -g
+```
+
+Review the output. If sleep settings are already at 0, you can skip those specific commands and just verify.
 
 ```bash
 # Disable all sleep modes
@@ -542,6 +552,14 @@ defaults -currentHost write com.apple.screensaver idleTime 0
 
 **Important trade-off:** Disabling auto-updates means YOU are responsible for checking for security updates. We'll add this to the weekly monitoring cadence in Phase I.
 
+**Check current state first:**
+
+```bash
+defaults read /Library/Preferences/com.apple.SoftwareUpdate 2>/dev/null
+```
+
+If auto-updates are already disabled, verify and move on.
+
 ```bash
 # Disable automatic macOS updates
 sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticCheckEnabled -bool false
@@ -565,6 +583,15 @@ defaults read /Library/Preferences/com.apple.SoftwareUpdate
 ### A5: Enable FileVault
 
 **Concept:** FileVault is macOS's full-disk encryption. Without it, anyone who physically takes the Mac Mini can pull the drive and read everything — API keys, chat transcripts, session history, credentials. All of this sits unencrypted under `~/.openclaw/` unless the disk itself is encrypted.
+
+**If you enabled FileVault during Phase 0:** Just verify it completed:
+
+```bash
+sudo fdesetup status
+# Expected: "FileVault is On."
+```
+
+If it's still encrypting, that's fine — continue with the walkthrough. Encryption runs in the background.
 
 ```bash
 # Check current FileVault status
@@ -646,7 +673,7 @@ sudo pfctl -sr  # Show loaded rules — verify openclaw rules appear
 
 ### A7: Tailscale ACL Verification
 
-**Concept:** Tailscale is the strongest security layer in this deployment — stronger than the firewall, stronger than the loopback bind. It creates an encrypted tunnel between your devices, and only devices on your Tailscale network can reach each other. Our research concluded Tailscale is "ACTUALLY BETTER THAN TIM DESCRIBED" because it replaces several of Tim's manual hardening steps (SSH keys, port-based firewall rules) with a single identity-based access control system.
+**Concept:** Tailscale is already installed and running on your Mac Mini from the v1 build — and it's the strongest security layer in this deployment — stronger than the firewall, stronger than the loopback bind. It creates an encrypted tunnel between your devices, and only devices on your Tailscale network can reach each other. Our research concluded Tailscale is "ACTUALLY BETTER THAN TIM DESCRIBED" because it replaces several of Tim's manual hardening steps (SSH keys, port-based firewall rules) with a single identity-based access control system.
 
 ```bash
 # Verify Tailscale is running and connected
