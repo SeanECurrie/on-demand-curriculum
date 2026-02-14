@@ -4,6 +4,7 @@
 **Status:** Approved (brainstorming session)
 **Operator:** Sean Currie
 **Source:** Brainstorming session building on 130+ sources from Phase 1-3 research
+**Revised:** 2026-02-14 — Added Phase 0 (Machine Preparation) per design document `docs/plans/2026-02-14-phase0-machine-prep-design.md`
 
 ---
 
@@ -74,7 +75,7 @@ This snapshot means that 3 months from now, Sean can look at this walkthrough an
 
 ### Per-Phase Structure
 
-Each of the 9 phases follows this format:
+Each of the 10 phases follows this format:
 
 ```markdown
 ## Phase X: [Title]
@@ -131,12 +132,13 @@ We'll update: activity-log, intelligence-log, CONTEXT.md, and annotate
 this walkthrough with what actually happened.
 ```
 
-## 5. The Nine Phases
+## 5. The Ten Phases
 
 Based on the deployment plan (knowledge-base/04-deployment/mac-mini-deployment-plan.md), reframed with educational context:
 
 | Phase | Deployment Plan | Walkthrough Focus | "Understanding" Section |
 |-------|----------------|-------------------|------------------------|
+| 0 | Machine Preparation | Why identity sync and leftover services are security concerns, not housekeeping | Yes: Redefining the machine's role |
 | A | macOS Hardening | Why a dedicated user matters, what FileVault does, macOS vs Linux server model | Yes: macOS as a server |
 | B | Runtime Setup | What Node.js 22 brings, why ARM-native matters on M4 | No (straightforward) |
 | C | OpenClaw Installation | What the gateway is, what `openclaw gateway install` does under the hood (launchd) | Yes: Gateway architecture |
@@ -147,7 +149,7 @@ Based on the deployment plan (knowledge-base/04-deployment/mac-mini-deployment-p
 | H | Validation | Testing each security layer, the 6 deployment blockers, verification evidence | No (procedural, critical) |
 | I | Post-Deployment Immediate | Backups, monitoring, what to watch in first 48 hours, research cadence kickoff | No (operational) |
 
-"Understanding" sections appear in 5 of 9 phases — the ones where grasping the concept makes the commands make sense rather than just being copy-paste.
+"Understanding" sections appear in 6 of 10 phases — the ones where grasping the concept makes the commands make sense rather than just being copy-paste.
 
 ## 6. Interaction Model
 
@@ -180,11 +182,12 @@ Based on the deployment plan (knowledge-base/04-deployment/mac-mini-deployment-p
 | `patterns/` | Reusable patterns referenced in context |
 | `research/reports/05-open-questions.md` | The 6 deployment blockers to test |
 | `operator/sean-currie-profile.md` | Infrastructure details, Sean's setup |
+| 2026-02-14 brainstorming session + other agent's Mac Mini v1 state recap | Machine's actual current state, security-informed prep approach |
 
 ## 8. Scope Boundaries
 
 **In scope:**
-- Educational deployment walkthrough (Phases A-I)
+- Educational deployment walkthrough (Phases 0-I)
 - State-of-research snapshot
 - "Understanding" sections for key concepts
 - Blank deployment notes sections for Sean to fill
