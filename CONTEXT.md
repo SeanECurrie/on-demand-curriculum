@@ -1,14 +1,15 @@
 # CONTEXT.md — ClawdBot Research Project
 
-**Last Updated:** 2026-02-11
+**Last Updated:** 2026-02-14
 **Staleness Threshold:** 5 days (flag if older)
 
 ## Current Status
 
-- **Phase:** DEPLOYMENT WALKTHROUGH READY — research complete, educational walkthrough written.
+- **Phase:** DEPLOYMENT WALKTHROUGH READY (v1.1) — research complete, walkthrough updated with Phase 0 for existing Mac Mini prep.
 - **OpenClaw deployment:** NOT YET — walkthrough at `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (1,970 lines, 9 phases A-I).
 - **Deployment plan (reference):** `knowledge-base/04-deployment/mac-mini-deployment-plan.md`
 - **CRITICAL:** Must deploy version >= 2026.1.29 (CVE patches).
+- **Mac Mini current state:** v1 DevHub build (Homebrew, Docker Desktop, Ollama, Tailscale, FastAPI projects, monitoring containers). Phase 0 added to walkthrough for prep without wipe.
 
 ## What This Project Produced
 
@@ -72,7 +73,7 @@
 
 ## How to Use This Project
 
-1. **Ready to deploy?** Follow `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (educational walkthrough with concepts + commands)
+1. **Ready to deploy?** Follow `docs/walkthrough/2026-02-11-v1-initial-deployment.md` — start with Phase 0 (machine prep), then Phases A-I
 2. **Need the raw reference?** `knowledge-base/04-deployment/mac-mini-deployment-plan.md` (commands-only, no educational context)
 3. **Need to check security?** Read `knowledge-base/03-security/security-posture-analysis.md`
 4. **Choosing skills?** Read `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
