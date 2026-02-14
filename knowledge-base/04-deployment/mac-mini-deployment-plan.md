@@ -4,6 +4,7 @@
 **Based On:** Phase 1-2 research (130+ sources across Context7 official docs + Bright Data community intelligence)
 **Target:** Apple M4 Mac Mini, 16GB RAM, Tailscale configured
 **Operator:** Sean Currie (terminal-comfortable, solutions engineer, Tailscale SSH already working)
+**Updated:** 2026-02-14 — Added Phase 0 for existing Mac Mini with v1 DevHub build (Homebrew, Docker, Ollama, Tailscale pre-installed)
 
 ---
 
@@ -18,6 +19,8 @@ This is a **plan document, not a tutorial**. Every step has a specific command, 
 ## Pre-Flight Checklist
 
 Complete **all** of these before sitting down to deploy. Missing any item means stopping mid-deployment to acquire something.
+
+**Note (added 2026-02-14):** This plan originally assumed a clean Mac Mini. The deployment target has an existing v1 DevHub build with Homebrew, Docker Desktop, Ollama, Tailscale, and various development projects. Phase 0 (below) handles preparation. Phases A and B are adjusted to verify existing installs rather than install from scratch.
 
 ### Required Items
 
@@ -43,6 +46,88 @@ ssh openclaw-mac-mini "hostname && sw_vers && uname -m"
 ```
 
 **Source:** operator/sean-currie-profile.md (Tailscale SSH already configured between machines)
+
+---
+
+## Phase 0: Machine Preparation
+
+**Goal:** Prepare the existing Mac Mini (v1 DevHub build) for OpenClaw deployment without a full wipe.
+
+**Added:** 2026-02-14. Source: Security research cross-referenced with actual machine state (v1 DevHub: Homebrew, Docker Desktop, Ollama, Tailscale, FastAPI, monitoring containers).
+
+### 0.1: Identity & Sync Disconnection
+
+**Why:** iCloud sync creates data exfiltration paths for `~/.openclaw/` contents. Logged-in browsers are the attack bridge for CVE-2026-25253 (CVSS 8.8). Source: security-posture-analysis.md, intelligence-log.md.
+
+- Sign out of iCloud: System Settings > [Your Name] > Sign Out (or disable all individual sync services)
+- Sign out of Google in all browsers, clear sessions/cookies
+- Disable/remove any other cloud sync (Dropbox, OneDrive)
+
+```bash
+# Verify no sync processes running
+ps aux | grep -i -E "icloud|dropbox|onedrive|googledrive" | grep -v grep
+# Expected: No results
+```
+
+### 0.2: Software Audit
+
+**Why:** Capture pre-cleanup state for the record before removing anything.
+
+```bash
+brew list && brew list --cask
+docker ps -a && docker images
+npm list -g --depth=0
+lsof -iTCP -sTCP:LISTEN -P
+```
+
+**Expected outcome:** Snapshot of machine state saved (file or deployment notes).
+
+### 0.3: Software Cleanup
+
+**Why:** Remove services not part of OpenClaw stack. Reduces attack surface and frees resources. Source: session conversation 2026-02-14.
+
+```bash
+# Remove Ollama
+ollama stop 2>/dev/null; pkill -f ollama 2>/dev/null
+brew uninstall ollama 2>/dev/null
+rm -rf ~/.ollama
+
+# Clean Docker (keep Desktop, remove containers/images)
+docker stop $(docker ps -q) 2>/dev/null
+docker rm $(docker ps -aq) 2>/dev/null
+docker system prune -a --force
+
+# Remove old project repos (after confirming pushed to GitHub)
+# rm -rf ~/fastapi-project (adjust to actual paths)
+
+# Stop PostgreSQL if running
+brew services stop postgresql 2>/dev/null
+
+# Clean Homebrew
+brew update && brew upgrade
+brew autoremove && brew cleanup
+brew doctor
+```
+
+**Expected outcome:** Only OpenClaw-relevant software remains. Docker clean. Homebrew healthy.
+
+### 0.4: Readiness Verification
+
+**Why:** Go/no-go gate before Phase A.
+
+```bash
+sw_vers && uname -m                           # macOS version, arm64
+sudo fdesetup status                          # FileVault on
+csrutil status                                # SIP enabled
+spctl --status                                # Gatekeeper enabled
+tailscale status                              # Connected
+brew list                                     # Lean package list
+docker ps -a && docker images                 # Empty
+lsof -iTCP -sTCP:LISTEN -P                   # No unexpected ports
+df -h /                                       # Adequate disk space
+```
+
+**Expected outcome:** All checks pass. No unexpected listening ports, no sync processes, clean Docker, healthy Homebrew.
 
 ---
 
@@ -253,6 +338,8 @@ sudo pfctl -sr  # Show loaded rules
 
 ### A7: Tailscale ACL Verification
 
+**Note (2026-02-14):** Tailscale is already installed and configured from the v1 build. This step verifies and tightens rather than installs.
+
 **Why:** Tailscale is the strongest security layer in our deployment. Only Tailscale-authorized devices should reach the Mac Mini. Source: security-posture-analysis.md ("STRONGLY VALIDATED -- ACTUALLY BETTER THAN TIM DESCRIBED").
 
 ```bash
@@ -334,8 +421,9 @@ spctl --status
 
 ```bash
 # Switch to openclaw user (or run under admin and transfer later)
-# If Homebrew is not installed on this Mac Mini:
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Homebrew is already installed from v1 build (updated in Phase 0)
+# If for some reason it's missing:
+# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Add Homebrew to PATH (Apple Silicon location)
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
