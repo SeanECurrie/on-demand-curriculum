@@ -4,6 +4,37 @@ Quick reference for everything you need before and during deployment. The walkth
 
 ---
 
+## Pre-Deployment Machine Prep (Phase 0)
+
+Do this BEFORE anything else. Full details in the walkthrough Phase 0.
+
+**Identity disconnection:**
+- [ ] iCloud: signed out or all sync services disabled
+- [ ] Google: signed out of all browsers, cookies cleared
+- [ ] Other cloud sync: removed/disabled
+
+**Software cleanup:**
+```bash
+# Audit current state (save the output)
+brew list && brew list --cask && docker ps -a && docker images && lsof -iTCP -sTCP:LISTEN -P
+
+# Clean Docker (keep Desktop, remove old containers/images)
+docker stop $(docker ps -q) 2>/dev/null && docker rm $(docker ps -aq) 2>/dev/null && docker system prune -a --force
+
+# Remove Ollama
+brew uninstall ollama 2>/dev/null && rm -rf ~/.ollama
+
+# Clean Homebrew
+brew update && brew upgrade && brew autoremove && brew cleanup && brew doctor
+```
+
+**Readiness check (run before Phase A):**
+```bash
+sw_vers && uname -m && sudo fdesetup status && csrutil status && spctl --status && tailscale status && brew list && docker ps -a && lsof -iTCP -sTCP:LISTEN -P && df -h /
+```
+
+---
+
 ## Accounts & Tokens to Create
 
 | What | Where | Format | Used For |
@@ -21,10 +52,10 @@ Quick reference for everything you need before and during deployment. The walkth
 
 | Software | Install Command | Version Required | Notes |
 |----------|----------------|-----------------|-------|
-| Homebrew | `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` | Latest | Package manager. Installs to `/opt/homebrew` on Apple Silicon |
+| Homebrew | Already installed (v1 build). Verify: `brew --version` | Latest | Updated in Phase 0 |
 | Node.js 22 | `brew install node@22 && brew link node@22` | >= 22 | Must be ARM-native (`file $(which node)` should show `arm64`) |
 | OpenClaw | `npm install -g openclaw@latest` | **>= 2026.1.29** | **CRITICAL** — older versions have 1-click RCE (CVE-2026-25253) |
-| Docker Desktop | `brew install --cask docker` | Latest | Only if using sandbox mode (recommended but optional on 16GB) |
+| Docker Desktop | Already installed (v1 build). Verify: `docker --version` | Latest | Cleaned in Phase 0. Only if using sandbox mode. |
 
 **Verify after install:**
 ```bash
