@@ -1,10 +1,11 @@
-# OpenClaw Deployment Walkthrough — v1
+# OpenClaw Deployment Walkthrough — v1.1
 
 **Date:** 2026-02-11
 **Operator:** Sean Currie
 **Target:** Apple M4 Mac Mini, 16GB RAM, Tailscale configured
 **OpenClaw Target Version:** >= 2026.1.29 (mandatory — CVE patches)
 **Based On:** ClawdBot Research Project — 130+ sources across Context7 + Bright Data
+**Updated:** 2026-02-14 — Added Phase 0 (Machine Preparation) for existing Mac Mini with v1 DevHub build
 
 ---
 
@@ -57,6 +58,7 @@ These couldn't be answered by research alone. You'll test them hands-on:
 
 | # | Question | When to Test | What to Watch For |
 |---|----------|-------------|-------------------|
+| 0 | Machine state audit | Phase 0 (prep) | Audit commands capture current state — review before proceeding |
 | 1 | CVE patch verification | Phase C (install) | `openclaw --version` must show >= 2026.1.29 |
 | 2 | macOS Keychain behavior | Phase C (onboard) | Screenshot every TCC/Keychain dialog. Deny by default. |
 | 3 | Docker sandbox on Apple Silicon | Phase D (sandbox) | Memory consumption in Activity Monitor. Does 16GB hold? |
@@ -101,6 +103,295 @@ ssh openclaw-mac-mini "hostname && sw_vers && uname -m"
 ```
 
 If this doesn't work, fix Tailscale connectivity first. The rest of this walkthrough assumes you can SSH into the Mac Mini.
+
+---
+
+## Phase 0: Machine Preparation
+
+**What we're doing:** Preparing your existing Mac Mini — which has a v1 DevHub build (Homebrew, Docker, Ollama, Tailscale, FastAPI projects, monitoring containers) — for its new role as a dedicated OpenClaw deployment node. No wipe needed.
+**Why it matters:** This isn't tidying. Identity artifacts (iCloud, Google) create data exfiltration paths that conflict with OpenClaw's local-first security model. Unnecessary services (Ollama, monitoring containers) expand the attack surface. Existing software (Homebrew, Docker) changes the deployment path for later phases.
+**Time estimate:** 30-45 minutes.
+**Source context:** This phase was added on 2026-02-14 based on a review of the Mac Mini's actual state (v1 DevHub build from a prior project) against this project's security research.
+
+### Understanding: Redefining the Machine's Role
+
+Your Mac Mini started life as a modular dev node — a lab bench for Docker, local LLMs, FastAPI, and CI/CD experiments. That was the right build for exploration. But the role is changing. This machine is about to become a security-hardened, headless AI agent orchestration node running OpenClaw as a persistent service, accessible exclusively via Tailscale, with Docker sandbox for tool isolation.
+
+That role change has two implications:
+
+First, **identity artifacts become a security liability.** iCloud sync means files under `~/.openclaw/` (API keys, session transcripts, credentials) could sync to Apple's servers — defeating the data residency controls we designed. Logged-in browsers with saved Google sessions are the exact attack bridge that CVE-2026-25253 (CVSS 8.8, 1-click RCE) exploits. On a personal device, staying logged into iCloud and Google is normal. On an agent node, it's an attack surface.
+
+Second, **leftover services are unnecessary exposure.** Ollama listening on a port, Glances/Dozzle containers running, old project files scattered across the filesystem — none of these are part of the OpenClaw stack, but all of them are surface area the agent could theoretically interact with. The principle is simple: if OpenClaw doesn't need it, it shouldn't be there.
+
+The good news: most of your v1 build helps rather than hurts. Homebrew, Docker Desktop, Tailscale, Git, and your terminal setup are all things we'd install from scratch on a clean machine. You're ahead — you just need to clean and verify rather than build from zero.
+
+### 0.1: Identity & Sync Disconnection
+
+**Concept:** This is a security requirement, not personal preference. OpenClaw stores credentials, session transcripts, and API keys locally. Cloud sync services create paths for that data to leave the machine. A logged-in browser is the attack vector for the most critical CVE in OpenClaw's history.
+
+**Actions (in System Settings and browsers — these are GUI steps):**
+
+1. **iCloud:** System Settings > [Your Name] > Sign Out. If you want to keep your Apple ID for App Store access only, instead go to System Settings > [Your Name] > iCloud and individually disable: iCloud Drive, Photos, Contacts, Calendars, Keychain, Safari, Notes, and everything else. The goal is zero sync.
+
+2. **Google accounts:** Open every browser on this machine (Safari, Chrome, Firefox, etc.). Sign out of all Google accounts. Clear saved sessions and cookies. If you use Chrome, also go to Settings > You and Google > Turn off sync.
+
+3. **Other cloud sync:** If Dropbox, OneDrive, or any other sync service is installed, sign out and quit it. Check System Settings > General > Login Items to see what starts at boot — remove anything sync-related.
+
+**Verification:**
+```bash
+# Check for running sync processes
+ps aux | grep -i -E "icloud|dropbox|onedrive|googledrive" | grep -v grep
+# Expected: No results (nothing sync-related running)
+
+# Check Login Items for sync services
+osascript -e 'tell application "System Events" to get the name of every login item'
+# Review the list — flag anything that syncs to cloud
+```
+
+**Expected output:** No cloud sync processes running. Login Items clean of sync services.
+
+**If something's wrong:**
+- If iCloud sign-out asks about keeping data locally: choose "Keep on This Mac" — we're not deleting your data, just stopping sync
+- If a sync process won't quit: check Activity Monitor, force quit if needed
+- If you need your Apple ID for App Store (e.g., to update apps): keep it signed in but disable ALL iCloud services individually
+
+### 0.2: Software Audit
+
+**Concept:** Before removing anything, capture the machine's current state. This serves two purposes: it gives you a record of what was installed (in case you need to reconstruct something later), and it gives you (or your agent) data to review rather than relying on memory.
+
+```bash
+# Capture pre-cleanup state — save this output
+echo "=== HOMEBREW PACKAGES ===" && brew list && echo "" && \
+echo "=== HOMEBREW CASKS ===" && brew list --cask && echo "" && \
+echo "=== DOCKER CONTAINERS ===" && docker ps -a 2>/dev/null && echo "" && \
+echo "=== DOCKER IMAGES ===" && docker images 2>/dev/null && echo "" && \
+echo "=== GLOBAL NPM PACKAGES ===" && npm list -g --depth=0 2>/dev/null && echo "" && \
+echo "=== PIP PACKAGES ===" && pip list 2>/dev/null && echo "" && \
+echo "=== LISTENING PORTS ===" && lsof -iTCP -sTCP:LISTEN -P 2>/dev/null && echo "" && \
+echo "=== HOME DIRECTORY ===" && ls -la ~/
+```
+
+**Expected output:** A snapshot of everything on the machine. Save this output — paste it into the Deployment Notes section at the end of this phase, or save it to a file:
+```bash
+# Optional: save to a file for the record
+bash -c 'echo "=== HOMEBREW PACKAGES ===" && brew list && echo "" && echo "=== HOMEBREW CASKS ===" && brew list --cask && echo "" && echo "=== DOCKER CONTAINERS ===" && docker ps -a 2>/dev/null && echo "" && echo "=== DOCKER IMAGES ===" && docker images 2>/dev/null && echo "" && echo "=== GLOBAL NPM PACKAGES ===" && npm list -g --depth=0 2>/dev/null && echo "" && echo "=== PIP PACKAGES ===" && pip list 2>/dev/null && echo "" && echo "=== LISTENING PORTS ===" && lsof -iTCP -sTCP:LISTEN -P 2>/dev/null && echo "" && echo "=== HOME DIRECTORY ===" && ls -la ~/' > ~/pre-openclaw-audit-$(date +%Y%m%d).txt
+```
+
+**This is a checkpoint.** Review the output. If you want a second opinion on what should stay or go, share it with your agent before proceeding to Step 0.3.
+
+### 0.3: Software Cleanup
+
+**Concept:** Remove services and software that aren't part of the OpenClaw stack. The keep/remove decisions below are based on this project's research — what OpenClaw needs vs. what was part of the v1 DevHub build.
+
+**Ollama — remove (reinstall later if needed):**
+```bash
+# Stop Ollama if running
+ollama stop 2>/dev/null
+pkill -f ollama 2>/dev/null
+
+# Remove Ollama
+brew uninstall ollama 2>/dev/null
+# Or if installed via the official installer:
+sudo rm -rf /usr/local/bin/ollama
+rm -rf ~/.ollama
+
+# Verify
+which ollama
+# Expected: "ollama not found"
+```
+Ollama is a Week 1-2 roadmap item (local GGUF embeddings). Reinstall then if needed — no reason to keep it consuming disk space now.
+
+**Docker containers — stop and remove all:**
+```bash
+# Stop all running containers
+docker stop $(docker ps -q) 2>/dev/null
+
+# Remove all containers (Glances, Dozzle, Portainer, etc.)
+docker rm $(docker ps -aq) 2>/dev/null
+
+# Remove all images
+docker system prune -a --force
+
+# Verify
+docker ps -a
+# Expected: empty list
+docker images
+# Expected: empty list
+```
+Docker Desktop itself stays — OpenClaw uses it for sandbox containers. We're just cleaning out the v1 monitoring stack.
+
+**Old project repos and Python environments:**
+```bash
+# Review what's in your home directory
+ls ~/
+
+# Archive any repos you want to keep — push to GitHub if not already:
+# cd ~/your-project && git push origin main
+
+# Remove local copies of projects that are safely on GitHub:
+# rm -rf ~/fastapi-project  (adjust names to match your actual directories)
+# rm -rf ~/your-other-project
+
+# Remove Python virtual environments:
+# rm -rf ~/venv
+# rm -rf ~/.local/lib/python*  (if pip installed packages globally)
+```
+**Note:** Only remove repos you've confirmed are pushed to GitHub. If in doubt, push first.
+
+**PostgreSQL — stop if running:**
+```bash
+# Check if PostgreSQL is running
+brew services list | grep postgresql
+# If running:
+brew services stop postgresql
+# Optional — remove entirely if not needed:
+# brew uninstall postgresql
+```
+
+**Unused Homebrew packages:**
+```bash
+# Update Homebrew and upgrade existing packages first
+brew update && brew upgrade
+
+# Review what's installed
+brew list
+
+# Remove packages you don't need (examples — adjust to your actual install):
+# brew uninstall python@3.11  (if you don't need Python for OpenClaw)
+# brew uninstall <other-unused-packages>
+
+# Clean up orphaned dependencies and old downloads
+brew autoremove && brew cleanup
+```
+
+**What to keep (do NOT remove):**
+- `git` — needed for config-as-code backup
+- `curl`, `wget` — HTTP tools
+- `jq` — JSON processing (useful for config inspection)
+- `htop` — system monitoring
+- Docker Desktop — needed for OpenClaw sandbox
+- Tailscale — core security infrastructure
+- iTerm2 — terminal
+- Node.js (any version) — will be upgraded/installed as Node 22 in Phase B
+
+**Expected output:** A much leaner machine. Only software that serves the OpenClaw deployment remains.
+
+### 0.4: Homebrew Health Check
+
+**Concept:** Your existing Homebrew may have stale packages, broken links, or orphaned dependencies from the v1 build. Clean it up so Phase B starts from a healthy base.
+
+```bash
+# Run Homebrew's built-in diagnostics
+brew doctor
+
+# Fix any issues it reports (follow the suggestions in the output)
+
+# Verify Homebrew is healthy
+brew --version
+```
+
+**Expected output:** `brew doctor` reports "Your system is ready to brew" (or only cosmetic warnings).
+
+**If something's wrong:**
+- `brew doctor` may suggest unlinking or relinking packages — follow its advice
+- If it warns about permissions: `sudo chown -R $(whoami) /opt/homebrew`
+
+### 0.5: Docker Desktop Verification
+
+**Concept:** Docker Desktop stays but should be clean and current. It will be used for OpenClaw's sandbox containers.
+
+```bash
+# Verify Docker Desktop is running
+docker --version
+docker info | head -20
+
+# Check that no containers or images remain from cleanup
+docker ps -a
+docker images
+
+# Update Docker Desktop if needed
+# Open Docker Desktop > Check for Updates (this is a GUI step)
+```
+
+**Expected output:** Docker running, no containers, no images, current version.
+
+### 0.6: Readiness Verification
+
+**Concept:** This is the go/no-go gate before Phase A. Run this command block and review the output. Everything should look clean. If something unexpected appears — an unknown listening port, a sync process still running, more disk usage than expected — investigate before proceeding.
+
+```bash
+echo "=== READINESS CHECK ==="
+echo ""
+echo "--- macOS Version ---"
+sw_vers
+uname -m
+echo ""
+echo "--- FileVault ---"
+sudo fdesetup status
+echo ""
+echo "--- SIP ---"
+csrutil status
+echo ""
+echo "--- Gatekeeper ---"
+spctl --status
+echo ""
+echo "--- Tailscale ---"
+tailscale status
+echo ""
+echo "--- Homebrew Packages ---"
+brew list
+echo ""
+echo "--- Homebrew Casks ---"
+brew list --cask
+echo ""
+echo "--- Docker Status ---"
+docker ps -a 2>/dev/null
+docker images 2>/dev/null
+echo ""
+echo "--- Listening Ports ---"
+lsof -iTCP -sTCP:LISTEN -P 2>/dev/null
+echo ""
+echo "--- Disk Space ---"
+df -h /
+echo ""
+echo "--- Memory ---"
+sysctl hw.memsize | awk '{print $2/1073741824 " GB"}'
+echo ""
+echo "--- Cloud Sync Processes ---"
+ps aux | grep -i -E "icloud|dropbox|onedrive|googledrive" | grep -v grep
+echo ""
+echo "=== END READINESS CHECK ==="
+```
+
+**What you're looking for:**
+- macOS 15.x, arm64
+- FileVault: On (or "Encryption in progress...")
+- SIP: enabled
+- Gatekeeper: assessments enabled
+- Tailscale: connected with your devices listed
+- Homebrew: lean list — git, core tools, maybe Docker cask
+- Docker: no containers, no images
+- Listening ports: nothing unexpected (no Ollama on 11434, no Postgres on 5432, no Glances/Dozzle)
+- Disk: reasonable free space (50+ GB preferred)
+- Memory: 16 GB
+- Cloud sync: no results (nothing running)
+
+**If everything looks clean:** Proceed to Phase A.
+**If something unexpected appears:** Investigate before continuing. This is the last checkpoint before you start hardening the OS.
+
+### Phase 0 — Deployment Notes
+
+*Fill this in during deployment:*
+
+- [ ] iCloud signed out / all sync disabled?
+- [ ] Google accounts signed out of browsers?
+- [ ] Pre-cleanup audit saved?
+- [ ] Ollama removed?
+- [ ] Docker containers/images cleaned?
+- [ ] Old project repos archived and removed?
+- [ ] Homebrew cleaned and healthy?
+- [ ] Readiness check reviewed — all clean?
+- Notes / deviations / surprises:
 
 ---
 
