@@ -763,35 +763,39 @@ spctl --status
 
 ## Phase B: Runtime Setup
 
-**What we're doing:** Installing Node.js — the only runtime dependency OpenClaw needs.
+**What we're doing:** Installing or upgrading Node.js 22 — the only runtime dependency OpenClaw needs. Homebrew is already installed from your v1 build.
 **Why it matters:** OpenClaw is a Node.js application. Wrong version or wrong architecture means it won't run (or will run slowly under emulation).
 **Time estimate:** 5 minutes.
 
 ### B1: Install Node.js 22+ via Homebrew
 
-**Concept:** OpenClaw requires Node.js 22 or higher. Homebrew (macOS's package manager) provides ARM-native builds for Apple Silicon, meaning Node.js runs directly on the M4's performance cores — no Rosetta 2 translation layer. This matters for a long-running service because emulation adds CPU overhead and can introduce subtle issues.
+**Concept:** OpenClaw requires Node.js 22 or higher. Homebrew is already installed on your Mac Mini from the v1 build and was updated during Phase 0. If you have an older Node version installed, we'll upgrade. If not, we'll install fresh.
 
 ```bash
-# If Homebrew is not installed on the Mac Mini:
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Check if Node.js is already installed and what version
+node --version 2>/dev/null
+# If this shows v22.x.x — you're already set, skip to B2
 
-# Add Homebrew to PATH (Apple Silicon installs to /opt/homebrew, not /usr/local)
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# Install Node.js 22
+# If Node.js is not installed or is an older version:
 brew install node@22
 
-# Link it (makes 'node' available system-wide)
+# If an older version is installed and linked:
+brew unlink node 2>/dev/null
+brew install node@22
 brew link node@22
+
+# If you used nvm in the v1 build, clean it up:
+# nvm deactivate 2>/dev/null
+# Consider removing nvm entirely: rm -rf ~/.nvm
+# Then install Node via Homebrew instead (simpler for a server)
 ```
 
 **Expected output:** No errors from brew install.
 
 **If something's wrong:**
-- If Homebrew is already installed: skip the first command, just install Node
-- If `brew link` warns about conflicts: another Node version may be installed. Run `brew unlink node` first, then `brew link node@22`
-- If you're running this under the `openclaw` user: Homebrew may need to be installed under that user, or the admin can install it system-wide
+- If `brew link` warns about conflicts: another Node version is linked. Run `brew unlink node` first, then `brew link node@22`
+- If nvm is intercepting the node path: either remove nvm (`rm -rf ~/.nvm` and remove nvm lines from `~/.zshrc`) or use `nvm install 22 && nvm alias default 22`
+- If you're running this under the `openclaw` user: Homebrew should be accessible if installed under the admin user at `/opt/homebrew`
 
 ### B2: Verify ARM-Native
 
