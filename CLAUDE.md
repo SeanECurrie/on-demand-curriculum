@@ -112,19 +112,26 @@ Every finding gets tagged with its tier in `research/sources.md`.
 
 ## Session Protocol
 
-### Session Start
-1. Read `CONTEXT.md` — understand current state and project purpose (learning lab framing is at the top)
-2. Check staleness — if >5 days old, flag for review (this space moves fast)
-3. Check `intelligence-log.md` for recent strategic insights
-4. If context feels thin, read `operator/project-genesis.md` for refined purpose and `operator/purpose-refinement-2026-02-22.md` for the raw intent
-5. Calibrate your posture: this is a learning/exposure project, not a production deployment. Hardening is educational. The operator values challenge over agreement. Transferable knowledge over tool-specific detail.
+### Session Start (Use the `session-restart` skill)
+
+The `session-restart` skill at `skills/session-restart/SKILL.md` handles session startup efficiently. It reads `operator/session-state.md` (the single source of truth for walkthrough progress and task state), loads only the context files needed for the current phase, checks staleness, and presents a focused brief — all without bloating the context window.
+
+**If the skill isn't available** (e.g., different environment), follow this manual sequence:
+1. Read `operator/session-state.md` — walkthrough progress, current task, blockers, what happened last
+2. Read `CONTEXT.md` — project map, key decisions, open questions
+3. Check staleness — if >5 days since last session, flag for review (this space moves fast)
+4. Check `intelligence-log.md` tail for recent strategic insights
+5. If context feels thin, read `operator/project-genesis.md` for refined purpose
+6. Calibrate your posture: learning lab, not production. Challenge over agreement. Transferable over tool-specific.
 
 ### During Session
 - Log significant actions in `activity-log.md`
 - Log strategic insights in `intelligence-log.md` (not every action — only hypotheses validated, contradictions found, key discoveries)
 - Update `CONTEXT.md` at significant state changes
+- **Update `operator/session-state.md`** when walkthrough phases/steps complete, blockers change, or significant decisions are made
 
 ### Session End
+- Update `operator/session-state.md` with current state, last session summary, and notes for next session
 - Update `CONTEXT.md` with current state
 - Archive to `CONTEXT-HISTORY.md` if major phase completed
 - Commit changes
