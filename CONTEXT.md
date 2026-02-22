@@ -17,7 +17,7 @@
 
 - **Phase:** DEPLOYMENT WALKTHROUGH READY (v1.1) — research complete, walkthrough updated with Phase 0 for existing Mac Mini prep. **Ready for Sean to begin learning deployment.**
 - **Deployment posture:** Learning lab. Get it running, get it locally hardened, understand the attack surface, experiment with use cases. Not committing to daily professional use — building understanding and hands-on credibility.
-- **OpenClaw deployment:** NOT YET — walkthrough at `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (10 phases, 0-I).
+- **OpenClaw deployment:** NOT YET — walkthrough at `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (10 phases, 0-I). Interactive HTML version planned at `docs/walkthrough/interactive/` (see "Interactive Walkthrough" section below).
 - **Deployment plan (reference):** `knowledge-base/04-deployment/mac-mini-deployment-plan.md`
 - **⚠️ VERSION TARGET UPDATED:** Must deploy version **>= 2026.2.15** (minimum) or **2026.2.19** (recommended, latest as of 2026-02-22). Previous target of >= 2026.1.29 is INSUFFICIENT — 4 additional CVEs discovered and patched between 2026.2.1 and 2026.2.15. Walkthrough and crib sheet need updating to reflect this.
 - **Mac Mini (DevHub) current state:** v1 DevHub build (Homebrew, Docker Desktop, Ollama, Tailscale, FastAPI projects, monitoring containers). Phase 0 added to walkthrough for prep without wipe. **Universal Control restored as of 2026-02-21** (iCloud re-auth after aborted Recovery Mode — see Infrastructure section).
@@ -89,6 +89,21 @@ All staleness sweep changes were applied across 2 commits on 2026-02-22:
 - `04-security-evaluation.md` — GO with mandatory hardening
 - `05-open-questions.md` — 30 questions, 6 deployment blockers
 
+### Interactive Walkthrough (Planned)
+
+**Status:** Plan complete, awaiting execution via Claude Code agent teams.
+**Location:** `docs/walkthrough/interactive/`
+**Plan document:** External (not in project — ask Sean for location)
+
+A single-file interactive HTML transformation of the source walkthrough. Rough.js hand-drawn diagrams, Mermaid.js flowcharts, expandable phase sections, interactive deployment checklists, dark/light theme. Built using Claude Code's experimental agent teams feature (4-agent structure).
+
+**Source → Interactive sync rule:** The interactive walkthrough is a FORMAT transformation of `docs/walkthrough/2026-02-11-v1-initial-deployment.md`. If the source walkthrough is modified (new phases, updated commands, security patches, version changes), the interactive version MUST be flagged for rebuild. Any agent updating the source walkthrough should note in their commit or session log: "Interactive walkthrough at docs/walkthrough/interactive/ may need rebuild."
+
+**Structure:**
+- `docs/walkthrough/interactive/openclaw-deployment-walkthrough.html` — final deliverable
+- `docs/walkthrough/interactive/src/` — build intermediates (style guide, HTML shell, diagram JS)
+- `docs/walkthrough/interactive/build-reports/` — fidelity and UX validation reports from build process
+
 ### Key Verdicts (UNCHANGED — sweep reinforces, not contradicts)
 - **Mac Mini:** GO — community-validated, overpowered for this use case
 - **OpenClaw:** GO with mandatory hardening — now 6+ CVEs, ~20% malicious skills ecosystem (up from 12%). Remember: this is Case Study #1 for learning, not a permanent commitment.
@@ -153,13 +168,14 @@ Once the learning deployment is running, Sean wants to experiment with these —
 ## How to Use This Project
 
 1. **New session or new agent?** Read this file first, then `operator/project-genesis.md` for purpose context. Remember: this is a learning lab, not a production deployment.
-2. **Ready to deploy?** Follow `docs/walkthrough/2026-02-11-v1-initial-deployment.md` — start with Phase 0 (machine prep), then Phases A-I. The walkthrough is the primary operating document. It's educational by design — the "Understanding" sections are the point, not overhead.
-3. **Need the raw reference?** `knowledge-base/04-deployment/mac-mini-deployment-plan.md` (commands-only, no educational context)
-4. **Need to check security?** Read `knowledge-base/03-security/security-posture-analysis.md` + this CONTEXT.md "Staleness Sweep Results" section
-5. **Choosing skills?** Read `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
-6. **Staying current?** Follow `knowledge-base/07-operations/research-cadence.md`
-7. **Something breaks?** Check `knowledge-base/07-operations/operational-runbook-template.md`
-8. **Evaluating a different agent platform?** The research methodology (dual-source, credibility tiers), security posture analysis framework, and deployment patterns are designed to be transferable. OpenClaw is Case Study #1.
+2. **Ready to deploy?** Follow `docs/walkthrough/2026-02-11-v1-initial-deployment.md` — start with Phase 0 (machine prep), then Phases A-I. The walkthrough is the primary operating document. It's educational by design — the "Understanding" sections are the point, not overhead. Once built, the interactive version at `docs/walkthrough/interactive/openclaw-deployment-walkthrough.html` is the preferred format for following along.
+3. **Updating the walkthrough?** If you modify the source walkthrough, flag the interactive version for rebuild. The interactive HTML is a format transformation — content changes in the source must propagate. Note this in your commit message or session log.
+4. **Need the raw reference?** `knowledge-base/04-deployment/mac-mini-deployment-plan.md` (commands-only, no educational context)
+5. **Need to check security?** Read `knowledge-base/03-security/security-posture-analysis.md` + this CONTEXT.md "Staleness Sweep Results" section
+6. **Choosing skills?** Read `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
+7. **Staying current?** Follow `knowledge-base/07-operations/research-cadence.md`
+8. **Something breaks?** Check `knowledge-base/07-operations/operational-runbook-template.md`
+9. **Evaluating a different agent platform?** The research methodology (dual-source, credibility tiers), security posture analysis framework, and deployment patterns are designed to be transferable. OpenClaw is Case Study #1.
 
 ## Infrastructure
 

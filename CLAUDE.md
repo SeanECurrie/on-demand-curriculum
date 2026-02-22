@@ -218,3 +218,13 @@ Competitive analysis, lead building, knowledge base maintenance, workflow replic
 - `CONTEXT.md` tracks current state; `CONTEXT-HISTORY.md` archives milestones
 - Git commits at every meaningful checkpoint
 - No "final/" or "current/" directories — use date-stamped versioning
+
+### Source → Derivative Sync
+
+Some project artifacts are derived from others. When the source changes, the derivative must be flagged for update:
+
+| Source | Derivative | Sync Rule |
+|--------|-----------|-----------|
+| `docs/walkthrough/2026-02-11-v1-initial-deployment.md` | `docs/walkthrough/interactive/` | Content changes (new phases, updated commands, version bumps, security patches) require interactive version rebuild. Note in commit message: "Interactive walkthrough may need rebuild." |
+
+**If you modify a source document listed above:** check if a derivative exists and flag it. This is not optional.
