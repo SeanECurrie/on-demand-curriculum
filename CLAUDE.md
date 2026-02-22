@@ -3,28 +3,34 @@
 **Project:** ClawdBot Research Project
 **Operator:** Sean Currie
 **Created:** 2026-02-10
+**Refined:** 2026-02-22 (purpose alignment after research completion)
 **Design Document:** `docs/plans/2026-02-10-clawdbot-research-project-design.md`
 
 ---
 
 ## Identity & Purpose
 
-This project is a **living intelligence system** for autonomous AI agent technology — focused on ClawdBot/OpenClaw but aware of the broader landscape.
+This project is a **hands-on learning lab** for autonomous AI agent technology. OpenClaw is Case Study #1 — the first tool to move the needle and garner massive attention — but this project is not married to OpenClaw. The transferable skills (evaluation methodology, security thinking, deployment patterns) matter more than any single tool.
 
-It accumulates knowledge, informs decisions, and stays current. It is NOT a one-time setup guide.
+**The deployment is a learning exercise, not a production commitment.** Sean is building judgment, credibility, and hands-on understanding — not infrastructure he depends on daily. Hardening is educational as much as operational: understanding what real security hardening looks like and WHY each step matters is the point.
+
+**Why this matters professionally:** Sean is a Solutions Engineer. CEOs and CPOs are already asking "can you set up an AI agent" — these are active buying signals, not hypotheticals. This project makes Sean the person in the room who's actually deployed one, understood the security implications, and can separate hype from reality. Read `operator/project-genesis.md` for the full refined purpose.
 
 **What this does:**
-- Researches and maps the autonomous AI agent landscape
-- Deeply understands OpenClaw architecture, security, and deployment
-- Guides deployment on a dedicated M4 Mac Mini
-- Captures operational patterns and lessons learned
-- Stays current as the ecosystem evolves
+- Researches and maps the autonomous AI agent landscape (OpenClaw is the current focus, not the only focus)
+- Builds transferable judgment for evaluating ANY agent platform — security, deployment, ecosystem trust, viability
+- Guides a learning deployment on a dedicated M4 Mac Mini, with educational framing on every hardening step
+- Captures operational patterns and lessons learned that transfer beyond OpenClaw
+- Tests real use cases against the question: does an LLM agent add value here, or does a deterministic script do it better?
+- Stays current as the ecosystem evolves — and builds readiness to assess whatever comes next
 
 **What this is NOT:**
+- A production deployment commitment — this is a learning lab
 - A copy of someone else's tutorial
 - A static repo that goes stale
-- Limited to ClawdBot — it's aware of the full landscape
+- Limited to OpenClaw — it's aware of the full landscape and OpenClaw is Case Study #1
 - Documentation-only — community intelligence is equally weighted
+- OpenClaw-specific expertise building — the transferable skills are the real deliverable
 
 ---
 
@@ -32,10 +38,11 @@ It accumulates knowledge, informs decisions, and stays current. It is NOT a one-
 
 Full operator context lives in `operator/`:
 - `operator/sean-currie-profile.md` — Background, capabilities, infrastructure, working style
-- `operator/project-genesis.md` — Goals, decisions, what this project is/isn't
+- `operator/project-genesis.md` — Goals, decisions, refined purpose (updated 2026-02-22)
+- `operator/purpose-refinement-2026-02-22.md` — **Raw conversation capture of purpose alignment.** This is the unfiltered version of WHY this project exists. Read this if you need to understand Sean's actual intent vs. the structured summaries.
 - `operator/source-transcript-techwith-tim.md` — Structured extraction of founding video source
 
-**Read these files at session start if context feels thin.** They are the founding documents.
+**Read `project-genesis.md` at session start — it has the refined purpose.** Read `purpose-refinement-2026-02-22.md` if you need to gut-check whether your approach matches Sean's actual intent. These are not suggestions — they're how you calibrate.
 
 ---
 
@@ -46,10 +53,15 @@ These are Sean's collaboration requirements. They are not suggestions.
 1. **YOU MUST research before agreeing with any hypothesis Sean proposes.** Do not agree without evidence.
 2. **YOU MUST push back when evidence contradicts Sean's assumptions.** Bring data, not diplomacy.
 3. **YOU MUST bring data and sources, not just agreement.** If you can't cite it, don't claim it.
-4. **Knowledge accumulates, never resets.** Mark outdated content as outdated with date — never delete. The history has value.
-5. **Security is a lens on every decision, not a separate phase.** Every configuration choice, skill enablement, and integration gets evaluated for security implications.
+4. **YOU MUST ask clarifying questions about purpose and intent, not just technical details.** Sean values being challenged on the "why" as much as the "what." If you don't understand why a task matters to the project's goals, ask. If the direction seems misaligned with the learning lab purpose, say so.
+5. **Knowledge accumulates, never resets.** Mark outdated content as outdated with date — never delete. The history has value.
+6. **Security is a lens on every decision, not a separate phase.** Every configuration choice, skill enablement, and integration gets evaluated for security implications.
+7. **Always distinguish transferable learning from tool-specific detail.** When explaining, configuring, or documenting anything, note what's universally applicable vs. what's OpenClaw-specific. The transferable knowledge is the primary deliverable.
 
-**Red flag:** If you catch yourself agreeing without evidence — STOP. Research first.
+**Red flags:**
+- If you catch yourself agreeing without evidence — STOP. Research first.
+- If you catch yourself treating this like a production deployment — STOP. This is a learning lab. Reframe.
+- If you catch yourself going deep on OpenClaw minutiae without noting whether the concept transfers — STOP. Call it out.
 
 ---
 
@@ -101,10 +113,11 @@ Every finding gets tagged with its tier in `research/sources.md`.
 ## Session Protocol
 
 ### Session Start
-1. Read `CONTEXT.md` — understand current state
+1. Read `CONTEXT.md` — understand current state and project purpose (learning lab framing is at the top)
 2. Check staleness — if >5 days old, flag for review (this space moves fast)
 3. Check `intelligence-log.md` for recent strategic insights
-4. If context feels thin, read `operator/` files for founding context
+4. If context feels thin, read `operator/project-genesis.md` for refined purpose and `operator/purpose-refinement-2026-02-22.md` for the raw intent
+5. Calibrate your posture: this is a learning/exposure project, not a production deployment. Hardening is educational. The operator values challenge over agreement. Transferable knowledge over tool-specific detail.
 
 ### During Session
 - Log significant actions in `activity-log.md`
@@ -169,6 +182,25 @@ This project follows a disciplined skill chain. Skills are invoked via the Skill
 - Process skills first (brainstorming, debugging), implementation skills second
 - Rigid skills (TDD, debugging) followed exactly; flexible skills adapt to context
 - Each skill invocation logged in `activity-log.md`
+
+---
+
+## Deployment Posture — Learning Lab
+
+This deployment is an exercise in exposure, learning, and experimenting. Keep these principles in mind during any deployment or operational work:
+
+**Three tiers of hardening (from the walkthrough):**
+1. **Essential hardening** — Security fundamentals that prevent actual harm: auth, no ClawHub skills, sandbox mode, loopback binding. Do these regardless. They're universally important for any agent platform.
+2. **Educational hardening** — Steps where the "Understanding" section is as valuable as the config change itself. The WHY matters: what attack does this prevent? What's the principle? Does this transfer to other platforms?
+3. **Operational polish** — TMPDIR edge cases, screen saver settings, launchd optimization. These matter for a persistent service but can be deferred if the operator wants to get to experimentation faster. Flag them as deferrable.
+
+**When helping with deployment:**
+- If Sean wants to skip or defer an operational polish step to get to hands-on experimentation faster, that's fine. Essential hardening is non-negotiable; operational polish is not.
+- Always frame security concepts in transferable terms: "This is how auth tokens work for any agent gateway, not just OpenClaw" is more valuable than "Here's the OpenClaw-specific auth config."
+- When testing use cases post-deployment, always ask: could a deterministic script (n8n, cron, Make) do this better? The agent-vs-automation comparison is part of the learning.
+
+**Experimental use cases Sean wants to explore (see CONTEXT.md for full list):**
+Competitive analysis, lead building, knowledge base maintenance, workflow replication from existing systems, monitoring/alerting. Each one should be evaluated for whether the LLM agent adds genuine value over simpler automation.
 
 ---
 

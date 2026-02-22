@@ -1,11 +1,22 @@
 # CONTEXT.md — ClawdBot Research Project
 
-**Last Updated:** 2026-02-22 (post-staleness sweep)
+**Last Updated:** 2026-02-22 (post-staleness sweep + purpose refinement)
 **Staleness Threshold:** 5 days (flag if older)
+
+## Project Purpose
+
+**This is a hands-on learning lab**, not a production deployment. OpenClaw is Case Study #1 for building transferable judgment about autonomous AI agent platforms. The deployment is the vehicle for learning, not the destination. See `operator/project-genesis.md` for the full refined purpose and `operator/purpose-refinement-2026-02-22.md` for the raw conversation capture.
+
+**Key framing for any agent working in this project:**
+- Hardening is educational as much as operational — understanding WHY matters more than operational perfection
+- Transferable skills (security thinking, evaluation methodology, deployment patterns) matter more than OpenClaw-specific expertise
+- Sean is a Solutions Engineer — CEOs/CPOs are asking about AI agents NOW. This builds credibility and judgment for those conversations.
+- OpenClaw may or may not last, but the assessment capability built here transfers to whatever comes next
 
 ## Current Status
 
-- **Phase:** DEPLOYMENT WALKTHROUGH READY (v1.1) — research complete, walkthrough updated with Phase 0 for existing Mac Mini prep. **Awaiting Sean's decision to begin deployment.**
+- **Phase:** DEPLOYMENT WALKTHROUGH READY (v1.1) — research complete, walkthrough updated with Phase 0 for existing Mac Mini prep. **Ready for Sean to begin learning deployment.**
+- **Deployment posture:** Learning lab. Get it running, get it locally hardened, understand the attack surface, experiment with use cases. Not committing to daily professional use — building understanding and hands-on credibility.
 - **OpenClaw deployment:** NOT YET — walkthrough at `docs/walkthrough/2026-02-11-v1-initial-deployment.md` (10 phases, 0-I).
 - **Deployment plan (reference):** `knowledge-base/04-deployment/mac-mini-deployment-plan.md`
 - **⚠️ VERSION TARGET UPDATED:** Must deploy version **>= 2026.2.15** (minimum) or **2026.2.19** (recommended, latest as of 2026-02-22). Previous target of >= 2026.1.29 is INSUFFICIENT — 4 additional CVEs discovered and patched between 2026.2.1 and 2026.2.15. Walkthrough and crib sheet need updating to reflect this.
@@ -41,16 +52,22 @@
 - Sandbox configuration reference now much more granular: workspaceAccess, sessionToolsVisibility, 8-level tool restriction filtering order, browser sandbox options, container pruning, custom bind mounts.
 - exec-approvals system more mature: bulk config from file, CLI management, autoAllowSkills flag, remote approval via chat commands.
 
-## What Needs Updating Before Deployment
+## What Was Updated (2026-02-22)
 
-| Document | Change Needed |
-|----------|---------------|
-| `docs/walkthrough/...` | Version target: >= 2026.1.29 → >= 2026.2.19. Add SecureClaw evaluation step to Phase G. Note TMPDIR fix. |
-| `docs/walkthrough/crib-sheet.md` | Version target update. Add `openclaw sandbox explain` and `openclaw approvals` commands. |
-| `knowledge-base/03-security/security-posture-analysis.md` | Add 4 new CVEs, updated ClawHub numbers, SecureClaw tool, Microsoft/Cisco assessments. |
-| `knowledge-base/04-deployment/mac-mini-deployment-plan.md` | Version target. LaunchAgent TMPDIR note. |
-| `knowledge-base/01-landscape/competitive-landscape.md` | Foundation governance transition. |
-| `research/sources.md` | Add ~15 new sources from this sweep. |
+All staleness sweep changes were applied across 2 commits on 2026-02-22:
+
+| Document | Change Applied | Status |
+|----------|---------------|--------|
+| `docs/walkthrough/...` | Version target → >= 2026.2.19, 4 new CVEs, TMPDIR note, 15 edits total | ✅ Done |
+| `docs/walkthrough/crib-sheet.md` | Version target, 6 new CLI commands | ✅ Done |
+| `knowledge-base/03-security/security-posture-analysis.md` | 4 new CVEs, ClawHub numbers, SecureClaw, Microsoft/Cisco | ✅ Done |
+| `knowledge-base/04-deployment/mac-mini-deployment-plan.md` | Version target, TMPDIR note | ✅ Done |
+| `knowledge-base/01-landscape/competitive-landscape.md` | Foundation governance, stars update, risk #6 | ✅ Done |
+| `research/sources.md` | 15 new sources added (total 145+) | ✅ Done |
+| `operator/project-genesis.md` | Purpose refinement — learning lab framing, professional context | ✅ Done (this session) |
+| `CONTEXT.md` | Purpose section, deployment posture, use cases, framing updates | ✅ Done (this session) |
+
+**Still in progress this session:** CLAUDE.md alignment, walkthrough framing updates, operator profile review.
 
 ## What This Project Produced
 
@@ -74,9 +91,9 @@
 
 ### Key Verdicts (UNCHANGED — sweep reinforces, not contradicts)
 - **Mac Mini:** GO — community-validated, overpowered for this use case
-- **OpenClaw:** GO with mandatory hardening — now 6+ CVEs, ~20% malicious skills ecosystem (up from 12%)
+- **OpenClaw:** GO with mandatory hardening — now 6+ CVEs, ~20% malicious skills ecosystem (up from 12%). Remember: this is Case Study #1 for learning, not a permanent commitment.
 - **Landscape:** Right category choice — Foundation transition strengthens long-term viability
-- **Stack:** OpenClaw + n8n (deterministic workflows) + Langfuse (observability)
+- **Stack:** OpenClaw + n8n (deterministic workflows) + Langfuse (observability). n8n is interesting as a comparison point: where does an LLM agent add value vs. where does deterministic automation do it better?
 
 ## Key Decisions
 
@@ -112,6 +129,20 @@
 4. `004-webhook-n8n-integration.md` — n8n ↔ OpenClaw via webhook API
 5. `005-local-gguf-embeddings.md` — On-device memory search via M4 Neural Engine
 
+## Experimental Use Cases (Post-Deployment)
+
+Once the learning deployment is running, Sean wants to experiment with these — roughly in order of complexity. The key question for each: does an LLM agent add value here vs. deterministic automation?
+
+1. **Update notifications / monitoring alerts** — Low complexity, good first test
+2. **Competitive analysis automation** — Sean has baselines from existing work to evaluate against
+3. **Lead list building** — Structured enough that the agent-vs-script comparison is clear
+4. **Follow-up monitoring and alerting** — Tests scheduling, persistence, judgment
+5. **Context file / knowledge base maintenance** — Meta: can the agent help maintain this project?
+6. **Sandboxed workflow replication** — Mirror SaleEnablementEngine or WondaKB workflows to test real value
+7. **"Product Manager" agent** — Status aggregation, stakeholder updates, backlog grooming. Interesting because the parts an agent can do are the parts PMs hate, and the parts it can't do are the parts that make PMs valuable.
+
+**Future artifact:** An assessment framework document — "How to evaluate an autonomous agent platform." Build after deployment experience informs it, not before.
+
 ## Known Gaps
 
 - **`research/scrapes/` is empty.** Raw Bright Data outputs were consumed in real-time during research sessions but not persisted to disk. Individual KB files include source URLs that can be re-scraped if needed. Future research cycles should save raw scrape outputs before synthesizing.
@@ -121,12 +152,14 @@
 
 ## How to Use This Project
 
-1. **Ready to deploy?** Follow `docs/walkthrough/2026-02-11-v1-initial-deployment.md` — start with Phase 0 (machine prep), then Phases A-I. **BUT FIRST:** update version targets per this sweep (see "What Needs Updating" above).
-2. **Need the raw reference?** `knowledge-base/04-deployment/mac-mini-deployment-plan.md` (commands-only, no educational context)
-3. **Need to check security?** Read `knowledge-base/03-security/security-posture-analysis.md` + this CONTEXT.md "Staleness Sweep Results" section
-4. **Choosing skills?** Read `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
-5. **Staying current?** Follow `knowledge-base/07-operations/research-cadence.md`
-6. **Something breaks?** Check `knowledge-base/07-operations/operational-runbook-template.md`
+1. **New session or new agent?** Read this file first, then `operator/project-genesis.md` for purpose context. Remember: this is a learning lab, not a production deployment.
+2. **Ready to deploy?** Follow `docs/walkthrough/2026-02-11-v1-initial-deployment.md` — start with Phase 0 (machine prep), then Phases A-I. The walkthrough is the primary operating document. It's educational by design — the "Understanding" sections are the point, not overhead.
+3. **Need the raw reference?** `knowledge-base/04-deployment/mac-mini-deployment-plan.md` (commands-only, no educational context)
+4. **Need to check security?** Read `knowledge-base/03-security/security-posture-analysis.md` + this CONTEXT.md "Staleness Sweep Results" section
+5. **Choosing skills?** Read `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md`
+6. **Staying current?** Follow `knowledge-base/07-operations/research-cadence.md`
+7. **Something breaks?** Check `knowledge-base/07-operations/operational-runbook-template.md`
+8. **Evaluating a different agent platform?** The research methodology (dual-source, credibility tiers), security posture analysis framework, and deployment patterns are designed to be transferable. OpenClaw is Case Study #1.
 
 ## Infrastructure
 

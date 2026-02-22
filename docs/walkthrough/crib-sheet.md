@@ -1,6 +1,6 @@
 # Deployment Crib Sheet
 
-Quick reference for everything you need before and during deployment. The walkthrough (`2026-02-11-v1-initial-deployment.md`) has the full explanations — this is just the checklist.
+Quick reference for everything you need before and during your learning deployment. The walkthrough (`2026-02-11-v1-initial-deployment.md`) has the full explanations, educational context, and the "why" behind each step — this is just the checklist. See the walkthrough's "What This Walkthrough Is For" section for the three-tier system (🔒 Essential / 📚 Educational / ⚙️ Operational polish).
 
 ---
 

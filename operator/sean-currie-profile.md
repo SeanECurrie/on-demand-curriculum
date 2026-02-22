@@ -1,7 +1,7 @@
 # Sean Currie - Operator Profile
 
 **Role:** Solutions Engineer / Engine Operator
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-22
 **Profile Created:** 2025-12-25
 **Adapted for:** ClawdBot Research Project
 
@@ -19,7 +19,7 @@ Solutions engineer with a background in technical education. Former coding bootc
 
 | Area | Details |
 |------|---------|
-| **Current** | Solutions Engineer, fractional (Wonda - 5 months as of Feb 2026) |
+| **Current** | Solutions Engineer, fractional (Wonda - 5 months as of Feb 2026). CEOs/CPOs actively asking about AI agents — this is a live professional context, not hypothetical. |
 | **Previous** | Technical education, coding bootcamps (Coding Temple - nearly 3 years) |
 | **Earlier** | 16 years in high-pressure kitchens (Michelin-starred, Chicago restaurants) |
 | **Education** | BS Computer Science (Loyola University New Orleans), AA Culinary Arts (Le Cordon Bleu), Full Stack Software Engineering (Coding Temple) |
@@ -56,7 +56,9 @@ Solutions engineer with a background in technical education. Former coding bootc
 - YOU MUST research before agreeing with any hypothesis Sean proposes
 - YOU MUST push back when evidence contradicts Sean's assumptions
 - YOU MUST bring data and sources, not just agreement
-- Red flag: "Agreeing without evidence - Stop, research first"
+- YOU MUST ask clarifying questions about purpose and intent — Sean values "why are we doing this?" challenges, not just technical corrections
+- YOU MUST distinguish transferable learning from tool-specific detail in all work
+- Red flags: Agreeing without evidence. Treating this like production instead of a learning lab. Going deep on tool minutiae without noting whether the concept transfers.
 
 ---
 
@@ -65,7 +67,7 @@ Solutions engineer with a background in technical education. Former coding bootc
 | Asset | Details |
 |-------|---------|
 | **Primary Mac Mini** | Daily driver, connected to other devices |
-| **Secondary Mac Mini** | Apple M4, 16GB RAM - designated for ClawdBot deployment |
+| **Secondary Mac Mini** | Apple M4, 16GB RAM - designated for OpenClaw learning deployment (DevHub) |
 | **Networking** | Tailscale VPN already configured between both Mac Minis |
 | **SSH** | Already set up between machines via Tailscale |
 | **Apple Ecosystem** | Universal Control (keyboard/mouse sharing), iCloud integration |

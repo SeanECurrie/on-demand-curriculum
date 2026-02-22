@@ -5,7 +5,24 @@
 **Target:** Apple M4 Mac Mini, 16GB RAM, Tailscale configured
 **OpenClaw Target Version:** >= 2026.2.19 (mandatory — patches 6 CVEs including 4 discovered after initial research)
 **Based On:** ClawdBot Research Project — 130+ sources across Context7 + Bright Data
-**Updated:** 2026-02-22 — Version target updated to >= 2026.2.19 (4 new CVEs, macOS LaunchAgent fix, security hardening). Phase 0 added 2026-02-14.
+**Updated:** 2026-02-22 — Version target updated to >= 2026.2.19 (4 new CVEs, macOS LaunchAgent fix, security hardening). Phase 0 added 2026-02-14. Purpose framing refined 2026-02-22.
+
+---
+
+## What This Walkthrough Is For
+
+This is a **learning deployment**. The goal isn't to build production infrastructure you depend on daily — it's to build hands-on understanding of what deploying, hardening, and operating an autonomous AI agent actually involves. OpenClaw is Case Study #1: the first tool to move the needle in this space and the one that's generating real client conversations right now.
+
+**What you're actually building by going through this:**
+- Judgment about what "hardened deployment" means for any agent platform, not just OpenClaw
+- Hands-on experience you can reference when CEOs and CPOs ask about AI agents (and they are asking)
+- The ability to distinguish real security risks from hype, and to know which hardening steps are universally important vs. tool-specific
+- A working deployment you can experiment with — testing use cases, comparing agent value vs. deterministic automation, and building intuition
+
+**Three types of steps in this walkthrough:**
+- 🔒 **Essential hardening** — Security fundamentals that prevent actual harm. Non-negotiable regardless of whether this is a lab or production. (Auth, no ClawHub, sandbox, loopback binding.)
+- 📚 **Educational hardening** — Steps where the "Understanding" section is the real value. The concept transfers to any agent platform. Take your time with these.
+- ⚙️ **Operational polish** — Steps that matter for a persistent always-on service. If you want to get to experimentation faster, these can be deferred and revisited later. They're flagged.
 
 ---
 
@@ -19,9 +36,9 @@ This is a **read-ahead guide**, not a live session script. Here's how it works:
 4. **Fill in Deployment Notes.** Every phase ends with a blank "Deployment Notes" section. Use it to record what actually happened — deviations, surprises, observations. This is how the research project stays alive.
 5. **Report back when done.** After deployment (or when stuck), we'll update the project together: activity log, intelligence log, CONTEXT.md, and annotate this walkthrough with real-world findings.
 
-**A note on the educational approach:** This isn't a beginner tutorial and it isn't a reference manual. It's structured like a knowledgeable colleague walking you through a new stack — explaining the *why* behind each step, not just the *what*. Some phases have "Understanding" sections that dig into key concepts. These exist because the command makes more sense when you understand what it's doing.
+**A note on the educational approach:** This isn't a beginner tutorial and it isn't a reference manual. It's structured like a knowledgeable colleague walking you through a new stack — explaining the *why* behind each step, not just the *what*. Some phases have "Understanding" sections that dig into key concepts. These exist because the command makes more sense when you understand what it's doing. **The understanding IS the deliverable** — a running bot is the side effect.
 
-**Time estimate:** 2-3 hours for the full deployment (Phases A through I), assuming no blockers.
+**Time estimate:** 2-3 hours for the full deployment (Phases A through I), assuming no blockers. But don't rush the "Understanding" sections — those are where the transferable learning lives.
 
 ---
 
@@ -115,7 +132,7 @@ If this doesn't work, fix Tailscale connectivity first. The rest of this walkthr
 
 ### Understanding: Redefining the Machine's Role
 
-Your Mac Mini started life as a modular dev node — a lab bench for Docker, local LLMs, FastAPI, and CI/CD experiments. That was the right build for exploration. But the role is changing. This machine is about to become a security-hardened, headless AI agent orchestration node running OpenClaw as a persistent service, accessible exclusively via Tailscale, with Docker sandbox for tool isolation.
+Your Mac Mini started life as a modular dev node — a lab bench for Docker, local LLMs, FastAPI, and CI/CD experiments. That was the right build for exploration. The role is changing — this machine is becoming a security-hardened AI agent learning lab running OpenClaw, accessible exclusively via Tailscale, with Docker sandbox for tool isolation. We're hardening it like a production node because *understanding what production hardening looks like* is the point — even though this is primarily a learning deployment. The security steps here are 📚 **educational**: the concepts (identity isolation, attack surface reduction, least-privilege) apply to any agent platform, not just OpenClaw.
 
 That role change has two implications:
 
