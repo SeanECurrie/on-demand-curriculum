@@ -20,9 +20,9 @@ This is a **learning deployment**. The goal isn't to build production infrastruc
 - A working deployment you can experiment with — testing use cases, comparing agent value vs. deterministic automation, and building intuition
 
 **Three types of steps in this walkthrough:**
-- 🔒 **Essential hardening** — Security fundamentals that prevent actual harm. Non-negotiable regardless of whether this is a lab or production. (Auth, no ClawHub, sandbox, loopback binding.)
-- 📚 **Educational hardening** — Steps where the "Understanding" section is the real value. The concept transfers to any agent platform. Take your time with these.
-- ⚙️ **Operational polish** — Steps that matter for a persistent always-on service. If you want to get to experimentation faster, these can be deferred and revisited later. They're flagged.
+- **Essential hardening** — Security fundamentals that prevent actual harm. Non-negotiable regardless of whether this is a lab or production. (Auth, no ClawHub, sandbox, loopback binding.)
+- **Educational hardening** — Steps where the "Understanding" section is the real value. The concept transfers to any agent platform. Take your time with these.
+- **Operational polish** — Steps that matter for a persistent always-on service. If you want to get to experimentation faster, these can be deferred and revisited later. They're flagged.
 
 ---
 
@@ -75,7 +75,7 @@ These couldn't be answered by research alone. You'll test them hands-on:
 
 | # | Question | When to Test | What to Watch For |
 |---|----------|-------------|-------------------|
-| 0 | Machine state audit | Phase 0 (prep) | Audit commands capture current state — review before proceeding |
+| 0 | Machine state audit | Phase 0 (prep) | Connectivity, macOS updates, audit commands capture current state — review before proceeding |
 | 1 | CVE patch verification | Phase C (install) | `openclaw --version` must show >= 2026.2.19. Patches 6 CVEs (2 original + 4 discovered Feb 2026). |
 | 2 | macOS Keychain behavior | Phase C (onboard) | Screenshot every TCC/Keychain dialog. Deny by default. |
 | 3 | Docker sandbox on Apple Silicon | Phase D (sandbox) | Memory consumption in Activity Monitor. Does 16GB hold? |
@@ -125,14 +125,14 @@ If this doesn't work, fix Tailscale connectivity first. The rest of this walkthr
 
 ## Phase 0: Machine Preparation
 
-**What we're doing:** Preparing your existing Mac Mini — which has a v1 DevHub build (Homebrew, Docker, Ollama, Tailscale, FastAPI projects, monitoring containers) — for its new role as a dedicated OpenClaw deployment node. No wipe needed.
-**Why it matters:** This isn't tidying. Identity artifacts (iCloud, Google) create data exfiltration paths that conflict with OpenClaw's local-first security model. Unnecessary services (Ollama, monitoring containers) expand the attack surface. Existing software (Homebrew, Docker) changes the deployment path for later phases.
-**Time estimate:** 30-45 minutes.
-**Source context:** This phase was added on 2026-02-14 based on a review of the Mac Mini's actual state (v1 DevHub build from a prior project) against this project's security research.
+**What we're doing:** Preparing your existing Mac Mini — which has a v1 DevHub build (Homebrew, Docker, Ollama, Tailscale, FastAPI projects, monitoring containers) — for its new role as a dedicated OpenClaw learning lab. No wipe needed.
+**Why it matters:** This isn't tidying. Identity artifacts (iCloud, Google) create data exfiltration paths that conflict with OpenClaw's local-first security model. Unnecessary services (Ollama, monitoring containers) expand the attack surface. Existing software (Homebrew, Docker) changes the deployment path for later phases. And a machine that's been sitting idle may have drifted — pending updates, stale connections, unknown state.
+**Time estimate:** 45-60 minutes (includes macOS updates if needed).
+**Source context:** This phase was added on 2026-02-14 based on a review of the Mac Mini's actual state (v1 DevHub build from a prior project) against this project's security research. Updated 2026-02-22 with lessons from actual machine accessibility issues and community deployment experience.
 
 ### Understanding: Redefining the Machine's Role
 
-Your Mac Mini started life as a modular dev node — a lab bench for Docker, local LLMs, FastAPI, and CI/CD experiments. That was the right build for exploration. The role is changing — this machine is becoming a security-hardened AI agent learning lab running OpenClaw, accessible exclusively via Tailscale, with Docker sandbox for tool isolation. We're hardening it like a production node because *understanding what production hardening looks like* is the point — even though this is primarily a learning deployment. The security steps here are 📚 **educational**: the concepts (identity isolation, attack surface reduction, least-privilege) apply to any agent platform, not just OpenClaw.
+Your Mac Mini started life as a modular dev node — a lab bench for Docker, local LLMs, FastAPI, and CI/CD experiments. That was the right build for exploration. The role is changing — this machine is becoming a security-hardened AI agent learning lab running OpenClaw, accessible exclusively via Tailscale, with Docker sandbox for tool isolation. We're hardening it like a production node because *understanding what production hardening looks like* is the point — even though this is primarily a learning deployment. The concepts here — identity isolation, attack surface reduction, least-privilege, state auditing — apply to preparing ANY machine for ANY agent platform, not just OpenClaw.
 
 That role change has two implications:
 
@@ -142,17 +142,83 @@ Second, **leftover services are unnecessary exposure.** Ollama listening on a po
 
 The good news: most of your v1 build helps rather than hurts. Homebrew, Docker Desktop, Tailscale, Git, and your terminal setup are all things we'd install from scratch on a clean machine. You're ahead — you just need to clean and verify rather than build from zero.
 
-### 0.1: Identity & Sync Disconnection
+### 0.1: Connectivity & Power Check
 
-**Concept:** This is a security requirement, not personal preference. OpenClaw stores credentials, session transcripts, and API keys locally. Cloud sync services create paths for that data to leave the machine. A logged-in browser is the attack vector for the most critical CVE in OpenClaw's history.
+**Concept:** Before you touch anything on the machine, confirm you can actually reach it. This sounds obvious but isn't — your Mac Mini has gone unreachable before (Apple account issue knocked out Universal Control access). If you're planning to work remotely via Tailscale SSH, confirm the connection works NOW, before you start making changes that could break something.
+
+**If you're sitting at the Mac Mini physically:**
+Skip the SSH check, but still verify Tailscale is running — you'll need it later.
+
+**If you're connecting remotely via Tailscale SSH:**
+```bash
+# From your PRIMARY Mac — verify the DevHub is reachable
+tailscale ping devhub       # Replace 'devhub' with your Mac Mini's Tailscale hostname
+ssh devhub "hostname && uptime && sw_vers"
+```
+
+**Expected output:** Hostname, uptime (tells you how long it's been on), and macOS version.
+
+**If this fails:**
+- Machine might be asleep. If you have physical access, wake it. If not, check if Wake for Network Access is enabled (System Settings > Energy Saver on the Mac Mini directly).
+- Tailscale might not be running. If you can reach the machine via Screen Sharing or physically, check: is the Tailscale menu bar icon active? Try `tailscale status` from a local terminal on the Mac Mini.
+- Apple account issues: if the machine is stuck at a login screen or iCloud re-authentication dialog, you may need physical access to dismiss it. This has happened before — it's the reason this step exists.
+
+**Important — prevent sleep during this entire Phase 0:**
+Tailscale has a known issue on macOS where it doesn't reliably reconnect after the machine wakes from sleep (GitHub issues #1134, #17736, #17937). If you're working remotely and the machine sleeps mid-Phase 0, you could lose access. Run this immediately after connecting:
+```bash
+# Prevent sleep for the duration of Phase 0 (run on the Mac Mini)
+caffeinate -d &
+# This keeps the display awake. We'll set permanent sleep prevention in Phase A.
+```
+
+**HDMI dummy plug:** If you're running fully headless (no monitor connected), macOS degrades to a low-resolution graphics mode that can cause issues with screen capture and some UI operations. Plugging in an HDMI dummy plug ($5-10 from Amazon) before starting avoids this. Already on the Pre-Flight Checklist but worth doing now if you haven't.
+
+### 0.2: macOS Update Check
+
+**Concept:** A machine that's been sitting idle for weeks may have pending macOS updates. These can hang, require restarts, or change system behavior in ways that affect later phases. Get the machine current before making configuration changes. This also ensures you have the latest security patches — relevant since you're about to deploy software that handles API keys and network traffic.
+
+**Transferable concept:** "Update the OS before deploying agent software" applies to any platform on any OS. On Linux you'd run `apt update && apt upgrade`. The principle is the same: known-good baseline before adding new layers.
+
+```bash
+# Check current macOS version and available updates
+sw_vers
+softwareupdate --list
+```
+
+**If updates are available:**
+```bash
+# Install all available updates (may require restart)
+sudo softwareupdate --install --all --restart
+```
+
+**If this hangs ("Checking for updates..." spinner):**
+```bash
+# Restart Apple's update daemon
+sudo launchctl kickstart -k system/com.apple.softwareupdated
+# Then try again
+softwareupdate --list
+```
+
+**Expected output:** macOS 15.x (Sequoia) or later, fully updated. If a restart was required, reconnect via SSH after the machine comes back up. Run `caffeinate -d &` again after reconnecting.
+
+**If you're anxious to get going:** macOS updates are non-negotiable before deployment. Older macOS versions have Tailscale daemon bugs and missing security patches. Do this step even if you want to skip other cleanup.
+
+### 0.3: Identity & Sync Isolation
+
+**Concept:** OpenClaw stores credentials, session transcripts, and API keys locally. Cloud sync services create paths for that data to leave the machine. A logged-in browser is the attack vector for the most critical CVE in OpenClaw's history. You need to isolate this machine from cloud sync — but intelligently, without breaking system functionality you still need.
+
+**Important lesson from experience:** Fully signing out of your Apple ID can cause real problems — you lose App Store access for updates, Find My Mac stops working, and some macOS system features get flaky. The approach here: keep your Apple ID signed in, but disable ALL iCloud sync services individually. This gives you App Store access and system stability while preventing data sync.
 
 **Actions (in System Settings and browsers — these are GUI steps):**
 
-1. **iCloud:** System Settings > [Your Name] > Sign Out. If you want to keep your Apple ID for App Store access only, instead go to System Settings > [Your Name] > iCloud and individually disable: iCloud Drive, Photos, Contacts, Calendars, Keychain, Safari, Notes, and everything else. The goal is zero sync.
+1. **iCloud sync services — disable individually (don't sign out entirely):**
+   System Settings > [Your Name] > iCloud. Disable each service one by one: iCloud Drive, Photos, Contacts, Calendars, Keychain, Safari, Notes, Reminders, and everything else. The goal is **zero sync** while keeping your Apple ID active for system functions and App Store.
 
-2. **Google accounts:** Open every browser on this machine (Safari, Chrome, Firefox, etc.). Sign out of all Google accounts. Clear saved sessions and cookies. If you use Chrome, also go to Settings > You and Google > Turn off sync.
+2. **iCloud Drive specifically:** If iCloud Drive was syncing Desktop & Documents, turning it off will ask whether to keep files locally. Choose "Keep on This Mac." Your files stay; they just stop syncing.
 
-3. **Other cloud sync:** If Dropbox, OneDrive, or any other sync service is installed, sign out and quit it. Check System Settings > General > Login Items to see what starts at boot — remove anything sync-related.
+3. **Google accounts:** Open every browser on this machine (Safari, Chrome, Firefox, etc.). Sign out of all Google accounts. Clear saved sessions and cookies. If you use Chrome, also go to Settings > You and Google > Turn off sync. This is specifically about eliminating the browser-based attack vector for CVE-2026-25253.
+
+4. **Other cloud sync:** If Dropbox, OneDrive, or any other sync service is installed, sign out and quit it. Check System Settings > General > Login Items to see what starts at boot — remove anything sync-related.
 
 **Verification:**
 ```bash
@@ -165,14 +231,14 @@ osascript -e 'tell application "System Events" to get the name of every login it
 # Review the list — flag anything that syncs to cloud
 ```
 
-**Expected output:** No cloud sync processes running. Login Items clean of sync services.
+**Expected output:** No cloud sync processes running. Login Items clean of sync services. Apple ID still signed in (System Settings > [Your Name] should show your name, not "Sign In"), but no iCloud services actively syncing.
 
 **If something's wrong:**
-- If iCloud sign-out asks about keeping data locally: choose "Keep on This Mac" — we're not deleting your data, just stopping sync
 - If a sync process won't quit: check Activity Monitor, force quit if needed
-- If you need your Apple ID for App Store (e.g., to update apps): keep it signed in but disable ALL iCloud services individually
+- If macOS nags about iCloud services: dismiss the notifications. They'll stop after a restart.
+- If you accidentally signed out of Apple ID entirely: sign back in, then disable services individually. Full sign-out isn't necessary and causes more problems than it solves.
 
-### 0.2: Software Audit
+### 0.4: Software Audit
 
 **Concept:** Before removing anything, capture the machine's current state. This serves two purposes: it gives you a record of what was installed (in case you need to reconstruct something later), and it gives you (or your agent) data to review rather than relying on memory.
 
@@ -196,7 +262,7 @@ bash -c 'echo "=== HOMEBREW PACKAGES ===" && brew list && echo "" && echo "=== H
 
 **This is a checkpoint.** Review the output. If you want a second opinion on what should stay or go, share it with your agent before proceeding to Step 0.3.
 
-### 0.3: Software Cleanup
+### 0.5: Software Cleanup
 
 **Concept:** Remove services and software that aren't part of the OpenClaw stack. The keep/remove decisions below are based on this project's research — what OpenClaw needs vs. what was part of the v1 DevHub build.
 
@@ -293,7 +359,7 @@ brew autoremove && brew cleanup
 
 **Expected output:** A much leaner machine. Only software that serves the OpenClaw deployment remains.
 
-### 0.4: Homebrew Health Check
+### 0.6: Homebrew Health Check
 
 **Concept:** Your existing Homebrew may have stale packages, broken links, or orphaned dependencies from the v1 build. Clean it up so Phase B starts from a healthy base.
 
@@ -313,7 +379,7 @@ brew --version
 - `brew doctor` may suggest unlinking or relinking packages — follow its advice
 - If it warns about permissions: `sudo chown -R $(whoami) /opt/homebrew`
 
-### 0.5: Docker Desktop Verification
+### 0.7: Docker Desktop Verification
 
 **Concept:** Docker Desktop stays but should be clean and current. It will be used for OpenClaw's sandbox containers.
 
@@ -332,7 +398,7 @@ docker images
 
 **Expected output:** Docker running, no containers, no images, current version.
 
-### 0.6: Readiness Verification
+### 0.8: Readiness Verification
 
 **Concept:** This is the go/no-go gate before Phase A. Run this command block and review the output. Everything should look clean. If something unexpected appears — an unknown listening port, a sync process still running, more disk usage than expected — investigate before proceeding.
 
@@ -400,7 +466,11 @@ echo "=== END READINESS CHECK ==="
 
 *Fill this in during deployment:*
 
-- [ ] iCloud signed out / all sync disabled?
+- [ ] Machine reachable via Tailscale SSH? (or working physically at it?)
+- [ ] `caffeinate -d &` running to prevent sleep?
+- [ ] HDMI dummy plug inserted (if headless)?
+- [ ] macOS fully updated? Version: ___
+- [ ] iCloud sync services all disabled? (Apple ID still signed in?)
 - [ ] Google accounts signed out of browsers?
 - [ ] Pre-cleanup audit saved?
 - [ ] Ollama removed?
@@ -427,7 +497,7 @@ Tim's VPS ran Debian Linux — an OS built for servers. It doesn't sleep, doesn'
 
 The other thing that's different is the security model. On Linux, the root/non-root separation is sharp and well-understood. On macOS, there are "admin" users and "standard" users, plus a hidden root account, plus System Integrity Protection (SIP) preventing even root from modifying system files, plus Gatekeeper checking app signatures. We're going to use all of these layers. The dedicated non-admin user means the OpenClaw process can't `sudo` — so even if an attacker gets code execution through the agent, they can't escalate to system-level access.
 
-One advantage you have: your Mac Mini isn't starting from zero. The Phase 0 prep you just completed means Homebrew is already installed and healthy, Tailscale is already configured and running, and Docker Desktop is clean and ready for sandbox use. The server hardening steps in this phase still apply in full — sleep prevention, FileVault, firewall rules, SIP verification — but you won't be installing foundational tools alongside them.
+One advantage you have: your Mac Mini isn't starting from zero. The Phase 0 prep you just completed means macOS is fully updated, Homebrew is already installed and healthy, Tailscale is already configured and running, and Docker Desktop is clean and ready for sandbox use. The server hardening steps in this phase still apply in full — sleep prevention, FileVault, firewall rules, SIP verification — but you won't be installing foundational tools alongside them.
 
 ### A1: Create a Dedicated Non-Admin User
 

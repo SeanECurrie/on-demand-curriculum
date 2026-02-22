@@ -67,7 +67,7 @@ All staleness sweep changes were applied across 2 commits on 2026-02-22:
 | `operator/project-genesis.md` | Purpose refinement — learning lab framing, professional context | ✅ Done (this session) |
 | `CONTEXT.md` | Purpose section, deployment posture, use cases, framing updates | ✅ Done (this session) |
 
-**Still in progress this session:** CLAUDE.md alignment, walkthrough framing updates, operator profile review.
+**Completed 2026-02-22:** All purpose refinement edits applied — CLAUDE.md, walkthrough framing, crib sheet, operator profile, project-genesis, CONTEXT.md. See `operator/purpose-refinement-2026-02-22.md` for the reference document all edits were checked against.
 
 ## What This Project Produced
 
@@ -147,8 +147,8 @@ Once the learning deployment is running, Sean wants to experiment with these —
 
 - **`research/scrapes/` is empty.** Raw Bright Data outputs were consumed in real-time during research sessions but not persisted to disk. Individual KB files include source URLs that can be re-scraped if needed. Future research cycles should save raw scrape outputs before synthesizing.
 - **Community findings source references.** The 41 community intelligence sources are referenced inline throughout the document but lack full URL attribution for most entries. Key sources were added in the inline index on 2026-02-11.
-- **Walkthrough/crib sheet/deployment plan version targets are STALE.** They reference >= 2026.1.29. Must be updated to >= 2026.2.19 before deployment begins. See "What Needs Updating" table above.
-- **Security posture analysis doesn't include 4 new CVEs or updated ClawHub numbers.** Should be updated before deployment.
+- ~~**Walkthrough/crib sheet/deployment plan version targets are STALE.**~~ [RESOLVED 2026-02-22] All updated to >= 2026.2.19 during staleness sweep.
+- ~~**Security posture analysis doesn't include 4 new CVEs or updated ClawHub numbers.**~~ [RESOLVED 2026-02-22] All 6 CVEs and updated ClawHub numbers (824+/~20%) added during staleness sweep.
 
 ## How to Use This Project
 

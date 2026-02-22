@@ -1,6 +1,6 @@
 # Deployment Crib Sheet
 
-Quick reference for everything you need before and during your learning deployment. The walkthrough (`2026-02-11-v1-initial-deployment.md`) has the full explanations, educational context, and the "why" behind each step — this is just the checklist. See the walkthrough's "What This Walkthrough Is For" section for the three-tier system (🔒 Essential / 📚 Educational / ⚙️ Operational polish).
+Quick reference for everything you need before and during your learning deployment. The walkthrough (`2026-02-11-v1-initial-deployment.md`) has the full explanations, educational context, and the "why" behind each step — this is just the checklist. See the walkthrough's "What This Walkthrough Is For" section for the three-tier system (Essential / Educational / Operational polish).
 
 ---
 
@@ -8,8 +8,14 @@ Quick reference for everything you need before and during your learning deployme
 
 Do this BEFORE anything else. Full details in the walkthrough Phase 0.
 
-**Identity disconnection:**
-- [ ] iCloud: signed out or all sync services disabled
+**Connectivity & updates (do these first):**
+- [ ] Machine reachable via Tailscale SSH (or working physically at it)
+- [ ] `caffeinate -d &` running to prevent sleep during setup
+- [ ] HDMI dummy plug inserted (if headless)
+- [ ] `softwareupdate --list` — install all pending macOS updates
+
+**Identity isolation (disable sync, keep Apple ID signed in):**
+- [ ] iCloud: all sync services disabled individually (don't sign out of Apple ID)
 - [ ] Google: signed out of all browsers, cookies cleared
 - [ ] Other cloud sync: removed/disabled
 

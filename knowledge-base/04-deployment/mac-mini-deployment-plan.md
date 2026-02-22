@@ -53,81 +53,24 @@ ssh openclaw-mac-mini "hostname && sw_vers && uname -m"
 
 **Goal:** Prepare the existing Mac Mini (v1 DevHub build) for OpenClaw deployment without a full wipe.
 
-**Added:** 2026-02-14. Source: Security research cross-referenced with actual machine state (v1 DevHub: Homebrew, Docker Desktop, Ollama, Tailscale, FastAPI, monitoring containers).
+**Added:** 2026-02-14. **Updated:** 2026-02-22 — expanded with connectivity check, macOS update step, refined iCloud guidance (disable sync services individually, don't sign out of Apple ID entirely).
 
-### 0.1: Identity & Sync Disconnection
+**The full Phase 0 walkthrough is in `docs/walkthrough/2026-02-11-v1-initial-deployment.md`.** This plan document has the quick-reference version. Follow the walkthrough for detailed explanations and troubleshooting.
 
-**Why:** iCloud sync creates data exfiltration paths for `~/.openclaw/` contents. Logged-in browsers are the attack bridge for CVE-2026-25253 (CVSS 8.8). Source: security-posture-analysis.md, intelligence-log.md.
+**Phase 0 steps (8 total):**
 
-- Sign out of iCloud: System Settings > [Your Name] > Sign Out (or disable all individual sync services)
-- Sign out of Google in all browsers, clear sessions/cookies
-- Disable/remove any other cloud sync (Dropbox, OneDrive)
+| Step | What | Quick Reference |
+|------|------|----------------|
+| 0.1 | Connectivity & power check | Verify Tailscale SSH access. Run `caffeinate -d &` to prevent sleep. HDMI dummy plug if headless. |
+| 0.2 | macOS update check | `softwareupdate --list` — install all pending updates before anything else. |
+| 0.3 | Identity & sync isolation | Disable all iCloud sync services individually (don't sign out of Apple ID). Sign out of Google in browsers. Remove other cloud sync. |
+| 0.4 | Software audit | Capture pre-cleanup state: `brew list`, `docker ps -a`, `npm list -g`, `lsof -iTCP -sTCP:LISTEN -P`. Save output. |
+| 0.5 | Software cleanup | Remove Ollama, Docker containers/images, old project repos, unused Homebrew packages. Keep Docker Desktop, Tailscale, Git, Node.js. |
+| 0.6 | Homebrew health check | `brew doctor` — fix any issues reported. |
+| 0.7 | Docker Desktop verification | Confirm running, clean, current version. |
+| 0.8 | Readiness verification | Full system check: macOS version, FileVault, SIP, Gatekeeper, Tailscale, clean ports, disk space. Go/no-go gate for Phase A. |
 
-```bash
-# Verify no sync processes running
-ps aux | grep -i -E "icloud|dropbox|onedrive|googledrive" | grep -v grep
-# Expected: No results
-```
-
-### 0.2: Software Audit
-
-**Why:** Capture pre-cleanup state for the record before removing anything.
-
-```bash
-brew list && brew list --cask
-docker ps -a && docker images
-npm list -g --depth=0
-lsof -iTCP -sTCP:LISTEN -P
-```
-
-**Expected outcome:** Snapshot of machine state saved (file or deployment notes).
-
-### 0.3: Software Cleanup
-
-**Why:** Remove services not part of OpenClaw stack. Reduces attack surface and frees resources. Source: session conversation 2026-02-14.
-
-```bash
-# Remove Ollama
-ollama stop 2>/dev/null; pkill -f ollama 2>/dev/null
-brew uninstall ollama 2>/dev/null
-rm -rf ~/.ollama
-
-# Clean Docker (keep Desktop, remove containers/images)
-docker stop $(docker ps -q) 2>/dev/null
-docker rm $(docker ps -aq) 2>/dev/null
-docker system prune -a --force
-
-# Remove old project repos (after confirming pushed to GitHub)
-# rm -rf ~/fastapi-project (adjust to actual paths)
-
-# Stop PostgreSQL if running
-brew services stop postgresql 2>/dev/null
-
-# Clean Homebrew
-brew update && brew upgrade
-brew autoremove && brew cleanup
-brew doctor
-```
-
-**Expected outcome:** Only OpenClaw-relevant software remains. Docker clean. Homebrew healthy.
-
-### 0.4: Readiness Verification
-
-**Why:** Go/no-go gate before Phase A.
-
-```bash
-sw_vers && uname -m                           # macOS version, arm64
-sudo fdesetup status                          # FileVault on
-csrutil status                                # SIP enabled
-spctl --status                                # Gatekeeper enabled
-tailscale status                              # Connected
-brew list                                     # Lean package list
-docker ps -a && docker images                 # Empty
-lsof -iTCP -sTCP:LISTEN -P                   # No unexpected ports
-df -h /                                       # Adequate disk space
-```
-
-**Expected outcome:** All checks pass. No unexpected listening ports, no sync processes, clean Docker, healthy Homebrew.
+**Expected outcome:** Fully updated macOS, no cloud sync, no unnecessary services, clean Docker, healthy Homebrew, Tailscale connected. Ready for Phase A.
 
 ---
 
