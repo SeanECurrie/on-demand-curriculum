@@ -54,14 +54,14 @@ sw_vers && uname -m && sudo fdesetup status && csrutil status && spctl --status 
 |----------|----------------|-----------------|-------|
 | Homebrew | Already installed (v1 build). Verify: `brew --version` | Latest | Updated in Phase 0 |
 | Node.js 22 | `brew install node@22 && brew link node@22` | >= 22 | Must be ARM-native (`file $(which node)` should show `arm64`) |
-| OpenClaw | `npm install -g openclaw@latest` | **>= 2026.1.29** | **CRITICAL** — older versions have 1-click RCE (CVE-2026-25253) |
+| OpenClaw | `npm install -g openclaw@latest` | **>= 2026.2.19** | **CRITICAL** — older versions have 6 known CVEs including 1-click RCE. See walkthrough for details. |
 | Docker Desktop | Already installed (v1 build). Verify: `docker --version` | Latest | Cleaned in Phase 0. Only if using sandbox mode. |
 
 **Verify after install:**
 ```bash
 node --version          # >= 22
 file $(which node)      # arm64
-openclaw --version      # >= 2026.1.29
+openclaw --version      # >= 2026.2.19
 docker --version        # if installed
 ```
 
@@ -184,6 +184,14 @@ openclaw doctor                                   # Health check
 # Tailscale
 tailscale status                                  # Connected devices
 tailscale serve --bg 18789                        # Expose gateway UI via Tailscale HTTPS
+
+# New in v2026.2.19
+openclaw sandbox explain                              # Debug sandbox config
+openclaw approvals set --file ./exec-approvals.json   # Bulk set exec-approvals
+openclaw approvals allowlist add <pattern>             # Add to allowlist
+openclaw approvals allowlist remove <pattern>          # Remove from allowlist
+openclaw doctor --fix                                  # Auto-fix common issues (~70% success rate)
+openclaw devices remove <id>                           # Remove paired device
 ```
 
 ---
@@ -218,7 +226,7 @@ chmod 600 ~/.openclaw/exec-approvals.json
 ## Quick Verification After Deployment
 
 ```bash
-openclaw --version                    # >= 2026.1.29
+openclaw --version                    # >= 2026.2.19
 curl http://127.0.0.1:18789/health    # gateway responds
 sudo fdesetup status                  # FileVault is On
 csrutil status                        # SIP enabled

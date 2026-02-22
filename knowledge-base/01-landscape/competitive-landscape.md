@@ -2,6 +2,7 @@
 
 **Date:** 2026-02-11
 **Status:** Complete research synthesis
+**Updated:** 2026-02-22 — Staleness sweep: Foundation governance transition, GitHub stars update, security posture escalation
 **Purpose:** Inform our OpenClaw/ClawdBot deployment -- NOT to pick a different tool. Understand where alternatives are stronger, identify escape routes, and find complementary tools.
 
 ---
@@ -90,9 +91,9 @@ This distinction matters enormously: OpenClaw's real competitors are tools like 
 
 | Feature | OpenClaw/ClawdBot | n8n | CrewAI | LangGraph | AutoGPT | OpenAI Agents SDK | Manus AI |
 |---------|-------------------|-----|--------|-----------|---------|-------------------|----------|
-| **GitHub Stars** | **145,000+** (as of Feb 2026) | ~50,000+ | ~42,000 | Part of LangChain (~123,000 total ecosystem) | ~53,000 | ~15,000 (new) | N/A (closed) |
-| **Community** | Massive, fast-growing; r/OpenClawCentral; Moltbook social network | Large, established; active Discord | Growing; active Discord | Large (LangChain ecosystem) | Declining activity reported | Growing (OpenAI backing) | Limited (invite-only initially) |
-| **Maturity** | **Early but production-capable** (weeks old, rapid iteration) | **Production-ready** (years of enterprise use) | **Production-ready** (maturing fast) | **Production-ready** (enterprise-grade) | **Experimental** (reliability concerns, loop issues) | **Production-ready** (OpenAI backing, but new) | **Beta** (Meta acquisition pending) |
+| **GitHub Stars** | **209,000+** (as of Feb 22, 2026; was 145K on Feb 10) | ~50,000+ | ~42,000 | Part of LangChain (~123,000 total ecosystem) | ~53,000 | ~15,000 (new) | N/A (closed) |
+| **Community** | Massive, fast-growing; r/OpenClawCentral; Moltbook social network; OpenClaw Foundation governance (announced Feb 2026) | Large, established; active Discord | Growing; active Discord | Large (LangChain ecosystem) | Declining activity reported | Growing (OpenAI backing) | Limited (invite-only initially) |
+| **Maturity** | **Early but production-capable** (rapid iteration; transitioning to Foundation governance with OpenAI funding as of Feb 2026) | **Production-ready** (years of enterprise use) | **Production-ready** (maturing fast) | **Production-ready** (enterprise-grade) | **Experimental** (reliability concerns, loop issues) | **Production-ready** (OpenAI backing, but new) | **Beta** (Meta acquisition pending) |
 | **Documentation** | Community wiki, growing fast | **Excellent** (years of refinement) | Good, improving | **Excellent** (LangChain ecosystem) | Moderate (unclear in places) | Good (OpenAI quality) | Limited |
 | **Real Deployment Evidence** | CNBC reports Silicon Valley + China adoption; 145K GitHub stars; developer testimonials | **Extensive** enterprise production use globally | Growing enterprise adoption | **Extensive** enterprise production use | Mostly experimental/hobbyist | Growing rapidly | Limited public evidence |
 
@@ -188,6 +189,8 @@ This distinction matters enormously: OpenClaw's real competitors are tools like 
 
 5. **AutoGPT decline.** Despite 53K GitHub stars, multiple sources report declining maintenance and reliability issues. Not recommended as an escape route. (Source: Reddit r/AI_Agents -- Tier 4, Budibase -- Tier 3)
 
+6. **OpenClaw Foundation governance uncertainty.** Creator Peter Steinberger joined OpenAI on Feb 14, 2026. OpenClaw is transitioning to an independent Foundation with OpenAI funding. While this reduces bus-factor risk and ensures MIT license preservation, the governance structure, maintainer succession, and potential OpenAI integration influence are still unclear. Watch for: public roadmap, foundation charter, maintainer list, and any ChatGPT integration that might change project direction. (Source: TechCrunch, Fortune -- Tier 1-2)
+
 ---
 
 ## Source URLs and Credibility Tiers
@@ -215,8 +218,8 @@ This distinction matters enormously: OpenClaw's real competitors are tools like 
 
 ## Bottom Line
 
-**OpenClaw is the right choice for our use case.** No other tool combines self-hosted data sovereignty, messaging-first UX, persistent memory, multi-model flexibility, and goal-oriented autonomy in a single deployable package. The frameworks (CrewAI, LangGraph, AutoGen) are building blocks, not finished products. n8n solves a different problem (deterministic workflows) and is our strongest complement, not competitor.
+**OpenClaw is the right choice for our use case.** No other tool combines self-hosted data sovereignty, messaging-first UX, persistent memory, multi-model flexibility, and goal-oriented autonomy in a single deployable package. The frameworks (CrewAI, LangGraph, AutoGen) are building blocks, not finished products. The transition to Foundation governance (Feb 2026) strengthens long-term viability — less bus-factor risk, OpenAI funding, preserved MIT license. n8n solves a different problem (deterministic workflows) and is our strongest complement, not competitor.
 
-**Primary risk:** OpenClaw's youth and security surface. Mitigate with strict boundary configuration, regular security audits, and n8n as a fallback for compliance-critical workflows.
+**Primary risk:** OpenClaw's youth, security surface (now 6 CVEs patched, ~20% malicious skills), and Foundation governance uncertainty. Mitigate with strict boundary configuration, regular security audits, n8n as a fallback for compliance-critical workflows, and monitoring of Foundation charter evolution.
 
 **Recommended stack:** OpenClaw (primary agent) + n8n (deterministic workflows) + Langfuse (observability, when needed).

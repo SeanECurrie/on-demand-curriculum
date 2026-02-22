@@ -472,13 +472,13 @@ npm install -g openclaw@latest
 
 # IMMEDIATELY verify version — this is the #1 critical security check
 openclaw --version
-# Expected: >= 2026.1.29
-# If version is LESS than 2026.1.29: STOP. This version is vulnerable to
+# Expected: >= 2026.2.19
+# If version is LESS than 2026.2.19: STOP. This version is vulnerable to
 # CVE-2026-25253 (CVSS 8.8, 1-click RCE) and CVE-2026-24763 (command injection).
 # Update: npm install -g openclaw@latest
 ```
 
-**CRITICAL GATE:** If the installed version is < 2026.1.29, do NOT proceed. This patches two critical vulnerabilities disclosed February 2, 2026 that allow remote code execution even on localhost-only instances. The attack uses the victim's own browser as a bridge. Source: SOCRadar (Tier 1), NVD (Tier 1), security-posture-analysis.md.
+**CRITICAL GATE:** If the installed version is < 2026.2.19, do NOT proceed. This patches two critical vulnerabilities disclosed February 2, 2026 that allow remote code execution even on localhost-only instances. The attack uses the victim's own browser as a bridge. Additionally, 4 more CVEs were patched through v2026.2.15. Version 2026.2.19 includes critical macOS LaunchAgent TMPDIR fix for SQLite stability. Source: SOCRadar (Tier 1), NVD (Tier 1), security-posture-analysis.md.
 
 ### C2: Onboard Wizard
 
@@ -1150,7 +1150,7 @@ These are the 10 conditions from the security evaluation (research/reports/04-se
 
 | # | Condition | Verification Command | Expected |
 |---|-----------|---------------------|----------|
-| 1 | Version >= v2026.1.29 | `openclaw --version` | >= 2026.1.29 |
+| 1 | Version >= v2026.2.19 | `openclaw --version` | >= 2026.2.19 |
 | 2 | Gateway bound to loopback | `curl http://127.0.0.1:18789/health` (should work) + `curl http://<LAN-IP>:18789/health` (should FAIL) | Localhost: 200, LAN: Connection refused |
 | 3 | Gateway auth token set | `curl -s http://127.0.0.1:18789/health` without token header | Should return 401/403 or fail-closed |
 | 4 | Sandbox mode is "all" | `openclaw config get agents.defaults.sandbox.mode` | `"all"` |
@@ -1202,7 +1202,7 @@ curl -s http://127.0.0.1:18789/health
 These are the 6 blockers identified in research/reports/05-open-questions.md. Test each during validation.
 
 **Blocker 1: CVE patch verification**
-Already verified in C1. Re-verify: `openclaw --version` >= 2026.1.29.
+Already verified in C1. Re-verify: `openclaw --version` >= 2026.2.19.
 
 **Blocker 2: macOS Keychain behavior**
 Document every TCC/Keychain dialog encountered during Phases C-G. If none appeared, actively test:

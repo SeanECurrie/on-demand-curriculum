@@ -9,9 +9,9 @@
 
 ## Executive Summary
 
-OpenClaw is a high-risk, high-reward deployment. A critical RCE vulnerability (CVE-2026-25253, CVSS 8.8) was disclosed on February 2, 2026 — just 9 days ago — and affects all versions prior to 2026.1.29. The ClawHub skills ecosystem is actively compromised (12% of audited skills are malicious per Koi Security). Additionally, 88% of organizations running AI agents reported confirmed or suspected security incidents in the past year (Gravitee, Feb 2026). For Sean's Mac Mini deployment, OpenClaw is viable IF and ONLY IF the hardening configuration in this document is applied before connecting any messaging channels or granting any tool permissions. The security posture is "deploy cautiously with layered defenses" — not "deploy and configure later."
+OpenClaw is a high-risk, high-reward deployment. Six CVEs have been disclosed and patched through v2026.2.15, including CVE-2026-25253 (CVSS 8.8, 1-click RCE) and CVE-2026-24763 (command injection). Four additional CVEs were patched between v2026.2.1 and v2026.2.15. The ClawHub skills ecosystem is actively compromised (~20% of skills are malicious per updated scans, up from 12% at initial audit). Additionally, 88% of organizations running AI agents reported confirmed or suspected security incidents in the past year (Gravitee, Feb 2026). For Sean's Mac Mini deployment, OpenClaw is viable IF and ONLY IF the hardening configuration in this document is applied before connecting any messaging channels or granting any tool permissions. The security posture is "deploy cautiously with layered defenses" — not "deploy and configure later."
 
-**Bottom line: OpenClaw can be secured for personal use on a dedicated Mac Mini, but the default configuration is dangerously permissive, the skills ecosystem is actively hostile, and the project's security maturity is still catching up to its explosive adoption.**
+**Bottom line: OpenClaw can be secured for personal use on a dedicated Mac Mini, but the default configuration is dangerously permissive, the skills ecosystem is actively hostile (~20% malicious), and the project's security maturity is still catching up to its explosive adoption (209K+ GitHub stars, 42,000+ publicly exposed instances). The transition to the OpenClaw Foundation (Feb 2026) may improve governance long-term.**
 
 ---
 
@@ -25,7 +25,7 @@ Sean's Mac Mini M4 deployment has the following exposure points:
 |---------|----------|-------|
 | **Gateway WebSocket (port 18789)** | Localhost only if configured correctly | Default bind is loopback — good. But reverse proxy misconfiguration can bypass this (Kaspersky confirmed ~1000 exposed instances on Shodan). Source: Kaspersky, Tier 2 |
 | **Messaging channels (Telegram, etc.)** | Inbound messages from paired contacts | Primary prompt injection vector. Even with DM pairing, content the agent reads (emails, URLs, docs) carries adversarial instructions. Source: docs.openclaw.ai, Tier 1 |
-| **ClawHub skills** | Supply chain attack vector | 341 confirmed malicious skills (12% of audited), including credential stealers using ClickFix technique. Source: Koi Security / The Hacker News, Tier 2 |
+| **ClawHub skills** | Supply chain attack vector | 824+ confirmed malicious skills (~20% of registry, up from 341/12% at initial audit). "ClawHavoc" campaign includes typosquatting, reverse shells, credential exfiltration, Atomic macOS Stealer (AMOS) payloads targeting Keychain/SSH/crypto. Source: Koi Security, CyberSecurityNews, GBHackers, 1Password, Tier 1-2 |
 | **Tailscale tunnel** | Encrypted, authenticated | Strongest layer in our setup. Only Tailscale-authorized devices can reach the Mac Mini. Source: Tailscale official, Tier 1 |
 | **macOS local filesystem** | Full access if sandbox is off | `~/.openclaw/` contains credentials, session transcripts, API keys — all unencrypted on disk. Source: docs.openclaw.ai, Tier 1 |
 | **mDNS/Bonjour broadcast** | LAN information disclosure | Default "full" mode broadcasts CLI path, SSH port, hostname. Enables reconnaissance. Source: docs.openclaw.ai, Tier 1 |
@@ -47,8 +47,8 @@ Sean's Mac Mini M4 deployment has the following exposure points:
 
 | Threat | Likelihood | Impact | Risk Level | Mitigation Status |
 |--------|-----------|--------|------------|-------------------|
-| **CVE-2026-25253 (1-click RCE)** | High (if unpatched) | Critical (full system compromise) | **CRITICAL** | Patch to v2026.1.29+. Source: NVD/SOCRadar, Tier 1 |
-| **CVE-2026-24763 (command injection)** | High (if unpatched) | Critical (arbitrary command execution) | **CRITICAL** | Patch to v2026.1.29+. Source: NVD, Tier 1 |
+| **CVE-2026-25253 (1-click RCE)** | High (if unpatched) | Critical (full system compromise) | **CRITICAL** | Patch to v2026.2.19+. Source: NVD/SOCRadar, Tier 1 |
+| **CVE-2026-24763 (command injection)** | High (if unpatched) | Critical (arbitrary command execution) | **CRITICAL** | Patch to v2026.2.19+. Source: NVD, Tier 1 |
 | **Malicious ClawHub skill installation** | Medium | High (credential theft, malware) | **HIGH** | Zero skills from ClawHub until vetting process matures. Source: Koi Security, Tier 2 |
 | **Prompt injection via read content** | High | High (data exfiltration, unauthorized tool calls) | **HIGH** | Sandbox + tool restrictions + reader agent pattern. Source: docs.openclaw.ai, Tier 1 |
 | **Credential exposure on disk** | Medium | High (API keys, tokens, chat history) | **HIGH** | File permissions 600/700, full-disk encryption, dedicated user. Source: docs.openclaw.ai, Tier 1 |
@@ -111,7 +111,7 @@ A command injection vulnerability in OpenClaw's Docker sandbox execution mechani
 - Source: NVD (Tier 1)
 
 ### 3. ClawHub Skills Supply Chain Attack
-Tim mentioned skills but did not warn about the supply chain risk. As of February 2026: 341 confirmed malicious skills found by Koi Security (12% of audited skills). Attack techniques include ClickFix lures, typosquatting, reputation washing with intermediate benign skills, base64-encoded commands, and `curl | bash` patterns. Semgrep reports firsthand knowledge of PoC skills that evade OpenClaw's agentic safeguards.
+Tim mentioned skills but did not warn about the supply chain risk. As of February 2026: 824+ confirmed malicious skills (~20% of registry, up from 341/12% at Koi Security's initial audit). The 'ClawHavoc' campaign has since expanded with 1,184 malicious skills historically published. Attack techniques include ClickFix lures, typosquatting, reputation washing with intermediate benign skills, base64-encoded commands, and `curl | bash` patterns. Semgrep reports firsthand knowledge of PoC skills that evade OpenClaw's agentic safeguards.
 - Sources: Koi Security (Tier 2), Semgrep (Tier 2), The Hacker News (Tier 2), 1Password blog (Tier 2), Cisco (Tier 2)
 
 ### 4. The exec-approvals.json System
@@ -244,6 +244,49 @@ The kill chain, per SOCRadar and depthfirst.com researchers:
 Command injection in the Docker sandbox execution mechanism. Details from Tenable: allows code execution outside the intended sandbox boundary.
 - Sources: NVD (Tier 1), Tenable (Tier 2)
 
+### Four Additional CVEs (Patched Feb 2026)
+
+**[ADDED 2026-02-22 — Staleness sweep discovery]**
+
+Four additional CVEs were discovered and patched between v2026.2.1 and v2026.2.15:
+
+| CVE/Issue | Type | Patched In | Details |
+|-----------|------|-----------|---------|
+| Teams Token Leak | Credential exposure | v2026.2.1 | Microsoft Teams extension leaked authentication tokens |
+| Twitch Auth Bypass | Authorization bypass | v2026.2.1 | Twitch plugin authorization could be bypassed |
+| BlueBubbles Path Traversal | Path traversal | v2026.2.14 | BlueBubbles extension allowed filesystem traversal |
+| Telegram Token in Logs | Information disclosure | v2026.2.15 | Telegram bot token written to log files in plaintext |
+
+**Implication:** The minimum safe version is now >= 2026.2.15 (recommended: 2026.2.19 for macOS LaunchAgent and security hardening fixes).
+- Sources: GitHub Security Advisories (Tier 1), SecurityWeek (Tier 2), NVD (Tier 1)
+
+### SecureClaw — Third-Party Security Audit Tool
+
+**[ADDED 2026-02-22 — Staleness sweep discovery]**
+
+SecureClaw by Adversa AI (released 2026-02-16) is the first OWASP-aligned open-source security tool for OpenClaw deployments. Key features:
+- 55 automated audit checks
+- Maps to OWASP ASI Top 10 + MITRE ATLAS + CoSAI frameworks
+- Two-layer defense: code-level plugin (gateway/config hardening) + behavioral skill (~1,150 tokens)
+- 5 hardening modules
+- GitHub: adversa-ai/secureclaw
+
+**NOTE:** SecureClaw is a PLUGIN (executable code), not a Markdown skill. Our zero-ClawHub policy applies to random community skills, but SecureClaw comes from a reputable security firm with named researchers (Alex Polyakov, CEO). RECOMMEND: evaluate during Phase G security hardening — install from source, audit the code, then run.
+- Sources: SecurityWeek (Tier 2), Help Net Security (Tier 2), Adversa AI blog (Tier 2)
+
+### Microsoft Security Guidance
+
+**[ADDED 2026-02-22 — Staleness sweep discovery]**
+
+Microsoft Defender published OpenClaw-specific security guidance on 2026-02-19: "Use OpenClaw only in isolated environments that do not have access to any non-dedicated credentials or data which must not be leaked." Key findings from Microsoft's analysis:
+- 42,000+ publicly exposed instances identified
+- 512 vulnerabilities in first security audit
+- 6 GitHub Security Advisories in 3 weeks
+- 30,000+ instances running without authentication
+
+**Validates our approach:** Dedicated Mac Mini, Tailscale-only access, no shared credentials, layered hardening before channel connection.
+- Source: Microsoft Security Blog (Tier 2)
+
 ### 512 Vulnerabilities Found in Security Audit
 
 A security audit in late January 2026 (when still branded as Clawdbot) identified 512 vulnerabilities, 8 classified as critical.
@@ -258,6 +301,8 @@ LinkedIn post by Luke Hinds documented 1.5 million API keys exposed through Open
 
 Researcher @fmdz387 found nearly 1,000 publicly accessible OpenClaw instances running without authentication. Researcher Jamieson O'Reilly gained access to Anthropic API keys, Telegram bot tokens, Slack accounts, and months of chat history on exposed instances.
 - Source: Kaspersky citing X/Twitter researchers (Tier 2-3)
+
+**[UPDATED 2026-02-22]** Scanning teams (Censys, Bitsight, Hunt.io) now report 30,000+ internet-exposed instances. This is a significant escalation from the ~1,000 initially reported.
 
 ### Malicious Skills Campaign (ClawHavoc)
 
@@ -389,7 +434,7 @@ Source: Semgrep (Tier 2), GitHub (Tier 3)
 ### Pre-Installation Checklist
 
 ```bash
-# 1. Verify version is >= 2026.1.29 (patches CVE-2026-25253 and CVE-2026-24763)
+# 1. Verify version is >= 2026.2.19 (patches all 6 known CVEs + macOS LaunchAgent fix)
 openclaw --version
 
 # 2. Enable FileVault (full-disk encryption)

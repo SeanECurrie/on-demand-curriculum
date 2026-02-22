@@ -3,9 +3,9 @@
 **Date:** 2026-02-11
 **Operator:** Sean Currie
 **Target:** Apple M4 Mac Mini, 16GB RAM, Tailscale configured
-**OpenClaw Target Version:** >= 2026.1.29 (mandatory — CVE patches)
+**OpenClaw Target Version:** >= 2026.2.19 (mandatory — patches 6 CVEs including 4 discovered after initial research)
 **Based On:** ClawdBot Research Project — 130+ sources across Context7 + Bright Data
-**Updated:** 2026-02-14 — Added Phase 0 (Machine Preparation) for existing Mac Mini with v1 DevHub build
+**Updated:** 2026-02-22 — Version target updated to >= 2026.2.19 (4 new CVEs, macOS LaunchAgent fix, security hardening). Phase 0 added 2026-02-14.
 
 ---
 
@@ -38,14 +38,14 @@ This snapshot captures what the research project knew when this walkthrough was 
 | Verdict | Decision | Evidence |
 |---------|----------|----------|
 | **Mac Mini M4** | GO | Community-validated, overpowered for single-agent deployment. 16GB is plenty. ARM-native Node.js available. |
-| **OpenClaw** | GO with mandatory hardening | Two critical CVEs patched in v2026.1.29. Default config is dangerously permissive. 12% of ClawHub skills are malicious. Hardening is non-negotiable. |
+| **OpenClaw** | GO with mandatory hardening | Six CVEs patched through v2026.2.15. Default config is dangerously permissive. ~20% of ClawHub skills are malicious (up from 12%). Hardening is non-negotiable. |
 | **Recommended Stack** | OpenClaw + n8n + Langfuse | OpenClaw for reasoning. n8n for deterministic workflows (future). Langfuse for observability (future). This walkthrough covers OpenClaw only. |
 
 ### Key Decisions Applied in This Walkthrough
 
 These decisions emerged from the research and are baked into every configuration in this guide:
 
-- **Zero ClawHub skills** — Custom Markdown skills only. The ClawHub ecosystem has a 12% malicious rate (341 of 2,857 skills per Koi Security audit). We write our own.
+- **Zero ClawHub skills** — Custom Markdown skills only. The ClawHub ecosystem has a ~20% malicious rate (824+ of 10,700+ skills per updated scans, up from 12% at time of initial research). The "ClawHavoc" campaign includes Atomic macOS Stealer payloads. We write our own.
 - **Elevated mode DISABLED** — Instead of a global escape hatch that bypasses sandbox, we use per-agent routing where each agent has its own permissions. (See Pattern 002)
 - **Security hardening BEFORE channel connection** — Phase D comes before Phase F. Once Telegram is connected, the internet can reach the agent. Hardening after that is too late.
 - **Dedicated non-admin macOS user** — The OpenClaw process runs under a user that cannot `sudo`. Limits blast radius.
@@ -59,7 +59,7 @@ These couldn't be answered by research alone. You'll test them hands-on:
 | # | Question | When to Test | What to Watch For |
 |---|----------|-------------|-------------------|
 | 0 | Machine state audit | Phase 0 (prep) | Audit commands capture current state — review before proceeding |
-| 1 | CVE patch verification | Phase C (install) | `openclaw --version` must show >= 2026.1.29 |
+| 1 | CVE patch verification | Phase C (install) | `openclaw --version` must show >= 2026.2.19. Patches 6 CVEs (2 original + 4 discovered Feb 2026). |
 | 2 | macOS Keychain behavior | Phase C (onboard) | Screenshot every TCC/Keychain dialog. Deny by default. |
 | 3 | Docker sandbox on Apple Silicon | Phase D (sandbox) | Memory consumption in Activity Monitor. Does 16GB hold? |
 | 4 | launchd + dedicated user | Phase C (gateway) | Does LaunchAgent load for non-admin user? |
@@ -861,18 +861,20 @@ npm install -g openclaw@latest
 
 # IMMEDIATELY verify version — this is the #1 critical security check
 openclaw --version
-# Expected: >= 2026.1.29
+# Expected: >= 2026.2.19
 ```
 
 **CRITICAL GATE — READ THIS:**
 
-If the version is less than 2026.1.29, **STOP**. Do not continue. Update with `npm install -g openclaw@latest` and check again.
+If the version is less than 2026.2.19, **STOP**. Do not continue. Update with `npm install -g openclaw@latest` and check again.
 
 Why this matters: CVE-2026-25253 (disclosed February 2, 2026) is a CVSS 8.8 vulnerability — that's "High" severity. Here's how the attack works: an attacker sends you a crafted URL. If you click it, it exfiltrates your gateway auth token, disables the sandbox via the API, and executes arbitrary commands on your machine. Even localhost-bound instances are vulnerable because the attack uses *your own browser* as a bridge. It was patched in v2026.1.29.
 
 There's also CVE-2026-24763 (command injection in the Docker sandbox) patched in the same version.
 
-**Expected output:** Version >= 2026.1.29.
+**Update (2026-02-22):** Four additional CVEs were discovered and patched between v2026.2.1 and v2026.2.15: a Microsoft Teams token leak, Twitch plugin authorization bypass, BlueBubbles path traversal, and Telegram token leak in logs. Version 2026.2.19 also includes critical macOS fixes: LaunchAgent TMPDIR forwarding (prevents SQLite failures under launchd), skills hardening against shell interpolation of untrusted input, and gateway security audit detection of no-auth configurations. Deploy >= 2026.2.19.
+
+**Expected output:** Version >= 2026.2.19.
 
 **If something's wrong:**
 - Version too old: `npm install -g openclaw@latest`
@@ -947,7 +949,7 @@ launchctl print gui/$UID/bot.molt.gateway
 *Fill this in during deployment:*
 
 - [ ] OpenClaw version installed: ___
-- [ ] Version >= 2026.1.29 confirmed?
+- [ ] Version >= 2026.2.19 confirmed?
 - [ ] Onboarding wizard completed?
 - [ ] Gateway auth token saved securely?
 - [ ] TCC/Keychain dialogs encountered? (List them)
@@ -1820,7 +1822,7 @@ These are the 10 conditions from our security evaluation report. All must pass.
 
 | # | Condition | Verification | Expected |
 |---|-----------|-------------|----------|
-| 1 | Version >= v2026.1.29 | `openclaw --version` | >= 2026.1.29 |
+| 1 | Version >= v2026.2.19 | `openclaw --version` | >= 2026.2.19 |
 | 2 | Gateway bound to loopback | `curl http://127.0.0.1:18789/health` (should WORK) then `curl http://<your-LAN-IP>:18789/health` (should FAIL) | Localhost: 200, LAN: Connection refused |
 | 3 | Gateway auth token set | `curl -s http://127.0.0.1:18789/health` without token header | Should return 401/403 |
 | 4 | Sandbox mode is "all" | `openclaw config get agents.defaults.sandbox.mode` | `"all"` |
@@ -1879,7 +1881,7 @@ If the gateway doesn't come back after reboot, the LaunchAgent isn't configured 
 These are the items from our open questions report that could only be resolved through hands-on testing. Document each one:
 
 **Blocker 1 — CVE patch verification:**
-Already verified in Phase C. Re-verify: `openclaw --version` >= 2026.1.29.
+Already verified in Phase C. Re-verify: `openclaw --version` >= 2026.2.19.
 
 **Blocker 2 — macOS Keychain behavior:**
 By now you've been through Phases C-G. Did any Keychain or TCC dialogs appear?
@@ -2063,7 +2065,7 @@ chmod +x backup-config.sh
 
 After completing all phases, take 10 minutes to write a brief post-deployment summary. The key things to capture:
 
-1. **Actual version installed** (and was it >= 2026.1.29?)
+1. **Actual version installed** (and was it >= 2026.2.19?)
 2. **Which open questions were resolved** (and what were the answers?)
 3. **Any unexpected issues** (things the research didn't predict)
 4. **TCC/Keychain dialogs observed** (for Open Question #2)
@@ -2093,7 +2095,7 @@ This goes into `knowledge-base/07-operations/post-deployment-findings.md` — fe
 
 One final review — confirm all of these before considering deployment "done":
 
-- [ ] OpenClaw version >= 2026.1.29
+- [ ] OpenClaw version >= 2026.2.19
 - [ ] Non-admin user running gateway (or documented fallback)
 - [ ] FileVault enabled and encrypting
 - [ ] exec-approvals.json configured with denylist

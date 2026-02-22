@@ -216,6 +216,30 @@ Pulled 2026-02-11. 16+ sources. Full details in `knowledge-base/05-skills-and-in
 
 ---
 
+## Staleness Sweep Sources (2026-02-22)
+
+Added during pre-deployment staleness sweep. 15 new sources across security, governance, and ecosystem.
+
+| Date | Source | Type | Tier | URL | Key Finding |
+|------|--------|------|------|-----|-------------|
+| 2026-02-22 | GitHub Releases — v2026.2.19 | Official | 1 | https://github.com/openclaw/openclaw/releases/tag/v2026.2.19 | Latest release: LaunchAgent TMPDIR fix, skills hardening, ACP session rate limiting, Apple Watch companion |
+| 2026-02-22 | TechCrunch — Steinberger joins OpenAI | Tech news | 1 | https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/ | Creator joined OpenAI, Foundation transition announced |
+| 2026-02-22 | Fortune — Who is Peter Steinberger | Tech news | 1 | https://fortune.com/2026/02/19/openclaw-who-is-peter-steinberger-openai-sam-altman-anthropic-moltbook/ | Turned down Meta, 2M visitors/week peak |
+| 2026-02-22 | steipete.me — OpenClaw, OpenAI and the future | Creator blog | 1 | https://steipete.me/posts/2026/openclaw | Steinberger's own statement on joining OpenAI |
+| 2026-02-22 | Microsoft Security Blog | Enterprise security | 2 | https://www.microsoft.com/en-us/security/blog/2026/02/19/running-openclaw-safely-identity-isolation-runtime-risk/ | "Use only in isolated environments"; 42K+ exposed instances |
+| 2026-02-22 | eSecurity Planet — Malicious ClawHub Skills | Security news | 2 | https://www.esecurityplanet.com/threats/hundreds-of-malicious-skills-found-in-openclaws-clawhub/ | Updated malicious skill counts and ClawHavoc campaign details |
+| 2026-02-22 | CyberSecurityNews — ClawHavoc | Security news | 2 | https://cybersecuritynews.com/clawhavoc-poisoned-openclaws-clawhub/ | 1,184 malicious skills historically published |
+| 2026-02-22 | GBHackers — ClawHavoc | Security news | 2 | https://gbhackers.com/clawhavoc-infects-openclaws-clawhub/ | Reverse shells, credential exfiltration, AMOS payloads |
+| 2026-02-22 | 1Password Blog — Skills as attack surface | Security blog | 2 | https://1password.com/blog/from-magic-to-malware-how-openclaws-agent-skills-become-an-attack-surface | Agentic AI supply chain analysis |
+| 2026-02-22 | The Hacker News — 341 Malicious Skills | Security news | 2 | https://thehackernews.com/2026/02/researchers-find-341-malicious-clawhub.html | Initial Koi Security audit details |
+| 2026-02-22 | SecurityWeek — SecureClaw | Security news | 2 | (via web search) | SecureClaw by Adversa AI: OWASP-aligned security tool, 55 audit checks |
+| 2026-02-22 | Trending Topics EU — Steinberger joins OpenAI | Tech news | 2 | https://www.trendingtopics.eu/openclaw-developer-peter-steinberger-joins-openai-his-ai-agent-will-stay-open-source/ | OpenAI funding for Foundation |
+| 2026-02-22 | PointGuard AI — Supply Chain Attack | Security analysis | 2 | https://www.pointguardai.com/ai-security-incidents/openclaw-clawhub-malicious-skills-supply-chain-attack | Structured incident analysis |
+| 2026-02-22 | Barrack.ai — OpenClaw Security Nightmare | Security blog | 2 | https://blog.barrack.ai/openclaw-security-vulnerabilities-2026/ | "Security nightmare" framing with safe deployment guide |
+| 2026-02-22 | Conscia — OpenClaw Security Crisis | Security blog | 2 | https://conscia.com/blog/the-openclaw-security-crisis/ | Enterprise security perspective |
+
+---
+
 ## Summary Statistics
 
 | Category | Source Count | Primary Tiers |
@@ -227,6 +251,7 @@ Pulled 2026-02-11. 16+ sources. Full details in `knowledge-base/05-skills-and-in
 | Community Intelligence | 41 entries (inline refs) | Tiers 2-5 |
 | Architecture Deep-Dive | 16 entries | Tiers 1-3 |
 | Skills & Integrations | 16+ entries | Tiers 1-3 |
-| **Total unique sources** | **~130+** | |
+| Staleness Sweep (2026-02-22) | 15 entries | Tiers 1-2 |
+| **Total unique sources** | **~145+** | |
 
 **Note:** Some sources appear in multiple categories (e.g., Koi Security in both security and skills). The individual KB files contain the most detailed source attribution. This file is the consolidated index.
