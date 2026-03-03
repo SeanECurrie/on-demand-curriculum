@@ -135,3 +135,34 @@ The following sources were inherited from Output #1's competitive landscape rese
 | 2026-02-11 | Reddit r/LocalLLaMA — C/ua Apple Silicon Agents | 4 | macOS-native alternative awareness |
 | 2026-02-11 | Medium — Top 10 GitHub Starred Frameworks 2026 | 4 | GitHub stars / momentum data |
 | 2026-02-11 | Nuvi.dev — AI Agent Framework Comparison | 4 | Framework comparison |
+
+## Open Questions Research — Context7 (Tier 1)
+
+| Date | Source | Key Finding |
+|------|--------|-------------|
+| 2026-03-03 | OpenClaw system prompt docs (`docs/concepts/system-prompt`) via Context7 `/openclaw/openclaw` | System prompt built per agent run. SOUL.md, IDENTITY.md, USER.md, HEARTBEAT.md bootstrap files for personality. Hooks can swap SOUL.md for alternate persona. |
+| 2026-03-03 | OpenClaw update docs (`docs/install/updating`) via docs.openclaw.ai | Preferred update: re-run installer. Post-update: `openclaw doctor` + gateway restart. Pre-1.0 — breaking changes possible. |
+| 2026-03-03 | OpenClaw migration docs (`docs/install/migrating`) via Context7 `/openclaw/openclaw` + docs.openclaw.ai | Backup: tar `~/.openclaw` + workspace. Migration: copy state dir, run doctor. Backups contain credentials — treat as secrets. |
+| 2026-03-03 | OpenClaw Gmail integration (`docs/gateway/configuration-reference.md`, `docs/automation/gmail-pubsub.md`) via Context7 `/openclaw/openclaw` | Gmail via Google Cloud Pub/Sub. Requires GCP project, OAuth, Pub/Sub topic/subscription. Complex setup. Auto-starts watcher on boot. |
+
+## Open Questions Research — Bright Data (Tier 2-5)
+
+| Date | Source | Tier | Key Finding |
+|------|--------|------|-------------|
+| 2026-03-03 | ZeroClaw Migration Assessment (GitHub Gist, yanji84, Feb 22, 2026) | 3 | Each OpenClaw bot instance consumes ~420-440 MB RAM in always-running Docker container on 8 GB VPS. |
+| 2026-03-03 | Tencent Cloud — OpenClaw Deploying Optimal Configuration (tencentcloud.com/techpedia/140020) | 4 | 4 GB RAM recommended for standard deployment, 2 GB absolute minimum. |
+| 2026-03-03 | Medium — OpenClaw Review (kannasekarr) | 4 | Average response time 1.2 seconds, 99.8% uptime, zero lost messages for self-hosted instance. |
+| 2026-03-03 | oflight.co.jp — "OpenClaw Prompt Engineering Tips" | 4 | Practical prompt engineering: system prompt design, task decomposition, persona definition in SOUL.md. |
+| 2026-03-03 | CreatorFlow — "Instagram API Rate Limits: 200 DMs/Hour Explained (2026)" | 4 | Meta Instagram Graph API: 200 requests/hour, 100 posts/24h. DM automation: 200 messages/hour. |
+| 2026-03-03 | Storrito — "How Does Instagram Handle Automation in 2026" | 4 | Instagram's 2026 formal shift: approved API automation allowed, unauthorized bot behavior penalized. |
+| 2026-03-03 | DigitalOcean — "How to Connect Google to OpenClaw" | 3 | Tutorial covering Gmail, Calendar, Drive integration with OpenClaw using OAuth. |
+| 2026-03-03 | Lumadock — "How to integrate OpenClaw with Google Calendar" | 4 | Calendar integration reuses Gmail OAuth. Enable Calendar API in same GCP project. |
+| 2026-03-03 | YouTube (Z0tfD0wJt5M) — OpenClaw + Google Workspace Integration Tutorial | 4 | Full video walkthrough of Gmail and Google ecosystem integration. |
+| 2026-03-03 | getopenclaw.ai — Google Workspace Integration page | 4 | Lists full Google Workspace support: Gmail, Calendar, Drive, Docs, Sheets, Contacts. |
+| 2026-03-03 | IntuitionLabs — "Claude Pricing Explained" | 2 | Sonnet 4.6: $3/$15 per MTok. Haiku 4.5: $1/$5 per MTok. |
+| 2026-03-03 | TLDL — "Claude API Pricing 2026" | 2 | Opus 4.6: $5/$25 per MTok. Sonnet 4.6: $3/$15. Haiku: $0.25/$1.25. |
+| 2026-03-03 | Finout — "Claude Pricing in 2026" | 4 | Low-cost content generation example: Haiku 4.5 at 20M tokens = $70/month. |
+| 2026-03-03 | CostGoat — "Claude API Pricing Calculator (Mar 2026)" | 4 | Light use estimate: $10-50/month for <1K requests/day. |
+| 2026-03-03 | Lumadock — "How to upgrade OpenClaw safely" | 4 | Step-by-step upgrade guide with backups, post-upgrade testing, version rollback. |
+| 2026-03-03 | Lumadock — "OpenClaw backup guide for data, settings, and memory" | 4 | What to back up, how to encrypt, how to restore on new machine. |
+| 2026-03-03 | Hostinger — "OpenClaw best practices for safe and reliable usage" | 4 | Start with low-risk read-only automations. Keep private by default. |
