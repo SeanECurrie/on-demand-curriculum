@@ -5,7 +5,7 @@
 **Purpose:** Complete visual and curriculum design specification for interactive HTML walkthroughs produced by the On-Demand Curriculum Engine. Every aesthetic decision is made here so that downstream builders (Content Architect, Diagram Engineer) make zero visual judgment calls.
 
 **Adapting this template for a new output:**
-1. Use sections 1-5 and 6.1-6.7 as-is — they define the universal design system
+1. Use sections 1-5 (including 5.5-5.6 diagram design process) and 6.1-6.7 as-is — they define the universal design system
 2. Replace section 7 ("Example Diagram Specifications") with diagrams specific to your output's topic
 3. Follow the diagram category mapping in 6.5 — extend with new categories only if the existing 7 do not cover your domain
 4. The curriculum design principles in section 5 are topic-agnostic — apply them regardless of subject matter

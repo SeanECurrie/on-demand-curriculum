@@ -143,3 +143,5 @@ These were the first binary tests in the engine, written before this pattern was
 - `editorial-standards.md` — The quality standards that self-tests verify (inline self-tests added)
 - `dual-source-intelligence.md` — Research methodology with inline self-tests for source discipline
 - `credibility-tiers.md` — Source weighting system with inline self-tests for tier assignment
+- `../templates/walkthrough-style-guide.md` — Contains the diagram design process (Sections 5.5-5.6) that visual self-tests V2-V3 verify against
+- `../templates/diagram-color-reference.md` — The color lookup that visual self-test V6 verifies against

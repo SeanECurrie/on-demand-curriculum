@@ -317,3 +317,4 @@ Binary tests specific to section construction quality. Run these during Phase C 
 - `binary-self-tests.md` — The framework for the self-tests in this document. Test design rules (yes/no in 5 seconds, concrete, actionable) come from that methodology.
 - `findings-pattern-library.md` — When sections contain research findings, each finding should use the appropriate pattern from the library.
 - `../templates/walkthrough-style-guide.md` — Defines WHAT interactive walkthrough outputs look like (colors, typography, components). This document defines HOW they get built. The style guide is the specification; section construction is the build process.
+- `../templates/diagram-color-reference.md` — The single source of truth for diagram colors, used during Phase B diagram construction and verified during Phase C.5 render-validate.

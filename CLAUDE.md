@@ -109,7 +109,8 @@ The engine runs five stages to produce each output. Full details in the design d
 │   │   ├── binary-self-tests.md
 │   │   ├── findings-pattern-library.md
 │   │   ├── anti-patterns.md
-│   │   └── section-construction.md
+│   │   ├── section-construction.md
+│   │   └── validation/
 │   ├── intake/                 # How new outputs start
 │   │   ├── intake-process.md
 │   │   └── operator-profile-template.md
@@ -117,6 +118,7 @@ The engine runs five stages to produce each output. Full details in the design d
 │   │   ├── project-structure/
 │   │   ├── report-templates/
 │   │   ├── walkthrough-style-guide.md
+│   │   ├── diagram-color-reference.md
 │   │   └── interactive-html/
 │   ├── patterns/               # Cross-output reusable patterns
 │   └── skills/                 # Engine-level skills
@@ -125,7 +127,8 @@ The engine runs five stages to produce each output. Full details in the design d
 │       ├── self-test/
 │       ├── findings-pattern/
 │       ├── anti-pattern-check/
-│       └── section-construction/
+│       ├── section-construction/
+│       └── render-validate/
 └── outputs/                    # Each person's tailored deliverable
     └── openclaw-sean/          # Output #1 — reference implementation
 ```
@@ -236,6 +239,7 @@ These skills operate within the pipeline stages, invoked during actual engine wo
 | `findings-pattern` | During research synthesis (writing KB entries, intelligence log, reports) | Research → Synthesis |
 | `anti-pattern-check` | Periodically during output work, or when something feels off | All stages |
 | `section-construction` | Generating complex outputs (deep-dive only, >500 lines) | Output Generation |
+| `render-validate` | After constructing visual/interactive output (HTML walkthroughs) | Output Generation |
 | `self-test` | Before declaring any substantive work complete | All stages |
 
 ### Skill Discipline Rules
