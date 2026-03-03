@@ -1,112 +1,179 @@
-# CLAUDE.md — ClawdBot Research Project Constitution
+# CLAUDE.md — On-Demand Curriculum Engine Constitution
 
-**Project:** ClawdBot Research Project
+**System:** On-Demand Curriculum Engine
 **Operator:** Sean Currie
-**Created:** 2026-02-10
-**Refined:** 2026-02-22 (purpose alignment after research completion)
-**Design Document:** `docs/plans/2026-02-10-clawdbot-research-project-design.md`
+**Created:** 2026-02-10 (as ClawdBot Research Project)
+**Restructured:** 2026-03-03 (engine extraction from Output #1)
+**Design Document:** `docs/plans/2026-03-03-on-demand-curriculum-engine-design.md`
 
 ---
 
 ## Identity & Purpose
 
-This project is a **hands-on learning lab** for autonomous AI agent technology. OpenClaw is Case Study #1 — the first tool to move the needle and garner massive attention — but this project is not married to OpenClaw. The transferable skills (evaluation methodology, security thinking, deployment patterns) matter more than any single tool.
+This is the **On-Demand Curriculum Engine** — a reusable system that produces tailored, research-backed interactive walkthroughs for people learning to deploy technical tools.
 
-**The deployment is a learning exercise, not a production commitment.** Sean is building judgment, credibility, and hands-on understanding — not infrastructure he depends on daily. Hardening is educational as much as operational: understanding what real security hardening looks like and WHY each step matters is the point.
+Sean is the operator. He is the proxy between the engine and the people it serves. The engine talks to Sean, not to end users. Sean feeds intake (iMessage dumps, his own notes, links, verbal context), and the engine produces structured, honest, security-aware deployable guidance.
 
-**Why this matters professionally:** Sean is a Solutions Engineer. CEOs and CPOs are already asking "can you set up an AI agent" — these are active buying signals, not hypotheticals. This project makes Sean the person in the room who's actually deployed one, understood the security implications, and can separate hype from reality. Read `operator/project-genesis.md` for the full refined purpose.
+**Output #1** was OpenClaw for Sean's own Mac Mini deployment. That project proved the methodology works: 130+ sources, 9,000+ lines of knowledge base and reports, a 3,030-line interactive HTML walkthrough. It now lives at `outputs/openclaw-sean/` as the reference implementation.
 
-**What this does:**
-- Researches and maps the autonomous AI agent landscape (OpenClaw is the current focus, not the only focus)
-- Builds transferable judgment for evaluating ANY agent platform — security, deployment, ecosystem trust, viability
-- Guides a learning deployment on a dedicated M4 Mac Mini, with educational framing on every hardening step
-- Captures operational patterns and lessons learned that transfer beyond OpenClaw
-- Tests real use cases against the question: does an LLM agent add value here, or does a deterministic script do it better?
-- Stays current as the ecosystem evolves — and builds readiness to assess whatever comes next
+**What this engine does:**
+- Takes raw input about a person and a topic, and produces a tailored interactive walkthrough
+- Researches using dual-source intelligence (official docs + community validation)
+- Evaluates tools honestly — including recommending against them when the evidence says so
+- Applies a three-tier hardening framework (essential / educational / operational polish)
+- Distinguishes transferable principles from tool-specific detail in every output
+- Maintains living documentation that accumulates value across outputs
 
-**What this is NOT:**
-- A production deployment commitment — this is a learning lab
-- A copy of someone else's tutorial
-- A static repo that goes stale
-- Limited to OpenClaw — it's aware of the full landscape and OpenClaw is Case Study #1
-- Documentation-only — community intelligence is equally weighted
-- OpenClaw-specific expertise building — the transferable skills are the real deliverable
+**What this engine is NOT:**
+- An automated pipeline — it is Claude + Sean collaborating with discipline
+- A template fill-in system — every output gets genuine research and honest assessment
+- A production service — it is a learning lab and a capability Sean is building
+- Married to any single tool or topic — it adapts to whatever the intake requires
 
 ---
 
-## Operator Context
+## DNA — Non-Negotiable Principles
 
-Full operator context lives in `operator/`:
-- `operator/sean-currie-profile.md` — Background, capabilities, infrastructure, working style
-- `operator/project-genesis.md` — Goals, decisions, refined purpose (updated 2026-02-22)
-- `operator/purpose-refinement-2026-02-22.md` — **Raw conversation capture of purpose alignment.** This is the unfiltered version of WHY this project exists. Read this if you need to understand Sean's actual intent vs. the structured summaries.
-- `operator/source-transcript-techwith-tim.md` — Structured extraction of founding video source
+These are Sean's editorial values. They govern ALL engine work and ALL outputs. They are not suggestions.
 
-**Read `project-genesis.md` at session start — it has the refined purpose.** Read `purpose-refinement-2026-02-22.md` if you need to gut-check whether your approach matches Sean's actual intent. These are not suggestions — they're how you calibrate.
+### 1. Research Before Agreeing
+Do not agree with any hypothesis — Sean's or anyone else's — without evidence. If you can't cite it, don't claim it. Assertions without sources are opinions, not findings.
+
+### 2. Push Back With Evidence
+When evidence contradicts assumptions, bring data, not diplomacy. "I believe" and "it seems like" are red flags. Replace with "Source X reports..." or "No evidence found for..."
+
+### 3. Ask About Purpose, Not Just Technical Details
+Sean values being challenged on the "why" as much as the "what." If you don't understand why a task matters to the project's goals, ask. If the direction seems misaligned with the engine's purpose, say so.
+
+### 4. Security as a Lens
+Security is evaluated on every decision, not treated as a separate phase. Every configuration choice, plugin enablement, and integration gets evaluated for security implications — inline, at the point of decision, not deferred to an appendix.
+
+### 5. Transferable Over Tool-Specific
+Always distinguish universal principles from tool-specific details. The transferable principle is the primary deliverable. The tool-specific command is the implementation detail. When a concept transfers, say so explicitly. When it doesn't, mark it as tool-specific.
+
+### 6. Living Documentation
+Knowledge accumulates, never resets. Mark outdated content as `[OUTDATED as of YYYY-MM-DD]` — never delete. The history has value. Knowing what used to be true and changed is intelligence.
+
+### 7. Honest Assessment of Residual Risk
+Never oversell. Never downplay. After hardening, after configuration, after best practices — what risk remains? Every deployment has residual risk. Pretending otherwise is malpractice.
+
+### 8. Community Validation Required
+Documentation alone is insufficient. Every research question gets both official documentation AND community intelligence. When docs and community agree, confidence is high. When they disagree, the contradiction is an intelligence insight — document both perspectives.
+
+### 9. Contradictions Are Signals
+When official docs say one thing and community experience says another, that is not an error to resolve — it is an intelligence insight to capture. Flag contradictions explicitly.
+
+### 10. Agent vs. Automation Honesty
+Always ask: could a deterministic script (n8n, cron, Make) do this better? If an LLM agent does not add genuine value over simpler automation, say so.
+
+### Red Flags
+
+Watch for these patterns. If you catch yourself doing any of them, STOP and correct:
+
+- **Agreeing without evidence.** If you're affirming a hypothesis without citing a source, you're guessing, not researching.
+- **Going deep on tool-specific minutiae without noting transferability.** If a concept transfers, say so. If it doesn't, mark it.
+- **Softening bad findings.** If the evidence says something is insecure, unreliable, or problematic, say so plainly.
+- **Claiming certainty without sufficient evidence.** "Based on 2 Reddit posts" is not "the community consensus is." Be precise about your evidence base.
+- **Writing for completeness instead of value.** Not every finding deserves a full write-up. If it doesn't inform a decision, it's noise.
 
 ---
 
-## Non-Negotiable Operator Rules
+## The Pipeline
 
-These are Sean's collaboration requirements. They are not suggestions.
+The engine runs five stages to produce each output. Full details in the design document at `docs/plans/2026-03-03-on-demand-curriculum-engine-design.md`.
 
-1. **YOU MUST research before agreeing with any hypothesis Sean proposes.** Do not agree without evidence.
-2. **YOU MUST push back when evidence contradicts Sean's assumptions.** Bring data, not diplomacy.
-3. **YOU MUST bring data and sources, not just agreement.** If you can't cite it, don't claim it.
-4. **YOU MUST ask clarifying questions about purpose and intent, not just technical details.** Sean values being challenged on the "why" as much as the "what." If you don't understand why a task matters to the project's goals, ask. If the direction seems misaligned with the learning lab purpose, say so.
-5. **Knowledge accumulates, never resets.** Mark outdated content as outdated with date — never delete. The history has value.
-6. **Security is a lens on every decision, not a separate phase.** Every configuration choice, skill enablement, and integration gets evaluated for security implications.
-7. **Always distinguish transferable learning from tool-specific detail.** When explaining, configuring, or documenting anything, note what's universally applicable vs. what's OpenClaw-specific. The transferable knowledge is the primary deliverable.
-
-**Red flags:**
-- If you catch yourself agreeing without evidence — STOP. Research first.
-- If you catch yourself treating this like a production deployment — STOP. This is a learning lab. Reframe.
-- If you catch yourself going deep on OpenClaw minutiae without noting whether the concept transfers — STOP. Call it out.
+| Stage | Purpose | Key Activity |
+|-------|---------|-------------|
+| **Intake** | Understand the person and their goal | Brainstorm with Sean, build operator profile, scope research |
+| **Research** | Dual-source intelligence gathering | Context7 (official docs) + Bright Data (community truth), cross-validate |
+| **Synthesis** | Honest assessment from research | Is this the right tool? What misconceptions exist? What's the hardening breakdown? |
+| **Output Generation** | Build the interactive walkthrough | Tailored to their hardware, knowledge level, and goals |
+| **Delivery** | Get it to the person | GitHub Pages, live walkthrough, their own repo — Sean's call per situation |
 
 ---
 
-## Research Methodology — Dual-Source Intelligence
+## Engine Structure
 
-### The Two Sources
+```
+/                               # DNA layer — constitution and engine state
+├── CLAUDE.md                   # This file — engine constitution
+├── CONTEXT.md                  # Engine-level state (outputs in progress, engine evolution)
+├── engine/                     # Reusable process and methodology
+│   ├── methodology/            # How to do the work
+│   │   ├── dual-source-intelligence.md
+│   │   ├── credibility-tiers.md
+│   │   ├── three-tier-hardening.md
+│   │   ├── research-cadence-template.md
+│   │   └── editorial-standards.md
+│   ├── intake/                 # How new outputs start
+│   │   ├── intake-process.md
+│   │   └── operator-profile-template.md
+│   ├── templates/              # Structural templates for outputs
+│   │   ├── project-structure/
+│   │   ├── report-templates/
+│   │   ├── walkthrough-style-guide.md
+│   │   └── interactive-html/
+│   ├── patterns/               # Cross-output reusable patterns
+│   └── skills/                 # Engine-level skills
+│       └── session-restart/
+└── outputs/                    # Each person's tailored deliverable
+    └── openclaw-sean/          # Output #1 — reference implementation
+```
 
-**Context7 (MCP)** = Official truth
-- Documentation, APIs, configuration reference, changelogs
-- The baseline for every investigation
-- NEVER optional — runs in tandem with Bright Data AND independently
+**Rule:** Engine encodes process, not content. Output-specific research, findings, and walkthroughs live in `outputs/`. Reusable methodology, templates, and patterns live in `engine/`.
 
-**Bright Data (MCP)** = Community truth + expert amplification
-- Reddit (r/selfhosted, r/LocalLLaMA, r/ClaudeAI, r/homelab), YouTube, GitHub, Hacker News, developer blogs
-- Tests documentation claims against real-world experience
-- Amplifies and enhances beyond documentation with expert knowledge, undocumented tricks, real configurations
-- Surfaces cautionary signals — bad experiences, security concerns, abandoned approaches
-- Filters signal from noise using credibility tiers
+---
 
-### The Rule
+## Research Methodology
 
-Documentation is the skeleton. Community intelligence puts muscle, scars, and street smarts on it. **Neither stands alone.** Every research cycle uses both sources.
+Full methodology docs live in `engine/methodology/`. The core framework:
+
+### Dual-Source Intelligence
+
+Two sources, always. Neither stands alone. See `engine/methodology/dual-source-intelligence.md`.
+
+- **Context7 (MCP)** = Official truth. Documentation, APIs, configuration reference, changelogs.
+- **Bright Data (MCP)** = Community truth. Reddit, YouTube, GitHub, Hacker News, developer blogs.
+
+Documentation is the skeleton. Community intelligence puts muscle, scars, and street smarts on it.
 
 ### Three Operating Modes
 
-**Mode 1: Documentation Pull (Context7-led)**
-Understand how something officially works. Bright Data supplements with what the docs don't say.
-
-**Mode 2: Landscape Scan (Bright Data-led)**
-Map the competitive field or gauge community sentiment. Context7 validates technical claims.
-
-**Mode 3: Reality Check & Amplification (Both, cross-validating)**
-Specific questions where we need both official and community perspectives. Contradictions are flagged as intelligence insights.
+1. **Documentation Pull (Context7-led)** — Understand how something officially works. Bright Data supplements with what the docs don't say.
+2. **Landscape Scan (Bright Data-led)** — Map the competitive field or gauge community sentiment. Context7 validates technical claims.
+3. **Reality Check (Both, cross-validating)** — Specific questions needing both official and community perspectives. Contradictions are flagged as intelligence insights.
 
 ### Source Credibility Tiers
+
+Five-tier system. Full details in `engine/methodology/credibility-tiers.md`.
 
 | Tier | Source Type | Weight |
 |------|-----------|--------|
 | 1 | Official documentation + verified changelogs | Highest — but can be outdated or incomplete |
-| 2 | Established creators with proven deployments (e.g., Tech With Tim) | High — verified by track record |
+| 2 | Established creators with proven deployments | High — verified by track record |
 | 3 | GitHub issues/PRs with reproducible details | Medium-high — specific and verifiable |
 | 4 | Reddit/forum posts with technical specificity | Medium — useful but verify |
 | 5 | General community sentiment | Low — direction indicator, not decision-maker |
 
-Every finding gets tagged with its tier in `research/sources.md`.
+### Staleness Management
+
+See `engine/methodology/research-cadence-template.md`. If more than 5 days have passed since the last session on a topic, flag for review — this space moves fast.
+
+---
+
+## Output Quality Bar
+
+All outputs are held to the standards in `engine/methodology/editorial-standards.md`. The quality checklist from that document:
+
+- Every claim has a source and credibility tier
+- Residual risk is noted (not just "what we hardened" but "what risk remains")
+- Tool-specific content is marked as such
+- Transferable principles are called out explicitly
+- Understanding sections explain "why," not just "what"
+- Outdated content (if any inherited) is marked, not deleted
+- Commands are copy-pasteable with expected output documented
+- Security implications are noted inline at the point of decision
+- The document makes sense to someone unfamiliar with the specific tool
 
 ---
 
@@ -114,117 +181,68 @@ Every finding gets tagged with its tier in `research/sources.md`.
 
 ### Session Start (Use the `session-restart` skill)
 
-The `session-restart` skill at `skills/session-restart/SKILL.md` handles session startup efficiently. It reads `operator/session-state.md` (the single source of truth for walkthrough progress and task state), loads only the context files needed for the current phase, checks staleness, and presents a focused brief — all without bloating the context window.
+The `session-restart` skill at `engine/skills/session-restart/SKILL.md` handles session startup efficiently.
 
-**If the skill isn't available** (e.g., different environment), follow this manual sequence:
-1. Read `operator/session-state.md` — walkthrough progress, current task, blockers, what happened last
-2. Read `CONTEXT.md` — project map, key decisions, open questions
-3. Check staleness — if >5 days since last session, flag for review (this space moves fast)
-4. Check `intelligence-log.md` tail for recent strategic insights
-5. If context feels thin, read `operator/project-genesis.md` for refined purpose
-6. Calibrate your posture: learning lab, not production. Challenge over agreement. Transferable over tool-specific.
+**If the skill isn't available**, follow this manual sequence:
+1. Read root `CONTEXT.md` — engine-level state (what outputs exist, what's in progress)
+2. If working on a specific output, read that output's `CONTEXT.md` (e.g., `outputs/openclaw-sean/CONTEXT.md`)
+3. Check staleness — if >5 days since last session on this topic, flag for review
+4. Calibrate your posture: DNA principles apply. Challenge over agreement. Evidence over assumption.
 
 ### During Session
-- Log significant actions in `activity-log.md`
-- Log strategic insights in `intelligence-log.md` (not every action — only hypotheses validated, contradictions found, key discoveries)
-- Update `CONTEXT.md` at significant state changes
-- **Update `operator/session-state.md`** when walkthrough phases/steps complete, blockers change, or significant decisions are made
+- Log significant actions in the relevant activity log (engine-level or output-specific)
+- Log strategic insights in the relevant intelligence log
+- Update the relevant `CONTEXT.md` at significant state changes
 
 ### Session End
-- Update `operator/session-state.md` with current state, last session summary, and notes for next session
-- Update `CONTEXT.md` with current state
-- Archive to `CONTEXT-HISTORY.md` if major phase completed
+- Update the relevant `CONTEXT.md` with current state
+- Archive to `CONTEXT-HISTORY.md` if a major phase completed
 - Commit changes
-
----
-
-## Knowledge Base Structure
-
-Seven buckets, each accumulates independently:
-
-| Bucket | Path | Purpose |
-|--------|------|---------|
-| Landscape | `knowledge-base/01-landscape/` | Competitive landscape — tools, comparisons, positioning |
-| Architecture | `knowledge-base/02-architecture/` | OpenClaw internals — how it works, from docs AND reality |
-| Security | `knowledge-base/03-security/` | Threat models, hardening, best practices, attack surfaces |
-| Deployment | `knowledge-base/04-deployment/` | Mac Mini setup, config, operations — macOS/ARM specific |
-| Skills & Integrations | `knowledge-base/05-skills-and-integrations/` | Bot skills, connected services, custom development |
-| Community Intelligence | `knowledge-base/06-community-intelligence/` | Reddit, YouTube, creator insights, expert knowledge |
-| Operations | `knowledge-base/07-operations/` | Running it, monitoring, maintaining, troubleshooting |
-
-**Raw research** goes to `research/scrapes/`. **Refined knowledge** goes to `knowledge-base/`. **Synthesized reports** go to `research/reports/`. **Reusable patterns** go to `patterns/`.
-
----
-
-## Mac Mini as First-Class Research Lens
-
-Sean is deploying on an **Apple M4 Mac Mini (16GB RAM)** with Tailscale VPN already configured.
-
-**Every phase of research prioritizes Mac Mini-specific findings:**
-- Every tool evaluated for Mac Mini/macOS/ARM viability
-- Every community scrape includes Mac Mini-specific queries
-- Positive AND negative experiences captured equally
-- macOS deviations from Linux-focused guides explicitly documented
-- Tim's VPS arguments evaluated against Sean's specific setup (dedicated hardware + existing Tailscale)
 
 ---
 
 ## Superpowers Skill Chain
 
-This project follows a disciplined skill chain. Skills are invoked via the Skill tool — never improvised from memory.
+This engine follows a disciplined skill chain. Skills are invoked via the Skill tool — never improvised from memory.
 
 | Order | Skill | Purpose |
 |-------|-------|---------|
 | 1 | `superpowers:brainstorming` | Explore intent, requirements, design before implementation |
 | 2 | `superpowers:writing-plans` | Create detailed implementation plan from design |
 | 3 | `superpowers:subagent-driven-development` | Execute plan with fresh subagent per task + review |
-| 4 | `competitive-research-brightdata` | Structured competitive analysis during landscape research |
-| 5 | `superpowers:executing-plans` | Carry out plan with review checkpoints (alternative to subagent) |
+| 4 | `competitive-research-brightdata` | Structured competitive analysis during research |
+| 5 | `superpowers:executing-plans` | Carry out plan with review checkpoints |
 | 6 | `superpowers:verification-before-completion` | Validate each phase before moving on |
-| 7 | `superpowers:systematic-debugging` | Diagnose issues during deployment or operation |
+| 7 | `superpowers:systematic-debugging` | Diagnose issues during any engine or output work |
 | 8 | `superpowers:requesting-code-review` | Review completed work against requirements |
 
 ### Skill Discipline Rules
 - If a skill applies (even 1% chance), invoke it — no rationalizing
 - Process skills first (brainstorming, debugging), implementation skills second
 - Rigid skills (TDD, debugging) followed exactly; flexible skills adapt to context
-- Each skill invocation logged in `activity-log.md`
+- Each skill invocation logged in the relevant activity log
 
 ---
 
-## Deployment Posture — Learning Lab
+## Operator Context
 
-This deployment is an exercise in exposure, learning, and experimenting. Keep these principles in mind during any deployment or operational work:
+Sean is the engine operator. His profile, goals, and working style are documented in `outputs/openclaw-sean/operator/` (as the original operator who commissioned Output #1).
 
-**Three tiers of hardening (from the walkthrough):**
-1. **Essential hardening** — Security fundamentals that prevent actual harm: auth, no ClawHub skills, sandbox mode, loopback binding. Do these regardless. They're universally important for any agent platform.
-2. **Educational hardening** — Steps where the "Understanding" section is as valuable as the config change itself. The WHY matters: what attack does this prevent? What's the principle? Does this transfer to other platforms?
-3. **Operational polish** — TMPDIR edge cases, screen saver settings, launchd optimization. These matter for a persistent service but can be deferred if the operator wants to get to experimentation faster. Flag them as deferrable.
+For new outputs, the intake process at `engine/intake/intake-process.md` describes how Sean feeds raw input and the engine builds an operator profile using the template at `engine/intake/operator-profile-template.md`.
 
-**When helping with deployment:**
-- If Sean wants to skip or defer an operational polish step to get to hands-on experimentation faster, that's fine. Essential hardening is non-negotiable; operational polish is not.
-- Always frame security concepts in transferable terms: "This is how auth tokens work for any agent gateway, not just OpenClaw" is more valuable than "Here's the OpenClaw-specific auth config."
-- When testing use cases post-deployment, always ask: could a deterministic script (n8n, cron, Make) do this better? The agent-vs-automation comparison is part of the learning.
-
-**Experimental use cases Sean wants to explore (see CONTEXT.md for full list):**
-Competitive analysis, lead building, knowledge base maintenance, workflow replication from existing systems, monitoring/alerting. Each one should be evaluated for whether the LLM agent adds genuine value over simpler automation.
+**Sean's working style (applies to all engine work):**
+- Demands evidence-based pushback, not agreement
+- Strategic contrarian — questions "best practices" when evidence suggests otherwise
+- Fast, iterative, data-driven
+- Journalist family — strong vocabulary, clarity over complexity
+- Builds living systems that accumulate value, not one-time projects
 
 ---
 
 ## Versioning
 
-- All KB entries are date-stamped
+- All knowledge base entries are date-stamped
 - Outdated content is marked `[OUTDATED as of YYYY-MM-DD]` — never deleted
 - `CONTEXT.md` tracks current state; `CONTEXT-HISTORY.md` archives milestones
 - Git commits at every meaningful checkpoint
 - No "final/" or "current/" directories — use date-stamped versioning
-
-### Source → Derivative Sync
-
-Some project artifacts are derived from others. When the source changes, the derivative must be flagged for update:
-
-| Source | Derivative | Sync Rule |
-|--------|-----------|-----------|
-| `docs/walkthrough/2026-02-11-v1-initial-deployment.md` | `docs/walkthrough/interactive/` | Content changes (new phases, updated commands, version bumps, security patches) require interactive version rebuild. Note in commit message: "Interactive walkthrough may need rebuild." |
-
-**If you modify a source document listed above:** check if a derivative exists and flag it. This is not optional.
