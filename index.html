@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On-Demand Curriculum</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f1117;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .container {
+    max-width: 640px;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: #888;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.5;
+  }
+
+  .output-card {
+    display: block;
+    background: #1a1d27;
+    border: 1px solid #2a2d37;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .output-card:hover {
+    border-color: #4a7dff;
+    background: #1e2130;
+  }
+
+  .output-card h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.4rem;
+  }
+
+  .output-card .person {
+    font-size: 0.85rem;
+    color: #4a7dff;
+    margin-bottom: 0.6rem;
+  }
+
+  .output-card .description {
+    font-size: 0.88rem;
+    color: #999;
+    line-height: 1.5;
+  }
+
+  .output-card .tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    background: #252836;
+    color: #7a8bbf;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    margin-top: 0.8rem;
+  }
+
+  footer {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>On-Demand Curriculum</h1>
+  <p class="subtitle">Tailored, research-backed interactive walkthroughs for people learning to deploy technical tools.</p>
+
+  <a href="openclaw-jeff/" class="output-card">
+    <h2>OpenClaw Deployment</h2>
+    <p class="person">For Jeff — Denver Real Estate, Hatch Brand</p>
+    <p class="description">Deploy OpenClaw on a MacBook Air for Instagram content creation. Covers dedicated machine setup, security hardening, prompting fundamentals, and split architecture (OpenClaw + Zapier).</p>
+    <span class="tag">Interactive Walkthrough</span>
+  </a>
+
+  <footer>On-Demand Curriculum Engine</footer>
+</div>
+</body>
+</html>

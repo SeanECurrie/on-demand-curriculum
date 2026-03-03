@@ -1,0 +1,2810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw Deployment Walkthrough — Jeff</title>
+  <style>
+/* ─── CSS Custom Properties ─── */
+:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  /* Light mode colors */
+  --color-blue-50: #eff6ff; --color-blue-100: #dbeafe; --color-blue-200: #bfdbfe;
+  --color-blue-500: #3b82f6; --color-blue-600: #2563eb; --color-blue-700: #1d4ed8;
+  --color-red-50: #fef2f2; --color-red-100: #fee2e2;
+  --color-red-500: #ef4444; --color-red-600: #dc2626;
+  --color-green-50: #f0fdf4; --color-green-100: #dcfce7;
+  --color-green-500: #22c55e; --color-green-600: #16a34a;
+  --color-amber-50: #fffbeb; --color-amber-100: #fef3c7;
+  --color-amber-500: #f59e0b; --color-amber-800: #92400e;
+  --color-stone-50: #fafaf9; --color-stone-100: #f5f5f4; --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1; --color-stone-400: #a8a29e; --color-stone-500: #78716c;
+  --color-stone-700: #44403c; --color-stone-800: #292524; --color-stone-900: #1c1917;
+
+  --bg: var(--color-stone-50);
+  --surface: var(--color-stone-100);
+  --code-bg: var(--color-stone-200);
+  --border: var(--color-stone-200);
+  --border-subtle: var(--color-stone-300);
+  --text-muted: var(--color-stone-400);
+  --text-secondary: var(--color-stone-500);
+  --text-body: var(--color-stone-700);
+  --text-heading: var(--color-stone-800);
+  --text-strongest: var(--color-stone-900);
+  --link: var(--color-blue-500);
+  --link-hover: var(--color-blue-600);
+
+  --callout-critical-bg: var(--color-red-50);
+  --callout-critical-border: var(--color-red-500);
+  --callout-critical-label: var(--color-red-600);
+  --callout-warning-bg: var(--color-red-50);
+  --callout-warning-border: var(--color-amber-500);
+  --callout-warning-label: var(--color-red-600);
+  --callout-tip-bg: var(--color-amber-50);
+  --callout-tip-border: var(--color-amber-500);
+  --callout-tip-label: var(--color-amber-800);
+  --callout-info-bg: var(--color-blue-50);
+  --callout-info-border: var(--color-blue-500);
+  --callout-info-label: var(--color-blue-600);
+
+  --understanding-bg: var(--color-amber-50);
+  --understanding-border: var(--color-amber-500);
+  --understanding-label: var(--color-amber-500);
+
+  --nav-active-bg: var(--color-blue-100);
+  --nav-active-color: var(--color-blue-600);
+  --nav-active-border: var(--color-blue-500);
+
+  --checkbox-bg: white;
+  --checkbox-border: var(--color-stone-300);
+  --checkbox-checked: var(--color-green-500);
+
+  --time-badge-bg: var(--color-blue-200);
+  --time-badge-color: var(--color-blue-600);
+
+  --sidebar-bg: var(--color-stone-100);
+  --sidebar-border: var(--color-stone-200);
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --surface: #262626;
+  --code-bg: #2d2d2d;
+  --border: #404040;
+  --border-subtle: #333333;
+  --text-muted: #737373;
+  --text-secondary: #a3a3a3;
+  --text-body: #d4d4d4;
+  --text-heading: #e5e5e5;
+  --text-strongest: #f5f5f5;
+  --link: #60a5fa;
+  --link-hover: #3b82f6;
+
+  --callout-critical-bg: #450a0a;
+  --callout-critical-border: #f87171;
+  --callout-critical-label: #f87171;
+  --callout-warning-bg: #450a0a;
+  --callout-warning-border: #fbbf24;
+  --callout-warning-label: #f87171;
+  --callout-tip-bg: #451a03;
+  --callout-tip-border: #fbbf24;
+  --callout-tip-label: #fbbf24;
+  --callout-info-bg: #1e3a5f;
+  --callout-info-border: #60a5fa;
+  --callout-info-label: #60a5fa;
+
+  --understanding-bg: rgba(69, 26, 3, 0.3);
+  --understanding-border: #fbbf24;
+  --understanding-label: #fbbf24;
+
+  --nav-active-bg: #1e3a5f;
+  --nav-active-color: #60a5fa;
+  --nav-active-border: #3b82f6;
+
+  --checkbox-bg: #262626;
+  --checkbox-border: #525252;
+
+  --time-badge-bg: #1e3a5f;
+  --time-badge-color: #60a5fa;
+
+  --sidebar-bg: #1f1f1f;
+  --sidebar-border: #333333;
+}
+
+/* ─── Global ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 24px;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-body);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ─── Layout ─── */
+.sidebar {
+  width: 260px;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 24px 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.sidebar-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+
+.theme-toggle {
+  width: 36px; height: 36px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-body);
+}
+.theme-toggle:hover { background: var(--code-bg); }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="dark"] .icon-sun { display: block; }
+:root:not([data-theme="dark"]) .icon-sun { display: none; }
+:root:not([data-theme="dark"]) .icon-moon { display: block; }
+html:not([data-theme]) .icon-sun { display: none; }
+html:not([data-theme]) .icon-moon { display: block; }
+
+.nav-group-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 8px 20px 4px;
+  margin-top: 16px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 20px;
+  font-size: 14px; font-weight: 500;
+  color: var(--text-body);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+}
+.nav-item:hover { background: var(--code-bg); color: var(--text-heading); text-decoration: none; }
+.nav-item.active {
+  background: var(--nav-active-bg);
+  color: var(--nav-active-color);
+  border-left-color: var(--nav-active-border);
+  font-weight: 600;
+}
+.nav-item.completed { border-left-color: var(--color-green-500); }
+
+.nav-dot {
+  width: 8px; height: 8px; min-width: 8px;
+  border-radius: 50%;
+  background: var(--border-subtle);
+  display: inline-block;
+}
+.nav-item.active .nav-dot {
+  background: transparent;
+  border: 2px solid var(--color-blue-500);
+}
+.nav-item.completed .nav-dot { background: var(--color-green-500); }
+
+.sidebar-progress {
+  margin-top: auto;
+  padding: 16px 20px;
+}
+.progress-label {
+  font-size: 12px; color: var(--text-muted); margin-bottom: 6px;
+}
+.progress-bar {
+  height: 4px; background: var(--border-subtle); border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--color-blue-500); border-radius: 2px;
+  transition: width 300ms ease;
+}
+
+.main-content {
+  margin-left: 260px;
+  max-width: 780px;
+  padding: 48px 40px;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  position: fixed; top: 12px; left: 12px; z-index: 200;
+  width: 40px; height: 40px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; cursor: pointer;
+  align-items: center; justify-content: center;
+}
+.hamburger svg { color: var(--text-body); }
+.sidebar-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 99;
+}
+
+/* ─── Typography ─── */
+h1 { font-size: 28px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: var(--text-strongest); margin-bottom: 8px; }
+h2 { font-size: 22px; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; color: var(--text-heading); margin: 32px 0 16px; }
+h3 { font-size: 18px; font-weight: 600; line-height: 1.4; color: var(--text-heading); margin: 24px 0 12px; }
+h4 { font-size: 16px; font-weight: 600; color: var(--text-heading); margin: 16px 0 8px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 4px 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+strong { color: var(--text-heading); }
+
+code:not(pre code) {
+  font-family: var(--font-mono); font-size: 14px;
+  background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
+  color: var(--text-body);
+}
+
+.step-number { color: var(--color-blue-500); font-weight: 700; }
+
+/* ─── Phase Header ─── */
+.phase-section { padding-top: 16px; }
+.phase-header {
+  padding: 32px 0 24px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+}
+.phase-header.security-critical {
+  border-left: 4px solid var(--color-red-500);
+  padding-left: 16px;
+}
+[data-theme="dark"] .phase-header.security-critical { border-left-color: #f87171; }
+.phase-number {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--color-blue-500);
+  margin-bottom: 4px;
+}
+[data-theme="dark"] .phase-number { color: #60a5fa; }
+.phase-title { font-size: 28px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: var(--text-strongest); margin-bottom: 8px; }
+
+.time-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--time-badge-bg); color: var(--time-badge-color);
+  font-size: 12px; font-weight: 600;
+  padding: 3px 10px; border-radius: 12px; margin-top: 8px;
+}
+
+/* ─── Code Blocks ─── */
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0 16px;
+  overflow-x: auto;
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 14px; line-height: 1.55;
+  color: var(--text-body);
+}
+.code-block pre { margin: 0; }
+.code-block code { background: none; padding: 0; font-size: 14px; }
+
+.code-lang {
+  position: absolute; top: 0; left: 16px;
+  background: var(--border-subtle);
+  padding: 2px 8px; border-radius: 0 0 4px 4px;
+  font-size: 11px; font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  width: 32px; height: 32px;
+  background: transparent; border: none; border-radius: 6px;
+  cursor: pointer; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+}
+.copy-btn:hover { background: var(--surface); }
+.copy-btn.copied { color: var(--color-green-500); }
+
+/* ─── Callouts ─── */
+.callout {
+  border-radius: 8px; padding: 16px 20px; margin: 16px 0;
+  border-left: 4px solid; font-size: 15px; line-height: 1.6;
+}
+.callout p { margin: 6px 0; }
+.callout-label {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.callout-critical { background: var(--callout-critical-bg); border-left-color: var(--callout-critical-border); }
+.callout-critical .callout-label { color: var(--callout-critical-label); }
+.callout-warning { background: var(--callout-warning-bg); border-left-color: var(--callout-warning-border); }
+.callout-warning .callout-label { color: var(--callout-warning-label); }
+.callout-tip { background: var(--callout-tip-bg); border-left-color: var(--callout-tip-border); }
+.callout-tip .callout-label { color: var(--callout-tip-label); }
+.callout-info { background: var(--callout-info-bg); border-left-color: var(--callout-info-border); }
+.callout-info .callout-label { color: var(--callout-info-label); }
+
+/* ─── Understanding Sections ─── */
+.understanding-section {
+  border-left: 4px solid var(--understanding-border);
+  background: var(--understanding-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+.understanding-label {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--understanding-label);
+  margin-bottom: 8px;
+}
+.understanding-title { margin-top: 0; }
+
+/* ─── Expandable Sections ─── */
+.expandable {
+  border: 1px solid var(--border);
+  border-radius: 8px; margin: 12px 0; overflow: hidden;
+}
+.expandable-trigger {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 12px 16px;
+  background: var(--surface); border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 15px; font-weight: 600;
+  color: var(--text-body); text-align: left;
+}
+.expandable-trigger:hover { background: var(--code-bg); }
+.expandable-trigger .chevron {
+  flex-shrink: 0; color: var(--text-muted);
+  transition: transform 200ms ease;
+}
+.expandable-trigger[aria-expanded="true"] .chevron { transform: rotate(90deg); }
+.expandable-content { padding: 0 16px 16px; }
+
+/* ─── Tables ─── */
+.table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 16px 0; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table th {
+  text-align: left; padding: 10px 12px; font-weight: 600;
+  color: var(--text-body); background: var(--surface);
+  border-bottom: 2px solid var(--border-subtle);
+}
+.data-table td {
+  padding: 10px 12px; border-bottom: 1px solid var(--border);
+  color: var(--text-body); vertical-align: top;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table code { font-size: 13px; }
+
+/* ─── Checkboxes ─── */
+.checkbox-list { margin: 12px 0; }
+.checkbox-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; }
+.checkbox-input {
+  appearance: none; width: 20px; height: 20px; min-width: 20px;
+  border: 2px solid var(--checkbox-border); border-radius: 4px;
+  background: var(--checkbox-bg); cursor: pointer; margin-top: 2px;
+  position: relative;
+}
+.checkbox-input:checked { background: var(--checkbox-checked); border-color: var(--checkbox-checked); }
+.checkbox-input:checked::after {
+  content: ""; position: absolute; left: 5px; top: 1px;
+  width: 6px; height: 11px;
+  border: solid white; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.checkbox-input:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
+.checkbox-input:checked + .checkbox-label {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--border-subtle);
+}
+.checkbox-label { font-size: 15px; line-height: 1.5; color: var(--text-body); cursor: pointer; }
+
+/* ─── Self-Test / Notes ─── */
+.deployment-notes {
+  background: var(--surface);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 8px; padding: 20px 24px; margin: 24px 0 40px;
+}
+.deployment-notes-title {
+  font-size: 16px; font-weight: 700;
+  color: var(--text-heading); margin-bottom: 12px;
+}
+.deployment-notes-intro { color: var(--text-secondary); font-style: italic; margin-bottom: 12px; }
+
+.notes-input {
+  display: block; width: 100%; padding: 8px 12px; margin-top: 4px;
+  font-family: var(--font-mono); font-size: 13px;
+  border: 1px solid var(--border-subtle); border-radius: 6px;
+  background: var(--checkbox-bg); color: var(--text-body);
+  resize: vertical; min-height: 60px;
+}
+.notes-input:focus { outline: 2px solid var(--color-blue-500); outline-offset: 1px; border-color: var(--color-blue-500); }
+
+/* ─── Diagrams ─── */
+.diagram-container {
+  margin: 24px 0; padding: 20px;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); min-height: 100px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ─── Walkthrough Header ─── */
+.walkthrough-header { margin-bottom: 24px; }
+.walkthrough-title { font-size: 28px; }
+
+.intro-section { margin-bottom: 32px; }
+
+/* ─── Print ─── */
+@media print {
+  .sidebar { display: none; }
+  .hamburger { display: none; }
+  .expandable-content { display: block !important; }
+  .copy-btn { display: none; }
+  .code-block { break-inside: avoid; }
+  .phase-header { break-before: page; }
+  .callout { break-inside: avoid; }
+  .data-table { break-inside: avoid; }
+  [data-theme] { color-scheme: light; }
+  body { font-size: 12px; max-width: none; }
+  .main-content { margin-left: 0; max-width: none; padding: 20px; }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1023px) {
+  .sidebar { width: 240px; }
+  .main-content { margin-left: 240px; padding: 48px 24px; }
+  .phase-title { font-size: 24px; }
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 200ms ease;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-backdrop.open { display: block; }
+  .hamburger { display: flex; }
+  .main-content { margin-left: 0; padding: 60px 20px 48px; }
+  .phase-title { font-size: 22px; }
+}
+</style>
+  <script src="https://cdn.jsdelivr.net/npm/roughjs@4.5.2/bundled/rough.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+<!-- Mobile hamburger -->
+<button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="3" y1="6" x2="21" y2="6"/>
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+
+<!-- Sidebar backdrop (mobile) -->
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">OpenClaw — Jeff</div>
+    <button class="theme-toggle" id="theme-toggle" title="Toggle dark/light mode">
+      <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+  </div>
+  <div class="nav-group-label">FOUNDATIONS</div>
+  <a class="nav-item" href="#s1-intro" data-target="s1-intro" data-phase="s1"><span class="nav-dot"></span>1. What Is OpenClaw</a>
+  <a class="nav-item" href="#s2-machine" data-target="s2-machine" data-phase="s2"><span class="nav-dot"></span>2. Why a Dedicated Machine</a>
+  <a class="nav-item" href="#s3-setup" data-target="s3-setup" data-phase="s3"><span class="nav-dot"></span>3. Your Setup</a>
+  <div class="nav-group-label">DEPLOYMENT</div>
+  <a class="nav-item" href="#s4-install" data-target="s4-install" data-phase="s4"><span class="nav-dot"></span>4. Installation</a>
+  <a class="nav-item" href="#s5-security" data-target="s5-security" data-phase="s5"><span class="nav-dot"></span>5. Security Hardening</a>
+  <div class="nav-group-label">OPERATION</div>
+  <a class="nav-item" href="#s6-prompting" data-target="s6-prompting" data-phase="s6"><span class="nav-dot"></span>6. Prompting</a>
+  <a class="nav-item" href="#s7-social" data-target="s7-social" data-phase="s7"><span class="nav-dot"></span>7. Social Media Workflow</a>
+  <a class="nav-item" href="#s8-next" data-target="s8-next" data-phase="s8"><span class="nav-dot"></span>8. What's Next</a>
+  <div class="sidebar-progress">
+    <div class="progress-label" id="progress-label">0 of 8 sections complete</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+</nav>
+
+<main class="main-content" id="main-content">
+<div class="walkthrough-header">
+  <h1 class="walkthrough-title">OpenClaw Deployment Walkthrough — Jeff</h1>
+</div>
+<p><strong>Version:</strong> 1.0<br>
+<strong>Date:</strong> 2026-03-03<br>
+<strong>For:</strong> Jeff (Denver real estate, Hatch brand, @jeffanswers)<br>
+<strong>Produced by:</strong> On-Demand Curriculum Engine, Output #2</p>
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 1: What Is OpenClaw -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s1-intro" data-phase="s1">
+  <div class="phase-header">
+    <div class="phase-number">Section 1</div>
+    <h1 class="phase-title">What Is OpenClaw (And What Isn't It)</h1>
+  </div>
+
+<p>Before you install anything, you need to understand what you're building and what it will actually do for you. This section sets expectations honestly so nothing catches you off guard.</p>
+
+<h3>The One-Sentence Version</h3>
+
+<p>OpenClaw is an AI assistant that runs on your own MacBook, can take real actions on your behalf (like drafting Instagram posts), and keeps your data private on your machine.</p>
+
+<h3>What OpenClaw Is</h3>
+
+<p>OpenClaw is a <strong>platform</strong> — a foundation you build on, not a finished product you turn on. Think of it like buying a commercial kitchen: the kitchen has the stove, the counters, the sink, but you still need to decide what you're cooking, buy the ingredients, and learn the recipes.</p>
+
+<p>Here's what OpenClaw gives you:</p>
+<ul>
+  <li>A way to talk to an AI (Claude) that lives on your own computer, not on someone else's servers</li>
+  <li>The ability to connect that AI to real tools — Instagram, email, scheduling, web research</li>
+  <li>A dashboard where you can see what your AI is doing and manage it visually</li>
+  <li>Privacy: your conversations, drafts, and data stay on your MacBook unless you choose to send them somewhere</li>
+</ul>
+
+<p>Here's what OpenClaw does NOT give you out of the box:</p>
+<ul>
+  <li>A ready-to-go Instagram posting system (that requires configuration)</li>
+  <li>AI that knows your brand voice (you teach it)</li>
+  <li>Auto-pilot social media (you review and approve everything, especially at the start)</li>
+  <li>Security (the default settings are wide open — the walkthrough locks them down)</li>
+</ul>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why "platform, not solution" matters</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>In real estate, you know the difference between buying a brokerage and buying a desk at someone else's brokerage. OpenClaw is like building your own brokerage for AI — you have full control, but you also have full responsibility for the setup. That's the tradeoff for keeping your data on your machine instead of handing it to a cloud service. This walkthrough handles the setup for you. After that, you're in the driver's seat.</p></div></div></div>
+
+<h3>The Four Pieces</h3>
+
+<p>OpenClaw has four main parts. Think of them like the parts of a well-run office:</p>
+
+<p><strong>1. The Gateway (Front Desk)</strong><br>
+Every message you send goes through the Gateway first. It checks who you are, decides which agent should handle your request, and sends the response back. If the Gateway isn't running, nothing works — it's the foundation.</p>
+
+<p><strong>2. The LLM Connection (The Brain You're Renting)</strong><br>
+The Gateway doesn't think on its own. It sends your messages to Claude (an AI made by Anthropic) over the internet, gets the response back, and delivers it to you. You provide your own API key — like a membership card that lets OpenClaw use Claude on your behalf. You pay per use, and for your workload (social media captions), the cost is modest: roughly $3-10 per month.</p>
+
+<p><strong>3. Skills (The Hands)</strong><br>
+Skills are add-ons that let OpenClaw actually do things — search the web, read files, create content. Without skills, the agent can only talk. With skills, it can act. The walkthrough installs only safe, locally-built skills. We'll explain why in the Security section.</p>
+
+<p><strong>4. The Dashboard (Control Panel)</strong><br>
+A web page that runs on your MacBook (not on the internet — only accessible from your computer) where you can see what the agent is doing, review its work, and manage your setup visually instead of typing commands.</p>
+
+<div class="diagram-container" id="diagram-four-pieces" role="img" aria-label="Diagram showing the four pieces of OpenClaw: Gateway, Skills, and Dashboard inside a MacBook Air boundary, with Claude outside connected by an arrow crossing the boundary"><noscript>Diagram: The Four Pieces of OpenClaw</noscript></div>
+
+<h3>How It Works When You Use It</h3>
+
+<p>Here's what happens when you ask OpenClaw to draft an Instagram post:</p>
+<ol>
+  <li><strong>You type a message</strong> — through the Dashboard on your MacBook or through a messaging app</li>
+  <li><strong>The Gateway receives it</strong> — the front desk checks who sent it and whether they're authorized</li>
+  <li><strong>The Gateway sends it to Claude</strong> — your message, plus your brand voice instructions, goes to Claude's servers over the internet</li>
+  <li><strong>Claude thinks and responds</strong> — it reads your request, might ask a skill to look up Denver market data, and writes a draft</li>
+  <li><strong>The draft comes back to you</strong> — through whatever channel you used to send the original message</li>
+  <li><strong>You review and approve</strong> — nothing gets posted without your say-so</li>
+</ol>
+
+<p>The whole cycle takes a few seconds for a caption draft.</p>
+
+<h3>The Split Architecture: Two Tools, Not One</h3>
+
+<p>Here's something important to understand upfront: <strong>OpenClaw has no built-in Instagram posting ability.</strong> It can create content beautifully — captions, hashtags, brand-voice-consistent drafts — but it cannot publish directly to Instagram.</p>
+
+<p>That's actually a good thing, and here's why.</p>
+
+<p>The workflow uses two tools:</p>
+<ul>
+  <li><strong>OpenClaw + Claude</strong> handles the thinking — drafting captions, suggesting hashtags, maintaining your brand voice</li>
+  <li><strong>Zapier</strong> handles the posting — the mechanical act of publishing to Instagram on a schedule</li>
+</ul>
+
+<p>This split follows a principle that applies well beyond this project: <strong>use AI for tasks that need intelligence, use automation for tasks that are mechanical.</strong> Writing a caption requires creativity. Posting it to Instagram at the right time is just pushing a button — a simple automation tool does that more reliably than an AI agent.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Agent vs. automation honesty</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>Could a simple script post to Instagram without any AI? Absolutely. The posting part is mechanical — it's the same steps every time. That's why Zapier handles it. What a script can't do is write a compelling caption about the Sloans Lake market that sounds like you and uses the right hashtags. That's where Claude earns its keep. The best systems use intelligence where it adds value and automation where it doesn't. This principle applies to any tool you'll ever evaluate — ask "could a simpler tool do this part?"</p></div></div></div>
+
+<h3>What This Will Cost</h3>
+
+<p>Let's be direct about money:</p>
+
+<div class="table-wrapper"><table class="data-table">
+<thead><tr><th>Item</th><th>Monthly Cost</th><th>What It Is</th></tr></thead>
+<tbody>
+<tr><td>Claude Pro subscription</td><td>$20/mo</td><td>Web access to Claude for your own use (separate from OpenClaw)</td></tr>
+<tr><td>Claude API</td><td>$3-10/mo</td><td>What OpenClaw uses to talk to Claude. Pay-per-use, based on how much content you generate</td></tr>
+<tr><td>Zapier</td><td>$0-20/mo</td><td>Instagram publishing automation. Free tier may be enough for 3-5 posts/week</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>$23-50/mo</strong></td><td></td></tr>
+</tbody>
+</table></div>
+
+<p>The Claude Pro subscription and Claude API are separate things. The subscription gives you direct web access to Claude (useful for ad hoc work). The API is the connection OpenClaw uses. You need both.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: What an API key is</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>An API key is like a combination of a password and a credit card number. Anyone who has it can use Claude and charge it to your account. You'll create one during setup, and this walkthrough stores it securely. Never share your API key in messages, emails, or screenshots. If you think it's been compromised, change it immediately on the Anthropic website. You can also set a monthly spending cap so even if someone gets your key, the damage is limited. This principle applies to every service that uses API keys — treat them like you treat your banking password.</p></div></div></div>
+
+<h3>What You Should Expect</h3>
+
+<p><strong>The first week:</strong> You'll set up the infrastructure — install OpenClaw, configure security, set up your Instagram business account. This is the heaviest lift. Expect 2-3 focused sessions, each 1-2 hours.</p>
+
+<p><strong>Weeks 2-3:</strong> You'll get the content workflow running — teach the AI your brand voice, connect Zapier for posting, create your first AI-drafted posts. Things start feeling useful.</p>
+
+<p><strong>Weeks 3-4:</strong> You hit a rhythm. You spend ~15 minutes a day reviewing what the AI drafted, approving posts, and giving feedback to improve the voice. The system gets better the more you use it.</p>
+
+<p><strong>What this will NOT do:</strong></p>
+<ul>
+  <li>Grow your Instagram overnight. Automation handles posting mechanics. Growth comes from content quality, consistency, and local relevance. The AI helps with quality; you provide the Denver expertise.</li>
+  <li>Eliminate all your involvement. Even with full automation, you review content and provide local context. The goal is to move from "I have to be on Instagram" to "I review and approve what the AI prepared." That's a real improvement.</li>
+  <li>Work without maintenance. You'll need to update OpenClaw weekly (takes 5 minutes), and occasionally adjust your brand voice as you learn what works.</li>
+</ul>
+
+<h3>Self-Test: Section 1</h3>
+
+<p>Before moving on, you should be able to answer these:</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s1-platform" id="s1-platform"><label class="checkbox-label" for="s1-platform">I understand that OpenClaw is a platform I need to configure, not a turn-key solution</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s1-four-pieces" id="s1-four-pieces"><label class="checkbox-label" for="s1-four-pieces">I know the four pieces: Gateway (front desk), Claude (brain), Skills (hands), Dashboard (control panel)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s1-split-arch" id="s1-split-arch"><label class="checkbox-label" for="s1-split-arch">I understand that OpenClaw creates content and Zapier publishes it (split architecture)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s1-cost" id="s1-cost"><label class="checkbox-label" for="s1-cost">I know the approximate monthly cost ($23-50/mo)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s1-review" id="s1-review"><label class="checkbox-label" for="s1-review">I understand that I'll review and approve all content before it's posted</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 1</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s1-notes" placeholder="Your notes for Section 1..."></textarea>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 2: Why a Dedicated Machine -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s2-machine" data-phase="s2">
+  <div class="phase-header">
+    <div class="phase-number">Section 2</div>
+    <h1 class="phase-title">Why a Dedicated Machine</h1>
+  </div>
+
+<p>This section explains why you're setting up a separate MacBook for this, rather than just installing it on whatever computer you already use. The reasoning here applies to any AI agent platform — not just OpenClaw.</p>
+
+<h3>The Problem with Sharing</h3>
+
+<p>Your current computer has everything on it: your email, your banking, your client contracts, your browsing history, your saved passwords. If you install an AI agent on that same computer and something goes wrong — a bad skill, a security vulnerability, a misconfiguration — the agent could potentially access all of it.</p>
+
+<p>Think of it like this: you wouldn't let a new hire sit at your desk with your email open, your banking logged in, and your client files spread out. You'd give them their own workspace with only the tools they need.</p>
+
+<div class="diagram-container" id="diagram-shared-dedicated" role="img" aria-label="Diagram comparing a shared machine with everything crammed together versus a dedicated machine with clean separation"><noscript>Diagram: Shared Machine vs. Dedicated Machine</noscript></div>
+
+<h3>Your Situation: The Honest Tradeoff</h3>
+
+<p>You're buying a MacBook Air. It's going to run OpenClaw, but it's also going to be a laptop you use. That means it's a <strong>shared machine</strong> — OpenClaw and your personal activities (email, banking, client work) coexist on the same device.</p>
+
+<p><strong>Is this ideal?</strong> No. A dedicated machine — like a Mac Mini that does nothing but run OpenClaw — would be safer because even if something went wrong with the AI agent, your personal data wouldn't be on the same device.</p>
+
+<p><strong>Is your setup workable?</strong> Yes, with proper security. The walkthrough configures multiple security layers — a sandbox (locked room) for the agent, authentication (password) on the gateway, localhost binding (only your computer can access it), and encryption on the whole drive. These layers compensate for sharing the machine.</p>
+
+<p><strong>Should you consider a Mac Mini instead?</strong> If this MacBook Air is going to sit on a desk 95% of the time, a Mac Mini would actually be a better investment. It costs less at the same specs, has a fan for cooling (the Air doesn't), is designed for always-on use, and has no battery to manage. The Air trades all of those server-friendly features for portability. If you need portability, the Air works. If you don't, the Mini is objectively better for this.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Isolation reduces blast radius (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>This is a principle that applies far beyond OpenClaw. In real estate, you probably keep your personal and business finances in separate accounts — not because you expect fraud, but because separation limits the damage if something goes wrong. The same logic applies to computers. Every IT professional will tell you: don't run sensitive systems on general-purpose machines if you can avoid it. When you can't avoid it (like your situation), you compensate with layers of protection. This walkthrough builds those layers.</p></div></div></div>
+
+<h3>What Makes the MacBook Air Work</h3>
+
+<p>The MacBook Air M4 is more than powerful enough for OpenClaw. The platform's requirements are modest:</p>
+
+<div class="table-wrapper"><table class="data-table">
+<thead><tr><th>What OpenClaw Needs</th><th>What the MacBook Air Has</th></tr></thead>
+<tbody>
+<tr><td>1-2 GB RAM</td><td>16 or 24 GB</td></tr>
+<tr><td>1 CPU core</td><td>10 CPU cores</td></tr>
+<tr><td>~500 MB storage</td><td>256 GB - 1 TB</td></tr>
+<tr><td>Docker support</td><td>Full support via OrbStack</td></tr>
+</tbody>
+</table></div>
+
+<p>The real questions aren't about power — they're about running a server on a laptop that wasn't designed to be a server. We'll handle those:</p>
+<ul>
+  <li><strong>Sleep prevention:</strong> Laptops sleep. Servers can't. We'll configure yours to stay awake.</li>
+  <li><strong>Battery management:</strong> Always plugged in with a charge limit to protect battery health.</li>
+  <li><strong>Thermal management:</strong> The Air has no fan. For OpenClaw's workload (mostly idle, occasional bursts), this is fine. A laptop stand helps with heat.</li>
+</ul>
+
+<h3>Self-Test: Section 2</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s2-tradeoffs" id="s2-tradeoffs"><label class="checkbox-label" for="s2-tradeoffs">I understand why running OpenClaw on a shared machine has tradeoffs</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s2-layers" id="s2-layers"><label class="checkbox-label" for="s2-layers">I understand that multiple security layers compensate for those tradeoffs</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s2-power" id="s2-power"><label class="checkbox-label" for="s2-power">I know my MacBook Air is powerful enough for this workload</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s2-mini" id="s2-mini"><label class="checkbox-label" for="s2-mini">I've considered whether a Mac Mini might be better for my situation</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 2</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s2-notes" placeholder="Your notes for Section 2..."></textarea>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 3: Your Setup -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s3-setup" data-phase="s3">
+  <div class="phase-header">
+    <div class="phase-number">Section 3</div>
+    <h1 class="phase-title">Your Setup — Everything You Need Before Installation</h1>
+  </div>
+
+<p>This section covers everything that needs to be in place before you install OpenClaw. Think of it as a pre-flight checklist. Don't skip ahead — if any of these prerequisites are missing, the installation will fail or the system won't work correctly.</p>
+
+<h3 id="s3-1">3.1 Hardware Checklist</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-hardware-air" id="s3-hardware-air"><label class="checkbox-label" for="s3-hardware-air"><strong>MacBook Air M4 in hand</strong> — powered on, logged in, connected to WiFi</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-hardware-ram" id="s3-hardware-ram"><label class="checkbox-label" for="s3-hardware-ram"><strong>24 GB RAM strongly recommended</strong> — if you haven't purchased yet, the $200 upgrade from 16 GB to 24 GB is the single highest-impact hardware decision. With 16 GB, the system will work but will be tight on memory under sustained use. With 24 GB, you'll have comfortable headroom.</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-hardware-storage" id="s3-hardware-storage"><label class="checkbox-label" for="s3-hardware-storage"><strong>512 GB storage minimum</strong> — Docker images and logs accumulate over time. 256 GB will get tight.</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-hardware-power" id="s3-hardware-power"><label class="checkbox-label" for="s3-hardware-power"><strong>Power adapter connected</strong> — this machine will run plugged in nearly all the time</label></div>
+</div>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why 24 GB matters</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>Running OpenClaw means running several layers at once: macOS itself (4-6 GB), the container runtime (0.5-1.5 GB), OpenClaw's gateway and agents (about 450 MB each), and potentially a web browser for automation (another 500 MB - 1.5 GB). On 16 GB, that stack uses 50-85% of your available memory, leaving little room for anything else. On 24 GB, it uses 30-55%, with comfortable breathing room. Think of it like listing square footage: technically a family of four can live in 800 square feet, but 1,200 changes the experience entirely. This principle applies to any Docker-based service on a consumer laptop — the container runtime adds overhead that isn't obvious until you're running it.</p></div></div></div>
+
+<h3 id="s3-2">3.2 macOS Essentials</h3>
+
+<p>These are macOS settings you need to verify or enable before anything else.</p>
+
+<h4>FileVault (Full-Disk Encryption)</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-filevault" id="s3-filevault"><label class="checkbox-label" for="s3-filevault"><strong>Verify FileVault is ON:</strong> Open System Settings > Privacy &amp; Security > scroll down to FileVault</label></div>
+</div>
+
+<p>If FileVault shows "ON" — you're good. Move on.</p>
+<p>If FileVault shows "OFF" — turn it on now. Click "Turn On FileVault" and follow the prompts.</p>
+
+<p><strong>Why this matters:</strong> All of OpenClaw's data — your API keys, chat history, agent configurations — is stored as regular files on your hard drive, not encrypted by the app itself. If your MacBook is stolen (from your car, an open house, a coffee shop), FileVault ensures that data is unreadable without your login password. Without it, someone who steals your laptop can read everything by connecting the drive to another computer.</p>
+
+<p><strong>Expected result:</strong> FileVault shows "On" with a green indicator. Encryption may take a few hours to complete in the background if you just turned it on — that's normal and doesn't prevent you from continuing.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why does OpenClaw store credentials unencrypted? (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>This is actually common in software. Most applications store their configuration and credentials as plain text files on disk. They rely on the operating system's security (your login password, FileVault encryption) to protect those files. This is why full-disk encryption matters on every laptop with sensitive data — not just for OpenClaw, but for anything. If you have client contracts, financial documents, or business plans on your MacBook, FileVault protects all of it.</p></div></div></div>
+
+<h4>macOS Firewall</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-firewall" id="s3-firewall"><label class="checkbox-label" for="s3-firewall"><strong>Enable the firewall:</strong> Open System Settings > Network > Firewall > turn ON</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-stealth" id="s3-stealth"><label class="checkbox-label" for="s3-stealth"><strong>Enable stealth mode:</strong> Click "Options..." > check "Enable stealth mode"</label></div>
+</div>
+
+<p><strong>Why this matters:</strong> The firewall prevents other devices on your network from finding and connecting to services on your MacBook. Stealth mode means your computer doesn't even respond to network probes — it's invisible on the network.</p>
+
+<p><strong>Expected result:</strong> Firewall shows "Active" with stealth mode enabled.</p>
+
+<h3 id="s3-3">3.3 Claude Subscription and API Key</h3>
+
+<p>You need two things from Anthropic: a Claude Pro subscription and an API key.</p>
+
+<h4>Claude Pro Subscription ($20/month)</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-claude-signup" id="s3-claude-signup"><label class="checkbox-label" for="s3-claude-signup">Go to <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> and sign up or log in</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-claude-pro" id="s3-claude-pro"><label class="checkbox-label" for="s3-claude-pro">Subscribe to Claude Pro ($20/month)</label></div>
+</div>
+
+<p>This gives you web access to Claude for your own use — writing emails, brainstorming, research. It's useful on its own, but it's separate from what OpenClaw uses.</p>
+
+<h4>Claude API Key (pay-per-use)</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-console" id="s3-api-console"><label class="checkbox-label" for="s3-api-console">Go to <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a></label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-account" id="s3-api-account"><label class="checkbox-label" for="s3-api-account">Create an account (or log in — this is a separate account from claude.ai)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-nav" id="s3-api-nav"><label class="checkbox-label" for="s3-api-nav">Navigate to API Keys</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-create" id="s3-api-create"><label class="checkbox-label" for="s3-api-create">Click "Create Key"</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-name" id="s3-api-name"><label class="checkbox-label" for="s3-api-name">Name it something recognizable: <code>openclaw-jeff-macbook</code></label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-copy" id="s3-api-copy"><label class="checkbox-label" for="s3-api-copy"><strong>Copy the key immediately</strong> — you won't be able to see it again after you close this page</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-store" id="s3-api-store"><label class="checkbox-label" for="s3-api-store"><strong>Store it temporarily</strong> in a note (you'll enter it into OpenClaw during installation). Do NOT paste it into any chat, email, or social media message.</label></div>
+</div>
+
+<p><strong>Set a spending limit:</strong></p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-billing" id="s3-api-billing"><label class="checkbox-label" for="s3-api-billing">In the Anthropic console, go to Settings > Plans &amp; Billing</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-api-limit" id="s3-api-limit"><label class="checkbox-label" for="s3-api-limit">Set a monthly usage limit — $25 is plenty for your use case (expected usage: $3-10/month)</label></div>
+</div>
+
+<p>This cap means even if someone got your key, the maximum damage is $25/month — not an open-ended bill.</p>
+
+<p><strong>Expected result:</strong> You have an API key copied and a $25/month spending limit set.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Two accounts, two purposes</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>Claude Pro (claude.ai) = your personal access to Claude. Think of it like having a subscription to a gym.<br>Claude API (console.anthropic.com) = OpenClaw's connection to Claude. Think of it like buying a membership card for your employee to use the same gym.<br>They're billed separately. The Pro subscription is flat-rate ($20/month). The API is pay-per-use, and for social media captions, it's inexpensive.</p></div></div></div>
+
+<h3 id="s3-4">3.4 OrbStack Installation</h3>
+
+<p>OrbStack is the container runtime — the software that lets OpenClaw run in an isolated environment (container) on your Mac. We're using OrbStack instead of Docker Desktop because it uses significantly less memory, has lower CPU usage, and is specifically optimized for Mac.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-orb-download" id="s3-orb-download"><label class="checkbox-label" for="s3-orb-download">Go to <a href="https://orbstack.dev" target="_blank" rel="noopener">orbstack.dev</a></label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-orb-install" id="s3-orb-install"><label class="checkbox-label" for="s3-orb-install">Download OrbStack for Mac</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-orb-drag" id="s3-orb-drag"><label class="checkbox-label" for="s3-orb-drag">Open the downloaded file and drag OrbStack to your Applications folder</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-orb-launch" id="s3-orb-launch"><label class="checkbox-label" for="s3-orb-launch">Launch OrbStack from Applications</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-orb-perms" id="s3-orb-perms"><label class="checkbox-label" for="s3-orb-perms">When prompted, grant the system permissions OrbStack requests (it needs these to manage containers)</label></div>
+</div>
+
+<p><strong>Verify OrbStack is running:</strong></p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-orb-terminal" id="s3-orb-terminal"><label class="checkbox-label" for="s3-orb-terminal">Open Terminal (Applications > Utilities > Terminal)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-orb-verify" id="s3-orb-verify"><label class="checkbox-label" for="s3-orb-verify">Type the following command and press Enter:</label></div>
+</div>
+
+<div class="code-block" id="code-s3-docker"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s3-docker" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>docker --version</code></pre></div>
+
+<p><strong>Expected output:</strong> Something like:</p>
+<div class="code-block"><pre><code>Docker version 27.x.x, build xxxxxxx</code></pre></div>
+
+<p>If you see a version number, OrbStack is working correctly. If you see "command not found," OrbStack isn't fully installed — try quitting and relaunching it.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: What's a container?</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>A container is a self-contained package that has everything a program needs to run, isolated from the rest of your computer. Think of it like a furnished apartment inside your house — the tenant (OpenClaw) has everything they need in their unit, and they can't wander into your living room. If something goes wrong inside the apartment, your house is unaffected. That's why we run OpenClaw in a container: it keeps the agent contained. This concept applies to any software that supports containers — it's one of the most important isolation techniques in computing.</p></div></div></div>
+
+<h3 id="s3-5">3.5 Instagram Prerequisites</h3>
+
+<p>OpenClaw can create your content, but to publish to Instagram via Zapier, you need specific account types set up. Instagram's publishing API has strict requirements — if any of these are missing, automated posting will not work.</p>
+
+<h4>Create an Instagram Account</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-ig-create" id="s3-ig-create"><label class="checkbox-label" for="s3-ig-create">If you don't already have one, create an Instagram account. Choose a handle for your professional brand (e.g., @jeffanswers if available)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-ig-app" id="s3-ig-app"><label class="checkbox-label" for="s3-ig-app">Download the Instagram app on your phone</label></div>
+</div>
+
+<h4>Convert to a Professional Account</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-ig-pro" id="s3-ig-pro"><label class="checkbox-label" for="s3-ig-pro">Open Instagram > your profile > Settings > Account > Switch to Professional Account</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-ig-business" id="s3-ig-business"><label class="checkbox-label" for="s3-ig-business">Choose "Business" (not Creator)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-ig-category" id="s3-ig-category"><label class="checkbox-label" for="s3-ig-category">Select a category that fits (e.g., "Real Estate Agent")</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-ig-contact" id="s3-ig-contact"><label class="checkbox-label" for="s3-ig-contact">Connect your business contact info</label></div>
+</div>
+
+<p><strong>Why Business, not Creator:</strong> The publishing API that Zapier uses only works with Business or Creator accounts, not personal accounts. Business gives you the analytics features relevant to your real estate work.</p>
+
+<h4>Create a Facebook Page</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-fb-create" id="s3-fb-create"><label class="checkbox-label" for="s3-fb-create">Go to <a href="https://facebook.com/pages/create" target="_blank" rel="noopener">facebook.com/pages/create</a></label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-fb-setup" id="s3-fb-setup"><label class="checkbox-label" for="s3-fb-setup">Create a Page for your real estate business</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-fb-info" id="s3-fb-info"><label class="checkbox-label" for="s3-fb-info">Fill in the basic information (name, category, description)</label></div>
+</div>
+
+<p><strong>Why you need this:</strong> Instagram's API runs through Facebook's infrastructure. To publish programmatically, your Instagram Business account must be linked to a Facebook Page. This is a Meta requirement, not an OpenClaw one. Every tool that publishes to Instagram — Zapier, Buffer, Hootsuite, anything — requires this.</p>
+
+<h4>Link Instagram to Facebook Page</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-link-fb" id="s3-link-fb"><label class="checkbox-label" for="s3-link-fb">Open Facebook Page Settings > Linked Accounts > Instagram</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-link-ig" id="s3-link-ig"><label class="checkbox-label" for="s3-link-ig">Connect your Instagram Business account to the Facebook Page</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-link-auth" id="s3-link-auth"><label class="checkbox-label" for="s3-link-auth">Follow the authorization prompts</label></div>
+</div>
+
+<p><strong>Verify the link:</strong></p>
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-link-verify" id="s3-link-verify"><label class="checkbox-label" for="s3-link-verify">Go to your Instagram Settings > Account > Linked Accounts — Confirm your Facebook Page appears</label></div>
+</div>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: The Facebook prerequisite chain</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>This chain — Facebook account, Facebook Page, Instagram Professional account, linking them — trips up a lot of people. It exists because Meta (the company that owns both Facebook and Instagram) routes all Instagram API access through their Facebook infrastructure. It feels unnecessary, but it's a hard requirement. Once it's set up, you don't need to think about it again. Any service that publishes to Instagram on your behalf has already navigated this same requirement on their end.</p></div></div></div>
+
+<h4>Complete Page Publishing Authorization</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-fb-transparency" id="s3-fb-transparency"><label class="checkbox-label" for="s3-fb-transparency">On your Facebook Page, go to Settings > Page Transparency</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-fb-verify" id="s3-fb-verify"><label class="checkbox-label" for="s3-fb-verify">Complete any required verification steps Meta presents</label></div>
+</div>
+
+<p><strong>Note:</strong> This may take 24-48 hours to process. If Meta asks for additional verification (ID, business documents), this is normal for new pages that want publishing access. It's a one-time process.</p>
+
+<h3 id="s3-6">3.6 Zapier Account</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-zapier" id="s3-zapier"><label class="checkbox-label" for="s3-zapier">Go to <a href="https://zapier.com" target="_blank" rel="noopener">zapier.com</a> and create a free account</label></div>
+</div>
+
+<p>You don't need to set up any automations yet — we'll do that in Section 7.</p>
+<p>Zapier's free tier allows 100 tasks per month. If you're posting 3-5 times per week (12-20 posts per month), the free tier should be sufficient to start. If you exceed it, the Starter plan is about $20/month.</p>
+
+<h3 id="s3-7">3.7 Pre-Flight Checklist Summary</h3>
+
+<p>Before proceeding to installation, verify everything:</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-pf-air" id="s3-pf-air"><label class="checkbox-label" for="s3-pf-air">MacBook Air powered on, connected to WiFi, plugged into power</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-pf-fv" id="s3-pf-fv"><label class="checkbox-label" for="s3-pf-fv">FileVault is ON</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-pf-fw" id="s3-pf-fw"><label class="checkbox-label" for="s3-pf-fw">macOS Firewall is ON with stealth mode</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-pf-pro" id="s3-pf-pro"><label class="checkbox-label" for="s3-pf-pro">Claude Pro subscription active</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-pf-api" id="s3-pf-api"><label class="checkbox-label" for="s3-pf-api">Claude API key created and copied (with $25/month spending limit)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-pf-orb" id="s3-pf-orb"><label class="checkbox-label" for="s3-pf-orb">OrbStack installed and <code>docker --version</code> returns a version number</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-pf-ig" id="s3-pf-ig"><label class="checkbox-label" for="s3-pf-ig">Instagram Business account created and linked to a Facebook Page</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-pf-zapier" id="s3-pf-zapier"><label class="checkbox-label" for="s3-pf-zapier">Zapier account created</label></div>
+</div>
+
+<p><strong>If anything above is incomplete, stop and finish it before moving to Section 4.</strong> The installation assumes all of these are in place.</p>
+
+<h3>Self-Test: Section 3</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-test-preflight" id="s3-test-preflight"><label class="checkbox-label" for="s3-test-preflight">All pre-flight checklist items are complete</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-test-apikey" id="s3-test-apikey"><label class="checkbox-label" for="s3-test-apikey">I have my Claude API key ready (not shared with anyone)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-test-ig" id="s3-test-ig"><label class="checkbox-label" for="s3-test-ig">I understand that the Instagram account must be a Business type linked to a Facebook Page</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s3-test-orb" id="s3-test-orb"><label class="checkbox-label" for="s3-test-orb">OrbStack is installed and working</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 3</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s3-notes" placeholder="Your notes for Section 3..."></textarea>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 4: Installation and Deployment -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s4-install" data-phase="s4">
+  <div class="phase-header">
+    <div class="phase-number">Section 4</div>
+    <h1 class="phase-title">Installation and Deployment</h1>
+  </div>
+
+<p>This is where you install OpenClaw on your MacBook Air. Every command is explained — what it does, what you should see, and what to do if something goes wrong. Follow these steps in order. Don't skip ahead.</p>
+
+<h3 id="s4-1">4.1 Open Terminal</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-terminal" id="s4-terminal"><label class="checkbox-label" for="s4-terminal">Open Terminal: press Command + Space, type "Terminal", press Enter</label></div>
+</div>
+
+<p>You'll see a window with a blinking cursor and something like:</p>
+
+<div class="code-block"><pre><code>jeff@jeffs-macbook-air ~ %</code></pre></div>
+
+<p>This is the command line. You type commands here and press Enter to run them. If anything in this walkthrough says "run this command," you type it (or copy-paste it) into Terminal and press Enter.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: The command line isn't scary</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>The Terminal is just a way to talk to your computer by typing instead of clicking. Every command in this walkthrough is copy-pasteable — you don't need to memorize anything or type from memory. When you paste a command and press Enter, watch the output. If it matches what the walkthrough says to expect, you're on track. If it doesn't, check the troubleshooting notes below each step.</p></div></div></div>
+
+<h3 id="s4-2">4.2 Install OpenClaw</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-install-cmd" id="s4-install-cmd"><label class="checkbox-label" for="s4-install-cmd">Copy and paste this command into Terminal and press Enter:</label></div>
+</div>
+
+<div class="code-block" id="code-s4-install"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-install" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>curl -fsSL https://openclaw.ai/install.sh | bash</code></pre></div>
+
+<p><strong>What this does:</strong> Downloads the official OpenClaw installer and runs it. The installer:</p>
+<ol>
+  <li>Checks that Docker (OrbStack) is running</li>
+  <li>Downloads the OpenClaw container images</li>
+  <li>Sets up the initial configuration</li>
+  <li>Starts the gateway</li>
+</ol>
+
+<p><strong>Expected output:</strong> You'll see a progress display as images download. It may take 3-5 minutes depending on your internet speed. At the end, you should see something like:</p>
+
+<div class="code-block"><pre><code> _____ _                 _____ _
+|  _  | |               /  __ \ |
+| | | | |__   ___  _ __ | /  \/ | __ ___      __
+| | | | '_ \ / _ \| '_ \| |   | |/ _` \ \ /\ / /
+\ \_/ / |_) |  __/| | | | \__/\ | (_| |\ V  V /
+ \___/|_.__/ \___||_| |_|\____/_|\__,_| \_/\_/
+
+OpenClaw is running!
+Dashboard: http://localhost:18789</code></pre></div>
+
+<p><strong>If you see an error about Docker not running:</strong> Close and reopen OrbStack from your Applications folder. Wait 10 seconds, then try the install command again.</p>
+<p><strong>If you see a network error or download failure:</strong> Check your internet connection. Try again. If it persists, wait a few minutes — the download server may be temporarily busy.</p>
+
+<h3 id="s4-3">4.3 Set Your Gateway Password</h3>
+
+<p>The installer may prompt you to create a password during setup. If it doesn't, or if you want to ensure a strong, random password is set:</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-token" id="s4-token"><label class="checkbox-label" for="s4-token">Run this command to generate a secure gateway token:</label></div>
+</div>
+
+<div class="code-block" id="code-s4-token"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-token" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw doctor --generate-gateway-token</code></pre></div>
+
+<p><strong>Expected output:</strong> A long random string of characters. This is your gateway password. Copy it — you'll need it to log into the Dashboard.</p>
+
+<p><strong>Security note (inline):</strong> This token is what prevents anyone else from controlling your AI agent. Without it, any code running on your computer — including JavaScript from a website you visit — could talk to your agent. This is not hypothetical: a vulnerability called "ClawJacked" (patched in version 2026.2.25) exploited exactly this scenario. The token is your front door lock.</p>
+
+<h3 id="s4-4">4.4 Verify the Installation</h3>
+
+<p>Let's confirm everything is running correctly.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-version" id="s4-version"><label class="checkbox-label" for="s4-version">Check OpenClaw's version:</label></div>
+</div>
+
+<div class="code-block" id="code-s4-version"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-version" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw --version</code></pre></div>
+
+<p><strong>Expected output:</strong> A version number. It must be <strong>2026.2.25 or higher.</strong></p>
+<div class="code-block"><pre><code>openclaw version 2026.2.x</code></pre></div>
+
+<p><strong>Why this version matters:</strong> Versions before 2026.2.25 have known security vulnerabilities that can be exploited even from websites you visit normally. If your version is lower, run the installer again:</p>
+
+<div class="code-block" id="code-s4-reinstall"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-reinstall" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>curl -fsSL https://openclaw.ai/install.sh | bash --no-onboard</code></pre></div>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-health" id="s4-health"><label class="checkbox-label" for="s4-health">Check system health:</label></div>
+</div>
+
+<div class="code-block" id="code-s4-health"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-health" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw health</code></pre></div>
+
+<p><strong>Expected output:</strong> All checks show green/passing status. You should see the gateway listed as "running."</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-dashboard" id="s4-dashboard"><label class="checkbox-label" for="s4-dashboard">Open the Dashboard:</label></div>
+</div>
+
+<p>Open your web browser (Safari or Chrome) and go to:</p>
+<div class="code-block"><pre><code>http://localhost:18789</code></pre></div>
+
+<p><strong>Expected result:</strong> You see the OpenClaw Dashboard. It will ask for your gateway token — paste the token you generated in step 4.3.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: What "localhost:18789" means</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>"Localhost" means "this computer" — not the internet, not your network, just your MacBook. The number 18789 is a "port" — think of it like an apartment number. Your MacBook is the building, and OpenClaw lives in apartment 18789. When you type "localhost:18789" in your browser, you're saying "go to this computer, apartment 18789." Nobody else on your WiFi or the internet can visit this address — it only works from your own machine. This is a key part of your security: the agent's front door only opens from inside your house.</p></div></div></div>
+
+<p><strong>If the Dashboard doesn't load:</strong> Make sure OrbStack is running (check for its icon in the menu bar). Then run:</p>
+<div class="code-block" id="code-s4-restart"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-restart" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw gateway restart</code></pre></div>
+<p>Wait 10 seconds and try the browser again.</p>
+
+<h3 id="s4-5">4.5 Connect Your Claude API Key</h3>
+
+<p>Now connect OpenClaw to Claude so it can use AI.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-llm-settings" id="s4-llm-settings"><label class="checkbox-label" for="s4-llm-settings">In the Dashboard, go to Settings (or Configuration)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-llm-provider" id="s4-llm-provider"><label class="checkbox-label" for="s4-llm-provider">Find the LLM provider section</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-llm-anthropic" id="s4-llm-anthropic"><label class="checkbox-label" for="s4-llm-anthropic">Select "Anthropic" as the provider</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-llm-key" id="s4-llm-key"><label class="checkbox-label" for="s4-llm-key">Paste your Claude API key from Section 3.3</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-llm-model" id="s4-llm-model"><label class="checkbox-label" for="s4-llm-model">Set the model to <strong>Claude Sonnet 4.6</strong> (good balance of quality and cost)</label></div>
+</div>
+
+<p>Alternatively, you can set this via the command line:</p>
+
+<div class="code-block" id="code-s4-llm"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-llm" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config set llm.provider anthropic
+openclaw config set llm.apiKey YOUR-API-KEY-HERE
+openclaw config set llm.model claude-sonnet-4-6</code></pre></div>
+
+<p>Replace <code>YOUR-API-KEY-HERE</code> with your actual API key. After pasting, it's stored in OpenClaw's configuration on your MacBook.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-llm-test" id="s4-llm-test"><label class="checkbox-label" for="s4-llm-test">Verify the connection works — send a test message through the Dashboard</label></div>
+</div>
+
+<p>Type something like: "Hello, can you confirm you're working?"</p>
+<p><strong>Expected result:</strong> Claude responds through the Dashboard. If it does, the AI connection is working.</p>
+
+<p><strong>If you get an authentication error:</strong> Double-check your API key. Go to console.anthropic.com, verify the key is active, and re-enter it. API keys are case-sensitive — copy the entire string exactly.</p>
+<p><strong>If you get a model not found error:</strong> The model name may have changed. Try <code>claude-sonnet-4-5</code> or check the Anthropic documentation for current model names.</p>
+
+<h3 id="s4-6">4.6 Sleep Prevention</h3>
+
+<p>Your MacBook needs to stay awake for the AI agent to work. By default, closing the lid puts it to sleep, which kills the agent.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-sleep" id="s4-sleep"><label class="checkbox-label" for="s4-sleep">Run this command to prevent sleep:</label></div>
+</div>
+
+<div class="code-block" id="code-s4-sleep"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-sleep" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>sudo pmset -a disablesleep 1</code></pre></div>
+
+<p><strong>What this does:</strong> Tells macOS to never sleep, even when the lid is closed. The <code>sudo</code> part means it needs your Mac login password — type it when prompted (you won't see the characters as you type, that's normal).</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-sleep-verify" id="s4-sleep-verify"><label class="checkbox-label" for="s4-sleep-verify">Verify the setting:</label></div>
+</div>
+
+<div class="code-block" id="code-s4-sleepv"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s4-sleepv" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>pmset -g | grep disablesleep</code></pre></div>
+
+<p><strong>Expected output:</strong> <code>disablesleep 1</code></p>
+
+<p><strong>Important:</strong> This disables ALL sleep, including manual sleep. If you take this laptop on the go, re-enable sleep to save battery: <code>sudo pmset -a disablesleep 0</code>. Re-disable it when you get home: <code>sudo pmset -a disablesleep 1</code>.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why servers don't sleep (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>Any always-on service — a web server, a home automation hub, an AI agent — needs its host machine to stay awake. This isn't specific to OpenClaw. If you ever run any other service on this machine (a smart home controller, a media server, anything), the same rule applies: the computer must stay powered on and awake. Sleep is for laptops that travel. Servers don't sleep.</p></div></div></div>
+
+<h3 id="s4-7">4.7 Battery and Charge Management</h3>
+
+<p>Since this MacBook will be plugged in most of the time, you need to protect the battery from degradation.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-battery" id="s4-battery"><label class="checkbox-label" for="s4-battery">Open System Settings > Battery — Set the charge limit to <strong>80%</strong></label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-display" id="s4-display"><label class="checkbox-label" for="s4-display">Also in Battery settings: Set "Turn display off after" to a short interval (5 minutes)</label></div>
+</div>
+
+<p><strong>What this does:</strong> Stops charging the battery at 80% instead of 100%. Lithium batteries degrade faster when kept at full charge for long periods. Since your MacBook is plugged in and doesn't need full battery capacity, capping at 80% significantly extends battery lifespan.</p>
+
+<h3 id="s4-8">4.8 Thermal Management</h3>
+
+<p>The MacBook Air has no fan — it cools passively. For OpenClaw's workload (mostly idle, occasional bursts), this is fine. But a few practices help:</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-stand" id="s4-stand"><label class="checkbox-label" for="s4-stand">Use a laptop stand or elevate the MacBook on a hard surface (not a blanket, pillow, or couch cushion)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-ventilation" id="s4-ventilation"><label class="checkbox-label" for="s4-ventilation">If running with the lid closed, keep it on a well-ventilated surface</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-brightness" id="s4-brightness"><label class="checkbox-label" for="s4-brightness">If running with the lid open, set the screen brightness to zero</label></div>
+</div>
+
+<p><strong>You do NOT need to worry about thermal throttling for normal use.</strong> OpenClaw's workload is 95% idle. The Air handles this comfortably.</p>
+
+<h3 id="s4-9">4.9 Installation Verification Checkpoint</h3>
+
+<p>Let's confirm everything from this section is working:</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-v-version" id="s4-v-version"><label class="checkbox-label" for="s4-v-version"><code>openclaw --version</code> shows 2026.2.25 or higher</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-v-health" id="s4-v-health"><label class="checkbox-label" for="s4-v-health"><code>openclaw health</code> shows all green</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-v-dash" id="s4-v-dash"><label class="checkbox-label" for="s4-v-dash">Dashboard loads at localhost:18789</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-v-claude" id="s4-v-claude"><label class="checkbox-label" for="s4-v-claude">Claude responds to test messages through the Dashboard</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-v-sleep" id="s4-v-sleep"><label class="checkbox-label" for="s4-v-sleep"><code>pmset -g | grep disablesleep</code> shows <code>disablesleep 1</code></label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-v-battery" id="s4-v-battery"><label class="checkbox-label" for="s4-v-battery">Battery charge limit is set to 80%</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-v-stand" id="s4-v-stand"><label class="checkbox-label" for="s4-v-stand">Laptop is on a stand or hard surface</label></div>
+</div>
+
+<p><strong>If all checkboxes above are checked, OpenClaw is installed and running.</strong> The next section locks it down.</p>
+
+<h3>Self-Test: Section 4</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-test-installed" id="s4-test-installed"><label class="checkbox-label" for="s4-test-installed">OpenClaw is installed and running version 2026.2.25+</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-test-dashboard" id="s4-test-dashboard"><label class="checkbox-label" for="s4-test-dashboard">I can access the Dashboard at localhost:18789</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-test-claude" id="s4-test-claude"><label class="checkbox-label" for="s4-test-claude">Claude is connected and responding</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-test-sleep" id="s4-test-sleep"><label class="checkbox-label" for="s4-test-sleep">Sleep is disabled and battery charge limit is set</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s4-test-understand" id="s4-test-understand"><label class="checkbox-label" for="s4-test-understand">I understand what each command I ran actually does</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 4</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s4-notes" placeholder="Your notes for Section 4..."></textarea>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 5: Security Hardening -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s5-security" data-phase="s5">
+  <div class="phase-header security-critical">
+    <div class="phase-number">Section 5</div>
+    <h1 class="phase-title">Security Hardening</h1>
+  </div>
+
+<p>This section configures the security controls that protect your agent, your data, and your professional reputation. These are not optional steps — they are as essential as the installation itself. The default OpenClaw configuration is wide open, and the walkthrough locks it down before you use it for anything real.</p>
+
+<p><strong>The approach:</strong> Think of security as layers, like the walls and locks in a building. Each layer stops a different type of problem. Even if one layer fails, the others still protect you.</p>
+
+<div class="diagram-container" id="diagram-security-layers" role="img" aria-label="Diagram showing concentric security layers: macOS Firewall and FileVault on the outside, then Localhost Binding, Gateway Password, Docker Sandbox, with Your Agent and Data at the protected center"><noscript>Diagram: Security Layers — Defense in Depth</noscript></div>
+
+<h3>Why This Matters for You Specifically</h3>
+
+<p>You're not just a person running a tech experiment. You're a top-ranked Denver real estate agent whose livelihood depends on client trust. Here's what's at stake:</p>
+
+<div class="table-wrapper"><table class="data-table">
+<thead><tr><th>What's on Your Machine</th><th>If Compromised</th></tr></thead>
+<tbody>
+<tr><td>Client names and contact info</td><td>Breach of professional trust. Potential legal liability.</td></tr>
+<tr><td>Instagram credentials</td><td>Unauthorized posts from @jeffanswers. Brand damage to Hatch.</td></tr>
+<tr><td>Claude API key</td><td>Someone runs up charges on your account.</td></tr>
+<tr><td>Chat history and session logs</td><td>Contains business conversations and strategy.</td></tr>
+<tr><td>Browser sessions (if browser tools enabled)</td><td>Access to your email, banking, real estate platforms.</td></tr>
+</tbody>
+</table></div>
+
+<p>Your real estate industry is actively grappling with AI security. Industry conferences in early 2026 flagged "feeding sensitive client information into AI tools" as a new risk. You're ahead of the curve by taking this seriously.</p>
+
+<h3 id="s5-1">5.1 Gateway Authentication</h3>
+
+<p>You already generated a gateway token in Section 4.3. Now let's verify it's properly configured.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-auth-verify" id="s5-auth-verify"><label class="checkbox-label" for="s5-auth-verify">Run:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-auth"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-auth" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config get gateway.auth</code></pre></div>
+
+<p><strong>Expected output:</strong> Shows that authentication is enabled with a token set.</p>
+<p>If authentication isn't set, configure it now:</p>
+
+<div class="code-block" id="code-s5-authset"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-authset" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config set gateway.auth.mode token
+openclaw config set gateway.auth.token YOUR-GENERATED-TOKEN</code></pre></div>
+
+<p><strong>What this prevents:</strong> Without authentication, any code running on your computer — including JavaScript from websites you visit — could control your agent. The "ClawJacked" vulnerability exploited exactly this: a malicious website opened a connection to the gateway, brute-forced the password (there was none), and took control. Your token makes this impossible.</p>
+
+<h3 id="s5-2">5.2 Localhost Binding</h3>
+
+<p>This ensures the gateway only listens on your computer, not on the network.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-localhost" id="s5-localhost"><label class="checkbox-label" for="s5-localhost">Verify localhost binding:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-bind"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-bind" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config get gateway.bind</code></pre></div>
+
+<p><strong>Expected output:</strong> Shows binding to <code>loopback</code> or <code>127.0.0.1</code>.</p>
+<p>If it shows anything else, fix it:</p>
+
+<div class="code-block" id="code-s5-bindset"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-bindset" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config set gateway.mode local
+openclaw config set gateway.bind loopback
+openclaw config set gateway.port 18789</code></pre></div>
+
+<p><strong>What this prevents:</strong> If the gateway listened on your network instead of just your computer, anyone on your home WiFi could reach it. Localhost means "this computer only."</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: "Localhost" in plain language (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>Every computer has a special address — 127.0.0.1, also called "localhost" — that means "me, and only me." When a program listens on localhost, it's like having a conversation in your own head: nobody else can hear it. When a program listens on your network address instead, it's like speaking out loud in a room full of people. For any service you run on your own computer — not just OpenClaw — binding to localhost is the safe default. Only bind to the network if you specifically need other devices to connect.</p></div></div></div>
+
+<h3 id="s5-3">5.3 Enable Sandbox Mode</h3>
+
+<p>This is one of the most important security controls. The sandbox runs all agent tool execution inside an isolated container — a locked room the agent works inside.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-sandbox" id="s5-sandbox"><label class="checkbox-label" for="s5-sandbox">Configure sandbox mode:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-sandbox"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-sandbox" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config set agents.defaults.sandbox.mode all
+openclaw config set agents.defaults.sandbox.scope session
+openclaw config set agents.defaults.sandbox.docker.network none
+openclaw config set agents.defaults.sandbox.docker.readOnlyRoot true
+openclaw config set agents.defaults.sandbox.docker.capDrop '["ALL"]'
+openclaw config set agents.defaults.sandbox.docker.user "1000:1000"</code></pre></div>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-sandbox-verify" id="s5-sandbox-verify"><label class="checkbox-label" for="s5-sandbox-verify">Verify:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-sandboxv"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-sandboxv" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config get agents.defaults.sandbox</code></pre></div>
+
+<p><strong>Expected output:</strong> Shows sandbox mode "all," network "none," readOnlyRoot "true."</p>
+
+<p><strong>What each setting does:</strong> <code>network none</code> cuts off the sandbox's internet access (the agent communicates through the gateway instead). <code>readOnlyRoot</code> prevents the agent from modifying system files. <code>capDrop ALL</code> strips all special permissions — the agent can only perform basic operations inside its sandbox, with no ability to modify system settings, access hardware, or escalate its own privileges. <code>user "1000:1000"</code> runs the agent as a non-root user inside the container.</p>
+
+<p><strong>What this prevents:</strong> Without the sandbox, a tricked agent could access everything on your computer — your client files, browser sessions, saved passwords. With the sandbox, even a compromised agent is contained in its locked room.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: What a sandbox actually does (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>A sandbox is like a padded room in a bank where employees handle cash. The room has cameras, the door locks from the outside, and nothing leaves without being checked. Even if an employee makes a mistake (or is compromised), the damage stays in the room. In computing, sandboxes use the same principle: the program runs inside an isolated environment where it can do its job but can't affect anything outside. This applies to any software that runs code on your behalf — browser extensions, AI agents, automation tools. If it can be sandboxed, it should be.</p></div></div></div>
+
+<h3 id="s5-4">5.4 Disable Elevated Mode</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-elevated" id="s5-elevated"><label class="checkbox-label" for="s5-elevated">Verify elevated mode is off:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-elevated"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-elevated" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config get tools.elevated</code></pre></div>
+
+<p><strong>Expected output:</strong> Shows <code>enabled: false</code>.</p>
+<p>If it shows <code>true</code>, disable it:</p>
+
+<div class="code-block" id="code-s5-elevatedoff"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-elevatedoff" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config set tools.elevated.enabled false</code></pre></div>
+
+<p><strong>What this prevents:</strong> Even if something tricks the agent into trying to run commands outside its sandbox, the system blocks it at the door.</p>
+
+<h3 id="s5-5">5.5 Zero Community Skills</h3>
+
+<p>This is a hard policy, not a suggestion: <strong>do not install any skills from ClawHub</strong> (OpenClaw's public skill registry).</p>
+
+<p>Here's why, in plain terms:</p>
+
+<p>Roughly 1 in 5 skills on ClawHub are actually malware — programs designed to steal your passwords, API keys, and data. This isn't speculation. Security researchers scanned nearly 4,000 skills and found 534 with critical security problems and 76 that were outright malicious. Confirmed macOS malware (called "Atomic Stealer") has been distributed through ClawHub skills that look legitimate.</p>
+
+<p><strong>The publishing barrier to ClawHub is negligible.</strong> All you need is a one-week-old GitHub account and a text file. No code review. No security audit. No quality control.</p>
+
+<p>Skills inherit your agent's full permissions — file access, network access, credential access, the ability to send messages as you. A malicious social media skill could post anything from @jeffanswers. A credential-stealing skill could grab your Claude API key and your Instagram token.</p>
+
+<p><strong>The policy:</strong></p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-no-clawhub" id="s5-no-clawhub"><label class="checkbox-label" for="s5-no-clawhub">I will NOT install any skills from ClawHub</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-check-sean" id="s5-check-sean"><label class="checkbox-label" for="s5-check-sean">I will NOT install any skill without checking with Sean first</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-local-only" id="s5-local-only"><label class="checkbox-label" for="s5-local-only">The only skills on my system will be ones built locally by this walkthrough</label></div>
+</div>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why app stores aren't always safe (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>ClawHub is like an app store with no security review. You already know to be careful about what apps you install on your phone — this is the same principle, amplified. Browser extensions, WordPress plugins, phone apps from unknown developers — they all carry the same risk. The more permissions something has, the more careful you need to be about where it came from. Your agent has extensive permissions by design (it needs them to be useful). That makes skill selection a critical security decision.</p></div></div></div>
+
+<h3 id="s5-6">5.6 Disable mDNS/Bonjour Broadcasting</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-mdns" id="s5-mdns"><label class="checkbox-label" for="s5-mdns">Disable mDNS broadcasting:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-mdns"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-mdns" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config set discovery.mdns.mode off</code></pre></div>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-mdns-verify" id="s5-mdns-verify"><label class="checkbox-label" for="s5-mdns-verify">Verify:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-mdnsv"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-mdnsv" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw config get discovery.mdns</code></pre></div>
+
+<p><strong>Expected output:</strong> Shows <code>mode: off</code>.</p>
+<p><strong>What this prevents:</strong> Anyone on your home WiFi can see that you're running OpenClaw. Turning this off pulls down the sign. Your agent still works — it just doesn't advertise itself.</p>
+
+<h3 id="s5-7">5.7 Run the Security Audit</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-audit" id="s5-audit"><label class="checkbox-label" for="s5-audit">Run the audit:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-audit"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-audit" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw security audit</code></pre></div>
+
+<p><strong>Expected output:</strong> A report showing the security status of your configuration. Look for green checks or "PASS" on each item.</p>
+
+<p><strong>If any items show warnings or failures:</strong></p>
+
+<div class="code-block" id="code-s5-auditfix"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-auditfix" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw security audit --fix</code></pre></div>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-audit-deep" id="s5-audit-deep"><label class="checkbox-label" for="s5-audit-deep">Run a deeper audit:</label></div>
+</div>
+
+<div class="code-block" id="code-s5-auditdeep"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s5-auditdeep" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw security audit --deep</code></pre></div>
+
+<h3 id="s5-8">5.8 What We've Secured and What Risk Remains</h3>
+
+<p><strong>What you now have:</strong> Four layers of security, each protecting independently:</p>
+<ol>
+  <li><strong>macOS Firewall + FileVault</strong> — blocks network probes and encrypts your drive</li>
+  <li><strong>Localhost binding</strong> — blocks anyone not on this computer from reaching the agent</li>
+  <li><strong>Gateway authentication</strong> — blocks unauthorized access even from your own machine</li>
+  <li><strong>Docker sandbox</strong> — blocks the agent from escaping its isolated environment</li>
+</ol>
+
+<p>Plus: no community skills (eliminating the #1 attack vector), mDNS broadcasting disabled (your agent is invisible on the network), and a verified security audit.</p>
+
+<p><strong>What risk remains — honestly:</strong></p>
+
+<p><strong>Shared machine risk.</strong> Your MacBook runs OpenClaw and your personal applications on the same device. If the Docker sandbox were breached (through a rare, sophisticated attack), the agent could potentially access your client files, browser sessions, and credentials. This risk is LOW (container escapes are rare) but real. A dedicated machine would eliminate it entirely.</p>
+
+<p><strong>New vulnerabilities will be found.</strong> OpenClaw's security has been heavily scrutinized — 12+ vulnerabilities were discovered and patched in February 2026 alone. New ones will emerge. Keeping OpenClaw updated (Section 8 covers this) is your primary defense.</p>
+
+<p><strong>Prompt injection has no complete solution.</strong> If your agent reads untrusted content (emails, web pages, social media messages), hidden instructions in that content could influence the agent's behavior. No current technology fully prevents this. Your defense: limit what content sources the agent accesses, review what it does, and use Claude Sonnet 4.6 (the strongest available model at resisting injection).</p>
+
+<p><strong>API key exposure window.</strong> Your API keys are stored on your hard drive (protected by FileVault). If they're somehow leaked, they remain valid until you change them. Set calendar reminders to rotate keys every 90 days (Section 8 covers this).</p>
+
+<p>These risks are manageable. They are the same kinds of risks any AI agent deployment faces. You're mitigated better than most because this walkthrough doesn't take shortcuts.</p>
+
+<h3>Self-Test: Section 5</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-auth" id="s5-test-auth"><label class="checkbox-label" for="s5-test-auth">Gateway authentication is configured with a strong token</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-localhost" id="s5-test-localhost"><label class="checkbox-label" for="s5-test-localhost">Gateway is bound to localhost only</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-sandbox" id="s5-test-sandbox"><label class="checkbox-label" for="s5-test-sandbox">Sandbox mode is enabled for all agents</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-elevated" id="s5-test-elevated"><label class="checkbox-label" for="s5-test-elevated">Elevated mode is disabled</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-clawhub" id="s5-test-clawhub"><label class="checkbox-label" for="s5-test-clawhub">No ClawHub skills installed (zero tolerance)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-mdns" id="s5-test-mdns"><label class="checkbox-label" for="s5-test-mdns">mDNS broadcasting is disabled</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-audit" id="s5-test-audit"><label class="checkbox-label" for="s5-test-audit">Security audit passes clean</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-residual" id="s5-test-residual"><label class="checkbox-label" for="s5-test-residual">I understand the residual risks and how to manage them</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s5-test-transfer" id="s5-test-transfer"><label class="checkbox-label" for="s5-test-transfer">I understand that these security principles apply to any agent platform, not just OpenClaw</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 5</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s5-notes" placeholder="Your notes for Section 5..."></textarea>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 6: Prompting -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s6-prompting" data-phase="s6">
+  <div class="phase-header">
+    <div class="phase-number">Section 6</div>
+    <h1 class="phase-title">Prompting — Working With Your Agent</h1>
+  </div>
+
+<p>Your system is installed and locked down. Now it's time to actually use it. This section covers how to talk to your agent effectively — specifically for your real estate content workflow.</p>
+
+<p>The skills in this section transfer to every AI tool you'll ever use. Whether it's Claude directly, ChatGPT, Gemini, or any future AI platform, the principles of good prompting are the same.</p>
+
+<h3>How Prompting Works</h3>
+
+<p>When you send a message to your agent, here's what happens behind the scenes:</p>
+
+<div class="diagram-container" id="diagram-prompt-action" role="img" aria-label="Sequence diagram showing how a prompt flows from Jeff through the Gateway to Claude, optionally to Skills, and back with a response"><noscript>Diagram: How a Prompt Becomes Action</noscript></div>
+
+<ol>
+  <li>Your message goes to the Gateway</li>
+  <li>The Gateway adds your brand voice instructions (from files you'll set up below) to the message</li>
+  <li>The combined package goes to Claude</li>
+  <li>Claude reads your message in the context of your brand voice and writes a response</li>
+  <li>If Claude needs information (like current market data), it asks a skill to get it</li>
+  <li>The response comes back to you</li>
+</ol>
+
+<p><strong>The key insight:</strong> Claude doesn't just read your message. It reads your message plus everything in your brand voice files plus the conversation history. That context is what makes the response sound like you, not like a generic AI.</p>
+
+<h3 id="s6-1">6.1 Setting Up Your Brand Voice</h3>
+
+<p>OpenClaw uses special files that get injected into every conversation with the agent. These files teach Claude who you are and how you communicate.</p>
+
+<h4>SOUL.md — Your Core Voice</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-soul" id="s6-soul"><label class="checkbox-label" for="s6-soul">In the Dashboard, navigate to your agent's workspace (or use the file path <code>~/.openclaw/workspace/</code>)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-soul-create" id="s6-soul-create"><label class="checkbox-label" for="s6-soul-create">Create a file called <code>SOUL.md</code> with this content (customize it for your actual voice):</label></div>
+</div>
+
+<p><strong>How to create the file:</strong> Open Terminal and run:</p>
+
+<div class="code-block" id="code-s6-create-soul"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s6-create-soul" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>open -a TextEdit ~/.openclaw/workspace/SOUL.md</code></pre></div>
+
+<p>This opens TextEdit with a new file at the right location. Paste the content below, then save (Command+S). If TextEdit asks about format, choose "Use Plain Text." Repeat this same process for IDENTITY.md and USER.md below.</p>
+
+<div class="code-block" id="code-s6-soul"><span class="code-lang">markdown</span><button class="copy-btn" data-target="code-s6-soul" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code># Brand Voice — Jeff Answers / Hatch Real Estate
+
+## Who I Am
+I'm Jeff, a top-ranked Denver real estate agent and owner of the Hatch brand.
+I've been in Denver real estate for [X] years. I know the neighborhoods,
+the market dynamics, and the real story behind the numbers.
+
+## How I Sound
+- Professional but approachable — like talking to a knowledgeable friend
+- Confident without being arrogant — I know my market, and it shows
+- Denver-specific — I reference real neighborhoods, real trends, real numbers
+- Direct — I don't use filler or corporate jargon
+- Warm but authoritative — people trust me because I'm honest
+
+## What I Never Do
+- I never use clickbait or sensationalism
+- I never make guarantees about market performance
+- I never sound like a generic AI or a template
+- I never use excessive emojis or hashtags (3-5 relevant hashtags max)
+- I never discuss politics or controversial topics
+
+## Content Style
+- Instagram captions: 50-150 words, conversational, end with a question or
+  call-to-action that invites engagement
+- Market updates: lead with the insight, follow with the data
+- Property features: tell the story of the home, not just the specs
+- Hashtags: always include #DenverRealEstate, vary the rest based on content
+
+## Example Tone
+"The Sloans Lake market is telling a different story this spring. Inventory is
+up 15% from last year, but homes priced right are still moving in under two
+weeks. If you've been waiting for the right moment, the data says the window
+is opening. What neighborhood are you watching?"</code></pre></div>
+
+<p>Customize this with your actual experience, neighborhoods you specialize in, and the tone that represents your brand.</p>
+
+<h4>IDENTITY.md — Your Brand Identity</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-identity" id="s6-identity"><label class="checkbox-label" for="s6-identity">Create a file called <code>IDENTITY.md</code>:</label></div>
+</div>
+
+<div class="code-block" id="code-s6-identity"><span class="code-lang">markdown</span><button class="copy-btn" data-target="code-s6-identity" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code># Identity
+
+## Name
+Jeff — @jeffanswers on Instagram
+
+## Brand
+Hatch Real Estate, Denver
+
+## Role
+Denver's top-ranked real estate agent helping buyers and sellers navigate
+the market with honesty and expertise.
+
+## Platform Focus
+Instagram — visual storytelling and market insights for the Denver real
+estate community.</code></pre></div>
+
+<h4>USER.md — Context About You</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-user" id="s6-user"><label class="checkbox-label" for="s6-user">Create a file called <code>USER.md</code>:</label></div>
+</div>
+
+<div class="code-block" id="code-s6-user"><span class="code-lang">markdown</span><button class="copy-btn" data-target="code-s6-user" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code># User Context
+
+## Market Area
+Denver, Colorado — all neighborhoods and suburbs. Primary focus areas:
+[list your top neighborhoods].
+
+## Target Audience
+Denver homebuyers and sellers. Mix of first-time buyers, move-up buyers,
+and investors. Age range 28-55.
+
+## Business Context
+- Top-ranked Denver real estate agent (ranked #1-2 out of 20,000 agents
+  by AI search)
+- Owner of Hatch Real Estate brand
+- Building @jeffanswers as the primary social media presence
+- Franchise aspirations — systematizing what makes the business effective
+
+## Content Goals
+- Establish @jeffanswers as the go-to Denver real estate resource on Instagram
+- Post 3-5 times per week consistently
+- Mix of: market updates, neighborhood spotlights, home features,
+  behind-the-scenes, tips for buyers/sellers
+- Build a community, not just a following</code></pre></div>
+
+<h3 id="s6-2">6.2 Good Prompts vs. Bad Prompts</h3>
+
+<p>The quality of what the AI produces depends entirely on the quality of what you ask for. Here are real examples:</p>
+
+<h4>Bad: Vague and Generic</h4>
+<div class="code-block"><pre><code>Write me an Instagram post</code></pre></div>
+<p><strong>Result:</strong> A generic, bland caption that could be from any agent in any city. The AI has nothing to work with.</p>
+
+<h4>Good: Specific and Contextual</h4>
+<div class="code-block"><pre><code>Write an Instagram post about the Denver housing market in March 2026.
+Inventory in Sloans Lake is up 15% year-over-year. Tone: optimistic but
+realistic. End with a question that invites engagement. Include 3-5
+relevant hashtags.</code></pre></div>
+<p><strong>Result:</strong> A caption that references real data, sounds like a local expert, and engages the audience.</p>
+
+<h4>Bad: Too Many Instructions at Once</h4>
+<div class="code-block"><pre><code>Write me 5 Instagram posts for this week about different Denver neighborhoods,
+also create a content calendar, also tell me the best posting times, also
+suggest hashtag strategies</code></pre></div>
+<p><strong>Result:</strong> A scattered response that does everything poorly.</p>
+
+<h4>Good: One Task, Clear Parameters</h4>
+<div class="code-block"><pre><code>Write one Instagram post about the Cherry Creek neighborhood for a buyer
+audience. Highlight the walkability and restaurant scene. Keep it under
+150 words. Include my signature hashtags plus 2 neighborhood-specific ones.</code></pre></div>
+<p><strong>Result:</strong> A focused, high-quality caption you can actually use.</p>
+
+<h4>The Pattern</h4>
+<p>Good prompts share three things:</p>
+<ol>
+  <li><strong>One clear task</strong> — what you want</li>
+  <li><strong>Specific context</strong> — the details that make it relevant</li>
+  <li><strong>Constraints</strong> — length, tone, format, audience</li>
+</ol>
+<p>This pattern works with every AI tool.</p>
+
+<h3 id="s6-3">6.3 Common Prompting Mistakes</h3>
+
+<p><strong>Mistake 1: Accepting the first draft</strong><br>
+The first response is rarely the best one. Treat it like a first draft from a copywriter — give feedback and iterate.</p>
+<div class="code-block"><pre><code>That's too formal. Rewrite it like I'm talking to a friend at a backyard
+barbecue who just asked about the Denver market.</code></pre></div>
+
+<p><strong>Mistake 2: Not providing examples</strong><br>
+If you have Instagram posts you admire, tell the AI:</p>
+<div class="code-block"><pre><code>Here's a post style I like: [paste example]. Write my Sloans Lake market
+update in a similar tone but with my voice from SOUL.md.</code></pre></div>
+
+<p><strong>Mistake 3: Forgetting to specify the platform</strong></p>
+<div class="code-block"><pre><code>This is for an Instagram carousel post. Write the caption for the first
+slide and brief text for 4 additional slides about Denver market trends.</code></pre></div>
+
+<p><strong>Mistake 4: Not reviewing before posting</strong><br>
+The AI will sometimes make factual errors about your market, suggest hashtags that are off-brand, or produce content that doesn't sound like you. Always review. Always. Your professional reputation is attached to every post from @jeffanswers.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Prompting is a skill, not a talent (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>Prompting is like learning to brief a new assistant. The first few days, you give very detailed instructions and correct a lot. Over time, the assistant learns your preferences (through the SOUL.md and IDENTITY.md files) and you can give shorter instructions. But even experienced prompters still review outputs. The AI is a force multiplier for your ideas, not a replacement for your judgment. This applies to every AI tool — better instructions produce better results, across the board.</p></div></div></div>
+
+<h3 id="s6-4">6.4 Real Estate Prompt Templates</h3>
+
+<p>Here are starter templates you can customize. Save the ones you like for reuse.</p>
+
+<p><strong>Market Update:</strong></p>
+<div class="code-block"><pre><code>Write an Instagram caption about the [neighborhood] real estate market
+this [week/month]. Key data point: [specific stat]. Tone: insightful and
+conversational. End with a question. 100-150 words. 3-5 hashtags including
+#DenverRealEstate.</code></pre></div>
+
+<p><strong>Property Feature:</strong></p>
+<div class="code-block"><pre><code>Write an Instagram caption for a property at [address/neighborhood].
+Highlights: [2-3 features]. Target buyer: [type]. Make it feel like
+storytelling, not a listing sheet. 80-120 words. 3-5 hashtags.</code></pre></div>
+
+<p><strong>Neighborhood Spotlight:</strong></p>
+<div class="code-block"><pre><code>Write an Instagram caption about why [neighborhood] is great for
+[buyer type]. Include: [2-3 specific things — restaurants, parks, schools,
+vibe]. Tone: enthusiastic but genuine. End with "What's your favorite spot
+in [neighborhood]?" 100-150 words.</code></pre></div>
+
+<p><strong>Behind the Scenes:</strong></p>
+<div class="code-block"><pre><code>Write an Instagram caption about [situation — open house prep, closing day,
+market research]. Make it relatable and human. Show the work behind the
+results. Keep it under 100 words. 3-4 hashtags.</code></pre></div>
+
+<h3 id="s6-5">6.5 Iterating and Refining</h3>
+
+<p>After the AI produces a draft, you can refine it:</p>
+<ul>
+  <li>"Make it shorter — under 80 words"</li>
+  <li>"That hashtag doesn't fit my market. Replace #RealEstateInvesting with #DenverHomes"</li>
+  <li>"Too salesy. More conversational, less pitch."</li>
+  <li>"Add a specific mention of the upcoming open house on Saturday at 2pm"</li>
+  <li>"I like the opening but the ending falls flat. Rewrite just the last two sentences."</li>
+</ul>
+
+<p>The more specific your feedback, the better the revision. "Make it better" gives the AI nothing to work with. "The tone is right but the call-to-action feels generic — make it specific to first-time buyers in Washington Park" gives it everything.</p>
+
+<h3>Self-Test: Section 6</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-test-files" id="s6-test-files"><label class="checkbox-label" for="s6-test-files">SOUL.md, IDENTITY.md, and USER.md are created and customized</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-test-prompts" id="s6-test-prompts"><label class="checkbox-label" for="s6-test-prompts">I understand the difference between a vague prompt and a specific one</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-test-templates" id="s6-test-templates"><label class="checkbox-label" for="s6-test-templates">I have at least 2-3 prompt templates saved for my common content types</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-test-transfer" id="s6-test-transfer"><label class="checkbox-label" for="s6-test-transfer">I understand that prompting skills transfer to every AI tool</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-test-review" id="s6-test-review"><label class="checkbox-label" for="s6-test-review">I understand that I always review AI output before publishing</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 6</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s6-notes" placeholder="Your notes for Section 6..."></textarea>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 7: Social Media Workflow -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s7-social" data-phase="s7">
+  <div class="phase-header">
+    <div class="phase-number">Section 7</div>
+    <h1 class="phase-title">Your Social Media Workflow</h1>
+  </div>
+
+<p>This section builds your complete Instagram workflow: AI-powered content creation through OpenClaw, human review (that's you), and automated publishing through Zapier. By the end, you'll have a system that takes ~15 minutes a day.</p>
+
+<h3>The Split Architecture</h3>
+
+<p>Your workflow has two distinct halves, deliberately separated:</p>
+
+<div class="diagram-container" id="diagram-split-arch" role="img" aria-label="Diagram showing the split architecture workflow: content creation through OpenClaw and Claude on the left, human approval in the middle, and publishing through Zapier to Instagram on the right"><noscript>Diagram: Split Architecture — Content Creation to Instagram</noscript></div>
+
+<p><strong>Left side — Content Creation (OpenClaw + Claude):</strong> You give the AI a content idea. Claude drafts a caption with hashtags in your brand voice. You review and approve (or revise).</p>
+
+<p><strong>Right side — Publishing (Zapier):</strong> Approved content goes to Zapier, which handles the mechanical posting to Instagram on your schedule.</p>
+
+<p><strong>Why the split?</strong> Three reasons:</p>
+<ol>
+  <li>OpenClaw has no native Instagram skill — it literally cannot post directly</li>
+  <li>Zapier already has a pre-approved Instagram integration that handles all the Meta API complexity</li>
+  <li>The split creates a mandatory human review point between creation and publishing — protecting your brand</li>
+</ol>
+
+<div class="diagram-container" id="diagram-local-internet" role="img" aria-label="Diagram showing what stays on your MacBook (conversation history, API keys, skills, drafts) versus what leaves over the internet (prompt text to Claude, published posts to Instagram)"><noscript>Diagram: What Stays Local vs. What Leaves</noscript></div>
+
+<h3>Part A: Content Creation with OpenClaw</h3>
+
+<p>This part happens on your MacBook, using the brand voice files you set up in Section 6.</p>
+
+<h4>Setting Up a Content Workspace</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-workspace" id="s7-workspace"><label class="checkbox-label" for="s7-workspace">In your agent's workspace, create a folder for content:</label></div>
+</div>
+
+<div class="code-block" id="code-s7-mkdir"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s7-mkdir" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>mkdir -p ~/.openclaw/workspace/content/drafts
+mkdir -p ~/.openclaw/workspace/content/approved
+mkdir -p ~/.openclaw/workspace/content/posted</code></pre></div>
+
+<p>These folders organize your workflow: <code>drafts/</code> — AI-generated content waiting for your review. <code>approved/</code> — content you've approved and queued for posting. <code>posted/</code> — archive of published content.</p>
+
+<h4>Creating Your First Content Draft</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-first-draft" id="s7-first-draft"><label class="checkbox-label" for="s7-first-draft">Open the Dashboard and start a conversation with your agent</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-first-prompt" id="s7-first-prompt"><label class="checkbox-label" for="s7-first-prompt">Use one of the templates from Section 6. For your first post:</label></div>
+</div>
+
+<div class="code-block"><pre><code>Write an Instagram caption introducing @jeffanswers to my audience.
+I'm Jeff, Denver's top-ranked real estate agent, and this account will
+be the place for honest Denver market insights, neighborhood spotlights,
+and real talk about buying and selling homes. Tone: confident, warm,
+genuine. This is my first post — make it count but don't make it feel
+forced. Under 150 words. 4-5 hashtags including #DenverRealEstate
+and #JeffAnswers.</code></pre></div>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-review-draft" id="s7-review-draft"><label class="checkbox-label" for="s7-review-draft">Review the draft Claude produces</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-save-draft" id="s7-save-draft"><label class="checkbox-label" for="s7-save-draft">When you're satisfied, copy the final caption to <code>approved/</code></label></div>
+</div>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why batch creation saves you time</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>Creating 5 posts at once takes about 20-30 minutes including review. Creating them one at a time over the week takes the same total time but spread across 5 separate sessions, each with its own context-switching cost. Batch creation is how content professionals work — set aside focused time once or twice a week, create the content, then schedule it. The AI makes this even faster because it handles the first draft. You're the editor, not the writer. This workflow pattern applies whether you're using OpenClaw, Claude directly, or any AI content tool.</p></div></div></div>
+
+<h3>Part B: Zapier Publishing Setup</h3>
+
+<h4>Connect Zapier to Instagram</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-zapier-login" id="s7-zapier-login"><label class="checkbox-label" for="s7-zapier-login">Log in to <a href="https://zapier.com" target="_blank" rel="noopener">zapier.com</a></label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-zapier-create" id="s7-zapier-create"><label class="checkbox-label" for="s7-zapier-create">Click "Create a Zap"</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-zapier-trigger" id="s7-zapier-trigger"><label class="checkbox-label" for="s7-zapier-trigger">For the trigger, search for and select "Google Sheets" — Choose trigger: "New or Updated Spreadsheet Row"</label></div>
+</div>
+
+<h4>Create Your Content Calendar Spreadsheet</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-sheets-create" id="s7-sheets-create"><label class="checkbox-label" for="s7-sheets-create">Open Google Sheets and create a new spreadsheet named "Jeff Instagram Content Calendar"</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-sheets-cols" id="s7-sheets-cols"><label class="checkbox-label" for="s7-sheets-cols">Set up columns:</label></div>
+</div>
+
+<div class="table-wrapper"><table class="data-table">
+<thead><tr><th>A: Date</th><th>B: Caption</th><th>C: Hashtags</th><th>D: Image URL</th><th>E: Status</th></tr></thead>
+<tbody>
+<tr><td>2026-03-10</td><td>[Your caption]</td><td>#DenverRealEstate #Highland</td><td>[URL to image]</td><td>Ready</td></tr>
+</tbody>
+</table></div>
+
+<p><strong>Status column values:</strong> <code>Draft</code> — still being revised. <code>Ready</code> — approved and waiting to post. <code>Posted</code> — published to Instagram. <code>Skip</code> — decided not to post this one.</p>
+
+<h4>Set Up the Zapier Flow</h4>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-zap-step1" id="s7-zap-step1"><label class="checkbox-label" for="s7-zap-step1"><strong>Step 1 — Trigger: Google Sheets</strong> — Spreadsheet: "Jeff Instagram Content Calendar", trigger on Status column changes to "Ready"</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-zap-step2" id="s7-zap-step2"><label class="checkbox-label" for="s7-zap-step2"><strong>Step 2 — Action: Instagram for Business</strong> — Choose action: "Publish Photo", connect Instagram Business account, map Image URL and Caption fields</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-zap-step3" id="s7-zap-step3"><label class="checkbox-label" for="s7-zap-step3"><strong>Step 3 — Action: Update Google Sheet</strong> — After publishing, update Status column to "Posted"</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-zap-test" id="s7-zap-test"><label class="checkbox-label" for="s7-zap-test"><strong>Test the Zap</strong> — Add a test row, set status to "Ready", verify it posts to Instagram</label></div>
+</div>
+
+<p><strong>Expected result:</strong> A post appears on your Instagram from the content in your spreadsheet.</p>
+
+<h4>Zapier Configuration Tips</h4>
+
+<p><strong>Setting up the Google Sheets trigger correctly:</strong> In Zapier's trigger setup, you need to tell it which worksheet and which column to watch. Select your "Jeff Instagram Content Calendar" spreadsheet, choose Sheet1, and set the trigger column to the Status column (column E). Zapier will check this column every 1-15 minutes (depending on your plan) for rows where Status changes to "Ready."</p>
+
+<p><strong>Mapping fields in the Instagram action:</strong> When configuring the "Publish Photo" action, Zapier shows a form with fields to fill. Map them like this:</p>
+<ul>
+  <li><strong>Photo URL</strong> → select "Image URL" from your Google Sheets data (column D)</li>
+  <li><strong>Caption</strong> → select "Caption" (column B), then click the "+" button and also add "Hashtags" (column C) with a line break between them</li>
+</ul>
+
+<p><strong>Setting up the status update step:</strong> Add a third step to your Zap: "Update Spreadsheet Row in Google Sheets." Map it to update the Status column (E) to "Posted" for the row that triggered the Zap. This closes the loop so you always know what's been published.</p>
+
+<h4>Zapier Troubleshooting</h4>
+
+<div class="expandable"><button class="expandable-trigger troubleshooting-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Zap runs but Instagram shows an error</span></button><div class="expandable-content" style="display:none">
+<p><strong>Image format error:</strong> Instagram's API only accepts JPEG images. If your image is PNG, convert it to JPEG first. Aspect ratios must be between 4:5 (portrait) and 1.91:1 (landscape). Square (1:1) always works.</p>
+<p><strong>Permission error:</strong> Your Instagram Business account may have disconnected from Zapier. Go to Zapier &gt; My Apps &gt; Instagram for Business and reconnect. You may also need to re-authorize on Meta's end.</p>
+<p><strong>"Media posted before" error:</strong> Instagram rejects duplicate image URLs. Make sure each post uses a unique image.</p>
+</div></div>
+
+<div class="expandable"><button class="expandable-trigger troubleshooting-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Zap doesn't trigger when I set a row to "Ready"</span></button><div class="expandable-content" style="display:none">
+<p><strong>Check trigger configuration:</strong> Make sure the trigger is set to "New or Updated Spreadsheet Row" (not "New Spreadsheet Row" — that only fires on brand-new rows, not status changes).</p>
+<p><strong>Check Zap is turned on:</strong> In your Zapier dashboard, verify the Zap shows as "On" (green). New Zaps start in testing mode.</p>
+<p><strong>Polling delay:</strong> Free-tier Zaps check for changes every 15 minutes. If you just set a row to "Ready," wait 15 minutes before troubleshooting. Paid plans check every 1-5 minutes.</p>
+</div></div>
+
+<div class="expandable"><button class="expandable-trigger troubleshooting-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Free tier quota exceeded</span></button><div class="expandable-content" style="display:none">
+<p>Zapier's free tier allows 100 tasks per month. Each post uses 2-3 tasks (trigger + publish + update row). At 5 posts per week, that's 60-75 tasks per month — within the free tier. If you exceed it, Zapier will pause your Zaps until the next billing cycle.</p>
+<p><strong>Options:</strong> Reduce posting frequency, or upgrade to Zapier Starter (~$20/month) for 750 tasks. Most users at your posting volume stay within the free tier.</p>
+</div></div>
+
+<div class="expandable"><button class="expandable-trigger troubleshooting-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Instagram disconnects from Zapier</span></button><div class="expandable-content" style="display:none">
+<p>Instagram tokens expire every 60 days. Zapier usually handles refresh automatically, but sometimes the connection drops. Signs: Zap failures with "authentication" or "token expired" errors.</p>
+<p><strong>Fix:</strong> Go to Zapier &gt; My Apps &gt; Instagram for Business &gt; Reconnect. Follow the Meta authorization flow. Your Zaps will resume automatically.</p>
+<p>Set a calendar reminder every 50 days to check the connection proactively.</p>
+</div></div>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why Google Sheets as the bridge?</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>You might wonder why we're using a spreadsheet instead of a more sophisticated system. Three reasons: (1) you already know how to use Google Sheets, (2) it gives you a visual content calendar you can share with your business partner, and (3) it creates a clear audit trail of what was posted and when. Simplicity is a feature, not a limitation. You can add complexity later once the basic workflow is running. Start simple, add only what proves necessary.</p></div></div></div>
+
+<h4>Image Strategy</h4>
+
+<p>Instagram posts need images. Options, from simplest to most complex:</p>
+
+<p><strong>Option 1: Your own photos (start here)</strong> — Property photos, neighborhood shots, headshots. Upload to Google Drive and use the sharing link as the image URL.</p>
+
+<p><strong>Option 2: Canva templates</strong> — Create branded templates in Canva for market updates and tips. Export as JPEG (Instagram requires JPEG — PNG won't work via the API).</p>
+
+<p><strong>Option 3: AI-generated images (later)</strong> — Services like DALL-E or Midjourney. Adds complexity and cost — start with your own photos first.</p>
+
+<p><strong>Important format note:</strong> Instagram's API only accepts JPEG images. Aspect ratios must be between 4:5 (portrait) and 1.91:1 (landscape).</p>
+
+<h3>Part C: Your Daily Workflow</h3>
+
+<h4>Once or Twice a Week: Content Batch Session (30-45 minutes)</h4>
+<ol>
+  <li>Open the OpenClaw Dashboard</li>
+  <li>Tell your agent what content you need for the week</li>
+  <li>Review each draft. Revise what needs work.</li>
+  <li>Copy approved captions to your Google Sheets content calendar</li>
+  <li>Add images to the Image URL column</li>
+  <li>Set each row's status to "Ready"</li>
+</ol>
+
+<h4>Daily: Quick Review (5-10 minutes)</h4>
+<ol>
+  <li>Check that Zapier posted today's content correctly</li>
+  <li>Glance at comments and engagement on recent posts</li>
+  <li>Note any content ideas for your next batch session</li>
+</ol>
+
+<h4>Weekly: Maintenance (10 minutes)</h4>
+<ol>
+  <li>Review what performed well — adjust SOUL.md if needed</li>
+  <li>Run <code>openclaw security audit</code> (30 seconds)</li>
+  <li>Check for OpenClaw updates (covered in Section 8)</li>
+</ol>
+
+<p><strong>Total time investment:</strong> ~15-20 minutes per day, with one longer batch session per week.</p>
+
+<h3>Part D: Measuring Success</h3>
+
+<h4>First 2 Weeks: Establishing the System</h4>
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-measure-flow" id="s7-measure-flow"><label class="checkbox-label" for="s7-measure-flow">Is the content workflow smooth? Can you go from idea to approved draft in under 5 minutes?</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-measure-zapier" id="s7-measure-zapier"><label class="checkbox-label" for="s7-measure-zapier">Is Zapier posting reliably? Check that every "Ready" row actually gets posted.</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-measure-voice" id="s7-measure-voice"><label class="checkbox-label" for="s7-measure-voice">Does the content sound like you? Show drafts to your business partner or someone who knows your voice.</label></div>
+</div>
+
+<h4>Realistic Expectations</h4>
+
+<p><strong>Building @jeffanswers from zero to a meaningful following takes months of consistent posting, not weeks.</strong> The AI accelerates content creation but doesn't accelerate audience building. What the AI gives you is the ability to post consistently without the anxiety of creating everything from scratch. That consistency, over time, builds the audience.</p>
+
+<h3>Self-Test: Section 7</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-test-workspace" id="s7-test-workspace"><label class="checkbox-label" for="s7-test-workspace">I have a content workspace set up (drafts/approved/posted folders)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-test-create" id="s7-test-create"><label class="checkbox-label" for="s7-test-create">I can create content drafts with OpenClaw and iterate on them</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-test-zapier" id="s7-test-zapier"><label class="checkbox-label" for="s7-test-zapier">Zapier is connected to my Instagram Business account</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-test-sheets" id="s7-test-sheets"><label class="checkbox-label" for="s7-test-sheets">My Google Sheets content calendar is set up with the correct columns</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-test-flow" id="s7-test-flow"><label class="checkbox-label" for="s7-test-flow">I've tested the full flow: draft > approve > Zapier posts > Instagram</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-test-split" id="s7-test-split"><label class="checkbox-label" for="s7-test-split">I understand that content creation and publishing are separate systems</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s7-test-time" id="s7-test-time"><label class="checkbox-label" for="s7-test-time">I have a realistic expectation of ~15-20 min/day time investment</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 7</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s7-notes" placeholder="Your notes for Section 7..."></textarea>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 8: What's Next -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s8-next" data-phase="s8">
+  <div class="phase-header">
+    <div class="phase-number">Section 8</div>
+    <h1 class="phase-title">What's Next</h1>
+  </div>
+
+<p>Your system is running. Content is flowing. Instagram is getting consistent posts for the first time. Now let's talk about what comes next — both immediate maintenance and future possibilities.</p>
+
+<h3>Immediate: Keeping Your System Healthy</h3>
+
+<h4>Weekly Update Routine (5 minutes)</h4>
+
+<p>OpenClaw is actively maintained, with security patches released frequently. Update weekly:</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-backup" id="s8-backup"><label class="checkbox-label" for="s8-backup"><strong>Step 1 — Back up your configuration:</strong></label></div>
+</div>
+
+<div class="code-block" id="code-s8-backup"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s8-backup" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>tar -czf ~/openclaw-backup-$(date +%Y%m%d).tar.gz ~/.openclaw</code></pre></div>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-update" id="s8-update"><label class="checkbox-label" for="s8-update"><strong>Step 2 — Run the update:</strong></label></div>
+</div>
+
+<div class="code-block" id="code-s8-update"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s8-update" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>curl -fsSL https://openclaw.ai/install.sh | bash --no-onboard</code></pre></div>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-verify" id="s8-verify"><label class="checkbox-label" for="s8-verify"><strong>Step 3 — Verify:</strong></label></div>
+</div>
+
+<div class="code-block" id="code-s8-verify"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s8-verify" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw doctor && openclaw gateway restart && openclaw health</code></pre></div>
+
+<p><strong>Expected result:</strong> All checks pass, gateway restarts, health shows green.</p>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-dash-confirm" id="s8-dash-confirm"><label class="checkbox-label" for="s8-dash-confirm"><strong>Step 4 — Open the Dashboard and confirm the agent responds.</strong></label></div>
+</div>
+
+<p><strong>If an update breaks something:</strong></p>
+
+<div class="code-block" id="code-s8-rollback"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s8-rollback" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>openclaw gateway stop
+tar -xzf ~/openclaw-backup-YYYYMMDD.tar.gz -C ~/
+openclaw gateway start</code></pre></div>
+
+<p>This restores your previous configuration. Then check with Sean.</p>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Backup before update, verify after update (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>This three-step pattern — backup, update, verify — applies to every piece of software you maintain. WordPress updates, phone OS updates, any tool you depend on. The backup gives you a safety net. The verification confirms the update didn't break anything. The rollback plan means you're never stuck. This is how IT professionals approach every update, whether it's a single app or a data center.</p></div></div></div>
+
+<h4>API Key Rotation (every 90 days)</h4>
+
+<p>Set calendar reminders to change your API keys quarterly:</p>
+<ol>
+  <li>Generate a new key in the Anthropic console (console.anthropic.com)</li>
+  <li>Update it in OpenClaw: <code>openclaw config set llm.apiKey NEW-KEY-HERE</code></li>
+  <li>Delete the old key in the Anthropic console</li>
+  <li>Verify the agent still responds</li>
+</ol>
+
+<h4>Session Cleanup (monthly)</h4>
+
+<p>Old session transcripts accumulate and contain everything the agent saw and did — including client names and business data.</p>
+
+<div class="code-block" id="code-s8-cleanup"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s8-cleanup" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code># Delete sessions older than 30 days
+find ~/.openclaw/agents/*/sessions/ -mtime +30 -delete</code></pre></div>
+
+<h3>Future: Expanding What Your Agent Can Do</h3>
+
+<p>Once your Instagram workflow is running smoothly (give it 4-6 weeks), here are paths worth exploring:</p>
+
+<h4>SEO and Website Content</h4>
+<p>OpenClaw supports a WordPress integration that could help with blog posts and SEO content for your Hatch website. <strong>When to consider:</strong> After Instagram is running smoothly.</p>
+
+<h4>Research Agents</h4>
+<p>You could set up a separate agent focused on competitive intelligence — monitoring Denver market data, tracking competitor listings. <strong>When to consider:</strong> After 2-3 months of content creation.</p>
+
+<h4>Google Workspace Integration</h4>
+<p>Connecting OpenClaw to your Gmail and Google Calendar is technically possible. <strong>When to consider:</strong> Phase 2, and carefully. Connecting your email to an AI agent creates prompt injection risk. Discuss with Sean before attempting this.</p>
+
+<h4>Franchise Systematization</h4>
+<p>You mentioned wanting to franchise your essence. Your SOUL.md, IDENTITY.md, and content templates are the first building blocks. <strong>When to consider:</strong> Once your social media system is generating consistent, quality content.</p>
+
+<h3>Getting Help</h3>
+<ul>
+  <li><strong>Sean</strong> is your first call for anything technical</li>
+  <li><strong>The OpenClaw Dashboard</strong> shows logs and error messages if something goes wrong. Screenshot these before reaching out.</li>
+  <li><strong>This walkthrough</strong> is your reference document. Come back to it when needed.</li>
+</ul>
+
+<h3>Final Checklist</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-final-installed" id="s8-final-installed"><label class="checkbox-label" for="s8-final-installed">OpenClaw is installed, secured, and running (Sections 4-5)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-final-voice" id="s8-final-voice"><label class="checkbox-label" for="s8-final-voice">Your brand voice files (SOUL.md, IDENTITY.md, USER.md) are created and customized (Section 6)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-final-create" id="s8-final-create"><label class="checkbox-label" for="s8-final-create">You can create content with your agent and iterate on drafts (Section 6)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-final-zapier" id="s8-final-zapier"><label class="checkbox-label" for="s8-final-zapier">Zapier is connected and posting to Instagram (Section 7)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-final-sheets" id="s8-final-sheets"><label class="checkbox-label" for="s8-final-sheets">Your Google Sheets content calendar is working (Section 7)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-final-update" id="s8-final-update"><label class="checkbox-label" for="s8-final-update">You know how to update weekly (Section 8)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-final-backup" id="s8-final-backup"><label class="checkbox-label" for="s8-final-backup">You have a backup of your configuration</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-final-risks" id="s8-final-risks"><label class="checkbox-label" for="s8-final-risks">You understand the residual risks and how to manage them (Section 5)</label></div>
+</div>
+
+<p>You're running an AI-powered content system on your own hardware, with proper security, producing content in your brand voice, published to Instagram on your schedule. Most real estate agents haven't figured this out yet.</p>
+<p>You have.</p>
+
+<h3>Self-Test: Section 8</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-test-update" id="s8-test-update"><label class="checkbox-label" for="s8-test-update">I know how to update OpenClaw weekly (backup, update, verify)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-test-rotate" id="s8-test-rotate"><label class="checkbox-label" for="s8-test-rotate">I have a plan for API key rotation</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-test-future" id="s8-test-future"><label class="checkbox-label" for="s8-test-future">I understand what future expansions are possible and when to pursue them</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s8-test-help" id="s8-test-help"><label class="checkbox-label" for="s8-test-help">I know who to contact for help</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 8</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s8-notes" placeholder="Your notes for Section 8..."></textarea>
+</div>
+
+<hr>
+<p><em>Walkthrough produced by the On-Demand Curriculum Engine. 80+ sources, three-tier security hardening, dual-source intelligence (official documentation + community validation). Last updated: 2026-03-03.</em></p>
+
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT — Interactive Features + Diagrams -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<script>
+// ─── Core Interactive Features ───────────────────────────────────────────────
+(function() {
+  var STORAGE_PREFIX = 'openclaw-jeff-walkthrough-';
+
+  // ─── Theme Toggle ───
+  var themeToggle = document.getElementById('theme-toggle');
+  var savedTheme = localStorage.getItem(STORAGE_PREFIX + 'theme');
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }
+  themeToggle.addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem(STORAGE_PREFIX + 'theme', next);
+    window.dispatchEvent(new Event('themechange'));
+  });
+
+  // ─── Checkboxes — localStorage persistence ───
+  var checkboxes = document.querySelectorAll('.checkbox-input[data-key]');
+  checkboxes.forEach(function(cb) {
+    var key = STORAGE_PREFIX + cb.getAttribute('data-key');
+    var saved = localStorage.getItem(key);
+    if (saved === 'true') cb.checked = true;
+    cb.addEventListener('change', function() {
+      localStorage.setItem(key, this.checked ? 'true' : 'false');
+      updateProgress();
+    });
+  });
+
+  // ─── Notes — localStorage persistence ───
+  var notes = document.querySelectorAll('.notes-input[data-key]');
+  notes.forEach(function(ta) {
+    var key = STORAGE_PREFIX + ta.getAttribute('data-key');
+    var saved = localStorage.getItem(key);
+    if (saved) ta.value = saved;
+    ta.addEventListener('input', function() {
+      localStorage.setItem(key, this.value);
+    });
+  });
+
+  // ─── Expandable sections ───
+  document.querySelectorAll('.expandable-trigger').forEach(function(trigger) {
+    trigger.addEventListener('click', function() {
+      var expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      var content = this.nextElementSibling;
+      if (content) content.style.display = expanded ? 'none' : 'block';
+    });
+  });
+
+  // ─── Copy buttons ───
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = this.getAttribute('data-target');
+      var block = document.getElementById(targetId);
+      if (!block) return;
+      var code = block.querySelector('code');
+      if (!code) return;
+      navigator.clipboard.writeText(code.textContent).then(function() {
+        btn.classList.add('copied');
+        setTimeout(function() { btn.classList.remove('copied'); }, 1500);
+      }).catch(function() {
+        var range = document.createRange();
+        range.selectNodeContents(code);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+      });
+    });
+  });
+
+  // ─── Scroll spy & Navigation ───
+  var navItems = document.querySelectorAll('.nav-item[data-target]');
+  var sections = [];
+  navItems.forEach(function(item) {
+    var target = item.getAttribute('data-target');
+    var el = document.getElementById(target);
+    if (el) sections.push({ el: el, navItem: item });
+  });
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        navItems.forEach(function(ni) { ni.classList.remove('active'); });
+        var match = sections.find(function(s) { return s.el === entry.target; });
+        if (match) match.navItem.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(function(s) { observer.observe(s.el); });
+
+  // ─── Smooth scroll on nav click ───
+  navItems.forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = this.getAttribute('data-target');
+      var el = document.getElementById(target);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('open');
+    });
+  });
+
+  // ─── Mobile Hamburger ───
+  var sidebar = document.getElementById('sidebar');
+  var hamburger = document.getElementById('hamburger');
+  var backdrop = document.getElementById('sidebar-backdrop');
+
+  hamburger.addEventListener('click', function() {
+    sidebar.classList.toggle('open');
+    backdrop.classList.toggle('open');
+  });
+  backdrop.addEventListener('click', function() {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('open');
+  });
+
+  // ─── Section Completion & Progress ───
+  function updateProgress() {
+    var phaseSections = document.querySelectorAll('.phase-section');
+    var completedSections = 0;
+
+    phaseSections.forEach(function(section) {
+      var phaseId = section.getAttribute('data-phase');
+      var cbs = section.querySelectorAll('.checkbox-input');
+      if (cbs.length === 0) return;
+      var allChecked = Array.from(cbs).every(function(cb) { return cb.checked; });
+      var navItem = document.querySelector('.nav-item[data-phase="' + phaseId + '"]');
+      if (navItem) {
+        if (allChecked) {
+          navItem.classList.add('completed');
+          completedSections++;
+        } else {
+          navItem.classList.remove('completed');
+        }
+      }
+    });
+
+    var total = phaseSections.length;
+    var fill = document.getElementById('progress-fill');
+    var label = document.getElementById('progress-label');
+    if (fill) fill.style.width = (completedSections / total * 100) + '%';
+    if (label) label.textContent = completedSections + ' of ' + total + ' sections complete';
+  }
+
+  window.updateProgress = updateProgress;
+  updateProgress();
+})();
+</script>
+<script>
+// ─── Diagram Rendering ──────────────────────────────────────────────────────
+// Dependencies: Rough.js (window.rough) and Mermaid (window.mermaid) loaded via CDN
+
+// ─── Theme helper ───
+function getThemeColors() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return {
+    isDark: isDark,
+    bg: isDark ? '#1a1a1a' : '#fafaf9',
+    surface: isDark ? '#262626' : '#f5f5f4',
+    surfaceRaised: isDark ? '#2d2d2d' : '#e7e5e4',
+    border: isDark ? '#404040' : '#d6d3d1',
+    textPrimary: isDark ? '#e5e5e5' : '#292524',
+    textSecondary: isDark ? '#a3a3a3' : '#a8a29e',
+    textBody: isDark ? '#d4d4d4' : '#44403c',
+    blue: isDark ? '#60a5fa' : '#3b82f6',
+    blueFill: isDark ? '#1e3a5f' : '#dbeafe',
+    red: isDark ? '#f87171' : '#ef4444',
+    redFill: isDark ? '#450a0a' : '#fee2e2',
+    green: isDark ? '#4ade80' : '#22c55e',
+    greenFill: isDark ? '#052e16' : '#dcfce7',
+    neutral: isDark ? '#737373' : '#a8a29e',
+    neutralFill: isDark ? '#262626' : '#f5f5f4',
+    amber: isDark ? '#fbbf24' : '#f59e0b',
+    amberFill: isDark ? '#451a03' : '#fef3c7',
+    purple: isDark ? '#c084fc' : '#a855f7',
+    purpleFill: isDark ? '#3b0764' : '#f3e8ff',
+    indigo: isDark ? '#818cf8' : '#6366f1',
+    indigoFill: isDark ? '#312e81' : '#e0e7ff',
+    labelBg: isDark ? 'rgba(26,26,26,0.85)' : 'rgba(255,255,255,0.85)',
+  };
+}
+
+var roughDefaults = {
+  roughness: 1.8,
+  strokeWidth: 2,
+  bowing: 1,
+  fillStyle: 'hachure',
+  fillWeight: 1.5,
+  hachureGap: 6,
+  hachureAngle: -41,
+};
+
+// ─── Shared utilities ───
+var _resizeTimers = {};
+var _resizeRegistered = {};
+
+function debounceResize(id, fn) {
+  _resizeTimers[id] = { fn: fn };
+  if (_resizeRegistered[id]) return;
+  _resizeRegistered[id] = true;
+  window.addEventListener('resize', function() {
+    clearTimeout(_resizeTimers[id].timer);
+    _resizeTimers[id].timer = setTimeout(_resizeTimers[id].fn, 250);
+  });
+}
+
+function clearContainer(id) {
+  var el = document.getElementById(id);
+  if (el) el.innerHTML = '';
+  return el;
+}
+
+function createCanvas(container) {
+  var canvas = document.createElement('canvas');
+  var w = Math.min(Math.max(container.clientWidth - 40, 300), 720);
+  var dpr = window.devicePixelRatio || 1;
+  canvas.style.width = w + 'px';
+  canvas.width = w * dpr;
+  canvas.style.display = 'block';
+  container.appendChild(canvas);
+  return { canvas: canvas, width: w, dpr: dpr };
+}
+
+function setCanvasHeight(canvas, h, dpr) {
+  canvas.height = h * dpr;
+  canvas.style.height = h + 'px';
+}
+
+function drawLabel(ctx, text, x, y, opts) {
+  opts = opts || {};
+  var size = opts.size || 13;
+  var weight = opts.weight || '600';
+  var color = opts.color || getThemeColors().textPrimary;
+  var align = opts.align || 'center';
+  var baseline = opts.baseline || 'middle';
+  ctx.save();
+  ctx.font = weight + ' ' + size + 'px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillStyle = color;
+  ctx.textAlign = align;
+  ctx.textBaseline = baseline;
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function roughRect(rc, x, y, w, h, stroke, fill) {
+  return rc.rectangle(x, y, w, h, Object.assign({}, roughDefaults, {
+    stroke: stroke, fill: fill, fillStyle: 'hachure',
+  }));
+}
+
+function roughEllipse(rc, cx, cy, w, h, stroke, fill) {
+  return rc.ellipse(cx, cy, w, h, Object.assign({}, roughDefaults, {
+    stroke: stroke, fill: fill, fillStyle: 'cross-hatch',
+  }));
+}
+
+function drawArrow(rc, ctx, x1, y1, x2, y2, opts) {
+  opts = opts || {};
+  var stroke = opts.stroke || getThemeColors().neutral;
+  var sw = opts.strokeWidth || 2;
+  var dash = opts.dash || null;
+  var lineOpts = Object.assign({}, roughDefaults, { stroke: stroke, strokeWidth: sw });
+  if (dash) lineOpts.strokeLineDash = dash;
+  rc.line(x1, y1, x2, y2, lineOpts);
+  // Arrowhead
+  var angle = Math.atan2(y2 - y1, x2 - x1);
+  var headLen = 10;
+  var a1 = angle - Math.PI / 6;
+  var a2 = angle + Math.PI / 6;
+  rc.line(x2, y2, x2 - headLen * Math.cos(a1), y2 - headLen * Math.sin(a1), Object.assign({}, roughDefaults, { stroke: stroke, strokeWidth: sw }));
+  rc.line(x2, y2, x2 - headLen * Math.cos(a2), y2 - headLen * Math.sin(a2), Object.assign({}, roughDefaults, { stroke: stroke, strokeWidth: sw }));
+}
+
+// ─── Diagram 1: The Four Pieces of OpenClaw (Rough.js, Regions) ─────────────
+
+window.renderFourPieces = function(containerId) {
+  var container = clearContainer(containerId);
+  if (!container) return;
+  var c = getThemeColors();
+  var info = createCanvas(container);
+  var w = info.width; var dpr = info.dpr;
+  var h = 300;
+  setCanvasHeight(info.canvas, h, dpr);
+  var ctx = info.canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var rc = rough.canvas(info.canvas);
+
+  // Boundary: Jeff's MacBook Air
+  var bx = 20, by = 30, bw = w * 0.62, bh = 220;
+  rc.rectangle(bx, by, bw, bh, Object.assign({}, roughDefaults, {
+    stroke: c.neutral, strokeLineDash: [8, 4], fill: '', strokeWidth: 2
+  }));
+  drawLabel(ctx, "Your MacBook Air", bx + bw / 2, by - 10, { size: 13, weight: '700', color: c.neutral });
+
+  // Gateway
+  var gw = 140, gh = 45;
+  var gx = bx + 30, gy = by + 50;
+  roughRect(rc, gx, gy, gw, gh, c.blue, c.blueFill);
+  drawLabel(ctx, 'Gateway', gx + gw / 2, gy + 18, { size: 12, weight: '700', color: c.textPrimary });
+  drawLabel(ctx, '"Front Desk"', gx + gw / 2, gy + 34, { size: 10, weight: '400', color: c.textSecondary });
+
+  // Dashboard
+  var dx = bx + bw - 150, dy = by + 30;
+  roughRect(rc, dx, dy, 120, 45, c.blue, c.blueFill);
+  drawLabel(ctx, 'Dashboard', dx + 60, dy + 18, { size: 12, weight: '700', color: c.textPrimary });
+  drawLabel(ctx, '"Control Panel"', dx + 60, dy + 34, { size: 10, weight: '400', color: c.textSecondary });
+
+  // Skills
+  var sx = bx + bw - 150, sy = by + 130;
+  roughRect(rc, sx, sy, 120, 45, c.green, c.greenFill);
+  drawLabel(ctx, 'Skills', sx + 60, sy + 18, { size: 12, weight: '700', color: c.textPrimary });
+  drawLabel(ctx, '"The Hands"', sx + 60, sy + 34, { size: 10, weight: '400', color: c.textSecondary });
+
+  // Arrows: Gateway <-> Dashboard, Gateway <-> Skills
+  drawArrow(rc, ctx, gx + gw, gy + gh / 2, dx, dy + 22, { stroke: c.neutral });
+  drawArrow(rc, ctx, gx + gw, gy + gh / 2 + 10, sx, sy + 22, { stroke: c.neutral });
+
+  // Claude (outside boundary)
+  var clx = bx + bw + 60, cly = by + bh / 2;
+  roughEllipse(rc, clx, cly, 100, 60, c.purple, c.purpleFill);
+  drawLabel(ctx, 'Claude', clx, cly - 6, { size: 12, weight: '700', color: c.textPrimary });
+  drawLabel(ctx, '"The Brain"', clx, cly + 10, { size: 10, weight: '400', color: c.textSecondary });
+  drawLabel(ctx, '(rented)', clx, cly + 22, { size: 9, weight: '400', color: c.textSecondary });
+
+  // Arrow from Gateway through boundary to Claude (red crossing)
+  drawArrow(rc, ctx, gx + gw / 2, gy + gh, clx - 50, cly, { stroke: c.red, strokeWidth: 3 });
+
+  // Annotation
+  drawLabel(ctx, 'Everything inside this box stays on your computer', bx + bw / 2, by + bh + 20, { size: 11, weight: '400', color: c.textBody });
+
+  debounceResize('fourPieces', function() { window.renderFourPieces(containerId); });
+};
+
+// ─── Diagram 2: Shared vs. Dedicated Machine (Rough.js, Side-by-Side) ──────
+
+window.renderSharedDedicated = function(containerId) {
+  var container = clearContainer(containerId);
+  if (!container) return;
+  var c = getThemeColors();
+  var info = createCanvas(container);
+  var w = info.width; var dpr = info.dpr;
+  var h = 350;
+  setCanvasHeight(info.canvas, h, dpr);
+  var ctx = info.canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var rc = rough.canvas(info.canvas);
+
+  var midX = w / 2;
+  var colW = (w - 60) / 2;
+  var boxW = Math.min(130, colW * 0.75);
+  var boxH = 38;
+  var gap = 8;
+  var leftX = 15;
+  var rightX = midX + 15;
+
+  // Column titles
+  drawLabel(ctx, 'Your Setup (Shared)', leftX + colW / 2, 22, { size: 14, weight: '700', color: c.amber });
+  drawLabel(ctx, 'Ideal (Dedicated)', rightX + colW / 2, 22, { size: 14, weight: '700', color: c.green });
+
+  // Left: single box containing all elements
+  var lBoxX = leftX + (colW - boxW) / 2;
+  rc.rectangle(leftX + 10, 40, colW - 20, 240, Object.assign({}, roughDefaults, {
+    stroke: c.neutral, strokeLineDash: [6, 4], fill: ''
+  }));
+
+  var leftItems = [
+    { label: 'OpenClaw', stroke: c.blue, fill: c.blueFill },
+    { label: 'Client Data', stroke: c.green, fill: c.greenFill },
+    { label: 'Banking', stroke: c.amber, fill: c.amberFill },
+    { label: 'Email', stroke: c.amber, fill: c.amberFill },
+    { label: 'Browser', stroke: c.amber, fill: c.amberFill },
+  ];
+  leftItems.forEach(function(item, i) {
+    var y = 55 + i * (boxH + gap);
+    roughRect(rc, lBoxX, y, boxW, boxH, item.stroke, item.fill);
+    drawLabel(ctx, item.label, lBoxX + boxW / 2, y + boxH / 2, { size: 11, color: c.textPrimary });
+  });
+
+  // Red annotation line
+  rc.line(lBoxX + boxW + 5, 55 + boxH / 2, lBoxX + boxW + 5, 55 + boxH + gap + boxH / 2, Object.assign({}, roughDefaults, {
+    stroke: c.red, strokeWidth: 2, strokeLineDash: [4, 3]
+  }));
+  drawLabel(ctx, 'If breach:', lBoxX + boxW + 30, 55 + boxH + 4, { size: 9, weight: '400', color: c.red, align: 'left' });
+  drawLabel(ctx, 'agent reaches all', lBoxX + boxW + 30, 55 + boxH + 16, { size: 9, weight: '400', color: c.red, align: 'left' });
+
+  // Right: two separate boxes
+  var rBoxX = rightX + (colW - boxW) / 2;
+  // Top box: OpenClaw only
+  rc.rectangle(rightX + 10, 40, colW - 20, 70, Object.assign({}, roughDefaults, {
+    stroke: c.neutral, strokeLineDash: [6, 4], fill: ''
+  }));
+  roughRect(rc, rBoxX, 55, boxW, boxH, c.blue, c.blueFill);
+  drawLabel(ctx, 'OpenClaw', rBoxX + boxW / 2, 55 + boxH / 2, { size: 11, color: c.textPrimary });
+
+  // Gap (visible separation)
+  // Bottom box: personal stuff
+  rc.rectangle(rightX + 10, 140, colW - 20, 140, Object.assign({}, roughDefaults, {
+    stroke: c.neutral, strokeLineDash: [6, 4], fill: ''
+  }));
+  var rightItems = [
+    { label: 'Client Data', stroke: c.green, fill: c.greenFill },
+    { label: 'Banking / Email', stroke: c.amber, fill: c.amberFill },
+  ];
+  rightItems.forEach(function(item, i) {
+    var y = 155 + i * (boxH + gap);
+    roughRect(rc, rBoxX, y, boxW, boxH, item.stroke, item.fill);
+    drawLabel(ctx, item.label, rBoxX + boxW / 2, y + boxH / 2, { size: 11, color: c.textPrimary });
+  });
+
+  // Annotation
+  drawLabel(ctx, 'Multiple security layers compensate — but dedicated is better', w / 2, h - 25, { size: 11, weight: '400', color: c.textBody });
+
+  debounceResize('sharedDedicated', function() { window.renderSharedDedicated(containerId); });
+};
+
+// ─── Diagram 3: Security Layers (Rough.js, Nested Layers) ──────────────────
+
+window.renderSecurityLayers = function(containerId) {
+  var container = clearContainer(containerId);
+  if (!container) return;
+  var c = getThemeColors();
+  var info = createCanvas(container);
+  var w = Math.min(info.width, 500); var dpr = info.dpr;
+  var h = 400;
+  setCanvasHeight(info.canvas, h, dpr);
+  var ctx = info.canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var rc = rough.canvas(info.canvas);
+
+  var cx = w * 0.4, cy = h / 2;
+  var layers = [
+    { label: 'macOS Firewall + FileVault', desc: 'Blocks: network probes', inset: 0 },
+    { label: 'Localhost Only', desc: 'Blocks: anyone not on this computer', inset: 1 },
+    { label: 'Gateway Password', desc: 'Blocks: unauthorized access', inset: 2 },
+    { label: 'Docker Sandbox', desc: 'Blocks: agent escaping its room', inset: 3 },
+  ];
+
+  var outerW = w * 0.7, outerH = h * 0.8;
+  var insetStep = 30;
+
+  layers.forEach(function(layer, i) {
+    var lw = outerW - i * insetStep * 2;
+    var lh = outerH - i * insetStep * 2;
+    var lx = cx - lw / 2;
+    var ly = cy - lh / 2;
+    var opacity = 1 - i * 0.15;
+    rc.rectangle(lx, ly, lw, lh, Object.assign({}, roughDefaults, {
+      stroke: c.red, fill: c.redFill,
+      fillStyle: 'hachure', fillWeight: 1.5 * opacity,
+    }));
+    // Right-side annotations
+    var annotX = cx + lw / 2 + 10;
+    var annotY = ly + 16;
+    drawLabel(ctx, layer.label, annotX, annotY, { size: 10, weight: '700', color: c.red, align: 'left' });
+    drawLabel(ctx, layer.desc, annotX, annotY + 13, { size: 9, weight: '400', color: c.textSecondary, align: 'left' });
+  });
+
+  // Center: green core
+  var coreW = outerW - 4 * insetStep * 2 - 20;
+  var coreH = outerH - 4 * insetStep * 2 - 20;
+  roughRect(rc, cx - coreW / 2, cy - coreH / 2, coreW, coreH, c.green, c.greenFill);
+  drawLabel(ctx, 'Your Agent', cx, cy - 8, { size: 12, weight: '700', color: c.green });
+  drawLabel(ctx, '+ Your Data', cx, cy + 8, { size: 12, weight: '700', color: c.green });
+
+  // Bottom annotation
+  drawLabel(ctx, 'Each layer holds independently. If one fails, the others still protect.', cx, h - 15, { size: 10, weight: '400', color: c.textBody });
+
+  debounceResize('securityLayers', function() { window.renderSecurityLayers(containerId); });
+};
+
+// ─── Diagram 4: How a Prompt Becomes Action (Mermaid sequence) ──────────────
+
+window.renderPromptAction = function(containerId) {
+  var container = clearContainer(containerId);
+  if (!container) return;
+  var c = getThemeColors();
+
+  var div = document.createElement('div');
+  div.className = 'mermaid';
+  container.appendChild(div);
+
+  var def = 'sequenceDiagram\n';
+  def += '    participant J as Jeff\n';
+  def += '    participant G as Gateway<br/>(Front Desk)\n';
+  def += '    participant C as Claude<br/>(The Brain)\n';
+  def += '    participant S as Skills<br/>(The Hands)\n';
+  def += '    J->>G: "Draft me an Instagram post about Denver market"\n';
+  def += '    G->>G: Check password\n';
+  def += '    G->>C: Jeff\'s message + brand voice instructions\n';
+  def += '    C->>C: Think about the request\n';
+  def += '    C-->>G: "I need to check current market data"\n';
+  def += '    G->>S: Run market data skill\n';
+  def += '    S-->>G: Denver market stats\n';
+  def += '    G->>C: Here\'s the data\n';
+  def += '    C-->>G: Draft post with caption + hashtags\n';
+  def += '    G-->>J: "Here\'s your draft — review before posting"\n';
+
+  div.textContent = def;
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: c.blueFill,
+      primaryTextColor: c.textPrimary,
+      primaryBorderColor: c.blue,
+      lineColor: c.neutral,
+      secondaryColor: c.surfaceRaised,
+      tertiaryColor: c.border,
+      noteBkgColor: c.amberFill,
+      noteTextColor: c.textPrimary,
+      noteBorderColor: c.amber,
+      actorBkg: c.blueFill,
+      actorBorder: c.blue,
+      actorTextColor: c.textPrimary,
+      signalColor: c.textPrimary,
+      fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+      fontSize: '13px',
+    },
+  });
+
+  mermaid.run({ nodes: [div] });
+
+  debounceResize('promptAction', function() { window.renderPromptAction(containerId); });
+};
+
+// ─── Diagram 5: Split Architecture (Rough.js, Assembly Line) ────────────────
+
+window.renderSplitArch = function(containerId) {
+  var container = clearContainer(containerId);
+  if (!container) return;
+  var c = getThemeColors();
+  var info = createCanvas(container);
+  var w = info.width; var dpr = info.dpr;
+  var h = 280;
+  setCanvasHeight(info.canvas, h, dpr);
+  var ctx = info.canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var rc = rough.canvas(info.canvas);
+
+  var midY = 130;
+  var nodeW = 100, nodeH = 40;
+  var handoffX = w * 0.58;
+
+  // Zone labels
+  drawLabel(ctx, 'Content Creation (OpenClaw + Claude)', handoffX / 2, 20, { size: 12, weight: '700', color: c.blue });
+  drawLabel(ctx, 'Publishing (Zapier)', handoffX + (w - handoffX) / 2, 20, { size: 12, weight: '700', color: c.indigo });
+
+  // Handoff boundary
+  rc.line(handoffX, 35, handoffX, h - 50, Object.assign({}, roughDefaults, {
+    stroke: c.red, strokeWidth: 2, strokeLineDash: [8, 4]
+  }));
+  drawLabel(ctx, 'Human approval', handoffX, h - 40, { size: 10, weight: '600', color: c.red });
+  drawLabel(ctx, 'required', handoffX, h - 28, { size: 10, weight: '600', color: c.red });
+
+  // Zone 1 nodes
+  var nodes1 = [
+    { x: 20, label: 'Jeff', stroke: c.amber, fill: c.amberFill, ellipse: true },
+    { x: 130, label: 'Gateway', stroke: c.blue, fill: c.blueFill },
+    { x: 240, label: 'Claude', stroke: c.purple, fill: c.purpleFill, ellipse: true },
+    { x: 350, label: 'Draft', stroke: c.green, fill: c.greenFill },
+  ];
+
+  nodes1.forEach(function(n) {
+    if (n.ellipse) {
+      roughEllipse(rc, n.x + nodeW / 2, midY, nodeW, nodeH + 5, n.stroke, n.fill);
+    } else {
+      roughRect(rc, n.x, midY - nodeH / 2, nodeW, nodeH, n.stroke, n.fill);
+    }
+    drawLabel(ctx, n.label, n.x + nodeW / 2, midY, { size: 11, weight: '600', color: c.textPrimary });
+  });
+
+  // Arrows zone 1
+  drawArrow(rc, ctx, 70, midY, 130, midY, { stroke: c.neutral });
+  drawArrow(rc, ctx, 230, midY, 240, midY, { stroke: c.neutral });
+  drawArrow(rc, ctx, 340, midY, 350, midY, { stroke: c.neutral });
+
+  // Review loop arrow (dashed, below)
+  rc.line(350 + nodeW / 2, midY + 30, 20 + nodeW / 2, midY + 50, Object.assign({}, roughDefaults, {
+    stroke: c.amber, strokeWidth: 1.5, strokeLineDash: [6, 4]
+  }));
+  drawLabel(ctx, 'Review & approve', 200, midY + 55, { size: 9, weight: '400', color: c.amber });
+
+  // Zone 2 nodes
+  var z2Start = handoffX + 20;
+  var z2Nodes = [
+    { x: z2Start, label: 'Zapier', stroke: c.indigo, fill: c.indigoFill },
+    { x: z2Start + 120, label: 'Instagram', stroke: c.indigo, fill: c.indigoFill, ellipse: true },
+  ];
+
+  z2Nodes.forEach(function(n) {
+    if (n.ellipse) {
+      roughEllipse(rc, n.x + nodeW / 2, midY, nodeW, nodeH + 5, n.stroke, n.fill);
+    } else {
+      roughRect(rc, n.x, midY - nodeH / 2, nodeW, nodeH, n.stroke, n.fill);
+    }
+    drawLabel(ctx, n.label, n.x + nodeW / 2, midY, { size: 11, weight: '600', color: c.textPrimary });
+  });
+
+  // Arrows zone 2
+  drawArrow(rc, ctx, 350 + nodeW, midY, z2Start, midY, { stroke: c.red, strokeWidth: 3 });
+  drawArrow(rc, ctx, z2Start + nodeW, midY, z2Start + 120, midY, { stroke: c.neutral });
+
+  // Bottom annotation
+  drawLabel(ctx, 'Agent creates. Automation publishes. Jeff approves in between.', w / 2, h - 10, { size: 11, weight: '400', color: c.textBody });
+
+  debounceResize('splitArch', function() { window.renderSplitArch(containerId); });
+};
+
+// ─── Diagram 6: What Stays Local vs. What Leaves (Rough.js, Regions) ────────
+
+window.renderLocalInternet = function(containerId) {
+  var container = clearContainer(containerId);
+  if (!container) return;
+  var c = getThemeColors();
+  var info = createCanvas(container);
+  var w = info.width; var dpr = info.dpr;
+  var h = 380;
+  setCanvasHeight(info.canvas, h, dpr);
+  var ctx = info.canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var rc = rough.canvas(info.canvas);
+
+  var dividerX = w * 0.55;
+
+  // Vertical boundary
+  rc.line(dividerX, 40, dividerX, h - 50, Object.assign({}, roughDefaults, {
+    stroke: c.neutral, strokeWidth: 2, strokeLineDash: [8, 4]
+  }));
+  drawLabel(ctx, 'Internet Boundary', dividerX, 25, { size: 12, weight: '700', color: c.neutral });
+
+  // Zone labels
+  drawLabel(ctx, 'Private — stays on your computer', dividerX / 2, 50, { size: 11, weight: '600', color: c.green });
+  drawLabel(ctx, 'Sent — only what you choose', dividerX + (w - dividerX) / 2, 50, { size: 11, weight: '600', color: c.purple });
+
+  // Left zone: 5 data items
+  var leftItems = ['Conversation History', 'API Keys', 'Skills & Config', 'Agent Memory', 'Draft Content'];
+  var itemW = 140, itemH = 35;
+  var startY = 75;
+  var leftCenterX = dividerX / 2;
+
+  leftItems.forEach(function(label, i) {
+    var y = startY + i * (itemH + 10);
+    roughRect(rc, leftCenterX - itemW / 2, y, itemW, itemH, c.green, c.greenFill);
+    drawLabel(ctx, label, leftCenterX, y + itemH / 2, { size: 10, weight: '600', color: c.textPrimary });
+  });
+
+  // Right zone: Claude and Instagram
+  var rightCenterX = dividerX + (w - dividerX) / 2;
+  var claudeY = 120;
+  var igY = 240;
+
+  roughEllipse(rc, rightCenterX, claudeY, 120, 55, c.purple, c.purpleFill);
+  drawLabel(ctx, 'Claude', rightCenterX, claudeY - 6, { size: 12, weight: '700', color: c.textPrimary });
+  drawLabel(ctx, '(Anthropic)', rightCenterX, claudeY + 10, { size: 9, weight: '400', color: c.textSecondary });
+
+  roughEllipse(rc, rightCenterX, igY, 120, 55, c.indigo, c.indigoFill);
+  drawLabel(ctx, 'Instagram', rightCenterX, igY - 6, { size: 12, weight: '700', color: c.textPrimary });
+  drawLabel(ctx, '(Meta)', rightCenterX, igY + 10, { size: 9, weight: '400', color: c.textSecondary });
+
+  // Arrows crossing boundary (red)
+  var arrowStartX = leftCenterX + itemW / 2 + 5;
+  var arrowEndX = rightCenterX - 60;
+  // To Claude
+  drawArrow(rc, ctx, arrowStartX, startY + 4 * (itemH + 10) + itemH / 2, arrowEndX, claudeY, { stroke: c.red, strokeWidth: 3 });
+  // To Instagram
+  drawArrow(rc, ctx, arrowStartX, startY + 4 * (itemH + 10) + itemH / 2 + 10, arrowEndX, igY, { stroke: c.red, strokeWidth: 3 });
+
+  // Labels on arrows
+  drawLabel(ctx, 'Prompt text', dividerX, claudeY - 25, { size: 9, weight: '400', color: c.red });
+  drawLabel(ctx, 'Published post', dividerX, igY + 30, { size: 9, weight: '400', color: c.red });
+
+  // Bottom annotation
+  drawLabel(ctx, 'OpenClaw keeps your data local by default. Only two things leave.', w / 2, h - 15, { size: 11, weight: '400', color: c.textBody });
+
+  debounceResize('localInternet', function() { window.renderLocalInternet(containerId); });
+};
+
+</script>
+<script>
+// Initialize Mermaid
+if (typeof mermaid !== 'undefined') {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: isDark ? '#1e3a5f' : '#dbeafe',
+      primaryTextColor: isDark ? '#e5e5e5' : '#292524',
+      primaryBorderColor: isDark ? '#60a5fa' : '#3b82f6',
+      lineColor: isDark ? '#737373' : '#a8a29e',
+      secondaryColor: isDark ? '#2d2d2d' : '#f5f5f4',
+      tertiaryColor: isDark ? '#404040' : '#e7e5e4',
+      fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+      fontSize: '13px'
+    }
+  });
+}
+
+// Render diagrams when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  var diagramMap = {
+    'diagram-four-pieces': 'renderFourPieces',
+    'diagram-shared-dedicated': 'renderSharedDedicated',
+    'diagram-security-layers': 'renderSecurityLayers',
+    'diagram-prompt-action': 'renderPromptAction',
+    'diagram-split-arch': 'renderSplitArch',
+    'diagram-local-internet': 'renderLocalInternet'
+  };
+
+  for (var containerId in diagramMap) {
+    var funcName = diagramMap[containerId];
+    var container = document.getElementById(containerId);
+    if (container && typeof window[funcName] === 'function') {
+      try {
+        window[funcName](containerId);
+      } catch (e) {
+        console.error('Error rendering ' + funcName + ':', e);
+        container.innerHTML = '<div style="padding:20px;color:var(--text-muted);">Diagram failed to render: ' + funcName + '</div>';
+      }
+    }
+  }
+
+  // Re-render all diagrams function (called on theme toggle)
+  window.rerenderDiagrams = function() {
+    for (var cid in diagramMap) {
+      var fn = diagramMap[cid];
+      var cont = document.getElementById(cid);
+      if (cont && typeof window[fn] === 'function') {
+        try {
+          window[fn](cid);
+        } catch (e) {
+          console.error('Error re-rendering ' + fn + ':', e);
+        }
+      }
+    }
+  };
+
+  // Re-render diagrams on theme change
+  window.addEventListener('themechange', function() {
+    window.rerenderDiagrams();
+  });
+});
+
+// ─── Keyboard Shortcuts ───
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+  var navItems = document.querySelectorAll('.nav-item[data-phase]');
+  var phases = Array.prototype.slice.call(navItems);
+
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    var active = document.querySelector('.nav-item.active[data-phase]');
+    var idx = active ? phases.indexOf(active) : -1;
+    var next;
+    if (e.key === 'ArrowRight') {
+      next = idx < phases.length - 1 ? phases[idx + 1] : phases[phases.length - 1];
+    } else {
+      next = idx > 0 ? phases[idx - 1] : phases[0];
+    }
+    if (next) next.click();
+  }
+
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.expandable-trigger[aria-expanded="true"]').forEach(function(trigger) {
+      trigger.setAttribute('aria-expanded', 'false');
+      var content = trigger.nextElementSibling;
+      if (content) content.style.display = 'none';
+    });
+  }
+});
+</script>
+</body>
+</html>
