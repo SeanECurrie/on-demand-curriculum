@@ -9,8 +9,8 @@ Tailored interactive walkthrough for Jeff (Denver real estate agent, Hatch brand
 
 ## Current Status
 
-- **Phase:** Output Generation
-- **Pipeline stage:** Research and synthesis complete. 5 reports written. Building walkthrough.
+- **Phase:** Complete
+- **Pipeline stage:** All phases executed: Intake → Research → Synthesis → Output Generation → Render-Validate → Delivery
 - **Depth assessment:** Deep-dive (multi-stage pipeline, interactive HTML output >500 lines, multiple research reports)
 - **Deployment target:** MacBook Air (config-agnostic, 24GB RAM strongly recommended)
 - **LLM:** Claude (subscription)
@@ -24,11 +24,14 @@ Tailored interactive walkthrough for Jeff (Denver real estate agent, Hatch brand
 - 5 synthesis reports: landscape (abbreviated), architecture (abbreviated), feasibility (full), security (full), open questions
 - 25+ strategic insights in intelligence log
 
-### Walkthrough (In Progress)
-- 8-section interactive HTML walkthrough (~1,200-1,800 lines estimated)
-- Sections: Intro → Dedicated Machine → Setup → Installation → Security → Prompting → Social Media → What's Next
-- Interactive elements: checkboxes, expandable sections, notes fields, progress tracking, dark/light mode
-- Diagrams: concept-to-pattern mapped, isomorphism-tested, color-reference compliant
+### Walkthrough (Complete)
+- 2,810-line self-contained interactive HTML walkthrough
+- 8 sections: Intro → Dedicated Machine → Setup → Installation → Security → Prompting → Social Media → What's Next
+- 6 diagrams (5 Rough.js + 1 Mermaid): Four Pieces, Shared vs Dedicated, Security Layers, Prompt Flow, Split Architecture, Local vs Internet
+- 171 interactive data-keys (checkboxes + notes), localStorage persistence
+- Dark/light mode with diagram re-rendering, responsive (375px mobile), keyboard shortcuts
+- Render-validated via Puppeteer: V1-V6 all PASS
+- Deliverable: `docs/walkthrough/interactive/openclaw-deployment-walkthrough.html`
 
 ## Key Verdicts
 
