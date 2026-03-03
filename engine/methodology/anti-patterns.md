@@ -230,6 +230,32 @@ This reasoning is sound. But the anti-pattern is worth naming because the pile i
 
 ---
 
+### 11. The Unverified Render
+
+**What it looks like:** Visual or interactive output is generated, reviewed in source code, and declared complete — without anyone opening it in a browser to see what it actually looks like.
+
+**Real example:** Output #1's interactive walkthrough (3,030 lines of HTML) had four visual defects that are invisible in source code and obvious in a browser:
+
+1. **Hidden diagram:** The Phase Overview diagram (`diagram-phase-overview`) was rendered by Mermaid.js but had `style="display:none"` on its container. The most useful orientation diagram — showing the full walkthrough roadmap — was built and invisible. Nobody opened the HTML and noticed the diagram wasn't there.
+
+2. **Broken expandables:** 14 of 22 troubleshooting expandable sections had content that leaked outside their containers. The toggle button worked (the chevron rotated) but the content was always visible below the container. This is a DOM structure issue that is trivial to spot visually and nearly impossible to catch by reading HTML source.
+
+3. **Missing syntax highlighting:** The style guide specifies 8 token-type colors for code blocks (keywords, strings, comments, etc.) with exact hex values for light and dark mode. The actual HTML has monochrome code blocks across all 75 code blocks. The specification existed, the implementation didn't follow it, and nobody noticed because nobody compared the rendered output to the spec.
+
+4. **Non-persisting notes:** The style guide specifies localStorage persistence with 500ms debounce for `.notes-input` textarea fields. The implementation persists checkbox state but not text inputs. A user who fills in version numbers and deployment notes loses them on page reload.
+
+All four defects survived through the entire construction process and code review. They would have been caught in under 60 seconds by opening the file in a browser and clicking through one phase.
+
+**Why it happens:** During construction, the source code IS the output — you write HTML, you see HTML. The mental model is "I wrote the right structure, so it renders correctly." But HTML rendering is not deterministic from reading source — CSS interactions, JavaScript timing, DOM nesting, CDN load order, and viewport behavior all affect the result. The only reliable verification is looking at the rendered page. But "open it in a browser" feels like a separate step, not part of the build process, so it gets deferred to "later" — and later never comes.
+
+**What good looks like:** Visual verification is part of the build process, not a post-build step. The render-validate loop (see `section-construction.md` Phase C.5) makes this mandatory: render → screenshot → audit → fix → re-render. The loop runs until the output passes visual inspection. "It works in the source" is not sufficient.
+
+**Binary test:** Has the output been opened in a browser and visually inspected since the last source code edit? If no: you are about to ship unverified visual output. Open it now.
+
+*(First observed: 2026-02-22 (Output #1 construction), documented 2026-03-03 during engine methodology review)*
+
+---
+
 ## Related Documents
 
 - `binary-self-tests.md` — The framework for writing the binary tests in each anti-pattern entry
@@ -238,3 +264,4 @@ This reasoning is sound. But the anti-pattern is worth naming because the pile i
 - `depth-assessment.md` — How to classify work depth, which helps prevent premature depth anti-patterns
 - `credibility-tiers.md` — The tier system referenced in premature confidence and understated warning entries
 - `research-cadence-template.md` — The staleness management framework that addresses staleness blindness
+- `section-construction.md` — Phase C.5 (render-validate loop) directly addresses this anti-pattern
