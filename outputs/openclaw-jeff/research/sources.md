@@ -72,3 +72,35 @@ Sources reused from Output #1 (openclaw-sean) are marked with `[inherited]` and 
 | 2026-03-03 | Penligent AI — "OpenClaw 2026.2.23 Brings Security Hardening" | 3 | v2026.2.23: optional HSTS, stricter bind+auth guardrails, security boundary improvements. |
 | 2026-03-03 | Inman.com — "3 ways artificial intelligence will reshape real estate in 2026" (Feb 6, 2026) | 4 | Inman Connect NY: AI data security concerns specific to real estate. Client data exposure, deepfake fraud, proptech vendor security. |
 | 2026-03-03 | Real Estate News — "AI and real estate data: Who's making the rules?" (Feb 23, 2026) | 4 | MLSs pursuing "license, not lawsuit" strategy for AI data guardrails. Regulatory environment tightening. |
+
+## Social Media Skills Research — Context7 (Tier 1)
+
+| Date | Source | Key Finding |
+|------|--------|-------------|
+| 2026-03-03 | OpenClaw xurl skill (`skills/xurl/SKILL.md`) via Context7 `/openclaw/openclaw` | X/Twitter posting skill: text posts, media upload, replies, quotes. No Instagram equivalent exists in the official skill set. |
+| 2026-03-03 | OpenClaw tools index (`docs/tools/index.md`) via Context7 `/openclaw/openclaw` | Messaging covers Discord, Slack, Telegram, WhatsApp, Signal, iMessage, MS Teams. Instagram is NOT in the messaging platform list. |
+| 2026-03-03 | OpenClaw ClawHub docs (`docs/tools/clawhub.md`) via Context7 `/openclaw/openclaw` | ClawHub is the public skill registry. Install via `clawhub install <skill-slug>`. No security review or code signing for published skills. |
+| 2026-03-03 | OpenClaw skills docs (`docs/tools/skills.md`) via Context7 `/openclaw/openclaw` | Skills install into workspace `./skills` directory. OpenClaw picks them up on next session. No sandboxing mentioned. |
+| 2026-03-03 | Meta for Developers — Instagram Content Publishing API (`developers.facebook.com/docs/instagram-platform/content-publishing/`) | Two-step publish: create container, then publish. JPEG only for images. 100 posts/24h rate limit. Requires Professional account + Facebook Page + PPA. App review mandatory for third-party publishing. |
+
+## Social Media Skills Research — Bright Data (Tier 2-5)
+
+| Date | Source | Tier | Key Finding |
+|------|--------|------|-------------|
+| 2026-03-03 | Snyk — "ToxicSkills: Malicious AI Agent Skills" (snyk.io/blog, Feb 5, 2026) | 2 | 3,984 ClawHub skills scanned. 13.4% (534) have CRITICAL issues. 36.82% (1,467) have any security flaw. 76 confirmed malicious payloads. 91% of malicious skills combine prompt injection with malware. 8 malicious skills still live on ClawHub. |
+| 2026-03-03 | Newsfilecorp — "Genviral Releases OpenClaw Skill to Automate Social Media Content Across Six Platforms" | 2 | Genviral Partner API: 42 commands, supports TikTok, Instagram, YouTube, Facebook, Pinterest, LinkedIn. Slideshow generation, scheduling, analytics. Internal test: 25k TikTok views without human intervention. |
+| 2026-03-03 | AI CERTs — "OpenClaw Fuels Social Media Skill Automation With Genviral" | 4 | Details Genviral skill workflow: generate creative -> upload media -> render slideshow -> schedule post -> pull metrics -> iterate. Built-in throttling guards against platform limits. |
+| 2026-03-03 | n8n.io — "Automated AI content creation & Instagram publishing from Google Sheets" (workflow template #3840) | 2 | Working n8n workflow: Google Sheets -> Gemini (concept/prompt/caption) -> Replicate (image) -> Facebook Graph API (Instagram publish). Prerequisites include Instagram Business Account connected to Facebook Page. |
+| 2026-03-03 | Reddit r/AgentsOfAI — "I made a social media automation workflow with n8n + AI" | 4 | User built fully automated social media workflow with n8n + AI agents for content creation, publishing, and basic engagement. |
+| 2026-03-03 | Reddit r/OpenClawUseCases — "We created the most sophisticated OpenClaw social media" | 4 | Genviral team announcing skill release and open API for social media content at scale. |
+| 2026-03-03 | PostProxy blog — "Post to Instagram via API in 2026: No Facebook App Review Headaches" (Feb 28, 2026) | 4 | Detailed breakdown of Instagram API prerequisites: Facebook account, Facebook Page, Professional account, page linking, PPA. App review takes 2-4 weeks per permission. Personal accounts excluded entirely. JPEG only, aspect ratio 4:5 to 1.91:1, 2,200 char caption limit. |
+| 2026-03-03 | Zapier — Instagram for Business + Anthropic (Claude) integration page | 2 | Zapier's pre-approved Instagram integration supports: Publish Photo(s) (single/carousel), Publish Video (Reels), raw API requests. Claude integration: Send Message action. Handles OAuth token management. |
+| 2026-03-03 | Genviral API docs (docs.genviral.io) | 2 | Social media posting API built for AI agents. Generate slideshows, post carousels, schedule Shorts, publish Pinterest pins, share LinkedIn content. Partner endpoint at genviral.io/api/partner/v1. |
+| 2026-03-03 | Post Bridge — OpenClaw Instagram integration (post-bridge.com/openclaw) | 4 | Alternative API for OpenClaw to "plan, write, and actually post content to Instagram, TikTok." |
+| 2026-03-03 | VoltAgent/awesome-openclaw-skills (GitHub) | 3 | 5,400+ skills cataloged from the official ClawHub registry, filtered and categorized. Indicates large but unvetted ecosystem. |
+| 2026-03-03 | foxessellfaster.com — "How to Set Up an AI Agent for Real Estate in 2026" | 4 | Recommends Claude Pro + Telegram bot as starting stack for real estate AI agents. Does not recommend self-hosted agent platforms for social media. |
+| 2026-03-03 | mindstudio.ai — "10 AI Agents for Real Estate Professionals" (Feb 2026) | 4 | AI agents for real estate focused on lead follow-up, listings, and client communication — not social media posting. Social media treated as content creation problem, not agent problem. |
+| 2026-03-03 | Elfsight — "Instagram Graph API: Complete Developer Guide for 2026" | 4 | Instagram Graph API uses Business Use Case (BUC) rate limiting. Connect Instagram to Facebook Page required as first step. |
+| 2026-03-03 | Lumadock — "Automate social media with OpenClaw scheduling and automation" | 4 | Tutorial for cross-platform scheduling, approvals, analytics, and safer automation from chat channels. |
+| 2026-03-03 | Placester — "13 Impactful Real Estate Marketing AI News in 2026" | 4 | AI adoption increasing across real estate marketing. Industry data shows major platforms integrating AI tools. |
+| 2026-03-03 | autoreelapp.com — "AI-Powered Marketing Trends Real Estate 2026" | 4 | Real estate marketing automation ensures consistent follow-ups. AI-powered tools reducing manual workload for agents. |
