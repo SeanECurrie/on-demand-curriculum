@@ -104,7 +104,12 @@ The engine runs five stages to produce each output. Full details in the design d
 │   │   ├── credibility-tiers.md
 │   │   ├── three-tier-hardening.md
 │   │   ├── research-cadence-template.md
-│   │   └── editorial-standards.md
+│   │   ├── editorial-standards.md
+│   │   ├── depth-assessment.md
+│   │   ├── binary-self-tests.md
+│   │   ├── findings-pattern-library.md
+│   │   ├── anti-patterns.md
+│   │   └── section-construction.md
 │   ├── intake/                 # How new outputs start
 │   │   ├── intake-process.md
 │   │   └── operator-profile-template.md
@@ -115,7 +120,12 @@ The engine runs five stages to produce each output. Full details in the design d
 │   │   └── interactive-html/
 │   ├── patterns/               # Cross-output reusable patterns
 │   └── skills/                 # Engine-level skills
-│       └── session-restart/
+│       ├── session-restart/
+│       ├── depth-assessment/
+│       ├── self-test/
+│       ├── findings-pattern/
+│       ├── anti-pattern-check/
+│       └── section-construction/
 └── outputs/                    # Each person's tailored deliverable
     └── openclaw-sean/          # Output #1 — reference implementation
 ```
@@ -215,6 +225,18 @@ This engine follows a disciplined skill chain. Skills are invoked via the Skill 
 | 6 | `superpowers:verification-before-completion` | Validate each phase before moving on |
 | 7 | `superpowers:systematic-debugging` | Diagnose issues during any engine or output work |
 | 8 | `superpowers:requesting-code-review` | Review completed work against requirements |
+
+### Engine Pipeline Skills
+
+These skills operate within the pipeline stages, invoked during actual engine work:
+
+| Skill | When to Invoke | Pipeline Stage |
+|-------|---------------|----------------|
+| `depth-assessment` | Start of any substantive pipeline work | All stages |
+| `findings-pattern` | During research synthesis (writing KB entries, intelligence log, reports) | Research → Synthesis |
+| `anti-pattern-check` | Periodically during output work, or when something feels off | All stages |
+| `section-construction` | Generating complex outputs (deep-dive only, >500 lines) | Output Generation |
+| `self-test` | Before declaring any substantive work complete | All stages |
 
 ### Skill Discipline Rules
 - If a skill applies (even 1% chance), invoke it — no rationalizing

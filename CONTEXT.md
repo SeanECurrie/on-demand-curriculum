@@ -28,6 +28,9 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 
 - 2026-03-03: Engine created from restructure of ClawdBot Research Project
 - Output #1 (OpenClaw/Sean) serves as reference implementation
+- 2026-03-03: Instructional design patterns integrated — 5 methodology docs + 5 operational skills
+  Source: Reverse-engineered from Cole Medin's excalidraw-diagram-skill (meta-patterns, not tool-specific)
+  Patterns: depth assessment, binary self-tests, findings pattern library, anti-pattern gallery, section construction
 
 ## Key Decisions
 
