@@ -1,6 +1,11 @@
 # Open Questions — OpenClaw for Jeff (Output #2)
 
 **Date:** 2026-03-03
+**Report Type:** Open Questions
+**Depth:** Full
+**Sources:** Cross-references all KB entries and Reports 01-04
+**Credibility:** Resolution confidence documented per question
+
 **Questions:** 10
 **Resolved by prior research:** 3
 **Resolved by this research:** 5
@@ -103,3 +108,34 @@ Resolved with high confidence. `tar` of `~/.openclaw` directory captures all sta
 | Q8 (API cost) | Task 8 | `06-community-intelligence/community-findings.md` |
 | Q9 (Updates) | Task 8 | `06-community-intelligence/community-findings.md` |
 | Q10 (Backup) | Task 8 | `06-community-intelligence/community-findings.md` |
+
+---
+
+## Synthesis Notes
+
+Added during Report synthesis (Task 9, 2026-03-03). These notes capture how open question resolutions informed the five research reports.
+
+### How Open Questions Shaped the Reports
+
+**Q1 (RAM)** directly informed Report 03 (Feasibility) RAM analysis. The ZeroClaw production measurement (420-440 MB per instance) gave us the concrete number needed to make the 24 GB recommendation with high confidence rather than relying on official minimums alone.
+
+**Q2 (Instagram) + Q5 (Rate Limiting)** together shaped the recommended split architecture documented across Reports 02 and 04. The finding that OpenClaw has no native Instagram skill, combined with the ClawHub security risk, drove the recommendation to separate content generation (OpenClaw) from content publishing (Zapier). This is both a capability decision and a security decision.
+
+**Q4 (Brand Voice)** resolved cleanly and requires no special treatment in the reports. The SOUL.md/IDENTITY.md system is standard persistent prompt engineering -- the walkthrough simply needs to include creating these files during setup.
+
+**Q7 (Google Workspace)** remains deferred to Phase 2. Report 04 (Security) documents the prompt injection risk of connecting Gmail to the agent. The recommendation is explicit: Jeff should use Google Workspace normally via browser and use OpenClaw only for content creation, at least in Phase 1.
+
+**Q8 (API Cost)** resolved at $3-10/month for Claude API, which is dramatically lower than most users expect. This finding should be highlighted early in the walkthrough to set expectations -- cost is not a barrier for Jeff's use case.
+
+### Unresolved Items and Their Impact on the Walkthrough
+
+**Q1 (Long-term memory)** and **Q3 (Latency under load)** remain unresolved. Neither blocks the walkthrough:
+
+- **Q1** requires monitoring during Jeff's first week. The walkthrough should include a simple RAM check step at days 1, 3, and 7. If memory grows beyond 10 GB total with OrbStack, the walkthrough should provide a restart procedure.
+- **Q3** is practically irrelevant. Even if latency doubles during batch sessions, 10-15 seconds per draft is acceptable for async review. No walkthrough action needed.
+
+### Completeness Assessment
+
+The open questions report is complete. All 10 original questions have been addressed: 8 resolved with high confidence, 2 deferred to hands-on testing with clear monitoring procedures. No new questions emerged during synthesis that are not already covered by the reports.
+
+The cross-reference matrix accurately maps each question to its KB source. No orphaned findings -- every KB entry is referenced by at least one question or report.
