@@ -137,3 +137,4 @@ Binary yes/no checks to run after assigning credibility tiers to research source
 - `editorial-standards.md` — How tiered findings are documented and cited
 - `research-cadence-template.md` — How often to refresh findings at each tier
 - `binary-self-tests.md` — The full binary self-test framework and pipeline-stage tests
+- `depth-assessment.md` — How to classify work depth before starting any pipeline stage

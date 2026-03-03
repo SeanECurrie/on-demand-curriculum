@@ -100,10 +100,10 @@ After all sections exist, review the complete output as a unified document.
 
 3. **Check flow.** Does information build logically? Are transitions smooth? Does any section assume knowledge not yet covered?
 
-4. **Check balance.** Are sections proportional to their importance? The section driving the most important decision (often security) should be the deepest. If all sections are roughly equal length, suspect the "Symmetric Knowledge Base" anti-pattern.
+4. **Check balance.** Are sections proportional to their importance? The section driving the most important decision (often security) should be the deepest. If all sections are roughly equal length, depth was distributed by habit, not by value.
 
 5. **Run the anti-pattern check.** Specifically watch for:
-   - **Symmetric Knowledge Base** — all sections roughly equal despite unequal importance
+   - **Symmetric section lengths** — all sections roughly equal despite unequal importance
    - **Missing Source Trail** — sources cited in sections but not tracked centrally
    - **Understated Warning** — security findings that should be more prominent
 

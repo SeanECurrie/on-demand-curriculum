@@ -3,6 +3,9 @@ name: anti-pattern-check
 description: >
   Quick scan for known failure modes. Use periodically during research, synthesis, or output work.
   NOT mandatory — a spot-check when something feels off or when producing substantial output.
+  Invoke when completing a large section, when a finding feels undercooked, when you notice
+  scope changing, when research has been running for multiple sessions, or when Sean says
+  "does this look right?", "sanity check this", "anything feel off?", or similar.
 ---
 
 # Anti-Pattern Check — On-Demand Curriculum Engine

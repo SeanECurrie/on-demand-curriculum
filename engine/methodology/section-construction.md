@@ -92,10 +92,10 @@ After all sections exist, review the complete output as a unified document.
 
 3. **Check flow.** Does the eye move through sections in a logical order? Are transitions between sections smooth? Does information build on itself, or does a later section assume knowledge that was not covered earlier?
 
-4. **Check balance.** Are sections proportional to their importance? A GO/NO-GO security evaluation should be substantially deeper than a routine configuration step. If all sections are roughly the same length, the balance is probably wrong (see the "Symmetric Knowledge Base" anti-pattern in `anti-patterns.md`).
+4. **Check balance.** Are sections proportional to their importance? A GO/NO-GO security evaluation should be substantially deeper than a routine configuration step. If all sections are roughly the same length, the balance is probably wrong — equal-length sections across unequal-importance topics is a sign that depth was distributed by habit, not by value.
 
 5. **Run the anti-pattern check** on the whole output (see `anti-patterns.md`). In particular, watch for:
-   - The Symmetric Knowledge Base — all sections roughly equal despite unequal importance
+   - Symmetric section lengths despite unequal topic importance (depth distributed by habit, not value)
    - The Missing Source Trail — sources cited in sections but not tracked centrally
    - The Understated Warning — security findings that should be more prominent
 
@@ -266,7 +266,7 @@ Binary tests specific to section construction quality. Run these during Phase C 
 
 7. "Search for every anchor referenced by another section. Do all of them resolve?" YES/NO — If NO: broken cross-references. Fix before delivery.
 8. "Read the output from start to finish without stopping. Did any section feel repetitive of a previous section?" YES/NO — If YES: deduplicate or cross-reference instead of repeating.
-9. "Is the deepest section the one that drives the most important decision?" YES/NO — If NO: the balance may be wrong (see "Symmetric Knowledge Base" anti-pattern).
+9. "Is the deepest section the one that drives the most important decision?" YES/NO — If NO: depth is misallocated. The most important decision deserves the most thorough treatment.
 10. "Run the anti-pattern check. Did any anti-pattern match?" YES/NO — If YES: fix before delivery.
 
 ---
