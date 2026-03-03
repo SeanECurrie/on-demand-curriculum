@@ -104,3 +104,34 @@ Sources reused from Output #1 (openclaw-sean) are marked with `[inherited]` and 
 | 2026-03-03 | Lumadock — "Automate social media with OpenClaw scheduling and automation" | 4 | Tutorial for cross-platform scheduling, approvals, analytics, and safer automation from chat channels. |
 | 2026-03-03 | Placester — "13 Impactful Real Estate Marketing AI News in 2026" | 4 | AI adoption increasing across real estate marketing. Industry data shows major platforms integrating AI tools. |
 | 2026-03-03 | autoreelapp.com — "AI-Powered Marketing Trends Real Estate 2026" | 4 | Real estate marketing automation ensures consistent follow-ups. AI-powered tools reducing manual workload for agents. |
+
+## Landscape Research — Bright Data (Tier 2-5)
+
+| Date | Source | Tier | Key Finding |
+|------|--------|------|-------------|
+| 2026-03-03 | Medium — "5 OpenClaw Alternatives That Are Getting Better By the Day" (Joe Njenga, Mar 2026) | 4 | NanoClaw, PicoClaw, and other lightweight forks emerging. None match OpenClaw's full feature set for non-technical users. |
+| 2026-03-03 | DataCamp — "Top OpenClaw Alternatives: From Local to Enterprise AI" (Mar 2026) | 3 | Comprehensive comparison including Nanobot, n8n, AWS Bedrock Agents. Confirms OpenClaw's unique position for self-hosted, ready-to-deploy agents. |
+| 2026-03-03 | Cryptika Cybersecurity — "OpenClaw Releases 2026.2.23 Released With Security Updates" (Feb 2026) | 3 | v2026.2.23 adds Claude Opus 4.6 support, security hardening. Confirms active development and rapid patching cadence. |
+
+## Inherited from Output #1
+
+The following sources were inherited from Output #1's competitive landscape research (2026-02-11, updated 2026-02-22). These informed the landscape brief without re-scraping. Full details in `outputs/openclaw-sean/knowledge-base/01-landscape/competitive-landscape.md`.
+
+| Date | Source | Tier | Used For |
+|------|--------|------|----------|
+| 2026-02-11 | CNBC — OpenClaw rise and controversy | 2 | OpenClaw market position, community momentum, security warnings |
+| 2026-02-11 | Galileo.ai — AutoGen vs CrewAI vs LangGraph vs OpenAI | 3 | Framework comparison (alternatives) |
+| 2026-02-11 | Composio — OpenAI SDK vs LangGraph vs AutoGen vs CrewAI | 3 | Framework comparison (alternatives) |
+| 2026-02-11 | Budibase — 8 Open-Source AI Agent Platforms 2026 | 3 | Landscape overview |
+| 2026-02-11 | Contabo — OpenClaw Self-Hosted Guide | 4 | Self-hosted deployment reference, data sovereignty |
+| 2026-02-11 | C# Corner — OpenClaw vs n8n Explained | 4 | n8n comparison |
+| 2026-02-11 | Emergent.sh — 6 OpenClaw Competitors 2026 | 4 | Competitor identification |
+| 2026-02-11 | Reddit r/AI_Agents — Top Tools 2026 | 4 | Community tool preferences |
+| 2026-02-11 | Reddit r/OpenClawCentral — OpenClaw vs Similar Tools | 4 | Community comparison |
+| 2026-02-11 | HumAI — 30+ AI Agents Tested | 3 | Broad landscape validation |
+| 2026-02-11 | TowardsAI — 4 Best Multi-Agent Frameworks 2026 | 3 | Framework landscape |
+| 2026-02-11 | Langfuse — Open-Source AI Agent Frameworks Comparison | 3 | Framework comparison |
+| 2026-02-11 | SourceForge — AutoGPT vs OpenClaw | 4 | AutoGPT decline confirmation |
+| 2026-02-11 | Reddit r/LocalLLaMA — C/ua Apple Silicon Agents | 4 | macOS-native alternative awareness |
+| 2026-02-11 | Medium — Top 10 GitHub Starred Frameworks 2026 | 4 | GitHub stars / momentum data |
+| 2026-02-11 | Nuvi.dev — AI Agent Framework Comparison | 4 | Framework comparison |
