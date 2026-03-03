@@ -2,7 +2,7 @@
 
 **Purpose:** Documents the interactive HTML shell that the On-Demand Curriculum Engine uses to deliver walkthroughs. This README describes what the shell provides, how content gets inserted, and what is parameterizable vs. fixed.
 
-**Reference implementation:** Output #1 (OpenClaw) at `outputs/01-openclaw/docs/walkthrough/interactive/`
+**Reference implementation:** Output #1 (OpenClaw) at `outputs/openclaw-sean/docs/walkthrough/interactive/`
 
 ---
 
