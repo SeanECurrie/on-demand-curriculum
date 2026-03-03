@@ -15,7 +15,7 @@
 | V1 (Browser Render) | **FAIL** | No evidence of systematic visual verification. No Puppeteer screenshots, no manual screenshot artifacts, no render-validate log entries. The walkthrough was built and shipped without a visual QA pass. |
 | V2 (Isomorphism) | **PARTIAL (5/8)** | See per-diagram results below. Three diagrams fail the Isomorphism Test — their structure alone does not communicate the concept without labels. |
 | V3 (Diagram Spec Compliance) | **FAIL** | Significant divergence between the 8 specs in style guide Section 7 and the 8 diagrams actually implemented. 3 of 8 diagrams implement a different type/pattern than specified. Details below. |
-| V4 (Expandable Sections) | **PASS** | All expandable sections use consistent DOM structure: `.expandable` > `button.expandable-trigger[aria-expanded]` > `.expandable-content[style="display:none"]`. JS toggle at line 2074 correctly flips `aria-expanded` and `display`. Keyboard escape (line 3010) collapses all expanded sections. Print styles force all expandable-content visible (`display: block !important`). |
+| V4 (Expandable Sections) | **PASS (with caveat)** | DOM structure is correct per source analysis: `.expandable` > `button.expandable-trigger[aria-expanded]` > `.expandable-content[style="display:none"]`. JS toggle at line 2074 correctly flips `aria-expanded` and `display`. Keyboard escape (line 3010) collapses all expanded sections. Print styles force all expandable-content visible (`display: block !important`). **However, fidelity report documents that 14 of 22 troubleshooting expandables have empty content containers at runtime — bullets appear outside the expandable div instead of inside.** This discrepancy validates the core render-validate principle: source code inspection alone is insufficient. The DOM looks correct in the HTML source, but the browser renders broken expandables. This is exactly the failure mode V1 and the render-validate skill are designed to catch. |
 | V5 (State Persistence) | **PARTIAL** | Checkboxes: PASS — each has a unique `data-key` (e.g., `check-phase-0-0`), persisted via `localStorage.getItem`/`setItem` with restore on load (line 2084-2095). Theme: PASS — persisted via `walkthrough-theme` key. Validation dashboard: PASS — persisted via `walkthrough-validation` key. **Notes fields: FAIL** — CSS class `.notes-input` is defined (line 455) but zero elements in the HTML use it. The deployment-notes sections show "Notes / deviations / surprises:" as plain text with no input element, so users cannot actually record notes. |
 | V6 (Color Reference Compliance) | **FAIL** | Multiple dark-mode fill values in `diagrams.js` diverge from `diagram-color-reference.md`. Additionally, diagrams use only 5 of the 7 semantic categories — Agent/LLM (purple) and External Service (indigo) are never used, even where semantically appropriate. Details below. |
 
@@ -76,7 +76,7 @@
 
 ## Summary
 
-- **Tests passed:** 1.5 / 6 (V4 clean pass, V5 partial pass on checkboxes/theme, failures on V1, V3, V6, V2 partial)
+- **Tests passed:** 1.5 / 6 (V4 pass with caveat — DOM correct but 14/22 expandables broken at runtime, V5 partial pass on checkboxes/theme, failures on V1, V3, V6, V2 partial)
 - **Diagrams passing isomorphism:** 5 / 8 (Phase Overview weak pass; Gateway Architecture, Skill Security, and Validation Dashboard fail)
 - **Key findings:**
   1. **No visual verification was ever performed on Output #1.** V1 catches this correctly — the entire output was built without systematic render verification.
