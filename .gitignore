@@ -7,6 +7,9 @@ Thumbs.db
 credentials/
 secrets/
 
+# Operator profiles (PII — kept locally, not published)
+outputs/*/operator/
+
 # Raw scrape cache (large, regenerable)
 research/scrapes/raw/
 
