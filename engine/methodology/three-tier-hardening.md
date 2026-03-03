@@ -132,3 +132,4 @@ For a worked example of this framework applied to a real deployment walkthrough 
 - `editorial-standards.md` — How hardening guidance is written and framed
 - `dual-source-intelligence.md` — How hardening recommendations are researched
 - `credibility-tiers.md` — How to weight sources when hardening advice conflicts
+- `depth-assessment.md` — How to classify work depth before starting any pipeline stage

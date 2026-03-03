@@ -141,3 +141,4 @@ Before publishing any engine output, verify:
 - `dual-source-intelligence.md` — The research methodology that produces findings
 - `three-tier-hardening.md` — How deployment steps are classified
 - `research-cadence-template.md` — How research freshness is maintained
+- `depth-assessment.md` — How to classify work depth before starting any pipeline stage

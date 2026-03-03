@@ -145,3 +145,4 @@ For a worked example of this methodology applied to a real tool evaluation, see 
 - `credibility-tiers.md` — How to weight sources from each channel
 - `research-cadence-template.md` — How often to run each type of research sweep
 - `editorial-standards.md` — Standards for how findings are documented and cited
+- `depth-assessment.md` — How to classify work depth before starting any pipeline stage
