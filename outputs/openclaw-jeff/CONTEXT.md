@@ -9,8 +9,9 @@ Tailored interactive walkthrough for Jeff (Denver real estate agent, Hatch brand
 
 ## Current Status
 
-- **Phase:** Intake
-- **Pipeline stage:** Scaffolding complete, operator profile next
+- **Phase:** Research
+- **Pipeline stage:** Intake complete (scaffold + operator profile + depth assessment). Starting research.
+- **Depth assessment:** Deep-dive (multi-stage pipeline, interactive HTML output >500 lines, multiple research reports)
 - **Deployment target:** MacBook Air (config TBD — output is config-agnostic)
 - **LLM:** Claude (subscription)
 
