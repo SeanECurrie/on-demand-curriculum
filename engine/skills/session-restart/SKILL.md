@@ -20,8 +20,12 @@ oriented fast without bloating the context window. Follow these steps in order.
 Read the session state file first — it's the single source of truth for where things stand:
 
 ```
-Read: operator/session-state.md
+Read: outputs/openclaw-sean/operator/session-state.md
 ```
+
+<!-- NOTE: This skill currently has hardcoded paths for Output #1 (outputs/openclaw-sean/).
+     It needs adaptation for engine-level vs output-level usage — the output path should be
+     parameterized so the skill works for any output, not just OpenClaw/Sean. -->
 
 This file tracks:
 - Which walkthrough phase is current (and which are done)
@@ -29,7 +33,7 @@ This file tracks:
 - What happened last session
 - What's queued next
 
-If `session-state.md` doesn't exist yet, create it using the template in Step 5 below.
+If `session-state.md` doesn't exist yet for this output, create it using the template in Step 5 below.
 
 ## Step 2: Load Core Context (Selectively)
 
@@ -38,15 +42,15 @@ load everything if you don't need it.
 
 **Always read (they're short and high-signal):**
 ```
-Read: CONTEXT.md
+Read: outputs/openclaw-sean/CONTEXT.md
 ```
 
-CONTEXT.md has: current status, key decisions, open questions, known gaps, experimental
-use cases. It's the project map.
+The output CONTEXT.md has: current status, key decisions, open questions, known gaps,
+experimental use cases. It's the output map. (The root CONTEXT.md is the engine-level map.)
 
 **Read if session state says "posture check needed" or if this is your first session:**
 ```
-Read: operator/project-genesis.md
+Read: outputs/openclaw-sean/operator/project-genesis.md
 ```
 
 This has the refined purpose. Reminds you: learning lab, not production. Transferable
@@ -55,7 +59,7 @@ professional credibility.
 
 **Read if you need to gut-check whether your approach matches Sean's actual intent:**
 ```
-Read: operator/purpose-refinement-2026-02-22.md
+Read: outputs/openclaw-sean/operator/purpose-refinement-2026-02-22.md
 ```
 
 This is the raw, unfiltered conversation about WHY this project exists. It's the
@@ -63,7 +67,7 @@ calibration document. Use it when direction feels uncertain.
 
 **Read if the session involves deployment work:**
 ```
-Read: docs/walkthrough/crib-sheet.md
+Read: outputs/openclaw-sean/docs/walkthrough/crib-sheet.md
 ```
 
 The crib sheet is the quick-reference version of the walkthrough. Faster to load than
@@ -79,7 +83,7 @@ Run a quick staleness check on the session state and CONTEXT.md:
    diving into work?"
 3. Check the intelligence log tail (last 5 entries) for anything that might affect today's work:
    ```
-   Read: intelligence-log.md (last 30 lines)
+   Read: outputs/openclaw-sean/intelligence-log.md (last 30 lines)
    ```
 
 ## Step 4: Present Session Brief
@@ -113,7 +117,7 @@ During the session, keep session-state.md current. Update it when:
 
 ### Session State Template
 
-If `operator/session-state.md` doesn't exist, create it with this structure:
+If `outputs/<output-name>/operator/session-state.md` doesn't exist, create it with this structure:
 
 ```markdown
 # Session State — ClawdBot Research Project
