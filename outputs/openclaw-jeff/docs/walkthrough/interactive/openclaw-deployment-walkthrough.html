@@ -2048,6 +2048,11 @@ find ~/.openclaw/agents/*/sessions/ -mtime +30 -delete</code></pre></div>
       navigator.clipboard.writeText(code.textContent).then(function() {
         btn.classList.add('copied');
         setTimeout(function() { btn.classList.remove('copied'); }, 1500);
+      }).catch(function() {
+        var range = document.createRange();
+        range.selectNodeContents(code);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
       });
     });
   });
@@ -2177,11 +2182,15 @@ var roughDefaults = {
 
 // ─── Shared utilities ───
 var _resizeTimers = {};
+var _resizeRegistered = {};
 
 function debounceResize(id, fn) {
+  _resizeTimers[id] = { fn: fn };
+  if (_resizeRegistered[id]) return;
+  _resizeRegistered[id] = true;
   window.addEventListener('resize', function() {
-    clearTimeout(_resizeTimers[id]);
-    _resizeTimers[id] = setTimeout(fn, 250);
+    clearTimeout(_resizeTimers[id].timer);
+    _resizeTimers[id].timer = setTimeout(_resizeTimers[id].fn, 250);
   });
 }
 
