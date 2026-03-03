@@ -60,4 +60,4 @@ Every diagram element belongs to exactly one semantic category. The category det
 
 - **Walkthrough style guide Section 6:** `engine/templates/walkthrough-style-guide.md` — full diagram design specifications (node shapes, sizing, connector styles, dark mode adjustments)
 - **Section construction methodology:** `engine/methodology/section-construction.md` — how diagrams fit into the broader section-building process
-- **Render-validate skill:** `engine/skills/render-validate/SKILL.md` — visual QA loop for verifying rendered diagrams match specifications *(planned — Task 4)*
+- **Render-validate skill:** `engine/skills/render-validate/SKILL.md` — visual QA loop for verifying rendered diagrams match specifications
