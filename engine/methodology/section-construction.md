@@ -99,6 +99,43 @@ After all sections exist, review the complete output as a unified document.
    - The Missing Source Trail — sources cited in sections but not tracked centrally
    - The Understated Warning — security findings that should be more prominent
 
+### Phase C.5: Render-Validate Loop (Visual/Interactive Outputs Only)
+
+**This phase is mandatory for any output that contains visual elements** — diagrams, interactive components, styled HTML, or anything where the rendered appearance matters. Skip this phase only if the output is pure text (markdown documents, knowledge base entries, methodology docs).
+
+The core principle: **you cannot judge visual output from source code alone.** A hidden `display:none` diagram, a broken expandable section, a color that fails contrast, overlapping labels — all of these are invisible in the source and obvious in the browser. This phase forces visual verification.
+
+**Origin:** Cole Medin's Excalidraw skill makes render-validate mandatory with 2-4 iterations typical. The same principle applies to HTML walkthroughs: generate → render in browser → view → audit against style guide → fix → re-render.
+
+**The loop:**
+
+1. **Render the output.** Open the HTML file in a browser (via Puppeteer MCP or manually). This is not optional — "I'll check it later" is how Output #1 shipped with a hidden diagram and 14 broken expandables.
+
+2. **Screenshot and view.** Take screenshots of each major section/phase. View them as a reader would — not as the person who wrote the code. Look at what's actually on screen, not what you expect to see.
+
+3. **Audit against the style guide.** For each screenshot, check:
+   - Do all diagrams render and display? (Not hidden, not blank, not errored)
+   - Do expandable sections expand and collapse correctly? (Click each one)
+   - Do interactive elements work? (Checkboxes persist, notes fields save, copy buttons copy)
+   - Does dark mode toggle correctly? (Diagrams re-render, colors shift, contrast holds)
+   - Do code blocks have the correct styling? (Language labels, copy buttons, monospace font)
+   - On mobile viewport: does the layout adapt? (Sidebar becomes hamburger, tables scroll, touch targets are 44px+)
+
+4. **Audit against your diagram design intent.** For each diagram:
+   - Does the visual pattern match what you selected in the concept-to-pattern mapping (style guide Section 5.5)?
+   - Does the diagram pass the Isomorphism Test — would the structure communicate the concept without text labels?
+   - Are colors correct per `diagram-color-reference.md`?
+   - Are labels readable and not clipped by their containers?
+   - Do arrows connect to the intended elements?
+
+5. **Fix everything found.** Edit the source to address every defect. Do not defer visual fixes — they compound.
+
+6. **Re-render and re-view.** After fixes, render again. Check that fixes worked and didn't introduce new issues. Repeat until the output passes both the style guide audit and the diagram design audit.
+
+**When to stop:** The loop is done when every diagram renders correctly, every interactive element works, the layout responds to viewport changes, and you could show the output to Sean without caveats about "known issues."
+
+**Typical iteration count:** 2-4 passes for a full walkthrough. The first pass catches the obvious (broken elements, missing renders). The second catches the subtle (clipped labels, uneven spacing, color inconsistencies). The third is confirmation. If you need more than 4, the construction process has a systematic issue — investigate rather than iterating endlessly.
+
 ### Phase D: Iterate
 
 Fix anything found in Phase C. This may require editing multiple sections if a cross-reference or flow issue spans sections.
@@ -268,6 +305,8 @@ Binary tests specific to section construction quality. Run these during Phase C 
 8. "Read the output from start to finish without stopping. Did any section feel repetitive of a previous section?" YES/NO — If YES: deduplicate or cross-reference instead of repeating.
 9. "Is the deepest section the one that drives the most important decision?" YES/NO — If NO: depth is misallocated. The most important decision deserves the most thorough treatment.
 10. "Run the anti-pattern check. Did any anti-pattern match?" YES/NO — If YES: fix before delivery.
+11. "Has the output been rendered in a browser and visually inspected since the last edit?" YES/NO — If NO: you are shipping unverified visual output. Run the render-validate loop (Phase C.5).
+12. "Open the output in a browser. Click every expandable section. Do they all expand and collapse correctly?" YES/NO — If NO: broken interactive elements. Fix before delivery.
 
 ---
 
