@@ -1302,6 +1302,8 @@ openclaw config set agents.defaults.sandbox.docker.user "1000:1000"</code></pre>
 
 <p><strong>Expected output:</strong> Shows sandbox mode "all," network "none," readOnlyRoot "true."</p>
 
+<p><strong>What each setting does:</strong> <code>network none</code> cuts off the sandbox's internet access (the agent communicates through the gateway instead). <code>readOnlyRoot</code> prevents the agent from modifying system files. <code>capDrop ALL</code> strips all special permissions — the agent can only perform basic operations inside its sandbox, with no ability to modify system settings, access hardware, or escalate its own privileges. <code>user "1000:1000"</code> runs the agent as a non-root user inside the container.</p>
+
 <p><strong>What this prevents:</strong> Without the sandbox, a tricked agent could access everything on your computer — your client files, browser sessions, saved passwords. With the sandbox, even a compromised agent is contained in its locked room.</p>
 
 <div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: What a sandbox actually does (transferable)</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>A sandbox is like a padded room in a bank where employees handle cash. The room has cameras, the door locks from the outside, and nothing leaves without being checked. Even if an employee makes a mistake (or is compromised), the damage stays in the room. In computing, sandboxes use the same principle: the program runs inside an isolated environment where it can do its job but can't affect anything outside. This applies to any software that runs code on your behalf — browser extensions, AI agents, automation tools. If it can be sandboxed, it should be.</p></div></div></div>
@@ -1436,7 +1438,7 @@ openclaw config set agents.defaults.sandbox.docker.user "1000:1000"</code></pre>
     <h1 class="phase-title">Prompting — Working With Your Agent</h1>
   </div>
 
-<p>Now that OpenClaw is installed and secured, you need to learn how to talk to it effectively. This section covers how to give your agent instructions that produce useful results — specifically for your real estate content workflow.</p>
+<p>Your system is installed and locked down. Now it's time to actually use it. This section covers how to talk to your agent effectively — specifically for your real estate content workflow.</p>
 
 <p>The skills in this section transfer to every AI tool you'll ever use. Whether it's Claude directly, ChatGPT, Gemini, or any future AI platform, the principles of good prompting are the same.</p>
 
@@ -1467,6 +1469,12 @@ openclaw config set agents.defaults.sandbox.docker.user "1000:1000"</code></pre>
   <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-soul" id="s6-soul"><label class="checkbox-label" for="s6-soul">In the Dashboard, navigate to your agent's workspace (or use the file path <code>~/.openclaw/workspace/</code>)</label></div>
   <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s6-soul-create" id="s6-soul-create"><label class="checkbox-label" for="s6-soul-create">Create a file called <code>SOUL.md</code> with this content (customize it for your actual voice):</label></div>
 </div>
+
+<p><strong>How to create the file:</strong> Open Terminal and run:</p>
+
+<div class="code-block" id="code-s6-create-soul"><span class="code-lang">bash</span><button class="copy-btn" data-target="code-s6-create-soul" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code>open -a TextEdit ~/.openclaw/workspace/SOUL.md</code></pre></div>
+
+<p>This opens TextEdit with a new file at the right location. Paste the content below, then save (Command+S). If TextEdit asks about format, choose "Use Plain Text." Repeat this same process for IDENTITY.md and USER.md below.</p>
 
 <div class="code-block" id="code-s6-soul"><span class="code-lang">markdown</span><button class="copy-btn" data-target="code-s6-soul" title="Copy to clipboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><pre><code># Brand Voice — Jeff Answers / Hatch Real Estate
 
@@ -1775,6 +1783,43 @@ and #JeffAnswers.</code></pre></div>
 </div>
 
 <p><strong>Expected result:</strong> A post appears on your Instagram from the content in your spreadsheet.</p>
+
+<h4>Zapier Configuration Tips</h4>
+
+<p><strong>Setting up the Google Sheets trigger correctly:</strong> In Zapier's trigger setup, you need to tell it which worksheet and which column to watch. Select your "Jeff Instagram Content Calendar" spreadsheet, choose Sheet1, and set the trigger column to the Status column (column E). Zapier will check this column every 1-15 minutes (depending on your plan) for rows where Status changes to "Ready."</p>
+
+<p><strong>Mapping fields in the Instagram action:</strong> When configuring the "Publish Photo" action, Zapier shows a form with fields to fill. Map them like this:</p>
+<ul>
+  <li><strong>Photo URL</strong> → select "Image URL" from your Google Sheets data (column D)</li>
+  <li><strong>Caption</strong> → select "Caption" (column B), then click the "+" button and also add "Hashtags" (column C) with a line break between them</li>
+</ul>
+
+<p><strong>Setting up the status update step:</strong> Add a third step to your Zap: "Update Spreadsheet Row in Google Sheets." Map it to update the Status column (E) to "Posted" for the row that triggered the Zap. This closes the loop so you always know what's been published.</p>
+
+<h4>Zapier Troubleshooting</h4>
+
+<div class="expandable"><button class="expandable-trigger troubleshooting-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Zap runs but Instagram shows an error</span></button><div class="expandable-content" style="display:none">
+<p><strong>Image format error:</strong> Instagram's API only accepts JPEG images. If your image is PNG, convert it to JPEG first. Aspect ratios must be between 4:5 (portrait) and 1.91:1 (landscape). Square (1:1) always works.</p>
+<p><strong>Permission error:</strong> Your Instagram Business account may have disconnected from Zapier. Go to Zapier &gt; My Apps &gt; Instagram for Business and reconnect. You may also need to re-authorize on Meta's end.</p>
+<p><strong>"Media posted before" error:</strong> Instagram rejects duplicate image URLs. Make sure each post uses a unique image.</p>
+</div></div>
+
+<div class="expandable"><button class="expandable-trigger troubleshooting-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Zap doesn't trigger when I set a row to "Ready"</span></button><div class="expandable-content" style="display:none">
+<p><strong>Check trigger configuration:</strong> Make sure the trigger is set to "New or Updated Spreadsheet Row" (not "New Spreadsheet Row" — that only fires on brand-new rows, not status changes).</p>
+<p><strong>Check Zap is turned on:</strong> In your Zapier dashboard, verify the Zap shows as "On" (green). New Zaps start in testing mode.</p>
+<p><strong>Polling delay:</strong> Free-tier Zaps check for changes every 15 minutes. If you just set a row to "Ready," wait 15 minutes before troubleshooting. Paid plans check every 1-5 minutes.</p>
+</div></div>
+
+<div class="expandable"><button class="expandable-trigger troubleshooting-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Free tier quota exceeded</span></button><div class="expandable-content" style="display:none">
+<p>Zapier's free tier allows 100 tasks per month. Each post uses 2-3 tasks (trigger + publish + update row). At 5 posts per week, that's 60-75 tasks per month — within the free tier. If you exceed it, Zapier will pause your Zaps until the next billing cycle.</p>
+<p><strong>Options:</strong> Reduce posting frequency, or upgrade to Zapier Starter (~$20/month) for 750 tasks. Most users at your posting volume stay within the free tier.</p>
+</div></div>
+
+<div class="expandable"><button class="expandable-trigger troubleshooting-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Instagram disconnects from Zapier</span></button><div class="expandable-content" style="display:none">
+<p>Instagram tokens expire every 60 days. Zapier usually handles refresh automatically, but sometimes the connection drops. Signs: Zap failures with "authentication" or "token expired" errors.</p>
+<p><strong>Fix:</strong> Go to Zapier &gt; My Apps &gt; Instagram for Business &gt; Reconnect. Follow the Meta authorization flow. Your Zaps will resume automatically.</p>
+<p>Set a calendar reminder every 50 days to check the connection proactively.</p>
+</div></div>
 
 <div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why Google Sheets as the bridge?</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>You might wonder why we're using a spreadsheet instead of a more sophisticated system. Three reasons: (1) you already know how to use Google Sheets, (2) it gives you a visual content calendar you can share with your business partner, and (3) it creates a clear audit trail of what was posted and when. Simplicity is a feature, not a limitation. You can add complexity later once the basic workflow is running. Start simple, add only what proves necessary.</p></div></div></div>
 
