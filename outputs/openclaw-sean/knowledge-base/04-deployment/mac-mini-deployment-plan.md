@@ -673,7 +673,7 @@ Add to `~/.openclaw/openclaw.json`:
 }
 ```
 
-**Architecture alternative (from Phase 2 research):** Instead of elevated mode, use per-agent routing. Create a restricted agent for most tasks and a less-restricted agent for specific trusted use cases. Each agent has its own sandbox, tools, and credentials. Source: knowledge-base/02-architecture/architecture-deep-dive.md.
+**Architecture alternative (from Phase 2 research):** Instead of elevated mode, use per-agent routing. Create a restricted agent for most tasks and a less-restricted agent for specific trusted use cases. Each agent has its own sandbox, tools, and credentials. Source: knowledge-base/02-architecture/deep-dive-findings.md.
 
 ### D5: Disable mDNS Broadcasting
 
@@ -809,7 +809,7 @@ openclaw config set agents.defaults.model "claude-opus-4-6-20250514"
 
 ### E2: Model Routing — Per-Agent Assignment
 
-**Why:** Phase 2 architecture research confirmed model routing is failover-based, NOT intelligent task-based routing. You manually assign models per agent or use `/model` to switch during conversation. Source: knowledge-base/02-architecture/architecture-deep-dive.md.
+**Why:** Phase 2 architecture research confirmed model routing is failover-based, NOT intelligent task-based routing. You manually assign models per agent or use `/model` to switch during conversation. Source: knowledge-base/02-architecture/deep-dive-findings.md.
 
 **Day-1 approach:** Use Claude Opus 4.6 for everything initially. Cost optimization (using cheaper models for routine tasks) comes in Week 1-2.
 
@@ -1475,7 +1475,7 @@ This plan synthesizes findings from 130+ sources across 4 credibility tiers:
 | `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md` | Phased skill roadmap, Day-1 tools, cost considerations (16 sources) |
 | `research/reports/04-security-evaluation.md` | 10 mandatory security conditions, Tim's recommendations validated/challenged |
 | `research/reports/05-open-questions.md` | 6 deployment blockers, 30 total open questions |
-| `knowledge-base/02-architecture/architecture-deep-dive.md` | Model routing, sub-agents, sandbox architecture, webhook API |
+| `knowledge-base/02-architecture/deep-dive-findings.md` | Model routing, sub-agents, sandbox architecture, webhook API |
 | `operator/sean-currie-profile.md` | Infrastructure details, working style, proven patterns |
 
 ---

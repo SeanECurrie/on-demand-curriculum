@@ -1304,7 +1304,7 @@ Add to `~/.openclaw/openclaw.json`:
 }
 ```
 
-**The better architecture (Pattern 002):** If you later find you genuinely need some tasks to run on the host (outside the sandbox), do not re-enable elevated mode. Instead, use OpenClaw's multi-agent architecture with per-agent routing. Create a restricted agent for most interactions and a separate, less-restricted agent for specific trusted use cases. Each agent gets its own sandbox config, tool permissions, and session isolation. Route messages to agents based on channel and sender using the bindings system. This gives you the same capability as elevated mode but with architectural isolation instead of a global escape hatch. See `patterns/002-per-agent-routing-over-elevated-mode.md` for the full pattern and configuration example.
+**The better architecture (Pattern 002):** If you later find you genuinely need some tasks to run on the host (outside the sandbox), do not re-enable elevated mode. Instead, use OpenClaw's multi-agent architecture with per-agent routing. Create a restricted agent for most interactions and a separate, less-restricted agent for specific trusted use cases. Each agent gets its own sandbox config, tool permissions, and session isolation. Route messages to agents based on channel and sender using the bindings system. This gives you the same capability as elevated mode but with architectural isolation instead of a global escape hatch. See `engine/patterns/002-per-agent-routing-over-elevated-mode.md` (repo root) for the full pattern and configuration example.
 
 **Expected output:** No immediate output. Takes effect on gateway restart.
 
@@ -1385,7 +1385,7 @@ Add to `~/.openclaw/openclaw.json`:
 Walking through the allow list:
 
 - **`read`** — The agent can read files you point it to. This is information disclosure only — it can see content but not change it. Useful for having the agent review documents, check logs, or read configuration files.
-- **`web_search`** and **`web_fetch`** — The agent can search the web and fetch URLs. Both are read-only operations. `web_fetch` has built-in SSRF (Server-Side Request Forgery) protection from OpenClaw's security engine, so the agent cannot be tricked into fetching internal network resources. Note: even though these are read-only, they are still prompt injection vectors — content the agent reads from the web can contain adversarial instructions. This is where the reader agent pattern (`patterns/003-reader-agent-prompt-injection-defense.md`) becomes relevant in Phase 2.
+- **`web_search`** and **`web_fetch`** — The agent can search the web and fetch URLs. Both are read-only operations. `web_fetch` has built-in SSRF (Server-Side Request Forgery) protection from OpenClaw's security engine, so the agent cannot be tricked into fetching internal network resources. Note: even though these are read-only, they are still prompt injection vectors — content the agent reads from the web can contain adversarial instructions. This is where the reader agent pattern (`engine/patterns/003-reader-agent-prompt-injection-defense.md`) becomes relevant in Phase 2.
 - **`reactions`**, **`thinking`**, **`sessions_*`** — Cosmetic and informational tools. Zero security risk.
 
 Walking through the deny list:
@@ -1743,7 +1743,7 @@ This is both elegant and terrifying. Elegant because you can build capabilities 
 
 The ClawHub marketplace (OpenClaw's community skill repository) was audited by Koi Security in January 2026. Their "ClawHavoc" report found **341 malicious skills out of 2,857** — a 12% malicious rate. Attack techniques included ClickFix lures, typosquatting (naming a malicious skill nearly identically to a popular one), reputation washing, base64-encoded commands, and `curl | bash` patterns. Academic research from arXiv independently found that 26% of agent skills across the LLM ecosystem contain at least one vulnerability.
 
-This is why we use **zero ClawHub skills**. Our Day-1 capabilities come from OpenClaw's 53 bundled skills (reviewed by the OpenClaw team) and the built-in tools configured in Phase D. If we need custom functionality later, we write our own Markdown skills — fully auditable, zero supply chain risk. See `patterns/001-zero-clawhub-supply-chain-defense.md` for the full rationale.
+This is why we use **zero ClawHub skills**. Our Day-1 capabilities come from OpenClaw's 53 bundled skills (reviewed by the OpenClaw team) and the built-in tools configured in Phase D. If we need custom functionality later, we write our own Markdown skills — fully auditable, zero supply chain risk. See `engine/patterns/001-zero-clawhub-supply-chain-defense.md` (repo root) for the full rationale.
 
 ### G1: Day-1 Skills Configuration
 
@@ -2370,7 +2370,7 @@ This walkthrough synthesizes findings from 130+ sources across 4 credibility tie
 | `knowledge-base/03-security/security-posture-analysis.md` | Security rationale for every hardening step |
 | `knowledge-base/02-architecture/deep-dive-findings.md` | Architecture concepts for Understanding sections |
 | `knowledge-base/05-skills-and-integrations/recommended-starter-skills.md` | Phased capability roadmap |
-| `patterns/` | Reusable security and architecture patterns |
+| `engine/patterns/` (repo root) | Reusable security and architecture patterns |
 | `research/reports/05-open-questions.md` | The 6 deployment blockers |
 | `operator/sean-currie-profile.md` | Infrastructure details and context |
 
