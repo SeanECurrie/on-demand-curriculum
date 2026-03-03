@@ -1,6 +1,6 @@
 # On-Demand Curriculum Engine — Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **For Claude:** REQUIRED FIRST STEP: Invoke the `session-restart` skill (at `skills/session-restart/SKILL.md`) to load project context before beginning any work. Then use `superpowers:executing-plans` to implement this plan task-by-task.
 
 **Goal:** Restructure the ClawdBot Research Project repo into a three-layer engine (DNA + Engine + Outputs) that can produce tailored interactive walkthroughs for different people on different topics, with OpenClaw as Output #1.
 
