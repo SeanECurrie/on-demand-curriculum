@@ -990,4 +990,14 @@ When all `.checkbox-input` elements within a phase's `.deployment-notes` section
 
 ---
 
+---
+
+## 10. Construction Process
+
+This style guide defines **WHAT** interactive walkthrough outputs look like — every color, spacing value, component spec, and curriculum design rule needed to build without guessing.
+
+For **HOW** complex walkthroughs get built (the incremental construction process, cross-reference management, namespace conventions, and section-by-section build discipline), see `engine/methodology/section-construction.md`. That document activates for deep-dive depth outputs that exceed ~500 lines and provides the build process that ensures a 3,000-line walkthrough maintains the quality standards defined here from first section to last.
+
+---
+
 *End of engine style guide template. Every visual decision is defined. Build without guessing. Adapt section 7 for each new output.*
