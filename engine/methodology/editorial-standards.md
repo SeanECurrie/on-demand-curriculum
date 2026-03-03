@@ -135,6 +135,29 @@ Before publishing any engine output, verify:
 
 ---
 
+## Self-Tests
+
+Binary yes/no checks to run after writing any synthesis, assessment, or deliverable content. Use quick tests at scan depth, thorough tests at deep-dive depth. See `binary-self-tests.md` for the full framework and test design rules.
+
+**Evidence Discipline:**
+- Pick any claim in this document. Can you name the source and credibility tier without scrolling? (If no: the claim needs an inline source tag.)
+- Read the conclusion without reading the evidence sections. Does it read like a finding ("evidence shows...", "3 of 5 sources report...") or like an opinion ("we believe...", "it seems like...")? (If opinion: rewrite with evidence attribution.)
+
+**Honest Assessment:**
+- Read the residual risk section. Does it name specific risks with specific consequences, or does it say "some risk remains"? (If vague: name the risks. "Unauthorized network access remains possible if VPN is misconfigured" is specific. "Some security risk remains" is not.)
+- Find the most negative finding. Is it stated with the same directness as the most positive finding? (If softened: rewrite it. "This is insecure" not "this could potentially present security considerations.")
+
+**Transferable Framing:**
+- Pick any tool-specific instruction. Is it marked as tool-specific (`[Tool-specific: X]` or equivalent)? (If no: add the marker.)
+- Pick any transferable concept. Does the document explicitly say it transfers? (If no: add "This principle applies to..." or equivalent.)
+
+**Structural Quality:**
+- Pick any command in the document. Is the expected output documented next to it? (If no: add the expected output so the operator knows if it worked.)
+- Pick any "Understanding" section. Cover the commands below it. Does the Understanding section alone teach the principle? (If no: the Understanding section is just a preamble, not a deliverable. Rewrite it.)
+- Read any section from the middle of the document without reading what came before. Does it provide enough context to track? (If no: add a brief orienting sentence or cross-reference.)
+
+---
+
 ## Related Documents
 
 - `credibility-tiers.md` — The tier system referenced in the evidence requirement
@@ -142,3 +165,4 @@ Before publishing any engine output, verify:
 - `three-tier-hardening.md` — How deployment steps are classified
 - `research-cadence-template.md` — How research freshness is maintained
 - `depth-assessment.md` — How to classify work depth before starting any pipeline stage
+- `binary-self-tests.md` — The full binary self-test framework and pipeline-stage tests

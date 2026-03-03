@@ -133,3 +133,4 @@ For a worked example of this framework applied to a real deployment walkthrough 
 - `dual-source-intelligence.md` — How hardening recommendations are researched
 - `credibility-tiers.md` — How to weight sources when hardening advice conflicts
 - `depth-assessment.md` — How to classify work depth before starting any pipeline stage
+- `binary-self-tests.md` — The full binary self-test framework; the tier classification questions in this document (the "The test" blocks under each tier) are the existing exemplar that inspired the generalized pattern

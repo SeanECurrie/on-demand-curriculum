@@ -110,8 +110,30 @@ Examples:
 
 ---
 
+## Self-Tests
+
+Binary yes/no checks to run after assigning credibility tiers to research sources. See `binary-self-tests.md` for the full framework and test design rules.
+
+**Tier Assignment Discipline:**
+- Pick any source in this research. Can you answer the four classification questions (official? track record? reproducible? technically specific?) and arrive at the assigned tier in under 10 seconds? (If no: the tier assignment is not well-reasoned or the questions were not applied.)
+- Find any source assigned Tier 1. Is it actually published by the tool's maintainers on their official domain? (If no: it is not Tier 1. Reassign.)
+
+**Corroboration Discipline:**
+- Pick any finding supported solely by a Tier 4 or Tier 5 source. Is it also validated by a Tier 1-3 source, or explicitly marked as unvalidated? (If neither: the finding is under-sourced. Either find corroboration or flag the confidence gap.)
+- Find the highest-confidence claim in the research. Is it backed by at least one Tier 1-2 source? (If no: the most confident claim has the weakest sourcing. Fix the mismatch.)
+
+**Contradiction Discipline:**
+- Find a point where a higher-tier source and a lower-tier source disagree. Is the contradiction flagged as an intelligence insight with both perspectives documented? (If no: flag it. Contradictions between tiers are signals, not errors.)
+- Has any source been upgraded or downgraded from its initial tier assignment? If yes, is the reason documented? (If no reason: add one. Tier shifts without rationale are arbitrary.)
+
+**Staleness Check:**
+- Pick any Tier 1 source. Is the documentation version or date noted in the tag? (If no: Tier 1 sources without dates cannot be checked for staleness. Add the date.)
+
+---
+
 ## Related Documents
 
 - `dual-source-intelligence.md` — The research methodology that produces tiered findings
 - `editorial-standards.md` — How tiered findings are documented and cited
 - `research-cadence-template.md` — How often to refresh findings at each tier
+- `binary-self-tests.md` — The full binary self-test framework and pipeline-stage tests

@@ -140,9 +140,31 @@ For a worked example of this methodology applied to a real tool evaluation, see 
 
 ---
 
+## Self-Tests
+
+Binary yes/no checks to run after any research cycle. Use quick tests at scan depth, thorough tests at deep-dive depth. See `binary-self-tests.md` for the full framework and test design rules.
+
+**Source Discipline:**
+- Pick any claim in this research. Can you name the source and its credibility tier in under 5 seconds? (If no: the claim needs a source tag.)
+- Find the strongest claim — the one most likely to drive a decision. Is there a second, independent source that validates it? (If no: the claim is under-sourced for its weight.)
+
+**Dual-Source Discipline:**
+- Is there at least one finding backed by an official source AND at least one backed by a community source? (If no: you used one channel, not two.)
+- Pick the finding most critical to the operator's decision. Did it get both a Context7 pull AND a Bright Data sweep? (If no: the most important finding got the least rigorous treatment.)
+
+**Honest Assessment:**
+- Find the most negative finding in this research. Is it stated as plainly and specifically as the most positive one? (If no: you softened the bad news.)
+- Does this research surface at least one finding that complicates or contradicts the starting hypothesis? (If no: either the hypothesis was perfectly right — rare — or you stopped looking when you found confirmation.)
+
+**Contradiction Handling:**
+- Find a point where official docs and community sources disagree. Is the contradiction flagged explicitly with both perspectives? (If no contradiction exists: is the absence noted, or did you skip the cross-validation?)
+
+---
+
 ## Related Documents
 
 - `credibility-tiers.md` — How to weight sources from each channel
 - `research-cadence-template.md` — How often to run each type of research sweep
 - `editorial-standards.md` — Standards for how findings are documented and cited
 - `depth-assessment.md` — How to classify work depth before starting any pipeline stage
+- `binary-self-tests.md` — The full binary self-test framework and pipeline-stage tests
