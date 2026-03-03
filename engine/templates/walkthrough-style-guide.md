@@ -741,6 +741,50 @@ Three distinct section types appear throughout the walkthrough. Each must be vis
 | Code block | Any command or configuration the reader needs to copy | Conceptual descriptions of behavior |
 | Inline code | File paths, command names, config keys, port numbers referenced in prose | General technical terms in conceptual context |
 
+### 5.5 Concept-to-Pattern Mapping for Diagrams
+
+Before drawing any diagram, classify the concept's **behavior** — what it *does*, not what it *is*. A "gateway" is a noun; "transforms input to output through stages" is the behavior that determines visual pattern. The mapping table below connects conceptual behaviors to the visual patterns that structurally communicate them.
+
+| If the concept... | Visual Pattern | Rendering Tech | Example |
+|-------------------|---------------|----------------|---------|
+| Transforms input to output through stages | **Assembly Line** (before → process → after) | Rough.js (shows transformation states) | Gateway message flow: raw input → auth → agent → sandbox → response |
+| Spawns multiple outputs from one source | **Fan-Out** (radial arrows from center) | Rough.js (needs spatial layout) | Agent dispatching tool calls to multiple services |
+| Combines multiple inputs into one result | **Convergence** (arrows merging into single target) | Rough.js (needs spatial layout) | Multiple security layers protecting a single asset |
+| Has a strict sequence of ordered steps | **Timeline** (dots on a line with labels) | Mermaid sequence diagram OR Rough.js timeline | Model routing failover chain: primary → fallback 1 → fallback 2 |
+| Has hierarchy or nesting | **Tree / Nested Layers** (concentric shapes or branching lines) | Rough.js (concentric rectangles/ellipses for layers, lines for trees) | Defense in depth: network → auth → sandbox → policy → agent |
+| Loops or iterates continuously | **Cycle** (arrow returning to start) | Rough.js (needs curved return arrows) | Monitoring cadence: check → alert → fix → verify → check |
+| Compares two alternatives | **Side-by-Side** (parallel columns with visual contrast) | Rough.js (needs spatial layout for columns) | Before/after machine state, safe vs. dangerous skill sources |
+| Shows ordered interactions between actors | **Sequence** (vertical lifelines with horizontal messages) | Mermaid sequence diagram (purpose-built for this) | User → Gateway → Router → LLM API round-trip |
+| Groups related components into logical zones | **Regions** (labeled boundaries enclosing elements) | Rough.js (dashed rectangles as boundaries) | Network topology with Tailscale mesh grouping devices |
+| Categorizes items into buckets | **Card Layout** (columns or grid with headers) | Rough.js OR HTML/CSS (depending on interactivity needs) | Monitoring tasks by cadence: daily / weekly / monthly |
+
+**When no pattern fits:** If a concept does not map cleanly to any row above, it is likely too complex for a single diagram. Split it into two diagrams (each mapping to a row), or represent it as prose + table instead of forcing a visual. A diagram that requires a paragraph of explanation to interpret has failed.
+
+**Rendering technology decision guide:**
+
+- **Rough.js** — Default choice. Use when spatial layout communicates meaning: positions, relative sizes, containment, adjacency, and directional flow all carry information. Rough.js gives you full control over element placement.
+- **Mermaid sequence diagram** — Use when the concept is ordered interactions between named actors (vertical lifelines with horizontal messages). Mermaid's sequence diagram syntax is purpose-built for this pattern and produces cleaner results than hand-positioning lifelines in Rough.js.
+- **Mermaid flowchart** — Use only for simple directed flows with 5 or fewer nodes and no spatial semantics beyond "A leads to B." If you need containment, grouping, or positional meaning, use Rough.js instead.
+- **HTML/CSS** — Use when the diagram needs interactivity (hover states, click-to-expand, dynamic content) or when the "diagram" is really a structured layout (card grids, comparison tables with visual styling).
+
+### 5.6 Diagram Design Process
+
+Every diagram in an output must pass through this 4-step process before any rendering code is written. Skipping steps produces diagrams that look technical but communicate nothing.
+
+**Step 1 — Classify the concept.** Ask: "What does this concept DO?" Write a one-sentence behavior description. Do not use the concept's name in the description. "The gateway processes messages" is a name, not a behavior. "Transforms raw user input through authentication, routing, and sandboxing stages into a safe agent response" is a behavior.
+
+**Step 2 — Select the pattern.** Match the behavior from Step 1 to the mapping table in 5.5. If the behavior matches multiple rows, the concept is compound — split it into separate diagrams, one per behavior. If it matches zero rows, use prose + table instead.
+
+**Step 3 — Run the Isomorphism Test.** Mentally strip all text labels from the planned diagram. Ask: "Would the shape, structure, and spatial relationships alone communicate the concept to someone who knows the domain?" If the answer is no — if the diagram would be meaningless without labels — the pattern is wrong. An Assembly Line should *look like* sequential transformation. Nested Layers should *look like* containment. If your Cycle looks identical to your Timeline once labels are removed, one of them has the wrong pattern.
+
+**Step 4 — Choose rendering tech and build.** Use the rendering technology decision guide from 5.5 to select the technology, then build per the specifications in Section 6 (Diagram Style Rules).
+
+**The Variety Rule:** In any output with more than three major diagrams, each should use a different visual pattern from the 5.5 table. If three diagrams are all Mermaid LR flowcharts (or all Rough.js left-to-right box-and-arrow layouts), at least two are almost certainly using the wrong pattern. Go back to Step 1 for each and re-classify the behavior. Different concepts behave differently — their diagrams should look structurally different.
+
+**Connection to depth assessment:** The depth of the output determines how much diagramming is needed:
+- **Scan depth** (surface-level overview): Use simple patterns only — Assembly Line, Side-by-Side, Card Layout. One diagram per major concept. Labels carry most of the meaning.
+- **Deep-dive depth** (full walkthrough): Patterns PLUS evidence artifacts. Diagrams should pass the Isomorphism Test rigorously. Include annotations linking to source evidence. Use the full range of patterns from 5.5. Each diagram earns its place by communicating something prose cannot.
+
 ---
 
 ## 6. Diagram Style Rules (Rough.js)
