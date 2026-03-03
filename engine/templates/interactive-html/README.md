@@ -110,6 +110,7 @@ These elements are part of the engine framework and do not change between output
 - **Full style guide:** `engine/templates/walkthrough-style-guide.md` — every visual decision, pixel-level specifications
 - **Reference implementation:** Output #1's interactive HTML (the OpenClaw walkthrough) — the living example of this template in action
 - **Pattern library:** `engine/patterns/` — reusable security and architecture patterns that may inform content
+- **Diagram color reference:** `engine/templates/diagram-color-reference.md` — single source of truth for all diagram colors (read before generating any diagram)
 
 ---
 

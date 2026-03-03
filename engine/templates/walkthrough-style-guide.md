@@ -857,15 +857,11 @@ const arrowDefaults = {
 
 ### 6.5 Color Mapping for Diagram Elements
 
-| Category | Fill Color (light) | Fill Color (dark) | Stroke Color (light) | Stroke Color (dark) | Used For |
-|---------|-------------------|-------------------|---------------------|---------------------|----------|
-| Infrastructure | `#dbeafe` (blue-100) | `#1e3a5f` (blue-900) | `#3b82f6` (blue-500) | `#60a5fa` (blue-400) | Core platform components, service managers, firewalls |
-| Security | `#fee2e2` (red-100) | `#450a0a` (red-900) | `#ef4444` (red-500) | `#f87171` (red-400) | Sandboxes, access controls, security boundaries, attack nodes |
-| External Service | `#e0e7ff` (indigo-100) | `#312e81` (indigo-900) | `#6366f1` (indigo-500) | `#818cf8` (indigo-400) | Third-party APIs, external platforms |
-| Agent/LLM | `#f3e8ff` (purple-100) | `#3b0764` (purple-900) | `#a855f7` (purple-500) | `#c084fc` (purple-400) | AI agents, LLM layers, model routing |
-| Data/Config | `#dcfce7` (green-100) | `#052e16` (green-900) | `#22c55e` (green-500) | `#4ade80` (green-400) | Config files, credentials, session data |
-| User/Operator | `#fef3c7` (amber-100) | `#451a03` (amber-900) | `#f59e0b` (amber-500) | `#fbbf24` (amber-400) | User devices, user actions, attacker in vulnerability diagrams |
-| Neutral | `#f5f5f4` (stone-100) | `#262626` (dark-surface) | `#a8a29e` (stone-400) | `#737373` (dark-muted) | OS, hardware, generic containers |
+**Full reference:** `engine/templates/diagram-color-reference.md` — the single source of truth for all diagram colors. Read that file before generating any diagram.
+
+**Summary** (7 categories): Infrastructure (blue), Security (red), External Service (indigo), Agent/LLM (purple), Data/Config (green), User/Operator (amber), Neutral (stone). Each category has light/dark fill and stroke pairs. See the reference file for exact hex values.
+
+**Rule:** Colors encode meaning. Each element's color comes from its semantic category, not from aesthetic preference. Do not invent one-off colors.
 
 ### 6.6 Consistent Node Sizing
 
