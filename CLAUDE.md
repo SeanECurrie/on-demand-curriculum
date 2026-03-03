@@ -111,6 +111,7 @@ The engine runs five stages to produce each output. Full details in the design d
 │   │   ├── anti-patterns.md
 │   │   ├── section-construction.md
 │   │   └── validation/
+│   │       └── output1-visual-audit.md
 │   ├── intake/                 # How new outputs start
 │   │   ├── intake-process.md
 │   │   └── operator-profile-template.md
