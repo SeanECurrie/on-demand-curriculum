@@ -48,3 +48,27 @@ Sources reused from Output #1 (openclaw-sean) are marked with `[inherited]` and 
 | 2026-03-03 | Reddit r/MacOS — "How to prevent MacBook from going to sleep with lid closed" | 4 | Amphetamine app with caffeine extension recommended for clamshell-without-display use. |
 | 2026-03-03 | Macworld — "How to stop your MacBook sleeping when the lid is closed" | 4 | Solutions: Amphetamine, clamshell mode, network wake settings. |
 | 2026-03-03 | Paolo Mainardi blog — "Docker on MacOS is still slow?" (Jan 2025) | 4 | VirtioFS performance improved significantly. OrbStack recommended for speed + usability blend. |
+
+## Security Research — Context7 (Tier 1)
+
+| Date | Source | Key Finding |
+|------|--------|-------------|
+| 2026-03-03 | OpenClaw Gateway security docs (`docs/gateway/security/index.md`) via Context7 `/openclaw/openclaw` | Secure baseline config: local mode, loopback bind, token auth, DM pairing policy. Non-loopback binds now require auth (fail-closed). |
+| 2026-03-03 | OpenClaw Gateway troubleshooting (`docs/gateway/troubleshooting.md`) via Context7 `/openclaw/openclaw` | Post-upgrade: bind+auth guardrails stricter, old key formats deprecated, device identity/pairing state changes require re-approval. |
+
+## Security Research — Bright Data (Tier 2-4)
+
+| Date | Source | Tier | Key Finding |
+|------|--------|------|-------------|
+| 2026-03-03 | Infosecurity Magazine — "Researchers Reveal Six New OpenClaw Vulnerabilities" (Feb 19, 2026) | 2 | Endor Labs found 6 new vulns (SSRF, auth bypass, path traversal). CVE-2026-26322 (CVSS 7.6), CVE-2026-26319 (CVSS 7.5), CVE-2026-26329 (high). All patched. |
+| 2026-03-03 | The Hacker News — "ClawJacked Flaw Lets Malicious Sites Hijack Local OpenClaw AI Agents" (Feb 28, 2026) | 2 | Oasis Security discovered WebSocket hijack via localhost. Brute-force gateway password + silent device registration. Patched v2026.2.25. Also covers log poisoning (v2026.2.13), 71 new malicious ClawHub skills, agent-to-agent attack chain. |
+| 2026-03-03 | SentinelOne — CVE-2026-25475 vulnerability database entry | 2 | Path traversal vulnerability in OpenClaw. Patched v2026.2.2. |
+| 2026-03-03 | SonicWall — "OpenClaw Auth Token Theft Leading to RCE: CVE-2026-25253" (late Feb 2026) | 2 | Detailed technical analysis of CVE-2026-25253 kill chain. |
+| 2026-03-03 | Oasis Security — "OpenClaw Vulnerability" (ClawJacked disclosure) | 2 | Original ClawJacked research. Localhost auto-approval bypass, missing rate limiting. Fix in <24 hours. |
+| 2026-03-03 | Eye Security — "Log Poisoning in OpenClaw" | 2 | Log poisoning enables indirect prompt injection. Agent reads own logs = poisoned logs influence behavior. |
+| 2026-03-03 | Trend Micro — "OpenClaw Skills Used to Distribute Atomic macOS Stealer" (Feb 2026) | 2 | Malicious ClawHub skill installs Atomic Stealer via fake "prerequisite." Payload from 91.92.242.30. |
+| 2026-03-03 | Straiker — "Built on ClawHub, Spread on Moltbook: The New Agent-to-Agent Attack Chain" | 2 | bob-p2p-beta skill instructs agents to store Solana private keys in plaintext, buy worthless tokens. Agent-to-agent social engineering. |
+| 2026-03-03 | Endor Labs — "How AI SAST Traced Data Flows to Uncover Six OpenClaw Vulnerabilities" | 2 | Trust boundaries extend beyond user input; LLM outputs and tool params are attack surfaces. |
+| 2026-03-03 | Penligent AI — "OpenClaw 2026.2.23 Brings Security Hardening" | 3 | v2026.2.23: optional HSTS, stricter bind+auth guardrails, security boundary improvements. |
+| 2026-03-03 | Inman.com — "3 ways artificial intelligence will reshape real estate in 2026" (Feb 6, 2026) | 4 | Inman Connect NY: AI data security concerns specific to real estate. Client data exposure, deepfake fraud, proptech vendor security. |
+| 2026-03-03 | Real Estate News — "AI and real estate data: Who's making the rules?" (Feb 23, 2026) | 4 | MLSs pursuing "license, not lawsuit" strategy for AI data guardrails. Regulatory environment tightening. |
