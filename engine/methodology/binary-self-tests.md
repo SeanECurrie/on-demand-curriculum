@@ -77,6 +77,19 @@ Run these after generating any walkthrough section, interactive HTML, or deliver
 | O3 | Pick any security-relevant configuration step. Is the security implication noted inline? | Pick any security-relevant step. Is the implication noted at the point of decision, or is it deferred to a later section or appendix? |
 | O4 | Does the output distinguish between essential, educational, and operational polish steps? (See `three-tier-hardening.md`) | For each essential (Tier 1) hardening step, could an operator explain WHY it is essential based solely on what the walkthrough says? |
 
+### Visual Output Tests
+
+Run these after generating any output with visual or interactive elements (HTML walkthroughs, styled diagrams, interactive components). These tests are only relevant when the output renders in a browser — skip for pure-text outputs.
+
+| # | Quick (Scan Depth) | Thorough (Deep-Dive Depth) |
+|---|---|---|
+| V1 | Has the output been opened in a browser since the last edit? | Has the output been rendered via Puppeteer (or manually) with screenshots taken of every major section, in both light and dark mode? |
+| V2 | Pick any diagram. Does its visual structure match the pattern prescribed by the concept-to-pattern mapping (style guide 5.5)? | **Isomorphism Test:** Pick any diagram. Mentally remove all text labels. Does the visual structure alone communicate the concept? If it looks like generic boxes without labels, the pattern is wrong. |
+| V3 | Count the diagrams in the output. Does the count match the diagram spec in the style guide Section 7? | For each diagram specified in the style guide, verify: (a) it renders, (b) it is visible (not hidden), (c) its type matches the spec, (d) its nodes match the spec. |
+| V4 | Click any expandable section. Does it expand and collapse? | Click every expandable section. Do they all work? Does content stay inside containers (not leaked outside)? |
+| V5 | Check any checkbox, reload the page. Is the state preserved? | Check a checkbox, enter text in a notes field, reload the page. Are both checkbox state and text content preserved? |
+| V6 | Pick any diagram. Are the colors consistent with the diagram color reference? | Open `diagram-color-reference.md`. For each diagram element, verify its fill and stroke match the semantic category from the reference. |
+
 ### Cross-Cutting Tests (Apply to Everything)
 
 Run these on any engine output, regardless of pipeline stage.
