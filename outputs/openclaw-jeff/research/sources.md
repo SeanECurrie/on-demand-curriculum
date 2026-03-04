@@ -105,6 +105,28 @@ Sources reused from Output #1 (openclaw-sean) are marked with `[inherited]` and 
 | 2026-03-03 | Placester — "13 Impactful Real Estate Marketing AI News in 2026" | 4 | AI adoption increasing across real estate marketing. Industry data shows major platforms integrating AI tools. |
 | 2026-03-03 | autoreelapp.com — "AI-Powered Marketing Trends Real Estate 2026" | 4 | Real estate marketing automation ensures consistent follow-ups. AI-powered tools reducing manual workload for agents. |
 
+## Mac Mini Hardware Research — Context7 (Tier 1)
+
+| Date | Source | Key Finding |
+|------|--------|-------------|
+| 2026-03-03 | Apple Mac Mini Technical Specifications (apple.com/mac-mini/specs) | M4 base: 16GB/24GB unified memory, 256GB-2TB SSD, all soldered. M4 Pro: 24GB/48GB, Thunderbolt 5, 10Gb Ethernet option. |
+| 2026-03-03 | Apple Mac Mini Store Page (apple.com/shop/buy-mac/mac-mini) | M4 24GB/512GB: $999. M4 16GB/256GB: $599. M4 Pro 24GB/512GB: $1,399. Street pricing ~$100 below Apple. |
+| 2026-03-03 | Apple Support — Mac Mini Power Consumption | Mac Mini M4 maximum power consumption: 155W. Confirms Jeff Geerling's independent measurements. |
+
+## Mac Mini Hardware Research — Bright Data (Tier 2-5)
+
+| Date | Source | Tier | Key Finding |
+|------|--------|------|-------------|
+| 2026-03-03 | Jeff Geerling — M4 Mac Mini Efficiency blog (jeffgeerling.com) | 2 | Measured power draw: idle 3-4W, light load 5-7W, sustained compute 42W, max 155W. At 5W average: ~44 kWh/year = ~$6.50/year at $0.15/kWh. Most credible independent source for Mac hardware power measurements. |
+| 2026-03-03 | AppleInsider Pricing Tracker (appleinsider.com) | 2 | Tracks street pricing for Mac Mini configurations. M4 24GB/512GB available ~$899 from authorized resellers. |
+| 2026-03-03 | MacRumors Mac Mini Roundup (macrumors.com/roundup/mac-mini) | 2-3 | Comprehensive M4 Mac Mini specs, configuration options, pricing history. Confirms RAM and storage are soldered (non-upgradeable). |
+| 2026-03-03 | Macworld — M4 Mac Mini specs and review (macworld.com) | 2 | Detailed specs comparison M4 vs M4 Pro. Port layout, thermal design, form factor analysis. |
+| 2026-03-03 | Hostbor — Mac Mini M4 Home Server Review (hostbor.com) | 3-4 | Real-world home server deployment experience. Confirms always-on reliability, low power draw, headless operation viability. |
+| 2026-03-03 | MacRumors Forums — M4 Pro Thunderbolt 5 display issues | 3-4 | Users report M4 Pro Thunderbolt 5 has issues powering portable displays via single USB-C cable. Known compatibility problem. |
+| 2026-03-03 | iMore — Headless Mac Mini setup guide (imore.com) | 3 | Step-by-step guide for headless Mac Mini operation. Screen Sharing setup, initial peripheral requirements, HDMI dummy plug recommendation. |
+| 2026-03-03 | MPU Talk Forums — M4 Mac Mini headless discussion (talk.macpowerusers.com) | 3-4 | Community discussion on running M4 Mac Mini headless. HDMI dummy plug ($8-12) recommended for proper Screen Sharing resolution. |
+| 2026-03-03 | Apple Community Discussions — Mac Mini headless setup (discussions.apple.com) | 3-4 | User reports on initial setup requirements. Confirms need for display + keyboard + mouse for first boot only. |
+
 ## Landscape Research — Bright Data (Tier 2-5)
 
 | Date | Source | Tier | Key Finding |
