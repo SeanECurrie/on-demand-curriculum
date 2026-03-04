@@ -49,9 +49,10 @@ These are not a rigid checklist — they're a framework. The engine asks what's 
 
 **About their setup:**
 9. What hardware do they have or plan to get?
-10. What's their current infrastructure? (networking, existing tools, OS)
-11. What existing systems/tools do they already use? (workflows the output might integrate with or replace)
-12. What's their budget situation? (not just money — time, attention, willingness to invest effort)
+10. **Will this machine be dedicated (only for this project) or shared (also personal/work use)?** Do not infer from "dedicated purchase" — ask explicitly. "Buying it for this" and "using it only for this" are different things. (Added 2026-03-03: Anti-pattern #12, The Contradictory Frame)
+11. What's their current infrastructure? (networking, existing tools, OS)
+12. What existing systems/tools do they already use? (workflows the output might integrate with or replace)
+13. What's their budget situation? (not just money — time, attention, willingness to invest effort)
 
 **About scope:**
 13. What does Sean think the right scope is? (full deployment? proof of concept? just understanding?)

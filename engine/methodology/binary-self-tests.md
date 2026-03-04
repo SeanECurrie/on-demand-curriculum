@@ -99,6 +99,7 @@ Run these on any engine output, regardless of pipeline stage.
 | X1 | Could someone unfamiliar with this specific tool read this document and understand the main points? | Pick a section from the middle of the document. Read it without reading anything before it. Does it provide enough context to stand on its own, or does it assume you read everything above? |
 | X2 | Does this output add value — does it inform a decision or teach a principle? Or is it information for the sake of completeness? | For each section, ask: "If I deleted this section, would the document lose decision-making value?" If no, the section is noise. |
 | X3 | Is outdated content marked `[OUTDATED]` rather than deleted? | If any content references a version number, date, or feature status — is there a date tag that makes staleness detectable? |
+| X4 | Pick any assumption about the user's setup (shared/dedicated, always-on/occasional). Does every section agree? | Search the full output for references to the user's hardware operational model. Do all sections frame it consistently? If any section contradicts another: contradictory frame (anti-pattern #12). |
 
 ---
 

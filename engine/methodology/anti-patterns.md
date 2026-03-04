@@ -256,6 +256,30 @@ All four defects survived through the entire construction process and code revie
 
 ---
 
+### 12. The Contradictory Frame
+
+**What it looks like:** The same output contains two conflicting framings of the same fact, and neither the engine nor the operator catches it until the end user does. The output teaches one thing in one section and assumes the opposite in another.
+
+**Real example:** Output #2 (OpenClaw for Jeff) contains both of these statements in the same walkthrough:
+
+- Section 2 intro: *"This section explains why you're setting up a separate MacBook for this, rather than just installing it on whatever computer you already use."* — framing the MacBook Air as a **dedicated** machine.
+- Section 2 body (line 722): *"You're buying a MacBook Air. It's going to run OpenClaw, but it's also going to be a laptop you use. That means it's a shared machine."* — framing the same MacBook Air as a **shared** machine.
+- Section 5 security (line 1399): *"Your MacBook runs OpenClaw and your personal applications on the same device."* — reinforcing the shared-machine framing.
+
+Jeff read the walkthrough and responded: *"It thinks I'm going to use the MacBook Air as my personal computer. Which I'm not."* He was right — the walkthrough contradicted itself. The intro said "separate," the body said "shared." The security section built its biggest residual risk assessment around the shared-machine assumption. Jeff caught the contradiction that the engine didn't.
+
+**Root cause:** The operator profile said "dedicated purchase" (bought new for this purpose). The engine inferred "shared use" (because why buy a laptop you never open as a laptop?). Both interpretations were reasonable. The problem is that the engine never resolved the ambiguity — it held both framings simultaneously and wrote different sections under different assumptions. The intake process did not include an explicit question: "Will this machine also be used for personal/work tasks, or exclusively for OpenClaw?"
+
+**Why it happens:** Intake captures what someone IS doing and what they WANT. It does not always capture the operational model — how the hardware will be used day-to-day. When hardware use is ambiguous, different pipeline stages can resolve the ambiguity differently. Research may assume shared (because it's a laptop). Output generation may assume dedicated (because the intro says "separate"). Neither checks the other's assumption.
+
+**What good looks like:** The intake process should include an explicit question about hardware operational model: dedicated vs. shared use. When the answer is ambiguous, the walkthrough should present it as a decision point rather than assuming either frame. And the whole-output review (Phase C) should include a consistency check: "Does every section agree on the same assumptions about the user's setup?"
+
+**Binary test:** Pick any assumption the walkthrough makes about the user's setup (shared/dedicated, always-on/occasional, primary/secondary machine). Search the full output for that assumption. Does every mention agree? If any section contradicts another: you have a contradictory frame.
+
+*(First observed: 2026-03-03, Output #2 post-delivery feedback from Jeff)*
+
+---
+
 ## Related Documents
 
 - `binary-self-tests.md` — The framework for writing the binary tests in each anti-pattern entry
