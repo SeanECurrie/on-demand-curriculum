@@ -197,6 +197,8 @@ The following sources were inherited from Output #1's competitive landscape rese
 | 2026-03-03 | Apple Support — High Performance Screen Sharing documentation | Apple Silicon + macOS Sonoma 14+: up to 60fps, 1-2 virtual displays up to 4K, audio routing, HDR support. Near-native latency. |
 | 2026-03-03 | Apple Support — Remote Login (SSH) documentation | SSH built into macOS via System Settings > Sharing > Remote Login. Command-line access to headless machines. |
 | 2026-03-03 | Apple Support — Universal Control documentation | Shares keyboard/mouse across Macs, but each device MUST have its own display. Not suitable for headless use. |
+| 2026-03-03 | Apple Support — Apple Remote Desktop documentation | Apple Remote Desktop ($80) for managing multiple Macs. Overkill for single-machine management — Screen Sharing sufficient. |
+| 2026-03-03 | Apple Support — Setup Assistant documentation | First-boot setup requires physical display, keyboard, and mouse. Cannot be completed remotely. |
 | 2026-03-03 | Apple Support — FileVault documentation | Full-disk encryption. Pre-boot unlock screen requires physical keyboard — cannot be accessed remotely. |
 | 2026-03-03 | Apple Mac Mini M4 — Technical Specifications page | Front 2x USB-C = USB 3 only (no DisplayPort Alt Mode). Rear 3x Thunderbolt 4 + 1x HDMI support display output. |
 | 2026-03-03 | Apple macOS Continuity — overview page | Universal Clipboard, AirDrop, iCloud Drive, Find My, Handoff. Requires same Apple ID, Wi-Fi, Bluetooth. |
