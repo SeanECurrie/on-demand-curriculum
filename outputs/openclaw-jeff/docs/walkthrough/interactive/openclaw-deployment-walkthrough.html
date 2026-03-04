@@ -768,6 +768,137 @@ A web page that runs on your MacBook (not on the internet — only accessible fr
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SECTION 2b: Your Hardware Choices -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="phase-section" id="s2b-choices" data-phase="s2b">
+  <div class="phase-header">
+    <div class="phase-number">Section 2b</div>
+    <h1 class="phase-title">Your Hardware Choices</h1>
+  </div>
+
+<h3 id="s2b-1">2b.1 Your Machine: What Changed</h3>
+
+<p>Section 2 was written with a specific assumption: you'd be running OpenClaw on a MacBook Air that also served as a personal computer. You've since clarified — this will be a <strong>dedicated machine</strong>. Your personal work stays on your 16" MacBook Pro M1 Max. The new machine runs OpenClaw and nothing else.</p>
+
+<p>This is a significant improvement to your security posture. The biggest residual risk we flagged in Section 2 — that a compromised agent could reach your email, banking, and client data on a shared machine — no longer applies. Your client contracts, saved passwords, and browsing history aren't on this machine. There's nothing for a bad actor to reach.</p>
+
+<p>The security layers from Section 2 (separate user account, locked-down permissions, network segmentation) still add value on a dedicated machine. Defense in depth means multiple barriers, and each one independently limits what can go wrong. But your baseline is already stronger than what that section planned for.</p>
+
+<div class="callout callout-info"><div class="callout-label">INFO</div><p>You don't need to redo Section 2. Everything there still applies — you're just starting from a better position than we assumed. The security layers that compensated for sharing are now bonus protection on a cleaner foundation.</p></div>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Why dedicated is better than we expected</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>The original walkthrough compensated for shared-machine risks with extra security layers — a separate user account, restricted permissions, network segmentation. These are real protections, but they're compensating controls. They reduce the impact of something going wrong on a machine that also holds sensitive data.</p><p>On a dedicated machine, the sensitive data isn't there in the first place. The blast radius of any incident is limited to OpenClaw itself — which is exactly what you want. The compensating controls become additional hardening rather than primary protection.</p><p>This principle — reducing what's at stake on any single device — applies to any deployment, not just OpenClaw. It's why companies put servers in separate network zones, why banks use dedicated terminals for wire transfers, and why security professionals keep work and personal devices separate. Isolation reduces blast radius. The less that can be reached from any single point of failure, the less damage any single failure can cause.</p></div></div></div>
+
+<h3 id="s2b-2">2b.2 Hardware Comparison</h3>
+
+<p>You're now choosing between two machines for this dedicated role. Both have Apple Silicon M4 chips and both can run OpenClaw comfortably. The difference is in what they were designed to do.</p>
+
+<div class="table-wrapper"><table class="data-table">
+<thead><tr><th>Criteria</th><th>Mac Mini M4 (24GB / 512GB)</th><th>MacBook Air M4 (24GB / 512GB)</th></tr></thead>
+<tbody>
+<tr><td><strong>Price</strong></td><td>$999</td><td>$1,199</td></tr>
+<tr><td><strong>Cooling</strong></td><td>Active fan — designed for sustained workloads without throttling</td><td>Fanless — thermal throttles under sustained CPU/GPU load (Jeff Geerling's testing confirms throttling under extended load)</td></tr>
+<tr><td><strong>Idle power draw</strong></td><td>3-4 watts (Jeff Geerling measured this in his Mac Mini M4 review — about $7/year in electricity)</td><td>Higher draw due to battery management circuitry and display subsystem, even with lid closed</td></tr>
+<tr><td><strong>Always-on suitability</strong></td><td>Yes — no sleep prevention hacks needed, no battery to degrade, designed to stay on</td><td>Requires <code>pmset</code> configuration to prevent sleep; battery degrades over time when always plugged in (Apple recommends periodic discharge cycles)</td></tr>
+<tr><td><strong>Ports</strong></td><td>3x Thunderbolt 4 (rear), HDMI, Gigabit Ethernet, 2x USB-C (front), headphone jack</td><td>2x USB-C, MagSafe, 3.5mm headphone jack</td></tr>
+<tr><td><strong>Portability</strong></td><td>None — 5" square box, stays on your desk</td><td>Full laptop — 3.4 lbs, all-day battery</td></tr>
+<tr><td><strong>Included peripherals</strong></td><td>Power cable only — no keyboard, mouse, or display included</td><td>Built-in keyboard, trackpad, and display</td></tr>
+</tbody>
+</table></div>
+
+<p>The cost difference is $200 at identical specs. But the real difference isn't price — it's that the Mac Mini was designed for the job you're asking it to do (sit on a desk and run continuously), while the MacBook Air was designed for a different job (travel with you and run on battery).</p>
+
+<div class="table-wrapper"><table class="data-table">
+<thead><tr><th>Cost Component</th><th>Mac Mini M4</th><th>MacBook Air M4</th></tr></thead>
+<tbody>
+<tr><td>Machine (24GB / 512GB)</td><td>$999</td><td>$1,199</td></tr>
+<tr><td>Display</td><td>$0 — use Screen Sharing from your MacBook Pro</td><td>$0 — built in</td></tr>
+<tr><td>Keyboard / trackpad</td><td>$0 — headless operation (no physical input needed after setup)</td><td>$0 — built in</td></tr>
+<tr><td>Electricity (annual)</td><td>~$7/year at 3-4W idle</td><td>~$12-15/year (higher idle draw + battery management)</td></tr>
+<tr><td><strong>Total first-year cost</strong></td><td><strong>~$1,006</strong></td><td><strong>~$1,214</strong></td></tr>
+</tbody>
+</table></div>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: How to evaluate hardware for a server</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>When you're buying a computer to use as a personal device, the things that matter are screen quality, portability, battery life, and keyboard feel. When you're buying a computer to run as a server — a machine that stays on 24/7, runs services in the background, and you interact with remotely — the criteria flip entirely.</p><p>For a server, what matters is: <strong>cooling</strong> (can it sustain load without throttling?), <strong>power efficiency</strong> (what does it cost to leave on?), <strong>reliability under continuous operation</strong> (is the hardware designed for this?), and <strong>connectivity</strong> (enough ports for wired networking and peripherals?).</p><p>A laptop is designed to be portable, run on battery, and sleep when you close the lid. A server is designed to stay put, stay on, and stay cool. Using a laptop as a server is like using a sports car as a delivery truck — it'll work, but you're fighting the design.</p><p>This framework — evaluating hardware by its intended workload, not by its marketing category — transfers to any deployment decision. Cloud providers make the same distinction: you don't pick a GPU instance for a web server, and you don't pick a micro instance for machine learning. Match the tool to the job.</p></div></div></div>
+
+<h3 id="s2b-3">2b.3 How You'll Access Your Machine</h3>
+
+<p>A Mac Mini without a monitor, keyboard, or mouse plugged in is called a <strong>headless</strong> machine. You control it remotely — from your MacBook Pro on the couch, from your office, wherever you are on your home network. This is how most servers in the world operate. Every website you visit, every cloud service you use, every data center — all headless machines managed remotely.</p>
+
+<p>You have three practical options for accessing a headless Mac Mini:</p>
+
+<div class="table-wrapper"><table class="data-table">
+<thead><tr><th>Option</th><th>How It Works</th><th>Cost</th><th>Best For</th><th>Setup Effort</th></tr></thead>
+<tbody>
+<tr><td><strong>Screen Sharing from MacBook Pro</strong></td><td>Built into macOS. Your Mac Mini appears in Finder's sidebar. Click to control it — you see its full desktop on your MacBook Pro screen. Apple Silicon Macs with macOS Sonoma 14+ support High Performance mode at 60fps (Apple's release notes for Sonoma confirm this).</td><td>Free</td><td>Daily use, full visual access</td><td>Very low — one toggle in System Settings</td></tr>
+<tr><td><strong>Lapdock (NexDock 6)</strong></td><td>A portable 14" screen with built-in keyboard and trackpad. Single USB-C cable to the Mac Mini's rear Thunderbolt port. Fold it shut and store it when not in use. Works like a laptop shell for your Mini.</td><td>$229</td><td>Physical access, portable to another room, folds away</td><td>Low — plug in one cable</td></tr>
+<tr><td><strong>SSH (Terminal)</strong></td><td>Command-line only. No visual interface. You type commands in Terminal on your MacBook Pro and they execute on the Mac Mini. Fast for quick checks like "is OpenClaw running?"</td><td>Free</td><td>Quick status checks, updates, restarts</td><td>Medium — requires comfort with Terminal</td></tr>
+</tbody>
+</table></div>
+
+<p>For your situation, Screen Sharing is the clear starting point. You already have a 16" MacBook Pro with a high-quality display — there's no reason to buy another screen. Screen Sharing on Apple Silicon Macs running macOS Sonoma or later delivers 60fps in High Performance mode, which means the remote desktop feels responsive, not laggy. It's built into macOS with nothing to install.</p>
+
+<div class="diagram-container" id="s2b-diagram-access-methods" role="img" aria-label="Diagram showing three ways to access a headless Mac Mini: Screen Sharing, Lapdock, and SSH"><noscript>Diagram: Access Methods for Headless Mac Mini</noscript></div>
+
+<div class="callout callout-warning"><div class="callout-label">HEADS UP</div><p><strong>Front USB-C ports don't carry display signal.</strong> The Mac Mini M4 has two USB-C ports on the front and three Thunderbolt 4 ports on the rear. Only the rear Thunderbolt ports carry display output. If you ever connect a lapdock or external monitor, it must plug into the back. The front ports are for USB devices (drives, accessories), not displays. Apple's Mac Mini tech specs page documents this distinction.</p></div>
+
+<div class="callout callout-warning"><div class="callout-label">HEADS UP</div><p><strong>Initial setup requires a physical display.</strong> When you first turn on a new Mac Mini, macOS Setup Assistant needs a screen, keyboard, and mouse to complete initial configuration — creating your user account, connecting to WiFi, accepting terms. This takes about 10 minutes. Any TV with an HDMI port works. After that, you enable Screen Sharing and the display is no longer needed.</p></div>
+
+<div class="callout callout-warning"><div class="callout-label">HEADS UP</div><p><strong>FileVault and headless reboots don't mix well.</strong> FileVault (macOS full-disk encryption) requires a password at the pre-boot screen after every restart — before the network is available, before Screen Sharing can connect. That means you'd need to physically connect a keyboard and display to your Mac Mini every time it reboots. For a dedicated OpenClaw machine in your home, the tradeoff is worth considering honestly: the risk FileVault protects against (someone stealing the machine and reading the disk) is low for a 5" box sitting on a shelf in your house. The operational friction of needing physical access for every reboot is real. Section 3 covers FileVault setup in detail — when you get there, consider whether the convenience of headless reboots outweighs the encryption protection for your specific situation.</p></div>
+
+<div class="expandable"><button class="expandable-trigger" aria-expanded="false"><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 8-8 8"/></svg><span>Understanding: Headless operation is how most servers work</span></button><div class="expandable-content" style="display:none"><div class="understanding-section"><div class="understanding-label">UNDERSTANDING</div><p>The concept of a headless machine might feel unusual if you've always used computers with screens attached, but it's the default in professional infrastructure. Every web server at Amazon, Google, and Microsoft runs headless. The servers hosting your email, your MLS portal, your brokerage's CRM — none of them have monitors. Engineers manage them remotely via SSH (command line) or remote desktop tools similar to Screen Sharing.</p><p>What you're doing with a Mac Mini running OpenClaw is the same pattern at home scale: a dedicated machine running a service, accessed remotely when you need to check on it or make changes. Most of the time, it just runs in the background doing its job.</p><p>This concept — managing a computer you never sit in front of — transfers to understanding how any remote service works. When your IT person says "the server is down," they're talking about a headless machine somewhere. When a cloud provider says "spin up an instance," they're creating a headless virtual machine you'll never physically see. Understanding headless operation is understanding how modern computing infrastructure actually works.</p></div></div></div>
+
+<h3 id="s2b-4">2b.4 Our Recommendation</h3>
+
+<p><strong>Machine: Mac Mini M4, 24GB RAM, 512GB storage — $999 from Apple.</strong></p>
+
+<p><strong>Access method: Screen Sharing from your MacBook Pro — free, and you already have everything you need.</strong></p>
+
+<p>Here's why this combination works for your situation:</p>
+
+<ul>
+  <li><strong>It's the cheapest option that meets every requirement.</strong> The Mac Mini is $200 less than the equivalent MacBook Air, and you don't need to buy a display, keyboard, or trackpad because Screen Sharing uses your MacBook Pro.</li>
+  <li><strong>It's designed for always-on operation.</strong> Active cooling means no thermal throttling. No battery to degrade. No sleep prevention configuration. It just runs.</li>
+  <li><strong>It's kid-proof by default.</strong> A headless Mac Mini tucked behind a monitor or on a shelf has no screen to tap, no keyboard to bang on, no lid to close. There's nothing for curious hands to interact with. Your MacBook Pro stays with you.</li>
+  <li><strong>You already own the best display for it.</strong> Your 16" MacBook Pro M1 Max with its Liquid Retina XDR display is a better screen than any standalone monitor under $500. Screen Sharing at 60fps means you're using that display to its full advantage.</li>
+  <li><strong>The power draw is negligible.</strong> At 3-4 watts idle (Jeff Geerling's measured figure), the Mac Mini costs about $7/year in electricity. Leaving a nightlight on costs more.</li>
+</ul>
+
+<div class="table-wrapper"><table class="data-table">
+<thead><tr><th>Item</th><th>Cost</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Mac Mini M4, 24GB / 512GB</td><td>$999</td><td>apple.com or Apple Store</td></tr>
+<tr><td>USB keyboard (setup only)</td><td>$10-15</td><td>Borrow or buy cheap — needed for the 10-minute initial macOS setup only</td></tr>
+<tr><td>HDMI cable</td><td>$0-10</td><td>For connecting to your TV during initial setup. You likely have one already</td></tr>
+<tr><td>Ethernet cable (recommended)</td><td>$5-10</td><td>Wired connection is more reliable than WiFi for an always-on server. Mac Mini has Gigabit Ethernet built in</td></tr>
+<tr><td>HDMI dummy plug (optional)</td><td>$8-12</td><td>Tricks macOS into thinking a display is connected, giving Screen Sharing a clean resolution. Optional — Screen Sharing works fine without it</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>~$1,025-1,045</strong></td><td></td></tr>
+</tbody>
+</table></div>
+
+<p><strong>Monthly costs remain the same as Section 1:</strong> $23-50/month for Claude Pro, Claude API, and Zapier. The Mac Mini adds about $0.58/month in electricity.</p>
+
+<div class="callout callout-tip"><div class="callout-label">TIP</div><p>If you'd rather have physical access without using Screen Sharing — or want a portable option you can move between rooms — the NexDock 6 lapdock ($229) is the best option we found. It gives you a 14" screen, keyboard, and trackpad over a single USB-C cable. But try Screen Sharing first. Most people who start with it never feel the need for a physical display.</p></div>
+
+<p><strong>What you give up:</strong> The Mac Mini isn't portable — it stays where you put it. If you wanted to take your OpenClaw machine to a coffee shop or open house, you'd need the MacBook Air instead. For a dedicated home server that you access remotely, portability isn't a requirement — but it's worth acknowledging what the tradeoff is.</p>
+
+<h3>Self-Test: Section 2b</h3>
+
+<div class="checkbox-list">
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s2b-mini-vs-air" id="s2b-mini-vs-air"><label class="checkbox-label" for="s2b-mini-vs-air">I understand why the Mac Mini is recommended over the MacBook Air for this</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s2b-access-method" id="s2b-access-method"><label class="checkbox-label" for="s2b-access-method">I know how I'll access the Mac Mini (Screen Sharing / lapdock / other)</label></div>
+  <div class="checkbox-item"><input type="checkbox" class="checkbox-input" data-key="s2b-shopping-list" id="s2b-shopping-list"><label class="checkbox-label" for="s2b-shopping-list">I know what to buy and the approximate total cost</label></div>
+</div>
+
+<div class="deployment-notes">
+  <div class="deployment-notes-title">Notes — Section 2b</div>
+  <div class="deployment-notes-intro">Record any questions, observations, or things you want to discuss with Sean.</div>
+  <textarea class="notes-input" data-key="s2b-notes" placeholder="Your notes for Section 2b..."></textarea>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
 <!-- SECTION 3: Your Setup -->
 <!-- ═══════════════════════════════════════════════════════════════════════════ -->
 
@@ -2711,6 +2842,76 @@ window.renderLocalInternet = function(containerId) {
   debounceResize('localInternet', function() { window.renderLocalInternet(containerId); });
 };
 
+// ─── Diagram: Access Methods for Headless Mac Mini (Hub-and-Spoke) ───────────
+
+window.renderAccessMethods = function(containerId) {
+  var container = clearContainer(containerId);
+  if (!container) return;
+  var c = getThemeColors();
+  var info = createCanvas(container);
+  var w = info.width; var dpr = info.dpr;
+  var h = 320;
+  setCanvasHeight(info.canvas, h, dpr);
+  var ctx = info.canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var rc = rough.canvas(info.canvas);
+
+  var centerX = w / 2;
+  var centerY = h / 2;
+  var nodeW = 120, nodeH = 44;
+  var hubW = 110, hubH = 50;
+  var spokeRadius = Math.min(w * 0.35, 140);
+
+  // Hub: Mac Mini (Infrastructure category — blue)
+  roughRect(rc, centerX - hubW / 2, centerY - hubH / 2, hubW, hubH, c.blue, c.blueFill);
+  drawLabel(ctx, 'Mac Mini M4', centerX, centerY - 6, { size: 12, weight: '700', color: c.textPrimary });
+  drawLabel(ctx, '(headless)', centerX, centerY + 10, { size: 10, weight: '400', color: c.textSecondary });
+
+  // Spoke positions (top-left, top-right, bottom)
+  var spokeAngles = [-2.3, -0.85, Math.PI / 2];
+  var spokeNodes = [
+    { label: 'Screen Sharing', sublabel: 'Free · macOS built-in', stroke: c.indigo, fill: c.indigoFill },
+    { label: 'Lapdock', sublabel: '$229 · USB-C cable', stroke: c.amber, fill: c.amberFill },
+    { label: 'SSH (Terminal)', sublabel: 'Free · command line', stroke: c.green, fill: c.greenFill },
+  ];
+
+  spokeNodes.forEach(function(node, i) {
+    var angle = spokeAngles[i];
+    var nx = centerX + spokeRadius * Math.cos(angle);
+    var ny = centerY + spokeRadius * Math.sin(angle);
+
+    // Draw spoke connector (from hub edge toward node)
+    var hubEdgeX = centerX + (hubW / 2 + 5) * Math.cos(angle);
+    var hubEdgeY = centerY + (hubH / 2 + 5) * Math.sin(angle);
+    var nodeEdgeX = nx - (nodeW / 2 + 5) * Math.cos(angle);
+    var nodeEdgeY = ny - (nodeH / 2 + 5) * Math.sin(angle);
+    drawArrow(rc, ctx, hubEdgeX, hubEdgeY, nodeEdgeX, nodeEdgeY, { stroke: c.neutral, strokeWidth: 2 });
+
+    // Draw spoke node
+    roughRect(rc, nx - nodeW / 2, ny - nodeH / 2, nodeW, nodeH, node.stroke, node.fill);
+    drawLabel(ctx, node.label, nx, ny - 6, { size: 11, weight: '600', color: c.textPrimary });
+    drawLabel(ctx, node.sublabel, nx, ny + 10, { size: 9, weight: '400', color: c.textSecondary });
+  });
+
+  // "Recommended" badge near Screen Sharing
+  var ssAngle = spokeAngles[0];
+  var ssX = centerX + spokeRadius * Math.cos(ssAngle);
+  var ssY = centerY + spokeRadius * Math.sin(ssAngle);
+  var badgeX = ssX;
+  var badgeY = ssY - nodeH / 2 - 16;
+  ctx.save();
+  ctx.fillStyle = c.labelBg;
+  var badgeW = 90, badgeH = 18;
+  ctx.fillRect(badgeX - badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH);
+  ctx.restore();
+  drawLabel(ctx, '★ Recommended', badgeX, badgeY, { size: 10, weight: '700', color: c.green });
+
+  // Bottom annotation
+  drawLabel(ctx, 'All three methods work together — use whichever fits the moment.', w / 2, h - 15, { size: 11, weight: '400', color: c.textBody });
+
+  debounceResize('accessMethods', function() { window.renderAccessMethods(containerId); });
+};
+
 </script>
 <script>
 // Initialize Mermaid
@@ -2740,7 +2941,8 @@ document.addEventListener('DOMContentLoaded', function() {
     'diagram-security-layers': 'renderSecurityLayers',
     'diagram-prompt-action': 'renderPromptAction',
     'diagram-split-arch': 'renderSplitArch',
-    'diagram-local-internet': 'renderLocalInternet'
+    'diagram-local-internet': 'renderLocalInternet',
+    's2b-diagram-access-methods': 'renderAccessMethods'
   };
 
   for (var containerId in diagramMap) {
