@@ -14,7 +14,7 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 | # | Output | Person | Topic | Status | Location |
 |---|--------|--------|-------|--------|----------|
 | 1 | OpenClaw Deployment | Sean Currie | OpenClaw agent platform | Complete (research + walkthrough ready) | outputs/openclaw-sean/ |
-| 2 | OpenClaw Deployment | Jeff (Denver RE) | OpenClaw on MacBook Air + Instagram | Complete | outputs/openclaw-jeff/ |
+| 2 | OpenClaw Deployment | Jeff (Denver RE) | OpenClaw on MacBook Air + Instagram | Complete + Section 2b iteration (hardware choices) | outputs/openclaw-jeff/ |
 
 ## Engine Structure
 
@@ -49,5 +49,9 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 - ~~Test engine by producing Output #2 (candidate: Jeff, OpenClaw, MacBook Air)~~ DONE
 - Output #2 validated full pipeline: intake → research (80+ sources) → synthesis (5 reports) → output generation (2,810-line interactive HTML, 6 diagrams) → render-validate (V1-V6 PASS)
 - Engine methodology proven: concept-to-pattern mapping, render-validate, split architecture discovery via DNA Principle #10
+- 2026-03-03: Output #2 post-delivery iteration — Section 2b (Hardware Choices) added after Jeff confirmed dedicated machine + Mac Mini pivot
+  - Engine learning: Anti-pattern #12 (The Contradictory Frame) + self-test X4 + intake Q10 update
+  - New section: 4 subsections + hub-and-spoke diagram, render-validated, 14/16 self-tests passed (2 known deferred)
+  - Deferred: Sections 3-5 still reference MacBook Air — will update after Jeff confirms purchase
 - Evaluate GitHub Pages for output delivery
 - Consider Output #3 candidate
