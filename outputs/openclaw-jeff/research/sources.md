@@ -188,3 +188,33 @@ The following sources were inherited from Output #1's competitive landscape rese
 | 2026-03-03 | Lumadock — "How to upgrade OpenClaw safely" | 4 | Step-by-step upgrade guide with backups, post-upgrade testing, version rollback. |
 | 2026-03-03 | Lumadock — "OpenClaw backup guide for data, settings, and memory" | 4 | What to back up, how to encrypt, how to restore on new machine. |
 | 2026-03-03 | Hostinger — "OpenClaw best practices for safe and reliable usage" | 4 | Start with low-risk read-only automations. Keep private by default. |
+
+## Access Methods Research — Context7 (Tier 1)
+
+| Date | Source | Key Finding |
+|------|--------|-------------|
+| 2026-03-03 | Apple Support — Screen Sharing documentation | Screen Sharing built into macOS via System Settings > Sharing. One toggle to enable. Mac appears in Finder sidebar on same network. |
+| 2026-03-03 | Apple Support — High Performance Screen Sharing documentation | Apple Silicon + macOS Sonoma 14+: up to 60fps, 1-2 virtual displays up to 4K, audio routing, HDR support. Near-native latency. |
+| 2026-03-03 | Apple Support — Remote Login (SSH) documentation | SSH built into macOS via System Settings > Sharing > Remote Login. Command-line access to headless machines. |
+| 2026-03-03 | Apple Support — Universal Control documentation | Shares keyboard/mouse across Macs, but each device MUST have its own display. Not suitable for headless use. |
+| 2026-03-03 | Apple Support — FileVault documentation | Full-disk encryption. Pre-boot unlock screen requires physical keyboard — cannot be accessed remotely. |
+| 2026-03-03 | Apple Mac Mini M4 — Technical Specifications page | Front 2x USB-C = USB 3 only (no DisplayPort Alt Mode). Rear 3x Thunderbolt 4 + 1x HDMI support display output. |
+| 2026-03-03 | Apple macOS Continuity — overview page | Universal Clipboard, AirDrop, iCloud Drive, Find My, Handoff. Requires same Apple ID, Wi-Fi, Bluetooth. |
+| 2026-03-03 | Apple Support — Continuity system requirements | Both M1 and M4 qualify. Same Apple ID + Wi-Fi + Bluetooth + Handoff enabled. Stable since Yosemite (2014). |
+
+## Access Methods Research — Bright Data (Tier 2-5)
+
+| Date | Source | Tier | Key Finding |
+|------|--------|------|-------------|
+| 2026-03-03 | 9to5Mac — Screen Sharing / High Performance Screen Sharing tutorial | 2 | Independent verification of High Performance mode: 60fps, low latency, virtual display support on Apple Silicon. |
+| 2026-03-03 | MacRumors — Universal Control Guide | 2 | Confirms each device needs its own display for Universal Control. Screenshots show physical display arrangement requirement. |
+| 2026-03-03 | NotebookCheck — NexDock 6 Review | 2 | 14" 1920x1200 IPS, 400 nits, 100% sRGB, 38Wh battery (~6-7hrs), rebuilt trackpad. Single USB-C cable for video + input. $229. |
+| 2026-03-03 | NexDock official site (nexdock.com) | 2 | Product specifications, USB-C DisplayPort Alt Mode compatibility, Mac Mini support confirmed. |
+| 2026-03-03 | AppleInsider — M4 Mac Mini headless review | 2 | Confirms Setup Assistant requires physical display. Details headless configuration steps post-setup. |
+| 2026-03-03 | MacStadium — Remote Access Guide / blog | 3 | Professional Mac hosting perspective: Screen Sharing for GUI, SSH for CLI, FileVault complicates headless reboot. |
+| 2026-03-03 | iMore — Headless Mac Mini setup guide | 3 | Step-by-step: borrow a TV via HDMI for 10-minute setup, then enable Screen Sharing + Remote Login for headless operation. |
+| 2026-03-03 | machow2 — Remote access guide | 3-4 | Evaluates Apple Remote Desktop ($80) as overkill for single-machine management. Screen Sharing sufficient for personal use. |
+| 2026-03-03 | Apple Community forums — Front USB-C port discussions | 3-4 | Community reports confirming front USB-C ports do not output video. Multiple threads with same finding. |
+| 2026-03-03 | MPU Talk forums — FileVault + headless operation | 3-4 | Community experience: FileVault pre-boot unlock requires physical keyboard. Workaround: disable FileVault or keep keyboard accessible. |
+| 2026-03-03 | AppleVis — VoiceOver accessibility setup guide | 3-4 | Documented but awkward: Mac Mini initial setup via audio prompts + keyboard navigation without visual display. Wired headphones required. |
+| 2026-03-03 | Dopesplay / Uperfect — portable monitor alternatives | 3-4 | Alternative portable monitors evaluated. Lack integrated keyboard/trackpad — less convenient than NexDock for headless access. |
