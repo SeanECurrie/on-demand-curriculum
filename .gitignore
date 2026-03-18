@@ -18,6 +18,9 @@ research/scrapes/raw/
 .idea/
 *.swp
 
+# Temp/test artifacts
+temp/
+
 # Scratch/workspace artifacts
 engine/skills/*-workspace/
 pipeline-start-*.html
