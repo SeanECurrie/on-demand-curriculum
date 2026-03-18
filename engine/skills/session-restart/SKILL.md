@@ -58,6 +58,28 @@ what to read to resume.
 Which output are you working on, or is this something new?
 ```
 
+## Step 2.5: Pipeline-Start Gate (New Work Only)
+
+If Step 2 identified this as **new work** (not resuming an existing output), stop here
+and invoke `pipeline-start` (`engine/skills/pipeline-start/SKILL.md`). New work includes:
+
+- Sean brings a document from another project ("here's a design doc", "turn this into...")
+- Sean describes a new topic or person ("new output for...", "let's start on...")
+- Sean wants to update engine methodology ("we should change how...")
+- Any work that would create new files, not modify existing ones
+
+**Do not proceed to Step 3 without pipeline-start for new work.** Pipeline-start will
+classify the operation (Type A-F), build a run plan, and get Sean's approval before
+execution begins. This is non-negotiable — the Jeff session proved that skipping
+orchestration leads to 3+ course corrections.
+
+**Resuming existing work:** If Sean is returning to an output that already has a run plan
+on disk (check `outputs/[name]/run-plans/`), read the run plan and pick up where it left
+off. Pipeline-start is not needed for resumption — the run plan IS the session state.
+
+**Exception:** Trivial mechanical changes (fixing a typo, updating a date) don't need
+pipeline-start. If the work wouldn't benefit from a plan, skip this step.
+
 ## Step 3: Load Output Context (Type-Specific)
 
 Once an output is selected, load context based on its type.

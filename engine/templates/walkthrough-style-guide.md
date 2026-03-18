@@ -196,6 +196,8 @@ body {
 }
 ```
 
+**Whitespace preservation:** Always set `white-space: pre-wrap` and `word-wrap: break-word` on `<pre>` elements explicitly. Do not rely on browser default user-agent styles — a CSS reset or parent rule can override them. For preformatted content that must not wrap (directory trees, ASCII art), use `white-space: pre` instead.
+
 **Language label (optional, for multi-language blocks):**
 - Position: absolute, top-left corner (top: 0, left: 16px)
 - Background: `--color-stone-300` (dark: `#404040`)
@@ -601,8 +603,44 @@ code:not(pre code) {
   padding: 2px 6px;
   border-radius: 4px;
   color: var(--color-stone-700);               /* dark: #d4d4d4 */
+  overflow-wrap: break-word;
 }
 ```
+
+**In table cells:** Add `white-space: nowrap` to `td code:not(pre code)` to prevent file paths from breaking mid-word. The `.table-wrap` scroll container handles overflow.
+
+**CSS reset awareness:** The global `* { margin: 0; padding: 0; }` reset strips `padding-left` from `<ul>` and `<ol>`, which removes the space for list markers. Always restore list padding:
+
+```css
+ul, ol {
+  padding-left: 24px;
+}
+```
+
+### 4.8.1 Directory Trees
+
+Directory trees use a monospace `<div>` with `white-space: pre` to preserve tree character alignment:
+
+```css
+.dir-tree {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  background: var(--color-stone-100);          /* dark: #262626 */
+  border: 1px solid var(--color-stone-200);    /* dark: #404040 */
+  border-radius: 8px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  white-space: pre;                            /* CRITICAL — preserves tree characters */
+}
+```
+
+**Formatting rules:**
+- One entry per line — never combine multiple subdirectories on a single line
+- Use `├──` for entries with siblings below, `└──` for the last entry in a group
+- Directory names get a `.dir` class (accent color, bold). File names get `.file` class.
+- Inline comments get a `.comment` class (muted color, italic). Align to column 40+ for readability.
+- `white-space: pre` is non-negotiable — without it, the tree renders as a single wrapped paragraph.
 
 ### 4.9 Deployment Notes Sections
 

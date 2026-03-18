@@ -200,11 +200,14 @@ All outputs are held to the standards in `engine/methodology/editorial-standards
 
 The `session-restart` skill at `engine/skills/session-restart/SKILL.md` handles session startup efficiently.
 
-**If the skill isn't available**, follow this manual sequence:
+**For new substantive work**, session-restart gates on `pipeline-start`. This is the critical routing step — pipeline-start classifies the work (Type A-F), builds a run plan on disk, and gets operator approval before execution begins. **Skipping pipeline-start means no classification, no run plan, no approval gate, and no compaction resilience.** The entire quality control layer depends on this step firing.
+
+**If session-restart isn't available**, follow this manual sequence:
 1. Read root `CONTEXT.md` — engine-level state (what outputs exist, what's in progress)
-2. If working on a specific output, read that output's `CONTEXT.md` (e.g., `outputs/openclaw-sean/CONTEXT.md`)
-3. Check staleness — if >5 days since last session on this topic, flag for review
-4. Calibrate your posture: DNA principles apply. Challenge over agreement. Evidence over assumption.
+2. If this is new work (not resuming), invoke `pipeline-start` (`engine/skills/pipeline-start/SKILL.md`) — classify, build run plan, get approval
+3. If resuming an existing output, check for a run plan on disk and pick up where it left off
+4. Check staleness — if >5 days since last session on this topic, flag for review
+5. Calibrate your posture: DNA principles apply. Challenge over agreement. Evidence over assumption.
 
 ### During Session
 - Log significant actions in the relevant activity log (engine-level or output-specific)

@@ -29,7 +29,12 @@ this skill.
 
 ## Prerequisites
 
-Before building, read these files for the engine's visual design system:
+**1. Run plan must exist.** Before executing this skill, verify that `pipeline-start` has
+been invoked and a run plan exists on disk at `outputs/[name]/run-plans/`. If no run plan
+exists, STOP and invoke `pipeline-start` first. Pipeline-start classifies the work as
+Type F, builds the run plan, and gets Sean's approval. This skill does not self-authorize.
+
+**2. Read the engine's visual design system** before building:
 
 ```
 Read: engine/templates/walkthrough-style-guide.md
@@ -39,6 +44,14 @@ Read: engine/templates/diagram-color-reference.md
 These define the complete CSS custom property system, color palette, dark mode values,
 callout types, typography scale, and diagram semantic categories. Do not improvise styles.
 Use the existing design system.
+
+Pay specific attention to:
+- **CSS reset awareness:** The style guide specifies a global reset that strips `padding`
+  from all elements. List elements (`ul`, `ol`) need `padding-left: 24px` restored.
+- **Whitespace preservation:** Directory trees and preformatted content need explicit
+  `white-space: pre`. Do not rely on browser defaults.
+- **Inline code in tables:** Add `white-space: nowrap` to `td code` to prevent file
+  paths from breaking mid-word.
 
 ## Reference Implementation
 
@@ -112,6 +125,28 @@ skip content because it doesn't fit a pattern.
 job-search-engine-design output has proven implementations of every interactive
 feature listed above.
 
+### Step 4.5: Content Completeness Check
+
+Before opening the browser, verify that every section from the source document is
+represented in the HTML. This step catches the most common Type F failure: silently
+skipping subsections because they didn't map cleanly to an interactive pattern.
+
+**Process:**
+1. List every H2 and H3 heading from each source document
+2. For each heading, confirm it has a corresponding HTML section, expandable block,
+   card, table row, or other representation
+3. If a heading is missing, either:
+   - Add it using the appropriate content type pattern from Step 2's mapping table
+   - Use the fallback pattern (prose with expandable detail blocks)
+   - **Never skip it silently.** If you deliberately omit something, note it in the
+     execution log with the reason.
+
+**Why this step exists:** The job-search-engine-design output skipped 3 subsections
+from "Context for Implementation Planning" (source material inputs, research findings,
+antipatterns) without explanation. The review-artifact skill says "Never skip content
+because it doesn't fit a pattern" but had no enforcement mechanism. This step is the
+enforcement.
+
 ### Step 5: Render-Validate
 
 Open the HTML in a browser. Verify:
@@ -145,5 +180,87 @@ When Sean brings an additional source document (e.g., implementation plan after 
 
 Type F outputs go in `outputs/[descriptive-name]/docs/walkthrough/interactive/[name].html`
 
-The output directory also gets an `OUTPUT.md` identity file (see session-restart skill
-for the format).
+The output directory also gets an `OUTPUT.md` identity file using this template:
+
+```markdown
+---
+name: [Descriptive Name]
+type: F (Review Artifact)
+source_documents:
+  - [absolute path to source doc 1]
+  - [absolute path to source doc 2]
+created: [YYYY-MM-DD]
+last_synced: [YYYY-MM-DD]
+status: Active
+---
+
+# [Name] — Review Artifact
+
+**Type F output:** [1-sentence description of what's being reviewed]
+
+## Source Documents
+
+1. **[Doc 1 name]** ([date]) — [brief description]
+2. **[Doc 2 name]** ([date]) — [brief description]
+
+## Deliverable
+
+- `docs/walkthrough/interactive/[name].html` — Single-file interactive HTML
+
+## Sync History
+
+| Date | What Changed | Source |
+|------|-------------|--------|
+| [YYYY-MM-DD] | Initial build | Both source documents |
+
+## Resuming This Output
+
+To resume work on this output in a new session:
+1. Check if source documents have been modified since `last_synced`
+2. If modified, re-read the changed sections and update the HTML in place
+3. If unchanged, the HTML is current — no action needed
+4. Sean will bring specific update instructions or a new source document
+```
+
+After creating OUTPUT.md, update the root `CONTEXT.md` Outputs Produced table to register
+the new output. Then commit changes to git. Both of these are required — they were missed
+in the first Type F run.
+
+## Anti-Patterns (Learned from Output #3)
+
+These failure modes were discovered during the first Type F execution. Check for them.
+
+### AP-1: Horizontal Scroll for Card Sequences
+
+**Wrong:** Using `display: flex` with `overflow-x: auto` for a sequence of 5+ cards.
+The cards overflow the container and users see only the first 2-3 with no obvious scroll
+indicator.
+
+**Right:** Use `display: grid` with `grid-template-columns: repeat(3, 1fr)` (or
+`repeat(2, 1fr)` on mobile). All cards visible. For sequences where order matters,
+use numbered labels (00, 01, 02...) instead of relying on left-to-right position.
+
+### AP-2: Compressed Directory Entries
+
+**Wrong:** Putting multiple subdirectories on a single line to save vertical space:
+`├── resumes/  ├── cover-letters/  ├── outreach/`
+
+**Right:** One entry per line with proper tree characters. Directory trees are reference
+material — they need to be scannable, not compact. Every entry gets its own line.
+
+### AP-3: Missing Whitespace Preservation
+
+**Wrong:** Using a `<div>` for preformatted content (directory trees, code templates)
+without `white-space: pre`. The content renders as a single wrapped paragraph.
+
+**Right:** Any content that depends on line breaks and indentation for meaning needs
+`white-space: pre` (or use a `<pre>` tag). Always verify in the browser — this is
+invisible in the source code and only shows up on render.
+
+### AP-4: CSS Reset Without Restore
+
+**Wrong:** Applying `* { margin: 0; padding: 0; }` without restoring `padding-left`
+on `<ul>` and `<ol>`. List markers clip or disappear.
+
+**Right:** Immediately after the reset, restore: `ul, ol { padding-left: 24px; }`
+The style guide documents this, but it's easy to forget when writing the actual HTML.

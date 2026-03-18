@@ -15,7 +15,7 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 |---|--------|--------|-------|--------|----------|
 | 1 | OpenClaw Deployment | Sean Currie | OpenClaw agent platform | Complete (research + walkthrough ready) | outputs/openclaw-sean/ |
 | 2 | OpenClaw Deployment | Jeff (Denver RE) | OpenClaw on MacBook Air + Instagram | Complete + Section 2b iteration (hardware choices) | outputs/openclaw-jeff/ |
-| 3 | *(available)* | | | Type F workflow ready, no active output | |
+| 3 | Job Search Engine Design Review | Sean Currie | Job Search Engine (design doc + implementation plan) | Active (Type F) | outputs/job-search-engine-design/ |
 
 ## Engine Structure
 
@@ -61,6 +61,6 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
   - New section: 4 subsections + hub-and-spoke diagram, render-validated, 14/16 self-tests passed (2 known deferred)
   - Deferred: Sections 3-5 still reference MacBook Air — will update after Jeff confirms purchase
 - Evaluate GitHub Pages for output delivery
-- Type F (Review Artifact) workflow is built and ready — no output produced yet
+- Type F (Review Artifact) workflow tested — Output #3 produced (job-search-engine-design)
 - OUTPUT.md pattern established — all outputs now have identity files
 - session-restart rewritten to discover and route to any output by type
