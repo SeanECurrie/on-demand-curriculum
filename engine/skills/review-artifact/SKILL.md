@@ -8,7 +8,7 @@ description: >
   expanding details, understanding architecture through diagrams rather than scrolling
   through raw markdown. The source material IS the input — no research, no synthesis, no
   operator profile. The engine transforms and presents.
-  Reference implementation: outputs/job-search-engine-design/
+  First Type F output becomes the reference implementation for future builds.
 ---
 
 # Review Artifact — Document-to-Interactive-HTML Skill
@@ -42,14 +42,9 @@ Use the existing design system.
 
 ## Reference Implementation
 
-Read the actual output to understand what "good" looks like:
-
-```
-Read: outputs/job-search-engine-design/docs/walkthrough/interactive/job-search-engine-design.html
-```
-
-This is the first Type F output. It demonstrates every content type pattern, the navigation
-structure, the diagram approach, and the update sync workflow.
+If a Type F output already exists in `outputs/`, read its HTML to understand what "good"
+looks like. If no Type F output exists yet, rely on the process steps below and the
+style system from the prerequisites.
 
 ## The Process
 
@@ -107,9 +102,9 @@ skip content because it doesn't fit a pattern.
 - Expandable `<details>` blocks for progressive disclosure
 - Rough.js diagrams that re-render on theme change and window resize
 
-**Build from the reference implementation's patterns**, not from scratch. The
-job-search-engine-design output has proven implementations of every interactive
-feature listed above.
+**Build from the reference implementation's patterns if one exists.** If this is
+the first Type F output, build from the style guide and the interactive feature
+requirements listed above.
 
 ### Step 5: Render-Validate
 
