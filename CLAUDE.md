@@ -80,7 +80,7 @@ Watch for these patterns. If you catch yourself doing any of them, STOP and corr
 
 ## The Pipeline
 
-The engine runs five stages to produce each output. Full details in the design document at `docs/plans/2026-03-03-on-demand-curriculum-engine-design.md`.
+The engine runs five stages to produce each output. Type F (Review Artifact) outputs skip Research and Synthesis — the source document IS the input. Full details in the design document at `docs/plans/2026-03-03-on-demand-curriculum-engine-design.md`.
 
 | Stage | Purpose | Key Activity |
 |-------|---------|-------------|
@@ -89,6 +89,7 @@ The engine runs five stages to produce each output. Full details in the design d
 | **Synthesis** | Honest assessment from research | Is this the right tool? What misconceptions exist? What's the hardening breakdown? |
 | **Output Generation** | Build the interactive walkthrough | Tailored to their hardware, knowledge level, and goals |
 | **Delivery** | Get it to the person | GitHub Pages, live walkthrough, their own repo — Sean's call per situation |
+| **Transform (Type F only)** | Turn a completed document into interactive HTML | Read source doc, classify sections, build single-file HTML with engine style system |
 
 ---
 
@@ -129,9 +130,12 @@ The engine runs five stages to produce each output. Full details in the design d
 │       ├── findings-pattern/
 │       ├── anti-pattern-check/
 │       ├── section-construction/
-│       └── render-validate/
+│       ├── render-validate/
+│       └── review-artifact/
 └── outputs/                    # Each person's tailored deliverable
-    └── openclaw-sean/          # Output #1 — reference implementation
+    ├── openclaw-sean/          # Output #1 — reference implementation (Type A)
+    ├── openclaw-jeff/          # Output #2 — Type A
+    └── job-search-engine-design/  # Output #3 — reference implementation (Type F)
 ```
 
 **Rule:** Engine encodes process, not content. Output-specific research, findings, and walkthroughs live in `outputs/`. Reusable methodology, templates, and patterns live in `engine/`.
@@ -242,6 +246,7 @@ These skills operate within the pipeline stages, invoked during actual engine wo
 | `section-construction` | Generating complex outputs (deep-dive only, >500 lines) | Output Generation |
 | `render-validate` | After constructing visual/interactive output (HTML walkthroughs) | Output Generation |
 | `self-test` | Before declaring any substantive work complete | All stages |
+| `review-artifact` | Transforming a completed document into interactive HTML for review (Type F) | Output Generation |
 
 ### Skill Discipline Rules
 - If a skill applies (even 1% chance), invoke it — no rationalizing
