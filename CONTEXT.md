@@ -40,7 +40,7 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 - 2026-03-18: Type F (Review Artifact) classification added — new output type for transforming completed documents into interactive HTML for Sean's review
   Origin: Job Search Engine design doc review proved the workflow: source doc → interactive HTML → review loop → feedback to source agent → sync updates
   Additions: Type F in pipeline-start, review-artifact skill, OUTPUT.md identity files for all outputs, session-restart rewritten to be output-aware
-  No reference implementation yet — first Type F output will serve as reference
+  Reference implementation: outputs/job-search-engine-design/ (design doc + implementation plan → interactive HTML)
 
 ## Key Decisions
 
