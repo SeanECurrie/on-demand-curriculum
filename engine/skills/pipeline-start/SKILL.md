@@ -318,7 +318,7 @@ deviations must be noted and justified.
 3. review-artifact skill → structural analysis + section planning + build
    ├── Read: engine/templates/walkthrough-style-guide.md
    ├── Read: engine/templates/diagram-color-reference.md
-   ├── Read: outputs/job-search-engine-design/ (reference implementation)
+   ├── Read: existing Type F output if one exists (reference implementation)
    └── Output: single-file interactive HTML
 4. render-validate → visual QA (V1-V6 if applicable)
 5. Create/update OUTPUT.md for the output
