@@ -28,11 +28,15 @@ This tells you: what outputs exist, engine evolution notes, what's next at the e
 
 Scan for available outputs:
 
+Scan the `outputs/` directory for subdirectories. For each one that has an `OUTPUT.md`,
+read it. For example:
+
 ```
 Read: outputs/openclaw-sean/OUTPUT.md
 Read: outputs/openclaw-jeff/OUTPUT.md
-Read: outputs/job-search-engine-design/OUTPUT.md
 ```
+
+(There may be more or fewer — discover what exists, don't assume a fixed list.)
 
 Each OUTPUT.md tells you: type (A-F), status, source documents, deliverables, and
 what to read to resume.
@@ -49,9 +53,7 @@ what to read to resume.
 
 | # | Output | Type | Status |
 |---|--------|------|--------|
-| 1 | OpenClaw (Sean) | A — Full pipeline | Complete |
-| 2 | OpenClaw (Jeff) | A — Full pipeline | Complete (Section 2b done, 3-5 deferred) |
-| 3 | JSE Design Review | F — Review artifact | Active |
+| [N] | [Name from OUTPUT.md] | [Type] | [Status] |
 
 Which output are you working on, or is this something new?
 ```

@@ -134,8 +134,7 @@ The engine runs five stages to produce each output. Type F (Review Artifact) out
 │       └── review-artifact/
 └── outputs/                    # Each person's tailored deliverable
     ├── openclaw-sean/          # Output #1 — reference implementation (Type A)
-    ├── openclaw-jeff/          # Output #2 — Type A
-    └── job-search-engine-design/  # Output #3 — reference implementation (Type F)
+    └── openclaw-jeff/          # Output #2 — Type A
 ```
 
 **Rule:** Engine encodes process, not content. Output-specific research, findings, and walkthroughs live in `outputs/`. Reusable methodology, templates, and patterns live in `engine/`.
