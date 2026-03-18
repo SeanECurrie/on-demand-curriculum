@@ -1,0 +1,2707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Search Engine — Design Document</title>
+  <style>
+/* ─── CSS Custom Properties ─── */
+:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  --color-blue-50: #eff6ff; --color-blue-100: #dbeafe; --color-blue-200: #bfdbfe;
+  --color-blue-500: #3b82f6; --color-blue-600: #2563eb; --color-blue-700: #1d4ed8;
+  --color-red-50: #fef2f2; --color-red-100: #fee2e2;
+  --color-red-500: #ef4444; --color-red-600: #dc2626;
+  --color-green-50: #f0fdf4; --color-green-100: #dcfce7;
+  --color-green-500: #22c55e; --color-green-600: #16a34a;
+  --color-amber-50: #fffbeb; --color-amber-100: #fef3c7;
+  --color-amber-500: #f59e0b; --color-amber-800: #92400e;
+  --color-purple-50: #faf5ff; --color-purple-100: #f3e8ff;
+  --color-purple-500: #a855f7; --color-purple-600: #9333ea;
+  --color-indigo-50: #eef2ff; --color-indigo-100: #e0e7ff;
+  --color-indigo-500: #6366f1; --color-indigo-600: #4f46e5;
+  --color-stone-50: #fafaf9; --color-stone-100: #f5f5f4; --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1; --color-stone-400: #a8a29e; --color-stone-500: #78716c;
+  --color-stone-700: #44403c; --color-stone-800: #292524; --color-stone-900: #1c1917;
+
+  --bg: var(--color-stone-50);
+  --surface: var(--color-stone-100);
+  --code-bg: var(--color-stone-200);
+  --border: var(--color-stone-200);
+  --border-subtle: var(--color-stone-300);
+  --text-muted: var(--color-stone-400);
+  --text-secondary: var(--color-stone-500);
+  --text-body: var(--color-stone-700);
+  --text-heading: var(--color-stone-800);
+  --text-strongest: var(--color-stone-900);
+  --link: var(--color-blue-500);
+  --link-hover: var(--color-blue-600);
+
+  --callout-info-bg: var(--color-blue-50);
+  --callout-info-border: var(--color-blue-500);
+  --callout-info-label: var(--color-blue-600);
+  --callout-warning-bg: var(--color-amber-50);
+  --callout-warning-border: var(--color-amber-500);
+  --callout-warning-label: var(--color-amber-800);
+  --callout-critical-bg: var(--color-red-50);
+  --callout-critical-border: var(--color-red-500);
+  --callout-critical-label: var(--color-red-600);
+  --callout-design-bg: var(--color-purple-50);
+  --callout-design-border: var(--color-purple-500);
+  --callout-design-label: var(--color-purple-600);
+
+  --nav-active-bg: var(--color-blue-100);
+  --nav-active-color: var(--color-blue-600);
+  --nav-active-border: var(--color-blue-500);
+
+  --sidebar-bg: var(--color-stone-100);
+  --sidebar-border: var(--color-stone-200);
+
+  --card-bg: white;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --surface: #262626;
+  --code-bg: #2d2d2d;
+  --border: #404040;
+  --border-subtle: #333333;
+  --text-muted: #737373;
+  --text-secondary: #a3a3a3;
+  --text-body: #d4d4d4;
+  --text-heading: #e5e5e5;
+  --text-strongest: #f5f5f5;
+  --link: #60a5fa;
+  --link-hover: #3b82f6;
+
+  --callout-info-bg: #1e3a5f;
+  --callout-info-border: #60a5fa;
+  --callout-info-label: #60a5fa;
+  --callout-warning-bg: #451a03;
+  --callout-warning-border: #fbbf24;
+  --callout-warning-label: #fbbf24;
+  --callout-critical-bg: #450a0a;
+  --callout-critical-border: #f87171;
+  --callout-critical-label: #f87171;
+  --callout-design-bg: rgba(59, 7, 100, 0.3);
+  --callout-design-border: #c084fc;
+  --callout-design-label: #c084fc;
+
+  --nav-active-bg: #1e3a5f;
+  --nav-active-color: #60a5fa;
+  --nav-active-border: #3b82f6;
+
+  --sidebar-bg: #1f1f1f;
+  --sidebar-border: #333333;
+
+  --card-bg: #262626;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* ─── Global ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-body);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ─── Layout ─── */
+.sidebar {
+  width: 260px;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 24px 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 1.3;
+}
+
+.theme-toggle {
+  width: 36px; height: 36px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-body);
+  flex-shrink: 0;
+}
+.theme-toggle:hover { background: var(--code-bg); }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="dark"] .icon-sun { display: block; }
+:root:not([data-theme="dark"]) .icon-sun { display: none; }
+:root:not([data-theme="dark"]) .icon-moon { display: block; }
+html:not([data-theme]) .icon-sun { display: none; }
+html:not([data-theme]) .icon-moon { display: block; }
+
+.nav-group-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 8px 20px 4px;
+  margin-top: 16px;
+}
+.nav-group-label:first-of-type { margin-top: 8px; }
+
+.nav-item {
+  display: block;
+  padding: 6px 20px 6px 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  text-decoration: none;
+}
+.nav-item:hover { color: var(--text-heading); background: var(--surface); text-decoration: none; }
+.nav-item.active {
+  background: var(--nav-active-bg);
+  color: var(--nav-active-color);
+  border-left-color: var(--nav-active-border);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 20px 0;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.main-content {
+  margin-left: 260px;
+  max-width: 820px;
+  padding: 40px 48px 80px;
+}
+
+/* ─── Mobile ─── */
+.mobile-header {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px;
+  background: var(--sidebar-bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 99;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.hamburger {
+  width: 40px; height: 40px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-body);
+}
+
+.mobile-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-left: 12px;
+}
+
+.backdrop {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+
+@media (max-width: 1023px) {
+  .sidebar { transform: translateX(-100%); width: 280px; z-index: 101; }
+  .sidebar.open { transform: translateX(0); }
+  .backdrop.open { display: block; }
+  .mobile-header { display: flex; }
+  .main-content { margin-left: 0; padding: 72px 24px 80px; }
+}
+
+/* ─── Typography ─── */
+.doc-header {
+  margin-bottom: var(--space-12);
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--border);
+}
+
+.doc-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-strongest);
+  line-height: 1.2;
+  margin-bottom: var(--space-3);
+}
+
+.doc-header .subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.doc-meta {
+  display: flex;
+  gap: var(--space-6);
+  margin-top: var(--space-4);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.doc-meta span { display: flex; align-items: center; gap: var(--space-2); }
+
+.section {
+  margin-bottom: var(--space-12);
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+
+.section h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-strongest);
+  margin-bottom: var(--space-6);
+  line-height: 1.3;
+}
+
+.section h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-4);
+}
+
+.section h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+
+.section p {
+  margin-bottom: var(--space-4);
+}
+
+.section ul, .section ol {
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-6);
+}
+
+.section li {
+  margin-bottom: var(--space-2);
+}
+
+.section li strong {
+  color: var(--text-heading);
+}
+
+/* ─── Callouts ─── */
+.callout {
+  border-left: 4px solid;
+  border-radius: 6px;
+  padding: var(--space-4) var(--space-5);
+  margin: var(--space-5) 0;
+  font-size: 14px;
+}
+
+.callout-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.callout-info { background: var(--callout-info-bg); border-color: var(--callout-info-border); }
+.callout-info .callout-label { color: var(--callout-info-label); }
+
+.callout-warning { background: var(--callout-warning-bg); border-color: var(--callout-warning-border); }
+.callout-warning .callout-label { color: var(--callout-warning-label); }
+
+.callout-critical { background: var(--callout-critical-bg); border-color: var(--callout-critical-border); }
+.callout-critical .callout-label { color: var(--callout-critical-label); }
+
+.callout-design { background: var(--callout-design-bg); border-color: var(--callout-design-border); }
+.callout-design .callout-label { color: var(--callout-design-label); }
+
+/* ─── Key Distinction Cards ─── */
+.distinction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
+}
+@media (max-width: 767px) { .distinction-grid { grid-template-columns: 1fr; } }
+
+.distinction-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: var(--space-5);
+  box-shadow: var(--card-shadow);
+}
+
+.distinction-card .card-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.distinction-card .card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: var(--space-2);
+}
+
+.distinction-card p {
+  font-size: 14px;
+  color: var(--text-body);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.card-label.blue { color: var(--color-blue-600); }
+.card-label.purple { color: var(--color-purple-600); }
+.card-label.green { color: var(--color-green-600); }
+[data-theme="dark"] .card-label.blue { color: var(--color-blue-500); }
+[data-theme="dark"] .card-label.purple { color: var(--color-purple-500); }
+[data-theme="dark"] .card-label.green { color: var(--color-green-500); }
+
+/* ─── Expandable Details ─── */
+.detail-block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: var(--space-4) 0;
+  overflow: hidden;
+}
+
+.detail-block summary {
+  padding: var(--space-3) var(--space-4);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  cursor: pointer;
+  background: var(--surface);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.detail-block summary::-webkit-details-marker { display: none; }
+
+.detail-block summary::before {
+  content: '\25B6';
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 200ms ease;
+  display: inline-block;
+}
+
+.detail-block[open] summary::before { transform: rotate(90deg); }
+
+.detail-block .detail-content {
+  padding: var(--space-4) var(--space-5);
+  font-size: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.detail-block .detail-content p { margin-bottom: var(--space-3); }
+.detail-block .detail-content p:last-child { margin-bottom: 0; }
+.detail-block .detail-content ul { padding-left: var(--space-5); margin-bottom: var(--space-3); }
+.detail-block .detail-content li { margin-bottom: var(--space-1); font-size: 14px; }
+
+/* ─── Phase Pipeline ─── */
+.pipeline-nav {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.phase-btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.phase-btn:hover { border-color: var(--color-blue-500); color: var(--text-heading); }
+
+.phase-btn.active {
+  background: var(--color-blue-500);
+  color: white;
+  border-color: var(--color-blue-500);
+}
+
+[data-theme="dark"] .phase-btn.active {
+  background: var(--color-blue-600);
+  border-color: var(--color-blue-600);
+}
+
+.phase-content { display: none; }
+.phase-content.active { display: block; }
+
+.phase-content h4 {
+  margin-top: var(--space-4);
+}
+
+.phase-content h4:first-child {
+  margin-top: 0;
+}
+
+/* ─── Diagram Containers ─── */
+.diagram-container {
+  margin: var(--space-6) 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--card-bg);
+}
+
+.diagram-container canvas {
+  display: block;
+  width: 100%;
+}
+
+.diagram-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--space-2) var(--space-4) var(--space-3);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+/* ─── Tables ─── */
+.table-wrap {
+  overflow-x: auto;
+  margin: var(--space-5) 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  background: var(--surface);
+  font-weight: 600;
+  color: var(--text-heading);
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 2px solid var(--border);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+tr:last-child td { border-bottom: none; }
+
+tr:hover td { background: var(--surface); }
+
+/* ─── Behavior Cards ─── */
+.behavior-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
+}
+@media (max-width: 767px) { .behavior-grid { grid-template-columns: 1fr; } }
+
+.behavior-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: var(--space-4) var(--space-5);
+  box-shadow: var(--card-shadow);
+}
+
+.behavior-number {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.behavior-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: var(--space-2);
+}
+
+.behavior-desc {
+  font-size: 13px;
+  color: var(--text-body);
+  line-height: 1.5;
+}
+
+/* ─── Directory Tree ─── */
+.dir-tree {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.8;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: var(--space-5);
+  margin: var(--space-5) 0;
+  overflow-x: auto;
+}
+
+.dir-tree details {
+  margin-left: 1.5em;
+}
+
+.dir-tree > details { margin-left: 0; }
+
+.dir-tree summary {
+  cursor: pointer;
+  color: var(--color-blue-600);
+  list-style: none;
+}
+
+[data-theme="dark"] .dir-tree summary { color: var(--color-blue-500); }
+
+.dir-tree summary::-webkit-details-marker { display: none; }
+
+.dir-tree summary::before {
+  content: '\25B6 ';
+  font-size: 9px;
+  color: var(--text-muted);
+  transition: transform 200ms ease;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.dir-tree details[open] > summary::before { transform: rotate(90deg); }
+
+.dir-tree .file {
+  margin-left: 1.5em;
+  color: var(--text-body);
+}
+
+.dir-tree .file-comment {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ─── Timeline / Build Sequence ─── */
+.build-timeline {
+  position: relative;
+  margin: var(--space-6) 0;
+  padding-left: 32px;
+}
+
+.build-timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--border);
+}
+
+.build-phase {
+  position: relative;
+  margin-bottom: var(--space-6);
+}
+
+.build-phase:last-child { margin-bottom: 0; }
+
+.build-dot {
+  position: absolute;
+  left: -26px;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-blue-500);
+  border: 2px solid var(--card-bg);
+  box-shadow: 0 0 0 2px var(--color-blue-500);
+}
+
+.build-phase.mve .build-dot {
+  background: var(--color-green-500);
+  box-shadow: 0 0 0 2px var(--color-green-500);
+}
+
+.build-phase-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: var(--space-1);
+}
+
+.build-phase-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: var(--space-2);
+}
+
+.build-phase-desc {
+  font-size: 14px;
+  color: var(--text-body);
+  line-height: 1.5;
+}
+
+.mve-badge {
+  display: inline-block;
+  background: var(--color-green-100);
+  color: var(--color-green-600);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: var(--space-2);
+  vertical-align: middle;
+}
+
+[data-theme="dark"] .mve-badge {
+  background: rgba(5, 46, 22, 0.5);
+  color: #4ade80;
+}
+
+/* ─── Lifecycle Stages ─── */
+.lifecycle-stages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-6) 0;
+}
+
+.lifecycle-stage {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  position: relative;
+}
+
+.lifecycle-stage:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 30px;
+  bottom: -14px;
+  width: 2px;
+  height: 12px;
+  background: var(--border);
+}
+
+.stage-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 28px;
+  text-align: center;
+  padding-top: 2px;
+}
+
+.stage-body { flex: 1; }
+
+.stage-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: var(--space-1);
+}
+
+.stage-desc {
+  font-size: 13px;
+  color: var(--text-body);
+  line-height: 1.5;
+}
+
+.stage-trigger {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: var(--space-1);
+}
+
+/* ─── Code snippets ─── */
+code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text-heading);
+}
+
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: var(--space-4) var(--space-5);
+  margin: var(--space-4) 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-heading);
+}
+
+/* ─── Print ─── */
+@media print {
+  .sidebar, .mobile-header, .backdrop { display: none !important; }
+  .main-content { margin-left: 0; padding: 20px; max-width: 100%; }
+  .detail-block[open] .detail-content { display: block; }
+  .phase-content { display: block !important; }
+  .phase-content::before { content: attr(data-phase-title); font-weight: 700; display: block; margin-bottom: 8px; }
+}
+  </style>
+</head>
+<body>
+
+<!-- Mobile Header -->
+<div class="mobile-header">
+  <button class="hamburger" aria-label="Open navigation">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 5h14M3 10h14M3 15h14"/>
+    </svg>
+  </button>
+  <span class="mobile-title">Job Search Engine Design</span>
+</div>
+<div class="backdrop"></div>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-title">Job Search Engine<br>Design Document</span>
+    <button class="theme-toggle" aria-label="Toggle theme">
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+
+  <div class="nav-group-label">Overview</div>
+  <a class="nav-item active" href="#what-this-is" data-target="what-this-is">What This Is</a>
+  <a class="nav-item" href="#architecture" data-target="architecture">Factory / Product Split</a>
+
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="#process" data-target="process">The Engine's Process</a>
+  <a class="nav-item" href="#target-lifecycle" data-target="target-lifecycle">Target Lifecycle</a>
+
+  <div class="nav-group-label">Capabilities</div>
+  <a class="nav-item" href="#skills" data-target="skills">Skills Architecture</a>
+  <a class="nav-item" href="#behaviors" data-target="behaviors">Engine Behaviors</a>
+
+  <div class="nav-group-label">Execution</div>
+  <a class="nav-item" href="#build-sequence" data-target="build-sequence">Build Sequence</a>
+  <a class="nav-item" href="#boundaries" data-target="boundaries">What Lives Where</a>
+  <a class="nav-item" href="#deferred-decisions" data-target="deferred-decisions">Deferred Decisions</a>
+
+  <div class="nav-group-label">Implementation</div>
+  <a class="nav-item" href="#implementation" data-target="implementation">Implementation Plan</a>
+
+  <div class="sidebar-footer">
+    Draft — 2026-03-17<br>
+    Sean Currie + Claude
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main-content">
+
+  <!-- Header -->
+  <header class="doc-header">
+    <h1>Job Search Engine</h1>
+    <p class="subtitle">A process-driven, AI-powered system that analyzes a full professional profile, researches the market, determines targeting, generates tailored materials, and manages the pipeline from first contact through offer.</p>
+    <div class="doc-meta">
+      <span>Draft &mdash; 2026-03-17</span>
+      <span>Brainstorm session: Sean + Claude</span>
+      <span>Status: Pending Review</span>
+    </div>
+  </header>
+
+  <!-- Section 1: What This Is -->
+  <section class="section" id="what-this-is">
+    <h2>What This Is</h2>
+
+    <p>A standalone, AI-powered job search engine built for Sean Currie. Not a resume folder &mdash; a <strong>process-driven system</strong> that runs its own discovery. It doesn't wait to be told what to target.</p>
+
+    <div class="distinction-grid">
+      <div class="distinction-card">
+        <div class="card-label blue">vs. Frank Lombardo</div>
+        <div class="card-title">Deliverables vs. Machine</div>
+        <p>Frank got deliverables. Sean gets a machine. The engine is opinionated, process-driven, and runs its own discovery.</p>
+      </div>
+      <div class="distinction-card">
+        <div class="card-label purple">vs. SEE</div>
+        <div class="card-title">Factory vs. Product</div>
+        <p>SEE is the factory. The job search engine is the product. Built and maintained from SEE, runs independently.</p>
+      </div>
+      <div class="distinction-card">
+        <div class="card-label green">The Meta-Play</div>
+        <div class="card-title">Engine as Portfolio Piece</div>
+        <p>The fact that Sean built an AI-powered job search engine is itself evidence of capability. The engine is self-aware as a talking point and proof of work.</p>
+      </div>
+    </div>
+
+    <details class="detail-block">
+      <summary>Design Considerations: Complexity vs. Frank's Approach</summary>
+      <div class="detail-content">
+        <p>Frank's engagement was simpler: FOR-FRANK, 03-WORKING, 01-KNOWLEDGE-BASE, _build. This engine is more complex by design &mdash; it's a living system, not a one-shot package. The complexity is warranted by:</p>
+        <ul>
+          <li><strong>Ongoing operation</strong> (not one delivery)</li>
+          <li><strong>Multiple targets</strong> with different lifecycles</li>
+          <li><strong>Process-driven methodology</strong> requiring state management</li>
+          <li><strong>Future automation layers</strong></li>
+        </ul>
+        <p>If complexity creates friction during use, simplify. Structure should serve the process, not the other way around.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Timeline Pressure: 4-8 Week Window</summary>
+      <div class="detail-content">
+        <p>The MVE (Minimum Viable Engine) concept ensures Sean can start operating within ~1 week of build start while deeper capabilities are built in parallel. The engine's own Phase 1 (Discovery &amp; Positioning) can run before all skills are extracted.</p>
+        <p><strong>Critical path:</strong> capability map + market scanner + session orchestrator.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Runtime Isolation: No SEE References in Deployed Engine</summary>
+      <div class="detail-content">
+        <p>The deployed engine is <strong>fully self-contained</strong>. Its CLAUDE.md, skills, operator files, and directory structure do not reference SEE. SEE is a build-time concern, not a runtime concern.</p>
+        <ul>
+          <li>The engine's CLAUDE.md describes its own methodology &mdash; not where it came from</li>
+          <li>Skill files don't reference "forked from" or "extracted from" &mdash; they're the engine's own skills</li>
+          <li>Operator files (COLLABORATION-STYLE.md, WRITING-STYLE.md) are the engine's own documents</li>
+          <li>Directory comments describe what things ARE, not where they came from</li>
+        </ul>
+        <p><strong>The one exception:</strong> SEE appears as a <strong>portfolio item</strong> in the capability map &mdash; "Sean built a Sales Enablement Engine." That's evidence about Sean's professional work, not operational awareness of the engine's own construction.</p>
+        <p><strong>Build-time implication:</strong> During Phase 3 (Core Skills Build), all SEE references get stripped from files before deployment. The extraction manifest tracks provenance; the deployed skills don't carry it.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Operator File Staleness (Prerequisite)</summary>
+      <div class="detail-content">
+        <p>As of design date (2026-03-17), source material is stale:</p>
+        <ul>
+          <li><strong>OPERATOR-PROFILE.md:</strong> last updated 2025-12-25 (83 days stale)</li>
+          <li><strong>CONTEXT.md:</strong> last updated 2026-02-19 (26 days stale)</li>
+          <li><strong>Evidence index:</strong> 6 entries for 30+ work products</li>
+        </ul>
+        <p>These must be updated before or during Phase 2. The engine's quality depends on the quality of its source material.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- Section 2: Architecture -->
+  <section class="section" id="architecture">
+    <h2>Factory / Product Separation</h2>
+
+    <p>Two distinct systems with a clear boundary. SEE designs, builds, and maintains. The Job Search Engine operates and uses.</p>
+
+    <div class="diagram-container">
+      <canvas id="diagram-architecture" width="760" height="360"></canvas>
+      <div class="diagram-label">SEE (factory) produces and maintains the Job Search Engine (product). Updates flow right; design stays left.</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-6);">
+      <div>
+        <h4>SEE Owns</h4>
+        <ul>
+          <li>Design docs &amp; plans</li>
+          <li>Skill extraction planning</li>
+          <li>Source material gathering</li>
+          <li>Capability development</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Engine Owns</h4>
+        <ul>
+          <li>The running process</li>
+          <li>Market research</li>
+          <li>Targeting decisions</li>
+          <li>Generated materials</li>
+          <li>Pipeline management</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-design">
+      <div class="callout-label">Design Principle</div>
+      Updates flow from SEE &rarr; JobSearchEngine when new skills are built or source material is refreshed. After Phase 3, Sean operates from the engine. Returns to SEE to build new capabilities, update source material, or maintain skills.
+    </div>
+
+    <details class="detail-block">
+      <summary>Location Mapping: What Lives Where</summary>
+      <div class="detail-content">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Activity</th><th>Location</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Design docs, plans, decisions</td><td><code>SEE projects/job-search-engine/</code></td></tr>
+              <tr><td>Skill audit &amp; manifest</td><td><code>SEE projects/job-search-engine/extraction-manifest/</code></td></tr>
+              <tr><td>Skill staging (build/modify before deployment)</td><td><code>SEE projects/job-search-engine/staged-skills/</code></td></tr>
+              <tr><td>Source material gathering</td><td><code>SEE projects/job-search-engine/source-material/</code></td></tr>
+              <tr><td><strong>Deployed skills (engine owns these)</strong></td><td><strong><code>~/Desktop/JobSearchEngine/skills/local/</code></strong></td></tr>
+              <tr><td><strong>Day-to-day skill tweaks</strong></td><td><strong>In the engine directly</strong></td></tr>
+              <tr><td>Market research, targeting, materials</td><td><code>~/Desktop/JobSearchEngine/</code></td></tr>
+              <tr><td>Pipeline management, interviews, offers</td><td><code>~/Desktop/JobSearchEngine/</code></td></tr>
+              <tr><td>New capability design (major new skills)</td><td><code>SEE &rarr; stage &rarr; deploy to engine</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- Section 3: The Engine's Process -->
+  <section class="section" id="process">
+    <h2>The Engine's Process</h2>
+
+    <p>When Sean sits down with the engine, it has a structured process. <strong>The engine drives &mdash; Sean steers.</strong> Six phases, from ingesting source material through continuous intelligence.</p>
+
+    <div class="diagram-container">
+      <canvas id="diagram-pipeline" width="760" height="140"></canvas>
+      <div class="diagram-label">Click a phase above or use the pills below to explore each phase in detail.</div>
+    </div>
+
+    <nav class="pipeline-nav">
+      <button class="phase-btn active" data-phase="phase-0">Phase 0: Ingest</button>
+      <button class="phase-btn" data-phase="phase-1">Phase 1: Discovery</button>
+      <button class="phase-btn" data-phase="phase-2">Phase 2: Targeting</button>
+      <button class="phase-btn" data-phase="phase-3">Phase 3: Arsenal</button>
+      <button class="phase-btn" data-phase="phase-4">Phase 4: Execute</button>
+      <button class="phase-btn" data-phase="phase-5">Phase 5: Intelligence</button>
+    </nav>
+
+    <!-- Phase 0 -->
+    <div class="phase-content active" id="phase-0" data-phase-title="Phase 0: Ingest & Profile Build">
+      <h4>Ingest &amp; Profile Build</h4>
+      <p>First-time setup. The engine ingests all source material and produces the foundation everything else builds on.</p>
+
+      <h4>What This Phase Produces</h4>
+      <ul>
+        <li><strong>Master capability map</strong> &mdash; every skill, achievement, proof point. Atomized and tagged by domain, evidence strength, recency, and transferability.</li>
+        <li><strong>Wonda narrative arc</strong> &mdash; the engine works WITH Sean to frame this chapter. The raw facts: 6-month fractional SE role, products built, relationship complexity, professional growth. The framing is an engine-phase conversation, not a pre-decision.</li>
+        <li><strong>Products inventory</strong> &mdash; SEE, WondaKB, renewal engine, master content library, UI design framework, dev team bridge, hosted platform research, on-demand-curriculum, and the job search engine itself.</li>
+        <li><strong>Gap analysis</strong> &mdash; what's strong, what's thin, where evidence is solid vs. inferred.</li>
+      </ul>
+
+      <div class="callout callout-warning">
+        <div class="callout-label">Heavy Lift</div>
+        This phase is heavier than a simple ingest. Sean's operator files are stale as of the design date. The evidence index has 6 entries for 30+ work products. Phase 0 includes excavating the full engagement history, not just reading existing files.
+      </div>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="phase-content" id="phase-1" data-phase-title="Phase 1: Discovery & Positioning">
+      <h4>Discovery &amp; Positioning</h4>
+      <p>The engine analyzes the capability map AND runs market research (Bright Data, job boards, industry signals). It returns positioning &mdash; not templates, but evidence-driven angles.</p>
+
+      <h4>What the Engine Returns</h4>
+      <ul>
+        <li><strong>"Here's what your profile says you are"</strong> &mdash; capability clusters, not job titles</li>
+        <li><strong>"Here's what the market is hiring for"</strong> &mdash; demand signals, compensation data, growth indicators</li>
+        <li><strong>"Here's where those overlap &mdash; and where they don't"</strong></li>
+        <li><strong>"Here are positioning angles I'd recommend, ranked, with reasoning"</strong></li>
+        <li><strong>Pushback included</strong> &mdash; "You might think X, but the data says Y"</li>
+      </ul>
+
+      <div class="callout callout-design">
+        <div class="callout-label">Design Principle</div>
+        The engine determines targeting. The design does not pre-define positioning variants. The discovery process surfaces them from evidence + market data. Sean debates, refines, and lands on variants.
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-label">Self-Awareness</div>
+        The engine knows its own existence is evidence of capability. When positioning angles emerge, "built AI-powered operational systems" should be grounded in real artifacts &mdash; including this engine.
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-content" id="phase-2" data-phase-title="Phase 2: Targeting">
+      <h4>Targeting</h4>
+      <p>The engine builds target lists with two tiers of depth.</p>
+
+      <ul>
+        <li><strong>Sniper list (10-15)</strong> &mdash; Deep-researched companies. Each gets a full target folder with company profile, role analysis, contact intelligence, fit scoring.</li>
+        <li><strong>Pipeline list (50+)</strong> &mdash; Broader targets, scored and tiered. Enough data to prioritize, not enough for personalized outreach yet.</li>
+      </ul>
+
+      <p><strong>Scoring criteria</strong> are defined by the engine based on Phase 1 findings: culture fit, growth signals, hiring velocity, compensation range, role-profile alignment. Not pre-defined in this design.</p>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-content" id="phase-3" data-phase-title="Phase 3: Arsenal Build">
+      <h4>Arsenal Build</h4>
+      <p>Per target, the engine generates tailored materials from the atomic capability map &mdash; not rewritten from scratch each time.</p>
+
+      <ul>
+        <li>Tailored resume (from atomic capability map + positioning variant)</li>
+        <li>Cover letter / application narrative</li>
+        <li>Outreach sequences (hiring manager, referral, recruiter)</li>
+        <li>LinkedIn profile updates</li>
+        <li>Interview prep (when interviews are scheduled)</li>
+      </ul>
+
+      <p>All materials pass through the collaboration style and writing style guides. <strong>Output sounds like Sean, not AI.</strong></p>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-content" id="phase-4" data-phase-title="Phase 4: Execute & Track">
+      <h4>Execute &amp; Track</h4>
+      <p>Pipeline management powered by <strong>Notion</strong> as the visualization and tracking layer.</p>
+
+      <ul>
+        <li>Application status tracking (Notion databases &mdash; visual pipeline, filterable, sortable)</li>
+        <li>Interview scheduling and prep generation</li>
+        <li>Post-interview debrief processing</li>
+        <li>Follow-up sequencing</li>
+        <li>Cross-opportunity intelligence ("they loved the AI story" &rarr; weight that signal)</li>
+        <li>Feedback loops that refine targeting and positioning</li>
+      </ul>
+
+      <div class="callout callout-info">
+        <div class="callout-label">Notion Integration</div>
+        The engine builds and manages a Notion workspace for pipeline visualization. This is a first-class capability, not an afterthought. Markdown files remain source of truth; Notion is the visual layer and daily operating view.
+      </div>
+
+      <details class="detail-block">
+        <summary>Engine-phase decisions surfaced during execution</summary>
+        <div class="detail-content">
+          <ul>
+            <li><strong>LinkedIn content strategy</strong> &mdash; what to post, when, how the job search intersects with professional presence</li>
+            <li><strong>Geography preferences</strong> &mdash; remote, hybrid, Chicago-area, open to relocation</li>
+            <li><strong>Compensation expectations</strong> &mdash; floor, target, negotiation leverage</li>
+            <li><strong>Portfolio presentation</strong> &mdash; which projects to highlight</li>
+          </ul>
+          <p>These are discovered through the engine's process, not pre-set in this design.</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="phase-content" id="phase-5" data-phase-title="Phase 5: Continuous Intelligence">
+      <h4>Continuous Intelligence <span style="font-size: 12px; color: var(--text-muted); font-weight: 400;">(future-ready)</span></h4>
+      <p>Architecturally ready, not first build. The hooks exist; nothing runs automatically yet.</p>
+
+      <ul>
+        <li>Scheduled market scans (cron jobs or similar)</li>
+        <li>Auto-surfaced new postings matching profile</li>
+        <li>Re-engagement sequences for stale contacts</li>
+        <li>LinkedIn content integration</li>
+        <li>Automated application tracking</li>
+        <li>Notion dashboard auto-refresh</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section 4: Target Lifecycle -->
+  <section class="section" id="target-lifecycle">
+    <h2>Target Lifecycle</h2>
+
+    <p>Sniper target folders expand as opportunities progress. Stages are created only when needed &mdash; a cold target has only <code>00-RESEARCH/</code>, an active interview has up through <code>03-INTERVIEWS/</code>.</p>
+
+    <div class="lifecycle-stages">
+      <div class="lifecycle-stage">
+        <div class="stage-num">00</div>
+        <div class="stage-body">
+          <div class="stage-name">Research</div>
+          <div class="stage-desc">Company profile, role analysis, contact profiles (hiring manager, recruiter, referrals). Always exists for every sniper target.</div>
+        </div>
+      </div>
+      <div class="lifecycle-stage">
+        <div class="stage-num">01</div>
+        <div class="stage-body">
+          <div class="stage-name">Outreach</div>
+          <div class="stage-desc">Tailored resume, cover letter, outreach sequences. Created when actively targeting.</div>
+          <div class="stage-trigger">Trigger: decision to pursue this target</div>
+        </div>
+      </div>
+      <div class="lifecycle-stage">
+        <div class="stage-num">02</div>
+        <div class="stage-body">
+          <div class="stage-name">Active</div>
+          <div class="stage-desc">Communications tracking and timeline. Created when they respond.</div>
+          <div class="stage-trigger">Trigger: "I got a reply from Acme"</div>
+        </div>
+      </div>
+      <div class="lifecycle-stage">
+        <div class="stage-num">03</div>
+        <div class="stage-body">
+          <div class="stage-name">Interviews</div>
+          <div class="stage-desc">Per-round prep (battle plan) and debriefs (post-interview intelligence). Cross-round pattern analysis in synthesis.md.</div>
+          <div class="stage-trigger">Trigger: first interview scheduled</div>
+        </div>
+      </div>
+      <div class="lifecycle-stage">
+        <div class="stage-num">04</div>
+        <div class="stage-body">
+          <div class="stage-name">Offer</div>
+          <div class="stage-desc">Offer analysis, negotiation playbook, decision framework against other active opportunities.</div>
+          <div class="stage-trigger">Trigger: offer received</div>
+        </div>
+      </div>
+      <div class="lifecycle-stage">
+        <div class="stage-num">05</div>
+        <div class="stage-body">
+          <div class="stage-name">Outcome</div>
+          <div class="stage-desc">Lessons learned, relationship status. Always created at resolution &mdash; whether accepted, declined, or withdrawn.</div>
+          <div class="stage-trigger">Trigger: any resolution</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-design">
+      <div class="callout-label">Design Principle</div>
+      Stage promotion is a skill or session-orchestrator capability. When Sean says "I got a reply from Acme," the engine scaffolds the next stage, updates CONTEXT.md, updates the pipeline tracker, and initiates the appropriate next process.
+    </div>
+
+    <details class="detail-block">
+      <summary>Full Target Directory Structure</summary>
+      <div class="detail-content">
+        <div class="dir-tree">
+          <details open>
+            <summary>targets/sniper/[company-name]/</summary>
+            <div class="file">CONTEXT.md <span class="file-comment"># Stage, next action, timeline, temperature</span></div>
+            <details>
+              <summary>00-RESEARCH/</summary>
+              <div class="file">company-profile.md</div>
+              <div class="file">role-analysis.md</div>
+              <details>
+                <summary>contacts/</summary>
+                <div class="file"><span class="file-comment"># Hiring manager, recruiter, referral profiles</span></div>
+              </details>
+            </details>
+            <details>
+              <summary>01-OUTREACH/</summary>
+              <div class="file">resume.md</div>
+              <div class="file">cover-letter.md</div>
+              <details>
+                <summary>sequences/</summary>
+                <div class="file"><span class="file-comment"># Per-contact outreach sequences</span></div>
+              </details>
+            </details>
+            <details>
+              <summary>02-ACTIVE/</summary>
+              <details>
+                <summary>communications/</summary>
+                <div class="file"><span class="file-comment"># Tracked exchanges</span></div>
+              </details>
+              <div class="file">timeline.md</div>
+            </details>
+            <details>
+              <summary>03-INTERVIEWS/</summary>
+              <details>
+                <summary>round-N/</summary>
+                <div class="file">prep-OPERATOR.md <span class="file-comment"># Pre-interview battle plan</span></div>
+                <div class="file">debrief.md <span class="file-comment"># Post-interview intelligence</span></div>
+              </details>
+              <div class="file">synthesis.md <span class="file-comment"># Cross-round pattern analysis</span></div>
+            </details>
+            <details>
+              <summary>04-OFFER/</summary>
+              <div class="file">offer-analysis.md</div>
+              <div class="file">negotiation-OPERATOR.md</div>
+              <div class="file">decision-framework.md <span class="file-comment"># vs. other active opportunities</span></div>
+            </details>
+            <details>
+              <summary>05-OUTCOME/</summary>
+              <div class="file">outcome.md <span class="file-comment"># Lessons, relationship status</span></div>
+            </details>
+          </details>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- Section 5: Skills Architecture -->
+  <section class="section" id="skills">
+    <h2>Skills Architecture</h2>
+
+    <p>Skills are the engine's most critical layer. They are also the hardest to get right &mdash; 88 source skills across 8 projects, an extractability audit already done, antipatterns to fix, and a <strong>runtime isolation requirement</strong> that means every skill must arrive in the engine clean, self-contained, and unaware of where it came from.</p>
+
+    <h3>Skill Lifecycle</h3>
+
+    <p>Skills go through a <strong>one-way pipeline</strong>. Source &rarr; staging &rarr; engine. Once a skill lands in the engine, it belongs to the engine. The engine doesn't know or care where it came from.</p>
+
+    <div class="diagram-container">
+      <canvas id="diagram-skill-lifecycle" width="760" height="200"></canvas>
+      <div class="diagram-label">One-way skill pipeline: Source projects &rarr; SEE staging &rarr; deployed engine. No references flow backward.</div>
+    </div>
+
+    <h3>Three Classifications</h3>
+
+    <p>Every skill identified in Phase 1B gets one of three classifications. Each has a different build process:</p>
+
+    <div class="distinction-grid">
+      <div class="distinction-card">
+        <div class="card-label green">Clone-and-Go</div>
+        <div class="card-title">Works as-is</div>
+        <p>Copy &rarr; strip source references &rarr; rename if needed &rarr; deploy. 4 steps.</p>
+      </div>
+      <div class="distinction-card">
+        <div class="card-label blue">Fork-and-Adapt</div>
+        <div class="card-title">Right methodology, needs modification</div>
+        <p>Copy &rarr; understand &rarr; identify changes &rarr; rewrite modified sections &rarr; strip references &rarr; verify standalone readability &rarr; deploy. 7 steps.</p>
+      </div>
+      <div class="distinction-card">
+        <div class="card-label purple">Build-New</div>
+        <div class="card-title">No source skill exists</div>
+        <p>Define requirement &rarr; reference working examples &rarr; write from scratch &rarr; test against engine methodology &rarr; deploy. 5 steps.</p>
+      </div>
+    </div>
+
+    <details class="detail-block">
+      <summary>Full build process details for each classification</summary>
+      <div class="detail-content">
+        <h4>Clone-and-go</h4>
+        <ol>
+          <li>Copy SKILL.md to staging area</li>
+          <li>Strip any source-project references (paths, engagement names, project-specific context)</li>
+          <li>Rename if the skill name should change for job search context</li>
+          <li>Deploy to engine's <code>skills/local/</code></li>
+        </ol>
+        <h4>Fork-and-adapt</h4>
+        <ol>
+          <li>Copy SKILL.md to staging area</li>
+          <li>Read and understand what the skill does</li>
+          <li>Identify what changes for job search (terminology, inputs/outputs, context)</li>
+          <li>Rewrite the modified sections &mdash; the skill becomes a NEW skill that shares DNA with the source</li>
+          <li>Strip all source-project references</li>
+          <li>Test: does the skill make sense if you've never heard of the source project?</li>
+          <li>Deploy to engine's <code>skills/local/</code></li>
+        </ol>
+        <h4>Build-new</h4>
+        <ol>
+          <li>Define the capability requirement (what the skill needs to do)</li>
+          <li>Reference working examples from the capability inventory (scripts, patterns, prior outputs)</li>
+          <li>Write the SKILL.md from scratch in staging</li>
+          <li>Test against the engine's CLAUDE.md and methodology</li>
+          <li>Deploy to engine's <code>skills/local/</code></li>
+        </ol>
+      </div>
+    </details>
+
+    <h3>Manifest Entry Format</h3>
+
+    <p>Phase 1B produces <strong>one manifest entry per skill</strong>. Each entry is a build spec detailed enough for Phase 3 to execute without re-reading source skills:</p>
+
+    <div class="code-block">## [Engine Skill Name]
+
+**Classification:** Clone-and-go | Fork-and-adapt | Build-new
+**Source:** [project/skill-name] or "New"
+**Priority:** Critical path (Phase 0-1) | Core (Phase 2-3) | Supporting (Phase 4+)
+**Effort:** [estimate]
+
+### What It Does in the Engine
+[1-3 sentences: what this skill does in the job search context]
+
+### What Changes from Source (fork-and-adapt only)
+- [Specific change 1]
+- [Specific change 2]
+
+### What to Build (build-new only)
+- [Capability requirement]
+- [Reference examples to draw from]
+
+### Working Examples to Include
+- [Script, deliverable, or pattern that deploys alongside this skill]
+
+### Antipattern Fixes (if applicable)
+- [From extractability audit: what gets fixed during this extraction]
+
+### Acceptance Test
+[How to verify this skill works correctly in the engine, independent of source]</div>
+
+    <h3>Skill Ownership Model</h3>
+
+    <p><strong>Once deployed, the engine owns its skills completely.</strong></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Situation</th><th>Where It Happens</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Day-to-day tweaks (adjust template, fix prompt, tune behavior)</td><td>In the engine directly &mdash; <code>skills/local/</code></td></tr>
+          <tr><td>Skill isn't working well (needs rethinking)</td><td>In the engine directly &mdash; Sean modifies based on real experience</td></tr>
+          <tr><td>Brand new capability needed (nothing like it exists)</td><td>Designed in SEE project, built in staging, deployed to engine</td></tr>
+          <tr><td>Major overhaul of an existing skill</td><td>Optionally return to SEE for planning, but the work lands in the engine</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-design">
+      <div class="callout-label">Design Principle</div>
+      The engine never references back to source skills. If a skill needs to change, it changes where it lives. The extraction manifest in SEE tracks provenance for historical reference, but the engine doesn't carry that lineage. The engine's CLAUDE.md references skills by their engine names, not source names.
+    </div>
+
+    <h3>Capability Inventory (<code>skills/CAPABILITIES.md</code>)</h3>
+
+    <p>The engine carries a <code>skills/CAPABILITIES.md</code> file that maps what it can do. This is <strong>NOT a provenance document</strong> &mdash; it's an operational reference.</p>
+
+    <p>For each capability: skill name, what it does (in job search context), working examples, and available infrastructure.</p>
+
+    <details class="detail-block">
+      <summary>Example entry: Notion Integration</summary>
+      <div class="detail-content">
+        <div class="code-block">## Notion Integration
+
+**Skill:** `notion-ops`
+**What it does:** Builds and manages Notion databases for pipeline
+visualization. Maps workspace, creates databases, pushes/pulls data.
+**Working examples:**
+- 3 populate scripts (reference implementations for pushing structured
+  data to Notion)
+- Property design methodology (how to evolve database schemas iteratively)
+- Playbook-first approach: map workspace before operating, title for
+  understanding / ID for execution
+**Infrastructure:** Notion MCP server, cached workspace schemas</div>
+        <p>The engine reads this and knows: "I have a Notion skill, here's what it can do, here are examples I can reference." No mention of where it came from.</p>
+      </div>
+    </details>
+
+    <h3>Known Capability Requirements</h3>
+
+    <p>Phase 1B determines the final skill names, classifications, and build specs.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Capability</th><th>Description</th><th>Build Approach (preliminary)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Session orchestration</td><td>Context loading, phase routing, stage detection</td><td>Fork-and-adapt (significant rework for job search phases)</td></tr>
+          <tr><td>Profile building</td><td>Ingest source material, build capability map, atomize</td><td>Build-new</td></tr>
+          <tr><td>Market scanning</td><td>Bright Data + job board research, trend analysis</td><td>Fork-and-adapt (combine engagement-research + competitive-research)</td></tr>
+          <tr><td>Positioning synthesis</td><td>Match profile to market, recommend angles</td><td>Fork-and-adapt</td></tr>
+          <tr><td>Target building</td><td>Company/role lists, scoring, prioritization</td><td>Fork-and-adapt (ICP &rarr; company targeting profile)</td></tr>
+          <tr><td>Company research</td><td>Deep-dive specific companies</td><td>Fork-and-adapt (minimal changes)</td></tr>
+          <tr><td>Contact profiling</td><td>Hiring manager, recruiter, referral profiles</td><td>Fork-and-adapt (minimal &mdash; template name changes)</td></tr>
+          <tr><td>Resume generation</td><td>Tailored resume from atoms + positioning + target</td><td>Build-new (uses Frank's _build/ scripts as reference)</td></tr>
+          <tr><td>Outreach building</td><td>Personalized sequences per contact</td><td>Fork-and-adapt (tone shift: sales &rarr; professional networking)</td></tr>
+          <tr><td>Materials QA</td><td>Quality check, unverified claims discipline</td><td>Fork-and-adapt (checklist adapted for resume/cover letter)</td></tr>
+          <tr><td>Interview processing</td><td>Debrief extraction, cross-round synthesis</td><td>Fork-and-adapt (meeting &rarr; interview context mapping)</td></tr>
+          <tr><td>Stage promotion</td><td>Detect stage changes, scaffold, update pipeline</td><td>Build-new (or session-orchestrator capability)</td></tr>
+          <tr><td>Content updating</td><td>Audit-logged updates to profiles, targets, pipeline</td><td>Clone-and-go (already engagement-agnostic)</td></tr>
+          <tr><td>Audit logging</td><td>Activity log + intelligence log</td><td>Clone-and-go (already engagement-agnostic)</td></tr>
+          <tr><td>Notion integration</td><td>Pipeline visualization, target dashboards</td><td>Fork-and-adapt (workspace mapping &rarr; job search databases)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details class="detail-block">
+      <summary>Skills from Other Projects Worth Evaluating</summary>
+      <div class="detail-content">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Project</th><th>Skill</th><th>Why</th><th>Likely Classification</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>on-demand-curriculum</td><td><code>depth-assessment</code></td><td>Process control &mdash; could govern research depth</td><td>Fork-and-adapt</td></tr>
+              <tr><td>on-demand-curriculum</td><td><code>pipeline-start</code></td><td>Pipeline initialization pattern</td><td>Fork-and-adapt</td></tr>
+              <tr><td>on-demand-curriculum</td><td><code>findings-pattern</code></td><td>Pattern identification in research outputs</td><td>Fork-and-adapt</td></tr>
+              <tr><td>attio-mcp-agent</td><td><code>enrich-contacts</code></td><td>Contact enrichment methodology</td><td>Fork-and-adapt</td></tr>
+              <tr><td>attio-mcp-agent</td><td><code>csv-to-attio-ingest</code></td><td>CRM data pipeline (if Notion needs bulk import)</td><td>Evaluate</td></tr>
+              <tr><td>restaurant-software</td><td><code>session-orchestrator</code></td><td>Alternative orchestrator implementation (simpler?)</td><td>Evaluate</td></tr>
+              <tr><td>MaiaLearningResearch</td><td><code>competitive-research-brightdata</code></td><td>Market research methodology</td><td>Fork-and-adapt</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Known Antipatterns to Fix During Extraction</summary>
+      <div class="detail-content">
+        <p>From the 2026-03-13 extractability audit:</p>
+        <ul>
+          <li><strong>Session orchestrator as god object</strong> &mdash; too much responsibility in one skill</li>
+          <li><strong>Content-updater as mandatory choke point</strong> &mdash; everything routes through it unnecessarily</li>
+          <li><strong>Hardcoded living project paths</strong> &mdash; skills reference absolute paths instead of being portable</li>
+          <li><strong>Skill cross-references creating implicit coupling</strong> &mdash; skills depend on each other's internals</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Research Findings from Audit</summary>
+      <div class="detail-content">
+        <ul>
+          <li>19 of 23 SEE skills are already engagement-agnostic</li>
+          <li>All 7 core SEE skills map to job search with 15-30% adaptation</li>
+          <li>Frank's DOCX generation pipeline (6 Node.js scripts) is reusable</li>
+          <li>Notion infrastructure is rich: 2 skills, 3 populate scripts, playbook pattern, property design methodology, cached schemas, MCP server</li>
+          <li>88 total skills across 8 projects &mdash; capability inventory in Phase 1B catalogs the full landscape</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3>Collaboration &amp; Writing Style</h3>
+
+    <p>The engine carries its own versions of COLLABORATION-STYLE.md and WRITING-STYLE.md. Core principle: push back, research, bring data &mdash; tuned for job search context. These are the engine's own documents. They happen to encode the same principles as the originals, but they live in and belong to the engine.</p>
+  </section>
+
+  <!-- Section 6: Engine Behaviors -->
+  <section class="section" id="behaviors">
+    <h2>Engine Behaviors</h2>
+
+    <p>The deployed engine's CLAUDE.md will encode these behaviors. These are the operating principles &mdash; what makes the engine opinionated rather than passive.</p>
+
+    <div class="behavior-grid">
+      <div class="behavior-card">
+        <div class="behavior-number">#1</div>
+        <div class="behavior-title">Process-Driven</div>
+        <div class="behavior-desc">The engine has a methodology (Phases 0-4). It doesn't wait for instructions &mdash; it knows what phase it's in and what comes next.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#2</div>
+        <div class="behavior-title">Opinionated</div>
+        <div class="behavior-desc">Pushes back. Researches before agreeing. Argues with evidence. Doesn't validate &mdash; collaborates.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#3</div>
+        <div class="behavior-title">Atomic Source Material</div>
+        <div class="behavior-desc">Resumes, cover letters, and outreach are generated from the capability map, not rewritten from scratch each time.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#4</div>
+        <div class="behavior-title">Stage-Aware</div>
+        <div class="behavior-desc">Tracks every target's lifecycle stage. Promotes stages when status changes. Scaffolds the right structure.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#5</div>
+        <div class="behavior-title">Evidence-Grounded</div>
+        <div class="behavior-desc">Every claim in a resume or cover letter traces back to a documented achievement. Unverified claims are flagged.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#6</div>
+        <div class="behavior-title">Self-Aware as Portfolio</div>
+        <div class="behavior-desc">The engine knows it is evidence of Sean's capability. It can describe itself and position its existence as proof of work.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#7</div>
+        <div class="behavior-title">Writing Style Enforced</div>
+        <div class="behavior-desc">All outputs pass through Sean's writing style guide. The engine sounds like Sean, not like AI.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#8</div>
+        <div class="behavior-title">Audit Discipline</div>
+        <div class="behavior-desc">Two-layer logging: activity log (what happened) and intelligence log (what it means). Every action leaves a breadcrumb.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#9</div>
+        <div class="behavior-title">Notion-Powered Visualization</div>
+        <div class="behavior-desc">Pipeline tracking, target dashboards, and daily operating view live in Notion. Markdown remains source of truth.</div>
+      </div>
+      <div class="behavior-card">
+        <div class="behavior-number">#10</div>
+        <div class="behavior-title">Future-Ready</div>
+        <div class="behavior-desc">Architecture supports scheduled scans, automated applications, and deeper integrations without requiring them for first operation.</div>
+      </div>
+      <div class="behavior-card" style="grid-column: span 2;">
+        <div class="behavior-number">#11</div>
+        <div class="behavior-title">Decisions Deferred to Process</div>
+        <div class="behavior-desc">The engine does not pre-decide targeting, positioning, geography, compensation, or strategy. It has processes to discover these through analysis + market research + operator dialogue.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Build Sequence -->
+  <section class="section" id="build-sequence">
+    <h2>Build Sequence</h2>
+
+    <p>Four build phases, with MVE (Minimum Viable Engine) achievable after a fast pass through the first three. The goal: Sean is operational in ~1 week, deeper capabilities build in parallel.</p>
+
+    <div class="build-timeline">
+      <div class="build-phase">
+        <div class="build-dot"></div>
+        <div class="build-phase-label">Phase 1A</div>
+        <div class="build-phase-title">Foundation</div>
+        <div class="build-phase-desc">
+          Scaffold both directory structures. Write the engine's CLAUDE.md (methodology, behaviors, guardrails). Write session orchestrator. Fork and tune COLLABORATION-STYLE.md and WRITING-STYLE.md.
+        </div>
+        <details class="detail-block" style="margin-top: var(--space-3);">
+          <summary>Milestone &amp; Deliverables</summary>
+          <div class="detail-content">
+            <p><strong>Milestone:</strong> Engine directory exists, CLAUDE.md is written, you can open a Claude Code session in <code>~/Desktop/JobSearchEngine/</code> and the orchestrator loads.</p>
+            <p><strong>Where:</strong> SEE (<code>projects/job-search-engine/</code>) + deployed engine (<code>~/Desktop/JobSearchEngine/</code>)</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="build-phase">
+        <div class="build-dot"></div>
+        <div class="build-phase-label">Phase 1B</div>
+        <div class="build-phase-title">Skill Audit &amp; Extraction Planning</div>
+        <div class="build-phase-desc">
+          This phase produces the build spec that Phase 3 executes. Every skill that lands in the engine traces back to a manifest entry written here.
+        </div>
+        <details class="detail-block" style="margin-top: var(--space-3);">
+          <summary>Full scope &amp; deliverables</summary>
+          <div class="detail-content">
+            <ul>
+              <li><strong>Audit the full 88-skill inventory</strong> against job search capabilities</li>
+              <li><strong>Apply extractability audit findings</strong> &mdash; which skills are already engagement-agnostic, which have hardcoded paths, which have antipatterns</li>
+              <li><strong>Classify each skill:</strong> clone-and-go / fork-and-adapt / build-new</li>
+              <li><strong>Write a manifest entry per skill</strong> &mdash; classification, what changes, what to include, antipattern fixes, acceptance test. Detailed enough for Phase 3 to execute mechanically.</li>
+              <li><strong>Build the capability inventory draft</strong> &mdash; skill name, working examples, reference scripts, patterns, infrastructure. Becomes <code>skills/CAPABILITIES.md</code> after deployment.</li>
+              <li><strong>Prioritize by critical path:</strong> Critical path skills (Phase 0-1: profile building, market scanning, orchestration, positioning) first. Core skills (Phase 2-3) next. Supporting skills (Phase 4+) last.</li>
+              <li><strong>Identify antipattern fixes</strong> per skill &mdash; god-object decomposition, path parameterization, choke point removal, coupling breakage.</li>
+              <li><strong>Create staging directory:</strong> <code>projects/job-search-engine/staged-skills/</code></li>
+            </ul>
+            <p><strong>Milestone:</strong> Extraction manifest complete &mdash; one build spec per skill, prioritized, with capability inventory draft. Phase 3 can execute mechanically from this document.</p>
+            <p><strong>Where:</strong> SEE (<code>projects/job-search-engine/extraction-manifest/</code>)</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="build-phase">
+        <div class="build-dot"></div>
+        <div class="build-phase-label">Phase 2</div>
+        <div class="build-phase-title">Source Material &amp; Profile Build</div>
+        <div class="build-phase-desc">
+          Update stale SEE operator files. Mine the full engagement history. Index all Desktop projects. Build the master capability map. Prepare Wonda source material. Import assets (resume, LinkedIn, evidence).
+        </div>
+        <details class="detail-block" style="margin-top: var(--space-3);">
+          <summary>This phase is significant work</summary>
+          <div class="detail-content">
+            <ul>
+              <li><strong>Update SEE operator files</strong> &mdash; OPERATOR-PROFILE.md, CONTEXT.md, evidence-index.md are all stale</li>
+              <li><strong>Mine the full engagement history</strong> &mdash; Wonda engagement, all projects. Extract every accomplishment into evidence entries</li>
+              <li><strong>Index Desktop projects</strong> &mdash; WondaKB, website-audit, on-demand-curriculum, MaiaLearningResearch, the engine itself</li>
+              <li><strong>Build the master capability map</strong> &mdash; atomized achievements, tagged by domain, evidence strength, recency, transferability</li>
+              <li><strong>Prepare Wonda source material</strong> &mdash; raw facts go into capability map; narrative framing is an engine-phase decision</li>
+              <li><strong>Import assets</strong> &mdash; current resume (pre-Wonda, Aug 2025), LinkedIn profile, other materials</li>
+            </ul>
+            <p><strong>Milestone:</strong> The engine can run Phase 0 end-to-end. Master capability map exists.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="build-phase mve">
+        <div class="build-dot"></div>
+        <div class="build-phase-label">Phase 3 <span class="mve-badge">MVE</span></div>
+        <div class="build-phase-title">Core Skills Build</div>
+        <div class="build-phase-desc">
+          This phase executes the Phase 1B manifest. Each manifest entry becomes a skill in the engine through a consistent per-skill process.
+        </div>
+        <details class="detail-block" style="margin-top: var(--space-3);">
+          <summary>Per-skill execution process</summary>
+          <div class="detail-content">
+            <p><strong>For each skill in priority order:</strong></p>
+            <ol>
+              <li><strong>Read the manifest entry</strong> &mdash; classification, what changes, what to include, acceptance test</li>
+              <li><strong>Execute the build process</strong> per classification:
+                <ul>
+                  <li>Clone-and-go: Copy source &rarr; strip references &rarr; rename if needed &rarr; stage</li>
+                  <li>Fork-and-adapt: Copy source &rarr; modify per manifest &rarr; strip references &rarr; verify standalone &rarr; stage</li>
+                  <li>Build-new: Write from scratch per manifest &rarr; reference examples &rarr; stage</li>
+                </ul>
+              </li>
+              <li><strong>Stage in SEE</strong> &mdash; <code>projects/job-search-engine/staged-skills/[skill-name]/SKILL.md</code></li>
+              <li><strong>Run acceptance test</strong> &mdash; per manifest entry</li>
+              <li><strong>Deploy clean to engine</strong> &mdash; <code>~/Desktop/JobSearchEngine/skills/local/</code></li>
+              <li><strong>Update CAPABILITIES.md</strong> &mdash; add the entry to the engine's capability inventory</li>
+            </ol>
+          </div>
+        </details>
+        <details class="detail-block" style="margin-top: var(--space-3);">
+          <summary>After all skills: wiring + final sweep</summary>
+          <div class="detail-content">
+            <ul>
+              <li>Wire up stage promotion capability</li>
+              <li>Wire up pipeline tracking</li>
+              <li>Wire up materials QA with writing style enforcement</li>
+              <li>DOCX generation pipeline (adapt from Frank's <code>_build/</code> pattern)</li>
+              <li>Deploy Notion integration skills with working examples</li>
+              <li><strong>Final sweep:</strong> Verify no deployed file references any source project. The extraction manifest tracks provenance; the deployed skills don't carry it.</li>
+              <li><strong>Integration test:</strong> Can the engine run Phase 1 (Discovery &amp; Positioning) end to end using only its own skills and context?</li>
+            </ul>
+          </div>
+        </details>
+        <details class="detail-block" style="margin-top: var(--space-3);">
+          <summary>Milestone &amp; MVE Definition</summary>
+          <div class="detail-content">
+            <p><strong>Milestone:</strong> Engine is operational, self-aware of its capabilities (via CAPABILITIES.md), and fully self-contained. Sean switches to <code>~/Desktop/JobSearchEngine/</code> and the engine knows what it can do, has working examples for every capability, and owns all its skills outright.</p>
+            <p><strong>MVE =</strong> Phase 1A + fast-pass Phase 2 + minimal Phase 3:</p>
+            <ul>
+              <li>CLAUDE.md written and operational</li>
+              <li>Session orchestrator working</li>
+              <li>Capability map built from existing materials</li>
+              <li>Resume generator functional (markdown &rarr; DOCX)</li>
+              <li>Market scanner functional (Bright Data queries)</li>
+              <li>Company researcher functional</li>
+              <li>Pipeline tracker operational</li>
+            </ul>
+            <p><strong>Timeline target for MVE:</strong> End of week 1 of build.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="build-phase">
+        <div class="build-dot"></div>
+        <div class="build-phase-label">Phase 6</div>
+        <div class="build-phase-title">Future-Ready Architecture (stubbed)</div>
+        <div class="build-phase-desc">
+          Stub scheduled scan capability (cron-ready, not active). Stub automated application tracking, LinkedIn content integration. Document what each stub needs to become active.
+        </div>
+        <details class="detail-block" style="margin-top: var(--space-3);">
+          <summary>Milestone</summary>
+          <div class="detail-content">
+            <p><strong>Milestone:</strong> Architecture supports future automation. Nothing runs automatically yet, but the hooks exist.</p>
+            <p>Consider OpenClaw / on-demand-curriculum patterns for scheduling.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: Boundaries -->
+  <section class="section" id="boundaries">
+    <h2>What Lives Where</h2>
+
+    <p>Clear boundary between the factory (SEE) and the product (JobSearchEngine). This table is the reference for where work happens.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Activity</th><th>Location</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Design docs, plans, decisions</td><td><code>SEE projects/job-search-engine/</code></td></tr>
+          <tr><td>Skill audit &amp; manifest</td><td><code>SEE projects/job-search-engine/extraction-manifest/</code></td></tr>
+          <tr><td>Skill staging (build/modify before deployment)</td><td><code>SEE projects/job-search-engine/staged-skills/</code></td></tr>
+          <tr><td>Source material gathering</td><td><code>SEE projects/job-search-engine/source-material/</code></td></tr>
+          <tr><td><strong>Deployed skills (engine owns these)</strong></td><td><strong><code>~/Desktop/JobSearchEngine/skills/local/</code></strong></td></tr>
+          <tr><td><strong>Day-to-day skill tweaks</strong></td><td><strong>In the engine directly</strong></td></tr>
+          <tr><td>Market research, targeting, materials</td><td><code>~/Desktop/JobSearchEngine/</code></td></tr>
+          <tr><td>Pipeline management, interviews, offers</td><td><code>~/Desktop/JobSearchEngine/</code></td></tr>
+          <tr><td>New capability design (major new skills)</td><td><code>SEE &rarr; stage &rarr; deploy to engine</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-info">
+      <div class="callout-label">The Handoff</div>
+      After Phase 3, Sean operates from the engine. The engine owns its skills &mdash; day-to-day modifications happen in the engine, not in SEE. Sean returns to SEE only for major new capabilities that need design and staging.
+    </div>
+
+    <details class="detail-block">
+      <summary>Full Deployed Engine Directory Structure</summary>
+      <div class="detail-content">
+        <div class="dir-tree">
+          <details open>
+            <summary>~/Desktop/JobSearchEngine/</summary>
+            <div class="file">CLAUDE.md <span class="file-comment"># Constitution</span></div>
+            <div class="file">README.md <span class="file-comment"># What this is, how to start</span></div>
+            <div class="file">CONTEXT.md <span class="file-comment"># Current state</span></div>
+            <details>
+              <summary>operator/</summary>
+              <div class="file">PROFILE.md <span class="file-comment"># Master capability map</span></div>
+              <div class="file">COLLABORATION-STYLE.md <span class="file-comment"># How the engine works with Sean</span></div>
+              <div class="file">WRITING-STYLE.md <span class="file-comment"># Sean's authentic voice</span></div>
+              <details>
+                <summary>evidence/</summary>
+                <div class="file"><span class="file-comment"># Achievements, atomized and tagged</span></div>
+              </details>
+              <details>
+                <summary>positioning/</summary>
+                <div class="file"><span class="file-comment"># Variant narratives (discovered in Phase 1)</span></div>
+              </details>
+              <details>
+                <summary>assets/</summary>
+                <div class="file"><span class="file-comment"># Resume source, LinkedIn source, portfolio</span></div>
+              </details>
+            </details>
+            <details>
+              <summary>skills/</summary>
+              <details>
+                <summary>local/</summary>
+                <div class="file"><span class="file-comment"># Engine's own skills (it owns these completely)</span></div>
+              </details>
+              <div class="file">CAPABILITIES.md <span class="file-comment"># What the engine can do &mdash; operational reference, not provenance</span></div>
+            </details>
+            <details>
+              <summary>market/</summary>
+              <div class="file">landscape.md <span class="file-comment"># Current market snapshot</span></div>
+              <details>
+                <summary>signals/</summary>
+                <div class="file"><span class="file-comment"># Hiring trends, industry moves, salary data</span></div>
+              </details>
+              <details>
+                <summary>scans/</summary>
+                <div class="file"><span class="file-comment"># Dated scan results</span></div>
+              </details>
+            </details>
+            <details>
+              <summary>targets/</summary>
+              <details>
+                <summary>sniper/</summary>
+                <div class="file"><span class="file-comment"># Deep-researched targets (10-15)</span></div>
+              </details>
+              <details>
+                <summary>pipeline/</summary>
+                <div class="file">pipeline-list.md <span class="file-comment"># Scored, tiered</span></div>
+              </details>
+              <details>
+                <summary>scoring/</summary>
+                <div class="file"><span class="file-comment"># ICP definitions, scoring criteria</span></div>
+              </details>
+            </details>
+            <details>
+              <summary>arsenal/</summary>
+              <details><summary>resumes/</summary><div class="file"><span class="file-comment"># Tailored per target/variant</span></div></details>
+              <details><summary>cover-letters/</summary><div class="file"><span class="file-comment"># Per target</span></div></details>
+              <details><summary>outreach/</summary><div class="file"><span class="file-comment"># Sequences per contact</span></div></details>
+              <details><summary>linkedin/</summary><div class="file"><span class="file-comment"># Profile updates, post drafts</span></div></details>
+              <details><summary>interview-prep/</summary><div class="file"><span class="file-comment"># Per company, per round</span></div></details>
+            </details>
+            <details>
+              <summary>pipeline/</summary>
+              <div class="file">tracker.md <span class="file-comment"># Application status</span></div>
+              <details><summary>debriefs/</summary><div class="file"><span class="file-comment"># Post-interview intelligence</span></div></details>
+              <details><summary>follow-ups/</summary><div class="file"><span class="file-comment"># Scheduled actions</span></div></details>
+            </details>
+            <details>
+              <summary>templates/</summary>
+              <details><summary>sniper-target/</summary><div class="file"><span class="file-comment"># Starter kit for deep-research target</span></div></details>
+              <details><summary>resume/</summary><div class="file"><span class="file-comment"># Resume structure templates</span></div></details>
+              <details><summary>outreach/</summary><div class="file"><span class="file-comment"># Sequence templates</span></div></details>
+            </details>
+            <details>
+              <summary>integrations/</summary>
+              <details>
+                <summary>notion/</summary>
+                <details><summary>playbook/</summary><div class="file"><span class="file-comment"># Database IDs, properties, working examples</span></div></details>
+                <details><summary>schemas/</summary><div class="file"><span class="file-comment"># Cached workspace schemas</span></div></details>
+              </details>
+            </details>
+            <details>
+              <summary>patterns/</summary>
+              <div class="file"><span class="file-comment"># Reusable solutions library</span></div>
+            </details>
+            <details>
+              <summary>logs/</summary>
+              <div class="file">activity-log.md</div>
+              <div class="file">intelligence-log.md</div>
+            </details>
+            <details>
+              <summary>_build/</summary>
+              <div class="file"><span class="file-comment"># Generation scripts (DOCX, PDF output)</span></div>
+            </details>
+          </details>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- Section 9: Deferred Decisions -->
+  <section class="section" id="deferred-decisions">
+    <h2>Decisions Deferred to Process</h2>
+
+    <p>These decisions are <strong>explicitly deferred</strong> to the engine's own process. The design provides the methodology and skills to make these decisions well &mdash; it does not answer them.</p>
+
+    <div class="callout callout-design">
+      <div class="callout-label">Design Principle</div>
+      If a decision depends on data the engine hasn't gathered yet (market research, profile analysis, company intelligence), the design describes the PROCESS for making that decision &mdash; not the answer.
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Decision</th><th>Phase</th><th>How the Engine Addresses It</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Wonda narrative framing</strong></td>
+            <td>0</td>
+            <td>During capability map + narrative arc work. Engine and Sean collaborate on positioning.</td>
+          </tr>
+          <tr>
+            <td><strong>What roles/titles to target</strong></td>
+            <td>1</td>
+            <td>Discovery process matches profile to market. Engine recommends, Sean steers.</td>
+          </tr>
+          <tr>
+            <td><strong>Positioning variants</strong></td>
+            <td>1</td>
+            <td>Engine surfaces capability clusters and maps them to market demand.</td>
+          </tr>
+          <tr>
+            <td><strong>Geography preferences</strong></td>
+            <td>1-2</td>
+            <td>Factors into scoring criteria and target filtering.</td>
+          </tr>
+          <tr>
+            <td><strong>Compensation expectations</strong></td>
+            <td>1-2</td>
+            <td>Market research informs floor/target, engine uses for filtering.</td>
+          </tr>
+          <tr>
+            <td><strong>LinkedIn content strategy</strong></td>
+            <td>1-3</td>
+            <td>Engine considers how job search intersects with professional presence.</td>
+          </tr>
+          <tr>
+            <td><strong>Portfolio presentation</strong></td>
+            <td>1-3</td>
+            <td>Which projects to highlight (SEE, WondaKB, on-demand-curriculum, this engine).</td>
+          </tr>
+          <tr>
+            <td><strong>Which companies to target</strong></td>
+            <td>2</td>
+            <td>Engine builds lists, scores, recommends. Sean approves sniper list.</td>
+          </tr>
+          <tr>
+            <td><strong>Outreach sequencing strategy</strong></td>
+            <td>3</td>
+            <td>Engine determines per-target approach based on research.</td>
+          </tr>
+          <tr>
+            <td><strong>Notion workspace structure</strong></td>
+            <td>4</td>
+            <td>Engine designs databases for pipeline visualization based on actual tracking needs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Key Decisions Already Made</h3>
+    <p>These were resolved during the brainstorming session and are captured here for reference:</p>
+    <ul>
+      <li>Engine is a living project in SEE, deployed standalone at <code>~/Desktop/JobSearchEngine/</code></li>
+      <li>Engine determines targeting &mdash; design does not pre-define positioning variants</li>
+      <li>Skills are a dedicated audit phase (1B), not hand-waved</li>
+      <li>Stage promotion is a skill/orchestrator capability for target lifecycle</li>
+      <li>Collaboration and writing style carry from SEE with job-search tuning</li>
+      <li>MVE concept: operational in ~1 week, deeper build continues in parallel</li>
+      <li>Frank's patterns (DOCX generation, unverified claims discipline, networking sequencing) are reusable</li>
+      <li>The engine itself is a portfolio piece (meta-awareness)</li>
+      <li>Notion replaces Attio as tracking/visualization layer</li>
+      <li>Wonda framing, role targeting, geography, comp, LinkedIn strategy &mdash; ALL engine-phase decisions</li>
+      <li>Wonda relationship maintained &mdash; Sean may continue working with them</li>
+      <li>Runtime isolation &mdash; deployed engine does not reference SEE. SEE is build-time only. Engine is self-contained.</li>
+      <li>Skill ownership &mdash; once deployed, engine owns its skills completely. Day-to-day tweaks in engine. Major new capabilities designed in SEE, staged, deployed.</li>
+      <li>Phase 1B manifest entries are full build specs &mdash; classification + what changes + what to include + acceptance test. Detailed enough for Phase 3 to execute mechanically.</li>
+      <li>Staging area (<code>staged-skills/</code>) in SEE project &mdash; skills get built/modified here, then deployed clean to engine.</li>
+    </ul>
+
+    <h3>Source Material Inputs</h3>
+    <details class="detail-block">
+      <summary>Full source material inventory</summary>
+      <div class="detail-content">
+        <ul>
+          <li><strong>Resume:</strong> <code>operator/Sean-Currie-Resume-08032025.docx</code> (pre-Wonda, Aug 2025)</li>
+          <li><strong>LinkedIn:</strong> <code>operator/Operator-Sean-Currie-Linkedin-Profile.pdf</code> (current)</li>
+          <li><strong>Evidence:</strong> <code>operator/evidence-index.md</code> (6 entries &mdash; needs major expansion)</li>
+          <li><strong>Operator files:</strong> OPERATOR-PROFILE.md, CONTEXT.md, COLLABORATION-STYLE.md, WRITING-STYLE.md</li>
+          <li><strong>Wonda engagement:</strong> <code>engagements/Wonda/</code> (full history)</li>
+          <li><strong>Desktop projects:</strong> WondaKB, website-audit, on-demand-curriculum, MaiaLearningResearch</li>
+          <li><strong>Frank's engagement:</strong> <code>engagements/JobSearch-FrankLombardo/</code> (patterns, templates, _build/ scripts)</li>
+          <li><strong>Extractability audit:</strong> <code>reviews/2026-03-13-wonda-extractability-audit/</code> (6 files)</li>
+          <li><strong>Skill inventory:</strong> 88 skills across 8 projects + 6 global</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- Section 10: Implementation Plan -->
+  <section class="section" id="implementation">
+    <h2>Implementation Plan</h2>
+
+    <p>22 tasks across 5 build phases. MVE (Minimum Viable Engine) is the critical path to Sean being operational within ~1 week. The engine can start running Phase 0-1 while remaining skills are built in parallel.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>What</th><th>Where</th><th>Tasks</th><th>MVE?</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>1A</strong></td><td>Foundation</td><td>SEE + Engine</td><td>1-5</td><td>Yes</td></tr>
+          <tr><td><strong>1B</strong></td><td>Skill Audit &amp; Extraction Planning</td><td>SEE</td><td>6-10</td><td>Yes (fast-pass)</td></tr>
+          <tr><td><strong>2</strong></td><td>Source Material &amp; Profile Build</td><td>SEE &rarr; Engine</td><td>11-15</td><td>Yes (fast-pass)</td></tr>
+          <tr><td><strong>3</strong></td><td>Core Skills Build</td><td>SEE staging &rarr; Engine</td><td>16-22</td><td>Yes (critical path)</td></tr>
+          <tr><td><strong>6</strong></td><td>Future-Ready Architecture</td><td>Engine</td><td>23-24</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-info">
+      <div class="callout-label">Tech Stack</div>
+      Claude Code skills (SKILL.md), markdown methodology files, Node.js + docx library (DOCX generation), Bright Data MCP (market research), Notion MCP (pipeline visualization), Puppeteer MCP (HTML&rarr;PDF).
+    </div>
+
+    <!-- Phase 1A -->
+    <h3>Phase 1A: Foundation <span style="font-size: 13px; color: var(--text-muted); font-weight: 400;">(Tasks 1-5)</span></h3>
+
+    <p><strong>Goal:</strong> Engine directory exists, CLAUDE.md is written, session orchestrator works, you can open a Claude Code session in <code>~/Desktop/JobSearchEngine/</code> and orient.</p>
+
+    <details class="detail-block">
+      <summary>Task 1: Scaffold Engine Directory Structure</summary>
+      <div class="detail-content">
+        <p>Create the full directory tree for both the SEE project side (<code>extraction-manifest/</code>, <code>staged-skills/</code>, <code>source-material/</code>) and the deployed engine (<code>~/Desktop/JobSearchEngine/</code> with all subdirectories). Initialize git. Create <code>.gitignore</code>.</p>
+        <p><strong>Acceptance:</strong> <code>ls ~/Desktop/JobSearchEngine/</code> shows all top-level directories. <code>git log</code> shows initial commit.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 2: Write Engine CLAUDE.md</summary>
+      <div class="detail-content">
+        <p>The engine's constitution. Encodes the methodology (Phases 0-4), all 11 behaviors, directory structure, target lifecycle, CONTEXT.md protocol, template/pattern awareness, operator deliverable marking, versioning, quality standards, and the "What NOT to Do" table.</p>
+        <p><strong>Key requirement:</strong> Self-contained &mdash; no SEE references. Claude opens the engine, reads CLAUDE.md, and understands everything without knowing about SEE.</p>
+        <p><strong>Acceptance:</strong> Open a Claude Code session in the engine. Claude reads CLAUDE.md and understands methodology, phases, behaviors, and directory structure without any reference to SEE.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 3: Write README, CONTEXT.md, and Log Files</summary>
+      <div class="detail-content">
+        <p>README with quick start guide and key directory reference. Initial CONTEXT.md reflecting Phase 0 state. Initialized activity log and intelligence log with format headers.</p>
+        <p><strong>Acceptance:</strong> README gives clear orientation. CONTEXT.md reflects Phase 0 state. Log files are initialized.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 4: Fork and Tune Collaboration + Writing Style</summary>
+      <div class="detail-content">
+        <p>Read SEE originals, then create the engine's own documents. COLLABORATION-STYLE tuned for job search (engine argues for targeting angles, challenges role fit assumptions, demands evidence for claims about capabilities). WRITING-STYLE carries Sean's voice with job-search-specific guidance per material type (resume, cover letter, outreach, LinkedIn).</p>
+        <p><strong>Acceptance:</strong> Both files read as the engine's own documents. No SEE references. Collaboration style pushes back on positioning; writing style captures Sean's voice.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 5: Write Session Orchestrator Skill</summary>
+      <div class="detail-content">
+        <p>A <strong>new skill</strong> &mdash; not a fork of the SEE orchestrator (which is a god object with 5 routes and 23 skill references). This is lean and phase-aware: load core context &rarr; detect phase &rarr; check active targets &rarr; report status &rarr; ask for direction.</p>
+        <p>Invoked via <code>/start-session</code>. Routes to appropriate phase work based on CONTEXT.md.</p>
+        <p><strong>Acceptance:</strong> Run <code>/start-session</code> in the engine. Orchestrator loads context, detects Phase 0, reports source material is needed, asks for direction. No god-object routing.</p>
+      </div>
+    </details>
+
+    <div class="callout callout-design">
+      <div class="callout-label">Phase 1A Milestone</div>
+      Open Claude Code in <code>~/Desktop/JobSearchEngine/</code>. Run <code>/start-session</code>. Claude reads CLAUDE.md, loads CONTEXT.md, detects Phase 0, reports source material is needed, asks what Sean wants to work on, and uses collaboration style. Tag: <code>phase-1a-complete</code>.
+    </div>
+
+    <!-- Phase 1B -->
+    <h3>Phase 1B: Skill Audit &amp; Extraction Planning <span style="font-size: 13px; color: var(--text-muted); font-weight: 400;">(Tasks 6-10)</span></h3>
+
+    <p><strong>Goal:</strong> Extraction manifest with one build spec per skill, prioritized, with capability inventory draft. Phase 3 can execute mechanically.</p>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">Note on "88 Skills"</div>
+      The design doc references 88 skills across 8 projects. Actual count is ~58 unique skills (many WondaKB skills are inherited from SEE) plus marketplace/superpowers skills. Phase 1B audits all unique skills regardless of exact count.
+    </div>
+
+    <details class="detail-block">
+      <summary>Task 6: Audit SEE Core Skills</summary>
+      <div class="detail-content">
+        <p>Read all 28 SEE skills. For each, determine: relevance to job search, classification (clone/fork/build/skip), engagement-agnostic status, antipatterns from extractability audit, and priority tier.</p>
+        <p>Cross-reference with the extractability audit (which already classified 19 of 23 as engagement-agnostic).</p>
+        <p><strong>28 skills to audit:</strong> session-orchestrator, content-updater, engagement-research, strategic-synthesis, deliverable-qa, campaign-builder, lead-builder, transcript-processor, prospect-profiler, team-profiler, attio-mapper, attio-ops, attio-qualify, attio-optimizer, attio-refiner, notion-mapper, notion-ops, audit-logging, framework-auditor, framework-explainer, navigator-builder, and more.</p>
+        <p><strong>Acceptance:</strong> Every SEE skill has a classification entry. Cross-referenced with extractability audit. Classifications are defensible.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 7: Audit External Project Skills</summary>
+      <div class="detail-content">
+        <p><strong>Parallelizable with Task 6.</strong></p>
+        <p>Audit WondaKB-unique skills (session-start, renewal-engine, strategic-accounts, document-integrator). Audit on-demand-curriculum's 8 process-control skills (pipeline-start, depth-assessment, section-construction, etc.). Audit Maia research skills (competitive-research-brightdata, competitive-analysis-quality-assurance).</p>
+        <p>Also audit Frank's reusable patterns: 6 Node.js DOCX scripts, resume template, application package formula, intel package structure, networking sequencing, unverified claims discipline, hypothesis tracking, framing guidance.</p>
+        <p><strong>Acceptance:</strong> All unique external skills classified. Frank's reusable patterns cataloged with clear classification.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 8: Write Extraction Manifest</summary>
+      <div class="detail-content">
+        <p><strong>Depends on Tasks 6 and 7.</strong></p>
+        <p>Consolidate both audits. Group by priority: Critical Path (Phase 0-1: session orchestrator, profile builder, market scanner, positioning synthesis), Core (Phase 2-3: target builder, company researcher, contact profiler, resume generator, outreach builder, materials QA, stage promotion), Supporting (Phase 4+: interview processor, Notion integration, audit logging, content updater).</p>
+        <p>Write one manifest entry per skill with: classification, what changes, what to build, working examples, antipattern fixes, acceptance test. Plus a DOCX generation pipeline entry.</p>
+        <p><strong>Acceptance:</strong> Every skill that will land in the engine has a manifest entry. Each is detailed enough for Phase 3 to execute without re-reading source skills.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 9: Draft Capability Inventory</summary>
+      <div class="detail-content">
+        <p><strong>Depends on Task 8.</strong></p>
+        <p>Write <code>CAPABILITIES-DRAFT.md</code> &mdash; becomes <code>skills/CAPABILITIES.md</code> after deployment. For each capability: skill name, what it does in job search context, working examples, infrastructure. Grouped by phase.</p>
+        <p><strong>Acceptance:</strong> Every manifest entry maps to a capability. No provenance, no source project names. Reads as an operational reference.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 10: Set Up Staging Directory</summary>
+      <div class="detail-content">
+        <p>Create <code>staged-skills/README.md</code> with process documentation and status tracking table. Staging is where skills get built/modified before clean deployment to the engine.</p>
+        <p><strong>Acceptance:</strong> Staging directory exists with clear process documentation.</p>
+      </div>
+    </details>
+
+    <div class="callout callout-design">
+      <div class="callout-label">Phase 1B Milestone</div>
+      <code>MANIFEST.md</code> has a build spec for every skill. Every spec has classification, what changes, working examples, acceptance test. Priorities assigned. <code>CAPABILITIES-DRAFT.md</code> maps capabilities to skills. Staging directory is ready.
+    </div>
+
+    <!-- Phase 2 -->
+    <h3>Phase 2: Source Material &amp; Profile Build <span style="font-size: 13px; color: var(--text-muted); font-weight: 400;">(Tasks 11-15)</span></h3>
+
+    <p><strong>Goal:</strong> The engine can run Phase 0 end-to-end. Master capability map exists. Evidence is documented. Source material is complete.</p>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">Significant Work</div>
+      Operator files are stale (last updated Feb 18, 28 days ago). Evidence index has 6 entries for 30+ work products. The engine's quality depends on source material quality.
+    </div>
+
+    <details class="detail-block">
+      <summary>Task 11: Update SEE Operator Files</summary>
+      <div class="detail-content">
+        <p>Update OPERATOR-PROFILE.md (83 days stale) and operator CONTEXT.md (26 days stale). Add: Wonda engagement summary, all products built, current skills inventory, technology proficiency updates. Reflect current reality: Wonda winding down, professional transition ahead.</p>
+        <p><strong>Acceptance:</strong> OPERATOR-PROFILE.md reflects March 2026 reality. No outdated information presented as current.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 12: Mine Evidence from Wonda Engagement</summary>
+      <div class="detail-content">
+        <p>Walk through the Wonda engagement chronologically. For each significant deliverable: what was built, impact, capability demonstrated, evidence strength (delivered &amp; used &gt; built &gt; designed &gt; proposed).</p>
+        <p><strong>Sources:</strong> <code>engagements/Wonda/03-DELIVERABLES/</code>, <code>06-PROJECTS/</code>, CONTEXT.md, CONTEXT-HISTORY.md, iteration-log.md.</p>
+        <p><strong>Target: 20+ entries</strong> from Wonda alone (renewal engine, content library, CRM audit, dev team bridge, UI design framework, campaign packages, weekly reports, engagement amendment, etc.)</p>
+        <p><strong>Acceptance:</strong> Evidence index has 20+ entries (up from 6). Each cites deliverables and tags capabilities. No unverified claims.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 13: Mine Evidence from Desktop Projects</summary>
+      <div class="detail-content">
+        <p><strong>Parallelizable with Task 12.</strong></p>
+        <p>Projects to mine: WondaKB, on-demand-curriculum, MaiaLearningResearch, website-audit, attio-mcp-agent, and the JobSearchEngine itself (meta: the engine as portfolio piece).</p>
+        <p><strong>Acceptance:</strong> Every significant Desktop project has at least one evidence entry.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 14: Build Master Capability Map</summary>
+      <div class="detail-content">
+        <p><strong>Depends on Tasks 11, 12, 13.</strong></p>
+        <p>Import expanded evidence. Create atomic evidence files in <code>operator/evidence/</code>, each tagged by domain, evidence strength, recency, transferability. Build <code>operator/PROFILE.md</code> &mdash; the master capability map that synthesizes atoms into capability clusters.</p>
+        <p><strong>Key:</strong> Do NOT pre-determine the clusters. Let them emerge from the evidence. The engine discovers positioning.</p>
+        <p>Import assets: resume (pre-Wonda, Aug 2025), LinkedIn profile.</p>
+        <p><strong>Acceptance:</strong> PROFILE.md exists with capability clusters derived from evidence. <code>operator/evidence/</code> has atomized entries. The engine can run Phase 0.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 15: Create Pipeline Tracker and Templates</summary>
+      <div class="detail-content">
+        <p>Initialize <code>pipeline/tracker.md</code> with stage and temperature keys. Create sniper target template (CONTEXT.md, company-profile.md, role-analysis.md). Create resume structure template. Create outreach sequence template with networking sequencing pattern (peer &rarr; decision-maker &rarr; HR).</p>
+        <p><strong>Acceptance:</strong> Templates follow patterns proven in Frank's engagement. Pipeline tracker is initialized.</p>
+      </div>
+    </details>
+
+    <div class="callout callout-design">
+      <div class="callout-label">Phase 2 Milestone</div>
+      <code>operator/PROFILE.md</code> exists with capability clusters. <code>operator/evidence/</code> has 25+ atomized entries. SEE operator files are current. Templates and tracker are ready. <strong>The engine can now run Phase 0.</strong>
+    </div>
+
+    <!-- Phase 3 -->
+    <h3>Phase 3: Core Skills Build <span style="font-size: 13px; color: var(--text-muted); font-weight: 400;">(Tasks 16-22)</span></h3>
+
+    <p><strong>Goal:</strong> Engine is operational, self-aware of its capabilities, and fully self-contained. Skills deployed from the extraction manifest.</p>
+
+    <p><strong>Process per skill:</strong> Read manifest entry &rarr; execute build per classification &rarr; stage in SEE &rarr; strip all source references &rarr; run acceptance test &rarr; deploy to engine &rarr; update staging README.</p>
+
+    <details class="detail-block">
+      <summary>Task 16: Build Critical Path Skills (Priority 1)</summary>
+      <div class="detail-content">
+        <p><strong>These skills are needed for Phase 0-1. The engine can't start real work without them.</strong></p>
+        <ol>
+          <li><strong>profile-builder</strong> (Build-new) &mdash; Ingests source material, builds atomic capability map. Atomize achievements, tag by domain/strength/recency/transferability.</li>
+          <li><strong>market-scanner</strong> (Fork-and-adapt) &mdash; Bright Data research tuned for job market: job boards, salary data, hiring trends, company intelligence.</li>
+          <li><strong>positioning-engine</strong> (Fork-and-adapt) &mdash; Matches capability map to market signals, recommends positioning angles with pushback behavior.</li>
+        </ol>
+        <p><strong>Acceptance:</strong> All three deployed. Each works independently. No source references. Engine can run Phase 0 + Phase 1.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 17: Build Core Skills (Priority 2)</summary>
+      <div class="detail-content">
+        <p><strong>Power Phase 2-3 (Targeting + Arsenal). 7 skills:</strong></p>
+        <ol>
+          <li><strong>target-builder</strong> (Fork) &mdash; Company/role lists, scoring, prioritization. ICP &rarr; company targeting profile.</li>
+          <li><strong>company-researcher</strong> (Fork) &mdash; Deep-dive companies via Bright Data. Populate 00-RESEARCH template.</li>
+          <li><strong>contact-profiler</strong> (Fork) &mdash; Hiring manager, recruiter, referral profiles.</li>
+          <li><strong>resume-generator</strong> (Build-new) &mdash; Tailored resumes from capability map atoms. Compose from atoms, flag unverified claims.</li>
+          <li><strong>outreach-builder</strong> (Fork) &mdash; Personalized networking sequences. Tone shift: sales &rarr; professional networking.</li>
+          <li><strong>materials-qa</strong> (Fork) &mdash; Quality check all outputs. Resume-specific: unverified claims, evidence tracing, ATS compatibility.</li>
+          <li><strong>stage-promoter</strong> (Build-new) &mdash; Detects and handles target stage transitions. Scaffolds next stage, updates tracker.</li>
+        </ol>
+        <p><strong>Parallelization:</strong> Skills 1-3 in parallel. Skills 4-6 in parallel. Skill 7 depends on template structures.</p>
+        <p><strong>Acceptance:</strong> All 7 deployed. Engine can run Phase 2 (targeting) and Phase 3 (arsenal).</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 18: Build Supporting Skills (Priority 3)</summary>
+      <div class="detail-content">
+        <p><strong>Support Phase 4+ and infrastructure. 4 skills:</strong></p>
+        <ol>
+          <li><strong>interview-processor</strong> (Fork) &mdash; Process debriefs into structured intelligence. Cross-round synthesis.</li>
+          <li><strong>notion-integration</strong> (Fork) &mdash; Pipeline visualization in Notion. Map to job search databases.</li>
+          <li><strong>audit-logger</strong> (Clone-and-go) &mdash; Two-layer logging. Strip remaining SEE refs, verify engine paths.</li>
+          <li><strong>content-updater</strong> (Clone-and-go, stripped) &mdash; Lightweight update discipline. NOT the 353-line choke point. Keep: "when updating tracked content, log the change."</li>
+        </ol>
+        <p><strong>Acceptance:</strong> All 4 deployed. Audit-logger writes to engine's log files. Content-updater is lightweight.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 19: Deploy DOCX Generation Pipeline</summary>
+      <div class="detail-content">
+        <p>Adapt Frank's 6 Node.js scripts into <code>_build/</code>. Extract helper library (styling constants, paragraph/bullet/heading/table builders, markdown bold parser, state machine resume parser). Write resume generator and intel package generator.</p>
+        <p><strong>Dependencies:</strong> <code>npm install docx</code>. May need <code>NODE_PATH=/opt/homebrew/lib/node_modules</code>.</p>
+        <p><strong>Acceptance:</strong> <code>node generate-resume.js [input.md] [output.docx]</code> produces a formatted resume. DOCX opens in Word with correct formatting.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 20: Build CAPABILITIES.md and Final Sweep</summary>
+      <div class="detail-content">
+        <p><strong>Depends on Tasks 16-19 (all skills deployed).</strong></p>
+        <p>Finalize <code>skills/CAPABILITIES.md</code> from the draft &mdash; update with actual deployed skill names, real working examples, confirmed infrastructure. No provenance. No source project names.</p>
+        <p><strong>Final reference sweep:</strong> Search every file in the engine for "SalesEnablementEngine", "SEE", "engagements/", "projects/job-search-engine", "staged-skills", and any renamed source skill names. Fix all references found. Exception: "Wonda" as a portfolio item in the capability map.</p>
+        <p><strong>Integration test:</strong> <code>/start-session</code> works. Engine knows its capabilities. Can guide through Phase 0. References writing and collaboration style. No errors, no missing files, no broken references.</p>
+        <p><strong>Acceptance:</strong> CAPABILITIES.md deployed. Zero SEE references. Integration test passes.</p>
+      </div>
+    </details>
+
+    <div class="callout callout-design">
+      <div class="callout-label">Phase 3 Milestone</div>
+      All skills deployed. CAPABILITIES.md complete. DOCX pipeline works. No SEE references. Integration test passes. Tag: <code>phase-3-complete</code>.
+    </div>
+
+    <!-- Phase 6 -->
+    <h3>Phase 6: Future-Ready Architecture <span style="font-size: 13px; color: var(--text-muted); font-weight: 400;">(Tasks 21-22)</span></h3>
+
+    <details class="detail-block">
+      <summary>Task 21: Stub Automation Layer</summary>
+      <div class="detail-content">
+        <p>Create <code>scheduled-scan</code> stub skill (architecturally ready, not implemented). Document what activation requires: scan frequency, cron setup, notification mechanism, connection to market-scanner.</p>
+        <p>Create <code>patterns/automation-readiness.md</code> mapping all future automation: scheduled scans (M effort), auto application tracking (M), LinkedIn content (L), re-engagement sequences (S), Notion auto-refresh (S).</p>
+        <p><strong>Acceptance:</strong> Stub exists. Readiness patterns document all future automation opportunities with activation instructions.</p>
+      </div>
+    </details>
+
+    <details class="detail-block">
+      <summary>Task 22: Update CONTEXT.md and Tag Release</summary>
+      <div class="detail-content">
+        <p>Update engine CONTEXT.md to reflect completed build state. Replace <code>[BUILD_DATE]</code> placeholders in CLAUDE.md. Final commit and tag <code>v1.0</code>.</p>
+        <p>Update SEE project CONTEXT.md and staging README with deployment status.</p>
+        <p><strong>Acceptance:</strong> Engine tagged v1.0. CONTEXT.md reflects reality. Ready for Sean to start using.</p>
+      </div>
+    </details>
+
+    <!-- Execution Summary -->
+    <h3>Execution Summary</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>Tasks</th><th>Est. Effort</th><th>Parallelizable</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>1A: Foundation</strong></td><td>1-5</td><td>1 day</td><td>Tasks 3+4 parallel</td></tr>
+          <tr><td><strong>1B: Skill Audit</strong></td><td>6-10</td><td>1-2 days</td><td>Tasks 6+7 parallel</td></tr>
+          <tr><td><strong>2: Source Material</strong></td><td>11-15</td><td>1-2 days</td><td>Tasks 12+13 parallel</td></tr>
+          <tr><td><strong>3: Core Skills</strong></td><td>16-20</td><td>2-3 days</td><td>Tasks 16/17/18 partially parallel</td></tr>
+          <tr><td><strong>6: Future Stubs</strong></td><td>21-22</td><td>0.5 day</td><td>Sequential</td></tr>
+          <tr style="font-weight: 600;"><td><strong>Total</strong></td><td>22 tasks</td><td>~6-8 days</td><td>MVE by day 3-4</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-info">
+      <div class="callout-label">MVE Path (Fastest to Operational)</div>
+      Tasks 1-5 (foundation) &rarr; fast-pass Tasks 8+14 (manifest + capability map from existing materials) &rarr; Task 16 (critical path skills) &rarr; Task 19 (DOCX pipeline). Sean can start operating Phase 0-1 while Tasks 17-18 build remaining skills.
+    </div>
+
+    <details class="detail-block">
+      <summary>Key Reference Locations</summary>
+      <div class="detail-content">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Reference</th><th>Location</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Design doc</td><td><code>projects/job-search-engine/plans/2026-03-17-job-search-engine-design.md</code></td></tr>
+              <tr><td>Decisions log</td><td><code>projects/job-search-engine/DECISIONS.md</code></td></tr>
+              <tr><td>Extractability audit</td><td><code>reviews/2026-03-13-wonda-extractability-audit/</code></td></tr>
+              <tr><td>Frank's engagement</td><td><code>engagements/JobSearch-FrankLombardo/</code></td></tr>
+              <tr><td>Frank's _build/ scripts</td><td><code>engagements/JobSearch-FrankLombardo/_build/</code></td></tr>
+              <tr><td>SEE skills</td><td><code>skills/local/</code></td></tr>
+              <tr><td>On-demand curriculum skills</td><td><code>~/Desktop/on-demand-curriculum/engine/skills/</code></td></tr>
+              <tr><td>Operator files</td><td><code>operator/</code></td></tr>
+              <tr><td>Evidence index</td><td><code>operator/evidence-index.md</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.5.2/bundled/rough.min.js"></script>
+<script>
+(function() {
+  // ─── Theme Toggle ───
+  const html = document.documentElement;
+  const saved = localStorage.getItem('jse-theme');
+  if (saved) html.setAttribute('data-theme', saved);
+
+  document.querySelector('.theme-toggle').addEventListener('click', function() {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    if (isDark) { html.removeAttribute('data-theme'); localStorage.removeItem('jse-theme'); }
+    else { html.setAttribute('data-theme', 'dark'); localStorage.setItem('jse-theme', 'dark'); }
+    renderAllDiagrams();
+  });
+
+  // ─── Mobile Nav ───
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.querySelector('.backdrop');
+  const hamburger = document.querySelector('.hamburger');
+
+  hamburger.addEventListener('click', function() {
+    sidebar.classList.toggle('open');
+    backdrop.classList.toggle('open');
+  });
+  backdrop.addEventListener('click', function() {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('open');
+  });
+
+  // ─── Smooth Scroll Nav ───
+  document.querySelectorAll('.nav-item').forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.getElementById(this.getAttribute('data-target'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('open');
+    });
+  });
+
+  // ─── Scroll Spy ───
+  var sections = document.querySelectorAll('.section');
+  var navItems = document.querySelectorAll('.nav-item');
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        navItems.forEach(function(n) { n.classList.remove('active'); });
+        var match = document.querySelector('.nav-item[data-target="' + entry.target.id + '"]');
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(function(s) { observer.observe(s); });
+
+  // ─── Keyboard Navigation ───
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    var items = Array.from(navItems);
+    var activeIdx = items.findIndex(function(n) { return n.classList.contains('active'); });
+
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      var next = Math.min(activeIdx + 1, items.length - 1);
+      items[next].click();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      var prev = Math.max(activeIdx - 1, 0);
+      items[prev].click();
+    }
+  });
+
+  // ─── Phase Stepper ───
+  document.querySelectorAll('.phase-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.phase-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.phase-content').forEach(function(c) { c.classList.remove('active'); });
+      this.classList.add('active');
+      var target = document.getElementById(this.getAttribute('data-phase'));
+      if (target) target.classList.add('active');
+      // Update pipeline diagram highlight
+      renderPipelineDiagram(Array.from(document.querySelectorAll('.phase-btn')).indexOf(this));
+    });
+  });
+
+  // ─── Diagram Rendering ───
+  function getColors() {
+    var isDark = html.getAttribute('data-theme') === 'dark';
+    return {
+      bg: isDark ? '#1a1a1a' : '#fafaf9',
+      cardBg: isDark ? '#262626' : '#ffffff',
+      border: isDark ? '#404040' : '#e7e5e4',
+      text: isDark ? '#e5e5e5' : '#292524',
+      textMuted: isDark ? '#a3a3a3' : '#78716c',
+      blue: isDark ? '#60a5fa' : '#3b82f6',
+      blueFill: isDark ? '#1e3a5f' : '#dbeafe',
+      green: isDark ? '#4ade80' : '#22c55e',
+      greenFill: isDark ? '#052e16' : '#dcfce7',
+      purple: isDark ? '#c084fc' : '#a855f7',
+      purpleFill: isDark ? 'rgba(59,7,100,0.4)' : '#f3e8ff',
+      amber: isDark ? '#fbbf24' : '#f59e0b',
+      amberFill: isDark ? '#451a03' : '#fef3c7',
+      red: isDark ? '#f87171' : '#ef4444',
+      neutral: isDark ? '#737373' : '#a8a29e',
+      neutralFill: isDark ? '#262626' : '#f5f5f4',
+    };
+  }
+
+  function setupCanvas(canvasId) {
+    var canvas = document.getElementById(canvasId);
+    if (!canvas) return null;
+    var container = canvas.parentElement;
+    var dpr = window.devicePixelRatio || 1;
+    var w = container.clientWidth;
+    var h = parseInt(canvas.getAttribute('height')) || 300;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, w, h);
+    return { canvas: canvas, ctx: ctx, rc: rough.canvas(canvas), w: w, h: h, dpr: dpr };
+  }
+
+  function drawLabel(ctx, text, x, y, color, font) {
+    ctx.save();
+    ctx.font = font || '13px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, x, y);
+    ctx.restore();
+  }
+
+  function drawLeftLabel(ctx, text, x, y, color, font) {
+    ctx.save();
+    ctx.font = font || '13px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillStyle = color;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, x, y);
+    ctx.restore();
+  }
+
+  // ─── Architecture Diagram ───
+  function renderArchitectureDiagram() {
+    var s = setupCanvas('diagram-architecture');
+    if (!s) return;
+    var c = getColors();
+    var rc = s.rc;
+    var ctx = s.ctx;
+    var w = s.w;
+    var opts = { roughness: 1.2, strokeWidth: 1.5, fillStyle: 'hachure', hachureGap: 6 };
+
+    // SEE box (left)
+    var seeW = w * 0.38;
+    var seeX = w * 0.04;
+    var seeY = 30;
+    var seeH = 290;
+    rc.rectangle(seeX, seeY, seeW, seeH, { ...opts, stroke: c.blue, fill: c.blueFill });
+    drawLabel(ctx, 'SEE (Factory)', seeX + seeW/2, seeY + 24, c.text, 'bold 15px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, 'Design, Build, Maintain', seeX + seeW/2, seeY + 46, c.textMuted, '12px -apple-system, BlinkMacSystemFont, sans-serif');
+
+    // SEE inner boxes
+    var innerX = seeX + 16;
+    var innerW = seeW - 32;
+    var items = ['plans/', 'extraction-manifest/', 'source-material/', 'CONTEXT.md'];
+    items.forEach(function(label, i) {
+      var iy = seeY + 70 + i * 50;
+      rc.rectangle(innerX, iy, innerW, 38, { ...opts, stroke: c.blue, fill: c.bg, roughness: 0.8 });
+      drawLabel(ctx, label, innerX + innerW/2, iy + 19, c.text, '13px "SF Mono", monospace');
+    });
+
+    // Engine box (right)
+    var engX = w * 0.58;
+    var engW = w * 0.38;
+    rc.rectangle(engX, seeY, engW, seeH, { ...opts, stroke: c.green, fill: c.greenFill });
+    drawLabel(ctx, 'JobSearchEngine (Product)', engX + engW/2, seeY + 24, c.text, 'bold 15px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, 'Operate, Use', engX + engW/2, seeY + 46, c.textMuted, '12px -apple-system, BlinkMacSystemFont, sans-serif');
+
+    // Engine inner boxes
+    var eInnerX = engX + 16;
+    var eInnerW = engW - 32;
+    var eItems = ['operator/', 'market/', 'targets/', 'arsenal/', 'pipeline/'];
+    eItems.forEach(function(label, i) {
+      var iy = seeY + 70 + i * 42;
+      rc.rectangle(eInnerX, iy, eInnerW, 32, { ...opts, stroke: c.green, fill: c.bg, roughness: 0.8 });
+      drawLabel(ctx, label, eInnerX + eInnerW/2, iy + 16, c.text, '13px "SF Mono", monospace');
+    });
+
+    // Arrow: SEE → Engine
+    var arrowY = seeY + seeH/2 - 15;
+    var arrowX1 = seeX + seeW + 8;
+    var arrowX2 = engX - 8;
+    var mid = (arrowX1 + arrowX2) / 2;
+    rc.line(arrowX1, arrowY, arrowX2 - 8, arrowY, { stroke: c.neutral, strokeWidth: 2, roughness: 0.5 });
+    // Arrowhead
+    ctx.beginPath();
+    ctx.moveTo(arrowX2 - 4, arrowY);
+    ctx.lineTo(arrowX2 - 14, arrowY - 5);
+    ctx.lineTo(arrowX2 - 14, arrowY + 5);
+    ctx.closePath();
+    ctx.fillStyle = c.neutral;
+    ctx.fill();
+    drawLabel(ctx, 'skills + source', mid, arrowY - 14, c.textMuted, '11px -apple-system, BlinkMacSystemFont, sans-serif');
+
+    // Arrow: Engine → SEE (return, dashed, below)
+    var retY = arrowY + 30;
+    rc.line(arrowX2 - 8, retY, arrowX1, retY, { stroke: c.neutral, strokeWidth: 1.5, roughness: 0.5, strokeLineDash: [6, 4] });
+    ctx.beginPath();
+    ctx.moveTo(arrowX1 + 4, retY);
+    ctx.lineTo(arrowX1 + 14, retY - 5);
+    ctx.lineTo(arrowX1 + 14, retY + 5);
+    ctx.closePath();
+    ctx.fillStyle = c.neutral;
+    ctx.fill();
+    drawLabel(ctx, 'maintain + update', mid, retY + 16, c.textMuted, '11px -apple-system, BlinkMacSystemFont, sans-serif');
+  }
+
+  // ─── Pipeline Diagram ───
+  var currentPhase = 0;
+
+  function renderPipelineDiagram(activePhase) {
+    if (activePhase !== undefined) currentPhase = activePhase;
+    var s = setupCanvas('diagram-pipeline');
+    if (!s) return;
+    var c = getColors();
+    var rc = s.rc;
+    var ctx = s.ctx;
+    var w = s.w;
+    var h = s.h;
+    var opts = { roughness: 1, strokeWidth: 1.5, fillStyle: 'hachure', hachureGap: 5 };
+
+    var phases = ['Phase 0\nIngest', 'Phase 1\nDiscovery', 'Phase 2\nTargeting', 'Phase 3\nArsenal', 'Phase 4\nExecute', 'Phase 5\nIntelligence'];
+    var phaseColors = [c.amber, c.blue, c.green, c.purple, c.blue, c.neutral];
+    var phaseFills = [c.amberFill, c.blueFill, c.greenFill, c.purpleFill, c.blueFill, c.neutralFill];
+
+    var boxW = Math.min(110, (w - 80) / 6);
+    var gap = (w - boxW * 6) / 7;
+    var boxH = 64;
+    var y = (h - boxH) / 2;
+
+    phases.forEach(function(label, i) {
+      var x = gap + i * (boxW + gap);
+      var isActive = i === currentPhase;
+      var stroke = isActive ? phaseColors[i] : c.border;
+      var fill = isActive ? phaseFills[i] : c.bg;
+      var sw = isActive ? 2.5 : 1.5;
+
+      rc.rectangle(x, y, boxW, boxH, { ...opts, stroke: stroke, fill: fill, strokeWidth: sw });
+
+      var lines = label.split('\n');
+      drawLabel(ctx, lines[0], x + boxW/2, y + boxH/2 - 9, isActive ? c.text : c.textMuted, 'bold 11px -apple-system, BlinkMacSystemFont, sans-serif');
+      drawLabel(ctx, lines[1], x + boxW/2, y + boxH/2 + 9, isActive ? c.text : c.textMuted, '12px -apple-system, BlinkMacSystemFont, sans-serif');
+
+      // Arrow to next
+      if (i < 5) {
+        var ax1 = x + boxW + 4;
+        var ax2 = gap + (i + 1) * (boxW + gap) - 4;
+        var ay = y + boxH/2;
+        if (ax2 > ax1 + 6) {
+          rc.line(ax1, ay, ax2 - 6, ay, { stroke: c.neutral, strokeWidth: 1.5, roughness: 0.4 });
+          ctx.beginPath();
+          ctx.moveTo(ax2 - 2, ay);
+          ctx.lineTo(ax2 - 9, ay - 4);
+          ctx.lineTo(ax2 - 9, ay + 4);
+          ctx.closePath();
+          ctx.fillStyle = c.neutral;
+          ctx.fill();
+        }
+      }
+    });
+
+    // Make canvas clickable for phases
+    var canvas = s.canvas;
+    canvas.style.cursor = 'pointer';
+    canvas.onclick = function(e) {
+      var rect = canvas.getBoundingClientRect();
+      var clickX = e.clientX - rect.left;
+      for (var i = 0; i < 6; i++) {
+        var x = gap + i * (boxW + gap);
+        if (clickX >= x && clickX <= x + boxW) {
+          document.querySelectorAll('.phase-btn')[i].click();
+          break;
+        }
+      }
+    };
+  }
+
+  // ─── Skill Lifecycle Diagram ───
+  function renderSkillLifecycleDiagram() {
+    var s = setupCanvas('diagram-skill-lifecycle');
+    if (!s) return;
+    var c = getColors();
+    var rc = s.rc;
+    var ctx = s.ctx;
+    var w = s.w;
+    var h = s.h;
+    var opts = { roughness: 1.2, strokeWidth: 1.5, fillStyle: 'hachure', hachureGap: 6 };
+
+    var boxW = Math.min(200, (w - 100) / 3);
+    var gap = (w - boxW * 3) / 4;
+    var boxH = 120;
+    var y = (h - boxH) / 2;
+
+    // Box 1: Source
+    var x1 = gap;
+    rc.rectangle(x1, y, boxW, boxH, { ...opts, stroke: c.neutral, fill: c.neutralFill });
+    drawLabel(ctx, 'Source Projects', x1 + boxW/2, y + 22, c.text, 'bold 14px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, '88 skills across', x1 + boxW/2, y + 50, c.textMuted, '12px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, '8 projects', x1 + boxW/2, y + 68, c.textMuted, '12px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, 'Phase 1B: Audit', x1 + boxW/2, y + 96, c.amber, 'bold 11px -apple-system, BlinkMacSystemFont, sans-serif');
+
+    // Box 2: Staging
+    var x2 = gap * 2 + boxW;
+    rc.rectangle(x2, y, boxW, boxH, { ...opts, stroke: c.blue, fill: c.blueFill });
+    drawLabel(ctx, 'SEE Staging', x2 + boxW/2, y + 22, c.text, 'bold 14px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, 'staged-skills/', x2 + boxW/2, y + 50, c.textMuted, '12px "SF Mono", monospace');
+    drawLabel(ctx, 'Build & strip refs', x2 + boxW/2, y + 72, c.textMuted, '12px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, 'Phase 3: Build', x2 + boxW/2, y + 96, c.blue, 'bold 11px -apple-system, BlinkMacSystemFont, sans-serif');
+
+    // Box 3: Engine
+    var x3 = gap * 3 + boxW * 2;
+    rc.rectangle(x3, y, boxW, boxH, { ...opts, stroke: c.green, fill: c.greenFill });
+    drawLabel(ctx, 'Deployed Engine', x3 + boxW/2, y + 22, c.text, 'bold 14px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, 'skills/local/', x3 + boxW/2, y + 50, c.textMuted, '12px "SF Mono", monospace');
+    drawLabel(ctx, 'Engine owns these', x3 + boxW/2, y + 72, c.textMuted, '12px -apple-system, BlinkMacSystemFont, sans-serif');
+    drawLabel(ctx, 'Runtime: Operate', x3 + boxW/2, y + 96, c.green, 'bold 11px -apple-system, BlinkMacSystemFont, sans-serif');
+
+    // Arrow 1 → 2
+    var ay = y + boxH / 2;
+    var a1x1 = x1 + boxW + 6;
+    var a1x2 = x2 - 6;
+    if (a1x2 > a1x1 + 10) {
+      rc.line(a1x1, ay, a1x2 - 8, ay, { stroke: c.neutral, strokeWidth: 2, roughness: 0.5 });
+      ctx.beginPath();
+      ctx.moveTo(a1x2 - 4, ay); ctx.lineTo(a1x2 - 14, ay - 5); ctx.lineTo(a1x2 - 14, ay + 5); ctx.closePath();
+      ctx.fillStyle = c.neutral; ctx.fill();
+    }
+
+    // Arrow 2 → 3
+    var a2x1 = x2 + boxW + 6;
+    var a2x2 = x3 - 6;
+    if (a2x2 > a2x1 + 10) {
+      rc.line(a2x1, ay, a2x2 - 8, ay, { stroke: c.neutral, strokeWidth: 2, roughness: 0.5 });
+      ctx.beginPath();
+      ctx.moveTo(a2x2 - 4, ay); ctx.lineTo(a2x2 - 14, ay - 5); ctx.lineTo(a2x2 - 14, ay + 5); ctx.closePath();
+      ctx.fillStyle = c.neutral; ctx.fill();
+    }
+
+    // "No refs back" annotation with X
+    drawLabel(ctx, 'no references flow back', (x2 + x3) / 2 + boxW/2, ay + boxH/2 + 12, c.red, 'italic 11px -apple-system, BlinkMacSystemFont, sans-serif');
+  }
+
+  function renderAllDiagrams() {
+    renderArchitectureDiagram();
+    renderPipelineDiagram();
+    renderSkillLifecycleDiagram();
+  }
+
+  // Initial render
+  if (typeof rough !== 'undefined') {
+    renderAllDiagrams();
+  } else {
+    window.addEventListener('load', renderAllDiagrams);
+  }
+
+  // Resize handler
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderAllDiagrams, 250);
+  });
+
+})();
+</script>
+</body>
+</html>

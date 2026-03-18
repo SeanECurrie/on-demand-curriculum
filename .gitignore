@@ -17,3 +17,11 @@ research/scrapes/raw/
 .vscode/
 .idea/
 *.swp
+
+# Scratch/workspace artifacts
+engine/skills/*-workspace/
+pipeline-start-*.html
+
+# Root-level screenshots (should live in output render-validate dirs, not root)
+mobile-*.png
+mobile-landing.png
