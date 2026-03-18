@@ -1,202 +1,155 @@
 ---
 name: session-restart
 description: >
-  Session restart and context reload for the ClawdBot Research Project. Use this skill
-  whenever starting a new co-work session, resuming after compaction, recovering from a
-  closed session, or when context feels stale or thin. Also use when Sean says things like
-  "restart session", "refresh context", "new session", "pick up where we left off",
-  "reload project", "what were we doing", or any variation of resuming work on this project.
-  This skill ensures every session starts calibrated — with the right files loaded, the right
-  posture set, and zero wasted context window on stuff that's already done.
+  Session restart and context reload for the On-Demand Curriculum Engine. Use whenever
+  starting a new session, resuming after compaction, recovering from a closed session,
+  or when context feels stale. Trigger phrases: "restart session", "refresh context",
+  "new session", "pick up where we left off", "reload project", "what were we doing",
+  "let's work on [output name]", or any variation of resuming work. This skill discovers
+  available outputs via OUTPUT.md files, routes by type, and gets Sean oriented fast.
 ---
 
-# Session Restart — ClawdBot Research Project
+# Session Restart — On-Demand Curriculum Engine
 
-You're an agent resuming work on Sean Currie's ClawdBot Research Project. This skill gets you
-oriented fast without bloating the context window. Follow these steps in order.
+You're an agent resuming work on Sean Currie's On-Demand Curriculum Engine. This skill
+gets you oriented fast without bloating the context window. Follow these steps in order.
 
-## Step 1: Load Session State
+## Step 1: Load Engine State
 
-Read the session state file first — it's the single source of truth for where things stand:
+Read the engine-level state first:
 
 ```
-Read: outputs/openclaw-sean/operator/session-state.md
+Read: CONTEXT.md
 ```
 
-<!-- NOTE: This skill currently has hardcoded paths for Output #1 (outputs/openclaw-sean/).
-     It needs adaptation for engine-level vs output-level usage — the output path should be
-     parameterized so the skill works for any output, not just OpenClaw/Sean. -->
+This tells you: what outputs exist, engine evolution notes, what's next at the engine level.
 
-This file tracks:
-- Which walkthrough phase is current (and which are done)
-- Active tasks and blockers
-- What happened last session
-- What's queued next
+## Step 2: Discover and Select Output
 
-If `session-state.md` doesn't exist yet for this output, create it using the template in Step 5 below.
+Scan for available outputs:
 
-## Step 2: Load Core Context (Selectively)
-
-Read these files in this order. The session state tells you which sections matter — don't
-load everything if you don't need it.
-
-**Always read (they're short and high-signal):**
 ```
-Read: outputs/openclaw-sean/CONTEXT.md
+Read: outputs/openclaw-sean/OUTPUT.md
+Read: outputs/openclaw-jeff/OUTPUT.md
+Read: outputs/job-search-engine-design/OUTPUT.md
 ```
 
-The output CONTEXT.md has: current status, key decisions, open questions, known gaps,
-experimental use cases. It's the output map. (The root CONTEXT.md is the engine-level map.)
+Each OUTPUT.md tells you: type (A-F), status, source documents, deliverables, and
+what to read to resume.
 
-**Read if session state says "posture check needed" or if this is your first session:**
-```
-Read: outputs/openclaw-sean/operator/project-genesis.md
-```
+**Routing:**
+- If Sean's message mentions a specific output ("let's work on the JSE design",
+  "back to Jeff's walkthrough"), go directly to that output.
+- If Sean's message implies new work ("I have a design doc", "new output for..."),
+  this is not a restart — hand off to `pipeline-start`.
+- If unclear, present available outputs and ask:
 
-This has the refined purpose. Reminds you: learning lab, not production. Transferable
-skills matter more than OpenClaw specifics. Sean is a Solutions Engineer and this builds
-professional credibility.
-
-**Read if you need to gut-check whether your approach matches Sean's actual intent:**
 ```
-Read: outputs/openclaw-sean/operator/purpose-refinement-2026-02-22.md
-```
+**Available outputs:**
 
-This is the raw, unfiltered conversation about WHY this project exists. It's the
-calibration document. Use it when direction feels uncertain.
+| # | Output | Type | Status |
+|---|--------|------|--------|
+| 1 | OpenClaw (Sean) | A — Full pipeline | Complete |
+| 2 | OpenClaw (Jeff) | A — Full pipeline | Complete (Section 2b done, 3-5 deferred) |
+| 3 | JSE Design Review | F — Review artifact | Active |
 
-**Read if the session involves deployment work:**
-```
-Read: outputs/openclaw-sean/docs/walkthrough/crib-sheet.md
+Which output are you working on, or is this something new?
 ```
 
-The crib sheet is the quick-reference version of the walkthrough. Faster to load than
-the full walkthrough when you just need to check what comes next.
+## Step 3: Load Output Context (Type-Specific)
 
-## Step 3: Check Staleness
+Once an output is selected, load context based on its type.
 
-Run a quick staleness check on the session state and CONTEXT.md:
+### Type A/B/C — Research-Based Outputs
 
-1. Look at the `last_updated` date in session-state.md
-2. If it's been more than 5 days since the last session, flag it: "It's been [N] days since
-   the last session. This ecosystem moves fast — should we do a staleness sweep before
-   diving into work?"
-3. Check the intelligence log tail (last 5 entries) for anything that might affect today's work:
-   ```
-   Read: outputs/openclaw-sean/intelligence-log.md (last 30 lines)
-   ```
+1. Read the output's `CONTEXT.md` (current phase, key decisions, open questions)
+2. Read `operator/session-state.md` if it exists (walkthrough progress, active tasks)
+3. Check staleness: if `last_updated` in CONTEXT.md is >5 days ago, flag it
+4. Check activity log tail (last 5 entries) for recent context
+
+### Type D — Research-Only
+
+1. Read the output's `CONTEXT.md` or research state file
+2. Check what questions were being investigated
+3. Check staleness
+
+### Type E — Engine Update
+
+1. Root CONTEXT.md is sufficient (already loaded in Step 1)
+2. Read the relevant methodology or skill file being updated
+
+### Type F — Review Artifact
+
+1. Read the output's `OUTPUT.md` (already loaded — has source documents and sync dates)
+2. **Check source document freshness:** For each source document listed in OUTPUT.md,
+   check if the file has been modified since the last sync date. Flag any that have changed:
+   > "Source doc [name] has been modified since last sync on [date]. Want to review changes?"
+3. Read the HTML deliverable path (don't load the full HTML — just know where it is)
+4. Check if Sean mentioned bringing updates or a new source document
 
 ## Step 4: Present Session Brief
 
-Give Sean a focused brief. Keep it tight — the goal is orientation, not a book report.
-Use this format:
+Give Sean a focused brief. Keep it tight — orientation, not a book report.
+
+### For Type A/B/C:
 
 ```
 **Session Brief — [date]**
 
-**Current phase:** [phase name and number from session-state.md]
-**Last session:** [1-sentence summary of what was accomplished]
-**Next up:** [what's queued — from session-state.md]
+**Output:** [name] (Type [X])
+**Current phase:** [from session-state or CONTEXT.md]
+**Last session:** [1-sentence summary]
+**Next up:** [what's queued]
 **Blockers:** [any, or "none"]
 **Days since last session:** [N] [+ staleness warning if >5]
 
-Ready to proceed with [next task], or do you want to adjust direction?
+Ready to proceed with [next task], or adjust direction?
 ```
 
-That's it. Don't summarize the entire project. Don't re-explain the purpose. Don't list
-every file in the knowledge base. Sean knows his project — he just needs to know where
-the needle is.
+### For Type F:
 
-## Step 5: Update Session State When Work Happens
-
-During the session, keep session-state.md current. Update it when:
-- A walkthrough phase or step is completed
-- A new blocker is discovered
-- A significant decision is made
-- The session ends (always update before closing)
-
-### Session State Template
-
-If `outputs/<output-name>/operator/session-state.md` doesn't exist, create it with this structure:
-
-```markdown
-# Session State — ClawdBot Research Project
-
-**Last Updated:** [date]
-**Last Session Summary:** [1-2 sentences]
-
-## Walkthrough Progress
-
-| Phase | Name | Status | Notes |
-|-------|------|--------|-------|
-| 0 | Machine Preparation | not_started | |
-| A | macOS Hardening | not_started | |
-| B | Runtime Setup | not_started | |
-| C | OpenClaw Installation | not_started | |
-| D | Security Hardening | not_started | |
-| E | Model Configuration | not_started | |
-| F | Channel Setup | not_started | |
-| G | Starter Skills & First Run | not_started | |
-| H | Validation | not_started | |
-| I | Post-Deployment | not_started | |
-
-Status values: not_started | in_progress | completed | blocked | deferred
-
-## Current Focus
-
-**Active task:** [what we're working on right now]
-**Phase step:** [e.g., "Phase 0, Step 0.3 — Identity & Sync Isolation"]
-**Blockers:** [anything preventing progress, or "none"]
-
-## Next Up
-
-1. [next task]
-2. [task after that]
-3. [etc.]
-
-## Session History (Last 5)
-
-| Date | What Happened | Outcome |
-|------|--------------|---------|
-| | | |
-
-## Decisions Made This Phase
-
-- [decision and rationale — accumulates as phases progress]
-
-## Notes for Next Session
-
-[Anything the current session wants to flag for the next one. Could be: "check if macOS
-update finished", "Sean mentioned wanting to try X", "need to research Y before Phase D".]
 ```
+**Session Brief — [date]**
+
+**Output:** [name] (Type F — Review Artifact)
+**Source documents:**
+- [doc 1]: [synced/modified since last sync]
+- [doc 2]: [synced/modified since last sync]
+**Deliverable:** [HTML path]
+**Last sync:** [date and what was synced]
+
+Source docs current, or do you have updates to integrate?
+```
+
+## Step 5: Update State When Work Happens
+
+During the session, keep the output's state current:
+
+**For Type A/B/C:**
+- Update `session-state.md` or `CONTEXT.md` at significant changes
+- Log to activity log for actions, intelligence log for strategic moments
+
+**For Type F:**
+- Update `OUTPUT.md` sync history when changes are applied
+- Add new source documents to the source table when integrated
+
+**At session end (all types):**
+- Update the relevant state file with current status
+- Note what's next for the next session
 
 ## Operator Calibration Reminders
 
-Every session, keep these in mind (from CLAUDE.md and the purpose refinement):
+Every session, keep these in mind (from CLAUDE.md):
 
-- **This is a learning lab.** Not production. Hardening is educational. If Sean wants to
-  skip operational polish to get to experimentation, that's fine. Essential security is
-  non-negotiable; operational polish is deferrable.
-- **Challenge, don't agree.** Sean explicitly demands evidence-based pushback. Ask "why
-  are we doing this?" if the direction seems off. Don't validate assumptions without data.
-- **Transferable > tool-specific.** Always note what's universally applicable vs. what's
-  OpenClaw-only. The ability to evaluate the NEXT tool is as valuable as deploying this one.
-- **Agent vs. automation.** When testing use cases, always ask: could a cron job or n8n
-  workflow do this better? The comparison is part of the learning.
-- **Log significant things.** Activity log for actions, intelligence log for strategic
-  insights. Not every keystroke — just the stuff that matters.
+- **Challenge, don't agree.** Sean demands evidence-based pushback.
+- **Transferable > tool-specific.** Note what's universally applicable.
+- **Agent vs. automation.** Could a simpler tool do this better?
+- **Log significant things.** Activity log for actions, intelligence log for insights.
 
 ## Context Window Efficiency
 
-The whole point of this skill is to avoid reloading the entire project every time a session
-starts. Here's what NOT to do:
-
-- Don't read every KB file at session start — only load what the current phase needs
-- Don't read the full walkthrough — use the crib sheet for quick reference, load specific
-  phases on demand
-- Don't re-read purpose-refinement unless calibration is needed
-- Don't dump the full activity log — the session state captures what matters
-- Don't read old research reports unless the current task specifically needs them
-
-The session-state.md file exists so you can start fast. Trust it. If it feels stale,
-update it — don't work around it by loading everything else.
+- Don't read every file at session start — only what the current output needs
+- Don't load full walkthroughs or HTML — use the brief to orient
+- Don't re-read operator profiles unless calibration is needed
+- Trust OUTPUT.md and CONTEXT.md — they exist to avoid reloading everything
+- For Type F: don't load the source documents unless Sean is syncing changes
