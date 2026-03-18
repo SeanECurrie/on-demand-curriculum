@@ -1,6 +1,6 @@
 # CONTEXT.md — On-Demand Curriculum Engine
 
-**Last Updated:** 2026-03-03
+**Last Updated:** 2026-03-18
 **Staleness Threshold:** 5 days
 
 ## Engine Purpose
@@ -15,6 +15,7 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 |---|--------|--------|-------|--------|----------|
 | 1 | OpenClaw Deployment | Sean Currie | OpenClaw agent platform | Complete (research + walkthrough ready) | outputs/openclaw-sean/ |
 | 2 | OpenClaw Deployment | Jeff (Denver RE) | OpenClaw on MacBook Air + Instagram | Complete + Section 2b iteration (hardware choices) | outputs/openclaw-jeff/ |
+| 3 | Job Search Engine Design Review | Sean Currie | JSE design doc + implementation plan | Active (Type F review artifact) | outputs/job-search-engine-design/ |
 
 ## Engine Structure
 
@@ -22,7 +23,7 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 - engine/intake/ — Intake process, operator profile template
 - engine/templates/ — Output scaffolding, report frameworks, walkthrough style guide
 - engine/patterns/ — Cross-output reusable patterns
-- engine/skills/ — Engine-level skills (session-restart, depth-assessment, self-test, findings-pattern, anti-pattern-check, section-construction, render-validate)
+- engine/skills/ — Engine-level skills (session-restart, depth-assessment, self-test, findings-pattern, anti-pattern-check, section-construction, render-validate, review-artifact)
 - outputs/ — Per-person deliverables
 
 ## Engine Evolution Notes
@@ -36,6 +37,10 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
   Source: Adapted from Cole Medin's Excalidraw diagram skill (methodology patterns, not tool-specific)
   Additions: style guide sections 5.5-5.6, diagram-color-reference.md, render-validate skill, visual self-tests (V1-V6), anti-pattern #11 (The Unverified Render)
   Validation: Retroactive audit of Output #1 confirms new tests catch documented failures
+- 2026-03-18: Type F (Review Artifact) classification added — new output type for transforming completed documents into interactive HTML for Sean's review
+  Origin: Job Search Engine design doc review proved the workflow: source doc → interactive HTML → review loop → feedback to source agent → sync updates
+  Additions: Type F in pipeline-start, review-artifact skill, OUTPUT.md identity files for all outputs, session-restart rewritten to be output-aware
+  Reference implementation: outputs/job-search-engine-design/ (design doc + implementation plan → interactive HTML)
 
 ## Key Decisions
 
@@ -43,6 +48,8 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 - Outputs are self-contained (navigable without engine knowledge)
 - Three-layer architecture: DNA (root) + Engine (process) + Outputs (content)
 - Patterns are cross-output (engine level), findings are per-output
+- OUTPUT.md identity files on every output — enables session-restart to discover and route by type
+- Type F outputs skip research/synthesis — source document IS the input
 
 ## What's Next
 
@@ -54,4 +61,7 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
   - New section: 4 subsections + hub-and-spoke diagram, render-validated, 14/16 self-tests passed (2 known deferred)
   - Deferred: Sections 3-5 still reference MacBook Air — will update after Jeff confirms purchase
 - Evaluate GitHub Pages for output delivery
-- Consider Output #3 candidate
+- ~~Consider Output #3 candidate~~ DONE — Output #3 is the Job Search Engine Design Review (Type F)
+- Type F workflow validated with Output #3: design doc + implementation plan → interactive HTML for review
+- OUTPUT.md pattern established — all outputs now have identity files
+- session-restart rewritten to discover and route to any output by type
