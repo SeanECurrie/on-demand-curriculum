@@ -1,6 +1,6 @@
 # CONTEXT.md — On-Demand Curriculum Engine
 
-**Last Updated:** 2026-03-18
+**Last Updated:** 2026-03-19
 **Staleness Threshold:** 5 days
 
 ## Engine Purpose
@@ -16,6 +16,7 @@ Sean Currie is the operator and proxy for all intake — the engine talks to Sea
 | 1 | OpenClaw Deployment | Sean Currie | OpenClaw agent platform | Complete (research + walkthrough ready) | outputs/openclaw-sean/ |
 | 2 | OpenClaw Deployment | Jeff (Denver RE) | OpenClaw on MacBook Air + Instagram | Complete + Section 2b iteration (hardware choices) | outputs/openclaw-jeff/ |
 | 3 | Job Search Engine Design Review | Sean Currie | Job Search Engine (design doc + implementation plan) | Active (Type F) | outputs/job-search-engine-design/ |
+| 4 | Notion Pipeline Guide | Sean Currie | Notion pipeline visualization layer (operational guide) | Active (Type F) | outputs/notion-pipeline-guide/ |
 
 ## Engine Structure
 
