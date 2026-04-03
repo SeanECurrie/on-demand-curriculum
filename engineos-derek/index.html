@@ -107,17 +107,23 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text);
 .meta-callout p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 .meta-callout strong { color: var(--text); }
 
-/* Journey timeline */
-.journey { display: flex; margin: 32px 0 0; position: relative; padding-top: 12px; }
-.journey::before { content: ''; position: absolute; top: 17px; left: 6px; right: 6px; height: 2px; background: var(--border); }
-.journey-step { flex: 1; position: relative; padding-top: 16px; padding-right: 12px; }
-.journey-step::before {
-  content: ''; position: absolute; top: 11px; left: 0; width: 12px; height: 12px;
-  border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); z-index: 1;
+/* Problem cards (full-width, numbered) */
+.problem-list { display: flex; flex-direction: column; gap: 16px; margin: 20px 0; }
+.problem-card {
+  display: flex; gap: 20px; align-items: flex-start;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 28px;
+  transition: all 0.2s;
 }
-.journey-step:last-child::before { background: var(--accent-green); }
-.journey-label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
-.journey-text { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-top: 2px; }
+.problem-card:hover { border-color: var(--border-light); background: var(--bg-card-hover); }
+.problem-num {
+  font-size: 32px; font-weight: 800; line-height: 1; flex-shrink: 0; width: 40px; text-align: center;
+}
+.problem-num.c1 { color: var(--accent-warm); }
+.problem-num.c2 { color: var(--accent-amber); }
+.problem-num.c3 { color: var(--accent-purple); }
+.problem-content .problem-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.problem-content p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+.problem-content p strong { color: var(--text); }
 
 /* Sections */
 section { padding: 48px 60px; border-bottom: 1px solid var(--border); }
@@ -131,7 +137,8 @@ p { margin: 8px 0; }
 .content-text strong { color: var(--text); }
 
 /* Cards */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin: 20px 0; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin: 20px 0; }
+.card-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0; }
 .card {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
   padding: 24px; transition: all 0.2s;
@@ -244,15 +251,14 @@ td strong { color: var(--text); }
   .hero h1 { font-size: 26px; }
   .hero .lead { font-size: 16px; }
   section { padding: 36px 24px; }
-  .card-grid { grid-template-columns: 1fr; }
+  .card-grid, .card-grid-2 { grid-template-columns: 1fr; }
   .comparison { grid-template-columns: 1fr; }
+  .problem-card { flex-direction: column; gap: 12px; }
+  .problem-num { width: auto; }
   .stats-bar { grid-template-columns: repeat(3, 1fr); }
-  .journey { flex-wrap: wrap; }
-  .journey-step { flex: none; width: 50%; margin-bottom: 12px; }
 }
 @media (max-width: 500px) {
   .stats-bar { grid-template-columns: repeat(2, 1fr); }
-  .journey-step { width: 100%; }
 }
 </style>
 </head>
@@ -301,25 +307,6 @@ td strong { color: var(--text); }
       <div class="stat"><div class="num">27</div><div class="label">Specialized Skills</div></div>
       <div class="stat"><div class="num">9</div><div class="label">Business Engines</div></div>
       <div class="stat"><div class="num">59</div><div class="label">Reusable Patterns</div></div>
-    </div>
-
-    <div class="journey fade-in">
-      <div class="journey-step">
-        <div class="journey-label">Late 2025</div>
-        <div class="journey-text">Built the first AI-powered sales tool. CRM integration, lead building, outreach campaigns.</div>
-      </div>
-      <div class="journey-step">
-        <div class="journey-label">Early 2026</div>
-        <div class="journey-text">Expanded across 11 projects &mdash; job search, competitive research, curriculum, restaurant tech, knowledge bases.</div>
-      </div>
-      <div class="journey-step">
-        <div class="journey-label">March 2026</div>
-        <div class="journey-text">Audited everything. Read every line across all projects. Found what worked and what didn't.</div>
-      </div>
-      <div class="journey-step">
-        <div class="journey-label">Now</div>
-        <div class="journey-text">9 engines running. 27 skills. 59 patterns extracted from real work. Still growing.</div>
-      </div>
     </div>
 
     <div class="meta-callout fade-in">
@@ -404,38 +391,38 @@ td strong { color: var(--text); }
     </p>
 
     <h3>Three Problems With "Just Asking AI"</h3>
-    <div class="card-grid">
-      <div class="card card-warm">
-        <div class="card-title">It Forgets Everything</div>
-        <div class="card-body">
-          Every conversation starts from zero. That market research you did last week? Gone.
+    <div class="problem-list">
+      <div class="problem-card">
+        <div class="problem-num c1">1</div>
+        <div class="problem-content">
+          <div class="problem-title">It Forgets Everything</div>
+          <p>Every conversation starts from zero. That market research you did last week? Gone.
           The decisions you made? Gone. The context about your clients, your industry, your
-          positioning? You explain it again. <strong>Every. Single. Time.</strong>
-          <br><br>
-          It's like hiring a brilliant consultant with amnesia. Sharp in the moment,
-          but tomorrow they won't remember your name.
+          positioning? You explain it again. <strong>Every. Single. Time.</strong></p>
+          <p style="margin-top: 10px;">It's like hiring a brilliant consultant with amnesia. Sharp in the moment,
+          but tomorrow they won't remember your name.</p>
         </div>
       </div>
-      <div class="card card-amber">
-        <div class="card-title">It's Confidently Wrong</div>
-        <div class="card-body">
-          AI doesn't say "I'm not sure." It says "Here's the answer" &mdash; even when it's
-          working from outdated information or averaging across contradictory sources.
-          <br><br>
-          <strong>It sounds exactly the same whether it's right or wrong.</strong> When you're
+      <div class="problem-card">
+        <div class="problem-num c2">2</div>
+        <div class="problem-content">
+          <div class="problem-title">It's Confidently Wrong</div>
+          <p>AI doesn't say "I'm not sure." It says "Here's the answer" &mdash; even when it's
+          working from outdated information or averaging across contradictory sources.</p>
+          <p style="margin-top: 10px;"><strong>It sounds exactly the same whether it's right or wrong.</strong> When you're
           making business decisions based on that research, you need to know which claims are
-          solid and which are the AI's best guess.
+          solid and which are the AI's best guess.</p>
         </div>
       </div>
-      <div class="card card-purple">
-        <div class="card-title">Nobody Checks the Work</div>
-        <div class="card-body">
-          When AI produces something, who reviews it? The same AI. That's an employee writing
-          a report and then grading their own report.
-          <br><br>
-          The failure mode isn't obvious errors &mdash; it's <strong>subtle ones that look right.</strong>
+      <div class="problem-card">
+        <div class="problem-num c3">3</div>
+        <div class="problem-content">
+          <div class="problem-title">Nobody Checks the Work</div>
+          <p>When AI produces something, who reviews it? The same AI. That's an employee writing
+          a report and then grading their own report.</p>
+          <p style="margin-top: 10px;">The failure mode isn't obvious errors &mdash; it's <strong>subtle ones that look right.</strong>
           A slightly outdated competitor analysis. A salary range from last year's market.
-          These don't announce themselves.
+          These don't announce themselves.</p>
         </div>
       </div>
     </div>
@@ -481,7 +468,7 @@ td strong { color: var(--text); }
       fancy AI workflow. Five mechanisms keep the system honest.
     </p>
 
-    <div class="card-grid">
+    <div class="card-grid-2">
       <div class="card card-accent">
         <div class="card-title">Research That Verifies Itself</div>
         <div class="card-body">
@@ -524,19 +511,16 @@ td strong { color: var(--text); }
           "skips steps when confident." EngineOS removes the option.</p>
         </div>
       </div>
-      <div class="card card-orange">
-        <div class="card-title">You Can Talk to It About Itself</div>
-        <div class="card-body">
-          <p>Ask the system how it's doing. Which engines are active. What work is outstanding.
-          What's changed since last session. What should we focus on next.</p>
-          <p style="margin-top: 8px;"><strong>It's an operating system you can have a conversation
-          with about its own state.</strong> Not just executing tasks &mdash; reasoning about
-          priorities, flagging things you might have forgotten, suggesting what to work on.</p>
-        </div>
-      </div>
     </div>
 
-    <div class="callout callout-green" style="margin-top: 20px;">
+    <div class="highlight-box" style="margin-top: 16px;">
+      <p><strong>And you can talk to it about itself.</strong> Ask the system which engines are active,
+      what work is outstanding, what's changed since last session. It reasons about priorities,
+      flags things you might have forgotten, suggests what to work on next. It's an operating
+      system you can have a conversation with about its own state.</p>
+    </div>
+
+    <div class="callout callout-green" style="margin-top: 16px;">
       <strong>An honesty moment:</strong> During testing, the adversarial evaluator caught fabricated
       citations in a research document on its first review pass &mdash; citations the production AI
       had generated with full confidence. The system found its own mistakes before anyone else could.
@@ -592,7 +576,7 @@ td strong { color: var(--text); }
       with real results.
     </p>
 
-    <div class="card-grid">
+    <div class="card-grid-2">
       <div class="card card-accent">
         <div class="result-tag">REAL RESULT</div>
         <div class="card-title">Research &amp; Intelligence</div>
@@ -900,13 +884,13 @@ function drawDiagrams() {
   const x1 = c1.getContext('2d'); x1.clearRect(0, 0, c1.width, c1.height);
   const r1 = rough.canvas(c1);
 
-  r1.rectangle(40, 200, 620, 140, { stroke: C.accent, strokeWidth: 2, fill: isDark ? 'rgba(34,211,238,0.06)' : 'rgba(34,211,238,0.08)', fillStyle: 'solid', roughness: 0.8 });
+  r1.rectangle(60, 200, 600, 140, { stroke: C.accent, strokeWidth: 2, fill: isDark ? 'rgba(34,211,238,0.06)' : 'rgba(34,211,238,0.08)', fillStyle: 'solid', roughness: 0.8 });
 
   const eng = [
-    { x: 55, w: 130, label: 'Sales', sub: 'CRM + Campaigns', c: C.warm },
-    { x: 200, w: 130, label: 'Job Search', sub: 'Pipeline + Intel', c: C.accent },
-    { x: 345, w: 130, label: 'Research', sub: 'Market Analysis', c: C.purple },
-    { x: 490, w: 155, label: 'Your Engine', sub: 'Any Domain', c: C.amber }
+    { x: 75, w: 125, label: 'Sales', sub: 'CRM + Campaigns', c: C.warm },
+    { x: 215, w: 125, label: 'Job Search', sub: 'Pipeline + Intel', c: C.accent },
+    { x: 355, w: 125, label: 'Research', sub: 'Market Analysis', c: C.purple },
+    { x: 495, w: 145, label: 'Your Engine', sub: 'Any Domain', c: C.amber }
   ];
   eng.forEach(e => {
     r1.rectangle(e.x, 60, e.w, 110, { stroke: e.c, strokeWidth: 1.5, fill: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)', fillStyle: 'solid', roughness: 0.8 });
@@ -922,21 +906,21 @@ function drawDiagrams() {
   });
 
   x1.fillStyle = C.accent; x1.font = 'bold 13px -apple-system, system-ui, sans-serif';
-  x1.fillText('OPERATING SYSTEM', 350, 235);
+  x1.fillText('OPERATING SYSTEM', 360, 235);
   x1.font = '11px -apple-system, system-ui, sans-serif'; x1.fillStyle = C.muted;
-  ['27 Skills','12 Methodologies','59 Patterns','38 Templates','Design System','Governance'].forEach((t,i) => x1.fillText(t, 115 + i*104, 265));
+  ['27 Skills','12 Methods','59 Patterns','38 Templates','Design System'].forEach((t,i) => x1.fillText(t, 135 + i*110, 265));
 
   x1.fillStyle = C.muted; x1.font = 'bold 10px -apple-system, system-ui, sans-serif'; x1.textAlign = 'right';
-  x1.fillText('LAYER 2', 35, 115); x1.fillText('Engines', 35, 128);
-  x1.fillText('LAYER 1', 35, 265); x1.fillText('OS', 35, 278);
+  x1.fillText('LAYER 2', 55, 115); x1.fillText('Engines', 55, 128);
+  x1.fillText('LAYER 1', 55, 265); x1.fillText('OS', 55, 278);
 
-  r1.rectangle(488, 58, 159, 114, { stroke: C.amber, strokeWidth: 1.5, roughness: 1.2, strokeLineDash: [6, 4] });
+  r1.rectangle(493, 58, 149, 114, { stroke: C.amber, strokeWidth: 1.5, roughness: 1.2, strokeLineDash: [6, 4] });
   x1.textAlign = 'center'; x1.fillStyle = C.amber; x1.font = 'italic 10px -apple-system, system-ui, sans-serif';
   x1.fillText('+ inherits everything', 567, 150);
 
   x1.fillStyle = C.muted; x1.font = '10px -apple-system, system-ui, sans-serif';
-  [130, 265, 410, 567].forEach(px => x1.fillText('inherits', px, 190));
-  x1.fillText('Shared foundation \u2022 Each engine isolated but inherits all OS capabilities', 350, 325);
+  [137, 277, 417, 567].forEach(px => x1.fillText('inherits', px, 190));
+  x1.fillText('Shared foundation \u2022 Each engine isolated but inherits all OS capabilities', 360, 325);
 
   // Quality flow
   const c3 = document.getElementById('s3-quality-flow');
