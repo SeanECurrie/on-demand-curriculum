@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EngineOS — What It Is and Why It's Different</title>
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #111118;
+  --bg-card-hover: #181822;
+  --bg-sidebar: #08080d;
+  --bg-subtle: rgba(255,255,255,0.02);
+  --text: #e4e4ec;
+  --text-muted: #8585a0;
+  --text-dim: #55556a;
+  --accent: #22d3ee;
+  --accent-glow: rgba(34,211,238,0.12);
+  --accent-warm: #f87171;
+  --accent-green: #4ade80;
+  --accent-amber: #fbbf24;
+  --accent-purple: #a78bfa;
+  --accent-orange: #fb923c;
+  --accent-pink: #f472b6;
+  --accent-slate: #94a3b8;
+  --border: #1e1e2a;
+  --border-light: #2a2a3a;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', Consolas, monospace;
+  --sidebar-w: 260px;
+}
+[data-theme="light"] {
+  --bg: #f8f8fc; --bg-card: #ffffff; --bg-card-hover: #f0f0f6;
+  --bg-sidebar: #eeeef4; --bg-subtle: rgba(0,0,0,0.02);
+  --text: #1a1a2e; --text-muted: #666680; --text-dim: #9999aa;
+  --border: #d8d8e4; --border-light: #e4e4ee;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+[data-theme="dark"] { color-scheme: dark; }
+[data-theme="light"] { color-scheme: light; }
+body { font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.6; }
+
+/* Sidebar */
+#sidebar {
+  position: fixed; top: 0; left: 0; width: var(--sidebar-w); height: 100vh;
+  background: var(--bg-sidebar); border-right: 1px solid var(--border);
+  padding: 24px 0; overflow-y: auto; z-index: 100; display: flex; flex-direction: column;
+}
+.logo { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+.logo-row { display: flex; justify-content: space-between; align-items: center; }
+.logo h2 { font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase; }
+.logo p { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+#theme-toggle {
+  background: none; border: 1px solid var(--border); color: var(--text-muted);
+  width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+#theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+#sidebar nav { flex: 1; padding: 4px 0; }
+#sidebar nav a {
+  display: block; padding: 10px 20px; font-size: 13px; color: var(--text-muted);
+  text-decoration: none; border-left: 3px solid transparent; transition: all 0.2s;
+}
+#sidebar nav a:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+#sidebar nav a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-glow); }
+
+/* Mobile */
+#menu-btn {
+  display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+  background: var(--bg-card); border: 1px solid var(--border); color: var(--text);
+  width: 40px; height: 40px; border-radius: 8px; cursor: pointer; font-size: 18px;
+}
+#overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+
+/* Main */
+#main { margin-left: var(--sidebar-w); padding: 0; min-height: 100vh; max-width: calc(100vw - var(--sidebar-w)); overflow-x: hidden; }
+
+/* Progress */
+#progress-bar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: 3px; background: var(--border); z-index: 50; }
+#progress-fill { height: 100%; background: var(--accent); width: 0; transition: width 0.3s; }
+
+/* Hero */
+.hero { padding: 72px 60px 56px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(34,211,238,0.04) 0%, transparent 100%); }
+.hero h1 { font-size: 38px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
+.hero h1 span { color: var(--accent); }
+.hero .lead { font-size: 18px; color: var(--text); font-weight: 600; max-width: 700px; line-height: 1.5; margin-bottom: 8px; }
+.hero .subtitle { font-size: 15px; color: var(--text-muted); max-width: 660px; line-height: 1.7; }
+
+/* Stats bar */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 1px; background: var(--border); margin: 32px 0 0; border-radius: 12px; overflow: hidden;
+}
+.stat { background: var(--bg-card); padding: 18px 12px; text-align: center; }
+.stat .num { font-size: 26px; font-weight: 800; color: var(--accent); }
+.stat .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+/* Meta callout */
+.meta-callout {
+  margin-top: 28px; background: var(--bg-card); border: 1px solid rgba(34,211,238,0.25);
+  border-radius: 10px; padding: 16px 20px; display: flex; gap: 12px; align-items: flex-start;
+  max-width: 660px;
+}
+.meta-callout .meta-icon { color: var(--accent); font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.meta-callout p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.meta-callout strong { color: var(--text); }
+
+/* Journey timeline */
+.journey { display: flex; margin: 32px 0 0; position: relative; padding-top: 12px; }
+.journey::before { content: ''; position: absolute; top: 17px; left: 6px; right: 6px; height: 2px; background: var(--border); }
+.journey-step { flex: 1; position: relative; padding-top: 16px; padding-right: 12px; }
+.journey-step::before {
+  content: ''; position: absolute; top: 11px; left: 0; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); z-index: 1;
+}
+.journey-step:last-child::before { background: var(--accent-green); }
+.journey-label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+.journey-text { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-top: 2px; }
+
+/* Sections */
+section { padding: 48px 60px; border-bottom: 1px solid var(--border); }
+section h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+section h2 .num { color: var(--accent); font-weight: 800; margin-right: 8px; }
+.section-intro { color: var(--text-muted); margin-bottom: 28px; max-width: 720px; line-height: 1.7; font-size: 15px; }
+h3 { font-size: 18px; font-weight: 600; margin: 28px 0 12px; }
+h4 { font-size: 15px; font-weight: 600; margin: 20px 0 8px; }
+p { margin: 8px 0; }
+.content-text { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 720px; }
+.content-text strong { color: var(--text); }
+
+/* Cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin: 20px 0; }
+.card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px; transition: all 0.2s;
+}
+.card:hover { border-color: var(--border-light); background: var(--bg-card-hover); }
+.card .card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.card .card-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.card .card-body strong { color: var(--text); }
+.card .result-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.5px; background: rgba(74,222,128,0.12); color: var(--accent-green); margin-bottom: 10px; }
+.card-accent { border-left: 3px solid var(--accent); }
+.card-green { border-left: 3px solid var(--accent-green); }
+.card-amber { border-left: 3px solid var(--accent-amber); }
+.card-purple { border-left: 3px solid var(--accent-purple); }
+.card-warm { border-left: 3px solid var(--accent-warm); }
+.card-orange { border-left: 3px solid var(--accent-orange); }
+
+/* Comparison */
+.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+.comparison-side { padding: 24px; border-radius: 12px; border: 1px solid var(--border); }
+.comparison-side.before { border-color: rgba(248,113,113,0.3); }
+.comparison-side.after { border-color: rgba(74,222,128,0.3); }
+.comparison-side h4 { margin: 0 0 16px; font-size: 16px; }
+.comparison-side.before h4 { color: var(--accent-warm); }
+.comparison-side.after h4 { color: var(--accent-green); }
+.comparison-side ul { padding-left: 20px; }
+.comparison-side li { font-size: 13px; color: var(--text-muted); margin: 8px 0; line-height: 1.6; }
+.comparison-side li strong { color: var(--text); }
+
+/* Expandables */
+.expandable { margin: 12px 0; }
+.expand-btn {
+  display: flex; align-items: center; gap: 8px; width: 100%; background: none;
+  border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px;
+  color: var(--text-muted); font-size: 13px; cursor: pointer; text-align: left;
+  font-family: var(--font-sans); transition: all 0.2s;
+}
+.expand-btn:hover { color: var(--text); border-color: var(--border-light); }
+.expand-icon { font-size: 10px; transition: transform 0.2s; flex-shrink: 0; }
+.expandable.open .expand-icon { transform: rotate(90deg); }
+.expand-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; padding: 0 16px; }
+.expandable.open .expand-body { max-height: 4000px; padding: 16px; }
+.expand-body p, .expand-body li { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+.expand-body ul { padding-left: 20px; margin: 8px 0; }
+.expand-body li { margin: 4px 0; }
+
+/* Diagrams */
+.diagram-wrap {
+  background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px; margin: 24px 0; overflow-x: auto; text-align: center;
+}
+[data-theme="light"] .diagram-wrap { background: rgba(0,0,0,0.03); }
+.diagram-wrap canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+.diagram-caption { font-size: 11px; color: var(--text-dim); text-align: center; margin-top: 12px; font-style: italic; }
+
+/* Highlight / callout */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(34,211,238,0.08), rgba(167,139,250,0.06));
+  border: 1px solid rgba(34,211,238,0.2); border-radius: 12px; padding: 24px; margin: 24px 0;
+}
+.highlight-box p { font-size: 14px; line-height: 1.7; }
+.highlight-box strong { color: var(--accent); }
+.callout { border-radius: 8px; padding: 16px 20px; margin: 16px 0; font-size: 13px; line-height: 1.7; }
+.callout-info { background: rgba(34,211,238,0.08); border: 1px solid rgba(34,211,238,0.2); color: var(--text-muted); }
+.callout-amber { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); color: var(--text-muted); }
+.callout-green { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); color: var(--text-muted); }
+.callout strong { color: var(--text); }
+
+/* Number drop */
+.number-drop { text-align: center; padding: 28px 20px; margin: 24px 0; }
+.number-drop .big-num { font-size: 48px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+.number-drop .big-label { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+/* Feature list */
+.feature-list { list-style: none; padding: 0; margin: 16px 0; }
+.feature-list li {
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  font-size: 14px; color: var(--text-muted); display: flex; gap: 12px; align-items: flex-start;
+}
+.feature-list li:last-child { border-bottom: none; }
+.feature-list .feat-marker { color: var(--accent); font-weight: 700; font-size: 16px; flex-shrink: 0; line-height: 1.4; }
+.feature-list li strong { color: var(--text); }
+
+/* Example cards */
+.example-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 16px 0; }
+.example-card .example-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.example-card .example-label.real { color: var(--accent-green); }
+.example-card h4 { margin: 0 0 8px; font-size: 15px; }
+.example-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.example-card .metric { display: inline-block; background: rgba(34,211,238,0.1); color: var(--accent); font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin: 4px 4px 4px 0; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+td strong { color: var(--text); }
+
+/* Fade-in animation */
+.fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  #sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+  #sidebar.open { transform: translateX(0); }
+  #overlay.open { display: block; }
+  #menu-btn { display: block; }
+  #main { margin-left: 0; max-width: 100vw; }
+  #progress-bar { left: 0; }
+  .hero { padding: 56px 24px 40px; }
+  .hero h1 { font-size: 26px; }
+  .hero .lead { font-size: 16px; }
+  section { padding: 36px 24px; }
+  .card-grid { grid-template-columns: 1fr; }
+  .comparison { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: repeat(3, 1fr); }
+  .journey { flex-wrap: wrap; }
+  .journey-step { flex: none; width: 50%; margin-bottom: 12px; }
+}
+@media (max-width: 500px) {
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .journey-step { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"><div id="progress-fill"></div></div>
+<button id="menu-btn" aria-label="Open navigation">&#9776;</button>
+<div id="overlay"></div>
+
+<aside id="sidebar">
+  <div class="logo">
+    <div class="logo-row">
+      <h2>EngineOS</h2>
+      <button id="theme-toggle" aria-label="Toggle theme">&#9788;</button>
+    </div>
+    <p>Interactive Walkthrough</p>
+  </div>
+  <nav>
+    <a href="#hero" class="active">Overview</a>
+    <a href="#s1-what-it-is">What It Is</a>
+    <a href="#s2-the-gap">The Gap</a>
+    <a href="#s3-governance">Why It Doesn't Drift</a>
+    <a href="#s4-capabilities">What It's Done</a>
+    <a href="#s5-real-world">In Practice</a>
+    <a href="#s6-under-hood">Under the Hood</a>
+  </nav>
+</aside>
+
+<div id="main">
+
+  <!-- HERO -->
+  <div class="hero" id="hero">
+    <h1>Engine<span>OS</span></h1>
+    <p class="lead">
+      One person. No team. No developers. No designers.<br>
+      An operating system for professional work, built on AI.
+    </p>
+    <p class="subtitle">
+      Not a chatbot. Not a tool. A structured environment where research is verified,
+      quality is enforced, nothing gets lost between sessions, and the system gets
+      smarter the more you use it.
+    </p>
+    <div class="stats-bar">
+      <div class="stat"><div class="num">100+</div><div class="label">Days Active</div></div>
+      <div class="stat"><div class="num">11</div><div class="label">Source Projects</div></div>
+      <div class="stat"><div class="num">27</div><div class="label">Specialized Skills</div></div>
+      <div class="stat"><div class="num">9</div><div class="label">Business Engines</div></div>
+      <div class="stat"><div class="num">59</div><div class="label">Reusable Patterns</div></div>
+    </div>
+
+    <div class="journey fade-in">
+      <div class="journey-step">
+        <div class="journey-label">Late 2025</div>
+        <div class="journey-text">Built the first AI-powered sales tool. CRM integration, lead building, outreach campaigns.</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-label">Early 2026</div>
+        <div class="journey-text">Expanded across 11 projects &mdash; job search, competitive research, curriculum, restaurant tech, knowledge bases.</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-label">March 2026</div>
+        <div class="journey-text">Audited everything. Read every line across all projects. Found what worked and what didn't.</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-label">Now</div>
+        <div class="journey-text">9 engines running. 27 skills. 59 patterns extracted from real work. Still growing.</div>
+      </div>
+    </div>
+
+    <div class="meta-callout fade-in">
+      <div class="meta-icon">&#9670;</div>
+      <p><strong>This page was built by the system it describes</strong> &mdash; from a conversation
+      to a shareable, hosted walkthrough in one session. What you're reading is also a demonstration
+      of what it produces.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: WHAT IT IS -->
+  <section id="s1-what-it-is" class="fade-in">
+    <h2><span class="num">01</span> What EngineOS Is</h2>
+    <p class="section-intro">
+      EngineOS is a system for getting professional work done with AI. Research, sales operations,
+      content production, client management, competitive intelligence. Not one-off conversations &mdash;
+      a structured operating environment where work builds on itself.
+    </p>
+
+    <h3>Two Layers, One System</h3>
+    <p class="content-text">
+      Think of it like running a firm with multiple clients or business lines.
+    </p>
+
+    <div class="diagram-wrap">
+      <canvas id="s1-arch-diagram" width="700" height="380"></canvas>
+      <p class="diagram-caption">Layer 1 (the OS) provides shared infrastructure. Layer 2 (engines) handle specific business domains.</p>
+    </div>
+
+    <div class="comparison" style="margin-top: 20px;">
+      <div class="comparison-side after" style="border-color: rgba(34,211,238,0.3);">
+        <h4 style="color: var(--accent);">Layer 1 &mdash; The Operating System</h4>
+        <ul>
+          <li><strong>The shared foundation.</strong> How research gets done, how quality gets checked, how information is organized and remembered.</li>
+          <li><strong>The firm's infrastructure.</strong> Processes, standards, and institutional knowledge that every business unit benefits from, regardless of domain.</li>
+          <li>27 specialized skills, 12 methodology documents, 59 reusable patterns, 38 templates, and a complete design system.</li>
+        </ul>
+      </div>
+      <div class="comparison-side after" style="border-color: rgba(167,139,250,0.3);">
+        <h4 style="color: var(--accent-purple);">Layer 2 &mdash; The Engines</h4>
+        <ul>
+          <li><strong>Business-specific units.</strong> Each handles a different domain &mdash; sales, job search, competitive research, knowledge management, curriculum.</li>
+          <li><strong>They inherit everything from Layer 1</strong> but keep their own data, workflows, and client information completely separate.</li>
+          <li>9 engines currently running. Each isolated. All sharing the same operational backbone.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>It Compounds</h3>
+
+    <div class="highlight-box">
+      <p>
+        The 59 patterns in the library were extracted from real work across <strong>11 different projects
+        over 100+ days of operation.</strong> Every methodology document was refined through actual use.
+        Every quality standard was tested against real deliverables. This isn't a framework someone
+        designed on a whiteboard &mdash; it's a system that was built, tested, broken, fixed, and refined
+        through daily operation.
+      </p>
+      <p style="margin-top: 12px;">
+        <strong>New engine on day one has access to everything the system has learned.</strong>
+        Need a new business vertical? Create a new engine. It immediately inherits every skill,
+        pattern, and methodology the OS already has. You don't start from scratch. Every session
+        makes every future session better. Every engine benefits from every other engine's experience.
+      </p>
+    </div>
+
+    <p class="content-text" style="margin-top: 20px;">
+      Right now it runs 9 engines for one person. It could just as easily run 3 engines for
+      3 different businesses &mdash; or 3 engines for 3 partners. The architecture doesn't care
+      about the org chart. Each engine gets its own data and workflows. They all share the same
+      quality standards and institutional knowledge.
+    </p>
+  </section>
+
+  <!-- SECTION 2: THE GAP -->
+  <section id="s2-the-gap" class="fade-in">
+    <h2><span class="num">02</span> The Gap Nobody Talks About</h2>
+    <p class="section-intro">
+      AI is genuinely powerful. You can ask it to write emails, analyze documents, summarize research,
+      draft strategy. And it'll give you something &mdash; usually fast, usually articulate.
+      The question is whether you can rely on it for real work.
+    </p>
+
+    <h3>Three Problems With "Just Asking AI"</h3>
+    <div class="card-grid">
+      <div class="card card-warm">
+        <div class="card-title">It Forgets Everything</div>
+        <div class="card-body">
+          Every conversation starts from zero. That market research you did last week? Gone.
+          The decisions you made? Gone. The context about your clients, your industry, your
+          positioning? You explain it again. <strong>Every. Single. Time.</strong>
+          <br><br>
+          It's like hiring a brilliant consultant with amnesia. Sharp in the moment,
+          but tomorrow they won't remember your name.
+        </div>
+      </div>
+      <div class="card card-amber">
+        <div class="card-title">It's Confidently Wrong</div>
+        <div class="card-body">
+          AI doesn't say "I'm not sure." It says "Here's the answer" &mdash; even when it's
+          working from outdated information or averaging across contradictory sources.
+          <br><br>
+          <strong>It sounds exactly the same whether it's right or wrong.</strong> When you're
+          making business decisions based on that research, you need to know which claims are
+          solid and which are the AI's best guess.
+        </div>
+      </div>
+      <div class="card card-purple">
+        <div class="card-title">Nobody Checks the Work</div>
+        <div class="card-body">
+          When AI produces something, who reviews it? The same AI. That's an employee writing
+          a report and then grading their own report.
+          <br><br>
+          The failure mode isn't obvious errors &mdash; it's <strong>subtle ones that look right.</strong>
+          A slightly outdated competitor analysis. A salary range from last year's market.
+          These don't announce themselves.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top: 20px;">
+      <strong>To be clear:</strong> Raw AI is useful. Great for drafting, brainstorming, quick lookups.
+      The gap shows up when you need professional-grade work &mdash; research you can trust, outputs
+      that meet a quality bar, institutional knowledge that accumulates. That's where "just asking" breaks down.
+    </div>
+
+    <h3>The Difference at a Glance</h3>
+    <div class="comparison">
+      <div class="comparison-side before">
+        <h4>Just Asking AI</h4>
+        <ul>
+          <li><strong>Memory:</strong> Starts from zero every session</li>
+          <li><strong>Research:</strong> Single source, no verification</li>
+          <li><strong>Quality:</strong> Self-evaluated (grading own homework)</li>
+          <li><strong>Methodology:</strong> Whatever seems right in the moment</li>
+          <li><strong>Patterns:</strong> Reinvented every time</li>
+          <li><strong>Multiple projects:</strong> Manual context-switching</li>
+        </ul>
+      </div>
+      <div class="comparison-side after">
+        <h4>EngineOS</h4>
+        <ul>
+          <li><strong>Memory:</strong> Context persists, logs survive permanently</li>
+          <li><strong>Research:</strong> Dual-sourced, credibility-scored, date-stamped</li>
+          <li><strong>Quality:</strong> Independent reviewer checks every deliverable</li>
+          <li><strong>Methodology:</strong> 12 standards, enforced by the system</li>
+          <li><strong>Patterns:</strong> 59 tested solutions, reused automatically</li>
+          <li><strong>Multiple projects:</strong> Isolated engines, shared infrastructure</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: GOVERNANCE -->
+  <section id="s3-governance" class="fade-in">
+    <h2><span class="num">03</span> Why It Doesn't Forget, Drift, or Bullshit</h2>
+    <p class="section-intro">
+      This is what makes EngineOS actually different from a well-written prompt or a
+      fancy AI workflow. Five mechanisms keep the system honest.
+    </p>
+
+    <div class="card-grid">
+      <div class="card card-accent">
+        <div class="card-title">Research That Verifies Itself</div>
+        <div class="card-body">
+          <p>Every piece of research gets dual-sourced &mdash; checked against at least two independent
+          sources. Every claim gets a credibility score on a 5-tier scale: official documentation at the
+          top, general community sentiment at the bottom.</p>
+          <p style="margin-top: 10px;"><strong>When sources disagree, the disagreement gets documented.</strong>
+          That's often the most valuable intelligence.</p>
+        </div>
+      </div>
+      <div class="card card-green">
+        <div class="card-title">Quality Control by Someone Else</div>
+        <div class="card-body">
+          <p>When EngineOS produces a deliverable, a completely separate AI instance reviews it.
+          This reviewer has <strong>no access to the original conversation</strong> &mdash; only the
+          output and a set of quality criteria.</p>
+          <p style="margin-top: 10px;">If the score doesn't pass, the work gets revised and re-evaluated.
+          Up to three rounds. If it still doesn't pass, a human makes the call.</p>
+        </div>
+      </div>
+      <div class="card card-amber">
+        <div class="card-title">Memory That Actually Persists</div>
+        <div class="card-body">
+          <p><strong>Activity log:</strong> Every operation recorded automatically &mdash; what was done,
+          when, by which skill.</p>
+          <p style="margin-top: 8px;"><strong>Intelligence log:</strong> Strategic insights captured
+          selectively &mdash; when research contradicts assumptions, when patterns emerge.</p>
+          <p style="margin-top: 8px;">Each engine's context file updates every session. Next time,
+          the system picks up where it left off.</p>
+        </div>
+      </div>
+      <div class="card card-purple">
+        <div class="card-title">Mechanical Enforcement</div>
+        <div class="card-body">
+          <p>EngineOS doesn't just have guidelines &mdash; it has <strong>mechanical blocks</strong>
+          that prevent shortcuts.</p>
+          <p style="margin-top: 8px;">Try to produce a deliverable without creating a plan first?
+          The system blocks the write. It's not a suggestion &mdash; it's a lock on the door until you do.</p>
+          <p style="margin-top: 8px;">The most common AI failure mode isn't "can't do it." It's
+          "skips steps when confident." EngineOS removes the option.</p>
+        </div>
+      </div>
+      <div class="card card-orange">
+        <div class="card-title">You Can Talk to It About Itself</div>
+        <div class="card-body">
+          <p>Ask the system how it's doing. Which engines are active. What work is outstanding.
+          What's changed since last session. What should we focus on next.</p>
+          <p style="margin-top: 8px;"><strong>It's an operating system you can have a conversation
+          with about its own state.</strong> Not just executing tasks &mdash; reasoning about
+          priorities, flagging things you might have forgotten, suggesting what to work on.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-green" style="margin-top: 20px;">
+      <strong>An honesty moment:</strong> During testing, the adversarial evaluator caught fabricated
+      citations in a research document on its first review pass &mdash; citations the production AI
+      had generated with full confidence. The system found its own mistakes before anyone else could.
+      That's the point of having an independent reviewer that can't see the original conversation.
+    </div>
+
+    <div class="expandable" style="margin-top: 16px;">
+      <button class="expand-btn" onclick="toggleExpand(this)">
+        <span class="expand-icon">&#9654;</span> How the credibility scoring works in practice
+      </button>
+      <div class="expand-body">
+        <p>Every source gets classified into one of five tiers:</p>
+        <ul>
+          <li><strong>Tier 1:</strong> Official documentation, verified changelogs, primary sources</li>
+          <li><strong>Tier 2:</strong> Established domain experts with proven track records</li>
+          <li><strong>Tier 3:</strong> Community contributions with reproducible evidence</li>
+          <li><strong>Tier 4:</strong> Forum discussions with technical specificity</li>
+          <li><strong>Tier 5:</strong> General sentiment &mdash; useful for direction, not for decisions</li>
+        </ul>
+        <p>Tier 1 = act with confidence. Tier 4-5 = treat as signal, not fact. The tier tag
+        travels with the finding everywhere.</p>
+      </div>
+    </div>
+
+    <div class="expandable">
+      <button class="expand-btn" onclick="toggleExpand(this)">
+        <span class="expand-icon">&#9654;</span> What mechanical enforcement looks like
+      </button>
+      <div class="expand-body">
+        <ul>
+          <li><strong>Pre-write hooks:</strong> Before any file gets modified, the system checks
+          for a plan. No plan = blocked write. Automated, not advisory.</li>
+          <li><strong>Forced skill chains:</strong> Each piece of work gets classified and assigned
+          a specific sequence of skills. You can't skip research to get to the output faster.</li>
+          <li><strong>Post-compaction recovery:</strong> If a long session compresses the AI's working
+          memory, core rules automatically get reinjected from disk.</li>
+        </ul>
+        <p>Consistency doesn't depend on the AI remembering to follow rules. The rules are structural.</p>
+      </div>
+    </div>
+
+    <div class="diagram-wrap" style="margin-top: 20px;">
+      <canvas id="s3-quality-flow" width="700" height="200"></canvas>
+      <p class="diagram-caption">Every deliverable follows this path &mdash; no exceptions, no shortcuts</p>
+    </div>
+  </section>
+
+  <!-- SECTION 4: WHAT IT'S DONE -->
+  <section id="s4-capabilities" class="fade-in">
+    <h2><span class="num">04</span> What It's Actually Done</h2>
+    <p class="section-intro">
+      Not what it theoretically can do. What it has done &mdash; across real business operations,
+      with real results.
+    </p>
+
+    <div class="card-grid">
+      <div class="card card-accent">
+        <div class="result-tag">REAL RESULT</div>
+        <div class="card-title">Research &amp; Intelligence</div>
+        <div class="card-body">
+          <p>Researched <strong>34 companies for pipeline freshness</strong> in a single automated
+          sweep. Ran competitive intelligence producing credibility-scored findings across 15+
+          companies. Every finding tagged with source tier and date &mdash; you know exactly
+          how trustworthy each claim is.</p>
+          <p style="margin-top: 10px;">The depth governor decides when to go deep vs. broad based
+          on what you're trying to decide. No wasted effort on shallow coverage of critical topics.</p>
+        </div>
+      </div>
+
+      <div class="card card-green">
+        <div class="result-tag">REAL RESULT</div>
+        <div class="card-title">Sales &amp; CRM Operations</div>
+        <div class="card-body">
+          <p><strong>5-skill CRM pipeline</strong> that maps your schema, audits data health,
+          classifies contacts by fit criteria, and writes records &mdash; all directly connected.
+          No export/import. No copy-paste.</p>
+          <p style="margin-top: 10px;">Lead list generation with enrichment and verification.
+          Email campaign builder with personalized sequences. One operator handling what typically
+          requires a sales ops team.</p>
+        </div>
+      </div>
+
+      <div class="card card-purple">
+        <div class="result-tag">REAL RESULT</div>
+        <div class="card-title">Content &amp; Deliverables</div>
+        <div class="card-body">
+          <p><strong>This walkthrough</strong> &mdash; 1,300+ lines of interactive HTML with
+          hand-drawn diagrams, from conversation to hosted page. Professional DOCX pipeline
+          producing formatted resumes and reports. Enterprise-grade styling with a full design system.</p>
+          <p style="margin-top: 10px;">Large outputs get incremental construction &mdash; each section
+          built with individual attention instead of degrading toward the end.</p>
+        </div>
+      </div>
+
+      <div class="card card-amber">
+        <div class="result-tag">REAL RESULT</div>
+        <div class="card-title">Operations &amp; Knowledge</div>
+        <div class="card-body">
+          <p><strong>317+ activity log entries</strong> &mdash; every operation automatically tracked
+          without manual entry. Meeting transcripts processed into structured intelligence with
+          decisions, action items, and findings routed to the right knowledge base.</p>
+          <p style="margin-top: 10px;">Notion workspace integration for live pipeline tracking.
+          Decision tracking with full context and reasoning preserved.</p>
+        </div>
+      </div>
+
+      <div class="card card-orange">
+        <div class="result-tag">REAL RESULT</div>
+        <div class="card-title">Quality Assurance</div>
+        <div class="card-body">
+          <p>Adversarial evaluator <strong>caught fabricated citations</strong> on first review pass.
+          Multi-stage QA pipeline: structural checks, content validation, visual verification.
+          9 known failure modes checked automatically at natural pause points.</p>
+          <p style="margin-top: 10px;">Binary pass/fail tests calibrated by output type.
+          The system doesn't declare "done" until the work actually passes.</p>
+        </div>
+      </div>
+
+      <div class="card card-warm">
+        <div class="result-tag">REAL RESULT</div>
+        <div class="card-title">System Building</div>
+        <div class="card-body">
+          <p><strong>New engine on day one inherits 27 skills, 59 patterns, and 12 quality
+          standards.</strong> Codebase onboarding produces context structure for any repository.
+          Framework explanations generated as interactive walkthroughs for stakeholders.</p>
+          <p style="margin-top: 10px;">Profile building for new operators. The system adapts
+          to whoever is using it &mdash; voice, preferences, domain expertise.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-amber" style="margin-top: 20px;">
+      <strong>These capabilities compound.</strong> Research feeds sales. Transcripts feed the
+      knowledge base. QA checks everything before it goes out. They're not standalone tools &mdash;
+      they're an interconnected system where each skill makes the others more effective.
+    </div>
+  </section>
+
+  <!-- SECTION 5: IN PRACTICE -->
+  <section id="s5-real-world" class="fade-in">
+    <h2><span class="num">05</span> Running Right Now</h2>
+    <p class="section-intro">
+      These aren't demos. These are engines actively handling real work.
+    </p>
+
+    <div class="example-card">
+      <div class="example-label real">ACTIVE ENGINE</div>
+      <h4>Job Search Engine &mdash; Live Pipeline</h4>
+      <p>A full job search operation. Market intelligence scans companies for fit. A targeting pipeline
+      evaluates roles across two lanes &mdash; active applications and prospective targets. Everything
+      syncs to a Notion workspace tracking stage, temperature, and next actions in real time.</p>
+      <div style="margin: 12px 0;">
+        <span class="metric">34 companies researched</span>
+        <span class="metric">22 candidates evaluated</span>
+        <span class="metric">Live Notion sync</span>
+      </div>
+      <p><strong>One operator. No recruiter. No researcher.</strong> Running a process that would
+      typically require both.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label real">ACTIVE ENGINE</div>
+      <h4>Sales Enablement Engine &mdash; CRM + Outreach</h4>
+      <p>Full sales operations workflow: lead building with enrichment, campaign construction with
+      personalized sequences, and direct CRM integration that reads and writes contact data, tracks
+      engagement stages, and audits data quality.</p>
+      <div style="margin: 12px 0;">
+        <span class="metric">5-skill CRM pipeline</span>
+        <span class="metric">Schema auto-discovery</span>
+        <span class="metric">ICP classification</span>
+      </div>
+      <p>The CRM integration alone spans from schema discovery to health auditing to automated
+      contact classification by fit criteria.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-label real">ACTIVE ENGINE</div>
+      <h4>Competitive Intelligence Research</h4>
+      <p>Multi-source research operations producing structured findings with credibility scores.
+      Technology evaluations, market landscape analysis, company deep dives. Outputs include
+      evidence chains &mdash; not summaries, but traceable research you can verify.</p>
+      <div style="margin: 12px 0;">
+        <span class="metric">Credibility-scored</span>
+        <span class="metric">Dual-sourced</span>
+        <span class="metric">Traceable evidence</span>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 24px;">
+      <p>
+        <strong>Where this could go:</strong> The same infrastructure could adapt to commodities
+        research, deal evaluation, portfolio monitoring, or running multiple ventures simultaneously.
+        The domain-specific knowledge base is what you'd add &mdash; the research methodology,
+        quality control, CRM integration, content production, and governance are already built.
+        That's the expensive part, and it's done.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 6: UNDER THE HOOD -->
+  <section id="s6-under-hood" class="fade-in">
+    <h2><span class="num">06</span> Under the Hood</h2>
+    <p class="section-intro">
+      What's actually powering this &mdash; briefly. Enough for credibility, not enough to bore.
+    </p>
+
+    <ul class="feature-list">
+      <li>
+        <span class="feat-marker">&#9670;</span>
+        <div><strong>Claude Code</strong> &mdash; Not ChatGPT. Not a chatbot. A professional
+        development environment where AI operates with access to the file system, tools, and
+        integrations. The difference between texting someone questions and having them sit at
+        your desk with access to everything.</div>
+      </li>
+      <li>
+        <span class="feat-marker">&#9670;</span>
+        <div><strong>Connected Tools</strong> &mdash; The AI reads and writes directly to your CRM,
+        Notion workspace, web research tools, and email. Not through copy-paste &mdash; direct
+        integration through a protocol called MCP.</div>
+      </li>
+      <li>
+        <span class="feat-marker">&#9670;</span>
+        <div><strong>Design System</strong> &mdash; Professional outputs aren't an accident. Full
+        enterprise design system &mdash; typography, color standards, accessibility, PDF and HTML
+        pipelines. Which is why this page looks like it does.</div>
+      </li>
+      <li>
+        <span class="feat-marker">&#9670;</span>
+        <div><strong>Governance Hooks</strong> &mdash; Mechanical enforcement, not suggestions.
+        Pre-write checks, forced skill sequences, automatic rule reinjection. The system enforces
+        its own discipline.</div>
+      </li>
+      <li>
+        <span class="feat-marker">&#9670;</span>
+        <div><strong>Disk-Persisted State</strong> &mdash; Everything on disk, not in conversation
+        memory. Run plans, context files, logs, intelligence captures. Session ends unexpectedly?
+        Nothing lost. Picks up exactly where it left off.</div>
+      </li>
+    </ul>
+
+    <div class="expandable" style="margin-top: 16px;">
+      <button class="expand-btn" onclick="toggleExpand(this)">
+        <span class="expand-icon">&#9654;</span> Full tool and integration list
+      </button>
+      <div class="expand-body">
+        <table>
+          <thead><tr><th>Category</th><th>Tools</th><th>What It Does</th></tr></thead>
+          <tbody>
+            <tr><td><strong>CRM</strong></td><td>Attio (5-skill pipeline)</td><td>Schema discovery, data ops, health auditing, lead classification, audit refinement</td></tr>
+            <tr><td><strong>Knowledge Base</strong></td><td>Notion (2-skill pipeline)</td><td>Workspace mapping, database operations, content routing, cross-database queries</td></tr>
+            <tr><td><strong>Web Research</strong></td><td>Bright Data, Context7</td><td>Company research, market intelligence, current documentation, web scraping</td></tr>
+            <tr><td><strong>Content</strong></td><td>Design System + Puppeteer</td><td>Enterprise HTML/CSS, PDF generation, DOCX pipeline, visual verification</td></tr>
+            <tr><td><strong>Communication</strong></td><td>Gmail, Slack</td><td>Draft creation, message search, channel interaction</td></tr>
+            <tr><td><strong>Governance</strong></td><td>PreToolUse hooks, PostCompact</td><td>Mechanical enforcement, automatic rule recovery after context compression</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 20px;">
+      <p>
+        <strong>What matters about the tech:</strong> None of these tools are unique individually.
+        What's unique is how they're composed &mdash; the methodology governing research, the quality
+        control checking every output, the governance preventing shortcuts, and the engine architecture
+        making it all reusable across businesses. The tools are the ingredients. EngineOS is the kitchen.
+      </p>
+    </div>
+  </section>
+
+  <footer style="padding: 32px 60px; text-align: center; border-top: 1px solid var(--border);">
+    <p style="font-size: 13px; color: var(--text-muted);">
+      Built over 100+ days across 11 projects. Started as a sales tool. Became an operating system. Still growing.
+    </p>
+    <p style="font-size: 11px; color: var(--text-dim); margin-top: 6px;">EngineOS &mdash; April 2026</p>
+  </footer>
+
+</div>
+
+<script>
+const html = document.documentElement;
+const themeBtn = document.getElementById('theme-toggle');
+const saved = localStorage.getItem('eos-theme');
+if (saved) html.setAttribute('data-theme', saved);
+updateThemeIcon();
+
+themeBtn.addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('eos-theme', next);
+  updateThemeIcon();
+  drawDiagrams();
+});
+
+function updateThemeIcon() {
+  themeBtn.textContent = html.getAttribute('data-theme') === 'dark' ? '\u2600' : '\u263E';
+}
+
+// Mobile menu
+const menuBtn = document.getElementById('menu-btn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+menuBtn.addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); });
+overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('open'); });
+
+// Scroll spy + progress
+const sectionEls = document.querySelectorAll('section, .hero');
+const navLinks = document.querySelectorAll('#sidebar nav a');
+const progressFill = document.getElementById('progress-fill');
+
+const spyObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sectionEls.forEach(s => spyObs.observe(s));
+
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progressFill.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+});
+navLinks.forEach(link => link.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('open'); }));
+
+// Fade-in animations
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+// Expandables
+function toggleExpand(btn) { btn.parentElement.classList.toggle('open'); }
+
+// Canvas scaling
+function scaleCanvases() {
+  document.querySelectorAll('.diagram-wrap canvas').forEach(c => {
+    const maxW = c.parentElement.clientWidth - 48;
+    if (c.width > maxW) {
+      const r = c.height / c.width;
+      c.style.width = maxW + 'px';
+      c.style.height = (maxW * r) + 'px';
+    } else {
+      c.style.width = ''; c.style.height = '';
+    }
+  });
+}
+
+// Rough.js Diagrams
+function drawDiagrams() {
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  const C = {
+    accent: '#22d3ee', purple: '#a78bfa', green: '#4ade80', amber: '#fbbf24',
+    warm: '#f87171', orange: '#fb923c',
+    text: isDark ? '#e4e4ec' : '#1a1a2e', muted: isDark ? '#8585a0' : '#666680',
+    border: isDark ? '#2a2a3a' : '#d8d8e4'
+  };
+
+  // Architecture diagram
+  const c1 = document.getElementById('s1-arch-diagram');
+  const x1 = c1.getContext('2d'); x1.clearRect(0, 0, c1.width, c1.height);
+  const r1 = rough.canvas(c1);
+
+  r1.rectangle(40, 200, 620, 140, { stroke: C.accent, strokeWidth: 2, fill: isDark ? 'rgba(34,211,238,0.06)' : 'rgba(34,211,238,0.08)', fillStyle: 'solid', roughness: 0.8 });
+
+  const eng = [
+    { x: 55, w: 130, label: 'Sales', sub: 'CRM + Campaigns', c: C.warm },
+    { x: 200, w: 130, label: 'Job Search', sub: 'Pipeline + Intel', c: C.accent },
+    { x: 345, w: 130, label: 'Research', sub: 'Market Analysis', c: C.purple },
+    { x: 490, w: 155, label: 'Your Engine', sub: 'Any Domain', c: C.amber }
+  ];
+  eng.forEach(e => {
+    r1.rectangle(e.x, 60, e.w, 110, { stroke: e.c, strokeWidth: 1.5, fill: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)', fillStyle: 'solid', roughness: 0.8 });
+    r1.line(e.x + e.w/2, 170, e.x + e.w/2, 200, { stroke: C.border, strokeWidth: 1, roughness: 0.5 });
+  });
+
+  x1.font = 'bold 11px -apple-system, system-ui, sans-serif'; x1.textAlign = 'center';
+  eng.forEach(e => {
+    x1.fillStyle = e.c; x1.fillText(e.label, e.x + e.w/2, 95);
+    x1.font = '10px -apple-system, system-ui, sans-serif'; x1.fillStyle = C.muted;
+    x1.fillText(e.sub, e.x + e.w/2, 112);
+    x1.font = 'bold 11px -apple-system, system-ui, sans-serif';
+  });
+
+  x1.fillStyle = C.accent; x1.font = 'bold 13px -apple-system, system-ui, sans-serif';
+  x1.fillText('OPERATING SYSTEM', 350, 235);
+  x1.font = '11px -apple-system, system-ui, sans-serif'; x1.fillStyle = C.muted;
+  ['27 Skills','12 Methodologies','59 Patterns','38 Templates','Design System','Governance'].forEach((t,i) => x1.fillText(t, 115 + i*104, 265));
+
+  x1.fillStyle = C.muted; x1.font = 'bold 10px -apple-system, system-ui, sans-serif'; x1.textAlign = 'right';
+  x1.fillText('LAYER 2', 35, 115); x1.fillText('Engines', 35, 128);
+  x1.fillText('LAYER 1', 35, 265); x1.fillText('OS', 35, 278);
+
+  r1.rectangle(488, 58, 159, 114, { stroke: C.amber, strokeWidth: 1.5, roughness: 1.2, strokeLineDash: [6, 4] });
+  x1.textAlign = 'center'; x1.fillStyle = C.amber; x1.font = 'italic 10px -apple-system, system-ui, sans-serif';
+  x1.fillText('+ inherits everything', 567, 150);
+
+  x1.fillStyle = C.muted; x1.font = '10px -apple-system, system-ui, sans-serif';
+  [130, 265, 410, 567].forEach(px => x1.fillText('inherits', px, 190));
+  x1.fillText('Shared foundation \u2022 Each engine isolated but inherits all OS capabilities', 350, 325);
+
+  // Quality flow
+  const c3 = document.getElementById('s3-quality-flow');
+  const x3 = c3.getContext('2d'); x3.clearRect(0, 0, c3.width, c3.height);
+  const r3 = rough.canvas(c3);
+
+  const steps = [
+    { x: 20, l: 'Research', s: 'Dual-sourced', c: C.accent },
+    { x: 160, l: 'Credibility', s: 'Score & tag', c: C.purple },
+    { x: 300, l: 'Produce', s: 'Build output', c: C.green },
+    { x: 440, l: 'Review', s: 'Independent AI', c: C.amber },
+    { x: 580, l: 'Deliver', s: 'Verified output', c: C.green }
+  ];
+  steps.forEach((s, i) => {
+    r3.rectangle(s.x, 50, 115, 70, { stroke: s.c, strokeWidth: 1.5, fill: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)', fillStyle: 'solid', roughness: 0.8 });
+    x3.textAlign = 'center'; x3.fillStyle = s.c; x3.font = 'bold 12px -apple-system, system-ui, sans-serif';
+    x3.fillText(s.l, s.x + 57, 82); x3.fillStyle = C.muted; x3.font = '10px -apple-system, system-ui, sans-serif';
+    x3.fillText(s.s, s.x + 57, 100);
+    if (i < steps.length - 1) {
+      r3.line(s.x + 115, 85, steps[i+1].x, 85, { stroke: C.border, strokeWidth: 1.5, roughness: 0.5 });
+      x3.fillStyle = C.border; x3.beginPath(); const nx = steps[i+1].x;
+      x3.moveTo(nx, 85); x3.lineTo(nx-6, 80); x3.lineTo(nx-6, 90); x3.fill();
+    }
+  });
+  r3.line(497, 120, 497, 155, { stroke: C.warm, strokeWidth: 1.2, roughness: 0.5 });
+  r3.line(497, 155, 357, 155, { stroke: C.warm, strokeWidth: 1.2, roughness: 0.5 });
+  r3.line(357, 155, 357, 120, { stroke: C.warm, strokeWidth: 1.2, roughness: 0.5 });
+  x3.fillStyle = C.warm; x3.beginPath(); x3.moveTo(357, 120); x3.lineTo(352, 128); x3.lineTo(362, 128); x3.fill();
+  x3.textAlign = 'center'; x3.font = '10px -apple-system, system-ui, sans-serif';
+  x3.fillText('Failed? Revise & retry (max 3x)', 427, 170);
+}
+
+drawDiagrams();
+scaleCanvases();
+window.addEventListener('resize', () => { drawDiagrams(); scaleCanvases(); });
+</script>
+</body>
+</html>
