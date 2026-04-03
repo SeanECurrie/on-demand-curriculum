@@ -259,17 +259,29 @@ td strong { color: var(--text); }
 .process-dot.iterate { background: var(--accent-warm); }
 .process-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .process-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.process-metrics { margin-top: 8px; }
 .process-metric {
-  display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px;
+  display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px;
   border-radius: 3px; background: rgba(34,211,238,0.1); color: var(--accent);
-  margin-top: 4px; margin-right: 4px;
+  margin: 3px 3px 3px 0;
 }
-.process-sub { margin-top: 10px; padding-left: 12px; border-left: 2px solid var(--border); }
-.process-sub li {
-  font-size: 11px; color: var(--text-dim); line-height: 1.6; margin: 3px 0;
-  list-style: none; padding-left: 0;
+.process-metric.click {
+  cursor: pointer; border: none; font-family: var(--font-sans); transition: all 0.15s;
 }
-.process-sub li strong { color: var(--text-muted); }
+.process-metric.click:hover { background: rgba(34,211,238,0.22); }
+.process-metric.click.active { background: rgba(34,211,238,0.25); color: var(--text); }
+.process-metric.click .arrow { font-size: 8px; margin-left: 3px; display: inline-block; transition: transform 0.2s; }
+.process-metric.click.active .arrow { transform: rotate(90deg); }
+.metric-panel {
+  display: none; margin-top: 8px; padding: 10px 14px; border-left: 2px solid var(--accent);
+  background: rgba(34,211,238,0.04); border-radius: 0 8px 8px 0;
+}
+[data-theme="light"] .metric-panel { background: rgba(34,211,238,0.06); }
+.metric-panel.open { display: block; }
+.metric-panel li {
+  font-size: 11px; color: var(--text-muted); line-height: 1.6; list-style: none; margin: 4px 0;
+}
+.metric-panel li strong { color: var(--text); }
 
 /* Fade-in animation */
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
@@ -847,109 +859,180 @@ td strong { color: var(--text); }
         <div class="process-dot design">2</div>
         <div class="process-title">Brainstorm the Approach</div>
         <div class="process-desc">The system read Derek's full profile, the original conversation transcript, and two previous pitch documents to understand the audience. Then four rounds of interactive design &mdash; not the AI deciding what to build, but a structured back-and-forth: three different approaches proposed with tradeoffs, the operator chose a direction, section structure drafted and refined, tone calibrated based on feedback. Nothing gets built until the design is locked.</div>
-        <span class="process-metric">4 design rounds</span>
-        <span class="process-metric">3 approaches evaluated</span>
-        <span class="process-metric">4 source documents analyzed</span>
-        <ul class="process-sub">
-          <li><strong>Round 1:</strong> Three approach options proposed &mdash; "Brokerage Parallel" (map to Derek's experience), "Show First Explain Second" (lead with outputs), "Derek's Questions" (FAQ structure)</li>
-          <li><strong>Round 2:</strong> Operator chose hybrid &mdash; show first, educate, then make it personal with real-world examples</li>
-          <li><strong>Round 3:</strong> Six-section structure drafted, each section reviewed for tone and framing, hypotheticals dialed back</li>
-          <li><strong>Round 4:</strong> Added meta-frame ("this page was built by the system"), growth/compounding story, Sean's skills as subtext</li>
-          <li><strong>Source material:</strong> Derek's profile, Sean-Derek conversation transcript, pitch summary v1, pitch summary v2</li>
-        </ul>
+        <div class="process-metrics">
+          <span class="process-metric click" data-panel="d2-rounds" onclick="toggleMetric(this)">4 design rounds <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d2-approaches" onclick="toggleMetric(this)">3 approaches evaluated <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d2-sources" onclick="toggleMetric(this)">4 source documents <span class="arrow">&#9656;</span></span>
+          <div class="metric-panel" id="d2-rounds">
+            <li><strong>Round 1:</strong> Three approach options proposed with tradeoffs for each</li>
+            <li><strong>Round 2:</strong> Operator chose hybrid direction &mdash; show first, educate, then make it personal</li>
+            <li><strong>Round 3:</strong> Six-section structure drafted, each reviewed for tone and framing, hypotheticals dialed back</li>
+            <li><strong>Round 4:</strong> Added meta-frame ("this page was built by the system"), growth/compounding story, Sean's skills as subtext</li>
+          </div>
+          <div class="metric-panel" id="d2-approaches">
+            <li><strong>A &mdash; "Brokerage Parallel":</strong> Map everything to Derek's experience running his brokerage. Engines = client types. OS = firm infrastructure.</li>
+            <li><strong>B &mdash; "Show First, Explain Second":</strong> Lead with concrete outputs EngineOS has produced, then reverse-engineer how.</li>
+            <li><strong>C &mdash; "Derek's Questions":</strong> Structure as natural Q&A &mdash; "What is this?" &rarr; "Why can't I just ask AI?" &rarr; "What does it actually do?"</li>
+            <li><strong>Chosen:</strong> Hybrid of A and B &mdash; show first, educate, then lock in with real-world examples</li>
+          </div>
+          <div class="metric-panel" id="d2-sources">
+            <li><strong>Derek's profile:</strong> Background, professional history, decision-making style, collaboration preferences</li>
+            <li><strong>Conversation transcript:</strong> Full Sean-Derek text exchange &mdash; context for the relationship and Derek's natural questions</li>
+            <li><strong>Pitch summary v1:</strong> Original anime language learning pitch &mdash; used for tone and framing reference</li>
+            <li><strong>Pitch summary v2:</strong> Revised pitch with red-team feedback incorporated</li>
+          </div>
+        </div>
       </div>
 
       <div class="process-step">
         <div class="process-dot plan">3</div>
         <div class="process-title">Plan, Classify, and Gate</div>
         <div class="process-desc">The phase controller classified this as a Content Production operation and built a formal run plan &mdash; written to disk, not just held in memory. The plan includes six hardened quality criteria in structured JSON: audience calibration, tone verification, factual accuracy, technical correctness, HTML standards compliance, and overall professional quality. Each criterion has a specific pass/fail definition and edge cases. The operator reviewed and approved the plan before any production began. This gate is mechanical &mdash; the system literally cannot write deliverable files without an approved plan.</div>
-        <span class="process-metric">6 hardened criteria</span>
-        <span class="process-metric">Run plan persisted to disk</span>
-        <span class="process-metric">Operator approval required</span>
-        <ul class="process-sub">
-          <li><strong>C1:</strong> Every section understandable by someone with no AI/software background</li>
-          <li><strong>C2:</strong> Tone is educational and honest &mdash; not sales copy</li>
-          <li><strong>C3:</strong> The "why can't I just ask AI?" question is clearly answered with concrete examples</li>
-          <li><strong>C4:</strong> All EngineOS claims factually accurate against current system state</li>
-          <li><strong>C5:</strong> HTML follows established walkthrough patterns, hostable on GitHub Pages</li>
-          <li><strong>C6:</strong> The page itself demonstrates professional quality &mdash; not generic or templated</li>
-        </ul>
+        <div class="process-metrics">
+          <span class="process-metric click" data-panel="d3-criteria" onclick="toggleMetric(this)">6 hardened criteria <span class="arrow">&#9656;</span></span>
+          <span class="process-metric">Run plan persisted to disk</span>
+          <span class="process-metric">Operator approval required</span>
+          <div class="metric-panel" id="d3-criteria">
+            <li><strong>C1:</strong> Every section understandable by someone with no AI/software background</li>
+            <li><strong>C2:</strong> Tone is educational and honest &mdash; not sales copy</li>
+            <li><strong>C3:</strong> The "why can't I just ask AI?" question is clearly answered with concrete examples</li>
+            <li><strong>C4:</strong> All EngineOS claims factually accurate against current system state</li>
+            <li><strong>C5:</strong> HTML follows established walkthrough patterns, hostable on GitHub Pages</li>
+            <li><strong>C6:</strong> The page itself demonstrates professional quality &mdash; not generic or templated</li>
+          </div>
+        </div>
       </div>
 
       <div class="process-step">
         <div class="process-dot research">4</div>
         <div class="process-title">Parallel Research Agents</div>
         <div class="process-desc">Two independent AI agents were dispatched at the same time &mdash; working in parallel, not sequentially. Agent 1 explored the existing HTML walkthrough system: read every template, style guide, and example output to understand exactly how to build the page. Agent 2 read every EngineOS documentation file &mdash; all 29 capabilities, 12 methodology documents, 5 principles, the full context file &mdash; to extract accurate content. Both agents worked autonomously and returned structured findings. This is one operator running two research threads simultaneously.</div>
-        <span class="process-metric">2 parallel agents</span>
-        <span class="process-metric">54 tool operations</span>
-        <span class="process-metric">Complete system documentation extracted</span>
-        <ul class="process-sub">
-          <li><strong>Agent 1 (30 ops):</strong> Read every HTML template, style guide, color token file, and existing walkthrough output. Extracted the full CSS architecture, component specs, JavaScript interaction patterns, and deployment process.</li>
-          <li><strong>Agent 2 (24 ops):</strong> Read all 29 capabilities, 12 methodology documents, 5 operating principles, the complete context file, decision log, and pattern library. Extracted concrete content for every section of the walkthrough.</li>
-        </ul>
+        <div class="process-metrics">
+          <span class="process-metric click" data-panel="d4-agents" onclick="toggleMetric(this)">2 parallel agents <span class="arrow">&#9656;</span></span>
+          <span class="process-metric">54 tool operations</span>
+          <div class="metric-panel" id="d4-agents">
+            <li><strong>Agent 1 (30 ops):</strong> Read every HTML template, style guide, color token file, and existing walkthrough output. Extracted the full CSS architecture, component specs, JS interaction patterns, and deployment process.</li>
+            <li><strong>Agent 2 (24 ops):</strong> Read all 29 capabilities, 12 methodology documents, 5 operating principles, the full context file, decision log, and pattern library. Extracted concrete content for every section.</li>
+          </div>
+        </div>
       </div>
 
       <div class="process-step">
         <div class="process-dot build">5</div>
         <div class="process-title">Build Incrementally</div>
         <div class="process-desc">The section construction skill built the walkthrough one section at a time &mdash; not in a single pass. This matters because AI-generated content degrades predictably: the first third is strong, the middle is adequate, the end loses detail. By building each section with individual focus, every section gets the same quality attention. The output: a single self-contained HTML file with a full CSS design system, sidebar navigation, dark/light mode toggle, scroll-spy, Rough.js hand-drawn diagrams, expandable sections, responsive mobile layout, and fade-in animations.</div>
-        <span class="process-metric">1,300+ lines of HTML</span>
-        <span class="process-metric">6 content sections</span>
-        <span class="process-metric">2 interactive diagrams</span>
-        <span class="process-metric">Single file, no dependencies</span>
-        <ul class="process-sub">
-          <li><strong>Section 1:</strong> What EngineOS Is &mdash; two-layer architecture, growth model</li>
-          <li><strong>Section 2:</strong> The Gap &mdash; three problems with raw AI, comparison grid</li>
-          <li><strong>Section 3:</strong> Why It Doesn't Drift &mdash; five governance mechanisms</li>
-          <li><strong>Section 4:</strong> What It's Actually Done &mdash; real results with metrics</li>
-          <li><strong>Section 5:</strong> Running Right Now &mdash; live engine examples</li>
-          <li><strong>Section 6:</strong> Under the Hood &mdash; light technical overview</li>
-          <li><strong>Built with:</strong> Full CSS design system, sidebar navigation, scroll-spy, dark/light toggle, Rough.js hand-drawn diagrams, expandable sections, fade-in animations, mobile responsive layout</li>
-        </ul>
+        <div class="process-metrics">
+          <span class="process-metric">1,300+ lines</span>
+          <span class="process-metric click" data-panel="d5-sections" onclick="toggleMetric(this)">6 content sections <span class="arrow">&#9656;</span></span>
+          <span class="process-metric">2 diagrams</span>
+          <span class="process-metric click" data-panel="d5-tech" onclick="toggleMetric(this)">Single file, zero dependencies <span class="arrow">&#9656;</span></span>
+          <div class="metric-panel" id="d5-sections">
+            <li><strong>01 &mdash; What EngineOS Is:</strong> Two-layer architecture diagram, growth model, compounding proof</li>
+            <li><strong>02 &mdash; The Gap:</strong> Three problems with raw AI, before/after comparison grid</li>
+            <li><strong>03 &mdash; Why It Doesn't Drift:</strong> Five governance mechanisms, adversarial evaluation honesty moment</li>
+            <li><strong>04 &mdash; What It's Done:</strong> Six capability cards with real results and metrics</li>
+            <li><strong>05 &mdash; Running Right Now:</strong> Three live engine examples with metric badges</li>
+            <li><strong>06 &mdash; Under the Hood:</strong> Light technical overview with expandable integration list</li>
+          </div>
+          <div class="metric-panel" id="d5-tech">
+            <li>Full CSS design system with light/dark theming</li>
+            <li>Fixed sidebar navigation with scroll-spy</li>
+            <li>Rough.js hand-drawn diagrams (redraw on theme change)</li>
+            <li>Expandable sections for progressive disclosure</li>
+            <li>Scroll-triggered fade-in animations</li>
+            <li>Mobile responsive with hamburger menu</li>
+            <li>Progress bar tracking scroll position</li>
+          </div>
+        </div>
       </div>
 
       <div class="process-step">
         <div class="process-dot verify">6</div>
         <div class="process-title">Render Validate</div>
         <div class="process-desc">The system launched a headless browser (Puppeteer), navigated to the HTML file, and took screenshots of every section in both dark and light mode. Not "I think it looks right" &mdash; actual visual verification. It checked that all 6 sections rendered, all 4 expandable sections worked, all 13 cards displayed, both diagrams drew correctly, and the responsive layout functioned. Then self-tested the content against all 6 hardened quality criteria from the run plan. Every criterion passed.</div>
-        <span class="process-metric">8 verification screenshots</span>
-        <span class="process-metric">6/6 quality criteria passed</span>
-        <span class="process-metric">Dark + light mode verified</span>
-        <ul class="process-sub">
-          <li><strong>Screenshots taken:</strong> Hero (dark), full page (dark), hero (light), Section 2 cards, Section 4 capabilities, Section 5 real-world examples, architecture diagram, quality flow diagram</li>
-          <li><strong>Structural check:</strong> Confirmed 6 sections, 4 expandables, 13 cards, 2 canvas diagrams, 7 nav links, 6 example cards, 3 highlight boxes all rendered</li>
-          <li><strong>Criteria check:</strong> Each of the 6 hardened criteria evaluated against the output &mdash; audience calibration, tone, gap answer, factual accuracy, HTML standards, professional quality &mdash; all passed</li>
-        </ul>
+        <div class="process-metrics">
+          <span class="process-metric click" data-panel="d6-shots" onclick="toggleMetric(this)">8 screenshots <span class="arrow">&#9656;</span></span>
+          <span class="process-metric">6/6 criteria passed</span>
+          <span class="process-metric click" data-panel="d6-struct" onclick="toggleMetric(this)">Structural verification <span class="arrow">&#9656;</span></span>
+          <div class="metric-panel" id="d6-shots">
+            <li>Hero section &mdash; dark mode</li>
+            <li>Full page &mdash; dark mode</li>
+            <li>Hero section &mdash; light mode</li>
+            <li>Section 2 &mdash; "Three Problems" cards</li>
+            <li>Section 4 &mdash; capability cards with results</li>
+            <li>Section 5 &mdash; live engine examples</li>
+            <li>Section 1 &mdash; architecture diagram close-up</li>
+            <li>Section 3 &mdash; quality flow diagram close-up</li>
+          </div>
+          <div class="metric-panel" id="d6-struct">
+            <li>6 sections rendered</li>
+            <li>4 expandable sections functional</li>
+            <li>13 cards displayed with correct borders</li>
+            <li>2 Rough.js canvas diagrams drawn</li>
+            <li>7 sidebar navigation links active</li>
+            <li>6 example cards with labels</li>
+            <li>3 highlight boxes styled</li>
+            <li>Theme toggle, scroll-spy, progress bar all working</li>
+          </div>
+        </div>
       </div>
 
       <div class="process-step">
         <div class="process-dot deploy">7</div>
         <div class="process-title">Deploy to a Live URL</div>
         <div class="process-desc">The system identified the existing GitHub Pages hosting setup, switched to the deployment branch, created the directory structure, copied the HTML file, updated the landing page to include the new walkthrough, committed with a descriptive message, and pushed to GitHub. A live, shareable URL was generated automatically. No manual file uploads. No separate hosting setup. The deployment pipeline was already built into the OS from previous walkthrough outputs.</div>
-        <span class="process-metric">GitHub Pages</span>
-        <span class="process-metric">Shareable URL</span>
-        <span class="process-metric">Reused existing pipeline</span>
-        <ul class="process-sub">
-          <li><strong>Steps:</strong> Identified hosting setup from prior walkthroughs &rarr; switched to deployment branch &rarr; created directory &rarr; copied HTML &rarr; updated landing page &rarr; committed &rarr; pushed</li>
-          <li><strong>Pipeline reuse:</strong> The GitHub Pages deployment pipeline was already built for earlier walkthrough outputs. No new hosting setup needed &mdash; the infrastructure carries forward.</li>
-        </ul>
+        <div class="process-metrics">
+          <span class="process-metric">GitHub Pages</span>
+          <span class="process-metric">Shareable URL</span>
+          <span class="process-metric click" data-panel="d7-pipeline" onclick="toggleMetric(this)">Deploy pipeline <span class="arrow">&#9656;</span></span>
+          <div class="metric-panel" id="d7-pipeline">
+            <li>Identified hosting setup from prior walkthrough outputs</li>
+            <li>Switched to gh-pages deployment branch</li>
+            <li>Created directory structure for new walkthrough</li>
+            <li>Copied HTML file as index.html</li>
+            <li>Updated landing page with new walkthrough link</li>
+            <li>Committed with descriptive message</li>
+            <li>Pushed to remote &mdash; live URL generated automatically</li>
+            <li><strong>No new setup needed</strong> &mdash; pipeline was already built from previous outputs</li>
+          </div>
+        </div>
       </div>
 
       <div class="process-step">
         <div class="process-dot iterate">8</div>
         <div class="process-title">Review, Research, Iterate</div>
         <div class="process-desc">An external collaborator reviewed the walkthrough and identified 7 content issues and 4 visual bugs. The system then did its own independent review of the full 1,200-line file, cross-referencing against the external feedback. A third research agent was dispatched to analyze 13 sources on what makes the best technical showcase pages work &mdash; studying Stripe, Vercel, Linear, and portfolio best practices. All findings were synthesized into a prioritized 15-item revision plan. V2 was built from scratch addressing every issue. Three additional operator feedback cycles refined the architecture diagram, card layouts, and visual details. Each fix was deployed to the live URL within minutes.</div>
-        <span class="process-metric">11 issues identified</span>
-        <span class="process-metric">13 external sources researched</span>
-        <span class="process-metric">15-item revision plan</span>
-        <span class="process-metric">3 feedback cycles</span>
-        <span class="process-metric">4 deployments</span>
-        <ul class="process-sub">
-          <li><strong>External review:</strong> 7 content/framing issues (buried narrative, undersold compounding, missing journey, feature list instead of results, hypotheticals diluting real examples, missing conversational capability, premature platform language) + 4 visual bugs (clipping, canvas scaling, spacing, toggle placement)</li>
-          <li><strong>Independent assessment:</strong> Agreed with 9 of 11 items, pushed back on 2 with reasoning. Found 5 additional issues the external review missed.</li>
-          <li><strong>Research agent:</strong> Analyzed Stripe docs, Vercel product tour, Linear design effect, portfolio best practices, progressive disclosure research, SaaS landing page trends &mdash; extracted 10 actionable patterns</li>
-          <li><strong>V2 rewrite:</strong> Hero restructured, compounding proof surfaced, Section 4 transformed from features to results, hypotheticals compressed, architecture diagram redesigned, card layouts fixed, process timeline added</li>
-        </ul>
+        <div class="process-metrics">
+          <span class="process-metric click" data-panel="d8-issues" onclick="toggleMetric(this)">11 issues identified <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d8-research" onclick="toggleMetric(this)">13 sources researched <span class="arrow">&#9656;</span></span>
+          <span class="process-metric">15-item revision plan</span>
+          <span class="process-metric click" data-panel="d8-v2" onclick="toggleMetric(this)">V2 changes <span class="arrow">&#9656;</span></span>
+          <span class="process-metric">3 feedback cycles</span>
+          <span class="process-metric">4 deployments</span>
+          <div class="metric-panel" id="d8-issues">
+            <li><strong>Content:</strong> "One person" story buried, compounding undersold, no build journey, feature list instead of results, hypotheticals diluting real examples, missing conversational capability, premature platform language</li>
+            <li><strong>Visual:</strong> Right-side content clipping, canvas diagrams not scaling, excessive vertical spacing, theme toggle buried in footer</li>
+          </div>
+          <div class="metric-panel" id="d8-research">
+            <li><strong>Stripe:</strong> Animation as communication, outcome-first documentation, 3x conversion from developer experience</li>
+            <li><strong>Vercel:</strong> Progressive disclosure via interactive tour, real UI over descriptions</li>
+            <li><strong>Linear:</strong> Visual quality as credibility signal, dark mode design language</li>
+            <li><strong>Portfolio research:</strong> Case studies beat feature lists, rejected choices create credibility, show the system not the deliverable</li>
+            <li><strong>SaaS trends:</strong> Lead with measurable outcomes, before/after splits, real interface visuals over abstract illustrations</li>
+            <li><strong>NN/g research:</strong> Single secondary disclosure layer, accordions for optional depth</li>
+          </div>
+          <div class="metric-panel" id="d8-v2">
+            <li>Hero restructured &mdash; "One person. No team." leads immediately</li>
+            <li>Stats bar expanded with investment metrics (100+ days, 11 projects)</li>
+            <li>Compounding proof pulled from hidden expandable into prominent callout</li>
+            <li>Section 4 transformed from feature list to real results with metrics</li>
+            <li>Hypotheticals compressed from 3 full cards to 1 highlight box</li>
+            <li>Architecture diagram flipped &mdash; EngineOS on top, engines below</li>
+            <li>"Three Problems" cards replaced with full-width numbered layout</li>
+            <li>EOS assistant capability added, adversarial honesty moment added</li>
+            <li>Process timeline section added (what you're reading now)</li>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1025,6 +1108,18 @@ document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
 
 // Expandables
 function toggleExpand(btn) { btn.parentElement.classList.toggle('open'); }
+
+// Metric panel toggles
+function toggleMetric(el) {
+  const id = el.getAttribute('data-panel');
+  const panel = document.getElementById(id);
+  const wrap = el.closest('.process-metrics');
+  // close other panels in this step
+  wrap.querySelectorAll('.metric-panel').forEach(p => { if (p.id !== id) p.classList.remove('open'); });
+  wrap.querySelectorAll('.process-metric.click').forEach(m => { if (m !== el) m.classList.remove('active'); });
+  panel.classList.toggle('open');
+  el.classList.toggle('active');
+}
 
 // Canvas scaling
 function scaleCanvases() {
