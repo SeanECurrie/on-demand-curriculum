@@ -264,6 +264,12 @@ td strong { color: var(--text); }
   border-radius: 3px; background: rgba(34,211,238,0.1); color: var(--accent);
   margin-top: 4px; margin-right: 4px;
 }
+.process-sub { margin-top: 10px; padding-left: 12px; border-left: 2px solid var(--border); }
+.process-sub li {
+  font-size: 11px; color: var(--text-dim); line-height: 1.6; margin: 3px 0;
+  list-style: none; padding-left: 0;
+}
+.process-sub li strong { color: var(--text-muted); }
 
 /* Fade-in animation */
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
@@ -844,6 +850,13 @@ td strong { color: var(--text); }
         <span class="process-metric">4 design rounds</span>
         <span class="process-metric">3 approaches evaluated</span>
         <span class="process-metric">4 source documents analyzed</span>
+        <ul class="process-sub">
+          <li><strong>Round 1:</strong> Three approach options proposed &mdash; "Brokerage Parallel" (map to Derek's experience), "Show First Explain Second" (lead with outputs), "Derek's Questions" (FAQ structure)</li>
+          <li><strong>Round 2:</strong> Operator chose hybrid &mdash; show first, educate, then make it personal with real-world examples</li>
+          <li><strong>Round 3:</strong> Six-section structure drafted, each section reviewed for tone and framing, hypotheticals dialed back</li>
+          <li><strong>Round 4:</strong> Added meta-frame ("this page was built by the system"), growth/compounding story, Sean's skills as subtext</li>
+          <li><strong>Source material:</strong> Derek's profile, Sean-Derek conversation transcript, pitch summary v1, pitch summary v2</li>
+        </ul>
       </div>
 
       <div class="process-step">
@@ -853,6 +866,14 @@ td strong { color: var(--text); }
         <span class="process-metric">6 hardened criteria</span>
         <span class="process-metric">Run plan persisted to disk</span>
         <span class="process-metric">Operator approval required</span>
+        <ul class="process-sub">
+          <li><strong>C1:</strong> Every section understandable by someone with no AI/software background</li>
+          <li><strong>C2:</strong> Tone is educational and honest &mdash; not sales copy</li>
+          <li><strong>C3:</strong> The "why can't I just ask AI?" question is clearly answered with concrete examples</li>
+          <li><strong>C4:</strong> All EngineOS claims factually accurate against current system state</li>
+          <li><strong>C5:</strong> HTML follows established walkthrough patterns, hostable on GitHub Pages</li>
+          <li><strong>C6:</strong> The page itself demonstrates professional quality &mdash; not generic or templated</li>
+        </ul>
       </div>
 
       <div class="process-step">
@@ -862,6 +883,10 @@ td strong { color: var(--text); }
         <span class="process-metric">2 parallel agents</span>
         <span class="process-metric">54 tool operations</span>
         <span class="process-metric">Complete system documentation extracted</span>
+        <ul class="process-sub">
+          <li><strong>Agent 1 (30 ops):</strong> Read every HTML template, style guide, color token file, and existing walkthrough output. Extracted the full CSS architecture, component specs, JavaScript interaction patterns, and deployment process.</li>
+          <li><strong>Agent 2 (24 ops):</strong> Read all 29 capabilities, 12 methodology documents, 5 operating principles, the complete context file, decision log, and pattern library. Extracted concrete content for every section of the walkthrough.</li>
+        </ul>
       </div>
 
       <div class="process-step">
@@ -872,6 +897,15 @@ td strong { color: var(--text); }
         <span class="process-metric">6 content sections</span>
         <span class="process-metric">2 interactive diagrams</span>
         <span class="process-metric">Single file, no dependencies</span>
+        <ul class="process-sub">
+          <li><strong>Section 1:</strong> What EngineOS Is &mdash; two-layer architecture, growth model</li>
+          <li><strong>Section 2:</strong> The Gap &mdash; three problems with raw AI, comparison grid</li>
+          <li><strong>Section 3:</strong> Why It Doesn't Drift &mdash; five governance mechanisms</li>
+          <li><strong>Section 4:</strong> What It's Actually Done &mdash; real results with metrics</li>
+          <li><strong>Section 5:</strong> Running Right Now &mdash; live engine examples</li>
+          <li><strong>Section 6:</strong> Under the Hood &mdash; light technical overview</li>
+          <li><strong>Built with:</strong> Full CSS design system, sidebar navigation, scroll-spy, dark/light toggle, Rough.js hand-drawn diagrams, expandable sections, fade-in animations, mobile responsive layout</li>
+        </ul>
       </div>
 
       <div class="process-step">
@@ -881,6 +915,11 @@ td strong { color: var(--text); }
         <span class="process-metric">8 verification screenshots</span>
         <span class="process-metric">6/6 quality criteria passed</span>
         <span class="process-metric">Dark + light mode verified</span>
+        <ul class="process-sub">
+          <li><strong>Screenshots taken:</strong> Hero (dark), full page (dark), hero (light), Section 2 cards, Section 4 capabilities, Section 5 real-world examples, architecture diagram, quality flow diagram</li>
+          <li><strong>Structural check:</strong> Confirmed 6 sections, 4 expandables, 13 cards, 2 canvas diagrams, 7 nav links, 6 example cards, 3 highlight boxes all rendered</li>
+          <li><strong>Criteria check:</strong> Each of the 6 hardened criteria evaluated against the output &mdash; audience calibration, tone, gap answer, factual accuracy, HTML standards, professional quality &mdash; all passed</li>
+        </ul>
       </div>
 
       <div class="process-step">
@@ -890,6 +929,10 @@ td strong { color: var(--text); }
         <span class="process-metric">GitHub Pages</span>
         <span class="process-metric">Shareable URL</span>
         <span class="process-metric">Reused existing pipeline</span>
+        <ul class="process-sub">
+          <li><strong>Steps:</strong> Identified hosting setup from prior walkthroughs &rarr; switched to deployment branch &rarr; created directory &rarr; copied HTML &rarr; updated landing page &rarr; committed &rarr; pushed</li>
+          <li><strong>Pipeline reuse:</strong> The GitHub Pages deployment pipeline was already built for earlier walkthrough outputs. No new hosting setup needed &mdash; the infrastructure carries forward.</li>
+        </ul>
       </div>
 
       <div class="process-step">
@@ -901,6 +944,12 @@ td strong { color: var(--text); }
         <span class="process-metric">15-item revision plan</span>
         <span class="process-metric">3 feedback cycles</span>
         <span class="process-metric">4 deployments</span>
+        <ul class="process-sub">
+          <li><strong>External review:</strong> 7 content/framing issues (buried narrative, undersold compounding, missing journey, feature list instead of results, hypotheticals diluting real examples, missing conversational capability, premature platform language) + 4 visual bugs (clipping, canvas scaling, spacing, toggle placement)</li>
+          <li><strong>Independent assessment:</strong> Agreed with 9 of 11 items, pushed back on 2 with reasoning. Found 5 additional issues the external review missed.</li>
+          <li><strong>Research agent:</strong> Analyzed Stripe docs, Vercel product tour, Linear design effect, portfolio best practices, progressive disclosure research, SaaS landing page trends &mdash; extracted 10 actionable patterns</li>
+          <li><strong>V2 rewrite:</strong> Hero restructured, compounding proof surfaced, Section 4 transformed from features to results, hypotheticals compressed, architecture diagram redesigned, card layouts fixed, process timeline added</li>
+        </ul>
       </div>
     </div>
 
