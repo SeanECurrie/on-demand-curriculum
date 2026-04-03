@@ -266,12 +266,24 @@ td strong { color: var(--text); }
   margin: 3px 3px 3px 0;
 }
 .process-metric.click {
-  cursor: pointer; border: none; font-family: var(--font-sans); transition: all 0.15s;
+  cursor: pointer; border: none; font-family: var(--font-sans);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
-.process-metric.click:hover { background: rgba(34,211,238,0.22); }
-.process-metric.click.active { background: rgba(34,211,238,0.25); color: var(--text); }
-.process-metric.click .arrow { font-size: 8px; margin-left: 3px; display: inline-block; transition: transform 0.2s; }
-.process-metric.click.active .arrow { transform: rotate(90deg); }
+.process-metric.click::after {
+  content: ''; display: inline-block; width: 0; height: 0;
+  border-left: 3px solid transparent; border-right: 3px solid transparent;
+  border-top: 3.5px solid currentColor; margin-left: 5px;
+  opacity: 0.5; vertical-align: middle; transition: transform 0.2s ease, opacity 0.15s ease;
+}
+.process-metric.click:hover {
+  background: rgba(34,211,238,0.18); box-shadow: 0 0 0 1px rgba(34,211,238,0.3);
+}
+.process-metric.click:hover::after { opacity: 1; }
+.process-metric.click.active {
+  background: rgba(34,211,238,0.22); color: var(--text);
+  box-shadow: 0 0 0 1px rgba(34,211,238,0.35);
+}
+.process-metric.click.active::after { transform: rotate(180deg); opacity: 1; }
 .metric-panel {
   display: none; margin-top: 8px; padding: 10px 14px; border-left: 2px solid var(--accent);
   background: rgba(34,211,238,0.04); border-radius: 0 8px 8px 0;
@@ -860,9 +872,9 @@ td strong { color: var(--text); }
         <div class="process-title">Brainstorm the Approach</div>
         <div class="process-desc">The system read Derek's full profile, the original conversation transcript, and two previous pitch documents to understand the audience. Then four rounds of interactive design &mdash; not the AI deciding what to build, but a structured back-and-forth: three different approaches proposed with tradeoffs, the operator chose a direction, section structure drafted and refined, tone calibrated based on feedback. Nothing gets built until the design is locked.</div>
         <div class="process-metrics">
-          <span class="process-metric click" data-panel="d2-rounds" onclick="toggleMetric(this)">4 design rounds <span class="arrow">&#9656;</span></span>
-          <span class="process-metric click" data-panel="d2-approaches" onclick="toggleMetric(this)">3 approaches evaluated <span class="arrow">&#9656;</span></span>
-          <span class="process-metric click" data-panel="d2-sources" onclick="toggleMetric(this)">4 source documents <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d2-rounds" onclick="toggleMetric(this)">4 design rounds</span>
+          <span class="process-metric click" data-panel="d2-approaches" onclick="toggleMetric(this)">3 approaches evaluated</span>
+          <span class="process-metric click" data-panel="d2-sources" onclick="toggleMetric(this)">4 source documents</span>
           <div class="metric-panel" id="d2-rounds">
             <li><strong>Round 1:</strong> Three approach options proposed with tradeoffs for each</li>
             <li><strong>Round 2:</strong> Operator chose hybrid direction &mdash; show first, educate, then make it personal</li>
@@ -889,7 +901,7 @@ td strong { color: var(--text); }
         <div class="process-title">Plan, Classify, and Gate</div>
         <div class="process-desc">The phase controller classified this as a Content Production operation and built a formal run plan &mdash; written to disk, not just held in memory. The plan includes six hardened quality criteria in structured JSON: audience calibration, tone verification, factual accuracy, technical correctness, HTML standards compliance, and overall professional quality. Each criterion has a specific pass/fail definition and edge cases. The operator reviewed and approved the plan before any production began. This gate is mechanical &mdash; the system literally cannot write deliverable files without an approved plan.</div>
         <div class="process-metrics">
-          <span class="process-metric click" data-panel="d3-criteria" onclick="toggleMetric(this)">6 hardened criteria <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d3-criteria" onclick="toggleMetric(this)">6 hardened criteria</span>
           <span class="process-metric">Run plan persisted to disk</span>
           <span class="process-metric">Operator approval required</span>
           <div class="metric-panel" id="d3-criteria">
@@ -908,7 +920,7 @@ td strong { color: var(--text); }
         <div class="process-title">Parallel Research Agents</div>
         <div class="process-desc">Two independent AI agents were dispatched at the same time &mdash; working in parallel, not sequentially. Agent 1 explored the existing HTML walkthrough system: read every template, style guide, and example output to understand exactly how to build the page. Agent 2 read every EngineOS documentation file &mdash; all 29 capabilities, 12 methodology documents, 5 principles, the full context file &mdash; to extract accurate content. Both agents worked autonomously and returned structured findings. This is one operator running two research threads simultaneously.</div>
         <div class="process-metrics">
-          <span class="process-metric click" data-panel="d4-agents" onclick="toggleMetric(this)">2 parallel agents <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d4-agents" onclick="toggleMetric(this)">2 parallel agents</span>
           <span class="process-metric">54 tool operations</span>
           <div class="metric-panel" id="d4-agents">
             <li><strong>Agent 1 (30 ops):</strong> Read every HTML template, style guide, color token file, and existing walkthrough output. Extracted the full CSS architecture, component specs, JS interaction patterns, and deployment process.</li>
@@ -923,9 +935,9 @@ td strong { color: var(--text); }
         <div class="process-desc">The section construction skill built the walkthrough one section at a time &mdash; not in a single pass. This matters because AI-generated content degrades predictably: the first third is strong, the middle is adequate, the end loses detail. By building each section with individual focus, every section gets the same quality attention. The output: a single self-contained HTML file with a full CSS design system, sidebar navigation, dark/light mode toggle, scroll-spy, Rough.js hand-drawn diagrams, expandable sections, responsive mobile layout, and fade-in animations.</div>
         <div class="process-metrics">
           <span class="process-metric">1,300+ lines</span>
-          <span class="process-metric click" data-panel="d5-sections" onclick="toggleMetric(this)">6 content sections <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d5-sections" onclick="toggleMetric(this)">6 content sections</span>
           <span class="process-metric">2 diagrams</span>
-          <span class="process-metric click" data-panel="d5-tech" onclick="toggleMetric(this)">Single file, zero dependencies <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d5-tech" onclick="toggleMetric(this)">Single file, zero dependencies</span>
           <div class="metric-panel" id="d5-sections">
             <li><strong>01 &mdash; What EngineOS Is:</strong> Two-layer architecture diagram, growth model, compounding proof</li>
             <li><strong>02 &mdash; The Gap:</strong> Three problems with raw AI, before/after comparison grid</li>
@@ -951,9 +963,9 @@ td strong { color: var(--text); }
         <div class="process-title">Render Validate</div>
         <div class="process-desc">The system launched a headless browser (Puppeteer), navigated to the HTML file, and took screenshots of every section in both dark and light mode. Not "I think it looks right" &mdash; actual visual verification. It checked that all 6 sections rendered, all 4 expandable sections worked, all 13 cards displayed, both diagrams drew correctly, and the responsive layout functioned. Then self-tested the content against all 6 hardened quality criteria from the run plan. Every criterion passed.</div>
         <div class="process-metrics">
-          <span class="process-metric click" data-panel="d6-shots" onclick="toggleMetric(this)">8 screenshots <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d6-shots" onclick="toggleMetric(this)">8 screenshots</span>
           <span class="process-metric">6/6 criteria passed</span>
-          <span class="process-metric click" data-panel="d6-struct" onclick="toggleMetric(this)">Structural verification <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d6-struct" onclick="toggleMetric(this)">Structural verification</span>
           <div class="metric-panel" id="d6-shots">
             <li>Hero section &mdash; dark mode</li>
             <li>Full page &mdash; dark mode</li>
@@ -984,7 +996,7 @@ td strong { color: var(--text); }
         <div class="process-metrics">
           <span class="process-metric">GitHub Pages</span>
           <span class="process-metric">Shareable URL</span>
-          <span class="process-metric click" data-panel="d7-pipeline" onclick="toggleMetric(this)">Deploy pipeline <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d7-pipeline" onclick="toggleMetric(this)">Deploy pipeline</span>
           <div class="metric-panel" id="d7-pipeline">
             <li>Identified hosting setup from prior walkthrough outputs</li>
             <li>Switched to gh-pages deployment branch</li>
@@ -1003,10 +1015,10 @@ td strong { color: var(--text); }
         <div class="process-title">Review, Research, Iterate</div>
         <div class="process-desc">An external collaborator reviewed the walkthrough and identified 7 content issues and 4 visual bugs. The system then did its own independent review of the full 1,200-line file, cross-referencing against the external feedback. A third research agent was dispatched to analyze 13 sources on what makes the best technical showcase pages work &mdash; studying Stripe, Vercel, Linear, and portfolio best practices. All findings were synthesized into a prioritized 15-item revision plan. V2 was built from scratch addressing every issue. Three additional operator feedback cycles refined the architecture diagram, card layouts, and visual details. Each fix was deployed to the live URL within minutes.</div>
         <div class="process-metrics">
-          <span class="process-metric click" data-panel="d8-issues" onclick="toggleMetric(this)">11 issues identified <span class="arrow">&#9656;</span></span>
-          <span class="process-metric click" data-panel="d8-research" onclick="toggleMetric(this)">13 sources researched <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d8-issues" onclick="toggleMetric(this)">11 issues identified</span>
+          <span class="process-metric click" data-panel="d8-research" onclick="toggleMetric(this)">13 sources researched</span>
           <span class="process-metric">15-item revision plan</span>
-          <span class="process-metric click" data-panel="d8-v2" onclick="toggleMetric(this)">V2 changes <span class="arrow">&#9656;</span></span>
+          <span class="process-metric click" data-panel="d8-v2" onclick="toggleMetric(this)">V2 changes</span>
           <span class="process-metric">3 feedback cycles</span>
           <span class="process-metric">4 deployments</span>
           <div class="metric-panel" id="d8-issues">
