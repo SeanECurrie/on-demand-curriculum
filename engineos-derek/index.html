@@ -332,8 +332,8 @@ td strong { color: var(--text); }
     </p>
 
     <div class="diagram-wrap">
-      <canvas id="s1-arch-diagram" width="700" height="380"></canvas>
-      <p class="diagram-caption">Layer 1 (the OS) provides shared infrastructure. Layer 2 (engines) handle specific business domains.</p>
+      <canvas id="s1-arch-diagram" width="700" height="440"></canvas>
+      <p class="diagram-caption">EngineOS provides the shared foundation. Each engine handles a specific business domain.</p>
     </div>
 
     <div class="comparison" style="margin-top: 20px;">
@@ -879,48 +879,87 @@ function drawDiagrams() {
     border: isDark ? '#2a2a3a' : '#d8d8e4'
   };
 
-  // Architecture diagram
+  // Architecture diagram — EngineOS on top, engines below
   const c1 = document.getElementById('s1-arch-diagram');
   const x1 = c1.getContext('2d'); x1.clearRect(0, 0, c1.width, c1.height);
   const r1 = rough.canvas(c1);
 
-  r1.rectangle(60, 200, 600, 140, { stroke: C.accent, strokeWidth: 2, fill: isDark ? 'rgba(34,211,238,0.06)' : 'rgba(34,211,238,0.08)', fillStyle: 'solid', roughness: 0.8 });
+  // EngineOS box (top — the big one)
+  r1.rectangle(50, 20, 600, 160, {
+    stroke: C.accent, strokeWidth: 2,
+    fill: isDark ? 'rgba(34,211,238,0.06)' : 'rgba(34,211,238,0.08)',
+    fillStyle: 'solid', roughness: 0.8
+  });
 
-  const eng = [
-    { x: 75, w: 125, label: 'Sales', sub: 'CRM + Campaigns', c: C.warm },
-    { x: 215, w: 125, label: 'Job Search', sub: 'Pipeline + Intel', c: C.accent },
-    { x: 355, w: 125, label: 'Research', sub: 'Market Analysis', c: C.purple },
-    { x: 495, w: 145, label: 'Your Engine', sub: 'Any Domain', c: C.amber }
+  x1.textAlign = 'center';
+  x1.fillStyle = C.accent; x1.font = 'bold 16px -apple-system, system-ui, sans-serif';
+  x1.fillText('EngineOS', 350, 52);
+  x1.fillStyle = C.muted; x1.font = '11px -apple-system, system-ui, sans-serif';
+  x1.fillText('The shared operating system \u2014 everything below inherits from here', 350, 72);
+
+  // OS capability tags
+  const osTags = ['27 Skills', '59 Patterns', '12 Methodologies', 'Quality Control', 'Research Standards'];
+  const osTags2 = ['Memory & Logs', 'Design System', '38 Templates', 'Governance', 'CRM & Integrations'];
+  osTags.forEach((t, i) => {
+    x1.fillStyle = C.text; x1.font = 'bold 10px -apple-system, system-ui, sans-serif';
+    x1.fillText(t, 110 + i * 120, 105);
+  });
+  osTags2.forEach((t, i) => {
+    x1.fillStyle = C.muted; x1.font = '10px -apple-system, system-ui, sans-serif';
+    x1.fillText(t, 110 + i * 120, 125);
+  });
+
+  x1.fillStyle = C.muted; x1.font = 'italic 10px -apple-system, system-ui, sans-serif';
+  x1.fillText('One system. Shared standards. Shared knowledge. Shared tools.', 350, 158);
+
+  // Downward arrows from OS to engines
+  const engineData = [
+    { x: 85, w: 120, label: 'Sales Engine', own: 'Own CRM data', own2: 'Own campaigns', c: C.warm },
+    { x: 225, w: 120, label: 'Job Search', own: 'Own pipeline', own2: 'Own targets', c: C.accent },
+    { x: 365, w: 120, label: 'Research', own: 'Own findings', own2: 'Own sources', c: C.purple },
+    { x: 505, w: 130, label: 'Your Next One', own: 'Any domain', own2: 'Any workflow', c: C.amber }
   ];
-  eng.forEach(e => {
-    r1.rectangle(e.x, 60, e.w, 110, { stroke: e.c, strokeWidth: 1.5, fill: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)', fillStyle: 'solid', roughness: 0.8 });
-    r1.line(e.x + e.w/2, 170, e.x + e.w/2, 200, { stroke: C.border, strokeWidth: 1, roughness: 0.5 });
+
+  // "powers" label + arrows
+  x1.fillStyle = C.muted; x1.font = 'bold 10px -apple-system, system-ui, sans-serif';
+  x1.fillText('POWERS', 350, 200);
+
+  engineData.forEach(e => {
+    // Arrow line
+    r1.line(e.x + e.w/2, 180, e.x + e.w/2, 230, { stroke: C.border, strokeWidth: 1.5, roughness: 0.5 });
+    // Arrowhead
+    x1.fillStyle = C.border; x1.beginPath();
+    x1.moveTo(e.x + e.w/2, 230); x1.lineTo(e.x + e.w/2 - 5, 222); x1.lineTo(e.x + e.w/2 + 5, 222); x1.fill();
   });
 
-  x1.font = 'bold 11px -apple-system, system-ui, sans-serif'; x1.textAlign = 'center';
-  eng.forEach(e => {
-    x1.fillStyle = e.c; x1.fillText(e.label, e.x + e.w/2, 95);
-    x1.font = '10px -apple-system, system-ui, sans-serif'; x1.fillStyle = C.muted;
-    x1.fillText(e.sub, e.x + e.w/2, 112);
-    x1.font = 'bold 11px -apple-system, system-ui, sans-serif';
+  // Engine boxes (bottom)
+  engineData.forEach(e => {
+    const isDashed = e.c === C.amber;
+    r1.rectangle(e.x, 232, e.w, 120, {
+      stroke: e.c, strokeWidth: 1.5,
+      fill: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+      fillStyle: 'solid', roughness: 0.8,
+      strokeLineDash: isDashed ? [6, 4] : undefined
+    });
+
+    x1.textAlign = 'center';
+    x1.fillStyle = e.c; x1.font = 'bold 11px -apple-system, system-ui, sans-serif';
+    x1.fillText(e.label, e.x + e.w/2, 258);
+
+    x1.fillStyle = C.muted; x1.font = '10px -apple-system, system-ui, sans-serif';
+    x1.fillText(e.own, e.x + e.w/2, 280);
+    x1.fillText(e.own2, e.x + e.w/2, 295);
+
+    x1.fillStyle = isDark ? 'rgba(34,211,238,0.6)' : 'rgba(34,211,238,0.8)';
+    x1.font = 'italic 9px -apple-system, system-ui, sans-serif';
+    x1.fillText('+ all OS capabilities', e.x + e.w/2, 335);
   });
 
-  x1.fillStyle = C.accent; x1.font = 'bold 13px -apple-system, system-ui, sans-serif';
-  x1.fillText('OPERATING SYSTEM', 360, 235);
-  x1.font = '11px -apple-system, system-ui, sans-serif'; x1.fillStyle = C.muted;
-  ['27 Skills','12 Methods','59 Patterns','38 Templates','Design System'].forEach((t,i) => x1.fillText(t, 135 + i*110, 265));
-
-  x1.fillStyle = C.muted; x1.font = 'bold 10px -apple-system, system-ui, sans-serif'; x1.textAlign = 'right';
-  x1.fillText('LAYER 2', 55, 115); x1.fillText('Engines', 55, 128);
-  x1.fillText('LAYER 1', 55, 265); x1.fillText('OS', 55, 278);
-
-  r1.rectangle(493, 58, 149, 114, { stroke: C.amber, strokeWidth: 1.5, roughness: 1.2, strokeLineDash: [6, 4] });
-  x1.textAlign = 'center'; x1.fillStyle = C.amber; x1.font = 'italic 10px -apple-system, system-ui, sans-serif';
-  x1.fillText('+ inherits everything', 567, 150);
-
+  // Bottom note
   x1.fillStyle = C.muted; x1.font = '10px -apple-system, system-ui, sans-serif';
-  [137, 277, 417, 567].forEach(px => x1.fillText('inherits', px, 190));
-  x1.fillText('Shared foundation \u2022 Each engine isolated but inherits all OS capabilities', 360, 325);
+  x1.textAlign = 'center';
+  x1.fillText('Each engine is isolated \u2014 own data, own workflows \u2014 but inherits the full OS', 350, 385);
+  x1.fillText('Add a new engine anytime. It starts with everything the system already knows.', 350, 400);
 
   // Quality flow
   const c3 = document.getElementById('s3-quality-flow');
