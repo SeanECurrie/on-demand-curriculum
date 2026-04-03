@@ -235,6 +235,36 @@ th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border
 td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
 td strong { color: var(--text); }
 
+/* Process timeline */
+.process-flow { position: relative; padding-left: 32px; margin: 24px 0; }
+.process-flow::before {
+  content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px;
+  width: 2px; background: var(--border);
+}
+.process-step { position: relative; padding-bottom: 20px; }
+.process-step:last-child { padding-bottom: 0; }
+.process-dot {
+  position: absolute; left: -32px; top: 3px; width: 22px; height: 22px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: #0a0a0f; z-index: 1;
+}
+[data-theme="light"] .process-dot { color: #fff; }
+.process-dot.orient { background: var(--accent); }
+.process-dot.design { background: var(--accent-purple); }
+.process-dot.plan { background: var(--accent-amber); }
+.process-dot.research { background: var(--accent-green); }
+.process-dot.build { background: var(--accent-orange); }
+.process-dot.verify { background: var(--accent); }
+.process-dot.deploy { background: var(--accent-green); }
+.process-dot.iterate { background: var(--accent-warm); }
+.process-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.process-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.process-metric {
+  display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px;
+  border-radius: 3px; background: rgba(34,211,238,0.1); color: var(--accent);
+  margin-top: 4px; margin-right: 4px;
+}
+
 /* Fade-in animation */
 .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -284,6 +314,7 @@ td strong { color: var(--text); }
     <a href="#s4-capabilities">What It's Done</a>
     <a href="#s5-real-world">In Practice</a>
     <a href="#s6-under-hood">Under the Hood</a>
+    <a href="#s7-how-built">How This Was Built</a>
   </nav>
 </aside>
 
@@ -787,6 +818,89 @@ td strong { color: var(--text); }
         control checking every output, the governance preventing shortcuts, and the engine architecture
         making it all reusable across businesses. The tools are the ingredients. EngineOS is the kitchen.
       </p>
+    </div>
+  </section>
+
+  <!-- SECTION 7: HOW THIS PAGE WAS BUILT -->
+  <section id="s7-how-built" class="fade-in">
+    <h2><span class="num">07</span> How This Page Was Built</h2>
+    <p class="section-intro">
+      The walkthrough you just read was produced by EngineOS in one session.
+      Here's the actual process the system followed &mdash; every step, every gate,
+      every quality check.
+    </p>
+
+    <div class="process-flow">
+      <div class="process-step">
+        <div class="process-dot orient">1</div>
+        <div class="process-title">Orient</div>
+        <div class="process-desc">Session orchestrator loaded project context, operator profile, capability registry. System knows where it is and what's available.</div>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot design">2</div>
+        <div class="process-title">Design</div>
+        <div class="process-desc">Four rounds of interactive brainstorming with the operator. Read Derek's profile, transcript, and previous materials. Iterated on approach, section structure, tone, and framing until locked.</div>
+        <span class="process-metric">4 rounds</span>
+        <span class="process-metric">3 approach options evaluated</span>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot plan">3</div>
+        <div class="process-title">Plan &amp; Gate</div>
+        <div class="process-desc">Phase controller classified the work (Content Production), built a disk-persisted run plan with 6 hardened quality criteria in structured JSON. Operator reviewed and approved before any production began.</div>
+        <span class="process-metric">6 hardened criteria</span>
+        <span class="process-metric">Operator approval gate</span>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot research">4</div>
+        <div class="process-title">Parallel Research</div>
+        <div class="process-desc">Two independent agents dispatched simultaneously. One explored the HTML walkthrough architecture and design system. The other extracted all EngineOS capabilities, methodology, and patterns for content.</div>
+        <span class="process-metric">2 parallel agents</span>
+        <span class="process-metric">54 tool uses</span>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot build">5</div>
+        <div class="process-title">Build</div>
+        <div class="process-desc">Section construction skill built the walkthrough incrementally &mdash; 6 content sections plus CSS framework and JavaScript interactions. Single-file HTML with Rough.js diagrams, dark/light mode, responsive layout.</div>
+        <span class="process-metric">1,300+ lines</span>
+        <span class="process-metric">6 sections</span>
+        <span class="process-metric">2 diagrams</span>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot verify">6</div>
+        <div class="process-title">Verify</div>
+        <div class="process-desc">Puppeteer launched a browser, navigated to the file, and took screenshots across dark mode, light mode, and every section. Structural verification confirmed all components rendered. Self-tested against all 6 hardened criteria.</div>
+        <span class="process-metric">8 screenshots</span>
+        <span class="process-metric">6/6 criteria passed</span>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot deploy">7</div>
+        <div class="process-title">Deploy</div>
+        <div class="process-desc">Copied to the GitHub Pages branch, updated the landing page, committed, and pushed. Live URL generated automatically.</div>
+        <span class="process-metric">GitHub Pages</span>
+        <span class="process-metric">Shareable link</span>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot iterate">8</div>
+        <div class="process-title">Iterate</div>
+        <div class="process-desc">External review identified 11 issues. Independent assessment cross-referenced findings. Research agent analyzed 13 sources on best showcase practices. Prioritized revision plan produced. V2 built addressing all issues. Three additional feedback cycles refined visual details.</div>
+        <span class="process-metric">11 issues addressed</span>
+        <span class="process-metric">13 research sources</span>
+        <span class="process-metric">3 feedback cycles</span>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top: 20px;">
+      <strong>This is what "not just asking AI" looks like.</strong> Session orientation, forced planning,
+      parallel research agents, quality gates, render validation, iterative revision with external feedback.
+      Every step enforced by the system. The process produced what you just read &mdash; and the process
+      itself is the point.
     </div>
   </section>
 
