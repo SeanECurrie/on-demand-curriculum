@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodology Index — EngineOS Docs</title>
+  <meta name="description" content="15 formalized methodology documents live at methodology/. They are protected by a path-scoped immutability rule (.claude/rules/methodology-immutable.md) -- modification requires explicit operator appr">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link active" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Methodology Index</h1>
+    <p class="report-header__subtitle">15 formalized methodology documents live at methodology/. They are protected by a path-scoped immutability rule (.claude/rules/methodology-immutable.md) -- modification requires explicit operator appr</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="methodology-index-15-documents">Methodology Index &ndash; 15 Documents<a class="headerlink" href="#methodology-index-15-documents" title="Anchor link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Anchor link">&para;</a></h2>
+<p>15 formalized methodology documents live at <code>methodology/</code>. They are protected by a path-scoped immutability rule (<code>.claude/rules/methodology-immutable.md</code>) &ndash; modification requires explicit operator approval. These encode proven methodology from production work across 11 source projects, with the majority sourced from the ODC&rsquo;s Cole methodology implementations and formalized during the Act 3 EngineOS build (March-April 2026).</p>
+<p>The methodology layer is reference infrastructure, not working documentation. Skills reference these documents; they do not duplicate their content. New methodology documents require operator approval and must follow the existing format: problem statement, methodology, binary self-tests, anti-pattern companions.</p>
+<p>The <code>methodology/</code> directory also contains two subdirectories: <code>research/</code> (supplementary research artifacts including <code>agent-architecture-landscape.md</code>) and <code>walkthroughs/</code> (walkthrough-related materials). These are supporting resources, not part of the 15 core methodology documents.</p>
+<hr />
+<h2 id="by-domain">By Domain<a class="headerlink" href="#by-domain" title="Anchor link">&para;</a></h2>
+<h3 id="research-methodology">Research Methodology<a class="headerlink" href="#research-methodology" title="Anchor link">&para;</a></h3>
+<h4 id="credibility-tiersmd">credibility-tiers.md<a class="headerlink" href="#credibility-tiersmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A 5-tier source weighting system for evaluating research sources. Every finding gets tagged with its source credibility tier, making it explicit how much confidence a claim deserves. The tiers run from Tier 1 (official documentation and verified changelogs &ndash; highest weight) through Tier 5 (general community sentiment &ndash; direction indicator only). The document includes a decision tree for assigning tiers and rules for when to upgrade or downgrade a source&rsquo;s effective tier based on context.</p>
+<p><strong>Key concepts:</strong> 5-tier source hierarchy, tier assignment decision tree, tier upgrading/downgrading, confidence-weighted evidence, the principle that contradictions between tiers are intelligence insights rather than failures.</p>
+<p><strong>Companion skill:</strong> research-engine (applies tiers during research), findings-formatter (embeds tier tags in output).</p>
+<p><strong>When loaded:</strong> Referenced during any research operation. The editorial-standards document requires tier tagging on every claim. The dual-source-intelligence methodology uses tiers to weight contradictions. The research-cadence-template uses tiers to set confidence-based staleness decay rates.</p>
+<hr />
+<h4 id="dual-source-intelligencemd">dual-source-intelligence.md<a class="headerlink" href="#dual-source-intelligencemd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A research discipline that combines official documentation (via Context7 MCP) with community intelligence (via Bright Data MCP) to produce higher-fidelity findings than either source alone. Documentation tells you how something is supposed to work; community intelligence tells you how it actually works. The gap between those two is where the most valuable findings live. Defines three operating modes: documentation pull (Context7-led), community sweep (Bright Data-led), and full dual-source (both sources required per claim).</p>
+<p><strong>Key concepts:</strong> Dual-source validation, documentation-community gap as intelligence insight, three operating modes (documentation pull, community sweep, full dual-source), the principle that neither official nor community sources are sufficient alone.</p>
+<p><strong>Companion skill:</strong> research-engine (executes the dual-source protocol), depth-governor (determines which mode based on depth classification).</p>
+<p><strong>When loaded:</strong> Referenced during any research operation that uses MCP tools. The depth-assessment document determines how many claims require full dual-sourcing (scan: pivotal claims only; deep-dive: all claims). The editorial-standards document&rsquo;s &ldquo;Community Validation&rdquo; principle (principle 4) derives from this methodology.</p>
+<hr />
+<h4 id="depth-assessmentmd">depth-assessment.md<a class="headerlink" href="#depth-assessmentmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A mandatory 30-second classification step at the start of any pipeline stage that determines whether to operate at scan depth (breadth-first) or deep-dive depth (depth-first). Prevents the default LLM behavior of medium-quality everything. Three classification questions determine depth: (1) Will this finding drive a GO/NO-GO decision? (2) Is the operator new to this topic? (3) Has this topic had security implications? The first YES answer triggers deep-dive. All NOs means scan is appropriate. Mixed-depth within a single stage is normal and expected.</p>
+<p><strong>Key concepts:</strong> Scan vs. deep-dive classification, 30-second forcing function, mixed-depth as the normal case, the distinction between coverage (scan goal) and confidence (deep-dive goal), the principle that even scan depth requires dual-source validation for pivotal claims.</p>
+<p><strong>Companion skill:</strong> depth-governor (enforces the classification at pipeline stage boundaries).</p>
+<p><strong>When loaded:</strong> Referenced at the start of every pipeline stage during governed operations. The binary-self-tests document has paired quick/thorough test variants calibrated to scan/deep-dive depth. The section-construction methodology activates only at deep-dive depth. The findings-pattern-library allows lightweight templates at scan depth.</p>
+<hr />
+<h4 id="findings-pattern-librarymd">findings-pattern-library.md<a class="headerlink" href="#findings-pattern-librarymd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A concept-to-structure mapping table for research output. When the engine synthesizes findings, it selects from 7 validated structures rather than inventing format each time. The patterns are: Contradiction Insight (sources disagree on a factual claim), Validation Entry (hypothesis confirmed), Discovery Entry (new finding), Risk Entry (risk assessment), Comparison Matrix (tool/option comparison), Resolution Entry (question resolved), and Recommendation Entry (actionable recommendation). Each pattern has required and optional fields with source and credibility tier requirements per claim.</p>
+<p><strong>Key concepts:</strong> 7 finding types with distinct structures, concept-type determines structure (not prose defaults), required vs. optional fields scaled by depth, the principle that patterns are advisory with an escape hatch for genuine edge cases.</p>
+<p><strong>Companion skill:</strong> findings-formatter (applies the correct pattern structure to research output).</p>
+<p><strong>When loaded:</strong> Referenced during synthesis stages of any research operation. The editorial-standards document requires source and tier tagging on every field. The depth-assessment document determines whether to use full or lightweight pattern templates.</p>
+<hr />
+<h4 id="research-cadence-templatemd">research-cadence-template.md<a class="headerlink" href="#research-cadence-templatemd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A framework for designing scheduled intelligence refresh cadences to prevent knowledge base staleness. Defines three threshold types for determining when findings can no longer be trusted: time-based (days since last verification, scaled by domain volatility), event-based (specific triggers that invalidate findings regardless of age), and confidence-based (source tier decay rates &ndash; Tier 1 findings decay slowly, Tier 5 findings decay fastest). Each engine configures its own schedule based on domain volatility, cost of stale data, and operational budget.</p>
+<p><strong>Key concepts:</strong> Staleness thresholds (time-based, event-based, confidence-based), domain volatility classification (critical/high/medium/low), source tier decay rates, the principle that intelligence decays and refresh must be scheduled rather than memory-triggered.</p>
+<p><strong>Companion skill:</strong> research-engine (executes refresh sweeps), market-scanner (landscape-level refresh).</p>
+<p><strong>When loaded:</strong> Referenced when configuring a new engine&rsquo;s research schedule or when evaluating whether existing knowledge base entries are still trustworthy. The credibility-tiers document provides the tier definitions that feed confidence-based decay rates.</p>
+<hr />
+<h3 id="quality-framework">Quality Framework<a class="headerlink" href="#quality-framework" title="Anchor link">&para;</a></h3>
+<h4 id="binary-self-testsmd">binary-self-tests.md<a class="headerlink" href="#binary-self-testsmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> Concrete YES/NO tests that the engine can run against its own output to verify quality. Replaces aspirational quality language (&ldquo;make it clear&rdquo;) with testable checkpoints (&ldquo;cover paragraph 3, read it without paragraph 1 &ndash; does it still track?&rdquo;). Organized by pipeline stage: Research Stage Tests (R1-R4), Synthesis Stage Tests (S1-S4), and Output Generation Tests (O1-O3). Each test has paired quick (scan depth) and thorough (deep-dive depth) variants. Includes test design rules: answerable YES/NO in under 5 seconds, references specific parts of output, a NO answer implies a specific fix.</p>
+<p><strong>Key concepts:</strong> Binary (YES/NO) quality verification, paired quick/thorough test variants, 4 test design rules, tests by pipeline stage (research, synthesis, output generation), the principle that LLMs can evaluate concrete yes/no questions but cannot reliably evaluate &ldquo;is this good?&rdquo;</p>
+<p><strong>Companion skill:</strong> output-self-test (executes binary tests against deliverables), sanity-check (uses binary tests for spot-checks).</p>
+<p><strong>When loaded:</strong> Referenced during QA stages of any governed operation. The phase-controller forces output-self-test invocation during skill chains. The depth-assessment document determines which test variant (quick or thorough) to run. Individual tests reference credibility-tiers and editorial-standards for their evaluation criteria.</p>
+<hr />
+<h4 id="anti-patternsmd">anti-patterns.md<a class="headerlink" href="#anti-patternsmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A catalog of 14 real failure modes observed during production engine work. Every entry cites a specific incident &ndash; a file, a log entry, a session where something went wrong. Organized into Research Anti-Patterns, Production Anti-Patterns, and Governance Anti-Patterns. Each entry has four components: what it looks like (recognition), why it happens (understanding the temptation), what good looks like (the alternative), and a binary self-test (catch it before it ships). Examples include The Understated Warning, Premature Confidence, The Settled Question That Was Not Settled, and The Comfortable Middle.</p>
+<p><strong>Key concepts:</strong> 14 evidence-based failure modes, the requirement that every entry cite a real failure (no theoretical anti-patterns), framing as failure modes rather than commandments, binary self-tests as catch mechanisms, the principle that an engine that cannot name its own failure modes cannot improve.</p>
+<p><strong>Companion skill:</strong> sanity-check (encodes 9 of the anti-patterns as binary spot-checks).</p>
+<p><strong>When loaded:</strong> Referenced during QA operations and when the sanity-check skill detects a failure mode. The phase-controller can invoke sanity-check during forced chains. Skills that produce deliverables should be aware of the failure modes relevant to their output type.</p>
+<hr />
+<h4 id="adversarial-validationmd">adversarial-validation.md<a class="headerlink" href="#adversarial-validationmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A two-agent testing methodology for validating composited systems. Formalized from the Cowork testing arc that validated EngineOS after the Act 3 build. Defines three roles (Executor, Evaluator, Operator), the independent context requirement (evaluator must not share the executor&rsquo;s session), the communication protocol (operator routes between agents), and dual-layer test design (capability layer: does it produce good output; governance layer: did it follow its own process). Documents three structural failure modes of self-evaluation: sycophancy, keyword-passing, and count errors in self-audit.</p>
+<p><strong>Key concepts:</strong> Two-agent architecture (executor/evaluator/operator), independent context requirement, dual-layer testing (capability + governance), correction-of-the-corrector pattern, the principle that self-evaluation is structurally unreliable due to sycophancy, keyword-passing, and count errors.</p>
+<p><strong>Companion skill:</strong> adversarial-evaluator (spawns independent-context subagents for scored evaluation).</p>
+<p><strong>When loaded:</strong> Referenced when validating a completed build or when running adversarial evaluation on deliverables. The adversarial-evaluator skill implements this methodology. Used at major phase boundaries for critical work.</p>
+<hr />
+<h3 id="production-methodology">Production Methodology<a class="headerlink" href="#production-methodology" title="Anchor link">&para;</a></h3>
+<h4 id="section-constructionmd">section-construction.md<a class="headerlink" href="#section-constructionmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A formalized incremental build process for complex outputs (interactive walkthroughs, comprehensive reports, multi-section deliverables). Prevents quality degradation from generating large outputs in single passes. Defines four phases: Phase A (plan sections with boundaries, cross-references, namespaces, and size estimates &ndash; presented for operator approval), Phase B (build one section at a time with cross-reference management and per-section binary self-tests), Phase C (full-output review for cross-reference integrity, convention consistency, and progressive complexity), Phase D (operator review checkpoint). Activates only at deep-dive depth for outputs exceeding ~500 lines.</p>
+<p><strong>Key concepts:</strong> Four-phase incremental build (plan, build per-section, full review, operator review), namespace convention for IDs and anchors, cross-reference management, the gating question (&ldquo;if I generate this entire output in one pass, will the last section be as good as the first?&rdquo;), the ~32K token practical ceiling for coherent single-pass generation.</p>
+<p><strong>Companion skill:</strong> render-validate (verifies HTML output integrity after section construction).</p>
+<p><strong>When loaded:</strong> Referenced during production of complex deliverables classified at deep-dive depth. The depth-assessment document determines activation. The phase-controller includes section construction in skill chains for applicable output types.</p>
+<hr />
+<h4 id="factory-patternmd">factory-pattern.md<a class="headerlink" href="#factory-patternmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> Four variants of the &ldquo;how does one system produce and maintain another&rdquo; pattern, each with documented maintenance protocols. The variants are: Full Extraction (complete capability lift with severed runtime dependency), Selective Lift (specific capabilities ported while source continues evolving), Template Propagation (structural templates deployed across instances), and Composite Build (best-version-wins assembly from multiple sources). Each variant includes: when to use, ecosystem examples with citations, maintenance protocols with staleness indicators, and anti-patterns. The core problem addressed is that innovation flows outward from factories and never returns.</p>
+<p><strong>Key concepts:</strong> 4 factory variants (full extraction, selective lift, template propagation, composite build), reverse audit for back-porting product innovations, extraction manifests for provenance tracking, constitution drift checks, the principle that factories should absorb their products&rsquo; improvements.</p>
+<p><strong>Companion skill:</strong> None directly. Referenced by ecosystem-build methodology and the codebase-onboarder skill.</p>
+<p><strong>When loaded:</strong> Referenced when building new engines, migrating capabilities between engines, or auditing capability drift between a source and its deployed product. The ecosystem-build methodology uses the composite build variant. The lift-audit methodology checks for regressions introduced by factory operations.</p>
+<hr />
+<h4 id="editorial-standardsmd">editorial-standards.md<a class="headerlink" href="#editorial-standardsmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> Six core editorial principles governing how research findings, deployment guidance, and knowledge base entries are written, cited, and maintained: (1) Evidence Requirement &ndash; every claim needs a source and credibility tier, (2) Honest Assessment &ndash; never oversell, never downplay, note residual risk, (3) Transferable Framing &ndash; distinguish universal principles from tool-specific details, (4) Community Validation &ndash; documentation alone is insufficient, (5) Security as a Lens &ndash; evaluated on every decision not as a separate phase, (6) Living Documentation &ndash; mark outdated content, never delete. Also defines writing standards for tone, voice, formatting, and version-stamping.</p>
+<p><strong>Key concepts:</strong> 6 editorial principles, the evidence requirement (if you can&rsquo;t cite it don&rsquo;t claim it), residual risk as a mandatory element, transferable vs. tool-specific framing, security-at-every-step, living documentation with never-delete, the tone standard of &ldquo;knowledgeable colleague, not manual or marketing page.&rdquo;</p>
+<p><strong>Companion skill:</strong> output-self-test (tests against editorial standards), qa-pipeline (includes editorial checks).</p>
+<p><strong>When loaded:</strong> Referenced during any content production operation. The findings-pattern-library requires source and tier tagging per the evidence requirement. The binary-self-tests reference editorial standards in their evaluation criteria. Applies to all written output across all engines.</p>
+<hr />
+<h3 id="system-building">System Building<a class="headerlink" href="#system-building" title="Anchor link">&para;</a></h3>
+<h4 id="ecosystem-buildmd">ecosystem-build.md<a class="headerlink" href="#ecosystem-buildmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> The three-act audit-to-composite methodology for building a unified system from a multi-project ecosystem. Formalized from the actual EngineOS build. Act 1 (Structural Reconnaissance) maps what exists without judging it &ndash; produces ecosystem map, growth story, deep attention register, and Act 2 workspace. Act 2 (Exhaustive Discovery) reads every line using capability-domain reading &ndash; produces capability cards, skill genealogy, cross-cutting analyses. Act 3 (Build from Evidence) composites best versions &ndash; five-phase build with evaluator-embedded checkpoint reviews, registry system, constitution written after the build.</p>
+<p><strong>Key concepts:</strong> Three-act architecture (reconnaissance, discovery, build), capability-domain reading (same capability across all projects simultaneously), 70% reading rule, best-version-wins compositing (not selection), standing research methodology (research during reads, not deferred), genealogy synthesis as first-class output, constitution-from-reality (written after the build, not before).</p>
+<p><strong>Companion skill:</strong> codebase-onboarder (uses the reconnaissance posture for new codebase orientation).</p>
+<p><strong>When loaded:</strong> Referenced when building a new OS-level system from multiple sources, conducting ecosystem-wide audits, or migrating engine capabilities to the OS layer. The lift-audit methodology is its post-build companion. The adversarial-validation methodology tests the system it produces.</p>
+<hr />
+<h4 id="lift-auditmd">lift-audit.md<a class="headerlink" href="#lift-auditmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> A three-dimensional audit methodology for detecting (a) internal regressions from lift operations and (b) external currency gaps where industry has evolved past the lifted baseline. The three dimensions are: Dimension 1 (Internal Regression Check &ndash; what ported vs. what exists in source, using method-level parity as primary signal), Dimension 2 (External Currency Validation &ndash; is the lifted baseline still current industry practice, using Context7 and Bright Data), Dimension 3 (Refactor-vs-Regression Distinction &ndash; when target differs from source, is it regression or legitimate cleanup). Formalized from real incidents: Attio direct-API never-lifted regression (891 lines at source, zero in target), notion-ops 55% body reduction, notion-mapper orphaned-skill regression.</p>
+<p><strong>Key concepts:</strong> Three-dimensional audit (regression, currency, refactor-vs-regression), method-level parity verification (not just line-count comparison), body-size delta as secondary-only evidence, orphaned-skill detection, the principle that regression and currency gaps accumulate invisibly and surface only when exercised.</p>
+<p><strong>Companion skill:</strong> sanity-check (spot-check for orphaned skills and missing implementations).</p>
+<p><strong>When loaded:</strong> Referenced after any major lift or migration operation. Companion to ecosystem-build (the construction methodology it audits) and adversarial-validation (the evaluation posture it inherits). Used during engine migration to EngineOS.</p>
+<hr />
+<h4 id="planning-enforcementmd">planning-enforcement.md<a class="headerlink" href="#planning-enforcementmd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> When planning skills (brainstorming, writing-plans) are required, when they are optional, and how the enforcement model works. Documents the empirical evidence: planning skills were skipped in three consecutive sessions despite being specified in phase-controller chains. Defines two enforcement types: structural enforcement (planner output is a required input to the production step &ndash; Layer 4 of the run plan must be populated) and advisory enforcement with transparency (skip-justification required in the run plan, visible at the operator approval gate). Maps enforcement per chain type (BL and EW require both; EN-deliverable and CP require writing-plans only; research and maintenance require neither).</p>
+<p><strong>Key concepts:</strong> Two enforcement types (structural and advisory-with-transparency), the asymmetry is intentional (structural for concrete artifacts, advisory for process value), chain-by-chain enforcement mapping, the root cause that agents conflate &ldquo;I know what to build&rdquo; with &ldquo;I&rsquo;ve thought through how to build it,&rdquo; the principle that detailed operator prompts create an illusion that scoping was already done.</p>
+<p><strong>Companion skill:</strong> phase-controller (enforces planning requirements per chain type).</p>
+<p><strong>When loaded:</strong> Referenced by the phase-controller during chain execution. The run plan Layer 4 (Design + Plan) is the structural enforcement mechanism. Applies to BL, EW, EN-deliverable, and CP operation types.</p>
+<hr />
+<h3 id="governance">Governance<a class="headerlink" href="#governance" title="Anchor link">&para;</a></h3>
+<h4 id="memory-architecturemd">memory-architecture.md<a class="headerlink" href="#memory-architecturemd" title="Anchor link">&para;</a></h4>
+<p><strong>What it covers:</strong> Both halves of how EngineOS remembers &ndash; write-side capture (D-1 through D-5) and read-side retrieval (Retrieval Surfaces section, added 2026-06-04). The write-side specifies the 8-surface memory hierarchy with locked architectural decisions governing what each surface is for, how logs split between OS and engines, when CONTEXT archives, and what log schemas are canonical. Five locked decisions: D-1 defines the canonical memory hierarchy with one-job-per-surface (CLAUDE.md for constitution, CONTEXT.md for current state, run plans for active execution, activity log for breadcrumbs, intelligence log for strategic memory, operator files for identity, auto-memory for cross-session). D-2 locks root-only logging with engine tags. D-3 sets CONTEXT-HISTORY archival triggers. D-4 defines registry ID scope. D-5 locks log schemas with the engine column addition. The read-side Retrieval Surfaces section closes the capture-without-retrieval gap (zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work before the fix). Three retrieval layers (session-start injection, <code>UserPromptSubmit</code> mid-work hook, manual <code>/recall</code> escalation) operate over the same six-surface priority corpus (intel-log → KB-index → concepts/connections → daily 30d → run-plans 60d → methodology). Each decision and the retrieval layer are backed by external research (44+ sources across D-1..D-5; the retrieval layer is anchored in DECISIONS.md D32).</p>
+<p><strong>Key concepts:</strong> 8-surface memory hierarchy with one-job-per-surface, root-only log model with engine tags (not per-tenant logs), CONTEXT-HISTORY archival triggers (size and time), the binary test for surface selection (&ldquo;which surface&rsquo;s one job matches this information?&rdquo;), the principle that surface role confusion (a surface doing two jobs) is a violation to correct, three-layer retrieval architecture (session-start / mid-work hook / manual escalation), six-surface priority corpus with signal-to-noise ordering, stopping rule (surfaces 1-2 yielding 3+ strong hits halts sweep of lower surfaces), the principle that capture without retrieval is a write-only system, why structured markdown + ripgrep beats vector retrieval at personal-KB scale (&lt;2000 articles).</p>
+<p><strong>Companion skill:</strong> session-orchestrator (reads CONTEXT.md per the hierarchy; triggers Layer 1 retrieval injection), phase-controller (writes run plans per the hierarchy), recall (executes Layer 3 manual escalation across the six-surface corpus).</p>
+<p><strong>When loaded:</strong> Referenced when making decisions about where information belongs in the system OR when prior context needs to be pulled back into active work. The logging specification at <code>.claude/rules/logging.md</code> implements the write-side architecture. The session-orchestrator reads CONTEXT.md as the Tier 1 orientation surface. The PostToolUse hook populates the activity log per the D-2 root-only model and D-5 schema. The <code>UserPromptSubmit</code> hook at <code>hooks/prompt-retrieval.py</code> implements Layer 2 retrieval; <code>scripts/retrieval-health.jsonl</code> records every invocation; the operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions for the keep/tune/kill decision per D32. Pairs with the <code>retrieval-before-decide</code> framework pattern (the discipline that fires manual escalation). For the deep operational walkthrough, see <a href="second-brain.html">second-brain.md</a>.</p>
+<hr />
+<p><em>EngineOS Methodology Index &ndash; produced from direct inspection of all 15 methodology documents at <code>methodology/</code>.</em></p>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

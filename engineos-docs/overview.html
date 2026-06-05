@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overview — EngineOS Docs</title>
+  <meta name="description" content="EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link active" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Overview</h1>
+    <p class="report-header__subtitle">EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="engineos-system-overview">EngineOS — System Overview<a class="headerlink" href="#engineos-system-overview" title="Anchor link">&para;</a></h1>
+<p>EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines: domain-specific tenants that inherit OS capabilities and keep their own engagement data, knowledge bases, and domain-adapted workflows.</p>
+<p>It is not a prompt library. It is not a collection of Claude Code skills taped together. It is an operating system with mechanical enforcement, adversarial quality evaluation, disk-persisted governance, and a methodology layer distilled from 105+ days of production work across 11 projects.</p>
+<p>EngineOS is operator-agnostic. The <code>operator/</code> directory personalizes the system at runtime through a structured 37-question intake process. The OS and its engines work for anyone; nothing assumes a specific person until <code>operator/PROFILE.md</code> exists.</p>
+<hr />
+<h2 id="system-at-a-glance">System at a Glance<a class="headerlink" href="#system-at-a-glance" title="Anchor link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Count</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Skills</td>
+<td>29</td>
+<td><code>.claude/skills/</code></td>
+</tr>
+<tr>
+<td>Patterns</td>
+<td>70 (58 problem, 5 deliverable, 7 framework)</td>
+<td><code>patterns/</code></td>
+</tr>
+<tr>
+<td>Methodology docs</td>
+<td>15</td>
+<td><code>methodology/</code></td>
+</tr>
+<tr>
+<td>Rules</td>
+<td>7 (3 unconditional, 4 path-scoped)</td>
+<td><code>.claude/rules/</code></td>
+</tr>
+<tr>
+<td>Hooks</td>
+<td>8 events (PreToolUse, PostToolUse, Stop, PostCompact, SessionStart, PreCompact, SessionEnd, UserPromptSubmit)</td>
+<td><code>hooks/</code></td>
+</tr>
+<tr>
+<td>Templates</td>
+<td>38 (27 deliverable, 11 engagement)</td>
+<td><code>templates/</code></td>
+</tr>
+<tr>
+<td>Principles</td>
+<td>5</td>
+<td><code>principles/</code></td>
+</tr>
+<tr>
+<td>Engine sources</td>
+<td>9 (4 active tenants, 5 at source locations)</td>
+<td><code>engines/</code> + Desktop</td>
+</tr>
+<tr>
+<td>Operation types</td>
+<td>7 (BL, EW, EN, RE, CP, IN, MT)</td>
+<td>Phase-controller</td>
+</tr>
+<tr>
+<td>Design system files</td>
+<td>6</td>
+<td><code>design-system/</code></td>
+</tr>
+<tr>
+<td>Registries</td>
+<td>2 (capabilities, engines)</td>
+<td><code>registry/</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="file-map">File Map<a class="headerlink" href="#file-map" title="Anchor link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>EngineOS/
+  CLAUDE.md                 # Constitution and routing layer (~200 lines)
+  CONTEXT.md                # Current system state (updated every session)
+  CONTEXT-HISTORY.md        # Archived context entries
+  DECISIONS.md              # All design decisions with rationale (D1-D32)
+
+  .claude/
+    rules/                  # 7 governance rules (3 unconditional + 4 path-scoped)
+    skills/                 # 29 OS-level skills
+    settings.json           # Hook wiring and permissions
+
+  hooks/                    # 8 hook scripts (4 .sh + 4 .py) for mechanical enforcement
+    pre-write-governance.sh # Blocks writes without active run plan
+    post-tool-use.sh        # Mechanical activity logging
+    stop.sh                 # Session-end CONTEXT.md check
+    post-compact.sh         # Core behavior re-injection after compaction
+    session-start.py        # Session orientation + retrieval Layer 1 injection
+    session-end.py          # Session-arc capture via flush.py spawn
+    pre-compact.py          # Memory flush before compaction (paired with SessionEnd)
+    prompt-retrieval.py     # UserPromptSubmit retrieval injection (D32)
+    _flush_common.py        # Shared flush module (D29 anti-drift discipline)
+    retrieval-triggers.json # Config for prompt-retrieval heuristic gate
+
+  engines/                  # Layer 2 tenants
+    job-search/             # Active: 8 domain skills, 9-lane pipeline, Notion integration
+    job-search-arnett/      # Active: Arnett McMurray JSE tenant, mechanically isolated
+    on-demand-curriculum/   # Portfolio: 2 domain skills, 8 outputs, this documentation
+    sales-enablement/       # Test stub: all capabilities lifted to OS
+
+  methodology/              # 15 protected documents (immutability rule)
+    research/               # Landscape research and supporting material
+
+  patterns/                 # 70 evidence-based patterns
+    problems/               # 58 problem patterns
+    deliverables/           # 5 deliverable patterns
+    frameworks/             # 7 framework patterns
+
+  principles/               # 5 operating principles
+  design-system/            # Enterprise CSS, color tokens, typography, accessibility
+  templates/                # 38 templates for deliverables and engagements
+    deliverables/           # 27 deliverable templates (6 subcategories)
+    engagement/             # 11 engagement scaffold templates
+
+  registry/                 # Stable identifiers
+    capabilities.md         # 32 capabilities with locations and sources
+    engines.md              # 9 engine sources with migration status
+
+  operator/                 # Operator identity (populated via Phase 0 intake)
+  scripts/                  # Second-brain pipeline + executable utilities
+    flush.py                # Session-arc capture to daily logs
+    compile.py              # KB promotion of high-signal moments
+    ingest.py               # External source ingestion to knowledge/
+    query.py                # Programmatic KB query
+    health-review.py        # Hook health observability summarizer
+    retrieval-review.py     # Retrieval health observability summarizer
+    lint.py                 # KB linting
+    hook-health.jsonl       # Append-only flush health log (D30)
+    retrieval-health.jsonl  # Append-only retrieval health log (D30)
+    attio/                  # Attio direct-API suite (8 files, restored per D26)
+  knowledge/                # Second-brain KB (concepts/, connections/, index.md, log.md, qa/)
+  daily/                    # Daily session-arc logs (captured via flush.py)
+  logs/                     # Two-layer: activity-log.md + intelligence-log.md
+  run-plans/                # Disk-persisted governance artifacts
+  docs/                     # Design documents and plans
+</code></pre></div>
+
+<hr />
+<h2 id="how-this-documentation-is-organized">How This Documentation Is Organized<a class="headerlink" href="#how-this-documentation-is-organized" title="Anchor link">&para;</a></h2>
+<p>These reference docs are organized by subsystem, not alphabetically. Start with what matches your interest:</p>
+<table>
+<thead>
+<tr>
+<th>If you want to understand&hellip;</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How the system is structured</td>
+<td><a href="architecture.html">Architecture</a></td>
+</tr>
+<tr>
+<td>How quality and process are enforced</td>
+<td><a href="governance.html">Governance</a></td>
+</tr>
+<tr>
+<td>What the 29 skills do and how they chain</td>
+<td><a href="skill-system.html">Skill System</a></td>
+</tr>
+<tr>
+<td>The research-first methodology</td>
+<td><a href="methodology.html">Methodology</a></td>
+</tr>
+<tr>
+<td>How engines work as tenants</td>
+<td><a href="engine-model.html">Engine Model</a></td>
+</tr>
+<tr>
+<td>How memory capture and retrieval work (KB, daily logs, /recall, retrieval hooks)</td>
+<td><a href="second-brain.html">Second Brain</a></td>
+</tr>
+<tr>
+<td>CRM and Notion integration</td>
+<td><a href="integrations.html">Integrations</a></td>
+</tr>
+<tr>
+<td>The visual design system</td>
+<td><a href="design-system.html">Design System</a></td>
+</tr>
+<tr>
+<td>Common questions from technical peers</td>
+<td><a href="faq.html">FAQ</a></td>
+</tr>
+</tbody>
+</table>
+<p>For catalog-style reference:</p>
+<table>
+<thead>
+<tr>
+<th>Looking up&hellip;</th>
+<th>See</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A specific skill</td>
+<td><a href="skills-reference.html">Skills Reference</a> — all 29 with triggers, tools, behaviors</td>
+</tr>
+<tr>
+<td>A specific pattern</td>
+<td><a href="patterns-reference.html">Patterns Reference</a> — all 70 categorized with 10 deep examples</td>
+</tr>
+<tr>
+<td>Available templates</td>
+<td><a href="templates-reference.html">Templates Reference</a> — all 38 by type</td>
+</tr>
+<tr>
+<td>Methodology docs</td>
+<td><a href="methodology-index.html">Methodology Index</a> — all 15 with coverage and companion skills</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="five-operating-principles">Five Operating Principles<a class="headerlink" href="#five-operating-principles" title="Anchor link">&para;</a></h2>
+<p>These are not aspirational. They describe how EngineOS was built and how it operates.</p>
+<ol>
+<li>
+<p><strong>Research-First</strong> — No deliverable begins without research. Hypotheses are tested, not assumed. If training data says X but current research says Y, trust the research.</p>
+</li>
+<li>
+<p><strong>Discover-Assess-Decide-Execute-Verify</strong> — The universal workflow. Skipping stages (especially discover and verify) is the most common failure mode. The phase-controller enforces this through forced skill chains.</p>
+</li>
+<li>
+<p><strong>Context-as-Session-State</strong> — CONTEXT.md is the handoff mechanism between sessions. It is always current. Every session reads it on start and updates it at end.</p>
+</li>
+<li>
+<p><strong>Never-Delete, Mark Outdated</strong> — Content is never deleted. Outdated content is marked with date and reason. The history has value. Logs are append-only.</p>
+</li>
+<li>
+<p><strong>Constitution-from-Reality</strong> — Build first, describe last. When the system and the documentation disagree, the system is right and the documentation needs updating. This file, and CLAUDE.md itself, were written after the system was built.</p>
+</li>
+</ol>
+<hr />
+<h2 id="provenance">Provenance<a class="headerlink" href="#provenance" title="Anchor link">&para;</a></h2>
+<p>EngineOS was not designed top-down. It was built from a three-act ecosystem audit (March 2026):</p>
+<ul>
+<li><strong>Act 1</strong> mapped the ecosystem structure across 11 projects on the operator&rsquo;s Desktop.</li>
+<li><strong>Act 2</strong> read every line of every file across those 11 projects. 89 finding files and 7 cross-cutting analyses.</li>
+<li><strong>Act 3</strong> built EngineOS from that evidence, using a &ldquo;best-version-wins&rdquo; compositing methodology — the strongest version of each capability was traced to its source via skill genealogy.</li>
+</ul>
+<p>The primary donors: SEE (operator identity, CRM integration, engagement workflows), JSE (governance stack, phase control, depth governance), ODC (methodology layer, editorial standards), WondaKB (multi-user architecture, Notion integration), MLR (QA pipeline, enterprise CSS), Restaurant (transcript innovations).</p>
+<p>The audit evidence lives at <code>~/Desktop/ecosystem-audit-act-2/findings/</code>. The build record is at <code>~/Desktop/ecosystem-audit-act-3/docs/build-log.md</code>.</p>
+<p>The substrate has continued to evolve since the initial build: a substrate-tightening operation (D25, April 2026) tested the governance stack against real failures and added the evidence-first-reporting rule plus sanity-check #11; a re-lift audit (D26) restored capabilities missed by the initial Act 3 pass; and the second-brain capture+retrieval layer (D29-D32, June 2026) added marathon-session capture caps with a shared hook module, retry+observability infrastructure, and a three-layer retrieval architecture (SessionStart injection, UserPromptSubmit mid-work hook, manual <code>/recall</code> escalation) over a six-surface corpus. See <a href="second-brain.html">Second Brain</a> for the retrieval and capture pipeline.</p>
+<hr />
+<h2 id="what-this-documentation-is-not">What This Documentation Is Not<a class="headerlink" href="#what-this-documentation-is-not" title="Anchor link">&para;</a></h2>
+<p>This documentation explains EngineOS to humans. It does not replace the operational files that serve the system at runtime:</p>
+<ul>
+<li><strong>CLAUDE.md</strong> is the routing layer and constitution — it tells Claude Code how to behave. This doc explains what CLAUDE.md does.</li>
+<li><strong>CONTEXT.md</strong> tracks current state for session continuity. This doc explains why that matters.</li>
+<li><strong>Skill SKILL.md files</strong> contain behavioral rules for execution. This doc explains the skill system.</li>
+<li><strong>Methodology docs</strong> are immutable reference material. This doc summarizes what they contain.</li>
+</ul>
+<p>If you&rsquo;re looking for operational files, see the <a href="#file-map">File Map</a> above. If you&rsquo;re trying to understand the system, keep reading these docs.</p>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

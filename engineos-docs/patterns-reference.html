@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patterns Reference — EngineOS Docs</title>
+  <meta name="description" content="Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link active" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Patterns Reference</h1>
+    <p class="report-header__subtitle">Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="pattern-library-70-patterns">Pattern Library &ndash; 70 Patterns<a class="headerlink" href="#pattern-library-70-patterns" title="Anchor link">&para;</a></h1>
+<h2 id="what-patterns-are-in-engineos">What Patterns Are in EngineOS<a class="headerlink" href="#what-patterns-are-in-engineos" title="Anchor link">&para;</a></h2>
+<p>Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and converted into a reusable lesson with clear trigger conditions and solutions.</p>
+<p>The pattern format is consistent: provenance header (source project, last verified date, staleness status), problem statement, step-by-step solution, when to use, when not to use, concrete example from real work, variations, and origin story. Every pattern traces back to a specific engagement, session, or test that produced it.</p>
+<p><strong>Breakdown:</strong> 58 problem patterns, 5 deliverable patterns, 7 framework patterns.</p>
+<p><strong>Source distribution:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Patterns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SEE + WondaKB (deduplicated)</td>
+<td>37</td>
+<td>CRM integration, sales intelligence, data quality, research methodology. 19 byte-identical pairs collapsed; 12 client-scrubbed WondaKB versions preferred for reuse.</td>
+</tr>
+<tr>
+<td>JSE</td>
+<td>13</td>
+<td>6 original (evidence/validation, intake), 7 domain-adapted from SEE concepts (research, job search).</td>
+</tr>
+<tr>
+<td>ODC</td>
+<td>5</td>
+<td>All original. Security and agent infrastructure patterns from a 48-source security posture analysis.</td>
+</tr>
+<tr>
+<td>EngineOS testing arc</td>
+<td>3</td>
+<td>Governance and validation patterns from adversarial cowork testing (March 2026).</td>
+</tr>
+<tr>
+<td>EngineOS cowork sessions</td>
+<td>6</td>
+<td>Planning enforcement, path search discipline, negative findings, tool-wrapper diagnostics, scope-creep detection, canary pattern for destructive operations (April 2026).</td>
+</tr>
+<tr>
+<td>EngineOS second-brain remediation + showcase production</td>
+<td>5</td>
+<td>Retrieval discipline, session-end audit, meta-section showcase framework, block-buffered stdout observability, parallel-agent background-mode UX (May-June 2026).</td>
+</tr>
+</tbody>
+</table>
+<p>The library consolidated from 93 source pattern files across 4 projects during the Act 3 build, then grew by 14 patterns through subsequent governance testing, production cowork sessions, and second-brain remediation arcs.</p>
+<hr />
+<h2 id="categorized-index">Categorized Index<a class="headerlink" href="#categorized-index" title="Anchor link">&para;</a></h2>
+<h3 id="agent-reliability-4-patterns">Agent Reliability (4 patterns)<a class="headerlink" href="#agent-reliability-4-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agent-hallucinated-success-verification</td>
+<td>Agents report successful batch operations (e.g., &ldquo;67/67 updated&rdquo;) when zero records actually changed, because HTTP 200 means &ldquo;received&rdquo; not &ldquo;persisted.&rdquo;</td>
+</tr>
+<tr>
+<td>mcp-silent-failure-detection</td>
+<td>MCP tools return HTTP 200 while silently failing to persist data, especially for select fields, multi-selects, and relationship fields that require specific data wrappers.</td>
+</tr>
+<tr>
+<td>verify-single-before-batch</td>
+<td>Running batch operations without testing a single record first wastes hours when the operation silently fails across all records.</td>
+</tr>
+<tr>
+<td>parallel-agents-need-background-mode</td>
+<td>Dispatching multiple parallel subagents without <code>run_in_background: true</code> blocks the parent until the slowest finishes; the operator sees silence that looks identical to &ldquo;stuck&rdquo; for 17+ minutes.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="crm-integration-attio-9-patterns">CRM Integration &ndash; Attio (9 patterns)<a class="headerlink" href="#crm-integration-attio-9-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>attio-import-escalation</td>
+<td>CRM data imports require different methods for different data types and volumes; a 4-phase escalation path prevents over-engineering simple imports and under-engineering complex ones.</td>
+</tr>
+<tr>
+<td>crm-id-mapping-disambiguation</td>
+<td>CRM systems use multiple ID types (record ID, entry ID, workspace ID) for the same entity; confusing them causes silent write failures.</td>
+</tr>
+<tr>
+<td>domain-first-company-resolution</td>
+<td>Resolve contacts to companies via email domain rather than company name to avoid mismatches from name variations, subsidiaries, and typos.</td>
+</tr>
+<tr>
+<td>export-match-local-for-scale</td>
+<td>For large datasets (500+), export CRM data, match locally, then push changes &ndash; individual API lookups are too slow and rate-limited.</td>
+</tr>
+<tr>
+<td>hidden-champion-identification</td>
+<td>High-potential expansion accounts hide in plain sight as small customers with signals (high usage, single-department adoption, strong champion) that indicate larger opportunity.</td>
+</tr>
+<tr>
+<td>local-cache-api-efficiency</td>
+<td>Cache CRM ID lookups locally to eliminate redundant API calls that waste time and count against rate limits.</td>
+</tr>
+<tr>
+<td>power-user-analysis</td>
+<td>Product usage data exists but is not leveraged for sales intelligence; identifying individual power users enables champion-based expansion and renewal targeting.</td>
+</tr>
+<tr>
+<td>reengagement-scoring</td>
+<td>Prioritize dormant account reactivation with a composite scoring framework instead of defaulting to alphabetical order or recency bias.</td>
+</tr>
+<tr>
+<td>revenue-attribution-gap</td>
+<td>Active users exist in the product but do not appear in billing or CRM revenue records, hiding the true size of the installed base.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="context-management-3-patterns">Context Management (3 patterns)<a class="headerlink" href="#context-management-3-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>context-isolation</td>
+<td>Token-heavy operations (research, transcript processing, web scraping) run in the main context, causing context bloat and eviction of earlier state. Dispatch to subagents instead.</td>
+</tr>
+<tr>
+<td>context-isolation-for-research</td>
+<td>Research tasks involving 10+ companies or batch scraping should be dispatched to subagents that return only structured findings, keeping the main context clean.</td>
+</tr>
+<tr>
+<td>content-excitement-outpaces-infrastructure</td>
+<td>During high-momentum sessions producing significant findings, infrastructure (CONTEXT.md, run plans, logs) falls behind the content work. Pause for infrastructure discipline after every significant pivot.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-quality-normalization-4-patterns">Data Quality / Normalization (4 patterns)<a class="headerlink" href="#data-quality-normalization-4-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>csv-line-ending-normalization</td>
+<td>CSV files from Windows/Excel contain invisible carriage return characters that break string matching while passing visual inspection.</td>
+</tr>
+<tr>
+<td>data-normalization-for-matching</td>
+<td>Record matching fails silently when data formats differ between source and target &ndash; case, whitespace, protocol prefixes, and line endings all cause phantom mismatches.</td>
+</tr>
+<tr>
+<td>job-title-credential-normalization</td>
+<td>Job titles from external sources embed credentials before the functional title (&ldquo;PhD, RN - Director of Nursing&rdquo;), breaking title-based classification and search.</td>
+</tr>
+<tr>
+<td>phone-number-format-normalization</td>
+<td>Phone numbers from imports arrive in inconsistent formats that CRM APIs reject; normalize to E.164 format before any write operation.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="evidence-validation-3-patterns">Evidence &amp; Validation (3 patterns)<a class="headerlink" href="#evidence-validation-3-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>evidence-strength-tagging</td>
+<td>Tag every capability claim with its evidence strength (documented metric, remembered number, rough estimate) at capture time so downstream consumers can distinguish verified data from approximations.</td>
+</tr>
+<tr>
+<td>ground-truth-before-scoring</td>
+<td>Company-level signals create appealing surface profiles that die on basic practical details (location, comp, tool requirements); read the actual JD before scoring any target.</td>
+</tr>
+<tr>
+<td>source-material-cross-validation</td>
+<td>Source material provided during intake may not have been written by the operator; distinguish factual content (valid regardless of author) from voice/framing content (valid only if operator-authored).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="intake-onboarding-1-pattern">Intake &amp; Onboarding (1 pattern)<a class="headerlink" href="#intake-onboarding-1-pattern" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>intake-question-file</td>
+<td>Generate a standalone question file from source material analysis so the operator can answer 20+ intake questions asynchronously, at their own pace, instead of under conversational pressure.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mcp-tool-integration-4-patterns">MCP / Tool Integration (4 patterns)<a class="headerlink" href="#mcp-tool-integration-4-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>batch-rate-limiting</td>
+<td>CRM APIs have often-undocumented rate limits; implement progressive backoff and batch sizing to avoid 429 responses, IP blocks, and silent throttling.</td>
+</tr>
+<tr>
+<td>idempotent-api-operations</td>
+<td>Using POST for bulk additions creates duplicates on retry; use PUT/PATCH with deterministic IDs or upsert patterns to make operations safely re-runnable.</td>
+</tr>
+<tr>
+<td>mcp-token-management</td>
+<td>MCP tool responses have token limits that cause truncation or total failure without warning; manage payload sizes and paginate results.</td>
+</tr>
+<tr>
+<td>custom-skills-over-mcp</td>
+<td><strong>SUPERSEDED.</strong> Dec 2025 advice to prefer custom skills over MCP servers; contradicted by current ecosystem practice where MCP tools are actively used for Attio and Notion. Retained for historical reference.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notion-integration-3-patterns">Notion Integration (3 patterns)<a class="headerlink" href="#notion-integration-3-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>notion-ai-properties</td>
+<td>Notion databases can have AI-managed properties that auto-generate content; these should never be written to programmatically but can be read for insights.</td>
+</tr>
+<tr>
+<td>notion-property-types</td>
+<td>Notion property types have non-obvious API formats; each type requires specific payload formatting when creating or updating pages.</td>
+</tr>
+<tr>
+<td>notion-relation-patterns</td>
+<td>Notion relations require page IDs (not names), rollups are read-only, dual relations sync automatically, and relations cap at 100 pages.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="research-methodology-6-patterns">Research Methodology (6 patterns)<a class="headerlink" href="#research-methodology-6-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>direct-ats-query-over-search</td>
+<td>Query company ATS APIs (Greenhouse, Lever, Ashby) directly instead of scraping Google search results for job listings.</td>
+</tr>
+<tr>
+<td>domain-specific-research</td>
+<td>Adjust research approach by industry &ndash; fintech JDs read nothing like healthcare JDs, and one-size-fits-all research produces shallow or misleading results.</td>
+</tr>
+<tr>
+<td>education-sector-research</td>
+<td>Education, nursing, and medical school research has unique challenges: token-heavy AI overviews, complex institutional subdomains, varied email patterns, and hidden contacts.</td>
+</tr>
+<tr>
+<td>no-results-as-signal</td>
+<td>Empty research results are data, not absence of data; document what was not found and interpret the absence as signal about company stage, visibility, or timing.</td>
+</tr>
+<tr>
+<td>snippet-extraction-over-scraping</td>
+<td>Extract specific data from search snippets instead of scraping full pages; faster, lighter on tokens, and higher hit-rate for contact enrichment.</td>
+</tr>
+<tr>
+<td>two-layer-company-profiles</td>
+<td>Separate company profiles into a Data Layer (refreshable facts) and an Intelligence Layer (accumulated human observations) so data refreshes do not overwrite intelligence.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sales-intelligence-5-patterns">Sales Intelligence (5 patterns)<a class="headerlink" href="#sales-intelligence-5-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>network-first-campaign-launch</td>
+<td>Before launching cold outreach for a new market campaign, mine existing networks for warm introductions &ndash; they convert at 3-5x the rate of cold contact.</td>
+</tr>
+<tr>
+<td>network-first-before-cold-apply</td>
+<td>Before submitting a cold application, exhaust warm paths through LinkedIn connections, alumni networks, and professional communities.</td>
+</tr>
+<tr>
+<td>university-land-and-expand</td>
+<td>Expand from one department to multiple departments within a university using internal referrals rather than cold outreach to new budget owners.</td>
+</tr>
+<tr>
+<td>vertical-icp-segmentation</td>
+<td>A single ICP definition fails across multiple verticals; each vertical needs its own buyer persona, pain points, and decision-process mapping.</td>
+</tr>
+<tr>
+<td>application-readiness-litmus-test</td>
+<td>Run five yes/no questions before investing significant effort in an application; fewer than 3 passing means the application is not ready.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="security-agent-infrastructure-5-patterns">Security &ndash; Agent Infrastructure (5 patterns)<a class="headerlink" href="#security-agent-infrastructure-5-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zero-clawhub-supply-chain-defense</td>
+<td>AI agent skill ecosystems are actively compromised; installing third-party skills from community marketplaces introduces supply chain risk that is difficult to detect.</td>
+</tr>
+<tr>
+<td>per-agent-routing-over-elevated-mode</td>
+<td>Route specific tasks to purpose-built agents with scoped permissions instead of using elevated mode, which bypasses the entire sandboxing layer.</td>
+</tr>
+<tr>
+<td>reader-agent-prompt-injection-defense</td>
+<td>Untrusted content the agent reads can contain adversarial instructions; use a dedicated reader agent with no write permissions as a data/code boundary.</td>
+</tr>
+<tr>
+<td>webhook-n8n-integration</td>
+<td>Use webhook-based n8n workflows for deterministic, auditable automation tasks alongside autonomous AI agents &ndash; some tasks should not depend on LLM reasoning.</td>
+</tr>
+<tr>
+<td>local-gguf-embeddings</td>
+<td>Run GGUF embedding models locally for agent memory search so private conversations and agent memory never leave your infrastructure.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="governance-validation-8-patterns">Governance &amp; Validation (8 patterns)<a class="headerlink" href="#governance-validation-8-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>advisory-governance-failure</td>
+<td>Governance that depends on the agent choosing to invoke it fails when the agent is confident and sees no ambiguity &ndash; advisory governance fails on confident agents, predictably and structurally.</td>
+</tr>
+<tr>
+<td>dependency-chain-masking</td>
+<td>A correct fix that depends on a broken upstream appears not to work; the fix gets blamed and redesigned when the real problem is the upstream it depends on.</td>
+</tr>
+<tr>
+<td>culmination-test-design</td>
+<td>Testing fixes independently gives false confidence; interaction effects between fixes only surface under realistic conditions where all fixes must work simultaneously.</td>
+</tr>
+<tr>
+<td>planning-skip-on-confidence</td>
+<td>Agents skip planning steps (brainstorming, writing-plans) when the task feels straightforward, conflating &ldquo;I know what to build&rdquo; with &ldquo;I&rsquo;ve thought through how to build it.&rdquo;</td>
+</tr>
+<tr>
+<td>path-search-discipline</td>
+<td>Variant-hunting generates guesses and tests them against the filesystem; parent-directory browsing looks at what is actually there. They feel similar but produce different reliability.</td>
+</tr>
+<tr>
+<td>confident-negative-finding</td>
+<td>A confident-but-wrong negative finding (&ldquo;X does not exist&rdquo;) propagates into invalid conclusions about entire capability domains when the finding becomes load-bearing for downstream analysis.</td>
+</tr>
+<tr>
+<td>tool-wrapper-vs-capability-limit</td>
+<td>Reporting a tool-wrapper limitation as a capability limitation leads to unnecessary manual workarounds when the underlying API supports the operation through a different interface.</td>
+</tr>
+<tr>
+<td>scope-creep-disguised-as-diligence</td>
+<td>Over-analysis on non-issues generates false-urgency findings by pattern-matching to standard playbooks that do not apply to the actual system.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="system-process-3-patterns">System &amp; Process (3 patterns)<a class="headerlink" href="#system-process-3-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>system-optimization-conversation</td>
+<td>A structured approach for helping users restructure their operational systems, invoked only on explicit request.</td>
+</tr>
+<tr>
+<td>video-recording-to-transcript</td>
+<td>Pipeline for converting raw video recordings into formatted, speaker-attributed transcripts with analysis, using local tools without cloud transcription services.</td>
+</tr>
+<tr>
+<td>block-buffered-stdout-masks-progress</td>
+<td>Long-running Python scripts spawned via Popen with file-redirected stdout default to block buffering &ndash; output accumulates invisibly until process exit, making a healthy process look hung for hours (3-week compile.py misdiagnosis in 2026-05). Set <code>sys.stdout.reconfigure(line_buffering=True)</code> at entry.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deliverables-5-patterns">Deliverables (5 patterns)<a class="headerlink" href="#deliverables-5-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>arnaud-friendly-campaign-overview</td>
+<td>Produce campaign overview deliverables formatted for executive consumption with clear structure and actionable next steps.</td>
+</tr>
+<tr>
+<td>exploratory-list-building</td>
+<td>For SDR/BDR outbound campaigns, cast wide first with 50+ companies before applying scoring and qualification &ndash; breadth before depth.</td>
+</tr>
+<tr>
+<td>jse-exploratory-list-building</td>
+<td>Domain-adapted version: build broad target company lists (50+) before scoring, avoiding premature narrowing that bakes in assumptions about what matters.</td>
+</tr>
+<tr>
+<td>meeting-memo-processing</td>
+<td>Process meeting recordings into structured memos that connect decisions, action items, and stakeholder preferences to engagement context and knowledge bases.</td>
+</tr>
+<tr>
+<td>destructive-ops-canary-pattern</td>
+<td>Isolate a single-record canary with hard pause before running bulk destructive operations; verify state change via independent re-fetch before committing to the batch.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="frameworks-7-patterns">Frameworks (7 patterns)<a class="headerlink" href="#frameworks-7-patterns" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>campaign-readiness-litmus-test</td>
+<td>A decision framework of binary questions for determining whether a campaign is ready to launch, preventing wasted effort on assumption-built campaigns.</td>
+</tr>
+<tr>
+<td>crm-integration-maintenance-cadence</td>
+<td>A scheduled maintenance framework for CRM integrations that degrade over time as API schemas change, ICP definitions drift, and data quality erodes.</td>
+</tr>
+<tr>
+<td>healthcare-icp-classification-framework</td>
+<td>A classification framework for healthcare contacts with varied job titles, embedded credentials, and non-standard naming conventions across three buyer persona categories.</td>
+</tr>
+<tr>
+<td>retrieval-before-decide</td>
+<td>Before recommending or implementing in a domain where EngineOS has prior intelligence, query the second brain first via <code>/recall</code> or the UserPromptSubmit retrieval hook &ndash; internal-archive lookup fails reliably under mid-task focus even when &ldquo;research before agreeing&rdquo; is followed for external sources.</td>
+</tr>
+<tr>
+<td>session-end-audit-before-flush</td>
+<td>Before <code>/exit</code> on any substantial session, audit second-brain coverage and close gaps manually; flush.py&rsquo;s 30-turn / 15K-char window misses the substance of marathon multi-day sessions, so the discipline closes what the hook architecture structurally cannot.</td>
+</tr>
+<tr>
+<td>meta-section-as-system-showcase</td>
+<td>When producing a partner-facing artifact, add a &ldquo;How this was made&rdquo; section explaining the system that produced it; the artifact becomes the proof, the meta-section makes the underlying capability legible to readers who don&rsquo;t know how to ask about it.</td>
+</tr>
+<tr>
+<td>living-docs-surface</td>
+<td>When a subsystem keeps evolving, the lookup surface must be rebuildable from disk truth on demand. Markdown source-of-truth (<code>docs/source/</code>) + explicit rebuild command (<code>scripts/build-docs.py</code>) + drift detection (<code>scripts/docs-staleness.py</code>); render-side sister to retrieval-before-decide (read) and session-end-audit-before-flush (write).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="key-patterns-deep-examples">Key Patterns &ndash; Deep Examples<a class="headerlink" href="#key-patterns-deep-examples" title="Anchor link">&para;</a></h2>
+<p>The following 10 patterns are presented in full detail. They were selected because they tell the story of how EngineOS learned from its own production work. Each one traces back to a specific incident where something went wrong, was analyzed, and became permanent institutional memory.</p>
+<h3 id="1-confident-negative-finding">1. Confident Negative Finding<a class="headerlink" href="#1-confident-negative-finding" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> When an agent declares &ldquo;X does not exist&rdquo; with confident framing, that finding becomes a premise for downstream analysis. If the finding is wrong, everything built on top of it is structurally invalidated &ndash; not just incorrect in one detail, but wrong at the foundation. The cost of a wrong negative is asymmetric: a wrong positive gets corrected when someone looks closer, but a wrong negative closes off investigation entirely.</p>
+<p><strong>The Incident:</strong> During a capability lift audit in April 2026, an agent needed to verify whether Attio direct-API code existed in the WondaKB source project. The operator had referenced <code>~/Desktop/wonda stuff/attio-mcp-claude-code-agent/</code>. The exact path returned &ldquo;No such file or directory.&rdquo; The agent generated 4 glob variants (lowercase/capitalized combinations of &ldquo;wonda&rdquo; and &ldquo;attio&rdquo;) and declared with confidence: &ldquo;does not exist on this machine.&rdquo;</p>
+<p>That strong negative propagated upward. The agent concluded: &ldquo;Attio direct-API never existed in sources either &ndash; never-existed gap on both sides.&rdquo; An entire quadrant of the audit (Attio capability lineage) was classified as &ldquo;never-existed, not a regression.&rdquo;</p>
+<p>The actual path was <code>/Users/seancurrie/Desktop/WONDA-STUFF/attio-mcp-claude-code-agent/</code> &ndash; ALLCAPS with hyphens instead of spaces. The canonical Attio direct-API code was an 889-line <code>attio-direct-api.js</code> file sitting at the unsearched path the entire time. The operator found it with a single <code>ls ~/Desktop/</code>. The audit had to be redone with the full capability inventory.</p>
+<p><strong>The Solution:</strong> Use weak framing (&ldquo;I couldn&rsquo;t find X at the expected path &ndash; verify?&rdquo;) when verification is incomplete. Treat negative findings as intermediate state requiring verification, not as terminal conclusions. When propagating into downstream analysis, flag the dependency explicitly so a single correction can unwind the chain.</p>
+<p><strong>The Lesson:</strong> Confidence should be calibrated to search thoroughness, not to how decisive the conclusion feels.</p>
+<hr />
+<h3 id="2-path-search-discipline">2. Path Search Discipline<a class="headerlink" href="#2-path-search-discipline" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> When looking for a file or directory, there are two approaches: variant-hunting (generating guesses and testing them) and searching (looking at what is actually there). They feel similar but produce fundamentally different reliability. Variant-hunting only finds what was guessed. Searching cannot miss what exists.</p>
+<p><strong>The Incident:</strong> This pattern shares the same triggering incident as confident-negative-finding, but encodes a different lesson. The operator referenced <code>~/Desktop/wonda stuff/</code> from memory. The agent treated this as a specification rather than a lead &ndash; it copy-pasted the path verbatim, then generated 4 variations along the axes it chose to vary (capitalization of &ldquo;wonda&rdquo; and &ldquo;attio&rdquo;). The actual path used ALLCAPS and hyphens (<code>WONDA-STUFF</code>), axes the agent did not vary.</p>
+<p>The operator&rsquo;s fix was a single command: <code>ls ~/Desktop/ | grep -i wonda</code>. Case-insensitive parent-directory browsing. It took 5 seconds, visually scanned 15-20 directory names, and could not miss what was there. The agent&rsquo;s 4-variant search felt thorough (four permutations tested!) but only covered a fraction of the possibility space.</p>
+<p><strong>The Solution:</strong> Treat operator-remembered paths as leads, not specs. When exact-match fails, go to parent-directory browsing before variant-hunting. If you must test variants, vary both case and separator (12+ combinations, not 4). But parent-directory browsing is always cheaper and more reliable.</p>
+<p><strong>The Lesson:</strong> Looking at what is there beats guessing what might be there.</p>
+<hr />
+<h3 id="3-tool-wrapper-vs-capability-limit">3. Tool Wrapper vs. Capability Limit<a class="headerlink" href="#3-tool-wrapper-vs-capability-limit" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> When a specific tool interface (MCP tool, SDK method, CLI flag) does not expose an operation, agents conclude the underlying capability itself is unavailable. &ldquo;The tool I have doesn&rsquo;t do X&rdquo; gets compressed to &ldquo;X isn&rsquo;t doable.&rdquo; The real problem is often the wrapper, not the capability.</p>
+<p><strong>The Incident:</strong> During a JSE pipeline reset in April 2026, 55 Notion Pipeline database rows needed to be archived. The agent tried <code>notion-update-page</code> via MCP &ndash; the command list exposed <code>update_properties</code>, <code>update_content</code>, <code>replace_content</code>, <code>apply_template</code>, and <code>update_verification</code>. No archive or delete command. The agent then checked <code>notion-move-pages</code> &ndash; it relocates but does not trash. Conclusion: &ldquo;Notion MCP can&rsquo;t delete pages, must be manual UI.&rdquo; The agent presented two options: manual UI bulk-delete or a move-to-orphans workaround.</p>
+<p>The operator pushed back: Notion&rsquo;s REST API supports page archival directly via <code>PATCH /v1/pages/{page_id}</code> with body <code>{"archived": true}</code>. The capability existed at the API layer; the MCP wrapper simply did not expose it. A 3-line <code>archive_page()</code> method added to the existing Python Notion client closed the gap in 30 minutes. The same session also surfaced a larger instance of the same pattern: an 889-line <code>attio-direct-api.js</code> existed in source but had not been ported to EngineOS &ndash; a wrapper gap, not a capability gap.</p>
+<p><strong>The Solution:</strong> Before declaring an operation impossible, check the upstream capability (REST API, SDK) behind the tool you are using. Report findings with explicit scope: &ldquo;The X MCP tool doesn&rsquo;t expose Y, but the X REST API supports Y via [endpoint].&rdquo; Give the operator a real decision between building a small wrapper, accepting the limit, or escalating.</p>
+<p><strong>The Lesson:</strong> A tool&rsquo;s surface area is not a capability&rsquo;s surface area.</p>
+<hr />
+<h3 id="4-advisory-governance-failure">4. Advisory Governance Failure<a class="headerlink" href="#4-advisory-governance-failure" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> Governance that depends on the agent choosing to invoke it fails when the agent has a clear path and does not perceive ambiguity. The agent knows about the governance step, understands it should be invoked, and skips it anyway &ndash; not from ignorance, but from confidence. This is predictable and structural.</p>
+<p><strong>The Incident:</strong> EngineOS&rsquo;s phase-controller is a governance skill that classifies operations, creates run plans, and enforces skill chains. During the March 2026 testing arc, two tests exercised the same system:</p>
+<p>Test J2 asked the agent to evaluate a company as a targeting candidate &ndash; a novel task with no obvious path. The agent felt uncertain, invoked phase-controller, created a run plan, and fired the full skill chain. Governance passed.</p>
+<p>Test J3 asked the agent to produce a resume from existing files &ndash; an obvious task with a clear path. The agent went straight to file loading, resume writing, DOCX production, and inline QA. Phase-controller was never invoked. Zero run plan files existed. The resume scored 9.8/10 on quality. Governance failed completely.</p>
+<p>The fix required layering enforcement: a CLAUDE.md Core Behavior instruction (makes the agent want to comply), plus a PreToolUse hook that mechanically blocks Write/Edit operations on deliverable paths without an active run plan (forces compliance when the instruction is skipped). The subsequent O1 culmination test confirmed: the hook blocked the first write attempt, the agent created a run plan, and the full skill chain fired.</p>
+<p><strong>The Solution:</strong> Layer instruction-based and structural enforcement. A single mechanism is skippable. Multiple mechanisms at different layers are harder to bypass simultaneously. The instruction handles the 90% case; the hook catches the 10% the instruction misses.</p>
+<p><strong>The Lesson:</strong> Advisory governance fails on confident agents; structural enforcement makes compliance the path of least resistance.</p>
+<hr />
+<h3 id="5-dependency-chain-masking">5. Dependency Chain Masking<a class="headerlink" href="#5-dependency-chain-masking" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> When a correct fix depends on a broken upstream, the fix appears not to work. The natural debugging instinct is to investigate the fix itself, potentially rebuilding something that was correctly designed from the start. Time is wasted, and correctly-built features risk being abandoned.</p>
+<p><strong>The Incident:</strong> During the same testing arc, EngineOS had an intelligence log write path (fix D20) wired into the phase-controller&rsquo;s run completion step. When a run plan completes, the system checks intelligence triggers and writes entries if any fire. Across tests J2 and J3, the intelligence log showed zero entries from operational work. The surface diagnosis: &ldquo;D20 is broken.&rdquo;</p>
+<p>But D20&rsquo;s dependency chain was: intelligence write path (D20) depends on phase-controller completing a run plan, which depends on phase-controller being invoked at all. In J3, phase-controller was never invoked (the advisory-governance-failure pattern). D20 never triggered because its upstream never fired.</p>
+<p>Without chain analysis, the wrong diagnosis would have been: investigate D20, rebuild the write path, still fail (because phase-controller still is not firing), conclude the whole intelligence log concept is broken, and abandon a correctly designed feature.</p>
+<p>The actual finding: &ldquo;D20&rsquo;s design is correct. This resolves when Finding 1 resolves.&rdquo; After the D22 fix restored phase-controller invocation, D20 triggered correctly during the O1 test and reported &ldquo;no triggers fired&rdquo; &ndash; proving the write path works but the test did not produce strategic insights worth logging.</p>
+<p><strong>The Solution:</strong> Map the dependency chain explicitly before diagnosing. Test upstream first. Mark dependencies in fix documentation. Design fixes to report their activation status, not just their output.</p>
+<p><strong>The Lesson:</strong> When a fix appears broken, check what activates it before checking the fix itself.</p>
+<hr />
+<h3 id="6-scope-creep-disguised-as-diligence">6. Scope Creep Disguised as Diligence<a class="headerlink" href="#6-scope-creep-disguised-as-diligence" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> When an agent is in &ldquo;be thorough&rdquo; mode, it can elevate irrelevant considerations to HIGH-severity findings. The analytical effort feels productive, but the finding is either not applicable to this system, off-scope for this operation, or a hypothetical requiring no response. Each finding looks individually reasonable; the cost of over-analysis is invisible until the operator notices the divergence.</p>
+<p><strong>The Incident:</strong> During a Notion bulk-archive build spec review in April 2026, the agent discovered EngineOS has no <code>.gitignore</code> at root. This became a HIGH-severity finding with a full credentials-strategy redesign: file permissions analysis, naming conventions, README notes, defense-in-depth proposals, and a &ldquo;Blocks build? YES&rdquo; classification that demanded action before proceeding.</p>
+<p>EngineOS is not a git repository. It was never intended to be. The operator never mentioned adding it to git. The agent pattern-matched &ldquo;credentials + files&rdquo; to &ldquo;git security&rdquo; and ran the standard playbook without checking whether the playbook applied. The whole analysis was scope-creep generated by treating category-based severity (&ldquo;credentials = HIGH&rdquo;) as ground truth rather than checking the actual blast radius. Operator response: &ldquo;EngineOS isn&rsquo;t a git repository. Drop git noise. chmod 600 + don&rsquo;t share. Move on.&rdquo;</p>
+<p><strong>The Solution:</strong> Scope-check before severity-check. Before assigning severity, ask: &ldquo;Does this apply to the current system?&rdquo; Not &ldquo;would this be a problem in general?&rdquo; Verify the scope assumption behind the finding before escalating. When in doubt: &ldquo;If I skipped this finding, would anything bad happen?&rdquo;</p>
+<p><strong>The Lesson:</strong> Thoroughness that does not check scope is not diligence; it is noise.</p>
+<hr />
+<h3 id="7-destructive-ops-canary-pattern">7. Destructive Ops Canary Pattern<a class="headerlink" href="#7-destructive-ops-canary-pattern" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Deliverables | <strong>Type:</strong> Deliverable</p>
+<p><strong>The Problem:</strong> Bulk destructive operations (delete, archive, overwrite) can fail catastrophically when applied to many records. A wrong page ID, untested code path, or silent API failure distributes damage across the entire batch before verification runs. The default &ldquo;run the whole thing and verify after&rdquo; structure means the damage is done by the time you discover the problem.</p>
+<p><strong>The Incident:</strong> During the April 2026 JSE pipeline reset, 55 Notion Pipeline rows needed to be archived via a newly-built <code>archive_page()</code> API wrapper &ndash; a 3-line method that had never been exercised against real data. Running the archive on all 55 without validation would have risked: an API token without archive access (some APIs return success on wrong permissions), a wrong database ID (archives from the wrong DB), an untested code path (the method was brand new), and cascade-failure invisibility (if row 1 fails, the loop might silently continue past it).</p>
+<p>The solution was a canary pattern built into <code>bulk-archive-pipeline.py</code>: (1) access probe via read-only <code>get_page()</code> to verify credentials, (2) archive one canary row selected for lowest risk (empty orphan, zero data loss if wrong), (3) independent re-fetch to verify <code>archived: true</code> in the response (not trusting the archive call&rsquo;s own success signal), (4) hard pause via <code>sys.exit(0)</code> so the operator can eyeball the result in Notion&rsquo;s UI, (5) explicit <code>--continue</code> flag to re-run for the remaining batch, (6) per-record logging during batch, (7) final database re-query to confirm zero rows remain.</p>
+<p><strong>The Solution:</strong> Separate access-probe from destructive action. Archive one canary, verify via independent fetch, hard-pause. Use a continuation flag for the batch. Log per-record. Final re-query confirms end-state.</p>
+<p><strong>The Lesson:</strong> The first destructive operation should prove the mechanism works; the batch should only run after the proof.</p>
+<hr />
+<h3 id="8-culmination-test-design">8. Culmination Test Design<a class="headerlink" href="#8-culmination-test-design" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> When multiple fixes need validation, testing each independently gives false confidence. Each fix passes its dedicated test in a controlled environment. The fixes interact badly when combined &ndash; ordering dependencies, shared state assumptions, cascading triggers. Nobody designs a single test exercising all fixes simultaneously because each piece was individually &ldquo;validated.&rdquo;</p>
+<p><strong>The Incident:</strong> After the J2 and J3 testing arc surfaced 5 fixes (D22 for phase-controller enforcement, D20 for intelligence log write path, D21 for activity log hook, D23 for stop hook paths, F4 for render verification), the O1 culmination test was designed to exercise all 5 simultaneously under realistic operating conditions.</p>
+<p>The test was a real task: transform <code>methodology/factory-pattern.md</code> into an interactive HTML walkthrough for the ODC engine. Not a synthetic exercise. Each fix mapped to a specific pass/fail criterion: run plan file exists (D22), skill chain matches plan (D22), intelligence entry or &ldquo;no triggers fired&rdquo; note (D20), activity log entries with real file paths (D21), no stop hook errors (D23), and QA scorecard includes render verification (F4). An escalation protocol defined consequences: if D22 failed a third time, the enforcement approach itself was fundamentally wrong and required a different mechanism, not another iteration.</p>
+<p>Result: O1 passed G1-G5. G6 passed with 8 browser screenshots. A new finding emerged &ndash; subagent operations are invisible to hooks &ndash; which became its own tracking item. All 5 original fixes were validated in combination, under conditions none of them had been tested in individually.</p>
+<p><strong>The Solution:</strong> After a batch of related fixes, design one test that exercises all of them under realistic conditions. Give each fix explicit pass/fail criteria. Include an escalation protocol for repeated failures. Track systemic signals beyond binary pass/fail.</p>
+<p><strong>The Lesson:</strong> Individual fix tests validate components; culmination tests validate the system.</p>
+<hr />
+<h3 id="9-planning-skip-on-confidence">9. Planning Skip on Confidence<a class="headerlink" href="#9-planning-skip-on-confidence" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> Agents skip planning steps when they judge the task is straightforward enough to build directly. The agent knows the planning step exists, understands its purpose, and bypasses it because &ldquo;the operator already scoped the work&rdquo; or &ldquo;the design is obvious.&rdquo; This is the advisory-governance-failure pattern applied specifically to planning and task decomposition.</p>
+<p><strong>The Incident:</strong> Across three consecutive EngineOS sessions (WS3 through WS5), planning skills were systematically skipped:</p>
+<p>WS3: Landscape research task. Agent correctly classified it as research (no brainstorming required per the chain), but inline design thinking replaced structured planning throughout. No planning artifacts on disk.</p>
+<p>WS4: Phase-controller evolution across 3 builds. The operator explicitly requested brainstorming and writing-plans. Neither was invoked. All three builds executed inline. An implementation plan was written to <code>docs/plans/</code> but the writing-plans skill was never loaded. Governance scored at 70% &ndash; artifacts produced, process not followed.</p>
+<p>WS5: Evaluator test. The brainstorming skill was loaded. The agent characterized the structured process as &ldquo;ceremony over substance&rdquo; and did inline design thinking instead. Again 70% compliance.</p>
+<p>WS6 (Part 1): After the cowork session called out the three-session pattern, both brainstorming and writing-plans were actually invoked for the first time. Governance passed &ndash; but only after the pattern was named and confronted.</p>
+<p>The fix (D24) introduced context-dependent mandatory enforcement: structural input dependency for writing-plans (Layer 4 of the run plan must be populated before production can proceed &ndash; empty Layer 4 means the production step cannot start) and skip-justification requirements for brainstorming (if skipped, the agent must write a visible justification in the run plan so the operator sees it at the approval gate).</p>
+<p><strong>The Solution:</strong> Enforce what is structurally enforceable (the plan artifact as a required input to production). Make visible what is not structurally enforceable (brainstorming process via skip-justification). Accept the asymmetry. Silent skipping &ndash; proceeding without invoking or justifying &ndash; is the governance violation.</p>
+<p><strong>The Lesson:</strong> &ldquo;I know what to build&rdquo; is not the same as &ldquo;I&rsquo;ve thought through how to build it.&rdquo;</p>
+<hr />
+<h3 id="10-agent-hallucinated-success-verification">10. Agent Hallucinated Success Verification<a class="headerlink" href="#10-agent-hallucinated-success-verification" title="Anchor link">&para;</a></h3>
+<p><strong>Category:</strong> Agent Reliability | <strong>Type:</strong> Problem</p>
+<p><strong>The Problem:</strong> AI agents report successful batch operations when no data actually changed. The agent sees HTTP 200 responses and concludes &ldquo;67/67 records updated successfully&rdquo; while zero records were actually modified in the target system. HTTP 200 means &ldquo;request received,&rdquo; not &ldquo;data persisted.&rdquo; MCP tools abstract away response details, and agents optimistically interpret acknowledgments as confirmations.</p>
+<p><strong>The Incident:</strong> During an Attio CRM integration audit in February 2026, the agent ran a batch update to set 67 contacts to &ldquo;Active&rdquo; status. The agent reported: &ldquo;Updated 67/67 contacts to &lsquo;Active&rsquo; status. All successful.&rdquo; Every API call returned HTTP 200.</p>
+<p>Manual spot-check in the CRM UI told a different story: all 67 contacts still showed their old status. Zero changes had persisted. The root cause was a data structure mismatch &ndash; the MCP tool was missing a required <code>data</code> wrapper for select field updates. The API accepted the malformed payload without complaint (200 OK), silently discarded the update, and returned a success response. Without the UI spot-check, the &ldquo;successful&rdquo; operation would have been recorded as complete and the team would have moved on with 67 unchanged records.</p>
+<p>The fix was a verification protocol: before any batch operation, record the current state of 3-5 sample records. Run the batch. Check those same records in the target system&rsquo;s UI. If unchanged, the operation silently failed. For critical operations (billing, access control), verify 100% of records regardless of batch size.</p>
+<p><strong>The Solution:</strong> Never trust agent-reported success counts. Treat them as &ldquo;requests sent,&rdquo; not &ldquo;changes confirmed.&rdquo; Spot-check in the target system&rsquo;s UI immediately after any batch operation. Build sample-based pre/post verification into every batch workflow.</p>
+<p><strong>The Lesson:</strong> An API returning success does not mean the operation succeeded; only independent verification of the target system&rsquo;s state confirms it.</p>
+<hr />
+<h2 id="how-the-library-works">How the Library Works<a class="headerlink" href="#how-the-library-works" title="Anchor link">&para;</a></h2>
+<p><strong>Before solving a problem:</strong> Check the library. If a pattern exists, use it. If not, solve the problem, then consider extracting a new pattern.</p>
+<p><strong>When to extract a new pattern:</strong> You solved something reusable, found a better approach than an existing pattern, identified a framework worth standardizing, or made a mistake worth preventing.</p>
+<p><strong>Staleness review:</strong> Patterns not verified within 90 days are marked <code>needs-review</code>. Patterns contradicted by current practice are marked <code>superseded</code> (currently 1: <code>custom-skills-over-mcp</code>). Superseded patterns are retained for historical reference &ndash; they document what was believed and why it changed.</p>
+<p><strong>Cross-engine applicability:</strong> This library serves all EngineOS engines. Patterns from any engine that solve problems across domains belong here. The domain distribution ranges from very high transferability (Agent Reliability, Governance &amp; Validation, Evidence &amp; Validation &ndash; applicable to any agent system) to medium transferability (CRM Integration, Notion Integration &ndash; platform-specific details but transferable principles).</p>
+<p>Every pattern carries its provenance. You can trace any pattern back to the project, engagement, and date that produced it. This is how institutional memory persists across sessions, across engines, and across time.</p>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

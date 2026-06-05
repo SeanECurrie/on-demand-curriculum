@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integrations — EngineOS Docs</title>
+  <meta name="description" content="EngineOS integrates with external systems through a layered architecture: MCP (Model Context Protocol) servers provide tool-level access, skills encode domain logic and workflow orchestration, and dir">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link active" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Integrations</h1>
+    <p class="report-header__subtitle">EngineOS integrates with external systems through a layered architecture: MCP (Model Context Protocol) servers provide tool-level access, skills encode domain logic and workflow orchestration, and dir</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="integrations-crm-notion-and-mcp">Integrations &ndash; CRM, Notion, and MCP<a class="headerlink" href="#integrations-crm-notion-and-mcp" title="Anchor link">&para;</a></h1>
+<p>EngineOS integrates with external systems through a layered architecture: MCP (Model Context Protocol) servers provide tool-level access, skills encode domain logic and workflow orchestration, and direct API scripts handle operations where MCP falls short. Seven skills and a Node.js utility suite cover the two primary integration domains &ndash; Attio CRM and Notion.</p>
+<hr />
+<h2 id="integration-philosophy">Integration Philosophy<a class="headerlink" href="#integration-philosophy" title="Anchor link">&para;</a></h2>
+<p>Three principles govern how EngineOS connects to external systems.</p>
+<p><strong>Domain-scoped MCP access.</strong> Every skill declares an <code>allowed-tools</code> frontmatter block that restricts which MCP tools it can invoke. An integration skill gets its domain-specific MCP tools and nothing else. A research skill gets Bright Data and Context7. A governance skill gets no MCP access at all &ndash; read-only filesystem tools only. This prevents cross-domain tool bleed and makes each skill&rsquo;s external surface area inspectable from its frontmatter.</p>
+<p><strong>Safety rules from <code>.claude/rules/integrations.md</code>.</strong> Four rules apply to all integration work:
+- Verify a single record before running batch operations.
+- Check the Attio playbook for known MCP bugs before operations.
+- Log all integration operations to the activity log with the tool name.
+- Credentials via environment variables (Attio) or engine-level config files (Notion) &ndash; never hardcoded, never logged.</p>
+<p><strong>The mapper-to-operator-to-executor pipeline.</strong> The integration architecture follows a consistent pattern across both domains:</p>
+<ol>
+<li><strong>Mapper</strong> discovers the external schema and produces a playbook (machine-readable cache + human-readable reference).</li>
+<li><strong>Operator-facing skills</strong> consume the playbook to audit, classify, or refine &ndash; producing analysis and approved action plans.</li>
+<li><strong>Write skills</strong> execute approved operations against the external system.</li>
+</ol>
+<p>No write skill runs without a playbook from the mapper. No bulk mutation runs without operator approval. The mapper is the foundation; everything downstream depends on it.</p>
+<hr />
+<h2 id="attio-crm-suite-5-skills">Attio CRM Suite (5 Skills)<a class="headerlink" href="#attio-crm-suite-5-skills" title="Anchor link">&para;</a></h2>
+<h3 id="the-pipeline">The Pipeline<a class="headerlink" href="#the-pipeline" title="Anchor link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>attio-mapper ──&gt; attio-optimizer ──&gt; attio-refiner ──&gt; attio-ops
+  (schemas)        (audit)            (decisions)       (execution)
+                                          ^
+                                          |
+                                   Operator context
+                                   Institutional knowledge
+
+attio-mapper ──&gt; attio-qualify
+  (schemas)      (ICP classification)
+</code></pre></div>
+
+<p>The pipeline has two branches. The audit branch (<code>mapper -&gt; optimizer -&gt; refiner -&gt; ops</code>) handles CRM health: audit the data, refine findings with operator context, execute approved fixes. The enrichment branch (<code>mapper -&gt; qualify</code>) handles ICP classification: match contacts against persona definitions using configurable keyword scoring.</p>
+<p>Both branches share the mapper&rsquo;s schema cache. Both require operator approval before mutations. Both produce logged, auditable output.</p>
+<h3 id="individual-skills">Individual Skills<a class="headerlink" href="#individual-skills" title="Anchor link">&para;</a></h3>
+<h4 id="attio-mapper-schema-discovery-and-caching">attio-mapper &ndash; Schema Discovery and Caching<a class="headerlink" href="#attio-mapper-schema-discovery-and-caching" title="Anchor link">&para;</a></h4>
+<p><strong>What it does:</strong> Dynamically discovers all objects in an Attio workspace (standard and custom), fetches full attribute metadata, applies type inference corrections for known MCP bugs, and generates both machine-readable JSON schemas and a human-readable playbook. Every other Attio skill reads from this cache.</p>
+<p><strong>When to invoke:</strong>
+- First-time Attio setup for an engine
+- &ldquo;Map this Attio workspace&rdquo; / &ldquo;refresh Attio schemas&rdquo;
+- Before heavy Attio operations (ensures schemas are current)
+- After custom objects or fields are added in Attio
+- When <code>_meta.json</code> shows last map &gt; 30 days ago</p>
+<p><strong>Key behaviors:</strong>
+- Dynamic object discovery via <code>GET /v2/objects</code> &ndash; never hardcodes object names. Custom objects are discovered automatically.
+- MCP bug detection: compares MCP-reported types against direct API types and annotates discrepancies. Fixes ~44% of &ldquo;unknown&rdquo; types on companies.
+- Three-phase operation: Discovery (fetch and cache), Change Detection (diff against previous schemas), Pattern Learning (log notable workspace patterns).</p>
+<p><strong>MCP tools used:</strong>
+- <code>mcp__attio-mcp__records_get_attributes</code> &ndash; attribute list for standard objects</p>
+<p><strong>Direct API calls:</strong> <code>GET /v2/objects</code>, <code>GET /v2/objects/{slug}/attributes</code>, <code>GET /v2/objects/{slug}/attributes/{attribute_slug}/options</code></p>
+<p><strong>Output location:</strong> <code>engines/&lt;engine&gt;/integrations/attio/schemas/</code> (JSON schemas, select field options, changelog, metadata) and <code>engines/&lt;engine&gt;/integrations/attio/attio-playbook/</code> (workspace map, objects reference, known bugs, pitfalls).</p>
+<hr />
+<h4 id="attio-optimizer-crm-health-audit">attio-optimizer &ndash; CRM Health Audit<a class="headerlink" href="#attio-optimizer-crm-health-audit" title="Anchor link">&para;</a></h4>
+<p><strong>What it does:</strong> Four-phase systematic audit: measure current state using intelligent sampling, benchmark against Attio docs and industry best practices via research tools, produce a gap analysis with prioritized action plan, and auto-generate an interactive 7-page HTML presentation suite.</p>
+<p><strong>When to invoke:</strong>
+- &ldquo;Audit the CRM&rdquo; / &ldquo;CRM health check&rdquo;
+- Before a major initiative that depends on CRM data quality
+- After large data imports (post-import quality check)
+- Quarterly maintenance review</p>
+<p><strong>Key behaviors:</strong>
+- Intelligent two-layer sampling: Layer A (engine-engaged records &ndash; active deals, referenced contacts, renewal targets) and Layer B (broader health assessment &ndash; recent records, dormant records, population extremes). Layer A records are what the engine is making decisions from; quality issues there are urgent.
+- Five audit categories with weighted scoring: Completeness (30%), Accuracy (25%), Pipeline Health (20%), Consistency (15%), Schema Utilization (10%).
+- Research cache: Bright Data and Context7 research results are cached for 30 days to avoid redundant queries.</p>
+<p><strong>MCP tools used:</strong>
+- Attio read tools: <code>records_search</code>, <code>records_search_advanced</code>, <code>records_search_batch</code>, <code>records_search_by_relationship</code>, <code>records_search_by_timeframe</code>, <code>records_get_details</code>, <code>records_get_info</code>, <code>records_get_attributes</code>, <code>records_list</code>, <code>lists_list</code>, <code>lists_get_entries</code>, <code>objects_list_attributes</code>
+- Research tools: <code>mcp__context7__resolve-library-id</code>, <code>mcp__context7__query-docs</code>, <code>mcp__brightdata__search_engine</code>, <code>mcp__brightdata__search_engine_batch</code>, <code>mcp__brightdata__scrape_as_markdown</code></p>
+<p><strong>Output location:</strong> <code>engines/&lt;engine&gt;/integrations/attio/audits/YYYY-MM-DD/</code> &ndash; 6 markdown files (executive summary through field strategy) + 7 HTML pages (CRM object map + 6 deliverable visualizations).</p>
+<hr />
+<h4 id="attio-refiner-operator-driven-audit-refinement">attio-refiner &ndash; Operator-Driven Audit Refinement<a class="headerlink" href="#attio-refiner-operator-driven-audit-refinement" title="Anchor link">&para;</a></h4>
+<p><strong>What it does:</strong> Takes <code>attio-optimizer</code> output and walks the operator through structured decision-making. The audit is the clean room; the refiner is the war room. It captures institutional knowledge about why data looks the way it does and produces annotated findings plus approved work orders that downstream skills can execute.</p>
+<p><strong>When to invoke:</strong>
+- &ldquo;Refine the audit&rdquo; / &ldquo;review CRM findings&rdquo;
+- &ldquo;Approve CRM actions&rdquo; / &ldquo;triage the audit actions&rdquo;
+- After reviewing the HTML audit presentation</p>
+<p><strong>Key behaviors:</strong>
+- Structured Q&amp;A per finding: present audit evidence, ask for operator context (why does this exist?), check priority agreement, collect decision (approve / modify / deprioritize / need more info).
+- P0 actions get individual review. P1 actions support batch approval with exceptions. P2/P3 actions are batched.
+- Produces <code>07-approved-actions.md</code> with execution-ready work orders specifying which downstream skill to use, affected record IDs, and acceptance criteria.</p>
+<p><strong>MCP tools used:</strong>
+- Attio read tools: <code>records_search</code>, <code>records_search_advanced</code>, <code>records_search_by_relationship</code>, <code>records_search_by_timeframe</code>, <code>records_get_details</code>, <code>records_get_info</code>, <code>records_list</code>, <code>lists_list</code>, <code>lists_get_entries</code></p>
+<p><strong>Output location:</strong> Same <code>audits/YYYY-MM-DD/</code> directory as the source audit &ndash; adds <code>06-operator-review.md</code>, <code>07-approved-actions.md</code>, and their HTML visualizations.</p>
+<hr />
+<h4 id="attio-ops-crm-write-operations">attio-ops &ndash; CRM Write Operations<a class="headerlink" href="#attio-ops-crm-write-operations" title="Anchor link">&para;</a></h4>
+<p><strong>What it does:</strong> Unified write-path skill covering three operational modes: CSV Import (records into People/Companies objects), CSV to List (records into a specific Attio list with entry-level properties), and Bulk List Ops (add/remove/sync/update list membership at scale).</p>
+<p><strong>When to invoke:</strong>
+- &ldquo;Import this CSV into Attio&rdquo; / &ldquo;add these contacts&rdquo;
+- &ldquo;Populate the [list name] list&rdquo; / &ldquo;import CSV into [list]&rdquo;
+- &ldquo;Sync [list] with this data&rdquo; / &ldquo;bulk add to [list]&rdquo;</p>
+<p><strong>Key behaviors:</strong>
+- Domain-first company strategy: extract domains from emails, skip generic domains (gmail, outlook, etc.), search by domain not name, create company with domain only (Attio auto-enriches), rely on automatic person-to-company association.
+- Three-tier field mapping: explicit (user-provided or CSV format spec), cached (prior mapping decisions), heuristic (confidence scoring with auto-accept at 0.82+, confirm at 0.65+, skip below).
+- Mandatory pre-import approval gate: presents a full summary of what will be created/updated/skipped and waits for explicit confirmation before any write.
+- Checkpoint saves for large imports (&gt;50 records): progress saved every 25 records, supports resumption.</p>
+<p><strong>MCP tools used:</strong>
+- <code>mcp__attio-mcp__records_search_advanced</code>, <code>records_get_details</code>, <code>records_list</code>, <code>records_create</code>, <code>records_update</code>, <code>records_add_to_list</code>, <code>lists_list</code>, <code>lists_get_entries</code>, <code>objects_list_attributes</code></p>
+<p><strong>Reads approved work orders from:</strong> <code>attio-refiner</code>&rsquo;s <code>07-approved-actions.md</code> when it specifies <code>attio-ops:csv-import</code> or <code>attio-ops:bulk-list</code> as the execution method.</p>
+<hr />
+<h4 id="attio-qualify-icp-classification-and-lead-qualification">attio-qualify &ndash; ICP Classification and Lead Qualification<a class="headerlink" href="#attio-qualify-icp-classification-and-lead-qualification" title="Anchor link">&para;</a></h4>
+<p><strong>What it does:</strong> Two-mode intelligence skill. Enrich mode: bulk ICP assignment via job title keyword matching with configurable confidence scoring. Qualify mode: cross-reference new signups against CRM data to categorize as existing customer, internal, spam, or new lead (high/medium/personal).</p>
+<p><strong>When to invoke:</strong>
+- &ldquo;Assign ICPs&rdquo; / &ldquo;enrich contacts&rdquo; / &ldquo;classify leads&rdquo;
+- &ldquo;Qualify these users&rdquo; / &ldquo;categorize these signups&rdquo;
+- &ldquo;Generate ICP assignment script&rdquo; (script-only, no execution)</p>
+<p><strong>Key behaviors:</strong>
+- All persona definitions, keywords, weights, thresholds, and domain lists load from <code>icp_definitions.json</code> at runtime. The skill is the algorithm; the engine owns the data. Zero engine-specific content in the skill itself.
+- Weighted scoring: exact title match (1.0), keyword in title (0.8), keyword in department (0.6), seniority bonus (+0.1). Configurable threshold (default 0.7) &ndash; below threshold goes to manual review queue.
+- Performance optimization: MCP one-by-one takes ~60-90 min for 150 contacts. The skill generates batch curl scripts using the direct API that complete in ~3-5 min. Scripts are idempotent and saved for manual retry on failure.</p>
+<p><strong>MCP tools used:</strong>
+- <code>mcp__attio-mcp__records_search_advanced</code>, <code>records_get_details</code>, <code>records_list</code>, <code>records_search</code></p>
+<p><strong>Config dependency:</strong> <code>engines/&lt;engine&gt;/integrations/attio/config/workspace/icp_definitions.json</code> &ndash; must contain <code>personas</code> array, <code>matching_algorithm</code> config, and <code>qualification</code> criteria.</p>
+<hr />
+<h3 id="real-workflow-trace">Real Workflow Trace<a class="headerlink" href="#real-workflow-trace" title="Anchor link">&para;</a></h3>
+<p><strong>Operator says: &ldquo;Audit the CRM.&rdquo;</strong></p>
+<ol>
+<li>
+<p><strong>Phase-controller classifies</strong> the request as a substantive operation and creates a run plan.</p>
+</li>
+<li>
+<p><strong>attio-optimizer fires.</strong> First checks <code>schemas/_meta.json</code> &ndash; if schemas are &gt;14 days stale, it recommends running <code>attio-mapper</code> first. Assuming schemas are fresh:
+   - <strong>Phase 1 (Audit):</strong> Loads engine context to understand active deals and campaigns. Builds an intelligent sample &ndash; Layer A pulls records the engine is actively working from (referenced in context, active deals and their networks, renewal targets). Layer B pulls broader health samples (recent records, dormant records, population extremes). Runs 5-category audit checks across the sample.
+   - <strong>Phase 2 (Research):</strong> Checks research cache. If stale or missing, queries Context7 for Attio documentation and Bright Data for industry CRM benchmarks. Caches results for 30-day reuse.
+   - <strong>Phase 3 (Recommend):</strong> Gap analysis against benchmarks. Produces prioritized action plan &ndash; P0 (revenue-blocking), P1 (efficiency), P2 (hygiene), P3 (optimization). Every action includes specific record IDs or reproducible queries.
+   - <strong>Phase 4 (Visualize):</strong> Generates 7-page interactive HTML presentation suite with the shared design system.</p>
+</li>
+<li>
+<p><strong>Operator reviews the HTML presentation.</strong> Opens <code>crm-object-map.html</code> as entry point, navigates through executive summary, health audit details, gap analysis, and action plan.</p>
+</li>
+<li>
+<p><strong>Operator says: &ldquo;Let&rsquo;s refine the audit.&rdquo;</strong> <code>attio-refiner</code> fires.
+   - Loads the audit output. Presents dashboard summary with health score, sample composition, and action counts by priority.
+   - Walks through P0 actions individually: presents finding with audit evidence, asks for operator context (&ldquo;is there a reason this exists?&rdquo;), confirms priority, collects decision.
+   - Batches P1-P3 for efficiency. Operator can cherry-pick or batch-approve.
+   - If operator needs more info, pre-formed exploration queries pull live CRM data using the audit&rsquo;s record IDs as starting points.
+   - Produces <code>06-operator-review.md</code> (annotated findings) and <code>07-approved-actions.md</code> (execution-ready work orders).</p>
+</li>
+<li>
+<p><strong>Execution phase.</strong> Operator triggers execution. Approved actions route to the appropriate downstream skill:
+   - Data cleanup and imports route to <code>attio-ops</code> (specifying <code>attio-ops:csv-import</code> or <code>attio-ops:bulk-list</code>).
+   - ICP classification actions route to <code>attio-qualify</code> (specifying <code>attio-qualify:enrich</code>).
+   - Schema changes flag as <code>manual-ui</code> (Attio doesn&rsquo;t support programmatic schema modification).</p>
+</li>
+<li>
+<p><strong>Downstream skills read <code>07-approved-actions.md</code></strong>, load the acceptance criteria, execute, and report results. Every mutation requires its own operator confirmation at execution time.</p>
+</li>
+</ol>
+<hr />
+<h3 id="direct-api-layer">Direct API Layer<a class="headerlink" href="#direct-api-layer" title="Anchor link">&para;</a></h3>
+<p>The <code>scripts/attio/</code> directory contains a production REST API client suite that exists because the Attio MCP server has known bugs. Four zero-dependency Node.js scripts (built-ins only &ndash; <code>https</code>, <code>fs</code>, <code>path</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>attio-direct-api.js</code></td>
+<td>Core utility. 20 functions covering MCP workarounds: select field updates (MCP silently fails), bulk list operations (MCP validation errors), record-reference fields (MCP 400 errors), list attribute management (no MCP tool exists). Works as both <code>require()</code> module and CLI tool.</td>
+</tr>
+<tr>
+<td><code>enhanced-schema-fetch.js</code></td>
+<td>Full attribute metadata beyond MCP: writable/required/multiselect/archived flags, select field options with IDs, markdown report generation, MCP bug detection and annotation.</td>
+</tr>
+<tr>
+<td><code>type-inference.js</code></td>
+<td>Field type inference engine. Workaround for the MCP bug where attribute types are extracted from record values instead of the proper <code>/objects/{type}/attributes</code> API. Three-tier inference: exact name mappings, pattern-based regex, text fallback.</td>
+</tr>
+<tr>
+<td><code>mapping.js</code></td>
+<td>CSV-to-Attio field mapping with confidence scoring. Heuristic matching: exact (1.0), substring (0.8), synonym (0.7), Levenshtein distance (0.6), word boundary (0.7).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why the direct API layer exists:</strong> MCP one-by-one operations take ~60-90 minutes for bulk work (150+ records). The direct API suite completes the same work in ~3-5 minutes. Beyond performance, several Attio operations simply fail through MCP &ndash; select field updates report success but don&rsquo;t persist, list operations throw validation errors, and record-reference writes return 400. The direct API scripts use the correct Attio REST API patterns that MCP doesn&rsquo;t implement.</p>
+<p><strong>Provenance note:</strong> The <code>scripts/attio/</code> direct-API layer (8 files, ~97KB) was restored to EngineOS under D26 after the Act 3 lift regression discovered the original SEE-source suite had been missed during the initial OS build. The restoration recovered the production REST client that the audit/optimize/ops chain depends on for the operations MCP cannot complete.</p>
+<p><strong>Authentication:</strong> All scripts use <code>process.env.ATTIO_API_KEY</code> exclusively. No file-based credential fallbacks, no config files for credentials.</p>
+<p><strong>Design contract:</strong> Zero npm dependencies. Engine-agnostic &ndash; no workspace-specific field names or values hardcoded. The scripts are the MCP workaround layer; when Attio fixes their MCP server upstream, these workarounds can be retired.</p>
+<hr />
+<h2 id="notion-suite-2-skills-scripts">Notion Suite (2 Skills + Scripts)<a class="headerlink" href="#notion-suite-2-skills-scripts" title="Anchor link">&para;</a></h2>
+<h3 id="the-pipeline_1">The Pipeline<a class="headerlink" href="#the-pipeline_1" title="Anchor link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>notion-mapper ──&gt; notion-ops
+  (playbook)       (read/write operations)
+</code></pre></div>
+
+<p>Simpler than Attio because Notion&rsquo;s API is more reliable &ndash; no MCP bug workaround layer needed. The mapper produces a playbook; notion-ops consumes it for all read/write operations.</p>
+<h3 id="individual-skills_1">Individual Skills<a class="headerlink" href="#individual-skills_1" title="Anchor link">&para;</a></h3>
+<h4 id="notion-mapper-workspace-discovery-and-playbook-generation">notion-mapper &ndash; Workspace Discovery and Playbook Generation<a class="headerlink" href="#notion-mapper-workspace-discovery-and-playbook-generation" title="Anchor link">&para;</a></h4>
+<p><strong>What it does:</strong> Deep-maps a Notion workspace to produce a playbook with database IDs, property definitions, relationship maps, working code examples, and pitfall documentation. Supports full workspace mapping or scoped mapping from a specific page down.</p>
+<p><strong>When to invoke:</strong>
+- First-time Notion setup for an engine
+- &ldquo;Map this Notion workspace&rdquo; / &ldquo;refresh the playbook&rdquo;
+- &ldquo;Check for Notion changes&rdquo;
+- Before heavy Notion operations</p>
+<p><strong>Key behaviors:</strong>
+- Three-phase operation mirroring <code>attio-mapper</code>: Discovery, Change Detection, Pattern Recognition.
+- Workspace context file (optional but recommended): engines can provide <code>workspace-context.md</code> describing known databases, AI-managed properties, and domain patterns. This dramatically improves mapping quality &ndash; the mapper can validate expectations, flag anomalies, and produce richer pitfall documentation. Without it, discovery runs mechanically from API responses alone.
+- Generates <code>databases.py</code> as the primary reference: database ID constants, per-database property maps with types, select options, relation targets (showing both human-readable title and machine-usable ID), rollup sources (marked read-only), and working create/query examples.</p>
+<p><strong>MCP tools used:</strong>
+- <code>mcp__claude_ai_Notion__notion-search</code>, <code>notion-fetch</code>, <code>notion-query-database-view</code></p>
+<p><strong>Output location:</strong> <code>engines/&lt;engine&gt;/config/notion/playbook/</code> &ndash; <code>workspace-map.json</code>, <code>databases.py</code>, <code>relations.md</code>, <code>pitfalls.md</code>, <code>changelog.md</code>, <code>_meta.json</code>.</p>
+<p><strong>Scripts:</strong> <code>map_workspace.py</code>, <code>workspace_mapper.py</code>, <code>playbook_generator.py</code>, <code>change_detector.py</code>, <code>formatters.py</code>, <code>notion_client.py</code> &ndash; all in <code>.claude/skills/notion-mapper/scripts/</code>.</p>
+<hr />
+<h4 id="notion-ops-readwrite-operations">notion-ops &ndash; Read/Write Operations<a class="headerlink" href="#notion-ops-readwrite-operations" title="Anchor link">&para;</a></h4>
+<p><strong>What it does:</strong> Full read/write operations for Notion databases. Four phases: Read from Playbook (load structure), Ingestion (route content to the right database), Optimization (schema analysis and improvement suggestions), and Query &amp; Analysis (cross-database queries and gap analysis).</p>
+<p><strong>When to invoke:</strong>
+- User mentions Notion or database names
+- &ldquo;Add this to Notion&rdquo; / &ldquo;route this to the right database&rdquo;
+- &ldquo;What campaigns are active?&rdquo; / &ldquo;which ICPs lack assets?&rdquo;
+- Building deliverables that could benefit from database context</p>
+<p><strong>Key behaviors:</strong>
+- Code-first approach using the Notion API directly. Seven Python scripts provide a full SDK:</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>domain_helpers.py</code></td>
+<td>High-level <code>NotionHelpers</code> class: <code>create_task()</code>, <code>create_project()</code>, <code>query_meetings()</code>, <code>get_meeting_with_content()</code></td>
+</tr>
+<tr>
+<td><code>property_builders.py</code></td>
+<td>Typed property/filter/sort builders: <code>props.title()</code>, <code>props.rich_text()</code>, <code>props.relation()</code>, <code>filters.equals()</code>, <code>filters.and_filter()</code>, <code>sorts.descending()</code></td>
+</tr>
+<tr>
+<td><code>query_engine.py</code></td>
+<td>Cross-database queries, gap analysis, summary statistics. Loads from playbook&rsquo;s <code>workspace-map.json</code></td>
+</tr>
+<tr>
+<td><code>ingester.py</code></td>
+<td>Content routing with confidence scoring. Suggests target database, proposes property mapping, confirms before creating</td>
+</tr>
+<tr>
+<td><code>notion_client.py</code></td>
+<td>API wrapper: <code>query_by_id()</code>, <code>get_page_with_content()</code></td>
+</tr>
+<tr>
+<td><code>notion_formatters.py</code></td>
+<td>Standalone property formatters and block text extraction</td>
+</tr>
+<tr>
+<td><code>schema_mapper.py</code></td>
+<td>Schema extraction and documentation</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Reads playbook before any operation &ndash; never queries the API for structure information that the playbook already has.</li>
+<li>Content routing with deduplication: checks for existing records before creating, supports <code>--upsert</code> mode.</li>
+</ul>
+<p><strong>MCP tools used:</strong>
+- <code>mcp__claude_ai_Notion__*</code> (wildcard &ndash; all Notion MCP tools available)</p>
+<hr />
+<h3 id="key-concepts">Key Concepts<a class="headerlink" href="#key-concepts" title="Anchor link">&para;</a></h3>
+<p><strong>AI-managed properties are READ-ONLY.</strong> Notion AI manages certain properties (task suggestions, project next steps, meeting summaries, action items). These are marked <code>DO NOT WRITE</code> in the playbook. Scripts can read them to extract insights but never write to them &ndash; doing so would conflict with Notion AI&rsquo;s management.</p>
+<p><strong>Two-way relations: set one side, the other auto-populates.</strong> When Notion relations are configured as two-way, setting a Task&rsquo;s <code>Project</code> field automatically updates the Project&rsquo;s <code>Tasks</code> list. The playbook documents which relations are two-way so scripts don&rsquo;t redundantly set both sides.</p>
+<p><strong>Workspace context as configuration, not embedded knowledge.</strong> The WondaKB engine proved that providing workspace context (known databases, AI-managed properties, domain patterns) dramatically improves mapping quality. This insight was lifted to the OS level: any engine can provide a <code>workspace-context.md</code> file, and the mapper uses it as an accelerator. The skill itself contains zero workspace-specific knowledge.</p>
+<p><strong>Credentials are engine-scoped.</strong> Each engine provides its own Notion credentials at <code>engines/&lt;engine&gt;/config/notion/credentials.json</code> (or the path specified in engine config). Different engines can connect to different Notion workspaces.</p>
+<p><strong>API version pinning and a known breaking change.</strong> Notion&rsquo;s API is versioned via the <code>Notion-Version</code> header. The current playbook scripts pin to <code>2022-06-28</code>. A D27 adjacent finding flagged a breaking change in Notion API versions released after 2026-03-11: the <code>archived</code> boolean property was renamed to <code>in_trash</code>. Code on the older pinned version continues to work, but mappers and ops scripts that auto-upgrade or copy current Notion docs may break on the rename. When refreshing the playbook or generating new query/filter code, verify which field name the active <code>Notion-Version</code> expects.</p>
+<hr />
+<h2 id="mcp-tool-scoping">MCP Tool Scoping<a class="headerlink" href="#mcp-tool-scoping" title="Anchor link">&para;</a></h2>
+<p>Every skill in EngineOS declares an <code>allowed-tools</code> block in its YAML frontmatter. This restricts which tools &ndash; filesystem, MCP, and skill invocation &ndash; are available during that skill&rsquo;s execution. The scoping is declarative and inspectable: reading a skill&rsquo;s frontmatter tells you its full external surface area.</p>
+<h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Anchor link">&para;</a></h3>
+<p>The <code>allowed-tools</code> line lists every tool the skill is permitted to use. Tools not listed are not available. MCP tools follow the naming convention <code>mcp__&lt;server&gt;__&lt;tool&gt;</code> (e.g., <code>mcp__attio-mcp__records_search_advanced</code>). Some skills use wildcards (e.g., <code>mcp__claude_ai_Notion__*</code> grants access to all Notion MCP tools).</p>
+<h3 id="three-scoping-patterns">Three Scoping Patterns<a class="headerlink" href="#three-scoping-patterns" title="Anchor link">&para;</a></h3>
+<p><strong>Pattern 1: Integration skill with domain-specific MCP tools.</strong></p>
+<p><code>attio-ops</code> &ndash; the CRM write-path skill:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">allowed-tools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Read, Write, Edit, Glob, Grep,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__records_search_advanced,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__records_get_details,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__records_list,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__lists_list,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__lists_get_entries,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__objects_list_attributes,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__records_create,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__records_update,</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mcp__attio-mcp__records_add_to_list</span>
+</code></pre></div>
+
+<p>Full filesystem access (it writes import results and logs), plus exactly the Attio MCP tools it needs for record CRUD and list operations. No research tools, no Notion tools, no skill invocation. The scope matches the job: read schemas, search records, create/update records, manage list membership.</p>
+<p><strong>Pattern 2: Research skill with external intelligence tools.</strong></p>
+<p><code>research-engine</code> &ndash; the research orchestrator:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">allowed-tools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Read, Write, Edit, Glob, Grep, Skill</span>
+</code></pre></div>
+
+<p>Filesystem access plus the <code>Skill</code> tool (it orchestrates other skills like <code>depth-governor</code> and <code>findings-formatter</code>). No direct MCP tools listed in the frontmatter &ndash; research MCP access (Bright Data, Context7) flows through the sub-skills it invokes. The orchestrator coordinates; the sub-skills hold the MCP scopes.</p>
+<p>Compare with <code>attio-optimizer</code>, which directly holds both Attio MCP tools and research MCP tools (<code>mcp__context7__*</code>, <code>mcp__brightdata__*</code>) because it runs its own research during Phase 2 without delegating to the research-engine.</p>
+<p><strong>Pattern 3: Governance skill with no MCP access.</strong></p>
+<p><code>sanity-check</code> and <code>depth-governor</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">allowed-tools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Read, Glob, Grep</span>
+</code></pre></div>
+
+<p>Read-only filesystem access. No Write, no Edit, no MCP tools, no Skill invocation. These skills inspect the current state of work against known failure modes and depth classification criteria. They cannot modify files or call external services. This is intentional &ndash; governance skills that can&rsquo;t change anything can be trusted to report honestly about the current state.</p>
+<h3 id="the-scoping-table">The Scoping Table<a class="headerlink" href="#the-scoping-table" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill Category</th>
+<th>Filesystem</th>
+<th>MCP Access</th>
+<th>Skill Invocation</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Integration (attio-ops, notion-ops)</td>
+<td>Read + Write</td>
+<td>Domain-specific MCP tools</td>
+<td>No</td>
+<td>Write to external systems within their domain</td>
+</tr>
+<tr>
+<td>Audit (attio-optimizer)</td>
+<td>Read + Write</td>
+<td>Attio MCP + Research MCP</td>
+<td>No</td>
+<td>Reads CRM, researches benchmarks, writes audit output</td>
+</tr>
+<tr>
+<td>Research (research-engine)</td>
+<td>Read + Write</td>
+<td>Via sub-skills</td>
+<td>Yes (Skill tool)</td>
+<td>Orchestrates research sub-skills</td>
+</tr>
+<tr>
+<td>Governance (sanity-check, depth-governor)</td>
+<td>Read-only</td>
+<td>None</td>
+<td>No</td>
+<td>Inspect and report only</td>
+</tr>
+<tr>
+<td>Orchestration (phase-controller, session-orchestrator)</td>
+<td>Read + Write</td>
+<td>None</td>
+<td>Yes (Skill tool)</td>
+<td>Coordinate skill chains, no direct external access</td>
+</tr>
+</tbody>
+</table>
+<p>This architecture means a CRM skill can never accidentally query Notion, a Notion skill can never accidentally hit the Attio API, and a governance skill can never modify anything. The allowed-tools frontmatter is the single source of truth for what each skill can touch.</p>
+<hr />
+<h2 id="cross-references">Cross-References<a class="headerlink" href="#cross-references" title="Anchor link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Document</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Integration safety rules</td>
+<td><code>.claude/rules/integrations.md</code></td>
+</tr>
+<tr>
+<td>Attio schema caching</td>
+<td><code>engines/&lt;engine&gt;/integrations/attio/schemas/</code></td>
+</tr>
+<tr>
+<td>Attio playbook</td>
+<td><code>engines/&lt;engine&gt;/integrations/attio/attio-playbook/</code></td>
+</tr>
+<tr>
+<td>Notion playbook</td>
+<td><code>engines/&lt;engine&gt;/config/notion/playbook/</code></td>
+</tr>
+<tr>
+<td>Direct API scripts</td>
+<td><code>scripts/attio/README.md</code></td>
+</tr>
+<tr>
+<td>Skill frontmatter convention</td>
+<td><code>.claude/skills/&lt;skill-name&gt;/SKILL.md</code> (YAML frontmatter)</td>
+</tr>
+<tr>
+<td>Known MCP bugs (Attio)</td>
+<td><code>engines/&lt;engine&gt;/integrations/attio/attio-playbook/known-bugs.md</code></td>
+</tr>
+<tr>
+<td>Activity logging</td>
+<td><code>.claude/rules/logging.md</code></td>
+</tr>
+<tr>
+<td>Phase control / skill chains</td>
+<td>See governance docs</td>
+</tr>
+</tbody>
+</table>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Governance — EngineOS Docs</title>
+  <meta name="description" content="&quot;This is methodology-as-infrastructure for a single operator using orchestration, discipline, and operator review checkpoints. It works because the operator is engaged. It does not claim to be determi">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link active" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Governance</h1>
+    <p class="report-header__subtitle">&quot;This is methodology-as-infrastructure for a single operator using orchestration, discipline, and operator review checkpoints. It works because the operator is engaged. It does not claim to be determi</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="governance-the-enforcement-stack">Governance &ndash; The Enforcement Stack<a class="headerlink" href="#governance-the-enforcement-stack" title="Anchor link">&para;</a></h1>
+<blockquote>
+<p>&ldquo;This is methodology-as-infrastructure for a single operator using orchestration, discipline, and operator review checkpoints. It works because the operator is engaged. It does not claim to be deterministic enforcement.&rdquo;</p>
+<p>&ndash; CLAUDE.md, Enforcement Architecture</p>
+</blockquote>
+<p>EngineOS governs a confident AI agent &ndash; one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&rsquo;t happen, and report filesystem facts from memory instead of checking disk. The governance stack exists because methodology alone does not survive contact with that agent. Skills exist, documentation exists, and without forced orchestration the agent defaults to &ldquo;just do the thing.&rdquo;</p>
+<p>The enforcement stack has two layers: mechanical enforcement (shell-script hooks that block tool calls at the Claude Code platform level) and advisory enforcement (instructions in CLAUDE.md, rules files, and skill specifications that depend on the agent following them). A run plan bridges both layers &ndash; it is simultaneously a planning artifact and a mechanical gate key.</p>
+<hr />
+<h2 id="two-enforcement-layers">Two Enforcement Layers<a class="headerlink" href="#two-enforcement-layers" title="Anchor link">&para;</a></h2>
+<h3 id="mechanical-enforcement-hooks">Mechanical Enforcement (Hooks)<a class="headerlink" href="#mechanical-enforcement-hooks" title="Anchor link">&para;</a></h3>
+<p>Claude Code supports lifecycle hooks: shell scripts (or Python scripts via <code>uv run</code>) that fire at specific points in the agent&rsquo;s operation. EngineOS deploys <strong>eight wired hook events</strong>, all configured in <code>.claude/settings.json</code>. The hook stack grew from four events (April 2026, the original governance build) to eight events (June 2026, when the second-brain capture and retrieval layer was added per DECISIONS.md D29-D32). The current eight events:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Event</th>
+<th>Matcher</th>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>PreToolUse</code></td>
+<td><code>Write\|Edit</code></td>
+<td><code>hooks/pre-write-governance.sh</code></td>
+<td>Block deliverable writes without a scope-matched run plan</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>PostToolUse</code></td>
+<td><code>Write\|Edit</code></td>
+<td><code>hooks/post-tool-use.sh</code></td>
+<td>Append activity-log row on every successful write/edit</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>Stop</code></td>
+<td>(any)</td>
+<td><code>hooks/stop.sh</code></td>
+<td>Warn if CONTEXT.md was not updated this session</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>PostCompact</code></td>
+<td>(any)</td>
+<td><code>hooks/post-compact.sh</code></td>
+<td>Re-inject core behaviors and active run-plan awareness</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>UserPromptSubmit</code></td>
+<td>(any)</td>
+<td><code>hooks/prompt-retrieval.py</code></td>
+<td>Inject relevant prior context from the second brain when the prompt matches the heuristic gate</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>SessionStart</code></td>
+<td>(any)</td>
+<td><code>hooks/session-start.py</code></td>
+<td>Inject KB index + last 30 lines of today&rsquo;s daily log as orientation context</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>SessionEnd</code></td>
+<td>(any)</td>
+<td><code>hooks/session-end.py</code></td>
+<td>Spawn <code>flush.py</code> to capture the session arc into today&rsquo;s daily log</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>PreCompact</code></td>
+<td>(any)</td>
+<td><code>hooks/pre-compact.py</code></td>
+<td>Spawn <code>flush.py</code> to capture the session arc into today&rsquo;s daily log before compaction discards detail</td>
+</tr>
+</tbody>
+</table>
+<p>The wiring in <code>.claude/settings.json</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;PreToolUse&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Write|Edit&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash $HOME/Desktop/EngineOS/hooks/pre-write-governance.sh&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;PostToolUse&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Write|Edit&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash $HOME/Desktop/EngineOS/hooks/post-tool-use.sh&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;Stop&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash $HOME/Desktop/EngineOS/hooks/stop.sh&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;PostCompact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash $HOME/Desktop/EngineOS/hooks/post-compact.sh&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;SessionStart&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv run --directory $HOME/Desktop/EngineOS python hooks/session-start.py&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;PreCompact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv run --directory $HOME/Desktop/EngineOS python hooks/pre-compact.py&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;SessionEnd&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv run --directory $HOME/Desktop/EngineOS python hooks/session-end.py&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;UserPromptSubmit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv run --directory $HOME/Desktop/EngineOS python hooks/prompt-retrieval.py&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Each hook type fires at a different point in the agent lifecycle. The <code>matcher</code> field on PreToolUse and PostToolUse restricts which tool invocations trigger the hook &ndash; <code>Write|Edit</code> means only file-writing operations. Hooks 1-4 are shell scripts (the April 2026 governance core); hooks 5-8 are Python scripts run via <code>uv</code> (the June 2026 second-brain layer). The two flush hooks (SessionEnd, PreCompact) share extraction and spawn logic via <code>hooks/_flush_common.py</code> (DECISIONS.md D29) so capture caps stay in sync across both firing points &ndash; an anti-drift discipline that prevents bumping one and forgetting the other.</p>
+<hr />
+<h4 id="hook-1-pretooluse-governance-gate-pre-write-governancesh">Hook 1: PreToolUse &ndash; Governance Gate (<code>pre-write-governance.sh</code>)<a class="headerlink" href="#hook-1-pretooluse-governance-gate-pre-write-governancesh" title="Anchor link">&para;</a></h4>
+<p><strong>Type:</strong> PreToolUse (fires before a Write or Edit tool call executes)
+<strong>Trigger:</strong> Every attempt to write or edit any file
+<strong>What it does:</strong> Blocks deliverable writes unless a scope-matched run plan exists on disk</p>
+<p>This is the hook that makes governance mechanical rather than advisory. A confident agent can ignore instructions. It cannot ignore a JSON response that denies permission to execute its tool call.</p>
+<p><strong>The deny mechanism:</strong></p>
+<p>When no qualifying run plan is found, the hook outputs JSON to stdout:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;hookSpecificOutput&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;hookEventName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PreToolUse&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;permissionDecision&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;deny&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;permissionDecisionReason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GOVERNANCE GATE (scope-matched): No active run plan found in [scope] for write to [path]. Before writing deliverables or modifying engine state, invoke phase-controller to classify this operation and create a scope-matched run plan.&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Claude Code reads <code>permissionDecision: "deny"</code> and blocks the tool call. The agent sees the <code>permissionDecisionReason</code> and must comply &ndash; there is no override available to the agent. Only the operator can create a run plan (via approving one), and only the hook can unlock the write.</p>
+<p><strong>Exempt paths:</strong></p>
+<p>Not every write needs a run plan. The hook maintains a skip list for housekeeping writes:</p>
+<div class="highlight"><pre><span></span><code><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>*/logs/*<span class="o">)</span><span class="w">            </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Activity log, intelligence log</span>
+<span class="w">    </span>*/CONTEXT.md<span class="o">)</span><span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Session state updates</span>
+<span class="w">    </span>*/DECISIONS.md<span class="o">)</span><span class="w">      </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Decision recording</span>
+<span class="w">    </span>*/.claude/settings*<span class="o">)</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Hook/settings configuration</span>
+<span class="w">    </span>*/.claude/rules/*<span class="o">)</span><span class="w">   </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Governance rules</span>
+<span class="w">    </span>*/hooks/*<span class="o">)</span><span class="w">           </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Hook scripts</span>
+<span class="w">    </span>*/run-plans/*<span class="o">)</span><span class="w">       </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Run plan files themselves</span>
+<span class="w">    </span>*/memory/*<span class="o">)</span><span class="w">          </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Auto-memory system</span>
+<span class="w">    </span>*MEMORY.md<span class="o">)</span><span class="w">          </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Memory index</span>
+<span class="k">esac</span>
+</code></pre></div>
+
+<p>Exempt paths exit 0 with no output, which means &ldquo;no opinion&rdquo; &ndash; the normal permission flow continues. This maps to the phase-controller&rsquo;s skip list: the same categories of work that don&rsquo;t need a run plan in the advisory layer don&rsquo;t need one in the mechanical layer.</p>
+<p><strong>Scope-matching logic (v2):</strong></p>
+<p>The hook&rsquo;s critical evolution was from v1 (any recent plan anywhere unlocks any write) to v2 (scope-matched plans). The v1 governance hole: an agent working on a JSE engagement could write to ODC files because an unrelated JSE run plan existed somewhere in the tree. v2 fixes this:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># --- SCOPE DETECTION ---</span>
+<span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;/engines/&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">after_engines</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FILE_PATH</span><span class="p">#*/engines/</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">after_engines</span><span class="p">%%/*</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># --- SCOPE-MATCHED RUN PLAN CHECK ---</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINE</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="c1"># Engine-scoped write: accept plan at engines/$ENGINE/run-plans/ OR root run-plans/</span>
+<span class="w">    </span><span class="nv">ACTIVE_PLAN</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/engines/</span><span class="nv">$ENGINE</span><span class="s2">/run-plans&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/run-plans&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.md&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>-2<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="c1"># OS-level write: require plan at root run-plans/</span>
+<span class="w">    </span><span class="nv">ACTIVE_PLAN</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/run-plans&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.md&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>-2<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<p>The rules:</p>
+<table>
+<thead>
+<tr>
+<th>Write target</th>
+<th>Required run plan location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engines/job-search/...</code></td>
+<td><code>engines/job-search/run-plans/</code> OR <code>run-plans/</code> (root)</td>
+</tr>
+<tr>
+<td><code>engines/on-demand-curriculum/...</code></td>
+<td><code>engines/on-demand-curriculum/run-plans/</code> OR <code>run-plans/</code> (root)</td>
+</tr>
+<tr>
+<td>OS-level paths (<code>.claude/skills/</code>, <code>methodology/</code>, etc.)</td>
+<td><code>run-plans/</code> (root only)</td>
+</tr>
+</tbody>
+</table>
+<p>Root <code>run-plans/</code> always qualifies because OS-level operations (builds, audits) legitimately touch engine files. Engine-specific <code>run-plans/</code> directories scope engine work to its own tenant. The <code>-maxdepth 1</code> enforces canonical flat paths &ndash; no nested subdirectories like <code>engines/X/pipeline/run-plans/</code> (a legacy pattern that was deprecated in the v2 rewrite). The <code>-mtime -2</code> requires the plan to have been modified within the last 2 days &ndash; stale plans don&rsquo;t unlock writes.</p>
+<hr />
+<h4 id="hook-2-posttooluse-activity-logging-post-tool-usesh">Hook 2: PostToolUse &ndash; Activity Logging (<code>post-tool-use.sh</code>)<a class="headerlink" href="#hook-2-posttooluse-activity-logging-post-tool-usesh" title="Anchor link">&para;</a></h4>
+<p><strong>Type:</strong> PostToolUse (fires after a Write or Edit tool call completes)
+<strong>Trigger:</strong> Every successful file write or edit
+<strong>What it does:</strong> Appends a timestamped entry to <code>logs/activity-log.md</code></p>
+<p>This hook solves a specific governance gap: advisory logging dropped during subagent dispatch because no skill explicitly instructed the subagent to log. Mechanical logging fires regardless of what the agent or subagent thinks about logging.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">INPUT</span><span class="o">=</span><span class="k">$(</span>cat<span class="k">)</span>
+<span class="nv">FILE_PATH</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$INPUT</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.tool_input.file_path // &quot;unknown&quot;&#39;</span><span class="k">)</span>
+<span class="nv">TOOL_NAME</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$INPUT</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.tool_name // &quot;unknown&quot;&#39;</span><span class="k">)</span>
+
+<span class="c1"># Determine action from tool name</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOOL_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Write&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">ACTION</span><span class="o">=</span><span class="s2">&quot;Created&quot;</span>
+<span class="k">elif</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TOOL_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Edit&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">ACTION</span><span class="o">=</span><span class="s2">&quot;Updated&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># Determine engine from file path</span>
+<span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;OS&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;/engines/job-search/&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;job-search&quot;</span>
+<span class="k">elif</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;/engines/on-demand-curriculum/&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;on-demand-curriculum&quot;</span>
+<span class="k">elif</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;/engines/sales-enablement/&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;sales-enablement&quot;</span>
+<span class="k">fi</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;| </span><span class="nv">$TIMESTAMP</span><span class="s2"> | </span><span class="nv">$ENGINE</span><span class="s2"> | </span><span class="nv">$ACTION</span><span class="s2"> | </span><span class="nv">$FILE_PATH_CLEAN</span><span class="s2"> | hook:post-tool-use | </span><span class="si">${</span><span class="nv">USER</span><span class="k">:-</span><span class="nv">operator</span><span class="si">}</span><span class="s2"> |&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ACTIVITY_LOG</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<p>Every write produces a row in the activity log with timestamp, engine tag, action type, file path, and attribution. The infinite-loop guard (<code>if [[ "$FILE_PATH" == *"activity-log.md" ]]; then exit 0</code>) prevents the hook from logging its own writes. Attribution reads from <code>$USER</code> environment variable with fallback to &ldquo;operator&rdquo; &ndash; preparing for future multi-user support without breaking the single-operator default.</p>
+<hr />
+<h4 id="hook-3-stop-session-end-check-stopsh">Hook 3: Stop &ndash; Session-End Check (<code>stop.sh</code>)<a class="headerlink" href="#hook-3-stop-session-end-check-stopsh" title="Anchor link">&para;</a></h4>
+<p><strong>Type:</strong> Stop (fires when a Claude Code session ends)
+<strong>Trigger:</strong> Session termination
+<strong>What it does:</strong> Warns if CONTEXT.md was not updated during the session</p>
+<div class="highlight"><pre><span></span><code><span class="nv">CONTEXT_FILE</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/CONTEXT.md&quot;</span>
+<span class="nv">TODAY</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span><span class="s1">&#39;+%Y-%m-%d&#39;</span><span class="k">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONTEXT_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">LAST_MOD</span><span class="o">=</span><span class="k">$(</span>stat<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;%Sm&#39;</span><span class="w"> </span>-t<span class="w"> </span><span class="s1">&#39;%Y-%m-%d&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONTEXT_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">               </span>date<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONTEXT_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="s1">&#39;+%Y-%m-%d&#39;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="k">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LAST_MOD</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TODAY</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Warning: CONTEXT.md was not updated this session (last modified: </span><span class="nv">$LAST_MOD</span><span class="s2">).&quot;</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="k">fi</span>
+
+<span class="c1"># Also checks every engine tenant&#39;s CONTEXT.md</span>
+<span class="k">for</span><span class="w"> </span>ENGINE_CONTEXT<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">&quot;</span>/engines/*/CONTEXT.md<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="c1"># ... same date check per engine</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>This hook is advisory, not blocking. It does not prevent session end. It surfaces a warning when the session handoff mechanism (CONTEXT.md) was not updated &ndash; catching the case where meaningful work happened but the recovery point was not written. The check covers both the root CONTEXT.md and every engine tenant&rsquo;s CONTEXT.md.</p>
+<hr />
+<h4 id="hook-4-postcompact-compaction-recovery-post-compactsh">Hook 4: PostCompact &ndash; Compaction Recovery (<code>post-compact.sh</code>)<a class="headerlink" href="#hook-4-postcompact-compaction-recovery-post-compactsh" title="Anchor link">&para;</a></h4>
+<p><strong>Type:</strong> PostCompact (fires after Claude Code compacts its context window)
+<strong>Trigger:</strong> Context compaction event
+<strong>What it does:</strong> Re-injects core behaviors and active run plan awareness</p>
+<p>Context compaction is the event where Claude Code&rsquo;s context window fills and older conversation turns are summarized or dropped. CLAUDE.md and rules survive compaction (they&rsquo;re always-loaded files), but in-session awareness of active work can be lost.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Core behaviors (always active):&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  1. Research before agreeing&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  2. Push back with evidence&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  3. Write as you go&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  4. Never delete&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  5. Constitution from reality&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  6. Govern before producing — no deliverable writes without a run plan&quot;</span>
+
+<span class="c1"># Check for active run plans</span>
+<span class="nv">RUN_PLANS</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">&quot;</span><span class="w"> </span>-path<span class="w"> </span><span class="s2">&quot;*/run-plans/*.md&quot;</span><span class="w"> </span>-newer<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/CONTEXT.md&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RUN_PLANS</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Active run plans found:&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RUN_PLANS</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>plan<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  -&gt; </span><span class="nv">$plan</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">done</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Resume the active run plan before starting new work.&quot;</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;No active run plans found.&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  Invoke phase-controller before writing any deliverables.&quot;</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<p>The hook lists active run plans (files newer than CONTEXT.md at canonical run-plan paths) and reminds the agent to resume them. If no active plans exist, it reminds the agent that the PreToolUse hook will block deliverable writes. The active engine tenants are enumerated so the agent knows which engines exist.</p>
+<p>This hook is the compaction survival mechanism. The run plan on disk persists the full execution state (6 layers of context). The PostCompact hook tells the agent where to find it. Together, they bridge the compaction gap.</p>
+<hr />
+<h4 id="hook-5-userpromptsubmit-retrieval-injection-prompt-retrievalpy">Hook 5: UserPromptSubmit &ndash; Retrieval Injection (<code>prompt-retrieval.py</code>)<a class="headerlink" href="#hook-5-userpromptsubmit-retrieval-injection-prompt-retrievalpy" title="Anchor link">&para;</a></h4>
+<p><strong>Type:</strong> UserPromptSubmit (fires after the operator submits a prompt, before the agent receives it)
+<strong>Trigger:</strong> Every prompt matching the heuristic gate (trigger words, question starts, minimum length)
+<strong>What it does:</strong> Searches the second brain and injects the top 3 matches as <code>&lt;prior-context&gt;...&lt;/prior-context&gt;</code> mid-prompt</p>
+<p>This is the mechanical half of the retrieval architecture (DECISIONS.md D32). Capture-side infrastructure (<code>flush.py</code>, <code>compile.py</code>, the KB, daily logs, intel log) grew strong by mid-2026 &ndash; 216 KB articles, 70+ intel-log entries, 18 daily logs &ndash; but a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work. Capture without retrieval is a write-only system. This hook closes the gap mechanically so the agent doesn&rsquo;t have to remember to query its own corpus.</p>
+<p><strong>Gate heuristic:</strong></p>
+<p>The hook does not fire on every prompt. It applies three cheap tests (config in <code>hooks/retrieval-triggers.json</code>):</p>
+<ol>
+<li><strong>Prompt length</strong> &ndash; skip if under 20 chars (one-liners aren&rsquo;t worth a corpus sweep)</li>
+<li><strong>Trigger words</strong> &ndash; fires when prompt contains one of: <code>we</code>, <code>our</code>, <code>before</code>, <code>prior</code>, <code>previous</code>, <code>remember</code>, <code>similar</code>, <code>again</code>, <code>last time</code></li>
+<li><strong>Question starts</strong> &ndash; fires when prompt begins with <code>have</code>, <code>did</code>, <code>what</code>, <code>how</code>, <code>why</code>, <code>when</code></li>
+</ol>
+<p>Either trigger condition firing is sufficient. The thresholds tune the noise/signal balance &ndash; defaults target a 10-60% gate hit rate per session.</p>
+<p><strong>Search:</strong></p>
+<p>The hook extracts query terms (≥4 chars, stopwords filtered, max 8 terms), compiles a single case-insensitive regex, and sweeps the six-surface priority corpus (the same priority order used by Hook 6 and by the <code>recall</code> skill):</p>
+<ol>
+<li><code>logs/intelligence-log.md</code> &ndash; highest density curated strategic moments</li>
+<li><code>knowledge/index.md</code> &ndash; catalog with summaries</li>
+<li><code>knowledge/concepts/*.md</code> + <code>connections/*.md</code> &ndash; KB article slug matching</li>
+<li><code>daily/*.md</code> (last 14 days) &ndash; recent session arcs</li>
+<li><code>run-plans/*.md</code> (last 60 days) &ndash; recent plan-and-execution records</li>
+<li>(methodology reserved for skill-side <code>/recall</code>; hook stops earlier)</li>
+</ol>
+<p>A budget deadline (default 1000ms) gates each surface &ndash; if the deadline expires mid-sweep, lower surfaces are skipped. Score-capping at <code>min(len(hits), 5)+1</code> for file-level surfaces prevents large files from drowning out per-row surfaces.</p>
+<p><strong>Output:</strong></p>
+<p>Top 3 ranked matches are formatted as <code>&lt;prior-context&gt;</code> injection at ≤1024 chars and returned via stdout as the Claude Code <code>additionalContext</code> convention. If no matches found, no injection (the hook exits silently; the prompt proceeds unchanged). Silent recovery on any error path &ndash; the hook never blocks the operator&rsquo;s prompt cycle.</p>
+<p><strong>Health log:</strong></p>
+<p>Every invocation appends one record to <code>scripts/retrieval-health.jsonl</code> &ndash; timestamp, session_id, gate decision, gate reasons, query terms, surfaces searched, matches found/returned, chars injected, exec_ms, result. The operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions and applies the keep/tune/kill rules from D32 (gate hit rate &lt;10% = too quiet; &gt;60% = too noisy; injection size near cap = bump cap; &gt;50% noise judgment = tighten or kill).</p>
+<p>This is governance-by-information-flow rather than governance-by-blocking &ndash; the hook does not deny anything; it changes what the agent sees by the time it answers. The deny-side mechanical layer (Hook 1) addresses &ldquo;research before producing&rdquo;; the inject-side mechanical layer (Hook 5) addresses &ldquo;research before agreeing&rdquo; applied to the agent&rsquo;s own corpus.</p>
+<hr />
+<h4 id="hook-6-sessionstart-orientation-injection-session-startpy">Hook 6: SessionStart &ndash; Orientation Injection (<code>session-start.py</code>)<a class="headerlink" href="#hook-6-sessionstart-orientation-injection-session-startpy" title="Anchor link">&para;</a></h4>
+<p><strong>Type:</strong> SessionStart (fires when Claude Code starts a session)
+<strong>Trigger:</strong> Session start
+<strong>What it does:</strong> Reads <code>knowledge/index.md</code> + the last 30 lines of today&rsquo;s (or yesterday&rsquo;s) daily log, injects as orientation context</p>
+<p>Layer 1 of the three-layer retrieval architecture (methodology/memory-architecture.md § Retrieval Surfaces). Every session begins with the full KB index visible plus the most recent in-flight context from the daily log. Cap is ~20K chars; output truncates with <code>...(truncated)</code> if exceeded.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Knowledge base index (the core retrieval mechanism)</span>
+<span class="k">if</span> <span class="n">INDEX_FILE</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="n">index_content</span> <span class="o">=</span> <span class="n">INDEX_FILE</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;## Knowledge Base Index</span><span class="se">\n\n</span><span class="si">{</span><span class="n">index_content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Recent daily log (last 30 lines of today&#39;s or yesterday&#39;s)</span>
+<span class="n">recent_log</span> <span class="o">=</span> <span class="n">get_recent_log</span><span class="p">()</span>
+<span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;## Recent Daily Log</span><span class="se">\n\n</span><span class="si">{</span><span class="n">recent_log</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This hook does no API calls &ndash; pure local file I/O. The session-orchestrator skill complements it on the agent-discipline side (CONTEXT.md reading, engine detection) but the orientation injection is what makes the KB index visible without the agent having to remember to load it.</p>
+<hr />
+<h4 id="hook-7-sessionend-session-arc-capture-session-endpy">Hook 7: SessionEnd &ndash; Session-Arc Capture (<code>session-end.py</code>)<a class="headerlink" href="#hook-7-sessionend-session-arc-capture-session-endpy" title="Anchor link">&para;</a></h4>
+<p><strong>Type:</strong> SessionEnd (fires when a Claude Code session terminates)
+<strong>Trigger:</strong> Session termination, transcript path provided by Claude Code
+<strong>What it does:</strong> Extracts the last ~60 turns / 30K chars from the JSONL transcript, writes them to a context file, spawns <code>flush.py</code> as a background process to extract knowledge into the daily log</p>
+<p>This is the write-side counterpart to Hook 6 (which reads from <code>daily/</code>). The hook itself does NO API calls &ndash; only local file I/O for speed (&lt;10s). The actual Agent SDK call lives in <code>flush.py</code>, spawned as a detached background process so the session-end event returns quickly.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Recursion guard: if we were spawned by flush.py (which calls Agent SDK,</span>
+<span class="c1"># which runs Claude Code, which would fire this hook again), exit immediately.</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CLAUDE_INVOKED_BY&quot;</span><span class="p">):</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Extraction and spawn logic both live in <code>hooks/_flush_common.py</code> &ndash; shared with Hook 8. The recursion guard prevents infinite loops when flush.py&rsquo;s internal Claude Code session would otherwise re-fire SessionEnd. Hook 3 (Stop) still fires separately and handles the CONTEXT.md update check; the two are independent.</p>
+<hr />
+<h4 id="hook-8-precompact-compaction-time-capture-pre-compactpy">Hook 8: PreCompact &ndash; Compaction-Time Capture (<code>pre-compact.py</code>)<a class="headerlink" href="#hook-8-precompact-compaction-time-capture-pre-compactpy" title="Anchor link">&para;</a></h4>
+<p><strong>Type:</strong> PreCompact (fires before Claude Code auto-compacts the context window)
+<strong>Trigger:</strong> Imminent compaction
+<strong>What it does:</strong> Same as SessionEnd &ndash; extracts recent transcript turns, spawns <code>flush.py</code> &ndash; but at the marathon-session boundary instead of at session termination</p>
+<p>Compaction discards detail by summarizing older turns. Without this hook, marathon sessions would lose the substantive arc to summarization before SessionEnd ever fires. PreCompact captures the arc into the daily log first; SessionEnd then captures the remainder at session close. Together they cover the two boundaries where session content might be lost.</p>
+<p>Both hooks share <code>hooks/_flush_common.py</code> (DECISIONS.md D29). The shared module exports <code>extract_conversation_context()</code>, <code>parse_hook_input()</code>, <code>spawn_flush_process()</code>, and the cap constants <code>MAX_TURNS=60</code> / <code>MAX_CONTEXT_CHARS=30_000</code> as a single source of truth. Bumping a cap in <code>_flush_common.py</code> updates both firing points automatically &ndash; the anti-drift discipline that prevents the next person from forgetting one of the two hooks. The recursion guard is identical to Hook 7.</p>
+<p><code>MIN_TURNS_TO_FLUSH</code> differs: SessionEnd flushes at ≥1 turn (any real conversation is worth capturing); PreCompact requires ≥5 turns (avoid spurious flushes for incidental compactions early in a session).</p>
+<hr />
+<h3 id="advisory-enforcement-rules-claudemd">Advisory Enforcement (Rules + CLAUDE.md)<a class="headerlink" href="#advisory-enforcement-rules-claudemd" title="Anchor link">&para;</a></h3>
+<p>The mechanical layer handles what can be blocked with a shell script. The advisory layer handles everything else &ndash; quality standards, research discipline, methodology compliance, voice consistency, and the hundreds of judgment calls that cannot be reduced to a <code>deny</code> JSON response.</p>
+<p><strong>CLAUDE.md core behaviors</strong> are the top-level instructions. Six non-negotiable behaviors survive context compaction because CLAUDE.md is always loaded:</p>
+<ol>
+<li>Research before agreeing</li>
+<li>Push back with evidence</li>
+<li>Write as you go (log every file operation)</li>
+<li>Never delete, mark outdated</li>
+<li>Constitution from reality (describe what exists, not what was planned)</li>
+<li>Govern before producing (no deliverable writes without a run plan)</li>
+</ol>
+<p><strong>7 rules</strong> in <code>.claude/rules/</code> provide specific enforcement instructions. Three are unconditional (loaded every session):</p>
+<ul>
+<li><code>governance-baseline.md</code> &ndash; restates core behaviors with operator protection clauses</li>
+<li><code>logging.md</code> &ndash; specifies the two-layer logging model (activity log breadcrumbs + intelligence log strategic moments)</li>
+<li><code>evidence-first-reporting.md</code> &ndash; requires disk verification before filesystem/state claims</li>
+</ul>
+<p>Four are path-scoped (loaded automatically when working in matching directories):</p>
+<ul>
+<li><code>engagement-structure.md</code> &ndash; engagement directory conventions</li>
+<li><code>integrations.md</code> &ndash; CRM/Notion integration rules</li>
+<li><code>living-projects.md</code> &ndash; active project management rules</li>
+<li><code>methodology-immutable.md</code> &ndash; protects methodology documents from unauthorized modification</li>
+</ul>
+<p><strong>The honest acknowledgment:</strong> Advisory enforcement depends on the agent following instructions. A sufficiently confident agent can ignore every rule, skip every skill invocation, and produce output that looks professional but followed none of the governance. This is not hypothetical &ndash; it happened in three consecutive sessions (WS3-WS5) where the agent skipped planning skills entirely while producing acceptable output. The mechanical layer (hooks) exists because advisory alone demonstrably fails on confident agents. The advisory layer remains essential for everything the mechanical layer cannot reach.</p>
+<hr />
+<h2 id="phase-controller-the-orchestration-brain">Phase-Controller &ndash; The Orchestration Brain<a class="headerlink" href="#phase-controller-the-orchestration-brain" title="Anchor link">&para;</a></h2>
+<p>The phase-controller is the central governance skill. It classifies work, builds run plans, forces skill invocation at every transition, and gates on operator approval before execution begins. Without it, methodology exists but nothing makes it fire.</p>
+<p><strong>Why it exists:</strong> Skills exist. Methodology docs exist. The agent knows about all of them. Without forced orchestration, the agent defaults to &ldquo;just do the thing&rdquo; &ndash; skipping depth governance, quality checks, and structured findings. The root cause is not missing methodology. It is missing orchestration. Phase-controller is the orchestrator.</p>
+<h3 id="7-operation-types">7 Operation Types<a class="headerlink" href="#7-operation-types" title="Anchor link">&para;</a></h3>
+<p>Every piece of work gets classified into one of seven types. Classification takes 60 seconds and determines the planning weight, skill chain, and criteria intensity.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+<th>When</th>
+<th>Planning Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BL</strong></td>
+<td>Build/Audit</td>
+<td>System building, ecosystem auditing, capability compositing, engine construction, major methodology evolution</td>
+<td>Heavy</td>
+</tr>
+<tr>
+<td><strong>EW</strong></td>
+<td>Engine Work</td>
+<td>Work within a specific engine tenant (research, deliverables, client tasks)</td>
+<td>Heavy</td>
+</tr>
+<tr>
+<td><strong>EN</strong></td>
+<td>Engagement</td>
+<td>Client engagement work within an engine (campaign execution, meeting follow-up, deliverable production)</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>RE</strong></td>
+<td>Research</td>
+<td>Research tasks using OS-level research capabilities (market intelligence, competitive analysis)</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>CP</strong></td>
+<td>Content Production</td>
+<td>Deliverable/content creation (documents, HTML, presentations, reports)</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>IN</strong></td>
+<td>Integration</td>
+<td>CRM/Notion/MCP integration work (data sync, schema mapping, pipeline operations)</td>
+<td>Light</td>
+</tr>
+<tr>
+<td><strong>MT</strong></td>
+<td>Maintenance</td>
+<td>OS-level maintenance, pattern updates, methodology review, skill refinement</td>
+<td>Light</td>
+</tr>
+</tbody>
+</table>
+<p>Classification rules resolve ambiguity: multiple types classify by the heaviest type (an engagement requiring research is EN, not RE). If classification is unclear, the agent asks the operator rather than guessing. The key distinction between BL and MT: BL changes what the system IS; MT changes what the system HAS.</p>
+<h3 id="the-4-step-flow">The 4-Step Flow<a class="headerlink" href="#the-4-step-flow" title="Anchor link">&para;</a></h3>
+<h4 id="step-1-classify-60-seconds">Step 1: Classify (60 seconds)<a class="headerlink" href="#step-1-classify-60-seconds" title="Anchor link">&para;</a></h4>
+<p>Read the intake context and classify. No brainstorming. No research. Just classify and present:</p>
+<div class="highlight"><pre><span></span><code>**Classification**
+
+Type: CP -- Content Production
+Basis: Primary deliverable is a document; operator provided structure and source files.
+Engine: on-demand-curriculum
+Scope signal: medium
+
+Correct?
+</code></pre></div>
+
+<p><strong>Gate: Do not proceed until the operator confirms.</strong></p>
+<h4 id="step-2-build-the-run-plan-write-to-disk">Step 2: Build the Run Plan (write to disk)<a class="headerlink" href="#step-2-build-the-run-plan-write-to-disk" title="Anchor link">&para;</a></h4>
+<p>Create the run plan artifact at a canonical path:</p>
+<ul>
+<li>Engine work: <code>engines/[name]/run-plans/[YYYY-MM-DD]-[short-name].md</code></li>
+<li>OS-level work: <code>run-plans/[YYYY-MM-DD]-[short-name].md</code></li>
+</ul>
+<p>The run plan has a fixed 6-layer structure:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Purpose</th>
+<th>When populated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Layer 0: Raw Intake</strong></td>
+<td>Operator&rsquo;s original input, captured verbatim</td>
+<td>At plan creation</td>
+</tr>
+<tr>
+<td><strong>Layer 1: Classification + Context</strong></td>
+<td>Confirmed type, basis, current state, staleness check</td>
+<td>At plan creation</td>
+</tr>
+<tr>
+<td><strong>Layer 2: Skill Chain + Depth</strong></td>
+<td>Ordered skill chain, depth assessment, gates, anti-pattern lint points, hardened criteria</td>
+<td>At plan creation</td>
+</tr>
+<tr>
+<td><strong>Layer 3: Research Findings</strong></td>
+<td>Structured findings from research phases</td>
+<td>Appended during execution</td>
+</tr>
+<tr>
+<td><strong>Layer 4: Design + Plan</strong></td>
+<td>Architecture, approach, implementation plan</td>
+<td>Appended after research; required before production</td>
+</tr>
+<tr>
+<td><strong>Layer 5: Execution Log</strong></td>
+<td>Timestamped record of what was done</td>
+<td>Appended at every transition</td>
+</tr>
+</tbody>
+</table>
+<p>Plus <strong>Not-Scope</strong> (what is explicitly excluded, never empty) and <strong>Deliverables</strong> (specific files with paths that will exist when the work is done).</p>
+<p>This structure is not decorative. Layer 4 is a structural dependency for production steps (see Contract Hardening below). Layer 5 is the compaction recovery mechanism &ndash; if context compacts mid-execution, the run plan on disk shows what has been done and what remains.</p>
+<h4 id="step-25-contract-hardening">Step 2.5: Contract Hardening<a class="headerlink" href="#step-25-contract-hardening" title="Anchor link">&para;</a></h4>
+<p>Before presenting the plan, the agent self-hardens its success criteria with three questions per criterion:</p>
+<ol>
+<li>
+<p><strong>Is this measurable?</strong> &ldquo;High quality&rdquo; is not a criterion. &ldquo;All citations trace to Tier 2+ sources per credibility-tiers.md&rdquo; is. If you cannot define a mechanical pass/fail check, the criterion is aspirational, not testable.</p>
+</li>
+<li>
+<p><strong>What would a hostile reviewer add?</strong> For each criterion, imagine an evaluator whose job is to break the deliverable. What edge case would they check? What is the likeliest way to technically pass but miss the intent?</p>
+</li>
+<li>
+<p><strong>Is the pass_definition specific enough to score?</strong> When someone later evaluates this work, can they answer YES or NO based on the pass_definition alone?</p>
+</li>
+</ol>
+<p>Criteria use structured JSON &ndash; not markdown &ndash; because models are less likely to tamper with structured JSON (per Anthropic&rsquo;s research on contract formats):</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;C1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;criterion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Control plane truth matches disk exactly&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;threshold&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pass_definition&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Grep verification passes: skill count = 28 (matches ls .claude/skills/ | wc -l), hook status = &#39;deployed&#39; not &#39;planned&#39; in CLAUDE.md&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;fail_definition&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Any count in any control plane doc disagrees with disk reality after edits&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;edge_cases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;Skill count drift if new skill added mid-session&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;Trailing newline counting differences&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>Criteria intensity scales by operation type: BL operations get 5-10 criteria; MT operations get 2-4.</p>
+<h4 id="step-3-present-for-approval">Step 3: Present for Approval<a class="headerlink" href="#step-3-present-for-approval" title="Anchor link">&para;</a></h4>
+<p>The run plan summary is presented to the operator:</p>
+<div class="highlight"><pre><span></span><code>**Run Plan Written** -&gt; engines/on-demand-curriculum/run-plans/2026-04-06-governance-doc.md
+
+**Type:** CP -- Content Production
+**Scope:** Governance reference documentation for EngineOS
+**Skill chain:** [numbered steps]
+**Gates:** [which steps require approval]
+**Hardened Criteria:** 6 criteria -- sharpest: all hook code excerpts verified against disk
+**Not-scope:** Modifying hooks or governance infrastructure
+**Deliverables:** docs/governance.md
+
+Approve to begin execution?
+</code></pre></div>
+
+<p><strong>Gate: Do not proceed until the operator approves.</strong> Not silence. Not implied consent. Explicit approval.</p>
+<h4 id="step-4-execute-with-forced-skill-invocation">Step 4: Execute with Forced Skill Invocation<a class="headerlink" href="#step-4-execute-with-forced-skill-invocation" title="Anchor link">&para;</a></h4>
+<p>Once approved, the run plan executes step by step under 11 forcing function rules.</p>
+<h3 id="11-forcing-function-rules">11 Forcing Function Rules<a class="headerlink" href="#11-forcing-function-rules" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Rule</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Every skill in the chain gets invoked.</strong> Not referenced, not &ldquo;kept in mind&rdquo; &ndash; actually loaded and executed.</td>
+<td>Prevents the agent from skipping skills it considers unnecessary.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Sanity-check runs at every lint point.</strong></td>
+<td>2-minute spot-check against 11 known failure modes. Catches drift before it compounds.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Output-self-test runs before any &ldquo;done&rdquo; declaration.</strong></td>
+<td>Binary YES/NO gates. NO means fix it before proceeding.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Gates are non-negotiable.</strong> Work does not proceed past a gate without the operator&rsquo;s explicit approval. Not silence. Not implied consent.</td>
+<td>The operator is the final enforcement layer. Gates are where human judgment enters.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Every skill invocation gets logged</strong> in Layer 5.</td>
+<td>Audit trail for compaction recovery and post-session review.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>The run plan is updated at every transition.</strong></td>
+<td>Disk is the source of truth. If context compacts, the run plan is the recovery point.</td>
+</tr>
+<tr>
+<td>6.5</td>
+<td><strong>Infrastructure updates happen BEFORE content presentation.</strong></td>
+<td>Prevents drift between what the operator sees and what the files say.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Skipping a chain step requires justification.</strong></td>
+<td>The chain is a minimum. You can add skills. You cannot silently skip them.</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Subagent outputs are pre-declared in the run plan.</strong></td>
+<td>Subagents don&rsquo;t inherit parent hooks or governance. The run plan is their governance contract.</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Rendered artifacts require render-validate before COMPLETE.</strong></td>
+<td>Visual verification via Puppeteer. QA scorecard must include a render verification row with PASS/FAIL.</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Mandatory planning steps require explicit engagement or skip-justification.</strong></td>
+<td>Steps tagged <code>[MANDATORY]</code> must be invoked or have a written justification visible to the operator. Silent skipping is a governance violation. Steps tagged <code>[MANDATORY - structural]</code> additionally require their output to exist in Layer 4 before production begins.</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>Evidence-before-reporting at phase transitions.</strong></td>
+<td>Before writing results to Layer 5, CONTEXT.md, or any gate presentation, re-verify filesystem/state claims against disk. Counts, file existence, edit landings &ndash; verified via <code>ls</code>, <code>wc -l</code>, <code>grep</code>, <code>Read</code>, not from working context.</td>
+</tr>
+</tbody>
+</table>
+<p>Rules 4, 10, and 11 deserve emphasis:</p>
+<p><strong>Rule 4</strong> is why the operator matters. Every gate is a human judgment checkpoint. The system does not auto-approve. The operator reviews the work, asks questions, redirects if needed, and explicitly says &ldquo;proceed.&rdquo; This is not a rubber stamp &ndash; in production, the operator has caught the evaluator validating against the wrong baseline, redirected scope that was drifting, and rejected plans that were over-engineered for the task.</p>
+<p><strong>Rule 10</strong> addresses the demonstrated failure pattern where agents skip planning. In three consecutive sessions (WS3-WS5), the agent skipped both brainstorming and writing-plans skills entirely &ndash; while producing acceptable output. The enforcement model is two-tiered: <code>[MANDATORY - structural]</code> steps (writing-plans) create artifacts that the production step reads as a required input &ndash; empty Layer 4 means production cannot proceed. <code>[MANDATORY]</code> steps (brainstorming) use advisory enforcement with transparency &ndash; if skipped, the agent must write a justification visible to the operator at the approval gate. This asymmetry is intentional: structural enforcement works where artifacts are concrete; advisory enforcement with transparency works where artifacts are fuzzy.</p>
+<p><strong>Rule 11</strong> addresses the verified-state-claim failure pattern. An agent declared a directory did not exist after 4 glob attempts. The actual path was <code>WONDA-STUFF</code> (all-caps, hyphens instead of spaces). That wrong negative propagated into an audit conclusion that an entire capability &ldquo;never existed in sources&rdquo; &ndash; structurally invalidating a quadrant of a capability audit. The operator found the path with one case-insensitive <code>ls</code>. Rule 11 requires re-verification against disk before any state claim at a phase transition.</p>
+<hr />
+<h2 id="the-iteration-envelope">The Iteration Envelope<a class="headerlink" href="#the-iteration-envelope" title="Anchor link">&para;</a></h2>
+<p>The iteration envelope is a produce-evaluate-retry loop that wraps the production steps in skill chains. It is the mechanism that turns independent evaluation from a concept into a repeating process.</p>
+<h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Anchor link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>OUTSIDE ENVELOPE (runs once):
+  depth-governor, brainstorming, writing-plans, operator approval gates
+
+INSIDE ENVELOPE (iterates on failure):
+  Produce deliverable
+  -&gt; adversarial-evaluator (independent context, scored JSON)
+  -&gt; IF PASS: exit envelope, proceed to next chain step
+  -&gt; IF FAIL: inject evaluation feedback -&gt; re-produce -&gt; re-evaluate
+  -&gt; After max retries: OPERATOR GATE with full iteration history
+
+AFTER ENVELOPE (runs once on final version):
+  qa-pipeline (if external-facing), operator approval, audit-logging
+</code></pre></div>
+
+<p><strong>Configuration:</strong>
+- <strong>Max retries:</strong> 3. Matches the adversarial-dev and Anthropic guidance defaults.
+- <strong>Evaluator turn budget:</strong> 20 turns per evaluation, 3 iterations max = 60 evaluator turns per run plan.
+- <strong>Feedback injection:</strong> On failure, the evaluator&rsquo;s <code>critical_issues</code> array and per-criterion feedback for failed criteria become additional context for the next produce attempt.
+- <strong>Operator escalation:</strong> When retries exhaust, the operator receives the full iteration history &ndash; all attempts, all scores, all feedback &ndash; and decides: accept as-is, give specific guidance, or take over manually.
+- <strong>Skip condition:</strong> The operator can say &ldquo;skip evaluation&rdquo; at any approval gate. This is the only way to bypass the envelope. The agent cannot skip it on confidence.</p>
+<p>Run plan logging per iteration:</p>
+<div class="highlight"><pre><span></span><code>[timestamp] Iteration 1: adversarial-evaluator scored avg 6.2. Failures: [C2: 5/10, C4: 6/10]. Feeding back.
+[timestamp] Iteration 2: adversarial-evaluator scored avg 7.8. PASSED (all criteria &gt;= threshold).
+</code></pre></div>
+
+<h3 id="adversarial-evaluator">Adversarial Evaluator<a class="headerlink" href="#adversarial-evaluator" title="Anchor link">&para;</a></h3>
+<p>The adversarial evaluator is a subagent with three architectural properties that make it structurally different from self-evaluation:</p>
+<p><strong>Independent context.</strong> The evaluator subagent does NOT share the executor&rsquo;s session. It receives only deliverable paths, criteria JSON, pass threshold, and a one-line task description. It cannot see the executor&rsquo;s reasoning, run plan, or conversation history. This independence is why agent judges disagree with humans only 0.3% of the time, versus 31% for single LLM self-judges (Agent-as-a-Judge, arxiv:2508.02994).</p>
+<p><strong>Tool asymmetry.</strong> The evaluator has Read, Bash, Glob, and Grep tools. It does NOT have Write or Edit. It can read files and run verification commands. It cannot fix what it finds. This is adapted from the adversarial-dev evaluator pattern &ndash; the evaluator&rsquo;s job is to find problems, not to solve them.</p>
+<p><strong>Mechanical distrust.</strong> The executor does NOT trust the evaluator&rsquo;s self-reported <code>passed</code> field. It recalculates:</p>
+<div class="highlight"><pre><span></span><code>passed = ALL criteria scores &gt;= their individual thresholds
+</code></pre></div>
+
+<p>If the evaluator says <code>"passed": true</code> but any criterion scores below threshold, the executor overrides to <code>false</code>. The evaluator is an LLM &ndash; it can misjudge its own summary. The scores are the source of truth.</p>
+<p>If the evaluator&rsquo;s output cannot be parsed as JSON (all three parsing strategies fail), the result is a hard fail: all scores = 0, <code>passed = false</code>. Parse failure is treated as evaluation failure. This is the punitive default &ndash; a malformed evaluation does not silently pass.</p>
+<h3 id="real-example-planning-enforcement-methodology-doc">Real Example: Planning-Enforcement Methodology Doc<a class="headerlink" href="#real-example-planning-enforcement-methodology-doc" title="Anchor link">&para;</a></h3>
+<p>The production of <code>methodology/planning-enforcement.md</code> (WS6) required 3 iterations through the envelope. The adversarial evaluator caught fabricated citations in the first two attempts &ndash; the concepts being cited were real (Cole&rsquo;s adversarial-dev, Anthropic&rsquo;s guidance), but the specific quotes attributed to those sources were generated from training data rather than verified against the actual documents. The output-self-test skill passed both times &ndash; self-evaluation cannot detect fabricated citations because the agent that wrote them believes they are correct.</p>
+<div class="highlight"><pre><span></span><code>Iteration 1: avg 6.8 — C3 (source fidelity) scored 5/10.
+    Evaluator feedback: &quot;Quotes attributed to Cole&#39;s harness.ts are plausible but not
+    verifiable from the codebase. Specific line numbers cited but content doesn&#39;t match.&quot;
+Iteration 2: avg 7.2 — C3 scored 6/10.
+    Evaluator feedback: &quot;Training-data citations removed but replaced with paraphrases
+    still attributed as direct quotes.&quot;
+Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
+    Citations restructured as summaries with explicit source-type markers.
+</code></pre></div>
+
+<p>This example demonstrates the core value of independent evaluation: the agent was confident its citations were accurate. Self-tests confirmed that confidence. Only an independent context &ndash; one that read the actual source files and compared them against the cited content &ndash; caught the discrepancy.</p>
+<hr />
+<h2 id="retrieval-architecture">Retrieval Architecture<a class="headerlink" href="#retrieval-architecture" title="Anchor link">&para;</a></h2>
+<p>The mechanical-enforcement layer described above is governance-by-blocking: hooks deny tool calls, force run plans, and re-inject behaviors after compaction. The retrieval architecture is the sister mechanism &ndash; <strong>governance-by-information-flow</strong>. It does not block; it changes what the agent sees by the time it acts. Where mechanical enforcement closes &ldquo;research before producing,&rdquo; retrieval closes &ldquo;research before agreeing&rdquo; applied to the agent&rsquo;s own corpus.</p>
+<p>The architecture was added 2026-06-04 per DECISIONS.md D32. The trigger was an audit finding (D32 Context): EngineOS had strong CAPTURE &ndash; <code>flush.py</code> + <code>compile.py</code> + 216 KB articles + 70+ intel-log entries + 18 daily logs + 27 run plans &ndash; but weak RETRIEVAL. During normal work the agent rarely read concept articles or queried the intel log. Mid-task focus suppresses reflexive internal-archive lookup. Capture without retrieval was a write-only system. For full architecture detail, decision rationale, and the why-not-vector-DB analysis, see <strong><code>docs/source/second-brain.md</code></strong> and <code>methodology/memory-architecture.md § Retrieval Surfaces</code>. This section covers the governance-relevant slice.</p>
+<h3 id="three-layers">Three Layers<a class="headerlink" href="#three-layers" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Mechanism</th>
+<th>Fires when</th>
+<th>Coverage target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. <strong>Session-start injection</strong></td>
+<td><code>hooks/session-start.py</code> (Hook 6)</td>
+<td>Every session start</td>
+<td>Orientation &ndash; full KB index + last 30 lines of today&rsquo;s daily log at ~20K cap</td>
+</tr>
+<tr>
+<td>2. <strong>Mid-work retrieval hook</strong></td>
+<td><code>hooks/prompt-retrieval.py</code> (Hook 5, <code>UserPromptSubmit</code>)</td>
+<td>Every prompt matching the heuristic gate</td>
+<td>~90% &ndash; silent, mechanical, ≤1024 chars, ≤1s, top-3 from 6-surface corpus</td>
+</tr>
+<tr>
+<td>3. <strong>Manual escalation</strong></td>
+<td><code>.claude/skills/recall/</code> (<code>/recall &lt;query&gt;</code>)</td>
+<td>Operator or agent invocation when hook missed or deeper sweep needed</td>
+<td>~10% &ndash; explicit, ranked, no cap</td>
+</tr>
+</tbody>
+</table>
+<p>Layer 1 establishes orientation. Layer 2 fills in mid-work context mechanically. Layer 3 escalates when the hook misses or the decision is load-bearing.</p>
+<h3 id="six-surface-priority-corpus">Six-Surface Priority Corpus<a class="headerlink" href="#six-surface-priority-corpus" title="Anchor link">&para;</a></h3>
+<p>All three layers read the same six surfaces in the same priority order:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Surface</th>
+<th>Density of value</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>logs/intelligence-log.md</code></td>
+<td>Highest (curated strategic moments)</td>
+<td>&ldquo;What did we learn / decide / observe?&rdquo;</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>knowledge/index.md</code></td>
+<td>High (catalog with summaries)</td>
+<td>&ldquo;Do we have an article on X?&rdquo;</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>knowledge/concepts/*.md</code> + <code>connections/*.md</code></td>
+<td>High in single article</td>
+<td>&ldquo;Read the article on X&rdquo;</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>daily/*.md</code> (last 30 days)</td>
+<td>Medium (recent in-flight context)</td>
+<td>&ldquo;What were we doing recently on Y?&rdquo;</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>run-plans/*.md</code> (last 60 days)</td>
+<td>High in single plan</td>
+<td>&ldquo;Recent plan-and-execution for Z&rdquo;</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>methodology/*.md</code></td>
+<td>Highest in matched doc</td>
+<td>&ldquo;Official approach to W&rdquo;</td>
+</tr>
+</tbody>
+</table>
+<p>Higher surfaces have higher signal-to-noise. Stopping rule: when surfaces 1-2 yield 3+ strong hits, lower surfaces are skipped. The whole corpus is markdown &ndash; structured KB index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision at personal-KB scale (&lt;500 articles, currently 216). Vector DB / GraphRAG / Mem0-style frameworks are Phase C deferred with explicit revisit conditions in D32 (corpus &gt;2000 articles, sustained semantic-miss complaints, etc.).</p>
+<h3 id="discipline-pattern-pairing">Discipline + Pattern Pairing<a class="headerlink" href="#discipline-pattern-pairing" title="Anchor link">&para;</a></h3>
+<p>The mechanical layer is paired with an advisory discipline so retrieval still fires when the hook&rsquo;s heuristic gate misses:</p>
+<ul>
+<li><strong>Framework pattern <code>retrieval-before-decide</code></strong> &ndash; the read-side discipline. Before making an architecture/methodology decision in a domain where prior intelligence likely exists, query the second brain first. The discipline names the moments where the hook&rsquo;s word-based gate isn&rsquo;t reliable (the prompt may not contain &ldquo;we&rdquo; or start with &ldquo;what&rdquo; yet the decision is load-bearing).</li>
+<li><strong>Sister discipline <code>session-end-audit-before-flush</code></strong> &ndash; the write-side discipline. For multi-day or multi-deliverable sessions, run a coverage audit before <code>flush.py</code> to ensure marathon-session content gets captured.</li>
+<li><strong>Feedback memory <code>feedback_lookup_before_decide.md</code></strong> &ndash; auto-fire trigger phrases that the agent learns to recognize as discipline-invocation moments.</li>
+<li><strong>Companion skill <code>recall</code></strong> &ndash; the manual escalation, pure Read/Grep/Glob, zero API cost. Invoked via <code>/recall &lt;query&gt;</code> or when the agent recognizes a discipline moment.</li>
+</ul>
+<p>Together the four pieces close both halves of the loop: capture (write-side) + retrieval (read-side), mechanical (hook + skill) + advisory (discipline + feedback).</p>
+<h3 id="measurement">Measurement<a class="headerlink" href="#measurement" title="Anchor link">&para;</a></h3>
+<p>The retrieval layer is governance-grade because it is measured. <code>scripts/retrieval-health.jsonl</code> is append-only, one record per UserPromptSubmit invocation. Schema: <code>ts, session_id, prompt_chars, query_terms, gate_triggered, gate_reasons, corpus_searched, matches_found, matches_returned, chars_injected, exec_ms, result</code>. The operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions and applies the keep/tune/kill rules from D32:</p>
+<ul>
+<li>Gate hit rate &lt;10% sustained → too quiet; loosen triggers or kill hook (rely on <code>/recall</code> only)</li>
+<li>Gate hit rate &gt;60% sustained → too noisy; tighten triggers or keep if injections useful</li>
+<li>Mean <code>chars_injected</code> near 1024 cap → consider bumping cap</li>
+<li>Operator marks injections subjectively; if &gt;50% noise → tighten or kill</li>
+</ul>
+<p>This is the same evidence-based keep/tune/kill cadence used by the capture-side health log (see Observability below). Three new binary tests added to memory-architecture (#10-#12) verify the layer fires per session.</p>
+<h3 id="observability">Observability<a class="headerlink" href="#observability" title="Anchor link">&para;</a></h3>
+<p>Both the capture-side and retrieval-side mechanical layers emit structured health logs. The operator reviews them periodically &ndash; the system does not silently degrade.</p>
+<ul>
+<li><strong><code>scripts/hook-health.jsonl</code></strong> (DECISIONS.md D30) &ndash; one record per <code>flush.py</code> invocation. Schema includes attempt count, retry success/failure, exec time, cap hits, response size. <code>scripts/health-review.py</code> summarizes failure rate, retry rate, cap-hit distribution, recent-records table.</li>
+<li><strong><code>scripts/retrieval-health.jsonl</code></strong> (DECISIONS.md D32) &ndash; one record per UserPromptSubmit invocation (see Measurement above). <code>scripts/retrieval-review.py</code> summarizes gate hit rate, injection size distribution, top query terms, top gate-fire reasons, exec-time distribution.</li>
+</ul>
+<p>D30 also added a 2-attempt retry loop (3s sleep) wrapping <code>query()</code> calls in both <code>flush.py:run_flush()</code> and <code>compile.py:compile_daily_log()</code>. The retry absorbs transient SDK errors (concurrent-session lock, rate, OAuth refresh) cheaply; the health log captures evidence about whether deeper investigation is warranted. If retry-success-rate stays high, the layered fix IS the answer; if <code>flush_error</code> rate stays &gt;5% after retries, that&rsquo;s the real signal to escalate. The operator runs <code>health-review.py</code> ad hoc when suspecting drift &ndash; not on a fixed cadence. Operator-driven keep/tune/kill.</p>
+<p>A related operational fix is captured in DECISIONS.md D31: Python&rsquo;s <code>print()</code> uses block buffering when stdout is a file, which had made <code>compile.py</code> look silently broken for ~3 weeks (<code>compile.log</code> mtime froze) when it was actually running fine intermittently. Fix is one line &ndash; <code>sys.stdout.reconfigure(line_buffering=True)</code> at the top of <code>compile.py:main()</code>. Also added: propagation of <code>CLAUDE_INVOKED_BY=knowledge_compile</code> BEFORE imports that could trigger Claude Code, preventing recursive SessionEnd → flush.py → compile.py → SessionEnd loops from spawning noise daily-log entries. The buffering insight is captured as an intelligence-log entry and as the <code>block-buffered-stdout-masks-progress</code> pattern &ndash; reusable across any future background-spawn pattern.</p>
+<hr />
+<h2 id="quality-gates-how-they-layer">Quality Gates &ndash; How They Layer<a class="headerlink" href="#quality-gates-how-they-layer" title="Anchor link">&para;</a></h2>
+<p>EngineOS has four quality gate mechanisms. They are not interchangeable &ndash; each catches a different class of failure, and they layer in a specific order.</p>
+<h3 id="output-self-test-fast-binary-gate">output-self-test (Fast Binary Gate)<a class="headerlink" href="#output-self-test-fast-binary-gate" title="Anchor link">&para;</a></h3>
+<p>Binary YES/NO questions per output type. Runs before any &ldquo;done&rdquo; declaration. Takes seconds per test. 5 test batteries: Research Output (RS), Content/Deliverable (CD), Integration Output (IO), HTML Output (HD), and Cross-Cutting (XC, always runs).</p>
+<p>Each test has a quick version (for scan-depth work) and a thorough version (for deep-dive work). Every test follows four design rules: answerable YES/NO in under 5 seconds, references specific parts of the output, a NO implies a specific fix, and paired quick/thorough versions.</p>
+<p><strong>What it catches:</strong> Structural problems &ndash; missing citations, placeholder text, generic output, voice mismatch, broken formatting. <strong>What it misses:</strong> Fabricated citations that look correct, criteria that technically pass but miss the intent, quality issues invisible in a quick skim.</p>
+<h3 id="sanity-check-periodic-spot-check">sanity-check (Periodic Spot-Check)<a class="headerlink" href="#sanity-check-periodic-spot-check" title="Anchor link">&para;</a></h3>
+<p>11 known failure modes, each with a binary test. Runs at natural pause points during execution &ndash; not at every commit, not mid-sentence, but at phase boundaries and after producing substantial output. Takes under 2 minutes.</p>
+<p>The 11 failure modes, each backed by a real production incident:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Failure Mode</th>
+<th>Quick Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Premature Confidence</td>
+<td>Am I calling something settled based on thin evidence?</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Staleness Blindness</td>
+<td>Am I acting on intel older than 2 weeks without checking?</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Scope Ratchet</td>
+<td>Has what we&rsquo;re targeting changed without deliberate decision?</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Generic Output</td>
+<td>Am I producing generic output instead of specific output?</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Claim Hallucination</td>
+<td>Is every claim traceable to documented evidence?</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Missing Source Trail</td>
+<td>Can I trace each claim to a specific source?</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Contradictory Frame</td>
+<td>Does this output hold conflicting assumptions?</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Agent Hallucinated Success</td>
+<td>Did an agent report success but the data didn&rsquo;t change?</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Depth Miscalibration</td>
+<td>Am I doing deep-dives on everything or scans on everything?</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Cross-Engine Contamination</td>
+<td>Is research from one engine bleeding into another?</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Unverified State Claim</td>
+<td>Am I reporting from memory instead of re-verifying?</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What it catches:</strong> Drift patterns that accumulate during execution. <strong>What it misses:</strong> Novel failure modes not yet in the gallery. Quality issues that require independent context to detect.</p>
+<h3 id="adversarial-evaluator-independent-evaluation">adversarial-evaluator (Independent Evaluation)<a class="headerlink" href="#adversarial-evaluator-independent-evaluation" title="Anchor link">&para;</a></h3>
+<p>Scored evaluation by an independent-context subagent. Runs inside the iteration envelope during production. 20-turn budget per evaluation. Evaluates against the run plan&rsquo;s hardened criteria.</p>
+<p><strong>What it catches:</strong> Self-evaluation blind spots &ndash; fabricated citations, criteria gaming, quality issues that the producing agent cannot see because it shares context with the reasoning that produced the work. <strong>What it misses:</strong> Failure modes outside the hardened criteria. Visual/rendering defects that require a browser.</p>
+<h3 id="qa-pipeline-final-comprehensive-gate">qa-pipeline (Final Comprehensive Gate)<a class="headerlink" href="#qa-pipeline-final-comprehensive-gate" title="Anchor link">&para;</a></h3>
+<p>4-stage composited verification for external-facing deliverables:</p>
+<ol>
+<li><strong>Stage 1: Programmatic Checks</strong> &ndash; Citation compliance (find all numeric claims, verify citations exist), marketing language detection (5 categories of promotional language), cross-document consistency (track data points across files, flag discrepancies), source freshness (flag citations older than 12 months), faithfulness (verify cited sources actually support claims &ndash; dispatches independent subagent at Comprehensive depth).</li>
+<li><strong>Stage 2: Binary Self-Tests</strong> &ndash; Invokes output-self-test batteries in the context of the full pipeline. Cross-references with Stage 1 findings.</li>
+<li><strong>Stage 3: Visual Verification</strong> &ndash; HTML outputs only. Renders in a real browser via Puppeteer. Screenshots every section. Audits against a checklist covering diagrams, interactivity, layout, typography, and color. Catches four defect classes invisible in source: hidden elements, broken interactivity, missing enhancements, non-persisting state.</li>
+<li><strong>Stage 4: Domain-Specific Standards</strong> &ndash; Professional checklists by deliverable type (reports, campaigns, lead lists, one-pagers, presentations, HTML interactives). Severity classification (Critical/High/Medium/Low) for every issue found across all stages.</li>
+</ol>
+<p><strong>What it catches:</strong> Everything the previous gates might miss when the deliverable is going to an external audience. <strong>What it misses:</strong> Nothing in scope &ndash; this is the comprehensive final gate.</p>
+<h3 id="the-layering-order">The Layering Order<a class="headerlink" href="#the-layering-order" title="Anchor link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>output-self-test  (fast, every &quot;done&quot; declaration)
+    |
+sanity-check  (periodic, at natural pause points)
+    |
+adversarial-evaluator  (inside iteration envelope, scored against criteria)
+    |
+qa-pipeline  (final gate, external-facing deliverables only)
+</code></pre></div>
+
+<p>Each layer is progressively more expensive and catches progressively subtler failures. output-self-test runs in seconds and catches structural problems. sanity-check runs in 2 minutes and catches drift patterns. adversarial-evaluator runs a full subagent and catches self-evaluation blind spots. qa-pipeline runs programmatic scans, self-tests, browser rendering, and domain checklists &ndash; it is the comprehensive gate that only fires for work going outside the system.</p>
+<hr />
+<h2 id="run-plans-planning-artifacts-and-gate-keys">Run Plans &ndash; Planning Artifacts AND Gate Keys<a class="headerlink" href="#run-plans-planning-artifacts-and-gate-keys" title="Anchor link">&para;</a></h2>
+<p>The key architectural insight: run plans serve two purposes simultaneously.</p>
+<p><strong>1. Planning artifact (advisory).</strong> The phase-controller creates a run plan. It captures the raw intake, classifies the work, specifies the skill chain, hardens the success criteria, and persists execution state across compaction boundaries. This is the advisory function &ndash; the plan guides execution.</p>
+<p><strong>2. Mechanical gate key (blocking).</strong> The PreToolUse hook checks for the run plan&rsquo;s existence on disk before allowing deliverable writes. No run plan at the canonical path = no writes. This is the mechanical function &ndash; the plan unlocks writes.</p>
+<p>This bridges the advisory and mechanical enforcement layers. The run plan is the bridge artifact &ndash; created by the advisory system (phase-controller skill), consumed by the mechanical system (pre-write-governance.sh hook). Without this bridge, the two layers would be independent: the agent could ignore advisory governance AND have its writes blocked by the hook (or the hook could be permissive while advisory governance goes unenforced). The run plan makes them interdependent.</p>
+<p><strong>Canonical paths (enforced by hook v2 scope-matching):</strong>
+- Engine work: <code>engines/[name]/run-plans/[YYYY-MM-DD]-[short-name].md</code>
+- OS-level work: <code>run-plans/[YYYY-MM-DD]-[short-name].md</code></p>
+<p>No nested subdirectories. The hook scans at <code>-maxdepth 1</code>. Legacy paths like <code>engines/X/pipeline/run-plans/</code> are deprecated.</p>
+<h3 id="a-real-run-plan">A Real Run Plan<a class="headerlink" href="#a-real-run-plan" title="Anchor link">&para;</a></h3>
+<p>The substrate tightening run plan (<code>run-plans/2026-04-05-engineos-substrate-tightening.md</code>) is a real BL-type (Build/Audit) run plan that executed to COMPLETE status. It demonstrates the 6-layer structure:</p>
+<details>
+<summary>Layer 0: Raw Intake (condensed)</summary>
+
+Operator commissioned external audit. Two-pass structural analysis identified contract integrity gaps -- control plane drift, run-plan path incoherence, governance enforcement holes, memory/logging split. Live cowork session became forensic evidence: caught phase-controller-skipping pattern, WONDA-STUFF path-search miss, tool-wrapper-vs-capability-limit confusion, scope-creep-disguised-as-due-diligence, confident-negative-finding propagation. Two tracks: State Integrity Tightening + Cowork Internalization.
+</details>
+
+<details>
+<summary>Layer 1: Classification + Context</summary>
+
+**Type:** BL -- Build/Audit (Heavy scope)
+**Basis:** Changes what EngineOS IS at the substrate layer. Touches every engine.
+**Current state:** 28 skills, 4 deployed hooks, 3 engine tenants. Known drift in CLAUDE.md (claimed 27 skills, hooks "planned"). [^historical-1]
+
+[^historical-1]: These counts reflect the system state at the time of the 2026-04-05 substrate-tightening operation. Current counts (2026-06-05): 29 skills (recall added 2026-06-04 per D32), 8 wired hook events (4 .sh + 4 .py per D32). The 3 engine tenants count remains accurate; a 4th tenant (`job-search-arnett`) was bootstrapped 2026-06-04. Excerpt left intact as authentic run-plan evidence.
+**Staleness check:** CONTEXT.md last updated 2 days ago. Current.
+</details>
+
+<details>
+<summary>Layer 2: Skill Chain + Depth (condensed)</summary>
+
+7 topic areas classified (5 deep-dive, 2 scan). 4-phase execution plan:
+- **Phase A:** Control Plane Truth Reconciliation (11 CLAUDE.md/CONTEXT.md/registry edits)
+- **Phase B:** Path + Hook Infrastructure Hardening (hook rewrite, path migration)
+- **Phase C:** Cowork Patterns Installation (5 new patterns, 1 new rule, 2 skill extensions)
+- **Phase D:** Culmination Test + Intelligence Capture
+
+5 gates (plan approval, and one after each phase).
+</details>
+
+<details>
+<summary>Layer 2 (continued): Hardened Criteria -- one representative criterion</summary>
+
+
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;C3&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;criterion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pre-write-governance.sh scope-matches write path to run plan location&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;threshold&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;pass_definition&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hook logic extracts target engine from file_path when path matches engines/[name]/... pattern, and requires an active run plan at engines/[name]/run-plans/ OR root run-plans/. Writes to exempt paths still allowed unconditionally.&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;fail_definition&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hook allows a write to engines/X/... when only a plan for engines/Y/... exists, OR hook blocks a write that should be allowed, OR exempt paths get gated unnecessarily&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;edge_cases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;Operations touching multiple engines&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;OS-level work touching .claude/skills or methodology&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Edge case when engine name has hyphen/underscore variance&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Writes to run-plans/ directory itself still exempt&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+
+10 criteria total, thresholds ranging from 7-9. The plan has criteria for control plane truth (C1), canonical paths (C2), hook logic (C3), MEMORY.md resolution (C4), pattern installation (C5), methodology immutability (C6), evidence-first enforcement (C7), architecture preservation (C8), culmination test (C9), and lift regression capture (C10).
+</details>
+
+<details>
+<summary>Layer 5: Execution Log (Phase A excerpt)</summary>
+
+
+<div class="highlight"><pre><span></span><code>### 2026-04-05 -- Phase A: Control Plane Truth Reconciliation
+
+**Disk counts verified:**
+- Skills: 28 (ls .claude/skills/ | wc -l) [^historical-2]
+- Methodology: 13 .md files in methodology/ root
+- Patterns: 59 (52 problem + 4 deliverable + 3 framework)
+- Capabilities: 32 active + 2 pending migration
+
+[^historical-2]: Counts as verified on 2026-04-05 during this run plan&#39;s Phase A execution. Current counts (2026-06-05): 29 skills, 15 methodology docs, 69 patterns (58 problem + 5 deliverable + 6 framework). The Phase A excerpt is preserved as the original execution evidence; current state is documented in `overview.md` and `architecture.md`.
+
+**CLAUDE.md edits (5 distinct edits):**
+- Line 41: Removed MEMORY.md from Tier 1
+- Lines 54-60: Updated skill count 27-&gt;28, reorganized skill list
+- Lines 71-77: REPLACED &quot;planned but not yet deployed&quot; with &quot;4 deployed hooks&quot;
+[...]
+
+**sanity-check results:**
+- #7 Contradictory Frame: CLEAN
+- #8 Agent Hallucinated Success: CLEAN (all 11 edits verified present via grep)
+
+**Phase A status:** COMPLETE. Gate B APPROVED.
+</code></pre></div>
+
+
+</details>
+
+<p>This run plan bridged both purposes: it guided the 35-step execution (planning artifact) and its presence at <code>run-plans/</code> unlocked every write across 4 phases of substrate changes (gate key).</p>
+<hr />
+<h2 id="the-operator-as-final-enforcement-layer">The Operator as Final Enforcement Layer<a class="headerlink" href="#the-operator-as-final-enforcement-layer" title="Anchor link">&para;</a></h2>
+<p>EngineOS does not claim to be self-governing. The operator is the final enforcement layer.</p>
+<p><strong>Gates require explicit approval.</strong> Not silence, not implied consent, not &ldquo;I think they would want&hellip;&rdquo; The agent stops and waits. In production, this means the operator reviews the work, asks questions, pushes back on scope, redirects approach, and says &ldquo;proceed&rdquo; only when satisfied. The operator has caught the evaluator validating against the wrong baseline, redirected substrate work that was drifting toward feature scope, and collapsed gate boundaries when the plan was well-designed and pre-approved.</p>
+<p><strong>Operator overrides advisory guidance.</strong> The operator&rsquo;s explicit instructions override all guidance except safety constraints. If the operator says &ldquo;skip evaluation,&rdquo; the iteration envelope is bypassed. If the operator says &ldquo;proceed without a full plan,&rdquo; the agent proceeds. The governance exists to serve the operator, not to constrain them.</p>
+<p><strong>Cross-engine scope requires confirmation.</strong> If a task would modify files in multiple engines, the agent confirms scope with the operator first. This prevents unintended cross-engine contamination.</p>
+<p><strong>Iteration exhaustion escalates to operator.</strong> When the adversarial evaluator fails a deliverable 3 times, the agent does not decide what to do. It presents the full iteration history &ndash; all attempts, all scores, all feedback &ndash; and the operator decides: accept as-is, provide specific guidance for another attempt, or take over manually.</p>
+<p><strong>The operator can skip the iteration envelope</strong> by saying &ldquo;skip evaluation&rdquo; at any approval gate. This is the only way to bypass the envelope. The agent cannot skip it on its own confidence &ndash; that is the advisory-governance-failure pattern, the exact behavior the enforcement stack was built to prevent.</p>
+<p>The system works because the operator is engaged. This is stated plainly in CLAUDE.md and repeated here without apology: methodology-as-infrastructure for a single engaged operator is not the same as deterministic enforcement, and it does not claim to be. What it claims &ndash; and what the evidence from 100+ days of production use supports &ndash; is that mechanical hooks catch what advisory governance misses, advisory governance covers what mechanical hooks cannot reach, and the operator catches what both miss.</p>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

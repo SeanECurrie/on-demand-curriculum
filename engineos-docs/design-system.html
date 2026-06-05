@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System — EngineOS Docs</title>
+  <meta name="description" content="The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two prod">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link active" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Design System</h1>
+    <p class="report-header__subtitle">The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two prod</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="design-system-enterprise-visual-infrastructure">Design System &ndash; Enterprise Visual Infrastructure<a class="headerlink" href="#design-system-enterprise-visual-infrastructure" title="Anchor link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Anchor link">&para;</a></h2>
+<p>The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file &ndash; <code>design-system/enterprise-styles.css</code> &ndash; composited from two production-proven sources: MLR&rsquo;s enterprise stylesheet (776 lines, November 2025, battle-tested across 13 professional deliverables at 9.5/10 quality through 7 iteration cycles) and ODC&rsquo;s walkthrough style guide (March 2026, WCAG AA verified, 50+ tokens with light/dark pairs).</p>
+<p>Engines producing HTML link this stylesheet. Engine-specific visual additions go in engine-level CSS that follows or imports the shared file. No engine duplicates tokens defined at the OS layer.</p>
+<p>The system ships with five companion reference documents: <code>color-tokens.md</code> (full token inventory), <code>typography.md</code> (type scales and spacing), <code>accessibility.md</code> (verified contrast tables), <code>pdf-pipeline.md</code> (Chrome headless generation), and <code>render-validate-pipeline.md</code> (6-step visual QA). This document synthesizes all six sources into one architectural reference.</p>
+<hr />
+<h2 id="7-layer-css-architecture">7-Layer CSS Architecture<a class="headerlink" href="#7-layer-css-architecture" title="Anchor link">&para;</a></h2>
+<p>The stylesheet is organized into seven layers, ordered by specificity and dependency. Each layer builds on the one before it. The layering exists for three reasons: it enforces a single source of truth for design tokens (Layer 1), it separates concerns cleanly enough that an engine can use Layer 2 for reports without pulling in Layer 3&rsquo;s interactive components, and it keeps print/dark/responsive overrides isolated from the base visual system.</p>
+<h3 id="layer-1-css-custom-properties">Layer 1: CSS Custom Properties<a class="headerlink" href="#layer-1-css-custom-properties" title="Anchor link">&para;</a></h3>
+<p>Single source of truth for every design token. Components reference these variables &ndash; never hard-coded hex values. If a color, spacing value, or font stack appears in Layers 2-7, it traces back to a <code>:root</code> variable defined here.</p>
+<div class="highlight"><pre><span></span><code><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c">/* Typography */</span>
+<span class="w">  </span><span class="nv">--font-body</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="n">apple-system</span><span class="p">,</span><span class="w"> </span><span class="n">BlinkMacSystemFont</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Segoe UI&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Roboto</span><span class="p">,</span>
+<span class="w">               </span><span class="n">Oxygen</span><span class="p">,</span><span class="w"> </span><span class="n">Ubuntu</span><span class="p">,</span><span class="w"> </span><span class="n">Cantarell</span><span class="p">,</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--font-mono</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SF Mono&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">SFMono-Regular</span><span class="p">,</span><span class="w"> </span><span class="n">ui-monospace</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;DejaVu Sans Mono&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Menlo</span><span class="p">,</span><span class="w"> </span><span class="n">Consolas</span><span class="p">,</span><span class="w"> </span><span class="kc">monospace</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c">/* 4px spacing grid */</span>
+<span class="w">  </span><span class="nv">--space-1</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="kt">px</span><span class="p">;</span><span class="w">   </span><span class="nv">--space-2</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w">   </span><span class="nv">--space-3</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--space-4</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="kt">px</span><span class="p">;</span><span class="w">  </span><span class="nv">--space-5</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="p">;</span><span class="w">  </span><span class="nv">--space-6</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--space-8</span><span class="p">:</span><span class="w"> </span><span class="mi">32</span><span class="kt">px</span><span class="p">;</span><span class="w">  </span><span class="nv">--space-10</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="nv">--space-12</span><span class="p">:</span><span class="w"> </span><span class="mi">48</span><span class="kt">px</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c">/* Layout constraints */</span>
+<span class="w">  </span><span class="nv">--max-content-width</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--max-prose-width</span><span class="p">:</span><span class="w"> </span><span class="mi">780</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--sidebar-width</span><span class="p">:</span><span class="w"> </span><span class="mi">260</span><span class="kt">px</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c">/* Semantic color tokens (50+ across 7 categories) */</span>
+<span class="w">  </span><span class="nv">--color-blue-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#3b82f6</span><span class="p">;</span><span class="w">    </span><span class="c">/* Infrastructure, links, primary */</span>
+<span class="w">  </span><span class="nv">--color-red-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#ef4444</span><span class="p">;</span><span class="w">     </span><span class="c">/* Security, warnings, critical */</span>
+<span class="w">  </span><span class="nv">--color-green-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#22c55e</span><span class="p">;</span><span class="w">   </span><span class="c">/* Success, data/config, completed */</span>
+<span class="w">  </span><span class="nv">--color-amber-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#f59e0b</span><span class="p">;</span><span class="w">   </span><span class="c">/* Tips, user/operator, educational */</span>
+<span class="w">  </span><span class="nv">--color-indigo-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#6366f1</span><span class="p">;</span><span class="w">  </span><span class="c">/* External services */</span>
+<span class="w">  </span><span class="nv">--color-purple-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#a855f7</span><span class="p">;</span><span class="w">  </span><span class="c">/* Agent/LLM */</span>
+<span class="w">  </span><span class="nv">--color-stone-700</span><span class="p">:</span><span class="w"> </span><span class="mh">#44403c</span><span class="p">;</span><span class="w">   </span><span class="c">/* Primary body text */</span>
+<span class="w">  </span><span class="c">/* ... plus shades at 50/100/200/300/400/600/800/900 per category */</span>
+
+<span class="w">  </span><span class="c">/* Enterprise report palette (MLR slate-gray, pandoc-aligned) */</span>
+<span class="w">  </span><span class="nv">--color-enterprise-text</span><span class="p">:</span><span class="w"> </span><span class="mh">#333333</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--color-enterprise-accent</span><span class="p">:</span><span class="w"> </span><span class="mh">#4a5568</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--color-enterprise-border</span><span class="p">:</span><span class="w"> </span><span class="mh">#e2e8f0</span><span class="p">;</span>
+<span class="w">  </span><span class="c">/* ... */</span>
+
+<span class="w">  </span><span class="c">/* Chart and role colors (D3.js visualization) */</span>
+<span class="w">  </span><span class="nv">--chart-color-1</span><span class="p">:</span><span class="w"> </span><span class="mh">#4A90E2</span><span class="p">;</span><span class="w">  </span><span class="c">/* Primary series / leader */</span>
+<span class="w">  </span><span class="nv">--chart-color-2</span><span class="p">:</span><span class="w"> </span><span class="mh">#27AE60</span><span class="p">;</span><span class="w">  </span><span class="c">/* Secondary series / positive */</span>
+<span class="w">  </span><span class="nv">--chart-color-3</span><span class="p">:</span><span class="w"> </span><span class="mh">#E74C3C</span><span class="p">;</span><span class="w">  </span><span class="c">/* Tertiary series / negative */</span>
+<span class="w">  </span><span class="c">/* ... 6 sequential colors total */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Every downstream layer references these properties. When dark mode activates, Layer 6 remaps the custom properties &ndash; no component code changes.</p>
+<h3 id="layer-2-core-enterprise-formatting">Layer 2: Core Enterprise Formatting<a class="headerlink" href="#layer-2-core-enterprise-formatting" title="Anchor link">&para;</a></h3>
+<p>Professional report styling aligned with pandoc output conventions. This layer handles the bread-and-butter elements of any report deliverable: base typography, heading hierarchy with bottom-border anchors, table formatting with alternating rows and hover states, list styles, section boxes, badges (both grayscale and colored priority variants), callouts (enterprise <code>callout-box</code> with 5 semantic variants plus interactive <code>.callout</code> with 4 variants), header patterns, and table-of-contents navigation.</p>
+<p>Representative structure:</p>
+<div class="highlight"><pre><span></span><code><span class="c">/* Tables: enterprise convention */</span>
+<span class="nt">th</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-enterprise-accent</span><span class="p">);</span>
+<span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#ffffff</span><span class="p">;</span>
+<span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">text-transform</span><span class="p">:</span><span class="w"> </span><span class="kc">uppercase</span><span class="p">;</span>
+<span class="w">  </span><span class="k">letter-spacing</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">tbody</span><span class="w"> </span><span class="nt">tr</span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">even</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-enterprise-bg-alt</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c">/* Callouts: four semantic variants (interactive/ODC-derived) */</span>
+<span class="p">.</span><span class="nc">callout</span><span class="p">.</span><span class="nc">critical</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-red-</span><span class="mi">50</span><span class="p">);</span><span class="w">   </span><span class="k">border-left-color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-red-</span><span class="mi">500</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">callout</span><span class="p">.</span><span class="nc">tip</span><span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-amber-</span><span class="mi">50</span><span class="p">);</span><span class="w"> </span><span class="k">border-left-color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-amber-</span><span class="mi">500</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">callout</span><span class="p">.</span><span class="nc">info</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-blue-</span><span class="mi">50</span><span class="p">);</span><span class="w">  </span><span class="k">border-left-color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-blue-</span><span class="mi">500</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c">/* Badges: grayscale for document body, colored for emphasis */</span>
+<span class="p">.</span><span class="nc">badge</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">inline-block</span><span class="p">;</span>
+<span class="w">  </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="kt">px</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="kt">pt</span><span class="p">;</span>
+<span class="w">  </span><span class="k">font-weight</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="p">;</span>
+<span class="w">  </span><span class="k">text-transform</span><span class="p">:</span><span class="w"> </span><span class="kc">uppercase</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Two callout systems coexist. The enterprise <code>.callout-box</code> (with <code>.important</code>, <code>.success</code>, <code>.info</code>, <code>.warning</code>, <code>.danger</code> modifiers) is from MLR&rsquo;s report convention. The interactive <code>.callout</code> (with <code>.critical</code>, <code>.warning</code>, <code>.tip</code>, <code>.info</code> modifiers and uppercase <code>.callout-label</code>) is from ODC&rsquo;s walkthrough convention. Both are available; use enterprise callouts in reports, interactive callouts in walkthroughs.</p>
+<h3 id="layer-3-interactive-components">Layer 3: Interactive Components<a class="headerlink" href="#layer-3-interactive-components" title="Anchor link">&para;</a></h3>
+<p>For curriculum walkthroughs and interactive HTML outputs. This layer provides:</p>
+<ul>
+<li><strong>Code blocks</strong> with syntax highlighting (8 token types, monospace font, language labels, copy-to-clipboard buttons)</li>
+<li><strong>Expandable/collapsible sections</strong> with semantic type variants (understanding, troubleshooting, expected-output, deployment) that color-code the trigger</li>
+<li><strong>Interactive checkboxes</strong> with localStorage persistence, custom appearance (20px visual, green check on checked state), focus-visible outlines, and strikethrough labels</li>
+<li><strong>Navigation sidebar</strong> with fixed positioning, scroll spy, progress bar, nav groups with uppercase labels, and active-state highlighting</li>
+<li><strong>Phase headers</strong> with phase-number labels, time-estimate badges, and security-critical border variants</li>
+<li><strong>&ldquo;Understanding&rdquo; sections</strong> with amber accent for educational context</li>
+<li><strong>Notes input fields</strong> for user annotations with localStorage persistence</li>
+<li><strong>Directory tree</strong> display in monospace</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c">/* Expandable sections */</span>
+<span class="p">.</span><span class="nc">expandable-trigger</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+<span class="w">  </span><span class="k">align-items</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
+<span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space-</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">  </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="w">  </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space-</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space-</span><span class="mi">4</span><span class="p">);</span>
+<span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-stone-</span><span class="mi">100</span><span class="p">);</span>
+<span class="w">  </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+<span class="w">  </span><span class="k">cursor</span><span class="p">:</span><span class="w"> </span><span class="kc">pointer</span><span class="p">;</span>
+<span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">font-weight</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">expandable-content</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w">  </span><span class="c">/* Toggle via .open class */</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">expandable</span><span class="p">.</span><span class="nc">open</span><span class="w"> </span><span class="p">.</span><span class="nc">expandable-content</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c">/* Checkbox with custom rendering */</span>
+<span class="p">.</span><span class="nc">checkbox-input</span><span class="p">:</span><span class="nd">checked</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-green-</span><span class="mi">500</span><span class="p">);</span>
+<span class="w">  </span><span class="k">border-color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-green-</span><span class="mi">500</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">checkbox-input</span><span class="p">:</span><span class="nd">focus-visible</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">outline</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-blue-</span><span class="mi">500</span><span class="p">);</span>
+<span class="w">  </span><span class="k">outline-offset</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="layer-4-data-visualization">Layer 4: Data Visualization<a class="headerlink" href="#layer-4-data-visualization" title="Anchor link">&para;</a></h3>
+<p>Strategic analysis components from MLR&rsquo;s competitive intelligence deliverables:</p>
+<ul>
+<li><strong>SWOT grids</strong> &ndash; 2x2 CSS grid with color-coded quadrants (green/strengths, red/weaknesses, blue/opportunities, amber/threats), each with section headers and bullet lists</li>
+<li><strong>Positioning maps</strong> &ndash; Absolute-positioned quadrant charts (700x500px) with axis labels, quadrant labels, and platform dots using semantic role colors (leader/challenger/incumbent/threat/subject)</li>
+<li><strong>Chart color classes</strong> &ndash; Six sequential colors mapped to CSS classes for D3.js integration (<code>chart-color-1</code> through <code>chart-color-6</code> applying both fill and stroke)</li>
+<li><strong>Map legends</strong> and <strong>strategic options</strong> formatting</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c">/* SWOT grid */</span>
+<span class="p">.</span><span class="nc">swot-grid</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="k">grid</span><span class="p">;</span>
+<span class="w">  </span><span class="k">grid-template-columns</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="n">fr</span><span class="w"> </span><span class="mi">1</span><span class="n">fr</span><span class="p">;</span>
+<span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">900</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">page-break-inside</span><span class="p">:</span><span class="w"> </span><span class="kc">avoid</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">swot-strengths</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#d4edda</span><span class="p">;</span><span class="w"> </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="mh">#28a745</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">swot-weaknesses</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#f8d7da</span><span class="p">;</span><span class="w"> </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="mh">#dc3545</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">swot-opportunities</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#cce5ff</span><span class="p">;</span><span class="w"> </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="mh">#0056b3</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">swot-threats</span><span class="w">       </span><span class="p">{</span><span class="w"> </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#fff3cd</span><span class="p">;</span><span class="w"> </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="mh">#ffc107</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c">/* Platform dots on positioning maps use semantic role tokens */</span>
+<span class="p">.</span><span class="nc">platform</span><span class="p">.</span><span class="nc">leader</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-role-leader</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">platform</span><span class="p">.</span><span class="nc">subject</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-role-subject</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<h3 id="layer-5-printpdf-optimization">Layer 5: Print/PDF Optimization<a class="headerlink" href="#layer-5-printpdf-optimization" title="Anchor link">&para;</a></h3>
+<p>CSS rules that Chrome headless depends on for clean PDF generation. Three mechanisms:</p>
+<ol>
+<li>
+<p><strong>Page-break control</strong> &ndash; Headings get <code>page-break-after: avoid</code> (no orphaned headings). Table rows get <code>page-break-inside: avoid</code>. <code>thead</code> repeats on every page via <code>table-header-group</code>. Explicit <code>.page-break</code> and <code>.no-break</code> utility classes.</p>
+</li>
+<li>
+<p><strong><code>@page</code> rule</strong> &ndash; Letter portrait, 0.75in margins.</p>
+</li>
+<li>
+<p><strong><code>@media print</code> query</strong> &ndash; Hides interactive elements (sidebar, dark mode toggle, copy buttons, progress bar), forces expandable sections open (<code>display: block !important</code>), and resets body padding.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="p">@</span><span class="k">page</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">size</span><span class="o">:</span><span class="w"> </span><span class="nt">letter</span><span class="w"> </span><span class="nt">portrait</span><span class="o">;</span>
+<span class="w">  </span><span class="nt">margin</span><span class="o">:</span><span class="w"> </span><span class="nt">0</span><span class="p">.</span><span class="nc">75in</span><span class="o">;</span>
+<span class="p">}</span>
+
+<span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="nt">print</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">sidebar</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">dark-mode-toggle</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">code-copy-btn</span><span class="o">,</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">sidebar-progress</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">  </span><span class="p">.</span><span class="nc">expandable-content</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nt">h1</span><span class="o">,</span><span class="w"> </span><span class="nt">h2</span><span class="o">,</span><span class="w"> </span><span class="nt">h3</span><span class="o">,</span><span class="w"> </span><span class="nt">h4</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">page-break-after</span><span class="p">:</span><span class="w"> </span><span class="kc">avoid</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">tr</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">page-break-inside</span><span class="p">:</span><span class="w"> </span><span class="kc">avoid</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">thead</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">table-header-group</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="layer-6-dark-mode-overrides">Layer 6: Dark Mode Overrides<a class="headerlink" href="#layer-6-dark-mode-overrides" title="Anchor link">&para;</a></h3>
+<p>Activated by setting <code>&lt;html data-theme="dark"&gt;</code>. The implementation remaps every custom property in the <code>:root</code> scope to its dark-mode equivalent. Components that reference <code>--color-stone-700</code> for body text automatically get <code>#d4d4d4</code> instead of <code>#44403c</code>. No component-level dark mode logic is needed.</p>
+<p>The stone scale inverts: <code>--color-stone-50</code> goes from <code>#fafaf9</code> (near-white) to <code>#1a1a1a</code> (near-black). Semantic colors shift to lighter, higher-contrast variants: <code>--color-blue-500</code> goes from <code>#3b82f6</code> to <code>#60a5fa</code>, <code>--color-red-500</code> from <code>#ef4444</code> to <code>#f87171</code>.</p>
+<p>Element-specific overrides handle components that reference hard-coded values or need additional dark treatment: tables, sidebar, expandable triggers, checkboxes, input fields, and syntax highlighting tokens.</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span><span class="nt">data-theme</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">--color-stone-50</span><span class="p">:</span><span class="w"> </span><span class="mh">#1a1a1a</span><span class="p">;</span><span class="w">   </span><span class="c">/* Was #fafaf9 */</span>
+<span class="w">  </span><span class="nv">--color-stone-700</span><span class="p">:</span><span class="w"> </span><span class="mh">#d4d4d4</span><span class="p">;</span><span class="w">  </span><span class="c">/* Was #44403c */</span>
+<span class="w">  </span><span class="nv">--color-stone-900</span><span class="p">:</span><span class="w"> </span><span class="mh">#f5f5f5</span><span class="p">;</span><span class="w">  </span><span class="c">/* Was #1c1917 */</span>
+
+<span class="w">  </span><span class="nv">--color-blue-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#60a5fa</span><span class="p">;</span><span class="w">   </span><span class="c">/* Was #3b82f6 */</span>
+<span class="w">  </span><span class="nv">--color-red-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#f87171</span><span class="p">;</span><span class="w">    </span><span class="c">/* Was #ef4444 */</span>
+<span class="w">  </span><span class="nv">--color-green-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#4ade80</span><span class="p">;</span><span class="w">  </span><span class="c">/* Was #22c55e */</span>
+<span class="w">  </span><span class="nv">--color-amber-500</span><span class="p">:</span><span class="w"> </span><span class="mh">#fbbf24</span><span class="p">;</span><span class="w">  </span><span class="c">/* Was #f59e0b */</span>
+<span class="w">  </span><span class="c">/* ... all semantic categories remapped */</span>
+<span class="p">}</span>
+
+<span class="c">/* Dark syntax highlighting */</span>
+<span class="o">[</span><span class="nt">data-theme</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">.</span><span class="nc">token-keyword</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#a78bfa</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="o">[</span><span class="nt">data-theme</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">.</span><span class="nc">token-string</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#34d399</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="o">[</span><span class="nt">data-theme</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">.</span><span class="nc">token-comment</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#737373</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p>All dark-mode text-on-background pairings are verified to WCAG AA. The contrast table is in <code>accessibility.md</code>.</p>
+<h3 id="layer-7-responsivemobile">Layer 7: Responsive/Mobile<a class="headerlink" href="#layer-7-responsivemobile" title="Anchor link">&para;</a></h3>
+<p>Triggered at <code>max-width: 768px</code>. Three major adaptations:</p>
+<ol>
+<li>
+<p><strong>Sidebar collapse</strong> &ndash; The fixed sidebar transforms off-screen (<code>translateX(-100%)</code>) and becomes an overlay triggered by a hamburger button. A backdrop overlay dims the content area.</p>
+</li>
+<li>
+<p><strong>Touch targets</strong> &ndash; Nav items, expandable triggers, and checkboxes get <code>min-height: 44px</code> per WCAG 2.1 SC 2.5.5.</p>
+</li>
+<li>
+<p><strong>Content scaling</strong> &ndash; Body font increases to 14px, padding reduces to <code>--space-5</code>, tables wrap in horizontally-scrollable containers, and positioning maps scale via <code>aspect-ratio: 7/5</code> with <code>width: 100%</code>.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">768px</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">sidebar</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translateX</span><span class="p">(</span><span class="mi">-100</span><span class="kt">%</span><span class="p">);</span>
+<span class="w">    </span><span class="k">transition</span><span class="p">:</span><span class="w"> </span><span class="k">transform</span><span class="w"> </span><span class="mi">200</span><span class="kt">ms</span><span class="w"> </span><span class="kc">ease</span><span class="p">;</span>
+<span class="w">    </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">280</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">sidebar</span><span class="p">.</span><span class="nc">open</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translateX</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">  </span><span class="p">.</span><span class="nc">nav-item</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">expandable-trigger</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">checkbox-input</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">min-height</span><span class="p">:</span><span class="w"> </span><span class="mi">44</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="p">.</span><span class="nc">matrix-container</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="w">    </span><span class="k">height</span><span class="p">:</span><span class="w"> </span><span class="kc">auto</span><span class="p">;</span>
+<span class="w">    </span><span class="k">aspect-ratio</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="o">/</span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2 id="color-system">Color System<a class="headerlink" href="#color-system" title="Anchor link">&para;</a></h2>
+<p>50+ semantic tokens across 7 categories, each with light/dark pairs. Every color belongs to a semantic category &ndash; the category determines usage, not aesthetic preference.</p>
+<h3 id="semantic-categories">Semantic Categories<a class="headerlink" href="#semantic-categories" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Token Prefix</th>
+<th>Usage Domain</th>
+<th>Key Tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blue</td>
+<td><code>--color-blue-*</code></td>
+<td>Infrastructure, links, primary actions, focus outlines</td>
+<td>50, 100, 200, 500, 600, 700</td>
+</tr>
+<tr>
+<td>Red</td>
+<td><code>--color-red-*</code></td>
+<td>Security, warnings, critical status, FAIL indicators</td>
+<td>50, 100, 500, 600</td>
+</tr>
+<tr>
+<td>Green</td>
+<td><code>--color-green-*</code></td>
+<td>Success, data/config, completed state, PASS indicators</td>
+<td>50, 100, 500, 600</td>
+</tr>
+<tr>
+<td>Amber</td>
+<td><code>--color-amber-*</code></td>
+<td>Tips, user/operator context, educational notes</td>
+<td>50, 100, 500, 800</td>
+</tr>
+<tr>
+<td>Indigo</td>
+<td><code>--color-indigo-*</code></td>
+<td>External services (third-party APIs, platforms)</td>
+<td>100, 500</td>
+</tr>
+<tr>
+<td>Purple</td>
+<td><code>--color-purple-*</code></td>
+<td>Agent/LLM layers, AI components, model routing</td>
+<td>100, 500</td>
+</tr>
+<tr>
+<td>Stone</td>
+<td><code>--color-stone-*</code></td>
+<td>Neutrals, text, borders, backgrounds, containers</td>
+<td>50, 100, 200, 300, 400, 500, 700, 800, 900</td>
+</tr>
+</tbody>
+</table>
+<p>The classification rule: ask &ldquo;is this infrastructure, security, external, agent/LLM, data/config, user/operator, or neutral?&rdquo; and use the fill/stroke pair for that category. Do not mix categories on a single element.</p>
+<h3 id="enterprise-report-palette">Enterprise Report Palette<a class="headerlink" href="#enterprise-report-palette" title="Anchor link">&para;</a></h3>
+<p>A separate slate-gray palette for professional reports, aligned with pandoc output. Nine tokens: <code>--color-enterprise-text</code> (#333333), three heading levels (#1a202c, #2d3748, #4a5568), accent (#4a5568 for table headers and section borders), two border weights (#e2e8f0 light, #d0d0d0 heavy), and two backgrounds (#f7f7f7 alt rows, #edf2f7 hover).</p>
+<h3 id="chart-and-visualization-colors">Chart and Visualization Colors<a class="headerlink" href="#chart-and-visualization-colors" title="Anchor link">&para;</a></h3>
+<p>Six sequential colors for D3.js charts: <code>--chart-color-1</code> through <code>--chart-color-6</code> (blue, green, red, amber, purple, gray). Five semantic role colors for positioning maps: leader (#4A90E2), challenger (#27AE60), incumbent (#6c757d), threat (#E74C3C), subject (#F5A623).</p>
+<h3 id="diagram-element-colors">Diagram Element Colors<a class="headerlink" href="#diagram-element-colors" title="Anchor link">&para;</a></h3>
+<p>Seven semantic categories for diagram generation (Rough.js, Mermaid, HTML/CSS). Each category provides a fill/stroke pair for both light and dark modes:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Fill (Light)</th>
+<th>Stroke (Light)</th>
+<th>Fill (Dark)</th>
+<th>Stroke (Dark)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Infrastructure</td>
+<td><code>#dbeafe</code></td>
+<td><code>#3b82f6</code></td>
+<td><code>#1e3a5f</code></td>
+<td><code>#60a5fa</code></td>
+</tr>
+<tr>
+<td>Security</td>
+<td><code>#fee2e2</code></td>
+<td><code>#ef4444</code></td>
+<td><code>#450a0a</code></td>
+<td><code>#f87171</code></td>
+</tr>
+<tr>
+<td>External Service</td>
+<td><code>#e0e7ff</code></td>
+<td><code>#6366f1</code></td>
+<td><code>#312e81</code></td>
+<td><code>#818cf8</code></td>
+</tr>
+<tr>
+<td>Agent/LLM</td>
+<td><code>#f3e8ff</code></td>
+<td><code>#a855f7</code></td>
+<td><code>#3b0764</code></td>
+<td><code>#c084fc</code></td>
+</tr>
+<tr>
+<td>Data/Config</td>
+<td><code>#dcfce7</code></td>
+<td><code>#22c55e</code></td>
+<td><code>#052e16</code></td>
+<td><code>#4ade80</code></td>
+</tr>
+<tr>
+<td>User/Operator</td>
+<td><code>#fef3c7</code></td>
+<td><code>#f59e0b</code></td>
+<td><code>#451a03</code></td>
+<td><code>#fbbf24</code></td>
+</tr>
+<tr>
+<td>Neutral</td>
+<td><code>#f5f5f4</code></td>
+<td><code>#a8a29e</code></td>
+<td><code>#262626</code></td>
+<td><code>#737373</code></td>
+</tr>
+</tbody>
+</table>
+<p>Connectors use stone-500 (<code>#78716c</code> light / <code>#737373</code> dark) at 2px. Security boundary crossings use red at 3px. Optional/future connections are dashed <code>[6, 4]</code>.</p>
+<h3 id="syntax-highlighting">Syntax Highlighting<a class="headerlink" href="#syntax-highlighting" title="Anchor link">&para;</a></h3>
+<p>Eight token types with distinct light/dark pairs: keyword (violet), string (emerald), comment (stone-400/neutral-500), number (amber), property (blue), punctuation (stone-700/neutral-300), command (red), flag (cyan).</p>
+<hr />
+<h2 id="typography">Typography<a class="headerlink" href="#typography" title="Anchor link">&para;</a></h2>
+<h3 id="font-stacks">Font Stacks<a class="headerlink" href="#font-stacks" title="Anchor link">&para;</a></h3>
+<p>Two font stacks, no external font loading:</p>
+<ul>
+<li><strong>Body/UI:</strong> <code>-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif</code> &ndash; system font stack, zero FOUT, renders natively on every platform.</li>
+<li><strong>Monospace:</strong> <code>"SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace</code> &ndash; used for code blocks, inline code, file paths, directory trees, config keys.</li>
+</ul>
+<p>Text rendering is optimized with <code>-webkit-font-smoothing: antialiased</code> and <code>text-rendering: optimizeLegibility</code>.</p>
+<h3 id="two-type-scales">Two Type Scales<a class="headerlink" href="#two-type-scales" title="Anchor link">&para;</a></h3>
+<p>The system has two type scales for two contexts. Selecting the wrong scale for a deliverable type is a common failure mode.</p>
+<p><strong>Interactive / Curriculum Scale (ODC-derived):</strong> 16px body text, detailed type hierarchy for walkthroughs and interactive HTML. Heading sizes: h1 at 28px/700, h2 at 22px/700, h3 at 18px/600. Body at 16px/400 with 1.65 line-height. Code at 14px. Nav items at 14px/500. Max prose width: 780px.</p>
+<p><strong>Enterprise Report Scale (MLR-derived):</strong> 13px body text, conservative hierarchy for professional reports and PDF output. Heading sizes: h1 at 24pt/700, h2 at 18pt/600, h3 at 14pt/600, h4 at 12pt/600. Table headers at 11px/600 uppercase. Max content width: 1200px.</p>
+<p>Scale selection by output type:</p>
+<table>
+<thead>
+<tr>
+<th>Output Type</th>
+<th>Scale</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interactive walkthrough</td>
+<td>Interactive</td>
+<td>Larger body for screen reading, detailed hierarchy for curriculum structure</td>
+</tr>
+<tr>
+<td>Competitive analysis report</td>
+<td>Enterprise</td>
+<td>Pandoc alignment, conservative sizing for dense data, PDF-optimized</td>
+</tr>
+<tr>
+<td>Framework explainer</td>
+<td>Interactive</td>
+<td>Interactive HTML with progressive disclosure</td>
+</tr>
+<tr>
+<td>Client-ready PDF</td>
+<td>Enterprise</td>
+<td>Professional, print-optimized</td>
+</tr>
+<tr>
+<td>Dashboard / data visualization</td>
+<td>Either</td>
+<td>Enterprise for data-heavy, interactive for narrative-heavy</td>
+</tr>
+</tbody>
+</table>
+<h3 id="spacing-system">Spacing System<a class="headerlink" href="#spacing-system" title="Anchor link">&para;</a></h3>
+<p>All spacing is built on a 4px grid. Nine tokens:</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Value</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--space-1</code></td>
+<td>4px</td>
+<td>Tight inline gaps (icon-to-text)</td>
+</tr>
+<tr>
+<td><code>--space-2</code></td>
+<td>8px</td>
+<td>Compact padding (checkbox internal, code inline)</td>
+</tr>
+<tr>
+<td><code>--space-3</code></td>
+<td>12px</td>
+<td>Standard inline padding (nav items, table cells)</td>
+</tr>
+<tr>
+<td><code>--space-4</code></td>
+<td>16px</td>
+<td>Standard block padding (cards, callouts)</td>
+</tr>
+<tr>
+<td><code>--space-5</code></td>
+<td>20px</td>
+<td>Content section vertical gap</td>
+</tr>
+<tr>
+<td><code>--space-6</code></td>
+<td>24px</td>
+<td>Section vertical gap, sidebar padding</td>
+</tr>
+<tr>
+<td><code>--space-8</code></td>
+<td>32px</td>
+<td>Phase section top padding</td>
+</tr>
+<tr>
+<td><code>--space-10</code></td>
+<td>40px</td>
+<td>Major section dividers, desktop content padding</td>
+</tr>
+<tr>
+<td><code>--space-12</code></td>
+<td>48px</td>
+<td>Page top/bottom padding</td>
+</tr>
+</tbody>
+</table>
+<h3 id="heading-rules">Heading Rules<a class="headerlink" href="#heading-rules" title="Anchor link">&para;</a></h3>
+<p>Never skip heading levels (h1 &gt; h2 &gt; h3 &gt; h4). Both scales use bottom borders as visual anchors: the interactive scale puts a 2px border in <code>--color-stone-200</code> on h2; the enterprise scale puts a 3px border in <code>--color-enterprise-accent</code> on h1 and a 2px border in <code>--color-enterprise-border</code> on h2. h3 and h4 get no borders in either scale. All heading levels carry <code>page-break-after: avoid</code> for PDF generation.</p>
+<hr />
+<h2 id="accessibility">Accessibility<a class="headerlink" href="#accessibility" title="Anchor link">&para;</a></h2>
+<p>The design system targets WCAG AA: 4.5:1 contrast ratio for normal text (&lt; 18px), 3:1 for large text (&gt;= 18px or &gt;= 14px bold).</p>
+<h3 id="verified-contrast">Verified Contrast<a class="headerlink" href="#verified-contrast" title="Anchor link">&para;</a></h3>
+<p>Every text-on-background pairing in the stylesheet has been verified. Representative light-mode pairings:</p>
+<table>
+<thead>
+<tr>
+<th>Combination</th>
+<th>Foreground</th>
+<th>Background</th>
+<th>Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Body text</td>
+<td><code>#44403c</code></td>
+<td><code>#fafaf9</code></td>
+<td>8.5:1</td>
+</tr>
+<tr>
+<td>Heading text</td>
+<td><code>#292524</code></td>
+<td><code>#fafaf9</code></td>
+<td>12.4:1</td>
+</tr>
+<tr>
+<td>Link text</td>
+<td><code>#3b82f6</code></td>
+<td><code>#fafaf9</code></td>
+<td>4.6:1</td>
+</tr>
+<tr>
+<td>Critical label</td>
+<td><code>#dc2626</code></td>
+<td><code>#fef2f2</code></td>
+<td>5.6:1</td>
+</tr>
+<tr>
+<td>Enterprise body</td>
+<td><code>#333333</code></td>
+<td><code>#ffffff</code></td>
+<td>12.6:1</td>
+</tr>
+<tr>
+<td>Table header text</td>
+<td><code>#ffffff</code></td>
+<td><code>#4a5568</code></td>
+<td>7.0:1</td>
+</tr>
+</tbody>
+</table>
+<p>Dark-mode pairings are independently verified:</p>
+<table>
+<thead>
+<tr>
+<th>Combination</th>
+<th>Foreground</th>
+<th>Background</th>
+<th>Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Body text</td>
+<td><code>#d4d4d4</code></td>
+<td><code>#1a1a1a</code></td>
+<td>11.3:1</td>
+</tr>
+<tr>
+<td>Link text</td>
+<td><code>#60a5fa</code></td>
+<td><code>#1a1a1a</code></td>
+<td>6.3:1</td>
+</tr>
+<tr>
+<td>Critical label</td>
+<td><code>#f87171</code></td>
+<td><code>#450a0a</code></td>
+<td>5.8:1</td>
+</tr>
+<tr>
+<td>Code on code-bg</td>
+<td><code>#d4d4d4</code></td>
+<td><code>#2d2d2d</code></td>
+<td>8.7:1</td>
+</tr>
+</tbody>
+</table>
+<p>Known failure pairings that must not be used: light blue (#60a5fa) on white (3.1:1), light green (#4ade80) on white (2.3:1), yellow (#fbbf24) on white (1.9:1), gray (#525252) on dark surface (#262626, 2.4:1).</p>
+<h3 id="focus-states">Focus States<a class="headerlink" href="#focus-states" title="Anchor link">&para;</a></h3>
+<p>All interactive elements have visible focus indicators: 2px solid <code>--color-blue-500</code> with 2px offset. Applied to checkboxes (<code>:focus-visible</code>), notes inputs (<code>:focus</code>), expandable triggers, copy buttons, and sidebar nav items. Focus must be visible in both light and dark mode.</p>
+<h3 id="touch-targets">Touch Targets<a class="headerlink" href="#touch-targets" title="Anchor link">&para;</a></h3>
+<p>Mobile touch targets are at least 44x44px per WCAG 2.1 SC 2.5.5. Nav items and expandable triggers get <code>min-height: 44px</code> in the responsive layer. Checkboxes are 20px visually but provide a 44px hit area via padding.</p>
+<h3 id="color-independent-meaning">Color-Independent Meaning<a class="headerlink" href="#color-independent-meaning" title="Anchor link">&para;</a></h3>
+<p>Color is never the sole indicator: badges include text labels (&ldquo;CRITICAL&rdquo;, &ldquo;HIGH&rdquo;), SWOT boxes include section headers, callout variants include uppercase labels, and diagram semantic categories are reinforced by shape differences (rectangles vs. circles vs. dashed boundaries).</p>
+<h3 id="reduced-motion">Reduced Motion<a class="headerlink" href="#reduced-motion" title="Anchor link">&para;</a></h3>
+<p>For users with <code>prefers-reduced-motion</code>, all transitions and animations collapse to 0.01ms:</p>
+<div class="highlight"><pre><span></span><code><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">prefers-reduced-motion</span><span class="o">:</span><span class="w"> </span><span class="nt">reduce</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">*,</span><span class="w"> </span><span class="o">*</span><span class="p">::</span><span class="nd">before</span><span class="o">,</span><span class="w"> </span><span class="o">*</span><span class="p">::</span><span class="nd">after</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">transition-duration</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="kt">ms</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
+<span class="w">    </span><span class="k">animation-duration</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="kt">ms</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
+<span class="w">    </span><span class="k">animation-iteration-count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
+<span class="w">    </span><span class="k">scroll-behavior</span><span class="p">:</span><span class="w"> </span><span class="kc">auto</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>This rule is recommended for inclusion in engine-level CSS that implements interactive behaviors.</p>
+<h3 id="semantic-html-requirements">Semantic HTML Requirements<a class="headerlink" href="#semantic-html-requirements" title="Anchor link">&para;</a></h3>
+<p>The design system assumes correct semantic structure: <code>&lt;button&gt;</code> for expandable triggers (not <code>&lt;div&gt;</code> with click handlers), <code>&lt;nav&gt;</code> for sidebar, <code>&lt;main&gt;</code> for primary content, proper heading hierarchy, <code>aria-expanded</code> on expandable triggers, <code>aria-current="true"</code> on active nav items.</p>
+<hr />
+<h2 id="production-pipelines">Production Pipelines<a class="headerlink" href="#production-pipelines" title="Anchor link">&para;</a></h2>
+<h3 id="pdf-pipeline">PDF Pipeline<a class="headerlink" href="#pdf-pipeline" title="Anchor link">&para;</a></h3>
+<p>Chrome headless generation with no intermediate tooling, no build system, no server. The HTML source is the single source of truth; the PDF is a generated artifact.</p>
+<p><strong>Command:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="s2">&quot;/Applications/Google Chrome.app/Contents/MacOS/Google Chrome&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--headless<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--disable-gpu<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--no-pdf-header-footer<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--print-to-pdf<span class="o">=</span><span class="s2">&quot;output.pdf&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;file:///absolute/path/to/source.html&quot;</span>
+</code></pre></div>
+
+<p>The <code>--no-pdf-header-footer</code> flag is critical &ndash; without it, Chrome prints the file URL at the top and date/page number at the bottom of every page. The <code>--disable-gpu</code> flag avoids rendering inconsistencies in headless mode.</p>
+<p><strong>CSS requirements:</strong> The PDF pipeline depends on three CSS mechanisms in the stylesheet: <code>@page</code> (letter portrait, 0.75in margins), page-break rules (headings avoid, rows avoid, thead repeats), and the <code>@media print</code> query (hides interactive elements, forces expandables open). These are not optional &ndash; removing any of them breaks the pipeline output.</p>
+<p><strong>Deliverable production sequence:</strong></p>
+<ol>
+<li>Content creation / template population (HTML with <code>{{PLACEHOLDER}}</code> convention)</li>
+<li>Render-validate (browser verification &ndash; see next section)</li>
+<li>Fix any defects (one at a time, re-verify each)</li>
+<li>Chrome headless PDF generation</li>
+<li>PDF verification (open and scan for page-break issues, missing headers, blank trailing pages)</li>
+<li>Distribution-ready</li>
+</ol>
+<p><strong>Combined PDFs:</strong> For multi-file deliverables, generate individual PDFs then combine with <code>pdfunite</code> (poppler-utils).</p>
+<p><strong>Common failures:</strong> Tables breaking mid-row (fix: <code>tr { page-break-inside: avoid }</code>), headings orphaned at page bottom (fix: <code>h1-h4 { page-break-after: avoid }</code>), interactive elements visible in PDF (fix: <code>@media print</code> rules hiding sidebar/toggle/copy-btn), expandable sections collapsed (fix: <code>.expandable-content { display: block !important }</code> in print query), color mismatch between browser and PDF (fix: verify in print preview first).</p>
+<p>This pipeline was battle-tested across 13 MLR deliverables through 7 iteration cycles (V1.0 through V2.3, November 2025). Cross-platform: same flags on macOS/Linux/Windows, only the Chrome executable path changes.</p>
+<h3 id="render-validate-pipeline">Render-Validate Pipeline<a class="headerlink" href="#render-validate-pipeline" title="Anchor link">&para;</a></h3>
+<p>6-step visual verification using Puppeteer. Exists because source code review is insufficient for visual outputs &ndash; four classes of defects are invisible in code:</p>
+<ol>
+<li><strong>CSS hiding content</strong> &ndash; a <code>display:none</code> or zero-height container hides content that has correct markup.</li>
+<li><strong>Broken interactivity</strong> &ndash; click handlers bound to wrong selectors, event listeners on stale IDs.</li>
+<li><strong>Missing runtime dependencies</strong> &ndash; CDN libraries that load but do not initialize (syntax highlighting, charting).</li>
+<li><strong>Non-persisting state</strong> &ndash; localStorage bindings referencing stale IDs, save handlers that do not fire.</li>
+</ol>
+<p>All four were discovered in the ODC&rsquo;s first production walkthrough. &ldquo;It looks right in the markup&rdquo; is not evidence.</p>
+<p><strong>The six steps:</strong></p>
+<ol>
+<li>
+<p><strong>Render</strong> &ndash; Launch Puppeteer, navigate to the HTML file via <code>file://</code> URL, wait for full page load including CDN libraries.</p>
+</li>
+<li>
+<p><strong>Screenshot</strong> &ndash; Capture systematic evidence: full page at 1280px (desktop), each major section, sidebar navigation (default + active state), most complex diagram at detail zoom, full page at 375px (mobile), and at least one section in dark mode.</p>
+</li>
+<li>
+<p><strong>Audit against style guide</strong> &ndash; Every item is YES/NO. Diagrams: visible, correct colors, readable labels, correct arrows, dark mode rendering. Interactive: expandables open/close, checkbox persistence, notes persistence, copy buttons functional. Layout: sidebar hierarchy, scroll spy, mobile hamburger, table horizontal scroll, 44px touch targets. Typography: monospace code blocks, syntax highlighting active, correct callout colors, WCAG AA contrast in dark mode.</p>
+</li>
+<li>
+<p><strong>Audit diagrams against design intent</strong> &ndash; Three per-diagram checks: (a) the visual pattern matches the concept&rsquo;s behavior (a flow concept in a layered diagram is wrong regardless of rendering quality), (b) the isomorphism test (remove all labels &ndash; does the bare structure still communicate the concept? if not, it is decoration, not communication), (c) the diagram argues, not just displays (it makes a point about relationships, dependencies, risks, or sequences &ndash; not just listing items in boxes).</p>
+</li>
+<li>
+<p><strong>Fix and re-render</strong> &ndash; One defect at a time. Fix, reload, re-screenshot the specific area, verify the fix without regressions. Do not batch fixes &ndash; that masks regressions where fixing issue A breaks something near issue B.</p>
+</li>
+<li>
+<p><strong>Report results</strong> &ndash; Iteration count, issues found and fixed, remaining known issues, screenshot count and coverage scope.</p>
+</li>
+</ol>
+<p><strong>The variety rule:</strong> In any output with more than three major diagrams, each should use a different visual pattern. If three diagrams are all left-to-right box-and-arrow layouts, at least two are almost certainly using the wrong pattern for their concept.</p>
+<p><strong>Fallback:</strong> If Puppeteer MCP is unavailable, degrade to manual verification (operator opens the file and provides screenshots). Never degrade to skipping verification.</p>
+<hr />
+<h2 id="source-files">Source Files<a class="headerlink" href="#source-files" title="Anchor link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Location</th>
+<th>What It Contains</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enterprise CSS</td>
+<td><code>design-system/enterprise-styles.css</code></td>
+<td>The 1241-line composited stylesheet (7 layers)</td>
+</tr>
+<tr>
+<td>Color tokens</td>
+<td><code>design-system/color-tokens.md</code></td>
+<td>Full token inventory with hex values, light/dark pairs, semantic usage</td>
+</tr>
+<tr>
+<td>Typography</td>
+<td><code>design-system/typography.md</code></td>
+<td>Two type scales, font stacks, spacing grid, heading rules</td>
+</tr>
+<tr>
+<td>Accessibility</td>
+<td><code>design-system/accessibility.md</code></td>
+<td>WCAG AA verified contrast tables, focus states, touch targets</td>
+</tr>
+<tr>
+<td>PDF pipeline</td>
+<td><code>design-system/pdf-pipeline.md</code></td>
+<td>Chrome headless generation methodology, common issues</td>
+</tr>
+<tr>
+<td>Render-validate</td>
+<td><code>design-system/render-validate-pipeline.md</code></td>
+<td>6-step visual QA process, diagram verification, concept-to-pattern mapping</td>
+</tr>
+</tbody>
+</table>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

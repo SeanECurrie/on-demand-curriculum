@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodology — EngineOS Docs</title>
+  <meta name="description" content="EngineOS encodes quality methodology as infrastructure, not documentation. 15 methodology docs live at methodology/ and are protected by an immutability rule -- modification requires operator approval">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link active" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Methodology</h1>
+    <p class="report-header__subtitle">EngineOS encodes quality methodology as infrastructure, not documentation. 15 methodology docs live at methodology/ and are protected by an immutability rule -- modification requires operator approval</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="methodology-research-first-quality-infrastructure">Methodology &ndash; Research-First Quality Infrastructure<a class="headerlink" href="#methodology-research-first-quality-infrastructure" title="Anchor link">&para;</a></h1>
+<p>EngineOS encodes quality methodology as infrastructure, not documentation. 15 methodology docs live at <code>methodology/</code> and are protected by an immutability rule &ndash; modification requires operator approval. These are not style guides. They are formalized approaches proven across 105+ days of production work across 11 projects. The majority were sourced from the ODC&rsquo;s Cole methodology implementations, with additional contributions from the JSE governance stack, MLR QA pipeline, and the ecosystem audit that produced EngineOS itself.</p>
+<p>For the full index of all 15 documents with companion skills and loading triggers, see <a href="methodology-index.html">methodology-index.md</a>. For how methodology connects to the governance enforcement layer, see <a href="governance.html">governance.md</a>.</p>
+<hr />
+<h2 id="research-methodology">Research Methodology<a class="headerlink" href="#research-methodology" title="Anchor link">&para;</a></h2>
+<p>Three documents form the research core: source credibility tiers, dual-source intelligence, and depth assessment. Together they answer: how much do you trust a source, how do you get two independent perspectives, and how deep do you go?</p>
+<h3 id="source-credibility-tiers">Source Credibility Tiers<a class="headerlink" href="#source-credibility-tiers" title="Anchor link">&para;</a></h3>
+<p>Every finding in EngineOS is tagged with a credibility tier. The system uses five tiers, each carrying a different evidence weight:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Source Type</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>Official documentation, verified changelogs</td>
+<td>Highest &ndash; authoritative baseline, verifiable against source code</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>Established creators with proven deployments</td>
+<td>High &ndash; track record matters, consistently accurate when cross-checked</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>GitHub issues/PRs with reproducible details</td>
+<td>Medium-high &ndash; specific, tied to code, elevates above general community</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>Reddit/forum posts with technical specificity</td>
+<td>Medium &ndash; useful for surfacing issues, requires verification</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>General community sentiment</td>
+<td>Low &ndash; direction indicator, not decision-maker</td>
+</tr>
+</tbody>
+</table>
+<p>Tiers are assigned through a four-question flow, applied in order:</p>
+<ol>
+<li><strong>Is it official?</strong> Published by the tool&rsquo;s maintainers, on their domain, in their docs or changelog? <strong>Yes</strong> = Tier 1.</li>
+<li><strong>Does the author have a proven track record?</strong> Publicly deployed, recognized expert, consistently accurate? <strong>Yes</strong> = Tier 2.</li>
+<li><strong>Is it reproducible and tied to code?</strong> GitHub issue with steps, version numbers, error output? <strong>Yes</strong> = Tier 3.</li>
+<li><strong>Does it contain technical specificity?</strong> Config snippets, exact error messages, version numbers? <strong>Yes</strong> = Tier 4. <strong>No</strong> = Tier 5.</li>
+</ol>
+<p>Every sourced claim carries a tag: <code>(Tier X, [source description], [date])</code>. Examples:</p>
+<div class="highlight"><pre><span></span><code>(Tier 1, official docs v2.3 changelog, 2026-02-15)
+(Tier 3, GitHub issue #1234, 2026-02-10)
+(Tier 5, general Reddit sentiment across 5+ threads, 2026-02)
+</code></pre></div>
+
+<p>Tiers are not permanent. A Tier 5 source gets upgraded when backed by a technically specific post. A Tier 1 source gets effectively downgraded when the documentation is demonstrably outdated. Multiple independent sources at the same tier converge for a corroboration upgrade. Conflict of interest triggers a downgrade. The tier assignment, upgrades, and downgrades are all documented &ndash; tier shifts without rationale are arbitrary.</p>
+<p>The tier system matters most when sources contradict each other. If Tier 1 official docs and Tier 4 forum posts disagree, the starting assumption favors Tier 1 &ndash; unless the Tier 4 source provides reproducible evidence. The contradiction itself is an intelligence insight, documented with both perspectives and an assessment of which is more current.</p>
+<h3 id="dual-source-intelligence">Dual-Source Intelligence<a class="headerlink" href="#dual-source-intelligence" title="Anchor link">&para;</a></h3>
+<p>Documentation tells you how something is supposed to work. Community intelligence tells you how it actually works. The gap between those two is where the most valuable findings live.</p>
+<p>EngineOS uses two MCP-integrated sources:</p>
+<ul>
+<li><strong>Context7 (official documentation):</strong> API references, configuration schemas, changelogs, architectural documentation. The skeleton &ndash; authoritative, structured, verifiable, but can be outdated or aspirational.</li>
+<li><strong>Bright Data (community intelligence):</strong> Reddit, Hacker News, GitHub issues, developer blogs, expert analysis. The muscle and scars &ndash; real-world validation, surfaces undocumented gotchas, but signal-to-noise varies.</li>
+</ul>
+<p>Neither source is sufficient alone. Documentation can be aspirational, describing planned features as current. Community intelligence can be anecdotal, colored by operator error mistaken for platform bugs. The discipline: every research question gets both sources. <strong>Contradictions between them are intelligence insights, not failures.</strong></p>
+<p>Three operating modes determine the lead source:</p>
+<p><strong>Mode 1 &ndash; Documentation Pull (Context7-led).</strong> When you need to understand how something officially works. Query Context7 for the relevant docs, note gaps and ambiguities, then use Bright Data to supplement with real-world experience.</p>
+<p><strong>Mode 2 &ndash; Landscape Scan (Bright Data-led).</strong> When mapping a competitive field or gauging community sentiment. Batch search across community sources, identify claims that need technical validation, then use Context7 to verify specific technical claims against official docs.</p>
+<p><strong>Mode 3 &ndash; Reality Check &amp; Amplification (both, cross-validating).</strong> The most common mode for deployment-critical decisions. Query both sources in parallel on the same question, compare findings, flag contradictions. If docs say &ldquo;all plugins are reviewed&rdquo; but community reports finding malicious ones, that contradiction is a critical finding.</p>
+<p>Cross-validation discipline: when official docs and community intelligence disagree, document both claims with sources and tiers, note the nature of the contradiction (outdated docs? undisclosed issue? community misunderstanding?), and determine which is more current through additional research. Record the contradiction in the intelligence log &ndash; even resolved contradictions have value.</p>
+<h3 id="depth-assessment">Depth Assessment<a class="headerlink" href="#depth-assessment" title="Anchor link">&para;</a></h3>
+<p>LLMs default to medium depth on everything. Without explicit classification, research gets &ldquo;pretty thorough&rdquo; and outputs get &ldquo;pretty good&rdquo; &ndash; never sharp. A landscape scan that should cover 15 tools in 20 minutes spends 20 minutes on the first three. A security evaluation that needs exhaustive source chains gets two Reddit posts and a docs link.</p>
+<p>Depth assessment is a mandatory 30-second classification step at the start of any pipeline stage. Two depths:</p>
+<p><strong>Scan (breadth-first).</strong> Covers many topics at surface level. 1-2 sources per claim is sufficient. Binary self-tests use quick versions. The goal is coverage.</p>
+<p><strong>Deep-dive (depth-first).</strong> Focuses on fewer topics with exhaustive coverage. Dual-source validation required per claim. Full evidence chains. Binary self-tests use thorough versions. The goal is confidence.</p>
+<p>Three classification questions, applied in order (first YES determines the depth):</p>
+<ol>
+<li><strong>&ldquo;Will this finding drive a GO/NO-GO decision?&rdquo;</strong> Yes = deep-dive.</li>
+<li><strong>&ldquo;Is the operator new to this topic?&rdquo;</strong> Yes = deep-dive for their unfamiliar areas, scan for context they already know.</li>
+<li><strong>&ldquo;Has this topic had security implications in past research?&rdquo;</strong> Yes = deep-dive on security aspects, scan the rest.</li>
+</ol>
+<p>All three NO = scan is appropriate.</p>
+<p>Mixed-depth within a single task is normal. Evaluating a new tool might mean deep-dive on security posture (GO/NO-GO + security implications), scan on feature comparison (landscape context), scan on installation (familiar territory). Classify per topic, not per task.</p>
+<p>Reclassification during work is expected, not a failure. A scan surfaces a security concern = reclassify to deep-dive. A deep-dive determines the topic is simpler than expected = reclassify to scan. Log the reclassification with the reason. Frequent reclassification in the same direction signals the initial classification was miscalibrated.</p>
+<h3 id="findings-structuring">Findings Structuring<a class="headerlink" href="#findings-structuring" title="Anchor link">&para;</a></h3>
+<p>When the engine synthesizes research findings, it selects from seven validated finding types rather than inventing format each time. Each type has a specific shape that makes findings scannable, comparable, and maintainable across the knowledge base.</p>
+<table>
+<thead>
+<tr>
+<th>Finding Type</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Contradiction Insight</strong></td>
+<td>Sources disagree on a factual claim relevant to a decision</td>
+</tr>
+<tr>
+<td><strong>Validation Entry</strong></td>
+<td>A hypothesis has been tested against evidence and confirmed</td>
+</tr>
+<tr>
+<td><strong>Discovery Entry</strong></td>
+<td>Research surfaced something not part of the original hypothesis</td>
+</tr>
+<tr>
+<td><strong>Risk Entry</strong></td>
+<td>A finding describes a threat that needs likelihood/impact assessment</td>
+</tr>
+<tr>
+<td><strong>Comparison Matrix</strong></td>
+<td>Research evaluates multiple options against each other</td>
+</tr>
+<tr>
+<td><strong>Resolution Entry</strong></td>
+<td>A research question has been conclusively answered</td>
+</tr>
+<tr>
+<td><strong>Recommendation Entry</strong></td>
+<td>Evidence supports a specific course of action</td>
+</tr>
+</tbody>
+</table>
+<p>Each type has required and optional fields. Required fields are always populated; optional fields are filled at deep-dive depth and skipped at scan depth. Every field includes a source and credibility tier.</p>
+<p>Two examples from production work:</p>
+<p><strong>Contradiction Insight:</strong></p>
+<div class="highlight"><pre><span></span><code>CONTRADICTION: Plugin ecosystem safety claims vs. reality
+
+- Claim A: Official docs describe plugin ecosystem as &quot;reviewed&quot;
+  (Tier 1, official documentation, 2026-02)
+- Claim B: Independent security audit finds ~20% of marketplace
+  plugins are malicious (Tier 2, security research firm, 2026-03)
+- Nature: Vendor understatement of supply chain risk
+- Current assessment: Security audit methodology (systematic
+  scanning, reproducible results) overrides vendor marketing language
+- Intelligence value: Community security audits provide ground truth
+  that vendor documentation does not -- transfers to any
+  marketplace/plugin ecosystem evaluation
+</code></pre></div>
+
+<p><strong>Risk Entry:</strong></p>
+<div class="highlight"><pre><span></span><code>RISK: Plugin marketplace supply chain -- actively compromised
+
+- Threat: Installing any marketplace plugin risks credential theft,
+  reverse shells, or targeted malware
+- Likelihood: High -- significant confirmed malicious plugins,
+  coordinated campaign identified
+- Impact: Full credential exfiltration, browser credentials, SSH keys
+- Current mitigations: Zero marketplace installation policy,
+  custom-only plugins, tight tool policy as execution boundary
+- Residual risk: An operator who forgets the policy and installs a
+  single marketplace plugin bypasses all mitigations. No automated
+  enforcement -- this is a discipline control, not a technical control.
+- Source chain: Independent security audit (Tier 2),
+  security news outlets (Tier 2-3)
+</code></pre></div>
+
+<hr />
+<h2 id="quality-framework">Quality Framework<a class="headerlink" href="#quality-framework" title="Anchor link">&para;</a></h2>
+<p>Four methodology documents form the quality layer: binary self-tests, anti-patterns, adversarial validation, and editorial standards. Together they answer: how do you test your own output, what failure modes do you watch for, how do you get independent evaluation, and what standards govern everything you write?</p>
+<h3 id="binary-self-tests">Binary Self-Tests<a class="headerlink" href="#binary-self-tests" title="Anchor link">&para;</a></h3>
+<p>LLMs cannot reliably evaluate &ldquo;is this good?&rdquo; They CAN evaluate concrete YES/NO questions. &ldquo;Write clearly&rdquo; is an aspiration. &ldquo;Read the third paragraph without reading the first two &ndash; does it make sense?&rdquo; is a verification step. The difference is the difference between hoping and checking.</p>
+<p>Binary self-tests are YES/NO quality gates answerable in under 5 seconds. Four design rules govern every test:</p>
+<ol>
+<li><strong>Answerable YES or NO in under 5 seconds.</strong> If it takes deliberation, the test is too vague.</li>
+<li><strong>Concrete &ndash; references specific parts of the output.</strong> &ldquo;Is this section good?&rdquo; is not a test. &ldquo;Pick any claim in section 3 &ndash; can you name its source?&rdquo; is a test.</li>
+<li><strong>Actionable &ndash; a NO answer implies a specific fix.</strong> If the test fails and you do not know what to change, the test is not useful.</li>
+<li><strong>Paired &ndash; quick version for scans, thorough version for deep-dives.</strong> Quick tests check for presence. Thorough tests check for quality.</li>
+</ol>
+<p>Tests are organized by pipeline stage. Examples from each stage:</p>
+<p><strong>Research (RS):</strong> &ldquo;Pick any claim. Can you name the source and its credibility tier in under 5 seconds?&rdquo; (Quick.) / &ldquo;For every finding that will drive a decision, is there both an official and a community source?&rdquo; (Thorough.)</p>
+<p><strong>Synthesis (SY):</strong> &ldquo;Does the synthesis include a residual risk statement?&rdquo; (Quick.) / &ldquo;Read the residual risk section. Does it name specific risks with specific consequences, or does it say &lsquo;some risk remains&rsquo;?&rdquo; (Thorough.)</p>
+<p><strong>Content/Deliverable (CD):</strong> &ldquo;Pick any command in the output. Is the expected output documented?&rdquo; (Quick.) / &ldquo;Does every recommendation have evidence behind it?&rdquo; (Thorough.)</p>
+<p><strong>Visual/HTML (HD):</strong> &ldquo;Has the output been opened in a browser since the last edit?&rdquo; (Quick.) / &ldquo;Do all expandable sections toggle correctly? Does content stay inside containers?&rdquo; (Thorough.)</p>
+<p><strong>Cross-Cutting (XC):</strong> &ldquo;Does this output add value &ndash; does it inform a decision or teach a principle?&rdquo; (Quick.) / &ldquo;Would you be comfortable if the reader checked your sources?&rdquo; (Thorough.)</p>
+<p>New tests are added when a quality failure is discovered. The question is always: &ldquo;What binary test would have caught this?&rdquo; If you cannot write a concrete test for a failure mode, the failure is too vague to prevent mechanically &ndash; investigate the root cause.</p>
+<h3 id="anti-patterns-14-evidence-based">Anti-Patterns (14 Evidence-Based)<a class="headerlink" href="#anti-patterns-14-evidence-based" title="Anchor link">&para;</a></h3>
+<p>EngineOS catalogs 14 real failure modes observed during production work. Every entry cites a specific incident &ndash; no theoretical anti-patterns. If it has not been seen to fail, it is not listed. The gallery is organized into three categories:</p>
+<p><strong>Research anti-patterns (4):</strong> The Understated Warning, Premature Confidence, The Settled Question That Was Not Settled, The One-Source Frame.</p>
+<p><strong>Output anti-patterns (3):</strong> The Missing Source Trail, The Empty Scaffold, The Process Deviation Nobody Noticed.</p>
+<p><strong>Process anti-patterns (7):</strong> Staleness Blindness, The Scope Ratchet, The Deferred Template Pile, The Unverified Render, The Contradictory Frame, Path-Pattern Lift Misses, Body-Size as Regression Signal.</p>
+<p>Each entry includes &ldquo;What it looks like&rdquo; (recognition), &ldquo;Why it happens&rdquo; (understanding the temptation), &ldquo;What good looks like&rdquo; (the alternative), and a binary self-test for detection. Four examples that illustrate the pattern:</p>
+<p><strong>Premature Confidence.</strong> Presenting a small number of community sources as consensus. Three Reddit posts from the same week are not &ldquo;community consensus&rdquo; &ndash; they might all trace back to one person&rsquo;s experience being reshared. The credibility-tiers system exists specifically because this failure mode was recurring during production research. Binary test: <em>Find a claim described as &ldquo;consensus&rdquo; or &ldquo;widely reported.&rdquo; Can you count 5+ independent sources behind it? If not, downgrade the language.</em></p>
+<p><strong>Missing Source Trail.</strong> Research finds many sources, but the consolidated source list is an afterthought created during review rather than maintained as research happens. In one production output, the source index had 1 entry versus 130+ sources cited across the knowledge base. Binary test: <em>Open the source index. Does the entry count roughly match the number of unique sources cited in the knowledge base? If substantially smaller, the source trail is retroactive, not contemporaneous.</em></p>
+<p><strong>Scope Ratchet.</strong> A project&rsquo;s framing evolves significantly during execution &ndash; from specific tool deployment to learning lab to reusable engine &ndash; but each expansion feels natural in context. One project went from &ldquo;install tool X on my hardware&rdquo; to &ldquo;reusable engine&rdquo; in 21 days through three incremental reframings. Each was well-reasoned. The anti-pattern is not the evolution &ndash; it is failing to recognize it and audit existing work against the new framing. Binary test: <em>Read the current purpose statement and the oldest purpose statement. Are they describing the same project? If not, has existing work been reviewed against the current purpose?</em></p>
+<p><strong>Contradictory Frame.</strong> The same output contains two conflicting framings of the same fact. A production output framed hardware as &ldquo;dedicated&rdquo; in one section and &ldquo;shared&rdquo; in the security section, building its biggest risk assessment around the wrong assumption. The end user caught it. Binary test: <em>Pick any assumption the output makes about the user&rsquo;s setup. Search the full output for that assumption. Does every mention agree?</em></p>
+<h3 id="adversarial-validation">Adversarial Validation<a class="headerlink" href="#adversarial-validation" title="Anchor link">&para;</a></h3>
+<p>Self-evaluation catches correctness errors but misses structural blind spots. EngineOS uses two-agent adversarial testing: an executor produces, an evaluator scores independently.</p>
+<p><strong>Three roles:</strong></p>
+<ul>
+<li><strong>Executor:</strong> The Claude Code agent. Builds, executes, produces output. Has full codebase access and operates under the system&rsquo;s governance.</li>
+<li><strong>Evaluator:</strong> A separate session with independent context. Reviews executor output, validates against specs, drafts checkpoint responses. Does NOT execute the work.</li>
+<li><strong>Operator:</strong> Routes between executor and evaluator. The decision-maker &ndash; neither agent has authority to override the operator.</li>
+</ul>
+<p><strong>The independent context requirement.</strong> The evaluator MUST NOT share the executor&rsquo;s session. Shared context means the evaluator inherits the executor&rsquo;s framing and cannot challenge it independently. The evaluator sees the deliverable and the criteria &ndash; nothing about the executor&rsquo;s reasoning process.</p>
+<p><strong>Why this matters.</strong> Three failure modes make self-evaluation structurally unreliable:</p>
+<ol>
+<li><strong>Sycophancy.</strong> The executor shares context with the request that produced the work, making its own decisions feel correct in retrospect.</li>
+<li><strong>Keyword-passing.</strong> When asked &ldquo;did you do X?&rdquo;, the agent searches for X, finds the keyword, and confirms &ndash; without checking depth. In one real test, the agent confirmed MLR&rsquo;s QA methodology was composited because it found related keywords, but the 922-line source&rsquo;s 8-phase verification workflow was entirely absent.</li>
+<li><strong>Count errors in self-audit.</strong> An agent miscounting its own output (reporting 4 intelligence log entries when 5 existed) is routine, not exceptional.</li>
+</ol>
+<p><strong>Mechanical distrust.</strong> The evaluator recalculates pass/fail from raw scores rather than trusting summary statements. Test results track systemically across tests &ndash; individual pass/fail is insufficient; the real signal is patterns across tests. A capability that passes once might be lucky; a capability that passes across three tests with different conditions is reliable.</p>
+<p><strong>Dual-layer test design.</strong> Every test evaluates two layers independently:</p>
+<ul>
+<li><strong>Capability layer:</strong> Does the system produce good output? Does the skill chain fire? Does data flow correctly?</li>
+<li><strong>Governance layer:</strong> Did the system follow its own process? Was the phase-controller invoked? Does the run plan govern execution? Is the activity log populated?</li>
+</ul>
+<p>A system can produce excellent output while violating every governance rule. In one test, a resume scored 9.8/10 on quality &ndash; but phase-controller was never invoked, no run plan existed, and no forced skill chain fired. The capability layer passed. The governance layer failed. Good output without governance is fragile; it works when the agent is confident and fails when the task is novel.</p>
+<hr />
+<h2 id="production-methodology">Production Methodology<a class="headerlink" href="#production-methodology" title="Anchor link">&para;</a></h2>
+<p>Three documents address how work gets produced at scale: section-by-section construction, the factory pattern, and editorial standards.</p>
+<h3 id="section-by-section-construction">Section-by-Section Construction<a class="headerlink" href="#section-by-section-construction" title="Anchor link">&para;</a></h3>
+<p>Quality degrades predictably in single-pass generation beyond approximately 500 lines. The first third is strong, the middle is adequate, and the final third loses detail, drops conventions, and introduces inconsistencies. This is not theoretical &ndash; large interactive walkthroughs exceed 3,000 lines of HTML, well beyond the point where coherence degrades.</p>
+<p>The process uses four phases:</p>
+<p><strong>Phase A &ndash; Plan sections with namespaces.</strong> List all sections, define boundaries, identify cross-references, assign unique namespace prefixes for IDs and anchors. Present the plan to the operator for approval. Do not generate content until the plan is approved.</p>
+<p><strong>Phase B &ndash; Build one section at a time.</strong> Generate each section independently. Update cross-references to and from previously generated sections. Run binary self-tests per section: Can you name the source for any claim? Does a forward reference to an unbuilt section get noted? Does the section make sense without reading the previous one?</p>
+<p><strong>Phase C &ndash; Whole-output review.</strong> Read the complete output as a reader would experience it. Check that all cross-references resolve, transitions are smooth, section proportions match importance. Run the anti-pattern check on the whole output.</p>
+<p><strong>Phase C.5 &ndash; Render-validate for visual outputs.</strong> Mandatory for anything with visual elements. You cannot judge visual output from source code alone. A hidden <code>display:none</code> diagram, broken expandable sections, failed contrast &ndash; all invisible in source, obvious in a browser. The loop: render, screenshot, audit against styling standards, fix, re-render. Typical iteration count: 2-4 passes.</p>
+<p><strong>Phase D &ndash; Iterate.</strong> Fix anything found in Phase C. Targeted re-review of specific issues, not a full repeat unless fixes were extensive. The goal is convergence.</p>
+<p>The namespace convention prevents ID collisions across sections: <code>{section-prefix}-{element-type}-{descriptive-name}</code>. Section prefixes are assigned in Phase A (<code>phase-a</code>, <code>sec-1</code>, <code>kb-security</code>). All IDs within a section use the namespace as a prefix, ensuring uniqueness across the entire output.</p>
+<h3 id="factory-pattern-4-variants">Factory Pattern &ndash; 4 Variants<a class="headerlink" href="#factory-pattern-4-variants" title="Anchor link">&para;</a></h3>
+<p>Engines are extracted from the OS and from each other through four distinct factory patterns, each solving a different version of &ldquo;how does one system produce and maintain another&rdquo;:</p>
+<p><strong>Variant 1 &ndash; Full Extraction.</strong> A complete capability lift from one system to another. The factory audits capabilities, selects and adapts a subset via an extraction manifest, stages them, deploys to a standalone product, and severs runtime dependency. The product owns everything after deployment. The JSE was extracted from the SEE in 2 days: 63 skills audited, 43 skipped, 20 kept, with a 41,594-byte extraction manifest specifying 7 sections per skill. JSE composited from four lineages &ndash; SEE operational skills, ODC governance methodology, WondaKB naming conventions, and original JSE innovation.</p>
+<p><strong>Variant 2 &ndash; Team Deployment.</strong> Deploying a configured workspace for a team with different identity and access requirements. One-time extraction with restructuring for multi-user access. WondaKB was extracted from the SEE: 20 skills migrated with name/path translations, KB content restructured from 7 technical buckets to 6 conversational files, 3 new skills created for multi-user collaboration (session-start with git pull, session-end with git push, document-integrator).</p>
+<p><strong>Variant 3 &ndash; Thin Routing.</strong> Lightweight orchestration that routes to capabilities across the ecosystem without containing or copying logic. The engine is pure coordination &ndash; improvements to source capabilities automatically propagate. The Research Engine routes to JSE&rsquo;s market-scanner, MLR&rsquo;s competitive-research, ODC&rsquo;s dual-source methodology, and MLR&rsquo;s enterprise templates. Core vulnerability: hardcoded file paths break silently when sources move. The capability registry solves this by providing stable identifiers that abstract away physical locations.</p>
+<p><strong>Variant 4 &ndash; Instance Spawning.</strong> Creating instances of a work template within a bounded context. <code>cp -r</code> to create instances from a proven structure. Shared methodology (playbook) with instance-specific content. Cross-instance learning accumulates in shared patterns. The most operationally accessible factory pattern. The Renewal Engine uses this: per-client instances from a methodology playbook where each instance is populated with client-specific content.</p>
+<p>Every variant includes a maintenance protocol (triggers, steps, staleness indicators) and a documented anti-pattern. Innovation flows outward from factories and never returns &ndash; the maintenance protocols close that loop through reverse audits, innovation detection, and back-port decision logs.</p>
+<h3 id="editorial-standards">Editorial Standards<a class="headerlink" href="#editorial-standards" title="Anchor link">&para;</a></h3>
+<p>Six core principles govern all written output:</p>
+<ol>
+<li>
+<p><strong>Evidence Requirement.</strong> If you cannot cite it, do not claim it. Every claim needs a source and credibility tier. &ldquo;I believe&rdquo; and &ldquo;it seems like&rdquo; are red flags. Replace with &ldquo;Source X reports&hellip;&rdquo; or &ldquo;No evidence found for&hellip;&rdquo;</p>
+</li>
+<li>
+<p><strong>Honest Assessment.</strong> Never oversell. Never downplay. Note residual risk. &ldquo;Impressive adoption rate AND significant unresolved security concerns&rdquo; is honest. Picking one framing is not. Residual risk is always noted &ndash; every deployment has risk after hardening. Pretending otherwise is malpractice.</p>
+</li>
+<li>
+<p><strong>Transferable Framing.</strong> Distinguish universal principles from tool-specific details. &ldquo;This is how authentication tokens work for any agent gateway&rdquo; is more valuable than &ldquo;Here&rsquo;s the Tool X auth config.&rdquo; When a concept transfers, say so explicitly. When something is tool-specific, mark it.</p>
+</li>
+<li>
+<p><strong>Community Validation.</strong> Documentation alone is insufficient. Every research question gets both official documentation and community intelligence. When docs and community agree, confidence is high. When they disagree, the contradiction is an intelligence insight.</p>
+</li>
+<li>
+<p><strong>Security as a Lens.</strong> Security is evaluated on every decision, not treated as a separate phase. Security implications are noted inline, where the decision is made, not deferred to an appendix that may never be read.</p>
+</li>
+<li>
+<p><strong>Living Documentation.</strong> Mark outdated content as outdated. Never delete. All entries are date-stamped. The history has value &ndash; knowing what used to be true and changed is intelligence.</p>
+</li>
+</ol>
+<hr />
+<h2 id="system-building-methodology">System Building Methodology<a class="headerlink" href="#system-building-methodology" title="Anchor link">&para;</a></h2>
+<p>Three documents encode how EngineOS was built and how composited systems are audited: the ecosystem build methodology, the lift audit, and planning enforcement.</p>
+<h3 id="ecosystem-build-three-act-architecture">Ecosystem Build &ndash; Three-Act Architecture<a class="headerlink" href="#ecosystem-build-three-act-architecture" title="Anchor link">&para;</a></h3>
+<p>The methodology used to build EngineOS itself, formalized from the three-act audit that composited 11 projects into a unified system.</p>
+<p><strong>Act 1 &ndash; Structural Reconnaissance.</strong> Posture: cartographer. Map what exists without judging it. Produces an ecosystem map, a growth story, a Deep Attention Register (hypotheses for Act 2), and an Act 2 workspace. Act 1&rsquo;s job is to make Act 2&rsquo;s discovery wildly informed. It does not solve, recommend, or prescribe. The EngineOS audit&rsquo;s Act 1 produced 19 files with 90+ register entries as starting hypotheses.</p>
+<p><strong>Act 2 &ndash; Exhaustive Discovery.</strong> Posture: auditor. Read every line. Produce findings, not recommendations. The core methodology is capability-domain reading: read the same capability type across ALL projects simultaneously rather than reading each project start-to-finish. This means one reader examines integration architecture across every project &ndash; cross-project comparison happens naturally within domain reads.</p>
+<p>The 70% reading rule: at least 70% of effort goes to actual line-by-line reading. Synthesis comes after the read. This prevents the discovery-filtered-by-conclusion trap where the agent decides the answer and then reads selectively to confirm it.</p>
+<p>Genealogy synthesis is a first-class output. Sub-agents reading individual domains cannot trace cross-domain iteration chains. A dedicated post-domain genealogy pass revealed that JSE composited from four distinct lineages &ndash; no single domain reader could have seen this. The EngineOS audit&rsquo;s Act 2 produced 103 files, 1.6MB total.</p>
+<p><strong>Act 3 &ndash; Build from Evidence.</strong> Posture: builder. The core methodology is best-version-wins compositing. Not selection (picking a winner) but compositing (taking the best parts from every lineage). The transcript-processor combines SEE v1.1 plus restaurant&rsquo;s three principles. The qa-pipeline combines MLR&rsquo;s programmatic checks plus ODC&rsquo;s binary self-tests plus JSE&rsquo;s governance integration. Taking the best from every iteration produces something better than any source.</p>
+<p>Five-phase build with checkpoint reviews: Foundation, Composites, Best-version deployments, Infrastructure (templates, patterns, principles), Constitution and validation. At every phase boundary, an independent evaluator reads deployed files on disk &ndash; not the executor&rsquo;s report &ndash; and issues corrections before the next phase begins. Reports approximate; disk is exact.</p>
+<h3 id="lift-audit-regression-detection">Lift Audit &ndash; Regression Detection<a class="headerlink" href="#lift-audit-regression-detection" title="Anchor link">&para;</a></h3>
+<p>When a system composites capabilities from multiple sources, two failure modes emerge after the build: internal regression (code that fails to port from source to target) and external currency drift (the lifted baseline ages against evolving practice).</p>
+<p>Both accumulate invisibly. They surface only when someone tries to exercise the capability. The EngineOS audit surfaced these empirically: 891 lines of JavaScript at source with zero lines in EngineOS (never-lifted regression), Python scripts reduced 55% with roughly half the functions missing (capability loss), and a skill existing as documentation pointing at files that never ported (orphaned-skill regression).</p>
+<p>Three audit dimensions:</p>
+<p><strong>Dimension 1 &ndash; Internal regression check.</strong> Compare source to target. The primary signal is method-level parity: function presence and public API coverage. Body-size delta (line counts) is secondary evidence only &ndash; never used alone.</p>
+<p><strong>Dimension 2 &ndash; External currency validation.</strong> Check whether the lifted baseline is still current practice. Use Context7 for API/library docs and Bright Data for current industry patterns. Impact-scaled: HIGH capabilities get 5+ Tier 1-2 sources; LOW capabilities get a single sanity check.</p>
+<p><strong>Dimension 3 &ndash; Refactor-vs-regression distinction.</strong> When target code differs from source, determine whether it is legitimate refactoring or capability loss. A file that got smaller may have been refactored (dead-code removal, DRY consolidation), not regressed. Method-level parity is the test: if function list and public API coverage both hold, size delta is refactoring.</p>
+<p>The canonical example: notion-ops had a &ldquo;55% body reduction&rdquo; from source. The initial audit read this as concerning. Method-level comparison revealed roughly half the functions were missing &ndash; method-level parity failed. THAT made it regression, not the body-size. Had the body-size been the sole signal, legitimate refactors would have been misclassified. This incident produced anti-pattern #14 (Body-Size as Regression Signal).</p>
+<p>Enumeration discipline is the most important audit practice: catalog ALL executable locations per source project. Do NOT pattern-match on expected paths. In one audit, the agent tested 4 case-permutation variants of a path, declared &ldquo;doesn&rsquo;t exist on this machine,&rdquo; and propagated that wrong-negative into &ldquo;capability never existed in sources.&rdquo; The operator found the file in one case-insensitive <code>ls</code>. Parent-directory browsing is cheaper and more reliable than variant-hunting.</p>
+<h3 id="planning-enforcement">Planning Enforcement<a class="headerlink" href="#planning-enforcement" title="Anchor link">&para;</a></h3>
+<p>Confident agents skip planning. This was documented across three consecutive sessions where brainstorming and writing-plans skills were specified in the skill chain and never invoked. Session compliance: 0%, ~30%, ~70%, then PASS in the fourth session after the pattern was identified.</p>
+<p>The root cause: governance that depends on the agent choosing to invoke it fails when the agent has a clear path and does not perceive a need for structured thinking. The agent conflates &ldquo;I know what to build&rdquo; with &ldquo;I&rsquo;ve thought through how to build it.&rdquo; Detailed operator prompts amplify this &ndash; they create an illusion that scoping was done by the operator.</p>
+<p>Two enforcement types address this:</p>
+<p><strong>Structural enforcement</strong> makes the planner&rsquo;s output a required input to the production step. The production step reads Layer 4 (Design + Plan) of the run plan as its first action. If Layer 4 is empty, there is nothing to read and production cannot proceed. This works for writing-plans because its output is concrete &ndash; a plan that populates Layer 4.</p>
+<p><strong>Advisory enforcement with transparency</strong> requires the agent to justify skipping in the run plan, visible to the operator at the approval gate. If the agent judges a mandatory step unnecessary, it writes a skip-justification. Silent skipping &ndash; proceeding without invoking or justifying &ndash; is a governance violation.</p>
+<p>The asymmetry is intentional. Structural enforcement works where artifacts are concrete. Advisory enforcement works where artifacts are fuzzy (like brainstorming output). Trying to force structural enforcement on brainstorming creates perverse incentives &ndash; the agent produces a fake artifact to satisfy a gate, which is worse than honest skipping.</p>
+<hr />
+<h2 id="governance-methodology">Governance Methodology<a class="headerlink" href="#governance-methodology" title="Anchor link">&para;</a></h2>
+<p>Two documents encode how the system remembers and how it stays current: memory architecture and research cadence. Memory architecture itself splits into two halves &ndash; write-side capture (where information goes when produced) and read-side retrieval (how prior context gets back into active work). Both halves are formalized in <code>methodology/memory-architecture.md</code>; the canonical decision record for the retrieval layer is <a href="../../DECISIONS.md">DECISIONS.md D32</a>. For the deep operational reference, see <a href="second-brain.html">second-brain.md</a>.</p>
+<h3 id="memory-architecture-write-side-capture">Memory Architecture (Write-Side &ndash; Capture)<a class="headerlink" href="#memory-architecture-write-side-capture" title="Anchor link">&para;</a></h3>
+<p>EngineOS uses 8 memory surfaces, each with ONE job. This section governs capture &ndash; what writes go where. The companion read-side architecture is the next subsection. Surfaces doing a second job are in violation and should be corrected:</p>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>One Job</th>
+<th>Persistence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLAUDE.md</code></td>
+<td>Constitution + routing</td>
+<td>Permanent, evolves slowly</td>
+</tr>
+<tr>
+<td><code>CONTEXT.md</code></td>
+<td>Current state, present-tense</td>
+<td>Updated every session</td>
+</tr>
+<tr>
+<td><code>CONTEXT-HISTORY.md</code></td>
+<td>Archived prior states</td>
+<td>Append-only archive</td>
+</tr>
+<tr>
+<td>Run plans</td>
+<td>Active execution contracts</td>
+<td>PLANNING to IN PROGRESS to COMPLETE</td>
+</tr>
+<tr>
+<td>Activity log</td>
+<td>Operational breadcrumbs (what happened)</td>
+<td>Append-only, hook-populated</td>
+</tr>
+<tr>
+<td>Intelligence log</td>
+<td>Strategic memory (why it matters)</td>
+<td>Append-only, human-curated</td>
+</tr>
+<tr>
+<td><code>operator/*</code></td>
+<td>Durable identity</td>
+<td>Stable, evolves with operator</td>
+</tr>
+<tr>
+<td>User-level auto-memory</td>
+<td>Cross-session memory</td>
+<td>Claude Code managed</td>
+</tr>
+</tbody>
+</table>
+<p>All log entries go to root <code>logs/</code>. Engine-local logs are legacy. Every log entry is tagged with an engine column (<code>job-search</code>, <code>sales-enablement</code>, <code>on-demand-curriculum</code>, or <code>OS</code> for OS-level work). Filtering by engine tag produces the tenant-specific view &ndash; cheaper than maintaining separate files per engine.</p>
+<p>This design is backed by external research: centralized logging with tenant tags is the industry standard across Grafana Loki, Datadog, Azure, AWS, and OpenTelemetry. Per-tenant stores are recommended only under strict regulatory isolation or at scales like 100M events/second. Single-responsibility memory surfaces converge with patterns across CrewAI (5 memory types), LangChain Agent Server (3 persistence layers), and OpenAI Agents SDK (global/session/profile separation).</p>
+<p>CONTEXT.md entries older than 30 days or exceeding 20 entries archive to CONTEXT-HISTORY.md. The archive trigger is on-demand at session boundaries, not periodic. The test: &ldquo;Is CONTEXT.md readable in under 30 seconds?&rdquo; If the What&rsquo;s Changed table makes you scroll past the fold, it is archive time.</p>
+<h3 id="retrieval-architecture-read-side-pulling-prior-context-back-in">Retrieval Architecture (Read-Side &ndash; Pulling Prior Context Back In)<a class="headerlink" href="#retrieval-architecture-read-side-pulling-prior-context-back-in" title="Anchor link">&para;</a></h3>
+<p>Capture without retrieval is a write-only system. The retrieval layer was added 2026-06-04 after a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work despite 216+ articles in the corpus. The canonical decision is <a href="../../DECISIONS.md">DECISIONS.md D32</a>; the canonical methodology section is in <code>methodology/memory-architecture.md</code>. The deep operational reference is <a href="second-brain.html">second-brain.md</a>.</p>
+<p>Retrieval operates as three layers over the same six-surface priority corpus:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Mechanism</th>
+<th>Fires when</th>
+<th>Coverage target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Session-start injection</strong></td>
+<td><code>hooks/session-start.py</code></td>
+<td>Every session start</td>
+<td>Orientation &ndash; KB index + last 30 lines of today&rsquo;s daily log injected at session boundary</td>
+</tr>
+<tr>
+<td><strong>2. Mid-work retrieval hook</strong></td>
+<td><code>hooks/prompt-retrieval.py</code> (<code>UserPromptSubmit</code>)</td>
+<td>Prompts matching the heuristic gate</td>
+<td>~90% &ndash; silent, mechanical, ≤1024 chars, ≤1s, top-3 matches from 6-surface corpus</td>
+</tr>
+<tr>
+<td><strong>3. Manual escalation</strong></td>
+<td><code>.claude/skills/recall/</code> (<code>/recall &lt;query&gt;</code>)</td>
+<td>Operator or agent invocation when hook missed or sweep needs depth</td>
+<td>~10% &ndash; explicit, ranked, no cap</td>
+</tr>
+</tbody>
+</table>
+<p>Layer 1 establishes orientation. Layer 2 fills in mid-work context mechanically. Layer 3 escalates when the hook misses or the decision is load-bearing.</p>
+<p>The same six surfaces are queried in the same priority order across all three layers, ordered by signal-to-noise:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Surface</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>logs/intelligence-log.md</code></td>
+<td>&ldquo;What did we learn / decide / observe?&rdquo;</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>knowledge/index.md</code></td>
+<td>&ldquo;Do we have an article on X?&rdquo;</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>knowledge/concepts/*.md</code> + <code>connections/*.md</code></td>
+<td>&ldquo;Read the article on X&rdquo;</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>daily/*.md</code> (last 30d)</td>
+<td>&ldquo;What were we doing recently on Y?&rdquo;</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>run-plans/*.md</code> (last 60d)</td>
+<td>&ldquo;Recent plan-and-execution for Z&rdquo;</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>methodology/*.md</code></td>
+<td>&ldquo;Official approach to W&rdquo;</td>
+</tr>
+</tbody>
+</table>
+<p>Stopping rule: when surfaces 1-2 yield 3+ strong hits, do not sweep the lower surfaces. The discipline that pairs with the manual escalation layer is the <code>retrieval-before-decide</code> framework pattern &ndash; query the second brain before deciding in a domain where prior intelligence likely exists. Health is measured via <code>scripts/retrieval-health.jsonl</code> (one record per <code>UserPromptSubmit</code> invocation); the operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions to make the keep / tune / kill decision per D32. Healthy gate hit rate band: 10-60%.</p>
+<p>Why not a vector DB at current scale: external research synthesis confirms structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision at personal-KB scale (&lt;500 articles; the corpus is at 216 and growing). Vector / GraphRAG / Mem0-style production frameworks are appropriate beyond ~2000 articles. Phase C is deferred with explicit revisit conditions in D32.</p>
+<h3 id="research-cadence">Research Cadence<a class="headerlink" href="#research-cadence" title="Anchor link">&para;</a></h3>
+<p>Intelligence decays. A finding from 30 days ago may be stale. A finding from 90 days ago may be dangerous to act on. Scheduled research sweeps prevent staleness from accumulating silently.</p>
+<p>Three staleness thresholds determine when a finding can no longer be trusted at face value:</p>
+<p><strong>Time-based.</strong> Days since last verification. Security findings: 0 days (always verify). Technology ecosystems: 3-7 days. Market positioning: 14-30 days. Methodology references: 60-90 days.</p>
+<p><strong>Event-based.</strong> Specific triggers that invalidate findings regardless of age. A finding verified yesterday becomes stale the moment a new version ships, a competitor launches, or a key source publishes contradicting information.</p>
+<p><strong>Confidence-based.</strong> Source reliability decay. Tier 1 sources (official docs) hold the longest. Tier 5 sources (general sentiment) decay fastest. Lower-tier findings decay faster because their initial confidence was lower.</p>
+<p>Three sweep layers provide the cadence structure:</p>
+<p><strong>Watch (frequent, short &ndash; 15-30 minutes).</strong> Catch critical changes. Narrow scope &ndash; new releases, security advisories, breaking changes. Frequency matched to domain volatility.</p>
+<p><strong>Pulse (moderate frequency &ndash; 30-60 minutes).</strong> Track broader landscape shifts, community sentiment changes, emerging patterns. Half the watch frequency.</p>
+<p><strong>Deep Refresh (infrequent, thorough &ndash; 1-2 hours).</strong> Full re-evaluation. Question assumptions. Check if the right questions are still being asked. Monthly to quarterly depending on volatility. Quality bar: would this knowledge change a decision? If no, it is maintenance. If yes, it is intelligence.</p>
+<p>The OS provides this framework. Each engine configures its own cadence parameters based on domain volatility. An engine doing competitive analysis in a fast-moving market refreshes weekly. An engine doing curriculum development on established platforms runs monthly watch sweeps with quarterly deep refreshes.</p>
+<hr />
+<h2 id="cross-references">Cross-References<a class="headerlink" href="#cross-references" title="Anchor link">&para;</a></h2>
+<ul>
+<li><strong>Governance enforcement layer:</strong> See <a href="governance.html">governance.md</a> for how the phase-controller, hooks, and rules mechanically enforce these methodologies.</li>
+<li><strong>Skill system:</strong> See <a href="skills-reference.html">skill-system.md</a> for the 29 skills that execute methodology (depth-governor enforces depth assessment, findings-formatter applies structured findings, output-self-test runs binary gates, recall escalates manual retrieval).</li>
+<li><strong>Pattern library:</strong> See <a href="patterns-reference.html">patterns-reference.md</a> for the 70 patterns that encode recurring solutions, including methodology-adjacent patterns like <code>planning-skip-on-confidence</code>, <code>path-search-discipline</code>, and <code>retrieval-before-decide</code>.</li>
+<li><strong>Methodology index:</strong> See <a href="methodology-index.html">methodology-index.md</a> for the full index of all 15 documents with companion skills and loading triggers.</li>
+<li><strong>Second brain operational reference:</strong> See <a href="second-brain.html">second-brain.md</a> for the deep walkthrough of the capture/retrieval system (flush.py, compile.py, the three retrieval layers, health monitoring, kill/keep decision cadence).</li>
+</ul>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

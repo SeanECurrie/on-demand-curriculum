@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engine Model — EngineOS Docs</title>
+  <meta name="description" content="Engines are the reason EngineOS exists. The OS layer (Layer 1) holds shared capabilities -- skills, methodology, governance, design system, operator identity. Engines (Layer 2) are the domain-specific">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link active" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Engine Model</h1>
+    <p class="report-header__subtitle">Engines are the reason EngineOS exists. The OS layer (Layer 1) holds shared capabilities -- skills, methodology, governance, design system, operator identity. Engines (Layer 2) are the domain-specific</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="engine-model-tenant-architecture">Engine Model &ndash; Tenant Architecture<a class="headerlink" href="#engine-model-tenant-architecture" title="Anchor link">&para;</a></h1>
+<p>Engines are the reason EngineOS exists. The OS layer (Layer 1) holds shared capabilities &ndash; skills, methodology, governance, design system, operator identity. Engines (Layer 2) are the domain-specific workspaces where those capabilities get applied to real problems. A job search, a client engagement, a curriculum deliverable, a competitive analysis &ndash; each runs inside an engine that inherits the OS toolkit and adds what the domain requires.</p>
+<p>This document explains how engines work, what they inherit, what they own, and where the nine known engines currently stand. As of 2026-06-05 there are four active tenants in <code>engines/</code> (job-search, job-search-arnett, on-demand-curriculum, sales-enablement) and six engines still operating at their Desktop source locations.</p>
+<hr />
+<h2 id="what-engines-are">What Engines Are<a class="headerlink" href="#what-engines-are" title="Anchor link">&para;</a></h2>
+<p>An engine is a Layer 2 tenant at <code>engines/&lt;engine-name&gt;/</code>. The term &ldquo;tenant&rdquo; is deliberate: engines are isolated from each other but share a common platform. They are peers &ndash; no engine outranks another &ndash; and none is a peer to the OS itself. The OS serves engines; engines do not modify the OS.</p>
+<p>Each engine is a self-contained domain workspace. It has its own engagement data, its own knowledge bases, its own CONTEXT.md tracking session state, and (optionally) its own domain-specific skills that encode workflows unique to that domain. What it does not have is its own copy of the shared infrastructure. Governance, methodology, patterns, design system, operator identity, and the 29 OS-level skills are inherited from Layer 1.</p>
+<p>This separation serves two goals:</p>
+<ol>
+<li>
+<p><strong>No capability duplication.</strong> When a skill improves at the OS level, every engine benefits. When a methodology doc is updated, the update is global. There is one source of truth for shared capabilities, and it lives at Layer 1.</p>
+</li>
+<li>
+<p><strong>Domain isolation.</strong> An engine&rsquo;s engagement data, client knowledge bases, and domain workflows are its own. Work in the job search engine does not leak into the sales enablement engine. Cross-engine operations require explicit operator confirmation.</p>
+</li>
+</ol>
+<hr />
+<h2 id="what-engines-inherit-vs-own">What Engines Inherit vs. Own<a class="headerlink" href="#what-engines-inherit-vs-own" title="Anchor link">&para;</a></h2>
+<h3 id="inherited-from-os-layer-1">Inherited from OS (Layer 1)<a class="headerlink" href="#inherited-from-os-layer-1" title="Anchor link">&para;</a></h3>
+<p>Everything in this list is referenced, not copied. If an engine needs it, it reads the OS version.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Count</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Skills</td>
+<td>29</td>
+<td><code>.claude/skills/</code></td>
+</tr>
+<tr>
+<td>Methodology docs</td>
+<td>15</td>
+<td><code>methodology/</code></td>
+</tr>
+<tr>
+<td>Patterns</td>
+<td>70 (58 problem, 5 deliverable, 7 framework)</td>
+<td><code>patterns/</code></td>
+</tr>
+<tr>
+<td>Design system</td>
+<td>6 files (CSS, tokens, typography, accessibility, PDF pipeline)</td>
+<td><code>design-system/</code></td>
+</tr>
+<tr>
+<td>Operator identity</td>
+<td>Profile, voice, evidence, beliefs, intelligence</td>
+<td><code>operator/</code></td>
+</tr>
+<tr>
+<td>Governance rules</td>
+<td>7 (3 unconditional + 4 path-scoped)</td>
+<td><code>.claude/rules/</code></td>
+</tr>
+<tr>
+<td>Enforcement hooks</td>
+<td>8 events wired (PreToolUse, PostToolUse, Stop, PostCompact, UserPromptSubmit, SessionStart, SubagentStop, Notification)</td>
+<td><code>hooks/</code></td>
+</tr>
+<tr>
+<td>Templates</td>
+<td>38 (27 deliverable + 11 engagement)</td>
+<td><code>templates/</code></td>
+</tr>
+<tr>
+<td>Principles</td>
+<td>5</td>
+<td><code>principles/</code></td>
+</tr>
+<tr>
+<td>Registries</td>
+<td>Capabilities + engines</td>
+<td><code>registry/</code></td>
+</tr>
+<tr>
+<td>Second brain (capture + retrieval)</td>
+<td>KB articles, daily logs, intelligence log, concepts, flush/compile pipeline, <code>/recall</code> skill, prompt-retrieval hook</td>
+<td><code>knowledge/</code>, <code>daily/</code>, <code>logs/</code>, <code>scripts/</code>, <code>.claude/skills/recall/</code></td>
+</tr>
+</tbody>
+</table>
+<p>The governance stack deserves special mention. Phase-controller, the 8 wired hook events, and all 7 rules apply to work inside any engine. When you write a deliverable in the job search engine, the PreToolUse hook checks for an active run plan scope-matched to <code>engines/job-search/</code>. When you start a session touching ODC files, the session-orchestrator detects the engine context from the path and loads accordingly. The governance is the same everywhere &ndash; that is the point.</p>
+<p>Engines also inherit the second brain transparently. The <code>/recall</code> skill, the SessionStart context injection, and the UserPromptSubmit retrieval hook all surface prior intelligence regardless of which engine the work is happening in &ndash; engine-tagged log entries and KB articles are filterable but not siloed. See <a href="second-brain.html">Second Brain</a> for the full capture + retrieval pipeline.</p>
+<p>See <a href="governance.html">Governance Stack</a> for how phase-controller, hooks, and rules enforce discipline across all engines.</p>
+<h3 id="owned-by-each-engine-domain-specific">Owned by Each Engine (Domain-Specific)<a class="headerlink" href="#owned-by-each-engine-domain-specific" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Why It&rsquo;s Local</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Domain skills</td>
+<td>Encode workflows that do not generalize. A resume generator is not useful outside a job search.</td>
+</tr>
+<tr>
+<td>Engagement data</td>
+<td>Client-specific, operator-specific, time-bound. Lives and dies with the domain.</td>
+</tr>
+<tr>
+<td>Knowledge bases</td>
+<td>Domain intelligence accumulated through research and engagement work.</td>
+</tr>
+<tr>
+<td>Domain-adapted workflows</td>
+<td>The 9-lane pipeline in JSE, the 6-type classification in ODC &ndash; these are engine architecture, not OS architecture.</td>
+</tr>
+<tr>
+<td>Domain methodology</td>
+<td>When a domain requires methodology that genuinely differs from OS methodology (e.g., ODC&rsquo;s three-tier-hardening for walkthrough security steps).</td>
+</tr>
+<tr>
+<td>CONTEXT.md / DECISIONS.md</td>
+<td>Per-engine session state and decision records. Each engine tracks its own work.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-engines-do-not-duplicate">What Engines Do NOT Duplicate<a class="headerlink" href="#what-engines-do-not-duplicate" title="Anchor link">&para;</a></h3>
+<p>This is a hard rule, not a suggestion. If an engine needs a capability that lives at Layer 1, it references the OS version. No local copies of:</p>
+<ul>
+<li><strong>Operator identity</strong> &ndash; use <code>operator/</code></li>
+<li><strong>Logging specification</strong> &ndash; use <code>.claude/rules/logging.md</code></li>
+<li><strong>Methodology docs</strong> &ndash; use <code>methodology/</code></li>
+<li><strong>Patterns</strong> &ndash; use <code>patterns/</code></li>
+<li><strong>Design system</strong> &ndash; use <code>design-system/</code></li>
+<li><strong>Governance skills</strong> &ndash; use OS-level <code>.claude/skills/</code></li>
+</ul>
+<p>The only exception: if an engine has a domain-specific variant that genuinely differs from the OS version, it keeps that variant locally and documents why it diverges. ODC&rsquo;s <code>methodology/three-tier-hardening.md</code> is an example &ndash; it classifies walkthrough security steps into essential/educational/operational tiers, which has no OS-level equivalent. That methodology stays in the engine.</p>
+<hr />
+<h2 id="starting-a-new-engine">Starting a New Engine<a class="headerlink" href="#starting-a-new-engine" title="Anchor link">&para;</a></h2>
+<p>Four steps. Not optional, not flexible.</p>
+<p><strong>1. Create the directory structure.</strong></p>
+<div class="highlight"><pre><span></span><code>engines/&lt;engine-name&gt;/
+  README.md       -- Engine identity: what it does, what it owns, what it inherits
+  CONTEXT.md      -- Session state: what&#39;s happening now, what changed, what&#39;s next
+  DECISIONS.md    -- Decision log: context, options, decision, why
+</code></pre></div>
+
+<p>These three files are the minimum viable engine. README.md is the engine&rsquo;s self-description. CONTEXT.md is the handoff mechanism between sessions (same role it plays at the OS level). DECISIONS.md records choices with their reasoning so future sessions understand why things are the way they are.</p>
+<p><strong>2. Add domain-specific directories as needed.</strong></p>
+<p>There is no mandatory directory structure beyond the three files. Each engine adds what its domain requires:</p>
+<ul>
+<li><code>engagements/</code> for client work (SEE)</li>
+<li><code>targets/</code>, <code>arsenal/</code>, <code>lanes/</code>, <code>market/</code>, <code>evidence/</code> for job search data (JSE)</li>
+<li><code>templates/</code>, <code>intake/</code>, <code>outputs/</code> for curriculum delivery (ODC)</li>
+<li><code>knowledge/</code> for accumulated domain intelligence (any engine)</li>
+<li><code>config/</code> for integration configuration (JSE has Notion config here)</li>
+</ul>
+<p>The structure follows the domain, not a template.</p>
+<p><strong>3. Register the engine in <code>registry/engines.md</code>.</strong></p>
+<p>The engine registry maps engine names to their current locations (source and tenant), migration status, and domain. This is the OS&rsquo;s awareness layer &ndash; session-orchestrator reads it to detect which engine context is active.</p>
+<p><strong>4. Domain-specific skills stay in the engine.</strong></p>
+<p>Skills that do not generalize across engines belong at <code>engines/&lt;engine-name&gt;/.claude/skills/</code>, not at the OS level. The test: would any other engine ever use this skill? If no, it is a domain skill. If yes, it belongs at Layer 1.</p>
+<p>See <a href="skill-system.html">Skill System</a> for how domain skills differ from OS skills in discovery, allowed-tools scoping, and chain participation.</p>
+<hr />
+<h2 id="active-tenants">Active Tenants<a class="headerlink" href="#active-tenants" title="Anchor link">&para;</a></h2>
+<p>Four engines have migrated to EngineOS tenants. They range from a fully self-contained active engine (JSE) to a sibling tenant scoped to a second operator (job-search-arnett) to a test configuration validating OS capabilities (SEE).</p>
+<h3 id="job-search-engine-jse-active">Job Search Engine (JSE) &ndash; Active<a class="headerlink" href="#job-search-engine-jse-active" title="Anchor link">&para;</a></h3>
+<p><strong>Location:</strong> <code>engines/job-search/</code>
+<strong>Status:</strong> Self-contained after 5-phase migration. The most data-rich tenant.
+<strong>Real use:</strong> The operator&rsquo;s live job search, Phase 2 (Targeting) in active execution.</p>
+<p>The JSE is the system&rsquo;s proof that EngineOS works as a daily operating environment. It runs a 9-lane pipeline architecture with tiered compensation strategy ($80K-$220K+ across 4 tiers), maintains live Notion integration (3 databases: Pipeline, Contacts, Outreach), and has a Node.js DOCX build pipeline for resume generation.</p>
+<p><strong>8 domain skills</strong> at <code>engines/job-search/.claude/skills/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target-builder</code></td>
+<td>Scored, tiered target company lists. Lane management, JD verification, contact identification.</td>
+</tr>
+<tr>
+<td><code>contact-profiler</code></td>
+<td>Person profiles for hiring managers, recruiters, referrals. Working style taxonomy, duplicate prevention.</td>
+</tr>
+<tr>
+<td><code>positioning-engine</code></td>
+<td>Career positioning synthesis. SWOT, gap analysis, Four Key Stories, vertical positioning, resume angles.</td>
+</tr>
+<tr>
+<td><code>outreach-builder</code></td>
+<td>Personalized outreach sequences. 5 frameworks (warm intro, cold professional, recruiter response, post-interview, networking nurture).</td>
+</tr>
+<tr>
+<td><code>resume-generator</code></td>
+<td>Atom selection to markdown to DOCX. Unverified claims discipline. Requires the <code>_build/</code> Node.js pipeline.</td>
+</tr>
+<tr>
+<td><code>materials-qa</code></td>
+<td>8-phase quality gate for all external materials. Fact-checking, inflation detection, cross-document consistency. Complements the OS qa-pipeline.</td>
+</tr>
+<tr>
+<td><code>html-deliverable-generator</code></td>
+<td>Career-specific HTML deliverables. Portfolio pages, project showcases, HTML resumes.</td>
+</tr>
+<tr>
+<td><code>interview-processor</code></td>
+<td>Interview debrief to structured intelligence. Tag, contextualize, chain, extract, route to target folders and contact profiles.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What makes JSE notable as a tenant:</strong>
+- It carried the governance innovations (phase-controller, depth governor, sanity-check) that became EngineOS&rsquo;s governance stack. The JSE was the first engine to enforce skill chains mechanically.
+- Its Desktop source location (<code>~/Desktop/JobSearchEngine/</code>) now holds 15 symlinks pointing back to the tenant &ndash; the migration inverted the dependency.
+- It has its own activity log (94+ entries) and intelligence log (30+ strategic insights) &ndash; engine-local logs that predate the OS-level logging consolidation. The OS logging spec now routes new entries to root <code>logs/</code> with engine tags.</p>
+<h3 id="job-search-engine-arnett-job-search-arnett-active">Job Search Engine &ndash; Arnett (job-search-arnett) &ndash; Active<a class="headerlink" href="#job-search-engine-arnett-job-search-arnett-active" title="Anchor link">&para;</a></h3>
+<p><strong>Location:</strong> <code>engines/job-search-arnett/</code>
+<strong>Status:</strong> Bootstrapped 2026-06-04. Sibling tenant to JSE.
+<strong>Real use:</strong> Live job search for Arnett McMurray, run as a second operator inside EngineOS.</p>
+<p>The Arnett tenant is the first proof that the engine model supports multiple instances of the same engine type. It is a peer to <code>engines/job-search/</code> (Sean&rsquo;s), not a child of it. Mechanical isolation comes from the PreToolUse scope-matching hook: writes to <code>engines/job-search-arnett/...</code> require an active run plan at this tenant&rsquo;s scope (or root), and writes targeting Sean&rsquo;s JSE will fail and force the agent to redirect.</p>
+<p><strong>0 tenant-local skills.</strong> This tenant inherits all 8 JSE domain skills from <code>engines/job-search/.claude/skills/</code> &ndash; <code>target-builder</code>, <code>contact-profiler</code>, <code>positioning-engine</code>, <code>outreach-builder</code>, <code>resume-generator</code>, <code>materials-qa</code>, <code>html-deliverable-generator</code>, <code>interview-processor</code>. If a skill needs adaptation for Arnett&rsquo;s shape, the convention is to capture the gap as an intelligence-log entry and propose OS-level (or JSE-level) changes via a separate run plan rather than fork the skill locally.</p>
+<p><strong>Shared build pipeline.</strong> The Node.js <code>_build/</code> pipeline used by <code>resume-generator</code> lives at <code>engines/job-search/_build/</code> and is referenced by absolute path. Tenant-scoped outputs land in <code>engines/job-search-arnett/arsenal/</code>.</p>
+<p><strong>What makes the Arnett tenant notable:</strong>
+- It is the first sibling-tenant configuration in EngineOS. Same engine type (JSE), different operator profile, mechanically isolated data, shared skill surface.
+- Cross-tenant attribution flows through the engine tag on activity log entries &ndash; no multi-user module activation was required. The existing logging spec already supports it.
+- It validates that domain skills generalize across operators when they were built to read from configurable evidence and profile sources rather than hardcoding to a single person.</p>
+<h3 id="on-demand-curriculum-odc-portfolio">On-Demand Curriculum (ODC) &ndash; Portfolio<a class="headerlink" href="#on-demand-curriculum-odc-portfolio" title="Anchor link">&para;</a></h3>
+<p><strong>Location:</strong> <code>engines/on-demand-curriculum/</code>
+<strong>Status:</strong> Portfolio engine. 8 completed outputs. Stable, available for new work.
+<strong>Real use:</strong> Produces interactive HTML walkthroughs and structured documentation &ndash; including the documentation you are reading right now.</p>
+<p>ODC is an interactive curriculum delivery engine. It takes a person, a topic, and an operator brief, and produces large-format, single-file HTML walkthroughs tailored to the specific recipient. The operator (Sean) is the proxy for all intake &ndash; the engine talks to Sean, not end users.</p>
+<p><strong>2 domain skills</strong> at <code>engines/on-demand-curriculum/.claude/skills/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pipeline-start</code></td>
+<td>Run controller with 6-type classification (A through F). Type A is new output from scratch (full pipeline). Type F is review artifact (document-to-HTML, skips research/synthesis). Builds run plans, forces skill invocation, gates on operator approval.</td>
+</tr>
+<tr>
+<td><code>review-artifact</code></td>
+<td>Transforms dense markdown documents into interactive single-file HTML walkthroughs. The execution skill for Type F operations.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Domain methodology:</strong> <code>methodology/three-tier-hardening.md</code> &ndash; classifies walkthrough security steps into essential/educational/operational tiers. This is the one domain methodology doc that stays local because it has no OS-level equivalent.</p>
+<p><strong>What makes ODC notable as a tenant:</strong>
+- It was the primary donor for editorial methodology. The credibility tiers, editorial standards, and section construction approach that now live at the OS level were reverse-engineered from ODC&rsquo;s production process.
+- Its 8 completed outputs include the Derek Hargens EngineOS walkthrough (live at GitHub Pages), the JSE design showcase, and this documentation project.
+- The pipeline-start skill is a domain-specific orchestrator that parallels phase-controller at the OS level but is tuned for curriculum delivery workflows. It handles the 6-type classification that determines which skill chain runs.</p>
+<h3 id="sales-enablement-engine-see-test-configuration">Sales Enablement Engine (SEE) &ndash; Test Configuration<a class="headerlink" href="#sales-enablement-engine-see-test-configuration" title="Anchor link">&para;</a></h3>
+<p><strong>Location:</strong> <code>engines/sales-enablement/</code>
+<strong>Status:</strong> Test fixture for Phase 5 validation. All production capabilities lifted to OS.
+<strong>Real use:</strong> Validates that EngineOS can serve a real SEE engagement using OS-level skills.</p>
+<p>The SEE is the ecosystem&rsquo;s original engine and its most prolific OS donor: 49 skills and 37 patterns were lifted from SEE source to EngineOS Layer 1 during the build. As a tenant, the SEE is deliberately lightweight. It carries no domain skills of its own because every capability it needs now lives at the OS level.</p>
+<p><strong>0 domain skills.</strong> Everything is inherited.</p>
+<p><strong>What makes SEE notable as a tenant:</strong>
+- It serves as the acid test for the tenant model. If an engine that donated 49 skills to the OS can operate using only OS-level skills against its own engagement data, the architecture works. The B-chain validation test (B1-B8) ran an 8-step engagement chain through session orientation, integration discovery, research, knowledge buildup, transcript processing, deliverable production, and QA validation &ndash; all using OS skills. B7 QA found 12 issues (1 critical) across 4 deliverables, demonstrating the composited QA pipeline catches real defects.
+- Its source engagement data stays at <code>~/Desktop/SalesEnablementEngine/engagements/</code>, not copied into the tenant. The tenant points to source data. Full migration is future work after the validation gate passes.
+- Test fixtures (engagement brief, transcript, Attio export, Notion export) are staged at <code>engines/sales-enablement/test-fixtures/</code>.</p>
+<hr />
+<h2 id="source-only-engines-6">Source-Only Engines (6)<a class="headerlink" href="#source-only-engines-6" title="Anchor link">&para;</a></h2>
+<p>Six engines remain at their Desktop source locations. Their capabilities have been lifted to EngineOS Layer 1 during the build, but they have not been migrated to tenant directories. Tenant directories are created as engines are migrated.</p>
+<table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>Domain</th>
+<th>Location</th>
+<th>What Was Lifted to OS</th>
+<th>Migration Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WondaKB</strong></td>
+<td>Team knowledge base</td>
+<td><code>~/Desktop/WondaKB/</code></td>
+<td>Multi-user architecture concepts, Notion workspace mapping patterns, content-updater routing, audit-trail logging</td>
+<td>Source &ndash; multi-user donor</td>
+</tr>
+<tr>
+<td><strong>Maia Learning Research (MLR)</strong></td>
+<td>Competitive analysis</td>
+<td><code>~/Desktop/MaiaLearningResearch/</code></td>
+<td>QA pipeline (composited), enterprise CSS + HTML production, PDF pipeline</td>
+<td>Source &ndash; QA + HTML donor. <code>competitive-research</code> and <code>programmatic-qa</code> skills pending migration.</td>
+</tr>
+<tr>
+<td><strong>Restaurant</strong></td>
+<td>Restaurant technology research</td>
+<td><code>~/Desktop/restaurant-software-experiment/</code></td>
+<td>Transcript processing innovations (4 Rules applied in transcript-processor skill)</td>
+<td>Source &ndash; transcript donor</td>
+</tr>
+<tr>
+<td><strong>DCC:FALLOUT4</strong></td>
+<td>Game optimization</td>
+<td><code>~/Desktop/DCC:FALLOUT4/</code></td>
+<td>5-layer immutability model (never-delete enrichment pattern &ndash; append, do not overwrite)</td>
+<td>Source &ndash; principles donor</td>
+</tr>
+<tr>
+<td><strong>Research Engine</strong></td>
+<td>Multi-domain research</td>
+<td><code>~/Desktop/SalesEnablementEngine/projects/research-engine/</code></td>
+<td>Research routing skill at OS level (<code>research-engine</code> skill)</td>
+<td>Source &ndash; routing skill</td>
+</tr>
+<tr>
+<td><strong>Claude Skill Optimizer</strong></td>
+<td>Skill audit methodology</td>
+<td><code>~/Desktop/claude-skill-optimizer/</code></td>
+<td>Meta-capability for skill quality assessment (6-phase audit methodology)</td>
+<td>Source &ndash; meta-capability. <code>skill-audit</code> pending migration.</td>
+</tr>
+</tbody>
+</table>
+<p>These engines are not dead projects. They are source reservoirs. The ecosystem audit read every line of every file across all 11 projects and traced the best version of each capability to its source. What was lifted to EngineOS was the best-version composite from across these sources. What remains at the source locations is the domain context and engagement data that only matters within that domain.</p>
+<hr />
+<h2 id="provenance-where-capabilities-came-from">Provenance &ndash; Where Capabilities Came From<a class="headerlink" href="#provenance-where-capabilities-came-from" title="Anchor link">&para;</a></h2>
+<p>EngineOS was not designed top-down. It was built bottom-up from an ecosystem audit that read 11 source projects, produced 89 finding files and 7 cross-cutting analyses, and traced each capability to its origin through skill genealogy. The build principle was <strong>best-version-wins compositing</strong>: when multiple engines carried a capability, the most mature version was lifted, preserving provenance.</p>
+<p>The capability registry (<code>registry/capabilities.md</code>) tracks the source of every OS-level capability with stable identifiers. Here is the source distribution across major capability domains:</p>
+<h3 id="governance">Governance<a class="headerlink" href="#governance" title="Anchor link">&para;</a></h3>
+<p><strong>Primary source: JSE.</strong> Genuine innovation with no predecessor.</p>
+<p>The governance stack &ndash; phase-controller, depth governor, output self-test, sanity-check &ndash; originated in the JSE. No earlier engine had forced skill chains, disk-persisted run plans, or binary quality gates. The JSE built these because it needed them: a live job search with real stakes and no room for sloppy outputs. Phase-controller&rsquo;s 11 forcing function rules, the iteration envelope (produce-evaluate-retry, max 3), and contract hardening (Step 2.5) were all JSE innovations.</p>
+<p>Supporting contributions: WondaKB (content-updater routing), SEE (audit-trail logging, session orientation patterns).</p>
+<h3 id="research">Research<a class="headerlink" href="#research" title="Anchor link">&para;</a></h3>
+<p><strong>Primary source: JSE, drawing from SEE + ODC.</strong></p>
+<p>Market scanning capability lives at the JSE lineage. The structured findings system (7 types: Discovery, Confirmation, Contradiction, Comparison, Gap, Risk, Recommendation) came from the JSE&rsquo;s findings-formatter, which preserved ODC&rsquo;s earlier findings patterns. Credibility tiers (the 5-tier source classification) came from ODC. Research cadence methodology came from ODC. The compositing took JSE&rsquo;s execution rigor and ODC&rsquo;s methodological framework.</p>
+<h3 id="integrations">Integrations<a class="headerlink" href="#integrations" title="Anchor link">&para;</a></h3>
+<p><strong>CRM (Attio): SEE.</strong> The full 5-skill Attio chain (mapper, ops, qualify, optimizer, refiner) originated in the SEE, which was built as a sales enablement tool with CRM at its center.</p>
+<p><strong>Notion: WondaKB + SEE.</strong> Notion mapping originated in WondaKB&rsquo;s multi-user architecture (workspace discovery across team boundaries). Notion operations (the data operation skill with direct API scripts) were built in SEE and enhanced during JSE migration. The composited version carries WondaKB&rsquo;s mapping patterns with SEE&rsquo;s operational capabilities.</p>
+<h3 id="content-production">Content Production<a class="headerlink" href="#content-production" title="Anchor link">&para;</a></h3>
+<p><strong>Composited from MLR + ODC + SEE.</strong></p>
+<p>This is where compositing matters most. No single engine had the full content production stack:
+- <strong>MLR</strong> contributed enterprise CSS, HTML-to-PDF pipeline, and the programmatic QA approach
+- <strong>ODC</strong> contributed section construction (incremental large-output generation), render-validate (Puppeteer visual verification), and the editorial methodology that governs content quality
+- <strong>SEE</strong> contributed campaign building, lead building, transcript processing, and framework explanation</p>
+<p>The OS-level production pipeline draws from all three.</p>
+<h3 id="methodology">Methodology<a class="headerlink" href="#methodology" title="Anchor link">&para;</a></h3>
+<p><strong>ODC (editorial, credibility) + JSE (governance, depth) + MLR (QA).</strong></p>
+<p>The 15 methodology docs at the OS level trace to three primary donors:
+- <strong>ODC:</strong> Credibility tiers, editorial standards, research cadence, section construction methodology, findings patterns
+- <strong>JSE:</strong> Depth assessment (binary Scan/Deep-Dive classification), planning enforcement, anti-patterns catalog, binary self-test methodology
+- <strong>MLR:</strong> QA pipeline methodology (composited verification stages)</p>
+<p>The memory architecture methodology (2-layer logging model) drew from SEE + WondaKB operational logging patterns, formalized through Grafana/Datadog/Azure/OpenTelemetry external research on tenant-tagged logging.</p>
+<hr />
+<h2 id="how-domain-skills-differ-from-os-skills">How Domain Skills Differ from OS Skills<a class="headerlink" href="#how-domain-skills-differ-from-os-skills" title="Anchor link">&para;</a></h2>
+<p>Both OS-level and domain-level skills use the same technical format: a <code>SKILL.md</code> file with YAML frontmatter (description, allowed-tools) and markdown body (trigger, instructions, output spec). Native discovery surfaces both. The differences are in scope and governance:</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>OS Skill</th>
+<th>Domain Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Location</td>
+<td><code>.claude/skills/</code></td>
+<td><code>engines/&lt;engine&gt;/.claude/skills/</code></td>
+</tr>
+<tr>
+<td>Visibility</td>
+<td>All sessions</td>
+<td>Only when working in that engine&rsquo;s context</td>
+</tr>
+<tr>
+<td>Generalization</td>
+<td>Useful across multiple engines</td>
+<td>Useful only within its domain</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>Can be governance/orchestration skills</td>
+<td>Typically execution skills; orchestration skills (like ODC&rsquo;s pipeline-start) are domain-scoped</td>
+</tr>
+<tr>
+<td>Chain participation</td>
+<td>Phase-controller forces OS skill chains</td>
+<td>Domain skills are invoked within OS-governed chains but are not themselves governance</td>
+</tr>
+</tbody>
+</table>
+<p>The practical effect: when phase-controller builds a skill chain for a JSE operation, it chains OS governance skills (session-orchestrator, depth-governor, qa-pipeline) with JSE domain skills (target-builder, resume-generator, materials-qa). The governance skeleton is OS; the domain execution is engine-local.</p>
+<p>See <a href="skill-system.html">Skill System</a> for complete coverage of skill architecture, chain maps, and frontmatter specification.</p>
+<hr />
+<h2 id="cross-references">Cross-References<a class="headerlink" href="#cross-references" title="Anchor link">&para;</a></h2>
+<ul>
+<li><a href="architecture.html">Architecture</a> &ndash; two-layer model, context tiers, how engines fit into the loading hierarchy</li>
+<li><a href="skill-system.html">Skill System</a> &ndash; OS vs. domain skills, chain maps, frontmatter specification</li>
+<li><a href="governance.html">Governance Stack</a> &ndash; how phase-controller, hooks, and rules apply across engines</li>
+<li><a href="integrations.html">Integrations</a> &ndash; Attio and Notion capabilities inherited by engines</li>
+<li><a href="methodology.html">Methodology</a> &ndash; the 15 docs engines inherit and the conditions for domain-specific variants</li>
+<li><a href="skills-reference.html">Skills Reference</a> &ndash; catalog of all 29 OS skills and 10 domain skills</li>
+<li><a href="second-brain.html">Second Brain</a> &ndash; capture + retrieval pipeline engines inherit from Layer 1</li>
+</ul>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

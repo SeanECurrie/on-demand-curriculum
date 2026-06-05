@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills Reference — EngineOS Docs</title>
+  <meta name="description" content="EngineOS ships 29 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link active" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Skills Reference</h1>
+    <p class="report-header__subtitle">EngineOS ships 29 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="skills-reference-29-skills">Skills Reference &ndash; 29 Skills<a class="headerlink" href="#skills-reference-29-skills" title="Anchor link">&para;</a></h1>
+<p>EngineOS ships 29 skills at <code>.claude/skills/</code>. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, and integration points.</p>
+<p>Skills load passively via native discovery (descriptions only, ~2% of context). Full content loads only on invocation. Every skill declares its <code>allowed-tools</code> in frontmatter, restricting what tools it can access.</p>
+<hr />
+<h2 id="summary-table">Summary Table<a class="headerlink" href="#summary-table" title="Anchor link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Category</th>
+<th>One-Liner</th>
+<th>Key Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>market-scanner</td>
+<td>Research</td>
+<td>Market intelligence, company research, and industry scanning for any engine</td>
+<td>Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bright Data, Context7</td>
+</tr>
+<tr>
+<td>research-engine</td>
+<td>Research</td>
+<td>Orchestrate research and analysis work across EngineOS capabilities &ndash; the routing layer</td>
+<td>Read, Write, Edit, Glob, Grep, Skill</td>
+</tr>
+<tr>
+<td>depth-governor</td>
+<td>Research</td>
+<td>Mandatory 30-second depth classification (scan vs. deep-dive) before substantive work</td>
+<td>Read, Glob, Grep</td>
+</tr>
+<tr>
+<td>findings-formatter</td>
+<td>Research</td>
+<td>Select and apply the right structure for research findings during synthesis</td>
+<td>Read, Write, Edit, Glob, Grep</td>
+</tr>
+<tr>
+<td>codebase-onboarder</td>
+<td>Research</td>
+<td>First-time codebase analysis &ndash; creates CLAUDE.md and context structure for any repository</td>
+<td>Read, Glob, Grep, Bash</td>
+</tr>
+<tr>
+<td>recall</td>
+<td>Research</td>
+<td>Search EngineOS&rsquo;s second brain (intel log, KB index, concepts, recent daily logs, run-plans, methodology) for prior context</td>
+<td>Read, Glob, Grep</td>
+</tr>
+<tr>
+<td>framework-explainer</td>
+<td>Content</td>
+<td>Generate interactive HTML presentations explaining frameworks and complex systems</td>
+<td>Read, Write, Edit, Glob, Grep</td>
+</tr>
+<tr>
+<td>campaign-builder</td>
+<td>Content</td>
+<td>Email sequence and outreach campaign creation with Campaign Readiness Litmus Test</td>
+<td>Read, Write, Edit, Glob, Grep, Skill</td>
+</tr>
+<tr>
+<td>lead-builder</td>
+<td>Content</td>
+<td>Enriched lead list and prospect profile generation for targeted outreach</td>
+<td>Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bright Data, Attio MCP</td>
+</tr>
+<tr>
+<td>transcript-processor</td>
+<td>Content</td>
+<td>Process meeting transcripts and conversations into structured intelligence</td>
+<td>Read, Write, Edit, Glob, Grep, Skill</td>
+</tr>
+<tr>
+<td>profile-builder</td>
+<td>Content</td>
+<td>Build operator profile from source material and structured intake</td>
+<td>Read, Write, Edit, Glob, Grep, Skill</td>
+</tr>
+<tr>
+<td>section-construction</td>
+<td>Content</td>
+<td>Incremental build for complex outputs &gt;500 lines &ndash; prevents single-pass quality degradation</td>
+<td>Read, Write, Edit, Glob, Grep</td>
+</tr>
+<tr>
+<td>render-validate</td>
+<td>Content</td>
+<td>Mandatory visual verification for interactive HTML outputs via Puppeteer</td>
+<td>Read, Glob, Grep, Puppeteer MCP</td>
+</tr>
+<tr>
+<td>attio-mapper</td>
+<td>Integration</td>
+<td>Map Attio CRM workspaces to generate schema caches and playbooks</td>
+<td>Read, Glob, Grep, Attio MCP</td>
+</tr>
+<tr>
+<td>attio-ops</td>
+<td>Integration</td>
+<td>Attio CRM operations &ndash; CSV import, list population, bulk operations</td>
+<td>Read, Write, Edit, Glob, Grep, Attio MCP</td>
+</tr>
+<tr>
+<td>attio-qualify</td>
+<td>Integration</td>
+<td>ICP classification and lead qualification for Attio contacts</td>
+<td>Read, Write, Glob, Grep, Attio MCP</td>
+</tr>
+<tr>
+<td>attio-optimizer</td>
+<td>Integration</td>
+<td>CRM health audit, best practices research, and optimization recommendations</td>
+<td>Read, Glob, Grep, Attio MCP, Context7, Bright Data</td>
+</tr>
+<tr>
+<td>attio-refiner</td>
+<td>Integration</td>
+<td>Operator-driven audit refinement with structured Q&amp;A and approved work orders</td>
+<td>Read, Write, Glob, Grep, Attio MCP</td>
+</tr>
+<tr>
+<td>notion-mapper</td>
+<td>Integration</td>
+<td>Map any Notion workspace to generate a playbook with working code examples</td>
+<td>Read, Write, Edit, Glob, Grep, Notion MCP</td>
+</tr>
+<tr>
+<td>notion-ops</td>
+<td>Integration</td>
+<td>Read/write operations for Notion databases &ndash; query, create, update, analyze</td>
+<td>Read, Write, Edit, Glob, Grep, Bash, Notion MCP</td>
+</tr>
+<tr>
+<td>phase-controller</td>
+<td>Governance</td>
+<td>The run controller &ndash; classifies operations, builds disk-persisted run plans, forces skill chains</td>
+<td>Read, Write, Edit, Glob, Grep, Skill</td>
+</tr>
+<tr>
+<td>session-orchestrator</td>
+<td>Governance</td>
+<td>Orient the OS at session start &ndash; phase detection, tiered context loading, dashboard, work routing</td>
+<td>Read, Write, Edit, Glob, Grep, Skill</td>
+</tr>
+<tr>
+<td>qa-pipeline</td>
+<td>Governance</td>
+<td>Pre-delivery quality assurance pipeline with 4 stages</td>
+<td>Read, Glob, Grep, Agent, Puppeteer MCP</td>
+</tr>
+<tr>
+<td>output-self-test</td>
+<td>Governance</td>
+<td>Run binary self-tests against output before declaring it complete</td>
+<td>Read, Glob, Grep</td>
+</tr>
+<tr>
+<td>sanity-check</td>
+<td>Governance</td>
+<td>Quick scan for 11 known failure modes at natural pause points</td>
+<td>Read, Glob, Grep</td>
+</tr>
+<tr>
+<td>content-updater</td>
+<td>Governance</td>
+<td>Choke point for all content updates &ndash; routes through origin-skill audit requirements</td>
+<td>Read, Write, Edit, Glob, Grep, Skill</td>
+</tr>
+<tr>
+<td>audit-logging</td>
+<td>Governance</td>
+<td>Two-layer audit system &ndash; Activity Log (breadcrumbs) and Intelligence Log (strategic moments)</td>
+<td>Read, Write, Edit, Glob, Grep</td>
+</tr>
+<tr>
+<td>adversarial-evaluator</td>
+<td>Governance</td>
+<td>Spawn an independent subagent to adversarially score deliverables against criteria</td>
+<td>Read, Bash, Glob, Grep</td>
+</tr>
+<tr>
+<td>eos-assistant</td>
+<td>System</td>
+<td>EngineOS-aware conversational partner &ndash; knows the system, detects drift, challenges framing</td>
+<td>Read, Glob, Grep, Skill, Bash</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="categories">Categories<a class="headerlink" href="#categories" title="Anchor link">&para;</a></h2>
+<h3 id="research-and-intelligence">Research and Intelligence<a class="headerlink" href="#research-and-intelligence" title="Anchor link">&para;</a></h3>
+<p>Seven skills that gather, classify, and structure external information. <code>recall</code> is the read-side retrieval companion &ndash; it searches the internal corpus (intelligence log, KB, daily logs, run-plans, methodology) before external research begins.</p>
+<hr />
+<h4 id="market-scanner">market-scanner<a class="headerlink" href="#market-scanner" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Market intelligence, company research, and industry scanning for any engine.</p>
+<p><strong>Triggers:</strong> &ldquo;research [company]&rdquo;, &ldquo;scan the [industry] market&rdquo;, &ldquo;what&rsquo;s happening at [company]&rdquo;, &ldquo;competitive landscape for [space]&rdquo;, &ldquo;validate this hypothesis&rdquo;, &ldquo;market intelligence on [topic]&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__brightdata__*, mcp__context7__*</code></p>
+<p><strong>Key behaviors:</strong>
+- Operates in two modes governed by depth-governor: Scan (broad landscape, Phase A only) and Deep-Dive (specific target, all three phases &ndash; broad search, targeted research, comparative analysis). Mixed depth is normal.
+- Teaches methodology, not just tool usage. For token-heavy research sweeps, writes code to gather, filter, and synthesize, keeping heavy processing out of context.
+- Always starts by clarifying the research objective &ndash; what question are we answering, what evidence would validate or invalidate.</p>
+<p><strong>Invokes:</strong> depth-governor (before execution), findings-formatter (to structure output)</p>
+<p><strong>Invoked by:</strong> research-engine, lead-builder, campaign-builder, attio-optimizer</p>
+<hr />
+<h4 id="research-engine">research-engine<a class="headerlink" href="#research-engine" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Orchestrate research and analysis work across EngineOS capabilities. This is the routing layer &ndash; it classifies the domain, looks up capabilities in the registry, and invokes them.</p>
+<p><strong>Triggers:</strong> &ldquo;research [topic]&rdquo;, &ldquo;analyze [company/market]&rdquo;, &ldquo;benchmark [metric]&rdquo;, &ldquo;competitive analysis of [space]&rdquo;, &ldquo;what does the data say about [question]&rdquo;, or any request for a consulting-grade research deliverable.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Thin orchestration skill that routes, not researches. Research logic lives in market-scanner and other registered capabilities.
+- Runs a 5-stage pipeline: Intake (clarify who and what), Research (route via registry), Analysis (three-ring convergence, findings-formatter), Deliverable (section-construction, render-validate), Delivery (deploy, quality gate).
+- Applies the three-ring approach to every research request: primary data, industry surveys, and broader context. When all three rings agree, the finding is solid. When they disagree, the contradiction is flagged.</p>
+<p><strong>Invokes:</strong> market-scanner, findings-formatter, section-construction, render-validate, qa-pipeline, depth-governor (via registry resolution)</p>
+<p><strong>Invoked by:</strong> phase-controller (via skill chain), eos-assistant (in production mode)</p>
+<hr />
+<h4 id="depth-governor">depth-governor<a class="headerlink" href="#depth-governor" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Mandatory 30-second depth classification (scan vs. deep-dive) before starting any substantive work.</p>
+<p><strong>Triggers:</strong> Starting research, synthesis, or output generation. Invoked by phase-controller as part of run plan creation.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- Prevents the default failure mode: medium-quality everything. Forces explicit classification so scans are broad and fast, deep-dives are exhaustive and narrow.
+- Three-question classification: (1) Will this drive a strategic decision? (2) Is this a high-priority target? (3) Does the operator have contradictory information? First YES triggers deep-dive; all NO means scan.
+- Classifies per-topic, not per-task. A single task often has both scan and deep-dive areas. Watches for reclassification signals during execution.</p>
+<p><strong>Invokes:</strong> None (read-only governance skill)</p>
+<p><strong>Invoked by:</strong> phase-controller, market-scanner, research-engine, findings-formatter, output-self-test, section-construction, content-updater</p>
+<hr />
+<h4 id="findings-formatter">findings-formatter<a class="headerlink" href="#findings-formatter" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Select and apply the right structure for research findings during synthesis. Seven patterns plus an escape hatch.</p>
+<p><strong>Triggers:</strong> Writing knowledge base entries, intelligence log entries, research reports, or structured findings. Especially when catching yourself writing &ldquo;we found that&hellip;&rdquo; prose paragraphs.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- Seven typed finding patterns: Contradiction Insight, Validation Entry, Discovery Entry, Risk Entry, Comparison Matrix, Resolution Entry, Recommendation Entry. Each has required and optional fields.
+- Depth-aware fill level: scan depth skips optional fields, deep-dive fills everything. The pattern shape stays the same; completeness changes.
+- Enforces source traceability &ndash; every claim must have a named source and confidence level retrievable in under 5 seconds.</p>
+<p><strong>Invokes:</strong> depth-governor (to check depth classification)</p>
+<p><strong>Invoked by:</strong> research-engine, market-scanner (indirectly, as structured output stage)</p>
+<hr />
+<h4 id="codebase-onboarder">codebase-onboarder<a class="headerlink" href="#codebase-onboarder" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> First-time codebase analysis &ndash; creates CLAUDE.md and context structure for any repository adopting Claude Code.</p>
+<p><strong>Triggers:</strong> &ldquo;onboard this codebase&rdquo;, &ldquo;set up Claude Code for this repo&rdquo;, first time using Claude Code with an existing repository, after major architectural changes.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Bash</code></p>
+<p><strong>Key behaviors:</strong>
+- Three-phase workflow: Discovery (read-only audit of structure, build/test/run, architecture, existing docs), Generate (create CLAUDE.md under 100 lines plus supporting docs), Validation (verify commands actually work).
+- Principles: Minimal over comprehensive, pointers over duplication, verified over assumed, honest over complete.
+- Operator review required before finalizing. The operator knows things about the codebase that discovery cannot surface.</p>
+<p><strong>Invokes:</strong> None</p>
+<p><strong>Invoked by:</strong> Manual invocation only</p>
+<hr />
+<h4 id="recall">recall<a class="headerlink" href="#recall" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Search EngineOS&rsquo;s second brain (intelligence log, knowledge index, KB concepts/connections, recent daily logs, recent run-plans, methodology) for prior context relevant to a topic. Pure Read/Grep/Glob &ndash; zero API cost.</p>
+<p><strong>Triggers:</strong> <code>/recall &lt;query&gt;</code>, &ldquo;have we seen this&rdquo;, &ldquo;what&rsquo;s our prior thinking on X&rdquo;, &ldquo;what did we decide about&rdquo;, &ldquo;do we have notes on&rdquo;, &ldquo;remember&rdquo;, &ldquo;look up&rdquo;, &ldquo;search the second brain&rdquo;, or before making an architecture/methodology/pattern decision in a domain where prior intelligence likely exists.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- Six-surface priority order: (1) <code>logs/intelligence-log.md</code> &ndash; curated strategic moments, highest density; (2) <code>knowledge/index.md</code> &ndash; 200+ row catalog with summaries, cheapest pointer; (3) <code>knowledge/concepts/*.md</code> + <code>knowledge/connections/*.md</code> &ndash; full KB articles, grep headers and first paragraphs unless query matches main subject; (4) <code>daily/*.md</code> last 30 days &ndash; recent session arcs and work-in-flight context; (5) <code>run-plans/*.md</code> last 60 days &ndash; detailed plans with hardened criteria and execution logs; (6) <code>methodology/*.md</code> &ndash; only when query is methodology-flavored. Stopping rule: if surfaces 1-2 yield 3+ strong hits, do not exhaustively grep lower surfaces.
+- Honest &ldquo;nothing found&rdquo; on zero hits &ndash; does NOT hallucinate matches when the corpus is empty. Returns the surfaces searched and suggests rephrasing, <code>scripts/query.py</code> for LLM-ranked deeper search, or noting the gap as a candidate for a new article.
+- Does NOT invoke <code>scripts/query.py</code> (which uses Claude Agent SDK and has API cost). Recall is pure ripgrep + Read; typical invocation under 2 seconds wall-clock. The Agent SDK path remains available for synthesis-heavy queries when recall returns nothing.
+- Does NOT add interpretive commentary &ndash; cites, does not synthesize. The operator does the synthesis after seeing the ranked hits.
+- Does NOT search across engine tenants by default. OS-level corpus only unless the query names an engine (&ldquo;in JSE&rdquo;, &ldquo;for sales-enablement&rdquo;), in which case the grep extends into that engine&rsquo;s <code>knowledge/</code>, <code>engagements/</code>, and <code>CONTEXT.md</code>.</p>
+<p><strong>Invokes:</strong> None (read-only governance skill)</p>
+<p><strong>Invoked by:</strong> Manual <code>/recall &lt;query&gt;</code> invocation; auto-fire via the <code>UserPromptSubmit</code> retrieval hook&rsquo;s heuristic gate (<code>hooks/prompt-retrieval.py</code>, ~90% of retrieval) and the <code>retrieval-before-decide</code> framework pattern at architecture/methodology decision points.</p>
+<hr />
+<h3 id="content-and-deliverable-production">Content and Deliverable Production<a class="headerlink" href="#content-and-deliverable-production" title="Anchor link">&para;</a></h3>
+<p>Seven skills that produce client-facing or operator-facing content. framework-explainer is cross-listed from Research.</p>
+<hr />
+<h4 id="campaign-builder">campaign-builder<a class="headerlink" href="#campaign-builder" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Email sequence and outreach campaign creation. Orchestration tier &ndash; invokes content-updater for KB updates and qa-pipeline before delivery.</p>
+<p><strong>Triggers:</strong> &ldquo;create email sequence&rdquo;, &ldquo;build a campaign&rdquo;, &ldquo;write outreach emails&rdquo;, &ldquo;nurture sequence for [segment]&rdquo;, &ldquo;sales cadence&rdquo;, &ldquo;follow-up sequence&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Mandatory Pre-Flight Check (Phase 0) surfaces the working foundation &ndash; KB files, prior research, context, key assumptions &ndash; and waits for operator confirmation before building.
+- Mandatory Campaign Readiness Litmus Test before any campaign launch: 5 questions testing conversation depth, pain validation, warm paths, proof points, and entry point knowledge. Fewer than 3/5 pass means &ldquo;not ready.&rdquo;
+- Four campaign frameworks: Cold Outreach, Warm Nurture, Post-Event Follow-up, Re-engagement. Four personalization levels from Segment to Deep.</p>
+<p><strong>Invokes:</strong> content-updater (for KB updates during campaign research), qa-pipeline (before delivery)</p>
+<p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
+<hr />
+<h4 id="lead-builder">lead-builder<a class="headerlink" href="#lead-builder" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Enriched lead list and prospect profile generation for targeted outreach.</p>
+<p><strong>Triggers:</strong> &ldquo;build a lead list&rdquo;, &ldquo;find prospects in [industry/segment]&rdquo;, &ldquo;who should we target&rdquo;, &ldquo;create target account list&rdquo;, &ldquo;enrich these leads&rdquo;, &ldquo;prioritize prospects&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__brightdata__*, mcp__attio-mcp__*</code></p>
+<p><strong>Key behaviors:</strong>
+- Core philosophy: filter before output. Research broadly, qualify ruthlessly, output only what passes. A weak lead list wastes sales time.
+- Orchestration tier &ndash; invokes market-scanner for web research, attio-ops for CRM enrichment, qa-pipeline before delivery.
+- Depth-aware: simple (single industry, known ICP, available sources) vs. complex (multiple verticals, emerging ICP, limited sources). Defaults to complex when mixed.</p>
+<p><strong>Invokes:</strong> market-scanner, attio-ops, qa-pipeline</p>
+<p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
+<hr />
+<h4 id="transcript-processor">transcript-processor<a class="headerlink" href="#transcript-processor" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Process meeting transcripts, stakeholder conversations, and session notes into structured intelligence.</p>
+<p><strong>Triggers:</strong> User pastes a meeting transcript, shares call notes, session notes, brain dumps, Slack/email threads, or any raw dialogue containing intelligence.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Non-negotiable rules: stakeholder corrections override analysis, preserve voice with direct quotes, track the correction chain (what KB said, what correction is, why original was wrong), don&rsquo;t over-interpret.
+- Pre-Phase tags every meeting (type, date, participants, urgency, signal quality) and threads it to prior conversations by searching CONTEXT-HISTORY.md and existing profiles.
+- Routes extracted intelligence to KB locations: decisions, pain points, action items, quotes, hypotheses, relationship dynamics.</p>
+<p><strong>Invokes:</strong> content-updater (for KB updates), profile-builder (when new stakeholder detected), audit-logging</p>
+<p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
+<hr />
+<h4 id="profile-builder">profile-builder<a class="headerlink" href="#profile-builder" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Build operator profile from source material and structured intake. Generates the identity files EngineOS personalizes around.</p>
+<p><strong>Triggers:</strong> &ldquo;set up my profile&rdquo;, &ldquo;who am I&rdquo;, Phase 0 onboarding, missing PROFILE.md detected by session-orchestrator.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Two modes: fresh onboarding (full flow) when PROFILE.md is missing, or profile refresh (targeted update) when it exists.
+- Source Material Intake reads everything in <code>operator/assets/</code> and extracts career timeline, role history, quantifiable claims, voice signals, goals.
+- Generative population runs a 37-question conversational intake &ndash; not reading from a list but generating specific, tailored questions from source material.</p>
+<p><strong>Invokes:</strong> content-updater (for file updates)</p>
+<p><strong>Invoked by:</strong> session-orchestrator (when PROFILE.md is missing), transcript-processor (when new stakeholder detected)</p>
+<hr />
+<h4 id="section-construction">section-construction<a class="headerlink" href="#section-construction" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Incremental build for complex outputs. Prevents single-pass quality degradation on outputs exceeding ~500 lines.</p>
+<p><strong>Triggers:</strong> &ldquo;build the walkthrough&rdquo;, &ldquo;generate the report&rdquo;, &ldquo;create the interactive HTML&rdquo;, &ldquo;produce the output&rdquo;, or any variation of generating a large structured deliverable.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- 10-second gate: Only applies if the output was classified as deep-dive AND will exceed ~500 lines. Otherwise, generate normally.
+- Phase A plans sections with namespace prefixes, cross-reference mapping, and size balance checks before any content is written. Operator approves the plan.
+- Builds one section at a time with explicit verification between sections, preventing the known degradation pattern where the last third of single-pass outputs loses detail.</p>
+<p><strong>Invokes:</strong> depth-governor (referenced for classification)</p>
+<p><strong>Invoked by:</strong> research-engine, framework-explainer, phase-controller (via skill chain)</p>
+<hr />
+<h4 id="render-validate">render-validate<a class="headerlink" href="#render-validate" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Mandatory visual verification for interactive HTML outputs via browser rendering and screenshot review.</p>
+<p><strong>Triggers:</strong> &ldquo;the output is ready&rdquo;, &ldquo;HTML complete&rdquo;, &ldquo;check the render&rdquo;, &ldquo;does it look right?&rdquo;, or any variation of declaring a visual output finished.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, mcp__puppeteer-mcp-claude__puppeteer_launch, mcp__puppeteer-mcp-claude__puppeteer_navigate, mcp__puppeteer-mcp-claude__puppeteer_screenshot, mcp__puppeteer-mcp-claude__puppeteer_evaluate, mcp__puppeteer-mcp-claude__puppeteer_click, mcp__puppeteer-mcp-claude__puppeteer_wait_for_selector, mcp__puppeteer-mcp-claude__puppeteer_close_browser, mcp__puppeteer-mcp-claude__puppeteer_new_page, mcp__puppeteer-mcp-claude__puppeteer_close_page, mcp__puppeteer-mcp-claude__puppeteer_get_text</code></p>
+<p><strong>Key behaviors:</strong>
+- Exists because source code review misses an entire class of visual defects. Provenance: 4 real production defects (hidden diagram via <code>display:none</code>, 14/22 broken expandables, missing syntax highlighting, non-persisting localStorage) &ndash; all invisible in source, all obvious in a browser.
+- Renders HTML via Puppeteer, takes screenshots, audits against design system specifications, fixes issues, re-screenshots in a loop until output matches intent.
+- Does not apply to pure-text outputs. Only for content that will be opened in a browser.</p>
+<p><strong>Invokes:</strong> None (verification-only)</p>
+<p><strong>Invoked by:</strong> research-engine, qa-pipeline (as Stage 3), framework-explainer, phase-controller (via skill chain)</p>
+<hr />
+<h4 id="framework-explainer">framework-explainer<a class="headerlink" href="#framework-explainer" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Generate interactive HTML presentations that explain frameworks, methodologies, or complex systems to stakeholders.</p>
+<p><strong>Triggers:</strong> &ldquo;explain the framework&rdquo;, &ldquo;create a presentation&rdquo;, &ldquo;visualize how this works&rdquo;, &ldquo;make an interactive demo&rdquo;, &ldquo;walk me through this system&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- Core insight: people understand file trees. The Finder-style file browser view is the star visual pattern &ndash; show the structure in a familiar way, then layer on intelligence.
+- Five visual patterns: Finder View (Mac-style file browser), Workflow Flow (animated CSS diagrams), Before/After Comparison, Demo Walkthrough (real prompt to real output), Progressive Disclosure (zoom out to zoom in).
+- Always uses real examples from the framework, never hypotheticals. All HTML must use the EngineOS design system (<code>enterprise-styles.css</code>, color tokens, typography, accessibility).</p>
+<p><strong>Invokes:</strong> qa-pipeline (on generated HTML), audit-logging</p>
+<p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
+<p><em>Cross-listed: Also appears under Research and Intelligence as it explains complex systems.</em></p>
+<hr />
+<h3 id="integration">Integration<a class="headerlink" href="#integration" title="Anchor link">&para;</a></h3>
+<p>Seven skills that connect EngineOS to external platforms (Attio CRM and Notion).</p>
+<hr />
+<h4 id="attio-mapper">attio-mapper<a class="headerlink" href="#attio-mapper" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Map Attio CRM workspaces to generate schema caches and playbooks consumed by all other Attio skills.</p>
+<p><strong>Triggers:</strong> &ldquo;map this Attio workspace&rdquo;, &ldquo;map Attio&rdquo;, &ldquo;check for Attio schema changes&rdquo;, &ldquo;refresh Attio schemas&rdquo;, &ldquo;what objects are in Attio&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, mcp__attio-mcp__records_get_attributes</code></p>
+<p><strong>Key behaviors:</strong>
+- Dynamic object discovery via <code>GET /v2/objects</code> &ndash; never hardcodes object names. Custom objects are discovered automatically.
+- Three phases: Discovery (enumerate objects, fetch schemas, apply type inference, detect MCP bugs), Change Detection (diff cached vs. current schemas, append changelog), Pattern Learning (analyze structure, log new MCP bugs).
+- Produces per-object JSON schemas, select field options, human-readable playbook, and schema changelog. Output goes to <code>engines/&lt;engine&gt;/integrations/attio/</code>.</p>
+<p><strong>Invokes:</strong> audit-logging</p>
+<p><strong>Invoked by:</strong> attio-ops (prerequisite), attio-qualify (prerequisite), attio-optimizer (prerequisite), session-orchestrator (can trigger refresh)</p>
+<hr />
+<h4 id="attio-ops">attio-ops<a class="headerlink" href="#attio-ops" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Attio CRM operations &ndash; CSV import, list population, bulk operations. The single skill for all write-path Attio operations.</p>
+<p><strong>Triggers:</strong> &ldquo;import CSV to Attio&rdquo;, &ldquo;populate list&rdquo;, &ldquo;add contacts to list&rdquo;, &ldquo;sync list&rdquo;, &ldquo;bulk update&rdquo;, &ldquo;import contacts&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, mcp__attio-mcp__records_search_advanced, mcp__attio-mcp__records_get_details, mcp__attio-mcp__records_list, mcp__attio-mcp__lists_list, mcp__attio-mcp__lists_get_entries, mcp__attio-mcp__objects_list_attributes, mcp__attio-mcp__records_create, mcp__attio-mcp__records_update, mcp__attio-mcp__records_add_to_list</code></p>
+<p><strong>Key behaviors:</strong>
+- Three modes: CSV Import (records into People/Companies objects), CSV to List (records into a specific list with entry values), Bulk List Ops (add/remove/sync/update list membership at scale).
+- Domain-first company strategy: extracts domain from email, skips generic domains, searches by domain not name, lets Attio auto-enrich. Person-company association is automatic.
+- Mandatory pre-execution approval gate. Every mutating operation requires explicit user confirmation with a clear summary of what will change.</p>
+<p><strong>Invokes:</strong> attio-mapper (if schemas missing), audit-logging, content-updater</p>
+<p><strong>Invoked by:</strong> attio-refiner (downstream execution), lead-builder, phase-controller (via skill chain)</p>
+<hr />
+<h4 id="attio-qualify">attio-qualify<a class="headerlink" href="#attio-qualify" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> ICP classification and lead qualification for Attio contacts. Assigns ICP personas using configurable keyword matching with confidence scoring.</p>
+<p><strong>Triggers:</strong> &ldquo;assign ICPs&rdquo;, &ldquo;enrich contacts&rdquo;, &ldquo;qualify users&rdquo;, &ldquo;classify leads&rdquo;, &ldquo;ICP coverage&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Glob, Grep, mcp__attio-mcp__records_search_advanced, mcp__attio-mcp__records_get_details, mcp__attio-mcp__records_list, mcp__attio-mcp__records_search</code></p>
+<p><strong>Key behaviors:</strong>
+- Two modes: Enrich (bulk ICP assignment via job title matching with confidence scoring) and Qualify (cross-reference new signups against CRM for categorization).
+- All persona definitions, keywords, weights, and thresholds load from <code>icp_definitions.json</code> at runtime. The skill is the algorithm; the engine owns the data.
+- Direct API execution for speed: MCP one-by-one takes ~60-90 min for 150 contacts; generated curl scripts take ~3-5 min. Scripts are idempotent.</p>
+<p><strong>Invokes:</strong> attio-mapper (prerequisite), audit-logging, content-updater</p>
+<p><strong>Invoked by:</strong> attio-refiner (downstream execution), attio-ops (two-stage import pattern), phase-controller (via skill chain)</p>
+<hr />
+<h4 id="attio-optimizer">attio-optimizer<a class="headerlink" href="#attio-optimizer" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> CRM health audit, best practices research, and optimization recommendations. Four-phase process: Audit, Research, Recommend, Visualize.</p>
+<p><strong>Triggers:</strong> &ldquo;audit the CRM&rdquo;, &ldquo;CRM health check&rdquo;, &ldquo;how healthy is our Attio&rdquo;, &ldquo;clean up Attio&rdquo;, &ldquo;optimize CRM&rdquo;, &ldquo;CRM optimization report&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, mcp__attio-mcp__records_search, mcp__attio-mcp__records_search_advanced, mcp__attio-mcp__records_search_batch, mcp__attio-mcp__records_search_by_relationship, mcp__attio-mcp__records_search_by_timeframe, mcp__attio-mcp__records_get_details, mcp__attio-mcp__records_get_info, mcp__attio-mcp__records_get_attributes, mcp__attio-mcp__records_list, mcp__attio-mcp__lists_list, mcp__attio-mcp__lists_get_entries, mcp__attio-mcp__objects_list_attributes, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__brightdata__search_engine, mcp__brightdata__search_engine_batch, mcp__brightdata__scrape_as_markdown</code></p>
+<p><strong>Key behaviors:</strong>
+- Intelligent sampling with two layers: Layer A (engine-engaged records &ndash; referenced in context, active deals, renewal targets) and Layer B (broader health assessment &ndash; recent records, dormant records, population extremes).
+- Five audit categories with weighted scoring: Completeness (30%), Accuracy (25%), Pipeline Health (20%), Consistency (15%), Schema Utilization (10%).
+- Auto-generates a 7-page interactive HTML presentation suite from audit findings using the EngineOS design system.</p>
+<p><strong>Invokes:</strong> attio-mapper (prerequisite &ndash; fresh schemas required), audit-logging</p>
+<p><strong>Invoked by:</strong> Phase-controller (via skill chain). Feeds into attio-refiner.</p>
+<hr />
+<h4 id="attio-refiner">attio-refiner<a class="headerlink" href="#attio-refiner" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Operator-driven audit refinement. Takes attio-optimizer output and produces annotated findings plus approved work orders through structured Q&amp;A.</p>
+<p><strong>Triggers:</strong> &ldquo;refine the audit&rdquo;, &ldquo;review CRM findings&rdquo;, &ldquo;let&rsquo;s work through the audit&rdquo;, &ldquo;approve CRM actions&rdquo;, &ldquo;triage the audit actions&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Glob, Grep, mcp__attio-mcp__records_search, mcp__attio-mcp__records_search_advanced, mcp__attio-mcp__records_search_by_relationship, mcp__attio-mcp__records_search_by_timeframe, mcp__attio-mcp__records_get_details, mcp__attio-mcp__records_get_info, mcp__attio-mcp__records_list, mcp__attio-mcp__lists_list, mcp__attio-mcp__lists_get_entries</code></p>
+<p><strong>Key behaviors:</strong>
+- The audit is the clean room; the refiner is the war room. Captures WHY things are that way and decides WHAT TO DO, adding operator context (institutional knowledge, automation awareness, historical decisions) that the audit cannot surface.
+- Structured review by priority: P0 actions get individual attention with 3 structured questions (context, priority check, decision). P1 supports batching. P2/P3 are batch-reviewed.
+- Produces <code>06-operator-review.md</code> (annotated findings) and <code>07-approved-actions.md</code> (work orders structured for downstream execution) plus their HTML visualizations.</p>
+<p><strong>Invokes:</strong> attio-ops (downstream &ndash; executes approved CSV/list actions), attio-qualify (downstream &ndash; executes approved ICP actions), audit-logging, content-updater</p>
+<p><strong>Invoked by:</strong> Operator-initiated after reviewing attio-optimizer output. Valuable but not gating &ndash; operators can skip it.</p>
+<hr />
+<h4 id="notion-mapper">notion-mapper<a class="headerlink" href="#notion-mapper" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Map any Notion workspace to generate a playbook with working code examples, database mappings, and relationship documentation.</p>
+<p><strong>Triggers:</strong> &ldquo;map this Notion workspace&rdquo;, &ldquo;map from this page down&rdquo;, &ldquo;check for Notion changes&rdquo;, &ldquo;refresh the playbook&rdquo;.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, mcp__claude_ai_Notion__notion-search, mcp__claude_ai_Notion__notion-fetch, mcp__claude_ai_Notion__notion-query-database-view</code></p>
+<p><strong>Key behaviors:</strong>
+- Mirrors attio-mapper&rsquo;s architecture: discovery, caching, change detection, pattern learning. Designed for any Notion workspace, not hardcoded to a specific structure.
+- Produces a playbook folder with database mappings, working code examples, relationship maps, and pitfall documentation at <code>engines/&lt;engine&gt;/integrations/notion/playbook/</code>.
+- Engines that provide a workspace context file get significantly better mapping results.</p>
+<p><strong>Invokes:</strong> audit-logging</p>
+<p><strong>Invoked by:</strong> notion-ops (prerequisite), session-orchestrator (can trigger refresh)</p>
+<hr />
+<h4 id="notion-ops">notion-ops<a class="headerlink" href="#notion-ops" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Read/write operations for Notion databases. Querying, creating, updating, and analyzing Notion content.</p>
+<p><strong>Triggers:</strong> User mentions &ldquo;Notion&rdquo; or database names, wants to add content matching database patterns, asks about tracked data or database structure.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Bash, mcp__claude_ai_Notion__*</code></p>
+<p><strong>Key behaviors:</strong>
+- Code-first approach using Notion API directly. Companion Python scripts in <code>scripts/</code> provide a full SDK for property building, querying, ingestion, and domain helpers.
+- Supports 4 phases: read from playbook, ingestion (content routing), optimization (schema analysis), and query/analysis (cross-database queries).
+- Requires a mapped workspace playbook from notion-mapper. If missing, directs the user to run notion-mapper first.</p>
+<p><strong>Invokes:</strong> notion-mapper (prerequisite if playbook missing), audit-logging</p>
+<p><strong>Invoked by:</strong> transcript-processor (for action item routing), session-orchestrator (auto-suggest)</p>
+<hr />
+<h3 id="governance-and-quality">Governance and Quality<a class="headerlink" href="#governance-and-quality" title="Anchor link">&para;</a></h3>
+<p>Eight skills that enforce methodology, quality gates, and operational discipline.</p>
+<hr />
+<h4 id="phase-controller">phase-controller<a class="headerlink" href="#phase-controller" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> The run controller for all substantive EngineOS work. Classifies operations, builds disk-persisted run plans, forces skill chains, and gates on operator approval.</p>
+<p><strong>Triggers:</strong> Starting any new work &ndash; research, engagement tasks, content production, integration work, system builds/audits, or OS maintenance. Invoked after session-orchestrator has oriented the session.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Classifies work into 7 types: Build/Audit (BL), Engine Work (EW), Engagement (EN), Research (RE), Content Production (CP), Integration (IN), Maintenance (MT). Classification takes 60 seconds maximum.
+- Produces a disk-persisted run plan with 5 layers: classification, depth/scope, skill chain (forced invocation order), hardened criteria, and execution log. The run plan IS the session state for a piece of work.
+- Forces skill invocation at every transition. Without this, the LLM defaults to &ldquo;just do the thing&rdquo; and skips depth governance, quality checks, and structured findings. This is the forcing function.</p>
+<p><strong>Invokes:</strong> depth-governor, market-scanner, research-engine, findings-formatter, campaign-builder, lead-builder, qa-pipeline, output-self-test, render-validate, adversarial-evaluator, section-construction, content-updater, audit-logging (any skill needed by the chain)</p>
+<p><strong>Invoked by:</strong> session-orchestrator (hands off to phase-controller after routing), eos-assistant (in production mode)</p>
+<hr />
+<h4 id="session-orchestrator">session-orchestrator<a class="headerlink" href="#session-orchestrator" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Orient the OS at session start. Detects phase, loads tiered context, shows engine states, routes by intent.</p>
+<p><strong>Triggers:</strong> Beginning of every session. <code>/start-session</code>.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Multi-user check (dormant until profiles exist), phase detection (fresh install vs. existing operator), context staleness alerts (7-day warning, 14-day escalation).
+- Four-tier context loading: Tier 1 always (CONTEXT.md, PROFILE.md, capabilities), Tier 2 phase-hinted (active engine context, recent intelligence), Tier 3 on-demand (skill content, engine methodology), Tier 4 reference (intelligence log, patterns, methodology docs).
+- Dashboard shows engine states, active run plans, recent activity, and recent intelligence. Work routing classifies intent (engine work, OS maintenance, research, new engine, cross-engine) and hands off to phase-controller.</p>
+<p><strong>Invokes:</strong> profile-builder (when PROFILE.md missing), phase-controller (after routing), attio-mapper / notion-mapper (can trigger integration refresh)</p>
+<p><strong>Invoked by:</strong> First skill to run in any session. Not invoked by other skills.</p>
+<hr />
+<h4 id="qa-pipeline">qa-pipeline<a class="headerlink" href="#qa-pipeline" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Pre-delivery quality assurance pipeline with 4 stages: programmatic checks, binary self-tests, visual verification, and domain-specific standards.</p>
+<p><strong>Triggers:</strong> &ldquo;QA this&rdquo;, &ldquo;check before sending&rdquo;, &ldquo;is this ready?&rdquo;, &ldquo;verify quality&rdquo;, &ldquo;review before delivery&rdquo;, or as part of a phase-controller skill chain.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Agent, mcp__puppeteer-mcp-claude__puppeteer_launch, mcp__puppeteer-mcp-claude__puppeteer_navigate, mcp__puppeteer-mcp-claude__puppeteer_screenshot, mcp__puppeteer-mcp-claude__puppeteer_evaluate, mcp__puppeteer-mcp-claude__puppeteer_click, mcp__puppeteer-mcp-claude__puppeteer_wait_for_selector, mcp__puppeteer-mcp-claude__puppeteer_close_browser, mcp__puppeteer-mcp-claude__puppeteer_new_page, mcp__puppeteer-mcp-claude__puppeteer_close_page, mcp__puppeteer-mcp-claude__puppeteer_get_text</code></p>
+<p><strong>Key behaviors:</strong>
+- Four stages run sequentially: Stage 1 (Programmatic Checks &ndash; citation gaps, marketing language, cross-document inconsistencies), Stage 2 (Binary Self-Tests from output-self-test), Stage 3 (Visual Verification via Puppeteer for HTML outputs), Stage 4 (Domain-Specific Standards).
+- Depth classification governs scope: Quick (5 min, internal), Standard (15 min, external client), Comprehensive (30+ min, high-stakes delivery).
+- Composited from four source engines: MLR programmatic QA, ODC editorial standards, JSE binary self-tests, SEE quality patterns.</p>
+<p><strong>Invokes:</strong> output-self-test (Stage 2), render-validate (Stage 3, for HTML outputs), adversarial-evaluator (can be a stage)</p>
+<p><strong>Invoked by:</strong> phase-controller (as QA gate in skill chains), campaign-builder, lead-builder, research-engine, framework-explainer</p>
+<hr />
+<h4 id="output-self-test">output-self-test<a class="headerlink" href="#output-self-test" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Run binary self-tests against output before declaring it complete. Yes/no questions, not judgment calls.</p>
+<p><strong>Triggers:</strong> About to say &ldquo;done&rdquo;, &ldquo;complete&rdquo;, &ldquo;ready for review&rdquo;. Invoked when finishing any research, content production, integration output, or deliverable.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- Binary test design rules: answerable YES/NO in under 5 seconds, references specific parts of the output, a NO implies a specific fix, paired quick/thorough versions for scan vs. deep-dive depth.
+- Test sets selected by output type: Research Output Tests, Content/Deliverable Tests, HTML Output Tests, Integration Output Tests, plus Cross-Cutting Tests that always run.
+- Read-only governance skill. Cannot modify files. Diagnoses; does not fix.</p>
+<p><strong>Invokes:</strong> None (read-only)</p>
+<p><strong>Invoked by:</strong> qa-pipeline (Stage 2), phase-controller (via skill chain), findings-formatter (self-test step)</p>
+<hr />
+<h4 id="sanity-check">sanity-check<a class="headerlink" href="#sanity-check" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Quick scan for 11 known failure modes at natural pause points. A pulse check, not a gate.</p>
+<p><strong>Triggers:</strong> &ldquo;sanity check this&rdquo;, something feels off, after producing a large chunk of work, natural pause points between phases.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- 11 binary tests against known failure modes: Premature Confidence, Staleness Blindness, Scope Ratchet, Generic Output, Claim Hallucination, Missing Source Trail, Contradictory Frame, Agent Hallucinated Success, Depth Miscalibration, Cross-Engine Contamination, Unverified State Claim.
+- Should take under 2 minutes. If it takes longer, you&rsquo;re overthinking it. Lightweight by design &ndash; not a substitute for qa-pipeline.
+- Three-step workflow: scan current work, run binary test for suspected matches, act (fix if straightforward, flag for operator if unclear).</p>
+<p><strong>Invokes:</strong> None (read-only)</p>
+<p><strong>Invoked by:</strong> eos-assistant (complementary spot-checks), phase-controller (periodic invocation during long operations)</p>
+<hr />
+<h4 id="content-updater">content-updater<a class="headerlink" href="#content-updater" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Choke point for all content updates. Routes updates through origin-skill audit requirements, logs with user attribution, cascades to related files.</p>
+<p><strong>Triggers:</strong> &ldquo;update [entity]&rdquo;, &ldquo;status change&rdquo;, &ldquo;new development&rdquo;, any modification to profiles, KB files, patterns, or tracked content. Key signal words: update, change, new development, refresh, status change.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Four-phase workflow: Phase 0 (check logs for prior context), Phase 1 (identify content type and load origin skill&rsquo;s audit requirements), Phase 2 (execute the update, cascade to related files), Phase 3 (mandatory audit logging with user attribution).
+- Origin-skill delegation: reads the originating skill&rsquo;s &ldquo;Audit Requirements&rdquo; section and executes those requirements. This is how skill-specific audit discipline is enforced on ad-hoc updates.
+- User attribution always present. Single-operator mode uses operator name from PROFILE.md; multi-user mode supports &ldquo;Mike (drafted for Sarah)&rdquo; attribution.</p>
+<p><strong>Invokes:</strong> audit-logging (always), origin skill&rsquo;s audit requirements (loaded dynamically)</p>
+<p><strong>Invoked by:</strong> campaign-builder, transcript-processor, profile-builder, attio-ops, attio-qualify, attio-refiner, and any skill that modifies tracked content</p>
+<hr />
+<h4 id="audit-logging">audit-logging<a class="headerlink" href="#audit-logging" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Two-layer audit system. Layer 1 (Activity Log) captures breadcrumb trails of all file operations. Layer 2 (Intelligence Log) captures strategic moments with engine tagging.</p>
+<p><strong>Triggers:</strong> Invoked to understand logging requirements, record strategic insights, or check logs before starting work.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- Layer 1 (Activity Log at <code>logs/activity-log.md</code>): always on, records every file operation with user attribution and engine tagging. Action types: Created, Updated, Deleted, Invoked, Researched.
+- Layer 2 (Intelligence Log at <code>logs/intelligence-log.md</code>): selective, records insights that would change how you approach similar work. Nine categories from Strategy Shift to Methodology Learning.
+- Pre-work log check protocol: before starting work that continues a thread, scan both logs for recent entries in the relevant engine and category. This is how institutional memory survives context compaction.</p>
+<p><strong>Invokes:</strong> None</p>
+<p><strong>Invoked by:</strong> Every skill in EngineOS. All skills must append to the activity log after completing work and selectively log to the intelligence log when trigger conditions are met.</p>
+<hr />
+<h4 id="adversarial-evaluator">adversarial-evaluator<a class="headerlink" href="#adversarial-evaluator" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> Spawn an independent evaluator subagent to adversarially score deliverables against structured criteria. The evaluator has no access to the executor&rsquo;s context.</p>
+<p><strong>Triggers:</strong> After producing any research document, engagement deliverable, or content piece. As a step in a phase-controller skill chain. When the operator requests &ldquo;evaluate this&rdquo; or &ldquo;score this against criteria.&rdquo;</p>
+<p><strong>Allowed tools:</strong> <code>Read, Bash, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- Dispatches a subagent with independent context. The subagent receives only deliverable paths, criteria JSON, pass threshold, and a one-line task description. No conversation history, no run plan.
+- Tool asymmetry: subagent has Read, Bash, Glob, Grep but NOT Write or Edit. It diagnoses; it cannot fix. This prevents the evaluator from silently patching issues instead of reporting them.
+- Mechanical distrust: the invoking agent recalculates pass/fail from individual criterion scores, never trusting the evaluator&rsquo;s self-reported summary. Parse failure is treated as evaluation failure (all-zero scores, HARD FAIL).</p>
+<p><strong>Invokes:</strong> None (dispatches a subagent, does not invoke other skills)</p>
+<p><strong>Invoked by:</strong> phase-controller (as evaluation step in skill chains), qa-pipeline (can be a stage)</p>
+<hr />
+<h3 id="system-awareness">System Awareness<a class="headerlink" href="#system-awareness" title="Anchor link">&para;</a></h3>
+<p>One skill that provides strategic conversation and system awareness.</p>
+<hr />
+<h4 id="eos-assistant">eos-assistant<a class="headerlink" href="#eos-assistant" title="Anchor link">&para;</a></h4>
+<p><strong>One-liner:</strong> EngineOS-aware conversational partner. Knows the system cold &ndash; current state, engine health, methodology, patterns, connections, history.</p>
+<p><strong>Triggers:</strong> <code>/eos-assistant</code>, &ldquo;fire up the EOS assistant&rdquo;, or any request that is about the system itself rather than a task within it.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Skill, Bash</code></p>
+<p><strong>Key behaviors:</strong>
+- Two modes: Default (strategic conversation &ndash; zero ceremony, aware, opinionated) and Production (activated when operator explicitly says &ldquo;let&rsquo;s build&rdquo; &ndash; adds drift detection, routing, correction encoding on top of phase-controller governance).
+- Boot sequence reads exactly 6 files: CONTEXT.md, registry/engines.md, activity log (last 20 entries), intelligence log (last 10 entries), operator COLLABORATION-STYLE.md, operator WRITING-STYLE.md. Conversational after these reads.
+- Eight behavioral directives encoding how an intelligent partner actually operated across the system: know the system not just the task, push back with evidence, surface staleness with a throttle, think in the operator&rsquo;s decision framework, separate interesting from actionable, challenge framing before it propagates, treat second occurrences as patterns, persist corrections as feedback memories.</p>
+<p><strong>Invokes:</strong> phase-controller (in production mode), any skill via on-demand loading based on conversation topic</p>
+<p><strong>Invoked by:</strong> Manual invocation only. Not invoked by other skills.</p>
+<hr />
+<h3 id="cross-category-notes">Cross-Category Notes<a class="headerlink" href="#cross-category-notes" title="Anchor link">&para;</a></h3>
+<p>Several skills appear in multiple categories by nature of their function:</p>
+<ul>
+<li><strong>framework-explainer</strong> is primarily a Content and Deliverable Production skill (it generates interactive HTML) but also serves Research and Intelligence (it explains complex systems and can include competitive positioning research).</li>
+<li><strong>codebase-onboarder</strong> is primarily Research and Intelligence (it audits and analyzes codebases) but also serves a Meta function (it sets up the context infrastructure for any new repository).</li>
+<li><strong>research-engine</strong> is primarily Research and Intelligence (it routes research requests) but also serves a Meta function (it orchestrates across multiple OS capabilities via the registry).</li>
+</ul>
+<p>The Attio integration skills form a chain with a defined execution order:</p>
+<div class="highlight"><pre><span></span><code>attio-mapper --&gt; attio-optimizer --&gt; attio-refiner --&gt; attio-ops / attio-qualify
+  (schemas)       (audit)            (decisions)        (execution)
+</code></pre></div>
+
+<p>The governance skills form a hierarchy:</p>
+<div class="highlight"><pre><span></span><code>session-orchestrator  (session start -- orients the OS)
+       |
+phase-controller     (work start -- classifies, plans, chains)
+       |
+  +----+----+----+
+  |    |    |    |
+depth  output sanity adversarial
+-gov   -self  -check -evaluator
+       -test
+</code></pre></div>
+
+<p>Content-updater and audit-logging sit beneath everything as cross-cutting infrastructure that all other skills invoke.</p>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>

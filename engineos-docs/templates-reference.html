@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates Reference — EngineOS Docs</title>
+  <meta name="description" content="EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement direct">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar__fill"></div></div>
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__org">EngineOS</div>
+    <div class="sidebar__title">System Documentation</div>
+    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  </div>
+  <nav class="sidebar__nav">
+    <div class="sidebar__section-label">Overview</div>
+    <a class="sidebar__link" href="overview.html">Overview</a>
+    <div class="sidebar__section-label">System</div>
+    <a class="sidebar__link" href="architecture.html">Architecture</a>
+    <a class="sidebar__link" href="governance.html">Governance</a>
+    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
+    <div class="sidebar__section-label">Skills &amp; Patterns</div>
+    <a class="sidebar__link" href="skill-system.html">Skill System</a>
+    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
+    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
+    <div class="sidebar__section-label">Methodology</div>
+    <a class="sidebar__link" href="methodology.html">Methodology</a>
+    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
+    <div class="sidebar__section-label">Memory</div>
+    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
+    <div class="sidebar__section-label">Infrastructure</div>
+    <a class="sidebar__link" href="integrations.html">Integrations</a>
+    <a class="sidebar__link" href="design-system.html">Design System</a>
+    <a class="sidebar__link active" href="templates-reference.html">Templates Reference</a>
+    <div class="sidebar__section-label">Reference</div>
+    <a class="sidebar__link" href="faq.html">FAQ</a>
+  </nav>
+  <div class="sidebar__footer">
+    Rebuild: <code>uv run scripts/build-docs.py</code><br>
+    Drift check: <code>uv run scripts/docs-staleness.py</code>
+  </div>
+</aside>
+<header class="report-header">
+  <div class="page-wrapper">
+    <div class="report-header__org">EngineOS</div>
+    <h1 class="report-header__title">Templates Reference</h1>
+    <p class="report-header__subtitle">EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement direct</p>
+    <div class="report-header__meta">
+      <span>Built 2026-06-05</span>
+      <span>Source: docs/source/</span>
+      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
+    </div>
+  </div>
+</header>
+<main class="page-wrapper">
+  <section class="section">
+    <h1 id="templates-reference-38-templates">Templates Reference &ndash; 38 Templates<a class="headerlink" href="#templates-reference-38-templates" title="Anchor link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Anchor link">&para;</a></h2>
+<p>EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement directories. All templates are designed for AI-assisted population using consistent placeholder conventions.</p>
+<p>Three placeholder types appear across the library:</p>
+<table>
+<thead>
+<tr>
+<th>Convention</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[PLACEHOLDER]</code></td>
+<td>Required replacement &ndash; must be filled before delivery</td>
+<td><code>[CLIENT-NAME]</code>, <code>[YYYY-MM-DD]</code></td>
+</tr>
+<tr>
+<td><code>{{variable}}</code></td>
+<td>Merge field for personalization in automated sequences</td>
+<td><code>{{first_name}}</code>, <code>{{company}}</code></td>
+</tr>
+<tr>
+<td><code>&lt;!-- INSTRUCTION --&gt;</code></td>
+<td>Guidance comment &ndash; remove after reading</td>
+<td><code>&lt;!-- REQUIRED: 3-5 sentences summarizing... --&gt;</code></td>
+</tr>
+<tr>
+<td><code>[OPTIONAL: ...]</code></td>
+<td>Conditional section &ndash; include or remove based on context</td>
+<td><code>[OPTIONAL: ## Additional Recommendations]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Templates live at <code>templates/</code> with two subdirectories: <code>deliverables/</code> and <code>engagement/</code>.</p>
+<hr />
+<h2 id="deliverable-templates-27">Deliverable Templates (27)<a class="headerlink" href="#deliverable-templates-27" title="Anchor link">&para;</a></h2>
+<p>Organized into six subcategories plus two top-level templates. Source index: <code>templates/deliverables/README.md</code>.</p>
+<h3 id="reports-6">Reports (6)<a class="headerlink" href="#reports-6" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>strategic-recommendations.md</code></td>
+<td><code>reports/</code></td>
+<td>Prioritized recommendations with evidence chains, implementation sequencing, and success metrics</td>
+</tr>
+<tr>
+<td><code>analysis-report.md</code></td>
+<td><code>reports/</code></td>
+<td>Deep-dive examination of a topic &ndash; research synthesis, due diligence</td>
+</tr>
+<tr>
+<td><code>engagement-summary.md</code></td>
+<td><code>reports/</code></td>
+<td>Milestone or phase wrap-up for handoff documentation</td>
+</tr>
+<tr>
+<td><code>case-study.md</code></td>
+<td><code>reports/</code></td>
+<td>Internal win story with learning capture for sales enablement</td>
+</tr>
+<tr>
+<td><code>customer-usage-report.md</code></td>
+<td><code>reports/</code></td>
+<td>&ldquo;Spotify Wrapped&rdquo; style usage summary for renewal conversations and QBRs</td>
+</tr>
+<tr>
+<td><code>weekly-activity-report.md</code></td>
+<td><code>reports/</code></td>
+<td>Conversational weekly report built from activity logs, intelligence logs, and operator debrief</td>
+</tr>
+</tbody>
+</table>
+<h3 id="one-pagers-3">One-Pagers (3)<a class="headerlink" href="#one-pagers-3" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>battle-card.md</code></td>
+<td><code>one-pagers/</code></td>
+<td>Competitive positioning for sales &ndash; use when a competitor comes up in a deal</td>
+</tr>
+<tr>
+<td><code>value-prop-card.md</code></td>
+<td><code>one-pagers/</code></td>
+<td>Core positioning crystallization for messaging alignment and sales training</td>
+</tr>
+<tr>
+<td><code>quick-reference.md</code></td>
+<td><code>one-pagers/</code></td>
+<td>Stakeholder cheat sheet for executive briefings</td>
+</tr>
+</tbody>
+</table>
+<h3 id="campaigns-6">Campaigns (6)<a class="headerlink" href="#campaigns-6" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email-sequence.md</code></td>
+<td><code>campaigns/</code></td>
+<td>Multi-touch cold/warm outreach sequence with A/B testing plan and reply handling</td>
+</tr>
+<tr>
+<td><code>nurture-sequence.md</code></td>
+<td><code>campaigns/</code></td>
+<td>Long-term lead warming for prospects not yet sales-ready</td>
+</tr>
+<tr>
+<td><code>follow-up-sequence.md</code></td>
+<td><code>campaigns/</code></td>
+<td>Post-event or post-meeting momentum capture</td>
+</tr>
+<tr>
+<td><code>campaign-package.md</code></td>
+<td><code>campaigns/</code></td>
+<td>Complete multi-track campaign structure &ndash; a folder template where each section becomes its own file</td>
+</tr>
+<tr>
+<td><code>bdr-handoff.md</code></td>
+<td><code>campaigns/</code></td>
+<td>Single-document BDR/SDR execution brief for delegating outreach</td>
+</tr>
+<tr>
+<td><code>linkedin-post.md</code></td>
+<td><code>campaigns/</code></td>
+<td>LinkedIn content template</td>
+</tr>
+</tbody>
+</table>
+<h3 id="presentations-3">Presentations (3)<a class="headerlink" href="#presentations-3" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stakeholder-deck.md</code></td>
+<td><code>presentations/</code></td>
+<td>Client leadership presentation for findings and recommendations</td>
+</tr>
+<tr>
+<td><code>proposal-deck.md</code></td>
+<td><code>presentations/</code></td>
+<td>Engagement pitch for sales proposals</td>
+</tr>
+<tr>
+<td><code>review-deck.md</code></td>
+<td><code>presentations/</code></td>
+<td>Progress checkpoint for QBRs and milestone reviews</td>
+</tr>
+</tbody>
+</table>
+<h3 id="documentation-3">Documentation (3)<a class="headerlink" href="#documentation-3" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>meeting-memo.md</code></td>
+<td><code>documentation/</code></td>
+<td>Structured meeting capture for every significant meeting</td>
+</tr>
+<tr>
+<td><code>discovery-call-summary.md</code></td>
+<td><code>documentation/</code></td>
+<td>Prospect discovery call capture</td>
+</tr>
+<tr>
+<td><code>playbook.md</code></td>
+<td><code>documentation/</code></td>
+<td>Repeatable process documentation for standardizing any workflow</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-3">Data (3)<a class="headerlink" href="#data-3" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lead-list-schema.md</code></td>
+<td><code>data/</code></td>
+<td>Prospect list structure for building outbound lists</td>
+</tr>
+<tr>
+<td><code>account-profile.md</code></td>
+<td><code>data/</code></td>
+<td>Target account deep-dive for account planning</td>
+</tr>
+<tr>
+<td><code>scoring-framework.md</code></td>
+<td><code>data/</code></td>
+<td>Lead/opportunity prioritization criteria</td>
+</tr>
+</tbody>
+</table>
+<h3 id="top-level-2">Top-Level (2)<a class="headerlink" href="#top-level-2" title="Anchor link">&para;</a></h3>
+<p>These sit directly in <code>templates/deliverables/</code> rather than in a subcategory folder.</p>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>campaign-launch-brief-template.md</code></td>
+<td>Hypothesis-driven campaign launch brief with metrics targets and conversation-first validation</td>
+</tr>
+<tr>
+<td><code>notion-task-import-template.md</code></td>
+<td>CSV import template for Notion task boards with column mapping and field-type constraints</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deliverables-readme">Deliverables README<a class="headerlink" href="#deliverables-readme" title="Anchor link">&para;</a></h3>
+<p><code>templates/deliverables/README.md</code> serves as the master index. It contains the full category table, a quick-reference lookup (&ldquo;I need to&hellip;&rdquo;), the standard workflow, operator vs. external naming conventions, template quality checklist, and recent additions log.</p>
+<hr />
+<h2 id="engagement-templates-11">Engagement Templates (11)<a class="headerlink" href="#engagement-templates-11" title="Anchor link">&para;</a></h2>
+<p>The engagement template directory (<code>templates/engagement/</code>) is a complete structural scaffold. When starting a new client engagement, the entire directory is copied as a unit and populated incrementally.</p>
+<h3 id="core-files-5">Core Files (5)<a class="headerlink" href="#core-files-5" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>README.md</code></td>
+<td>Engagement overview &ndash; client name, status, key contacts, current priority, quick links to other files</td>
+</tr>
+<tr>
+<td><code>CONTEXT.md</code></td>
+<td>Current state document &ndash; quick status, what&rsquo;s changed recently, next actions, active hypotheses. Updated every session. This is the session-start orientation file.</td>
+</tr>
+<tr>
+<td><code>CONTEXT-HISTORY.md</code></td>
+<td>Archive for CONTEXT.md entries older than 1-2 weeks. Keeps CONTEXT.md focused on current state while preserving history per the never-delete principle.</td>
+</tr>
+<tr>
+<td><code>DECISIONS.md</code></td>
+<td>Append-only decisions log using Context / Options / Decision / Why format. Past entries are never edited.</td>
+</tr>
+<tr>
+<td><code>NEW-ENGAGEMENT-CHECKLIST.md</code></td>
+<td>Step-by-step setup guide: pre-setup decisions, structure creation, core file initialization, first session orientation, and ongoing maintenance cadence</td>
+</tr>
+</tbody>
+</table>
+<h3 id="knowledge-base-templates-3">Knowledge Base Templates (3)<a class="headerlink" href="#knowledge-base-templates-3" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>company-core.md</code></td>
+<td><code>knowledge/</code></td>
+<td>Company profile &ndash; overview, products/services, market position, strengths/weaknesses, key messaging, sources</td>
+</tr>
+<tr>
+<td><code>sources.md</code></td>
+<td><code>knowledge/</code></td>
+<td>Standalone provenance tracking &ndash; primary sources, secondary sources, interview log, document receipts, source quality notes, information gaps</td>
+</tr>
+<tr>
+<td><code>profiles/README.md</code></td>
+<td><code>knowledge/profiles/</code></td>
+<td>People profiles directory with naming convention (<code>firstname-lastname.md</code>) and minimum viable profile template</td>
+</tr>
+</tbody>
+</table>
+<h3 id="subdirectory-readme-templates-3">Subdirectory README Templates (3)<a class="headerlink" href="#subdirectory-readme-templates-3" title="Anchor link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deliverables/README.md</code></td>
+<td><code>deliverables/</code></td>
+<td>Naming conventions for deliverable files (<code>YYYY-MM-DD-description.md</code>) and versioned deliverables</td>
+</tr>
+<tr>
+<td><code>integrations/README.md</code></td>
+<td><code>integrations/</code></td>
+<td>Integration directory structure (config/, playbook/, scripts/ per tool), common integrations, credential handling rules</td>
+</tr>
+<tr>
+<td><code>plans/README.md</code></td>
+<td><code>plans/</code></td>
+<td>Engagement-level plan storage with naming convention and scoping guidance</td>
+</tr>
+</tbody>
+</table>
+<h3 id="engagement-setup-workflow">Engagement Setup Workflow<a class="headerlink" href="#engagement-setup-workflow" title="Anchor link">&para;</a></h3>
+<p>The <code>NEW-ENGAGEMENT-CHECKLIST.md</code> defines a three-phase setup process:</p>
+<ol>
+<li>
+<p><strong>Phase 1 &ndash; Create Structure.</strong> Copy the entire <code>templates/engagement/</code> directory to the target location. Verify the directory tree matches the expected layout.</p>
+</li>
+<li>
+<p><strong>Phase 2 &ndash; Initialize Core Files.</strong> Populate README.md with engagement basics. Set CONTEXT.md quick status and current focus. Fill company-core.md with initial intelligence. Create the primary contact profile.</p>
+</li>
+<li>
+<p><strong>Phase 3 &ndash; First Session.</strong> Orient via CONTEXT.md. Define the first work item. Record any setup decisions in DECISIONS.md.</p>
+</li>
+</ol>
+<p>The checklist also defines a minimum viable engagement (copy, edit README, edit CONTEXT, create primary contact profile, start working) to prevent setup from blocking actual work.</p>
+<hr />
+<h2 id="how-templates-work">How Templates Work<a class="headerlink" href="#how-templates-work" title="Anchor link">&para;</a></h2>
+<h3 id="standard-workflow">Standard Workflow<a class="headerlink" href="#standard-workflow" title="Anchor link">&para;</a></h3>
+<ol>
+<li><strong>Select template</strong> from the appropriate category based on what you need to produce</li>
+<li><strong>Copy to engine deliverables directory</strong> &ndash; <code>engines/[engine-name]/deliverables/</code> or the engagement-specific output location</li>
+<li><strong>Replace placeholders</strong> &ndash; fill all <code>[PLACEHOLDER]</code> fields, populate <code>{{variable}}</code> merge fields, follow <code>&lt;!-- INSTRUCTION --&gt;</code> guidance then remove the comments</li>
+<li><strong>Adapt to context</strong> &ndash; remove <code>[OPTIONAL: ...]</code> sections that do not apply, add engagement-specific content where needed</li>
+<li><strong>Run QA</strong> &ndash; invoke the qa-pipeline skill before delivery. The output-self-test skill runs binary quality gates calibrated by output type.</li>
+<li><strong>File with versioning</strong> &ndash; follow the deliverables naming convention (<code>YYYY-MM-DD-description.md</code> for individual files, <code>v[X.Y]-[status]-YYYY-MM-DD/</code> for formal versioned deliverables)</li>
+</ol>
+<h3 id="operator-vs-external-naming">Operator vs. External Naming<a class="headerlink" href="#operator-vs-external-naming" title="Anchor link">&para;</a></h3>
+<p>Not all deliverables are client hand-offs. Materials for the operator&rsquo;s own use carry an <code>-OPERATOR</code> suffix to distinguish them from external deliverables. Example: <code>weekly-report.md</code> (hand-off) vs. <code>meeting-scripts-OPERATOR.md</code> (operator use).</p>
+<h3 id="folder-templates">Folder Templates<a class="headerlink" href="#folder-templates" title="Anchor link">&para;</a></h3>
+<p>The <code>campaign-package.md</code> template is a folder template &ndash; each numbered section becomes its own file within a campaign directory (<code>campaigns/[campaign-name]/</code>). The structure and naming convention in the template are preserved across the individual files.</p>
+<h3 id="ai-assisted-population">AI-Assisted Population<a class="headerlink" href="#ai-assisted-population" title="Anchor link">&para;</a></h3>
+<p>Templates are structured for AI consumption: clear section headers for extraction, confidence levels for weighting, source attribution for verification, and atomic sections that can be processed independently. The recommended approach is to provide the template plus source data and request section-by-section population, then review for accuracy and verify source citations.</p>
+<h3 id="creating-new-templates">Creating New Templates<a class="headerlink" href="#creating-new-templates" title="Anchor link">&para;</a></h3>
+<p>When a deliverable type recurs, generalize it into a template: remove engagement-specific details, add standard placeholders, include metadata (version, date, purpose), place it in the appropriate category folder, and update the deliverables README index.</p>
+<h3 id="html-deliverables">HTML Deliverables<a class="headerlink" href="#html-deliverables" title="Anchor link">&para;</a></h3>
+<p>Deliverables that produce HTML output use the EngineOS design system at <code>design-system/</code>. The enterprise stylesheet at <code>design-system/enterprise-styles.css</code> provides consistent styling. The render-validate skill verifies HTML output quality.</p>
+<hr />
+<p><em>EngineOS Templates Reference &ndash; produced from <code>templates/deliverables/README.md</code>, <code>templates/engagement/README.md</code>, and direct inspection of all 38 template files.</em></p>
+  </section>
+</main>
+<script>
+(function() {
+  var bar = document.querySelector(".progress-bar__fill");
+  if (!bar) return;
+  function update() {
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
+  }
+  document.addEventListener("scroll", update, {passive: true});
+  update();
+})();
+</script>
+</body>
+</html>
