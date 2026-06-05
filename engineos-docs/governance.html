@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Governance — EngineOS Docs</title>
-  <meta name="description" content="EngineOS governs a confident AI agent -- one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&#x27;t happen, and report filesystem facts from memory">
-  <link rel="stylesheet" href="assets/style.css?v=f9cf5368">
+  <meta name="description" content="EngineOS governs a confident AI agent — one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&#x27;t happen, and report filesystem facts from memory ">
+  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -51,18 +51,24 @@
 <header class="hero" id="s03">
   <div class="eyebrow">EngineOS System Documentation · Section 03 · Built 2026-06-05</div>
   <h1>Governance</h1>
-  <p class="subhead">EngineOS governs a confident AI agent -- one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&#x27;t happen, and report filesystem facts from memory instead of checking disk. The governance stack exists because methodology alone does not survive contact with that agen</p>
+  <p class="subhead">EngineOS governs a confident AI agent — one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&#x27;t happen, and report filesystem facts from memory instead of checking disk. The governance stack exists because methodology alone does not survive contact with that agent</p>
 </header>
 <section class="content">
 <blockquote>
 <p>&ldquo;This is methodology-as-infrastructure for a single operator using orchestration, discipline, and operator review checkpoints. It works because the operator is engaged. It does not claim to be deterministic enforcement.&rdquo;</p>
 <p>&ndash; CLAUDE.md, Enforcement Architecture</p>
 </blockquote>
-<p>The enforcement stack has two layers: mechanical enforcement (shell-script hooks that block tool calls at the Claude Code platform level) and advisory enforcement (instructions in CLAUDE.md, rules files, and skill specifications that depend on the agent following them). A run plan bridges both layers &ndash; it is simultaneously a planning artifact and a mechanical gate key.</p>
+<div class="intro-card">
+<p>The stack has <strong>two layers</strong>. Mechanical enforcement uses hooks that block tool calls at the Claude Code platform level. Advisory enforcement uses instructions (CLAUDE.md, rules files, skill specs) that depend on the agent following them. A <strong>run plan</strong> bridges both: a planning artifact created by advisory governance that doubles as a mechanical gate key the hook checks before allowing writes.</p>
+</div>
 <hr />
 <h2 id="two-enforcement-layers">Two Enforcement Layers<a class="anchor-link" href="#two-enforcement-layers" title="Permalink">¶</a></h2>
 <h3 id="mechanical-enforcement-hooks">Mechanical Enforcement (Hooks)<a class="anchor-link" href="#mechanical-enforcement-hooks" title="Permalink">¶</a></h3>
-<p>Claude Code supports lifecycle hooks: shell scripts (or Python scripts via <code>uv run</code>) that fire at specific points in the agent&rsquo;s operation. EngineOS deploys <strong>eight wired hook events</strong>, all configured in <code>.claude/settings.json</code>. The hook stack grew from four events (April 2026, the original governance build) to eight events (June 2026, when the second-brain capture and retrieval layer was added per DECISIONS.md D29-D32). The current eight events:</p>
+<div class="intro-card">
+<p>Hooks are the <strong>mechanical layer</strong> — they fire at lifecycle events in Claude Code and either block, log, or augment the agent&rsquo;s behavior. They don&rsquo;t depend on the agent reading instructions. EngineOS deploys <strong>eight wired hook events</strong> that together cover write-governance, audit logging, post-compact recovery, session-start orientation, session-arc capture (twice — on SessionEnd and PreCompact), and mid-work retrieval injection. The stack grew from four events (April 2026, original governance build) to eight (June 2026, when the second-brain capture and retrieval layer landed per D29-D32).</p>
+</div>
+<div class="tech-detail">
+<p><strong>The eight wired hook events:</strong></p>
 <table>
 <thead>
 <tr>
@@ -177,7 +183,8 @@
 <span class="p">}</span>
 </code></pre></div>
 
-<p>Each hook type fires at a different point in the agent lifecycle. The <code>matcher</code> field on PreToolUse and PostToolUse restricts which tool invocations trigger the hook &ndash; <code>Write|Edit</code> means only file-writing operations. Hooks 1-4 are shell scripts (the April 2026 governance core); hooks 5-8 are Python scripts run via <code>uv</code> (the June 2026 second-brain layer). The two flush hooks (SessionEnd, PreCompact) share extraction and spawn logic via <code>hooks/_flush_common.py</code> (DECISIONS.md D29) so capture caps stay in sync across both firing points &ndash; an anti-drift discipline that prevents bumping one and forgetting the other.</p>
+<p>Each hook type fires at a different point in the agent lifecycle. The <code>matcher</code> field on PreToolUse and PostToolUse restricts which tool invocations trigger the hook &ndash; <code>Write|Edit</code> means only file-writing operations. Hooks 1-4 are shell scripts (the April 2026 governance core); hooks 5-8 are Python scripts run via <code>uv</code> (the June 2026 second-brain layer). The two flush hooks (SessionEnd, PreCompact) share extraction and spawn logic via <code>hooks/_flush_common.py</code> (D29) so capture caps stay in sync across both firing points.</p>
+</div>
 <hr />
 <h4 id="hook-1-pretooluse-governance-gate-pre-write-governancesh">Hook 1: PreToolUse &ndash; Governance Gate (<code>pre-write-governance.sh</code>)<a class="anchor-link" href="#hook-1-pretooluse-governance-gate-pre-write-governancesh" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PreToolUse (fires before a Write or Edit tool call executes)
@@ -436,8 +443,10 @@
 <p><strong>The honest acknowledgment:</strong> Advisory enforcement depends on the agent following instructions. A sufficiently confident agent can ignore every rule, skip every skill invocation, and produce output that looks professional but followed none of the governance. This is not hypothetical &ndash; it happened in three consecutive sessions (WS3-WS5) where the agent skipped planning skills entirely while producing acceptable output. The mechanical layer (hooks) exists because advisory alone demonstrably fails on confident agents. The advisory layer remains essential for everything the mechanical layer cannot reach.</p>
 <hr />
 <h2 id="phase-controller-the-orchestration-brain">Phase-Controller &ndash; The Orchestration Brain<a class="anchor-link" href="#phase-controller-the-orchestration-brain" title="Permalink">¶</a></h2>
-<p>The phase-controller is the central governance skill. It classifies work, builds run plans, forces skill invocation at every transition, and gates on operator approval before execution begins. Without it, methodology exists but nothing makes it fire.</p>
-<p><strong>Why it exists:</strong> Skills exist. Methodology docs exist. The agent knows about all of them. Without forced orchestration, the agent defaults to &ldquo;just do the thing&rdquo; &ndash; skipping depth governance, quality checks, and structured findings. The root cause is not missing methodology. It is missing orchestration. Phase-controller is the orchestrator.</p>
+<div class="intro-card">
+<p>The phase-controller is the <strong>central governance skill</strong>. It classifies work into one of seven operation types, builds a disk-persisted run plan, forces skill invocation at every transition, and gates on operator approval before execution begins.</p>
+<p><strong>Why it exists:</strong> skills exist; methodology docs exist; the agent knows about all of them. Without forced orchestration, the agent defaults to &ldquo;just do the thing&rdquo; — skipping depth governance, quality checks, and structured findings. The root cause is not missing methodology. It is missing orchestration. Phase-controller is the orchestrator.</p>
+</div>
 <h3 id="7-operation-types">7 Operation Types<a class="anchor-link" href="#7-operation-types" title="Permalink">¶</a></h3>
 <p>Every piece of work gets classified into one of seven types. Classification takes 60 seconds and determines the planning weight, skill chain, and criteria intensity.</p>
 <table>
@@ -685,7 +694,9 @@ Approve to begin execution?
 <p><strong>Rule 11</strong> addresses the verified-state-claim failure pattern. An agent declared a directory did not exist after 4 glob attempts. The actual path was <code>WONDA-STUFF</code> (all-caps, hyphens instead of spaces). That wrong negative propagated into an audit conclusion that an entire capability &ldquo;never existed in sources&rdquo; &ndash; structurally invalidating a quadrant of a capability audit. The operator found the path with one case-insensitive <code>ls</code>. Rule 11 requires re-verification against disk before any state claim at a phase transition.</p>
 <hr />
 <h2 id="the-iteration-envelope">The Iteration Envelope<a class="anchor-link" href="#the-iteration-envelope" title="Permalink">¶</a></h2>
-<p>The iteration envelope is a produce-evaluate-retry loop that wraps the production steps in skill chains. It is the mechanism that turns independent evaluation from a concept into a repeating process.</p>
+<div class="intro-card">
+<p>The iteration envelope is a <strong>produce-evaluate-retry loop</strong> that wraps the production steps in skill chains. It&rsquo;s the mechanism that turns independent evaluation from a concept into a repeating process: produce → evaluate → if criteria pass, advance; if not, fix the specific gaps and retry; max three retries before escalation. Quality gets enforced through repetition rather than through a single &ldquo;did you check?&rdquo; prompt that a confident agent can confidently skip.</p>
+</div>
 <h3 id="how-it-works">How It Works<a class="anchor-link" href="#how-it-works" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>OUTSIDE ENVELOPE (runs once):
   depth-governor, brainstorming, writing-plans, operator approval gates
@@ -850,7 +861,9 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 <p>A related operational fix is captured in DECISIONS.md D31: Python&rsquo;s <code>print()</code> uses block buffering when stdout is a file, which had made <code>compile.py</code> look silently broken for ~3 weeks (<code>compile.log</code> mtime froze) when it was actually running fine intermittently. Fix is one line &ndash; <code>sys.stdout.reconfigure(line_buffering=True)</code> at the top of <code>compile.py:main()</code>. Also added: propagation of <code>CLAUDE_INVOKED_BY=knowledge_compile</code> BEFORE imports that could trigger Claude Code, preventing recursive SessionEnd → flush.py → compile.py → SessionEnd loops from spawning noise daily-log entries. The buffering insight is captured as an intelligence-log entry and as the <code>block-buffered-stdout-masks-progress</code> pattern &ndash; reusable across any future background-spawn pattern.</p>
 <hr />
 <h2 id="quality-gates-how-they-layer">Quality Gates &ndash; How They Layer<a class="anchor-link" href="#quality-gates-how-they-layer" title="Permalink">¶</a></h2>
-<p>EngineOS has four quality gate mechanisms. They are not interchangeable &ndash; each catches a different class of failure, and they layer in a specific order.</p>
+<div class="intro-card">
+<p>EngineOS has <strong>four quality gate mechanisms</strong>. They are not interchangeable — each catches a different class of failure, and they layer in a specific order. <code>output-self-test</code> is the fast binary gate (seconds, YES/NO per output type). <code>qa-pipeline</code> is the structural+content+visual sweep. <code>sanity-check</code> is the periodic spot-check against known failure modes. <code>adversarial-evaluator</code> is the independent-context judge that scores against hardened criteria. Layered, they catch what any single check would miss.</p>
+</div>
 <h3 id="output-self-test-fast-binary-gate">output-self-test (Fast Binary Gate)<a class="anchor-link" href="#output-self-test-fast-binary-gate" title="Permalink">¶</a></h3>
 <p>Binary YES/NO questions per output type. Runs before any &ldquo;done&rdquo; declaration. Takes seconds per test. 5 test batteries: Research Output (RS), Content/Deliverable (CD), Integration Output (IO), HTML Output (HD), and Cross-Cutting (XC, always runs).</p>
 <p>Each test has a quick version (for scan-depth work) and a thorough version (for deep-dive work). Every test follows four design rules: answerable YES/NO in under 5 seconds, references specific parts of the output, a NO implies a specific fix, and paired quick/thorough versions.</p>
@@ -950,10 +963,12 @@ qa-pipeline  (final gate, external-facing deliverables only)
 <p>Each layer is progressively more expensive and catches progressively subtler failures. output-self-test runs in seconds and catches structural problems. sanity-check runs in 2 minutes and catches drift patterns. adversarial-evaluator runs a full subagent and catches self-evaluation blind spots. qa-pipeline runs programmatic scans, self-tests, browser rendering, and domain checklists &ndash; it is the comprehensive gate that only fires for work going outside the system.</p>
 <hr />
 <h2 id="run-plans-planning-artifacts-and-gate-keys">Run Plans &ndash; Planning Artifacts AND Gate Keys<a class="anchor-link" href="#run-plans-planning-artifacts-and-gate-keys" title="Permalink">¶</a></h2>
-<p>The key architectural insight: run plans serve two purposes simultaneously.</p>
-<p><strong>1. Planning artifact (advisory).</strong> The phase-controller creates a run plan. It captures the raw intake, classifies the work, specifies the skill chain, hardens the success criteria, and persists execution state across compaction boundaries. This is the advisory function &ndash; the plan guides execution.</p>
-<p><strong>2. Mechanical gate key (blocking).</strong> The PreToolUse hook checks for the run plan&rsquo;s existence on disk before allowing deliverable writes. No run plan at the canonical path = no writes. This is the mechanical function &ndash; the plan unlocks writes.</p>
-<p>This bridges the advisory and mechanical enforcement layers. The run plan is the bridge artifact &ndash; created by the advisory system (phase-controller skill), consumed by the mechanical system (pre-write-governance.sh hook). Without this bridge, the two layers would be independent: the agent could ignore advisory governance AND have its writes blocked by the hook (or the hook could be permissive while advisory governance goes unenforced). The run plan makes them interdependent.</p>
+<div class="intro-card">
+<p>The key architectural insight: <strong>run plans serve two purposes simultaneously.</strong></p>
+<p><strong>1. Planning artifact (advisory).</strong> The phase-controller creates a run plan that captures the raw intake, classifies the work, specifies the skill chain, hardens the success criteria, and persists execution state across compaction boundaries. The plan <em>guides</em> execution.</p>
+<p><strong>2. Mechanical gate key (blocking).</strong> The PreToolUse hook checks for the run plan&rsquo;s existence on disk before allowing deliverable writes. No run plan at the canonical path = no writes. The plan <em>unlocks</em> execution.</p>
+<p>This is the bridge between advisory and mechanical enforcement. The run plan is created by the advisory system (phase-controller skill) and consumed by the mechanical system (<code>pre-write-governance.sh</code> hook). Without the bridge, the two layers would be independent — the agent could ignore advisory governance <em>and</em> have its writes blocked, or the hook could be permissive while advisory governance went unenforced. The run plan makes them interdependent.</p>
+</div>
 <p><strong>Canonical paths (enforced by hook v2 scope-matching):</strong>
 - Engine work: <code>engines/[name]/run-plans/[YYYY-MM-DD]-[short-name].md</code>
 - OS-level work: <code>run-plans/[YYYY-MM-DD]-[short-name].md</code></p>

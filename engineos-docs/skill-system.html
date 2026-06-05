@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Skill System — EngineOS Docs</title>
-  <meta name="description" content="EngineOS ships 29 skills at .claude/skills/. Individually, each skill is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a">
-  <link rel="stylesheet" href="assets/style.css?v=f9cf5368">
+  <meta name="description" content="EngineOS ships 29 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run c">
+  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -51,13 +51,18 @@
 <header class="hero" id="s05">
   <div class="eyebrow">EngineOS System Documentation · Section 05 · Built 2026-06-05</div>
   <h1>Skill System</h1>
-  <p class="subhead">EngineOS ships 29 skills at .claude/skills/. Individually, each skill is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run controller. The system&#x27;s value is not in any single skill -- it is in the composition: how skills chain together, h</p>
+  <p class="subhead">EngineOS ships 29 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run controller. The system&#x27;s value isn&#x27;t in any single skill — it&#x27;s in the composition: how skills chain together, how access</p>
 </header>
 <section class="content">
-<p>This document covers the machinery: discovery, anatomy, access control, categories, forced chains, and concrete traces from operator prompt to disk output. For the flat catalog of all 29 skills with one-liners, see <a href="skills-reference.html">skills-reference.md</a>. For the enforcement architecture that makes chains non-optional, see <a href="governance.html">governance.md</a>.</p>
+<div class="intro-card">
+<p>This document covers the machinery: discovery, anatomy, access control, categories, forced chains, and concrete traces from operator prompt to disk output. For the flat catalog with one-liners, see <a href="skills-reference.html">skills-reference.md</a>. For the enforcement architecture that makes chains non-optional, see <a href="governance.html">governance.md</a>.</p>
+</div>
 <hr />
 <h2 id="discovery">Discovery<a class="anchor-link" href="#discovery" title="Permalink">¶</a></h2>
-<p>Claude Code discovers skills through native directory scanning. Every <code>.claude/skills/*/SKILL.md</code> file is detected automatically. Discovery loads in two phases:</p>
+<div class="intro-card">
+<p>Skills are <strong>discovered, not configured</strong>. Claude Code scans <code>.claude/skills/*/SKILL.md</code> at session start and learns what exists from each skill&rsquo;s YAML description. <strong>Passive loading</strong> keeps all 29 descriptions visible (~2% of context); <strong>full loading</strong> only fires when a skill is actually invoked. The practical effect: EngineOS carries 29 skills without paying the context cost of 29 skills. A session that uses 3 skills loads 3, not 29.</p>
+</div>
+<p>The two phases in detail:</p>
 <p><strong>Passive loading (~2% of context):</strong> Skill descriptions from YAML frontmatter load at session start. Claude Code sees the name and a one-line summary for all 29 skills. This is the index &ndash; enough to know what exists, not enough to execute.</p>
 <p><strong>Full loading (on invocation):</strong> When a skill is invoked by name, its full SKILL.md loads into context. The complete methodology, phase structure, integration points, anti-patterns, and self-tests become available.</p>
 <p>This is the Tier 3 context budget model from CLAUDE.md. A session that uses 3 skills loads 3, not 29. A research session loads depth-governor, market-scanner, and findings-formatter. A CRM audit loads attio-mapper, attio-optimizer, and attio-refiner. Skills the session never touches stay at their 2% description footprint.</p>
@@ -67,7 +72,9 @@
 <p>The hook complements native discovery without replacing it. Discovery answers &ldquo;which skill should run.&rdquo; The retrieval hook answers &ldquo;what does the corpus already know that the operator hasn&rsquo;t said.&rdquo; Together they front-load both capability and context before the model decides what to do. When the hook misses or the operator wants a deeper sweep, the <code>recall</code> skill (Read-only, manual invocation) handles the unbounded version of the same search. Append-only health records at <code>scripts/retrieval-health.jsonl</code> make the hook&rsquo;s behavior auditable &ndash; the operator runs <code>scripts/retrieval-review.py</code> periodically to keep, tune, or kill the gate.</p>
 <hr />
 <h2 id="anatomy-of-a-skill">Anatomy of a Skill<a class="anchor-link" href="#anatomy-of-a-skill" title="Permalink">¶</a></h2>
-<p>Every skill follows the same structure: YAML frontmatter for metadata and access control, then a markdown body with methodology, phases, integration points, and self-tests.</p>
+<div class="intro-card">
+<p>Every skill follows the same shape: <strong>YAML frontmatter for metadata and access control, then a markdown body with methodology, phases, integration points, and self-tests.</strong> The frontmatter is the machine-readable contract (description + allowed-tools); the body is the operator-readable methodology. Together they make skills both auto-discoverable and human-auditable.</p>
+</div>
 <h3 id="frontmatter">Frontmatter<a class="anchor-link" href="#frontmatter" title="Permalink">¶</a></h3>
 <p>The frontmatter is the machine-readable contract. Two fields matter:</p>
 <ul>
@@ -118,8 +125,11 @@
 <p>The body is the methodology that loads on invocation. It is not a prompt template &ndash; it is a structured operating procedure with decision trees, quality gates, and worked examples.</p>
 <hr />
 <h2 id="access-control-via-allowed-tools">Access Control via allowed-tools<a class="anchor-link" href="#access-control-via-allowed-tools" title="Permalink">¶</a></h2>
-<p>The <code>allowed-tools</code> frontmatter field is the access control mechanism. It restricts what tools each skill can use when loaded, creating structural boundaries between skill categories.</p>
+<div class="intro-card">
+<p>The <code>allowed-tools</code> frontmatter field is the <strong>access control mechanism</strong>. It restricts what tools each skill can use when loaded, creating <strong>structural boundaries between skill categories</strong>. A read-only governance skill can&rsquo;t write files. An integration skill gets its domain-specific MCP tools and nothing else. The boundary is enforced at the platform level, not by convention — which means a skill literally can&rsquo;t reach beyond its declared surface even if the agent tries.</p>
+</div>
 <h3 id="five-access-tiers">Five Access Tiers<a class="anchor-link" href="#five-access-tiers" title="Permalink">¶</a></h3>
+<div class="tech-detail">
 <table>
 <thead>
 <tr>
@@ -162,6 +172,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="full-reference-table">Full Reference Table<a class="anchor-link" href="#full-reference-table" title="Permalink">¶</a></h3>
 <table>
 <thead>
@@ -472,8 +483,10 @@
 </table>
 <hr />
 <h2 id="forced-skill-chains">Forced Skill Chains<a class="anchor-link" href="#forced-skill-chains" title="Permalink">¶</a></h2>
-<p>The defining feature of the skill system is composition. Skills do not fire independently &ndash; they chain into typed workflows enforced by the phase-controller. When the phase-controller classifies an operation, it selects a chain template that specifies which skills fire, in what order, with what gates between them.</p>
-<p>The chains are not suggestions. Phase-controller Rule 1: &ldquo;Every skill in the chain gets invoked. Not referenced, not &lsquo;kept in mind&rsquo; &ndash; actually loaded and executed.&rdquo; Rule 4: &ldquo;Gates are non-negotiable. Work does not proceed past a gate without the operator&rsquo;s explicit approval.&rdquo;</p>
+<div class="intro-card">
+<p>The defining feature of the skill system is <strong>composition</strong>. Skills don&rsquo;t fire independently — they chain into typed workflows enforced by the phase-controller. Classification picks the chain template; the chain specifies which skills fire, in what order, with what gates between them.</p>
+<p><strong>The chains are not suggestions.</strong> Phase-controller Rule 1: <em>&ldquo;Every skill in the chain gets invoked. Not referenced, not &lsquo;kept in mind&rsquo; — actually loaded and executed.&rdquo;</em> Rule 4: <em>&ldquo;Gates are non-negotiable. Work does not proceed past a gate without the operator&rsquo;s explicit approval.&rdquo;</em> This is what turns skills from a library into an operating system.</p>
+</div>
 <h3 id="the-iteration-envelope">The Iteration Envelope<a class="anchor-link" href="#the-iteration-envelope" title="Permalink">¶</a></h3>
 <p>Production chains (BL, EW, EN, CP, RE) wrap their produce-and-evaluate steps in an <strong>iteration envelope</strong> &ndash; an evaluator-optimizer loop:</p>
 <div class="highlight"><pre><span></span><code>OUTSIDE ENVELOPE (runs once):

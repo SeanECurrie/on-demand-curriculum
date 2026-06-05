@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Overview — EngineOS Docs</title>
-  <meta name="description" content="EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system">
-  <link rel="stylesheet" href="assets/style.css?v=f9cf5368">
+  <meta name="description" content="EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS — shared skills, methodology, patterns, enforcement rules, operator identity, and a design syste">
+  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -51,13 +51,16 @@
 <header class="hero" id="s01">
   <div class="eyebrow">EngineOS System Documentation · Section 01 · Built 2026-06-05</div>
   <h1>Overview</h1>
-  <p class="subhead">EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines: domain-specific tenants that inherit OS capabilities and keep their own engagement data, knowl</p>
+  <p class="subhead">EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS — shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines — domain-specific tenants that inherit OS capabilities and keep their own engagement data, kno</p>
 </header>
 <section class="content">
-<p>It is not a prompt library. It is not a collection of Claude Code skills taped together. It is an operating system with mechanical enforcement, adversarial quality evaluation, disk-persisted governance, and a methodology layer distilled from 105+ days of production work across 11 projects.</p>
-<p>EngineOS is operator-agnostic. The <code>operator/</code> directory personalizes the system at runtime through a structured 37-question intake process. The OS and its engines work for anyone; nothing assumes a specific person until <code>operator/PROFILE.md</code> exists.</p>
+<div class="intro-card">
+<p>It is not a prompt library. It is not a collection of skills taped together. It is an operating system with <strong>mechanical enforcement</strong>, <strong>adversarial quality evaluation</strong>, <strong>disk-persisted governance</strong>, and a <strong>methodology layer distilled from 105+ days of production work</strong> across 11 projects.</p>
+<p>EngineOS is operator-agnostic. The <code>operator/</code> directory personalizes the system at runtime through a structured 37-question intake. The OS and its engines work for anyone; nothing assumes a specific person until <code>operator/PROFILE.md</code> exists.</p>
+</div>
 <hr />
 <h2 id="system-at-a-glance">System at a Glance<a class="anchor-link" href="#system-at-a-glance" title="Permalink">¶</a></h2>
+<div class="tech-detail">
 <table>
 <thead>
 <tr>
@@ -124,6 +127,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <hr />
 <h2 id="file-map">File Map<a class="anchor-link" href="#file-map" title="Permalink">¶</a></h2>
 <div class="highlight"><pre><span></span><code>EngineOS/
@@ -194,6 +198,9 @@
 
 <hr />
 <h2 id="how-this-documentation-is-organized">How This Documentation Is Organized<a class="anchor-link" href="#how-this-documentation-is-organized" title="Permalink">¶</a></h2>
+<div class="intro-card">
+<p>This documentation is <strong>lookup-shaped, not narrative-shaped</strong>. Pick the surface that matches your question — each page is the canonical reference for one subsystem, every count is disk-verified on each rebuild, and cross-links keep you from re-deriving what&rsquo;s already explained elsewhere. The table below routes by <em>what you&rsquo;re trying to know</em>.</p>
+</div>
 <p>These reference docs are organized by subsystem, not alphabetically. Start with what matches your interest:</p>
 <table>
 <thead>

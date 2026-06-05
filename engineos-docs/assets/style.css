@@ -1165,3 +1165,76 @@ main {
 }
 .doc-card:hover::after,
 .doc-card:active::after { opacity: 1; transform: translateX(4px); }
+
+/* ─── Explainer / Tech-detail primitives ─── */
+/* Per docs refactor 2026-06-05: structural H2 sections lead with a
+   plain-language intro-card (explainer), then surface their diagram /
+   table / JSON inside a tech-detail block as the proof. The pattern
+   came from the trading-assistant two-mode /docs/ surface (intel-log
+   2026-06-01) and pairs with feedback_walkthrough_purpose + feedback_showcase_patterns. */
+
+.intro-card {
+  background: var(--surface);
+  border-left: 4px solid var(--accent);
+  border-radius: 12px;
+  padding: 22px 26px;
+  margin: 6px 0 22px;
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: var(--text-body);
+}
+.intro-card > :first-child { margin-top: 0; }
+.intro-card > :last-child { margin-bottom: 0; }
+.intro-card p { font-size: 16.5px; margin-bottom: 12px; }
+.intro-card p:last-child { margin-bottom: 0; }
+.intro-card strong { color: var(--text-strongest); }
+.intro-card code {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(8,145,178,0.18);
+}
+
+.tech-detail {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 12px 0 22px;
+  font-size: 14.5px;
+  color: var(--text-secondary);
+}
+.tech-detail > :first-child { margin-top: 0; }
+.tech-detail > :last-child { margin-bottom: 0; }
+.tech-detail strong { color: var(--text-body); }
+.tech-detail table { font-size: 13px; }
+.tech-detail pre, .tech-detail .highlight pre {
+  margin: 8px 0;
+  font-size: 12.5px;
+}
+
+.mode-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.mode-badge.explainer {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(8,145,178,0.25);
+}
+.mode-badge.tech {
+  background: var(--code-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+  .intro-card { padding: 18px 18px; margin: 4px 0 16px; font-size: 16px; }
+  .intro-card p { font-size: 16px; }
+  .tech-detail { padding: 14px 16px; margin: 8px 0 18px; }
+}
