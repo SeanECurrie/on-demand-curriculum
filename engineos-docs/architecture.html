@@ -6,61 +6,50 @@
   <title>Architecture — EngineOS Docs</title>
   <meta name="description" content="EngineOS is structured as two distinct layers with a context engineering system that controls how much of the system loads into Claude Code&#x27;s context window at any given time. This architecture was a ">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link active" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item active" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Architecture</h1>
-    <p class="report-header__subtitle">EngineOS is structured as two distinct layers with a context engineering system that controls how much of the system loads into Claude Code&#x27;s context window at any given time. This architecture was a </p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s02">
+  <div class="eyebrow">EngineOS System Documentation · Section 02 · Built 2026-06-05</div>
+  <h1>Architecture</h1>
+  <p class="subhead">EngineOS is structured as two distinct layers with a context engineering system that controls how much of the system loads into Claude Code&#x27;s context window at any given time. This architecture was a deliberate design decision (D11) that reduced context consumption by 68% compared to the original Sales Enablement Engin</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="architecture-two-layer-model-and-context-engineering">Architecture — Two-Layer Model and Context Engineering<a class="headerlink" href="#architecture-two-layer-model-and-context-engineering" title="Anchor link">&para;</a></h1>
+<section class="content">
 <p>EngineOS is structured as two distinct layers with a context engineering system that controls how much of the system loads into Claude Code&rsquo;s context window at any given time. This architecture was a deliberate design decision (D11) that reduced context consumption by 68% compared to the original Sales Enablement Engine&rsquo;s load-everything approach.</p>
 <hr />
-<h2 id="the-two-layer-model">The Two-Layer Model<a class="headerlink" href="#the-two-layer-model" title="Anchor link">&para;</a></h2>
+<h2 id="the-two-layer-model">The Two-Layer Model<a class="anchor-link" href="#the-two-layer-model" title="Permalink">¶</a></h2>
 <div class="highlight"><pre><span></span><code>  EngineOS (Layer 1 — the OS)
   ┌──────────────────────────────────────────────────────┐
   │  29 Skills  │  15 Methodology  │  70 Patterns        │
@@ -86,10 +75,10 @@
 <p><strong>The inheritance rule:</strong> If an engine needs a capability that lives at Layer 1, it references the OS version. It does not duplicate it. If an engine has a domain-specific variant that genuinely differs, it keeps that variant locally and documents why it diverges.</p>
 <p>This separation means the OS can evolve without breaking engines, and engines can specialize without polluting the OS. See <a href="engine-model.html">Engine Model</a> for the full tenant architecture.</p>
 <hr />
-<h2 id="four-tier-context-engineering">Four-Tier Context Engineering<a class="headerlink" href="#four-tier-context-engineering" title="Anchor link">&para;</a></h2>
+<h2 id="four-tier-context-engineering">Four-Tier Context Engineering<a class="anchor-link" href="#four-tier-context-engineering" title="Permalink">¶</a></h2>
 <p>Context engineering is the core architectural problem for any system built on an LLM. Claude Code has a finite context window. EngineOS has 29 skills (some over 700 lines), 15 methodology docs, 70 patterns, 38 templates, and extensive operator identity files. Loading everything at once would consume the entire window before any work begins.</p>
 <p>EngineOS solves this with a four-tier loading model that keeps context consumption proportional to the work being done.</p>
-<h3 id="tier-1-always-present">Tier 1: Always Present<a class="headerlink" href="#tier-1-always-present" title="Anchor link">&para;</a></h3>
+<h3 id="tier-1-always-present">Tier 1: Always Present<a class="anchor-link" href="#tier-1-always-present" title="Permalink">¶</a></h3>
 <p><strong>Loads:</strong> Every session, unconditionally.</p>
 <table>
 <thead>
@@ -124,7 +113,7 @@
 </table>
 <p>These files have no <code>paths:</code> key in their YAML frontmatter, which signals Claude Code to load them unconditionally. They represent approximately 340 lines of always-present context.</p>
 <p><strong>Compaction resilience:</strong> When Claude Code compacts the context window, the <code>post-compact.sh</code> hook fires and re-injects the core governance behaviors as plain text. CLAUDE.md is re-read on the next interaction. The always-present tier is designed to survive compaction without information loss.</p>
-<h3 id="tier-2-path-triggered">Tier 2: Path-Triggered<a class="headerlink" href="#tier-2-path-triggered" title="Anchor link">&para;</a></h3>
+<h3 id="tier-2-path-triggered">Tier 2: Path-Triggered<a class="anchor-link" href="#tier-2-path-triggered" title="Permalink">¶</a></h3>
 <p><strong>Loads:</strong> Automatically when Claude Code reads files matching specific path patterns.</p>
 <table>
 <thead>
@@ -166,7 +155,7 @@
 </code></pre></div>
 
 <p>When a session never touches integration files, the integration rules never load. This is zero-cost context when not needed.</p>
-<h3 id="tier-3-skill-invoked">Tier 3: Skill-Invoked<a class="headerlink" href="#tier-3-skill-invoked" title="Anchor link">&para;</a></h3>
+<h3 id="tier-3-skill-invoked">Tier 3: Skill-Invoked<a class="anchor-link" href="#tier-3-skill-invoked" title="Permalink">¶</a></h3>
 <p><strong>Loads:</strong> Skill descriptions load passively at session start (~2% of context budget). Full skill content loads only when a skill is actually invoked.</p>
 <p>EngineOS has 29 skills at <code>.claude/skills/</code>. Each skill has a <code>SKILL.md</code> file with YAML frontmatter containing a <code>description</code> field. Claude Code reads these descriptions at session start for discovery purposes — so it knows what skills exist and when to suggest them.</p>
 <p>The full SKILL.md content (which can be substantial — <code>phase-controller</code> is 739 lines, <code>attio-optimizer</code> is over 500) only enters context when the skill is invoked. This means a session that uses 3 skills loads 3 skills, not 29.</p>
@@ -181,7 +170,7 @@
 </code></pre></div>
 
 <p>The <code>allowed-tools</code> field restricts what tools a skill can use when invoked. See <a href="skill-system.html">Skill System</a> for the full access control model.</p>
-<h3 id="tier-4-explicit-reference">Tier 4: Explicit Reference<a class="headerlink" href="#tier-4-explicit-reference" title="Anchor link">&para;</a></h3>
+<h3 id="tier-4-explicit-reference">Tier 4: Explicit Reference<a class="anchor-link" href="#tier-4-explicit-reference" title="Permalink">¶</a></h3>
 <p><strong>Loads:</strong> Only when a skill or the operator explicitly requests it. Never loaded preemptively.</p>
 <table>
 <thead>
@@ -225,7 +214,7 @@
 </tbody>
 </table>
 <p>This tier contains the bulk of EngineOS&rsquo;s content by volume. By loading it only on demand, the system can maintain a large knowledge base without paying a constant context cost.</p>
-<h3 id="the-context-budget-in-practice">The Context Budget in Practice<a class="headerlink" href="#the-context-budget-in-practice" title="Anchor link">&para;</a></h3>
+<h3 id="the-context-budget-in-practice">The Context Budget in Practice<a class="anchor-link" href="#the-context-budget-in-practice" title="Permalink">¶</a></h3>
 <p>A typical session might load:
 - <strong>Tier 1:</strong> ~340 lines (always)
 - <strong>Tier 2:</strong> 1-2 rules (~80 lines) if working in a matching path
@@ -234,10 +223,10 @@
 <p><strong>Total:</strong> ~1,300-2,500 lines of EngineOS context, leaving the majority of the window for actual work content.</p>
 <p>Compare this to the SEE&rsquo;s original approach: load all 49 skills, all patterns, all templates at session start. That&rsquo;s why D11 (four-tier context budget) was one of the founding architectural decisions — it made the system viable.</p>
 <hr />
-<h2 id="retrieval-architecture">Retrieval Architecture<a class="headerlink" href="#retrieval-architecture" title="Anchor link">&para;</a></h2>
+<h2 id="retrieval-architecture">Retrieval Architecture<a class="anchor-link" href="#retrieval-architecture" title="Permalink">¶</a></h2>
 <p>The four-tier context model controls what loads into the window. The retrieval architecture controls how the system finds prior context inside its own corpus mid-work. The two are peers: the context budget is the write-side (what enters context); retrieval is the read-side (what gets found and surfaced).</p>
 <p>EngineOS captures heavily — 216+ knowledge base articles, 70+ intelligence log entries, daily session arcs, run plans, methodology docs. Capture without retrieval is a write-only system. Until 2026-06-04, that&rsquo;s what EngineOS was: a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work. D32 (second-brain retrieval layer) closed the gap with three layers over a six-surface corpus.</p>
-<h3 id="three-retrieval-layers">Three Retrieval Layers<a class="headerlink" href="#three-retrieval-layers" title="Anchor link">&para;</a></h3>
+<h3 id="three-retrieval-layers">Three Retrieval Layers<a class="anchor-link" href="#three-retrieval-layers" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -269,17 +258,17 @@
 </tbody>
 </table>
 <p>Layer 1 establishes orientation. Layer 2 fills in mid-work context mechanically before the prompt reaches Tier 3 skill loading. Layer 3 escalates when the hook misses or the decision is load-bearing.</p>
-<h3 id="six-surface-priority-corpus">Six-Surface Priority Corpus<a class="headerlink" href="#six-surface-priority-corpus" title="Anchor link">&para;</a></h3>
+<h3 id="six-surface-priority-corpus">Six-Surface Priority Corpus<a class="anchor-link" href="#six-surface-priority-corpus" title="Permalink">¶</a></h3>
 <p>All three layers read the same corpus in the same priority order: <code>logs/intelligence-log.md</code> → <code>knowledge/index.md</code> → <code>knowledge/concepts/*.md</code> + <code>connections/*.md</code> → <code>daily/*.md</code> (last 30d) → <code>run-plans/*.md</code> (last 60d) → <code>methodology/*.md</code>. Higher surfaces have higher signal-to-noise. Stopping rule: when surfaces 1-2 yield 3+ strong hits, lower surfaces aren&rsquo;t swept.</p>
-<h3 id="why-no-vector-db">Why No Vector DB<a class="headerlink" href="#why-no-vector-db" title="Anchor link">&para;</a></h3>
+<h3 id="why-no-vector-db">Why No Vector DB<a class="anchor-link" href="#why-no-vector-db" title="Permalink">¶</a></h3>
 <p>At personal-KB scale (&lt;500 articles, currently 216), structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob — zero API cost. The Phase C vector layer is deferred with explicit revisit conditions in D32 (KB exceeds 2000 articles, or hook gate hit rate sustained &gt;60% with useful injections, or semantic misses grep can&rsquo;t surface).</p>
-<h3 id="measurement-built-in">Measurement Built In<a class="headerlink" href="#measurement-built-in" title="Anchor link">&para;</a></h3>
+<h3 id="measurement-built-in">Measurement Built In<a class="anchor-link" href="#measurement-built-in" title="Permalink">¶</a></h3>
 <p><code>scripts/retrieval-health.jsonl</code> is append-only, one record per <code>UserPromptSubmit</code> invocation (gate fire, query terms, surfaces searched, chars injected, exec time). The operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions to make the keep/tune/kill decision. Healthy band: gate hit rate 10-60%.</p>
 <p>See <a href="second-brain.html">Second Brain</a> for the full capture-plus-retrieval pipeline (flush.py, compile.py, knowledge/, daily/, health logs, decision rules). This section is the architectural slot; the deep reference is one click away.</p>
 <hr />
-<h2 id="registry-system">Registry System<a class="headerlink" href="#registry-system" title="Anchor link">&para;</a></h2>
+<h2 id="registry-system">Registry System<a class="anchor-link" href="#registry-system" title="Permalink">¶</a></h2>
 <p>Two registries provide stable identifiers for system components:</p>
-<h3 id="capability-registry-registrycapabilitiesmd">Capability Registry (<code>registry/capabilities.md</code>)<a class="headerlink" href="#capability-registry-registrycapabilitiesmd" title="Anchor link">&para;</a></h3>
+<h3 id="capability-registry-registrycapabilitiesmd">Capability Registry (<code>registry/capabilities.md</code>)<a class="anchor-link" href="#capability-registry-registrycapabilitiesmd" title="Permalink">¶</a></h3>
 <p>32 capabilities with stable identifiers, current file locations, and source engines. When a skill or file moves, the registry is updated — all references resolve through it.</p>
 <div class="highlight"><pre><span></span><code>| Identifier            | Capability                    | Current Location             | Source    |
 | `market-research`     | Market intelligence           | .claude/skills/market-scanner| JSE       |
@@ -288,10 +277,10 @@
 </code></pre></div>
 
 <p>The registry uses IDs-only reach (D4 from <code>methodology/memory-architecture.md</code>): it stores identifiers and pointers, not content. This keeps it minimal and reduces drift risk.</p>
-<h3 id="engine-registry-registryenginesmd">Engine Registry (<code>registry/engines.md</code>)<a class="headerlink" href="#engine-registry-registryenginesmd" title="Anchor link">&para;</a></h3>
+<h3 id="engine-registry-registryenginesmd">Engine Registry (<code>registry/engines.md</code>)<a class="anchor-link" href="#engine-registry-registryenginesmd" title="Permalink">¶</a></h3>
 <p>9 engine sources with current locations, tenant locations, and migration status. Maps where engines live (Desktop source vs. EngineOS tenant) and tracks which have been migrated.</p>
 <hr />
-<h2 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Anchor link">&para;</a></h2>
+<h2 id="file-structure">File Structure<a class="anchor-link" href="#file-structure" title="Permalink">¶</a></h2>
 <p>Every top-level directory has a single, well-defined purpose:</p>
 <table>
 <thead>
@@ -390,7 +379,7 @@
 </tbody>
 </table>
 <hr />
-<h2 id="compaction-resilience">Compaction Resilience<a class="headerlink" href="#compaction-resilience" title="Anchor link">&para;</a></h2>
+<h2 id="compaction-resilience">Compaction Resilience<a class="anchor-link" href="#compaction-resilience" title="Permalink">¶</a></h2>
 <p>Claude Code compacts older context when the window fills. EngineOS is designed for this. Eight hook events are wired in <code>.claude/settings.json</code> — four shell hooks govern writes and post-compact recovery; four Python hooks handle session-start orientation, session-arc capture, pre-compact flushing, and mid-work retrieval.</p>
 <p><strong>The eight wired hook events:</strong></p>
 <table>
@@ -474,7 +463,7 @@
 </ol>
 <p>The design principle: anything that must survive compaction lives on disk at a predictable path. The context window is a working space, not a storage system.</p>
 <hr />
-<h2 id="key-architectural-decisions">Key Architectural Decisions<a class="headerlink" href="#key-architectural-decisions" title="Anchor link">&para;</a></h2>
+<h2 id="key-architectural-decisions">Key Architectural Decisions<a class="anchor-link" href="#key-architectural-decisions" title="Permalink">¶</a></h2>
 <table>
 <thead>
 <tr>
@@ -532,19 +521,22 @@
 </tbody>
 </table>
 <p>See <a href="governance.html">Governance</a> for the full enforcement architecture. See <a href="second-brain.html">Second Brain</a> for the capture-plus-retrieval pipeline. See <a href="faq.html">FAQ</a> for &ldquo;why not just use a monolithic prompt?&rdquo;</p>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

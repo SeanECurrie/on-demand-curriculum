@@ -6,59 +6,48 @@
   <title>Patterns Reference — EngineOS Docs</title>
   <meta name="description" content="Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link active" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item active" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Patterns Reference</h1>
-    <p class="report-header__subtitle">Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s07">
+  <div class="eyebrow">EngineOS System Documentation · Section 07 · Built 2026-06-05</div>
+  <h1>Patterns Reference</h1>
+  <p class="subhead">Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and converted into a reusable lesson with clear trigger conditions and solutions.</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="pattern-library-70-patterns">Pattern Library &ndash; 70 Patterns<a class="headerlink" href="#pattern-library-70-patterns" title="Anchor link">&para;</a></h1>
-<h2 id="what-patterns-are-in-engineos">What Patterns Are in EngineOS<a class="headerlink" href="#what-patterns-are-in-engineos" title="Anchor link">&para;</a></h2>
+<section class="content">
+<h2 id="what-patterns-are-in-engineos">What Patterns Are in EngineOS<a class="anchor-link" href="#what-patterns-are-in-engineos" title="Permalink">¶</a></h2>
 <p>Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and converted into a reusable lesson with clear trigger conditions and solutions.</p>
 <p>The pattern format is consistent: provenance header (source project, last verified date, staleness status), problem statement, step-by-step solution, when to use, when not to use, concrete example from real work, variations, and origin story. Every pattern traces back to a specific engagement, session, or test that produced it.</p>
 <p><strong>Breakdown:</strong> 58 problem patterns, 5 deliverable patterns, 7 framework patterns.</p>
@@ -106,8 +95,8 @@
 </table>
 <p>The library consolidated from 93 source pattern files across 4 projects during the Act 3 build, then grew by 14 patterns through subsequent governance testing, production cowork sessions, and second-brain remediation arcs.</p>
 <hr />
-<h2 id="categorized-index">Categorized Index<a class="headerlink" href="#categorized-index" title="Anchor link">&para;</a></h2>
-<h3 id="agent-reliability-4-patterns">Agent Reliability (4 patterns)<a class="headerlink" href="#agent-reliability-4-patterns" title="Anchor link">&para;</a></h3>
+<h2 id="categorized-index">Categorized Index<a class="anchor-link" href="#categorized-index" title="Permalink">¶</a></h2>
+<h3 id="agent-reliability-4-patterns">Agent Reliability (4 patterns)<a class="anchor-link" href="#agent-reliability-4-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -134,7 +123,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="crm-integration-attio-9-patterns">CRM Integration &ndash; Attio (9 patterns)<a class="headerlink" href="#crm-integration-attio-9-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="crm-integration-attio-9-patterns">CRM Integration &ndash; Attio (9 patterns)<a class="anchor-link" href="#crm-integration-attio-9-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -181,7 +170,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="context-management-3-patterns">Context Management (3 patterns)<a class="headerlink" href="#context-management-3-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="context-management-3-patterns">Context Management (3 patterns)<a class="anchor-link" href="#context-management-3-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -204,7 +193,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="data-quality-normalization-4-patterns">Data Quality / Normalization (4 patterns)<a class="headerlink" href="#data-quality-normalization-4-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="data-quality-normalization-4-patterns">Data Quality / Normalization (4 patterns)<a class="anchor-link" href="#data-quality-normalization-4-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -231,7 +220,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="evidence-validation-3-patterns">Evidence &amp; Validation (3 patterns)<a class="headerlink" href="#evidence-validation-3-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="evidence-validation-3-patterns">Evidence &amp; Validation (3 patterns)<a class="anchor-link" href="#evidence-validation-3-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -254,7 +243,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="intake-onboarding-1-pattern">Intake &amp; Onboarding (1 pattern)<a class="headerlink" href="#intake-onboarding-1-pattern" title="Anchor link">&para;</a></h3>
+<h3 id="intake-onboarding-1-pattern">Intake &amp; Onboarding (1 pattern)<a class="anchor-link" href="#intake-onboarding-1-pattern" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -269,7 +258,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="mcp-tool-integration-4-patterns">MCP / Tool Integration (4 patterns)<a class="headerlink" href="#mcp-tool-integration-4-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="mcp-tool-integration-4-patterns">MCP / Tool Integration (4 patterns)<a class="anchor-link" href="#mcp-tool-integration-4-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -296,7 +285,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="notion-integration-3-patterns">Notion Integration (3 patterns)<a class="headerlink" href="#notion-integration-3-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="notion-integration-3-patterns">Notion Integration (3 patterns)<a class="anchor-link" href="#notion-integration-3-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -319,7 +308,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="research-methodology-6-patterns">Research Methodology (6 patterns)<a class="headerlink" href="#research-methodology-6-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="research-methodology-6-patterns">Research Methodology (6 patterns)<a class="anchor-link" href="#research-methodology-6-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -354,7 +343,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="sales-intelligence-5-patterns">Sales Intelligence (5 patterns)<a class="headerlink" href="#sales-intelligence-5-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="sales-intelligence-5-patterns">Sales Intelligence (5 patterns)<a class="anchor-link" href="#sales-intelligence-5-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -385,7 +374,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="security-agent-infrastructure-5-patterns">Security &ndash; Agent Infrastructure (5 patterns)<a class="headerlink" href="#security-agent-infrastructure-5-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="security-agent-infrastructure-5-patterns">Security &ndash; Agent Infrastructure (5 patterns)<a class="anchor-link" href="#security-agent-infrastructure-5-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -416,7 +405,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="governance-validation-8-patterns">Governance &amp; Validation (8 patterns)<a class="headerlink" href="#governance-validation-8-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="governance-validation-8-patterns">Governance &amp; Validation (8 patterns)<a class="anchor-link" href="#governance-validation-8-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -459,7 +448,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="system-process-3-patterns">System &amp; Process (3 patterns)<a class="headerlink" href="#system-process-3-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="system-process-3-patterns">System &amp; Process (3 patterns)<a class="anchor-link" href="#system-process-3-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -482,7 +471,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="deliverables-5-patterns">Deliverables (5 patterns)<a class="headerlink" href="#deliverables-5-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="deliverables-5-patterns">Deliverables (5 patterns)<a class="anchor-link" href="#deliverables-5-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -513,7 +502,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="frameworks-7-patterns">Frameworks (7 patterns)<a class="headerlink" href="#frameworks-7-patterns" title="Anchor link">&para;</a></h3>
+<h3 id="frameworks-7-patterns">Frameworks (7 patterns)<a class="anchor-link" href="#frameworks-7-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -553,9 +542,9 @@
 </tbody>
 </table>
 <hr />
-<h2 id="key-patterns-deep-examples">Key Patterns &ndash; Deep Examples<a class="headerlink" href="#key-patterns-deep-examples" title="Anchor link">&para;</a></h2>
+<h2 id="key-patterns-deep-examples">Key Patterns &ndash; Deep Examples<a class="anchor-link" href="#key-patterns-deep-examples" title="Permalink">¶</a></h2>
 <p>The following 10 patterns are presented in full detail. They were selected because they tell the story of how EngineOS learned from its own production work. Each one traces back to a specific incident where something went wrong, was analyzed, and became permanent institutional memory.</p>
-<h3 id="1-confident-negative-finding">1. Confident Negative Finding<a class="headerlink" href="#1-confident-negative-finding" title="Anchor link">&para;</a></h3>
+<h3 id="1-confident-negative-finding">1. Confident Negative Finding<a class="anchor-link" href="#1-confident-negative-finding" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> When an agent declares &ldquo;X does not exist&rdquo; with confident framing, that finding becomes a premise for downstream analysis. If the finding is wrong, everything built on top of it is structurally invalidated &ndash; not just incorrect in one detail, but wrong at the foundation. The cost of a wrong negative is asymmetric: a wrong positive gets corrected when someone looks closer, but a wrong negative closes off investigation entirely.</p>
 <p><strong>The Incident:</strong> During a capability lift audit in April 2026, an agent needed to verify whether Attio direct-API code existed in the WondaKB source project. The operator had referenced <code>~/Desktop/wonda stuff/attio-mcp-claude-code-agent/</code>. The exact path returned &ldquo;No such file or directory.&rdquo; The agent generated 4 glob variants (lowercase/capitalized combinations of &ldquo;wonda&rdquo; and &ldquo;attio&rdquo;) and declared with confidence: &ldquo;does not exist on this machine.&rdquo;</p>
@@ -564,7 +553,7 @@
 <p><strong>The Solution:</strong> Use weak framing (&ldquo;I couldn&rsquo;t find X at the expected path &ndash; verify?&rdquo;) when verification is incomplete. Treat negative findings as intermediate state requiring verification, not as terminal conclusions. When propagating into downstream analysis, flag the dependency explicitly so a single correction can unwind the chain.</p>
 <p><strong>The Lesson:</strong> Confidence should be calibrated to search thoroughness, not to how decisive the conclusion feels.</p>
 <hr />
-<h3 id="2-path-search-discipline">2. Path Search Discipline<a class="headerlink" href="#2-path-search-discipline" title="Anchor link">&para;</a></h3>
+<h3 id="2-path-search-discipline">2. Path Search Discipline<a class="anchor-link" href="#2-path-search-discipline" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> When looking for a file or directory, there are two approaches: variant-hunting (generating guesses and testing them) and searching (looking at what is actually there). They feel similar but produce fundamentally different reliability. Variant-hunting only finds what was guessed. Searching cannot miss what exists.</p>
 <p><strong>The Incident:</strong> This pattern shares the same triggering incident as confident-negative-finding, but encodes a different lesson. The operator referenced <code>~/Desktop/wonda stuff/</code> from memory. The agent treated this as a specification rather than a lead &ndash; it copy-pasted the path verbatim, then generated 4 variations along the axes it chose to vary (capitalization of &ldquo;wonda&rdquo; and &ldquo;attio&rdquo;). The actual path used ALLCAPS and hyphens (<code>WONDA-STUFF</code>), axes the agent did not vary.</p>
@@ -572,7 +561,7 @@
 <p><strong>The Solution:</strong> Treat operator-remembered paths as leads, not specs. When exact-match fails, go to parent-directory browsing before variant-hunting. If you must test variants, vary both case and separator (12+ combinations, not 4). But parent-directory browsing is always cheaper and more reliable.</p>
 <p><strong>The Lesson:</strong> Looking at what is there beats guessing what might be there.</p>
 <hr />
-<h3 id="3-tool-wrapper-vs-capability-limit">3. Tool Wrapper vs. Capability Limit<a class="headerlink" href="#3-tool-wrapper-vs-capability-limit" title="Anchor link">&para;</a></h3>
+<h3 id="3-tool-wrapper-vs-capability-limit">3. Tool Wrapper vs. Capability Limit<a class="anchor-link" href="#3-tool-wrapper-vs-capability-limit" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> When a specific tool interface (MCP tool, SDK method, CLI flag) does not expose an operation, agents conclude the underlying capability itself is unavailable. &ldquo;The tool I have doesn&rsquo;t do X&rdquo; gets compressed to &ldquo;X isn&rsquo;t doable.&rdquo; The real problem is often the wrapper, not the capability.</p>
 <p><strong>The Incident:</strong> During a JSE pipeline reset in April 2026, 55 Notion Pipeline database rows needed to be archived. The agent tried <code>notion-update-page</code> via MCP &ndash; the command list exposed <code>update_properties</code>, <code>update_content</code>, <code>replace_content</code>, <code>apply_template</code>, and <code>update_verification</code>. No archive or delete command. The agent then checked <code>notion-move-pages</code> &ndash; it relocates but does not trash. Conclusion: &ldquo;Notion MCP can&rsquo;t delete pages, must be manual UI.&rdquo; The agent presented two options: manual UI bulk-delete or a move-to-orphans workaround.</p>
@@ -580,7 +569,7 @@
 <p><strong>The Solution:</strong> Before declaring an operation impossible, check the upstream capability (REST API, SDK) behind the tool you are using. Report findings with explicit scope: &ldquo;The X MCP tool doesn&rsquo;t expose Y, but the X REST API supports Y via [endpoint].&rdquo; Give the operator a real decision between building a small wrapper, accepting the limit, or escalating.</p>
 <p><strong>The Lesson:</strong> A tool&rsquo;s surface area is not a capability&rsquo;s surface area.</p>
 <hr />
-<h3 id="4-advisory-governance-failure">4. Advisory Governance Failure<a class="headerlink" href="#4-advisory-governance-failure" title="Anchor link">&para;</a></h3>
+<h3 id="4-advisory-governance-failure">4. Advisory Governance Failure<a class="anchor-link" href="#4-advisory-governance-failure" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> Governance that depends on the agent choosing to invoke it fails when the agent has a clear path and does not perceive ambiguity. The agent knows about the governance step, understands it should be invoked, and skips it anyway &ndash; not from ignorance, but from confidence. This is predictable and structural.</p>
 <p><strong>The Incident:</strong> EngineOS&rsquo;s phase-controller is a governance skill that classifies operations, creates run plans, and enforces skill chains. During the March 2026 testing arc, two tests exercised the same system:</p>
@@ -590,7 +579,7 @@
 <p><strong>The Solution:</strong> Layer instruction-based and structural enforcement. A single mechanism is skippable. Multiple mechanisms at different layers are harder to bypass simultaneously. The instruction handles the 90% case; the hook catches the 10% the instruction misses.</p>
 <p><strong>The Lesson:</strong> Advisory governance fails on confident agents; structural enforcement makes compliance the path of least resistance.</p>
 <hr />
-<h3 id="5-dependency-chain-masking">5. Dependency Chain Masking<a class="headerlink" href="#5-dependency-chain-masking" title="Anchor link">&para;</a></h3>
+<h3 id="5-dependency-chain-masking">5. Dependency Chain Masking<a class="anchor-link" href="#5-dependency-chain-masking" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> When a correct fix depends on a broken upstream, the fix appears not to work. The natural debugging instinct is to investigate the fix itself, potentially rebuilding something that was correctly designed from the start. Time is wasted, and correctly-built features risk being abandoned.</p>
 <p><strong>The Incident:</strong> During the same testing arc, EngineOS had an intelligence log write path (fix D20) wired into the phase-controller&rsquo;s run completion step. When a run plan completes, the system checks intelligence triggers and writes entries if any fire. Across tests J2 and J3, the intelligence log showed zero entries from operational work. The surface diagnosis: &ldquo;D20 is broken.&rdquo;</p>
@@ -600,7 +589,7 @@
 <p><strong>The Solution:</strong> Map the dependency chain explicitly before diagnosing. Test upstream first. Mark dependencies in fix documentation. Design fixes to report their activation status, not just their output.</p>
 <p><strong>The Lesson:</strong> When a fix appears broken, check what activates it before checking the fix itself.</p>
 <hr />
-<h3 id="6-scope-creep-disguised-as-diligence">6. Scope Creep Disguised as Diligence<a class="headerlink" href="#6-scope-creep-disguised-as-diligence" title="Anchor link">&para;</a></h3>
+<h3 id="6-scope-creep-disguised-as-diligence">6. Scope Creep Disguised as Diligence<a class="anchor-link" href="#6-scope-creep-disguised-as-diligence" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> When an agent is in &ldquo;be thorough&rdquo; mode, it can elevate irrelevant considerations to HIGH-severity findings. The analytical effort feels productive, but the finding is either not applicable to this system, off-scope for this operation, or a hypothetical requiring no response. Each finding looks individually reasonable; the cost of over-analysis is invisible until the operator notices the divergence.</p>
 <p><strong>The Incident:</strong> During a Notion bulk-archive build spec review in April 2026, the agent discovered EngineOS has no <code>.gitignore</code> at root. This became a HIGH-severity finding with a full credentials-strategy redesign: file permissions analysis, naming conventions, README notes, defense-in-depth proposals, and a &ldquo;Blocks build? YES&rdquo; classification that demanded action before proceeding.</p>
@@ -608,7 +597,7 @@
 <p><strong>The Solution:</strong> Scope-check before severity-check. Before assigning severity, ask: &ldquo;Does this apply to the current system?&rdquo; Not &ldquo;would this be a problem in general?&rdquo; Verify the scope assumption behind the finding before escalating. When in doubt: &ldquo;If I skipped this finding, would anything bad happen?&rdquo;</p>
 <p><strong>The Lesson:</strong> Thoroughness that does not check scope is not diligence; it is noise.</p>
 <hr />
-<h3 id="7-destructive-ops-canary-pattern">7. Destructive Ops Canary Pattern<a class="headerlink" href="#7-destructive-ops-canary-pattern" title="Anchor link">&para;</a></h3>
+<h3 id="7-destructive-ops-canary-pattern">7. Destructive Ops Canary Pattern<a class="anchor-link" href="#7-destructive-ops-canary-pattern" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Deliverables | <strong>Type:</strong> Deliverable</p>
 <p><strong>The Problem:</strong> Bulk destructive operations (delete, archive, overwrite) can fail catastrophically when applied to many records. A wrong page ID, untested code path, or silent API failure distributes damage across the entire batch before verification runs. The default &ldquo;run the whole thing and verify after&rdquo; structure means the damage is done by the time you discover the problem.</p>
 <p><strong>The Incident:</strong> During the April 2026 JSE pipeline reset, 55 Notion Pipeline rows needed to be archived via a newly-built <code>archive_page()</code> API wrapper &ndash; a 3-line method that had never been exercised against real data. Running the archive on all 55 without validation would have risked: an API token without archive access (some APIs return success on wrong permissions), a wrong database ID (archives from the wrong DB), an untested code path (the method was brand new), and cascade-failure invisibility (if row 1 fails, the loop might silently continue past it).</p>
@@ -616,7 +605,7 @@
 <p><strong>The Solution:</strong> Separate access-probe from destructive action. Archive one canary, verify via independent fetch, hard-pause. Use a continuation flag for the batch. Log per-record. Final re-query confirms end-state.</p>
 <p><strong>The Lesson:</strong> The first destructive operation should prove the mechanism works; the batch should only run after the proof.</p>
 <hr />
-<h3 id="8-culmination-test-design">8. Culmination Test Design<a class="headerlink" href="#8-culmination-test-design" title="Anchor link">&para;</a></h3>
+<h3 id="8-culmination-test-design">8. Culmination Test Design<a class="anchor-link" href="#8-culmination-test-design" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> When multiple fixes need validation, testing each independently gives false confidence. Each fix passes its dedicated test in a controlled environment. The fixes interact badly when combined &ndash; ordering dependencies, shared state assumptions, cascading triggers. Nobody designs a single test exercising all fixes simultaneously because each piece was individually &ldquo;validated.&rdquo;</p>
 <p><strong>The Incident:</strong> After the J2 and J3 testing arc surfaced 5 fixes (D22 for phase-controller enforcement, D20 for intelligence log write path, D21 for activity log hook, D23 for stop hook paths, F4 for render verification), the O1 culmination test was designed to exercise all 5 simultaneously under realistic operating conditions.</p>
@@ -625,7 +614,7 @@
 <p><strong>The Solution:</strong> After a batch of related fixes, design one test that exercises all of them under realistic conditions. Give each fix explicit pass/fail criteria. Include an escalation protocol for repeated failures. Track systemic signals beyond binary pass/fail.</p>
 <p><strong>The Lesson:</strong> Individual fix tests validate components; culmination tests validate the system.</p>
 <hr />
-<h3 id="9-planning-skip-on-confidence">9. Planning Skip on Confidence<a class="headerlink" href="#9-planning-skip-on-confidence" title="Anchor link">&para;</a></h3>
+<h3 id="9-planning-skip-on-confidence">9. Planning Skip on Confidence<a class="anchor-link" href="#9-planning-skip-on-confidence" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> Agents skip planning steps when they judge the task is straightforward enough to build directly. The agent knows the planning step exists, understands its purpose, and bypasses it because &ldquo;the operator already scoped the work&rdquo; or &ldquo;the design is obvious.&rdquo; This is the advisory-governance-failure pattern applied specifically to planning and task decomposition.</p>
 <p><strong>The Incident:</strong> Across three consecutive EngineOS sessions (WS3 through WS5), planning skills were systematically skipped:</p>
@@ -637,7 +626,7 @@
 <p><strong>The Solution:</strong> Enforce what is structurally enforceable (the plan artifact as a required input to production). Make visible what is not structurally enforceable (brainstorming process via skip-justification). Accept the asymmetry. Silent skipping &ndash; proceeding without invoking or justifying &ndash; is the governance violation.</p>
 <p><strong>The Lesson:</strong> &ldquo;I know what to build&rdquo; is not the same as &ldquo;I&rsquo;ve thought through how to build it.&rdquo;</p>
 <hr />
-<h3 id="10-agent-hallucinated-success-verification">10. Agent Hallucinated Success Verification<a class="headerlink" href="#10-agent-hallucinated-success-verification" title="Anchor link">&para;</a></h3>
+<h3 id="10-agent-hallucinated-success-verification">10. Agent Hallucinated Success Verification<a class="anchor-link" href="#10-agent-hallucinated-success-verification" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Agent Reliability | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> AI agents report successful batch operations when no data actually changed. The agent sees HTTP 200 responses and concludes &ldquo;67/67 records updated successfully&rdquo; while zero records were actually modified in the target system. HTTP 200 means &ldquo;request received,&rdquo; not &ldquo;data persisted.&rdquo; MCP tools abstract away response details, and agents optimistically interpret acknowledgments as confirmations.</p>
 <p><strong>The Incident:</strong> During an Attio CRM integration audit in February 2026, the agent ran a batch update to set 67 contacts to &ldquo;Active&rdquo; status. The agent reported: &ldquo;Updated 67/67 contacts to &lsquo;Active&rsquo; status. All successful.&rdquo; Every API call returned HTTP 200.</p>
@@ -646,25 +635,28 @@
 <p><strong>The Solution:</strong> Never trust agent-reported success counts. Treat them as &ldquo;requests sent,&rdquo; not &ldquo;changes confirmed.&rdquo; Spot-check in the target system&rsquo;s UI immediately after any batch operation. Build sample-based pre/post verification into every batch workflow.</p>
 <p><strong>The Lesson:</strong> An API returning success does not mean the operation succeeded; only independent verification of the target system&rsquo;s state confirms it.</p>
 <hr />
-<h2 id="how-the-library-works">How the Library Works<a class="headerlink" href="#how-the-library-works" title="Anchor link">&para;</a></h2>
+<h2 id="how-the-library-works">How the Library Works<a class="anchor-link" href="#how-the-library-works" title="Permalink">¶</a></h2>
 <p><strong>Before solving a problem:</strong> Check the library. If a pattern exists, use it. If not, solve the problem, then consider extracting a new pattern.</p>
 <p><strong>When to extract a new pattern:</strong> You solved something reusable, found a better approach than an existing pattern, identified a framework worth standardizing, or made a mistake worth preventing.</p>
 <p><strong>Staleness review:</strong> Patterns not verified within 90 days are marked <code>needs-review</code>. Patterns contradicted by current practice are marked <code>superseded</code> (currently 1: <code>custom-skills-over-mcp</code>). Superseded patterns are retained for historical reference &ndash; they document what was believed and why it changed.</p>
 <p><strong>Cross-engine applicability:</strong> This library serves all EngineOS engines. Patterns from any engine that solve problems across domains belong here. The domain distribution ranges from very high transferability (Agent Reliability, Governance &amp; Validation, Evidence &amp; Validation &ndash; applicable to any agent system) to medium transferability (CRM Integration, Notion Integration &ndash; platform-specific details but transferable principles).</p>
 <p>Every pattern carries its provenance. You can trace any pattern back to the project, engagement, and date that produced it. This is how institutional memory persists across sessions, across engines, and across time.</p>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

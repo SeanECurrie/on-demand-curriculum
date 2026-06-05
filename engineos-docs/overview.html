@@ -6,63 +6,52 @@
   <title>Overview — EngineOS Docs</title>
   <meta name="description" content="EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link active" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item active" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Overview</h1>
-    <p class="report-header__subtitle">EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s01">
+  <div class="eyebrow">EngineOS System Documentation · Section 01 · Built 2026-06-05</div>
+  <h1>Overview</h1>
+  <p class="subhead">EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines: domain-specific tenants that inherit OS capabilities and keep their own engagement data, knowl</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="engineos-system-overview">EngineOS — System Overview<a class="headerlink" href="#engineos-system-overview" title="Anchor link">&para;</a></h1>
+<section class="content">
 <p>EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines: domain-specific tenants that inherit OS capabilities and keep their own engagement data, knowledge bases, and domain-adapted workflows.</p>
 <p>It is not a prompt library. It is not a collection of Claude Code skills taped together. It is an operating system with mechanical enforcement, adversarial quality evaluation, disk-persisted governance, and a methodology layer distilled from 105+ days of production work across 11 projects.</p>
 <p>EngineOS is operator-agnostic. The <code>operator/</code> directory personalizes the system at runtime through a structured 37-question intake process. The OS and its engines work for anyone; nothing assumes a specific person until <code>operator/PROFILE.md</code> exists.</p>
 <hr />
-<h2 id="system-at-a-glance">System at a Glance<a class="headerlink" href="#system-at-a-glance" title="Anchor link">&para;</a></h2>
+<h2 id="system-at-a-glance">System at a Glance<a class="anchor-link" href="#system-at-a-glance" title="Permalink">¶</a></h2>
 <table>
 <thead>
 <tr>
@@ -130,7 +119,7 @@
 </tbody>
 </table>
 <hr />
-<h2 id="file-map">File Map<a class="headerlink" href="#file-map" title="Anchor link">&para;</a></h2>
+<h2 id="file-map">File Map<a class="anchor-link" href="#file-map" title="Permalink">¶</a></h2>
 <div class="highlight"><pre><span></span><code>EngineOS/
   CLAUDE.md                 # Constitution and routing layer (~200 lines)
   CONTEXT.md                # Current system state (updated every session)
@@ -198,7 +187,7 @@
 </code></pre></div>
 
 <hr />
-<h2 id="how-this-documentation-is-organized">How This Documentation Is Organized<a class="headerlink" href="#how-this-documentation-is-organized" title="Anchor link">&para;</a></h2>
+<h2 id="how-this-documentation-is-organized">How This Documentation Is Organized<a class="anchor-link" href="#how-this-documentation-is-organized" title="Permalink">¶</a></h2>
 <p>These reference docs are organized by subsystem, not alphabetically. Start with what matches your interest:</p>
 <table>
 <thead>
@@ -274,7 +263,7 @@
 </tbody>
 </table>
 <hr />
-<h2 id="five-operating-principles">Five Operating Principles<a class="headerlink" href="#five-operating-principles" title="Anchor link">&para;</a></h2>
+<h2 id="five-operating-principles">Five Operating Principles<a class="anchor-link" href="#five-operating-principles" title="Permalink">¶</a></h2>
 <p>These are not aspirational. They describe how EngineOS was built and how it operates.</p>
 <ol>
 <li>
@@ -294,7 +283,7 @@
 </li>
 </ol>
 <hr />
-<h2 id="provenance">Provenance<a class="headerlink" href="#provenance" title="Anchor link">&para;</a></h2>
+<h2 id="provenance">Provenance<a class="anchor-link" href="#provenance" title="Permalink">¶</a></h2>
 <p>EngineOS was not designed top-down. It was built from a three-act ecosystem audit (March 2026):</p>
 <ul>
 <li><strong>Act 1</strong> mapped the ecosystem structure across 11 projects on the operator&rsquo;s Desktop.</li>
@@ -305,7 +294,7 @@
 <p>The audit evidence lives at <code>~/Desktop/ecosystem-audit-act-2/findings/</code>. The build record is at <code>~/Desktop/ecosystem-audit-act-3/docs/build-log.md</code>.</p>
 <p>The substrate has continued to evolve since the initial build: a substrate-tightening operation (D25, April 2026) tested the governance stack against real failures and added the evidence-first-reporting rule plus sanity-check #11; a re-lift audit (D26) restored capabilities missed by the initial Act 3 pass; and the second-brain capture+retrieval layer (D29-D32, June 2026) added marathon-session capture caps with a shared hook module, retry+observability infrastructure, and a three-layer retrieval architecture (SessionStart injection, UserPromptSubmit mid-work hook, manual <code>/recall</code> escalation) over a six-surface corpus. See <a href="second-brain.html">Second Brain</a> for the retrieval and capture pipeline.</p>
 <hr />
-<h2 id="what-this-documentation-is-not">What This Documentation Is Not<a class="headerlink" href="#what-this-documentation-is-not" title="Anchor link">&para;</a></h2>
+<h2 id="what-this-documentation-is-not">What This Documentation Is Not<a class="anchor-link" href="#what-this-documentation-is-not" title="Permalink">¶</a></h2>
 <p>This documentation explains EngineOS to humans. It does not replace the operational files that serve the system at runtime:</p>
 <ul>
 <li><strong>CLAUDE.md</strong> is the routing layer and constitution — it tells Claude Code how to behave. This doc explains what CLAUDE.md does.</li>
@@ -314,19 +303,22 @@
 <li><strong>Methodology docs</strong> are immutable reference material. This doc summarizes what they contain.</li>
 </ul>
 <p>If you&rsquo;re looking for operational files, see the <a href="#file-map">File Map</a> above. If you&rsquo;re trying to understand the system, keep reading these docs.</p>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

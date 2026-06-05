@@ -6,59 +6,48 @@
   <title>Templates Reference — EngineOS Docs</title>
   <meta name="description" content="EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement direct">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link active" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item active" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Templates Reference</h1>
-    <p class="report-header__subtitle">EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement direct</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s13">
+  <div class="eyebrow">EngineOS System Documentation · Section 13 · Built 2026-06-05</div>
+  <h1>Templates Reference</h1>
+  <p class="subhead">EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement directories. All templates are designed for AI-assisted population using consistent placeholder conventions.</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="templates-reference-38-templates">Templates Reference &ndash; 38 Templates<a class="headerlink" href="#templates-reference-38-templates" title="Anchor link">&para;</a></h1>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Anchor link">&para;</a></h2>
+<section class="content">
+<h2 id="overview">Overview<a class="anchor-link" href="#overview" title="Permalink">¶</a></h2>
 <p>EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement directories. All templates are designed for AI-assisted population using consistent placeholder conventions.</p>
 <p>Three placeholder types appear across the library:</p>
 <table>
@@ -94,9 +83,9 @@
 </table>
 <p>Templates live at <code>templates/</code> with two subdirectories: <code>deliverables/</code> and <code>engagement/</code>.</p>
 <hr />
-<h2 id="deliverable-templates-27">Deliverable Templates (27)<a class="headerlink" href="#deliverable-templates-27" title="Anchor link">&para;</a></h2>
+<h2 id="deliverable-templates-27">Deliverable Templates (27)<a class="anchor-link" href="#deliverable-templates-27" title="Permalink">¶</a></h2>
 <p>Organized into six subcategories plus two top-level templates. Source index: <code>templates/deliverables/README.md</code>.</p>
-<h3 id="reports-6">Reports (6)<a class="headerlink" href="#reports-6" title="Anchor link">&para;</a></h3>
+<h3 id="reports-6">Reports (6)<a class="anchor-link" href="#reports-6" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -138,7 +127,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="one-pagers-3">One-Pagers (3)<a class="headerlink" href="#one-pagers-3" title="Anchor link">&para;</a></h3>
+<h3 id="one-pagers-3">One-Pagers (3)<a class="anchor-link" href="#one-pagers-3" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -165,7 +154,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="campaigns-6">Campaigns (6)<a class="headerlink" href="#campaigns-6" title="Anchor link">&para;</a></h3>
+<h3 id="campaigns-6">Campaigns (6)<a class="anchor-link" href="#campaigns-6" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -207,7 +196,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="presentations-3">Presentations (3)<a class="headerlink" href="#presentations-3" title="Anchor link">&para;</a></h3>
+<h3 id="presentations-3">Presentations (3)<a class="anchor-link" href="#presentations-3" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -234,7 +223,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="documentation-3">Documentation (3)<a class="headerlink" href="#documentation-3" title="Anchor link">&para;</a></h3>
+<h3 id="documentation-3">Documentation (3)<a class="anchor-link" href="#documentation-3" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -261,7 +250,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="data-3">Data (3)<a class="headerlink" href="#data-3" title="Anchor link">&para;</a></h3>
+<h3 id="data-3">Data (3)<a class="anchor-link" href="#data-3" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -288,7 +277,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="top-level-2">Top-Level (2)<a class="headerlink" href="#top-level-2" title="Anchor link">&para;</a></h3>
+<h3 id="top-level-2">Top-Level (2)<a class="anchor-link" href="#top-level-2" title="Permalink">¶</a></h3>
 <p>These sit directly in <code>templates/deliverables/</code> rather than in a subcategory folder.</p>
 <table>
 <thead>
@@ -308,12 +297,12 @@
 </tr>
 </tbody>
 </table>
-<h3 id="deliverables-readme">Deliverables README<a class="headerlink" href="#deliverables-readme" title="Anchor link">&para;</a></h3>
+<h3 id="deliverables-readme">Deliverables README<a class="anchor-link" href="#deliverables-readme" title="Permalink">¶</a></h3>
 <p><code>templates/deliverables/README.md</code> serves as the master index. It contains the full category table, a quick-reference lookup (&ldquo;I need to&hellip;&rdquo;), the standard workflow, operator vs. external naming conventions, template quality checklist, and recent additions log.</p>
 <hr />
-<h2 id="engagement-templates-11">Engagement Templates (11)<a class="headerlink" href="#engagement-templates-11" title="Anchor link">&para;</a></h2>
+<h2 id="engagement-templates-11">Engagement Templates (11)<a class="anchor-link" href="#engagement-templates-11" title="Permalink">¶</a></h2>
 <p>The engagement template directory (<code>templates/engagement/</code>) is a complete structural scaffold. When starting a new client engagement, the entire directory is copied as a unit and populated incrementally.</p>
-<h3 id="core-files-5">Core Files (5)<a class="headerlink" href="#core-files-5" title="Anchor link">&para;</a></h3>
+<h3 id="core-files-5">Core Files (5)<a class="anchor-link" href="#core-files-5" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -344,7 +333,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="knowledge-base-templates-3">Knowledge Base Templates (3)<a class="headerlink" href="#knowledge-base-templates-3" title="Anchor link">&para;</a></h3>
+<h3 id="knowledge-base-templates-3">Knowledge Base Templates (3)<a class="anchor-link" href="#knowledge-base-templates-3" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -371,7 +360,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="subdirectory-readme-templates-3">Subdirectory README Templates (3)<a class="headerlink" href="#subdirectory-readme-templates-3" title="Anchor link">&para;</a></h3>
+<h3 id="subdirectory-readme-templates-3">Subdirectory README Templates (3)<a class="anchor-link" href="#subdirectory-readme-templates-3" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -398,7 +387,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="engagement-setup-workflow">Engagement Setup Workflow<a class="headerlink" href="#engagement-setup-workflow" title="Anchor link">&para;</a></h3>
+<h3 id="engagement-setup-workflow">Engagement Setup Workflow<a class="anchor-link" href="#engagement-setup-workflow" title="Permalink">¶</a></h3>
 <p>The <code>NEW-ENGAGEMENT-CHECKLIST.md</code> defines a three-phase setup process:</p>
 <ol>
 <li>
@@ -413,8 +402,8 @@
 </ol>
 <p>The checklist also defines a minimum viable engagement (copy, edit README, edit CONTEXT, create primary contact profile, start working) to prevent setup from blocking actual work.</p>
 <hr />
-<h2 id="how-templates-work">How Templates Work<a class="headerlink" href="#how-templates-work" title="Anchor link">&para;</a></h2>
-<h3 id="standard-workflow">Standard Workflow<a class="headerlink" href="#standard-workflow" title="Anchor link">&para;</a></h3>
+<h2 id="how-templates-work">How Templates Work<a class="anchor-link" href="#how-templates-work" title="Permalink">¶</a></h2>
+<h3 id="standard-workflow">Standard Workflow<a class="anchor-link" href="#standard-workflow" title="Permalink">¶</a></h3>
 <ol>
 <li><strong>Select template</strong> from the appropriate category based on what you need to produce</li>
 <li><strong>Copy to engine deliverables directory</strong> &ndash; <code>engines/[engine-name]/deliverables/</code> or the engagement-specific output location</li>
@@ -423,31 +412,34 @@
 <li><strong>Run QA</strong> &ndash; invoke the qa-pipeline skill before delivery. The output-self-test skill runs binary quality gates calibrated by output type.</li>
 <li><strong>File with versioning</strong> &ndash; follow the deliverables naming convention (<code>YYYY-MM-DD-description.md</code> for individual files, <code>v[X.Y]-[status]-YYYY-MM-DD/</code> for formal versioned deliverables)</li>
 </ol>
-<h3 id="operator-vs-external-naming">Operator vs. External Naming<a class="headerlink" href="#operator-vs-external-naming" title="Anchor link">&para;</a></h3>
+<h3 id="operator-vs-external-naming">Operator vs. External Naming<a class="anchor-link" href="#operator-vs-external-naming" title="Permalink">¶</a></h3>
 <p>Not all deliverables are client hand-offs. Materials for the operator&rsquo;s own use carry an <code>-OPERATOR</code> suffix to distinguish them from external deliverables. Example: <code>weekly-report.md</code> (hand-off) vs. <code>meeting-scripts-OPERATOR.md</code> (operator use).</p>
-<h3 id="folder-templates">Folder Templates<a class="headerlink" href="#folder-templates" title="Anchor link">&para;</a></h3>
+<h3 id="folder-templates">Folder Templates<a class="anchor-link" href="#folder-templates" title="Permalink">¶</a></h3>
 <p>The <code>campaign-package.md</code> template is a folder template &ndash; each numbered section becomes its own file within a campaign directory (<code>campaigns/[campaign-name]/</code>). The structure and naming convention in the template are preserved across the individual files.</p>
-<h3 id="ai-assisted-population">AI-Assisted Population<a class="headerlink" href="#ai-assisted-population" title="Anchor link">&para;</a></h3>
+<h3 id="ai-assisted-population">AI-Assisted Population<a class="anchor-link" href="#ai-assisted-population" title="Permalink">¶</a></h3>
 <p>Templates are structured for AI consumption: clear section headers for extraction, confidence levels for weighting, source attribution for verification, and atomic sections that can be processed independently. The recommended approach is to provide the template plus source data and request section-by-section population, then review for accuracy and verify source citations.</p>
-<h3 id="creating-new-templates">Creating New Templates<a class="headerlink" href="#creating-new-templates" title="Anchor link">&para;</a></h3>
+<h3 id="creating-new-templates">Creating New Templates<a class="anchor-link" href="#creating-new-templates" title="Permalink">¶</a></h3>
 <p>When a deliverable type recurs, generalize it into a template: remove engagement-specific details, add standard placeholders, include metadata (version, date, purpose), place it in the appropriate category folder, and update the deliverables README index.</p>
-<h3 id="html-deliverables">HTML Deliverables<a class="headerlink" href="#html-deliverables" title="Anchor link">&para;</a></h3>
+<h3 id="html-deliverables">HTML Deliverables<a class="anchor-link" href="#html-deliverables" title="Permalink">¶</a></h3>
 <p>Deliverables that produce HTML output use the EngineOS design system at <code>design-system/</code>. The enterprise stylesheet at <code>design-system/enterprise-styles.css</code> provides consistent styling. The render-validate skill verifies HTML output quality.</p>
 <hr />
 <p><em>EngineOS Templates Reference &ndash; produced from <code>templates/deliverables/README.md</code>, <code>templates/engagement/README.md</code>, and direct inspection of all 38 template files.</em></p>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

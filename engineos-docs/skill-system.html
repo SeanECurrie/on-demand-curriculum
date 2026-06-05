@@ -6,74 +6,63 @@
   <title>Skill System — EngineOS Docs</title>
   <meta name="description" content="EngineOS ships 29 skills at .claude/skills/. Individually, each skill is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link active" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item active" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Skill System</h1>
-    <p class="report-header__subtitle">EngineOS ships 29 skills at .claude/skills/. Individually, each skill is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s05">
+  <div class="eyebrow">EngineOS System Documentation · Section 05 · Built 2026-06-05</div>
+  <h1>Skill System</h1>
+  <p class="subhead">EngineOS ships 29 skills at .claude/skills/. Individually, each skill is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run controller. The system&#x27;s value is not in any single skill -- it is in the composition: how skills chain together, h</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="skill-system-how-skills-work">Skill System &ndash; How Skills Work<a class="headerlink" href="#skill-system-how-skills-work" title="Anchor link">&para;</a></h1>
+<section class="content">
 <p>EngineOS ships 29 skills at <code>.claude/skills/</code>. Individually, each skill is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run controller. The system&rsquo;s value is not in any single skill &ndash; it is in the composition: how skills chain together, how access control creates structural boundaries, and how the phase-controller forces invocation at every transition.</p>
 <p>This document covers the machinery: discovery, anatomy, access control, categories, forced chains, and concrete traces from operator prompt to disk output. For the flat catalog of all 29 skills with one-liners, see <a href="skills-reference.html">skills-reference.md</a>. For the enforcement architecture that makes chains non-optional, see <a href="governance.html">governance.md</a>.</p>
 <hr />
-<h2 id="discovery">Discovery<a class="headerlink" href="#discovery" title="Anchor link">&para;</a></h2>
+<h2 id="discovery">Discovery<a class="anchor-link" href="#discovery" title="Permalink">¶</a></h2>
 <p>Claude Code discovers skills through native directory scanning. Every <code>.claude/skills/*/SKILL.md</code> file is detected automatically. Discovery loads in two phases:</p>
 <p><strong>Passive loading (~2% of context):</strong> Skill descriptions from YAML frontmatter load at session start. Claude Code sees the name and a one-line summary for all 29 skills. This is the index &ndash; enough to know what exists, not enough to execute.</p>
 <p><strong>Full loading (on invocation):</strong> When a skill is invoked by name, its full SKILL.md loads into context. The complete methodology, phase structure, integration points, anti-patterns, and self-tests become available.</p>
 <p>This is the Tier 3 context budget model from CLAUDE.md. A session that uses 3 skills loads 3, not 29. A research session loads depth-governor, market-scanner, and findings-formatter. A CRM audit loads attio-mapper, attio-optimizer, and attio-refiner. Skills the session never touches stay at their 2% description footprint.</p>
 <p>The practical effect: EngineOS carries 29 skills without paying the context cost of 29 skills. A focused session consumes context proportional to its actual work, not proportional to the system&rsquo;s total capability.</p>
-<h3 id="passive-retrieval-via-userpromptsubmit-hook">Passive Retrieval via UserPromptSubmit Hook<a class="headerlink" href="#passive-retrieval-via-userpromptsubmit-hook" title="Anchor link">&para;</a></h3>
+<h3 id="passive-retrieval-via-userpromptsubmit-hook">Passive Retrieval via UserPromptSubmit Hook<a class="anchor-link" href="#passive-retrieval-via-userpromptsubmit-hook" title="Permalink">¶</a></h3>
 <p>Native skill discovery is the routing layer for <em>capability</em> loading &ndash; which procedure should fire for a given prompt. A parallel mechanism handles <em>context</em> loading: the <code>UserPromptSubmit</code> hook (<code>hooks/prompt-retrieval.py</code>, added 2026-06-04 per D32) silently injects relevant prior context from the second brain into the prompt before any skill loads. A heuristic gate (trigger words, question-form starts, minimum prompt length) decides whether to fire. When it fires, it searches the same six-surface priority corpus as the <code>recall</code> skill &ndash; intelligence log, knowledge index, KB concepts/connections, recent daily logs, recent run-plans, methodology &ndash; and injects up to 1,024 characters of top-3 matches with a ≤1-second budget.</p>
 <p>The hook complements native discovery without replacing it. Discovery answers &ldquo;which skill should run.&rdquo; The retrieval hook answers &ldquo;what does the corpus already know that the operator hasn&rsquo;t said.&rdquo; Together they front-load both capability and context before the model decides what to do. When the hook misses or the operator wants a deeper sweep, the <code>recall</code> skill (Read-only, manual invocation) handles the unbounded version of the same search. Append-only health records at <code>scripts/retrieval-health.jsonl</code> make the hook&rsquo;s behavior auditable &ndash; the operator runs <code>scripts/retrieval-review.py</code> periodically to keep, tune, or kill the gate.</p>
 <hr />
-<h2 id="anatomy-of-a-skill">Anatomy of a Skill<a class="headerlink" href="#anatomy-of-a-skill" title="Anchor link">&para;</a></h2>
+<h2 id="anatomy-of-a-skill">Anatomy of a Skill<a class="anchor-link" href="#anatomy-of-a-skill" title="Permalink">¶</a></h2>
 <p>Every skill follows the same structure: YAML frontmatter for metadata and access control, then a markdown body with methodology, phases, integration points, and self-tests.</p>
-<h3 id="frontmatter">Frontmatter<a class="headerlink" href="#frontmatter" title="Anchor link">&para;</a></h3>
+<h3 id="frontmatter">Frontmatter<a class="anchor-link" href="#frontmatter" title="Permalink">¶</a></h3>
 <p>The frontmatter is the machine-readable contract. Two fields matter:</p>
 <ul>
 <li><strong><code>description</code></strong> &ndash; What Claude Code sees during passive discovery. This is the routing signal. It tells the system when to invoke the skill and what triggers it responds to.</li>
@@ -110,7 +99,7 @@
 </code></pre></div>
 
 <p>The depth-governor can observe and classify but cannot modify files. The phase-controller can write run plans and invoke other skills. The attio-mapper can read from Attio&rsquo;s MCP endpoint but has no general write access &ndash; it generates schema caches through a controlled process, not ad-hoc edits.</p>
-<h3 id="body-structure">Body Structure<a class="headerlink" href="#body-structure" title="Anchor link">&para;</a></h3>
+<h3 id="body-structure">Body Structure<a class="anchor-link" href="#body-structure" title="Permalink">¶</a></h3>
 <p>After the frontmatter, a skill&rsquo;s body typically includes:</p>
 <ul>
 <li><strong>Provenance</strong> &ndash; Which source engine(s) the skill was adapted from</li>
@@ -122,9 +111,9 @@
 </ul>
 <p>The body is the methodology that loads on invocation. It is not a prompt template &ndash; it is a structured operating procedure with decision trees, quality gates, and worked examples.</p>
 <hr />
-<h2 id="access-control-via-allowed-tools">Access Control via allowed-tools<a class="headerlink" href="#access-control-via-allowed-tools" title="Anchor link">&para;</a></h2>
+<h2 id="access-control-via-allowed-tools">Access Control via allowed-tools<a class="anchor-link" href="#access-control-via-allowed-tools" title="Permalink">¶</a></h2>
 <p>The <code>allowed-tools</code> frontmatter field is the access control mechanism. It restricts what tools each skill can use when loaded, creating structural boundaries between skill categories.</p>
-<h3 id="five-access-tiers">Five Access Tiers<a class="headerlink" href="#five-access-tiers" title="Anchor link">&para;</a></h3>
+<h3 id="five-access-tiers">Five Access Tiers<a class="anchor-link" href="#five-access-tiers" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -167,7 +156,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="full-reference-table">Full Reference Table<a class="headerlink" href="#full-reference-table" title="Anchor link">&para;</a></h3>
+<h3 id="full-reference-table">Full Reference Table<a class="anchor-link" href="#full-reference-table" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -294,13 +283,13 @@
 </tr>
 </tbody>
 </table>
-<h3 id="why-this-matters">Why This Matters<a class="headerlink" href="#why-this-matters" title="Anchor link">&para;</a></h3>
+<h3 id="why-this-matters">Why This Matters<a class="anchor-link" href="#why-this-matters" title="Permalink">¶</a></h3>
 <p>Tool asymmetry is the structural mechanism that prevents quality evaluation from collapsing into self-approval. The adversarial-evaluator has <code>Read, Bash, Glob, Grep</code> &ndash; it can read deliverables and run checks, but it cannot fix what it finds. This is deliberate. An evaluator with Write access becomes a fixer, and a fixer is not adversarial. The same principle from Cole&rsquo;s adversarial-dev evaluator: tool asymmetry forces honest scoring because the evaluator cannot resolve its own criticism.</p>
 <p>Governance skills (depth-governor, output-self-test, sanity-check) are read-only for the same reason. They observe and report. They do not modify. If a sanity-check finds a problem, it surfaces the problem to the operator or the orchestrating skill &ndash; it does not silently fix it.</p>
 <p>MCP scoping prevents integration skills from accessing unrelated external systems. The attio-mapper can call <code>mcp__attio-mcp__records_get_attributes</code> but not Bright Data search endpoints. The market-scanner can call Bright Data and Context7 but not Attio or Notion. Each skill sees only the external surface it needs.</p>
 <hr />
-<h2 id="skill-categories">Skill Categories<a class="headerlink" href="#skill-categories" title="Anchor link">&para;</a></h2>
-<h3 id="research-and-intelligence-7-skills">Research and Intelligence (7 skills)<a class="headerlink" href="#research-and-intelligence-7-skills" title="Anchor link">&para;</a></h3>
+<h2 id="skill-categories">Skill Categories<a class="anchor-link" href="#skill-categories" title="Permalink">¶</a></h2>
+<h3 id="research-and-intelligence-7-skills">Research and Intelligence (7 skills)<a class="anchor-link" href="#research-and-intelligence-7-skills" title="Permalink">¶</a></h3>
 <p>Skills that gather, classify, route, and structure external information. They share a common dependency on depth-governor for calibration and findings-formatter for output structure. <code>recall</code> is the read-side retrieval companion &ndash; it searches the internal corpus before external research begins.</p>
 <table>
 <thead>
@@ -340,7 +329,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="content-and-deliverable-production-7-skills">Content and Deliverable Production (7 skills)<a class="headerlink" href="#content-and-deliverable-production-7-skills" title="Anchor link">&para;</a></h3>
+<h3 id="content-and-deliverable-production-7-skills">Content and Deliverable Production (7 skills)<a class="anchor-link" href="#content-and-deliverable-production-7-skills" title="Permalink">¶</a></h3>
 <p>Skills that produce client-facing and internal deliverables. They share write access and typically appear inside iteration envelopes where the adversarial-evaluator scores their output.</p>
 <table>
 <thead>
@@ -380,7 +369,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="integration-7-skills">Integration (7 skills)<a class="headerlink" href="#integration-7-skills" title="Anchor link">&para;</a></h3>
+<h3 id="integration-7-skills">Integration (7 skills)<a class="anchor-link" href="#integration-7-skills" title="Permalink">¶</a></h3>
 <p>Skills that connect EngineOS to external systems (Attio CRM, Notion). Each is MCP-scoped to its specific domain. The Attio skills form a pipeline; the Notion skills mirror the same architecture.</p>
 <table>
 <thead>
@@ -420,7 +409,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="governance-and-quality-7-skills">Governance and Quality (7 skills)<a class="headerlink" href="#governance-and-quality-7-skills" title="Anchor link">&para;</a></h3>
+<h3 id="governance-and-quality-7-skills">Governance and Quality (7 skills)<a class="anchor-link" href="#governance-and-quality-7-skills" title="Permalink">¶</a></h3>
 <p>Skills that enforce process, verify quality, and maintain audit trails. Governance skills are either read-only (cannot modify) or orchestration-tier (can invoke other skills). None are optional when the phase-controller includes them in a chain.</p>
 <table>
 <thead>
@@ -460,7 +449,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="system-awareness-1-skill">System Awareness (1 skill)<a class="headerlink" href="#system-awareness-1-skill" title="Anchor link">&para;</a></h3>
+<h3 id="system-awareness-1-skill">System Awareness (1 skill)<a class="anchor-link" href="#system-awareness-1-skill" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -476,10 +465,10 @@
 </tbody>
 </table>
 <hr />
-<h2 id="forced-skill-chains">Forced Skill Chains<a class="headerlink" href="#forced-skill-chains" title="Anchor link">&para;</a></h2>
+<h2 id="forced-skill-chains">Forced Skill Chains<a class="anchor-link" href="#forced-skill-chains" title="Permalink">¶</a></h2>
 <p>The defining feature of the skill system is composition. Skills do not fire independently &ndash; they chain into typed workflows enforced by the phase-controller. When the phase-controller classifies an operation, it selects a chain template that specifies which skills fire, in what order, with what gates between them.</p>
 <p>The chains are not suggestions. Phase-controller Rule 1: &ldquo;Every skill in the chain gets invoked. Not referenced, not &lsquo;kept in mind&rsquo; &ndash; actually loaded and executed.&rdquo; Rule 4: &ldquo;Gates are non-negotiable. Work does not proceed past a gate without the operator&rsquo;s explicit approval.&rdquo;</p>
-<h3 id="the-iteration-envelope">The Iteration Envelope<a class="headerlink" href="#the-iteration-envelope" title="Anchor link">&para;</a></h3>
+<h3 id="the-iteration-envelope">The Iteration Envelope<a class="anchor-link" href="#the-iteration-envelope" title="Permalink">¶</a></h3>
 <p>Production chains (BL, EW, EN, CP, RE) wrap their produce-and-evaluate steps in an <strong>iteration envelope</strong> &ndash; an evaluator-optimizer loop:</p>
 <div class="highlight"><pre><span></span><code>OUTSIDE ENVELOPE (runs once):
   depth-governor, brainstorming, writing-plans, operator approval
@@ -497,7 +486,7 @@ AFTER ENVELOPE (runs once on final version):
 
 <p>The iteration envelope is bounded. Three retries, then operator escalation. Each retry injects the evaluator&rsquo;s <code>critical_issues</code> and per-criterion feedback as additional context for the next attempt. The run plan logs each iteration with scores so the full history is visible.</p>
 <hr />
-<h3 id="bl-buildaudit-chain-three-act-structure">BL (Build/Audit) Chain &ndash; Three-Act Structure<a class="headerlink" href="#bl-buildaudit-chain-three-act-structure" title="Anchor link">&para;</a></h3>
+<h3 id="bl-buildaudit-chain-three-act-structure">BL (Build/Audit) Chain &ndash; Three-Act Structure<a class="anchor-link" href="#bl-buildaudit-chain-three-act-structure" title="Permalink">¶</a></h3>
 <p>The most complex chain. Operationalizes the three-act architecture from <code>methodology/ecosystem-build.md</code>. Mandatory methodology loading, evaluator-embedded review gates between acts, and an iteration envelope around the build execution.</p>
 <div class="highlight"><pre><span></span><code> 1. phase-controller            --&gt; run plan created, classification confirmed
  2. MANDATORY METHODOLOGY LOAD  --&gt; read ecosystem-build.md, adversarial-validation.md
@@ -546,7 +535,7 @@ AFTER ENVELOPE (runs once on final version):
 
 <p><strong>What makes BL unique:</strong> Three-act structure with evaluator-embedded gates between acts. Mandatory methodology loading before any work begins. Finding-file-first execution order &ndash; read the finding about a capability before reading the capability&rsquo;s source file.</p>
 <hr />
-<h3 id="cp-content-production-chain">CP (Content Production) Chain<a class="headerlink" href="#cp-content-production-chain" title="Anchor link">&para;</a></h3>
+<h3 id="cp-content-production-chain">CP (Content Production) Chain<a class="anchor-link" href="#cp-content-production-chain" title="Permalink">¶</a></h3>
 <p>For documents, HTML, presentations, reports &ndash; any deliverable where the primary output is content.</p>
 <div class="highlight"><pre><span></span><code> 1. phase-controller            --&gt; classify as CP, build run plan
  2. depth-governor              --&gt; classify content scope (scan vs. deep-dive)
@@ -575,7 +564,7 @@ AFTER ENVELOPE (runs once on final version):
 
 <p><strong>What makes CP distinct:</strong> Writing-plans is structurally enforced (Layer 4 must be populated before production begins). Brainstorming is not in this chain &ndash; the operator&rsquo;s brief typically provides scope. The qa-pipeline fires only for external-facing content.</p>
 <hr />
-<h3 id="re-research-chain">RE (Research) Chain<a class="headerlink" href="#re-research-chain" title="Anchor link">&para;</a></h3>
+<h3 id="re-research-chain">RE (Research) Chain<a class="anchor-link" href="#re-research-chain" title="Permalink">¶</a></h3>
 <p>For market intelligence, competitive analysis, exploratory research &ndash; work where the output is structured findings and synthesis.</p>
 <div class="highlight"><pre><span></span><code> 1. phase-controller            --&gt; classify as RE, build run plan
  2. depth-governor              --&gt; scan or deep-dive per topic area
@@ -604,7 +593,7 @@ AFTER ENVELOPE (runs once on final version):
 
 <p><strong>What makes RE distinct:</strong> No writing-plans &ndash; research is discovery-driven. Depth-governor handles scoping instead. The iteration envelope wraps synthesis, not the research itself. A soft gate after findings lets the operator redirect before synthesis begins.</p>
 <hr />
-<h3 id="in-integration-chain">IN (Integration) Chain<a class="headerlink" href="#in-integration-chain" title="Anchor link">&para;</a></h3>
+<h3 id="in-integration-chain">IN (Integration) Chain<a class="anchor-link" href="#in-integration-chain" title="Permalink">¶</a></h3>
 <p>For CRM/Notion/MCP integration work. The lightest chain &ndash; data integrity replaces creative quality as the primary concern.</p>
 <div class="highlight"><pre><span></span><code> 1. phase-controller            --&gt; classify as IN, build run plan
  2. Capture integration spec    --&gt; what systems, what data, what direction
@@ -621,7 +610,7 @@ AFTER ENVELOPE (runs once on final version):
 </code></pre></div>
 
 <p><strong>What makes IN distinct:</strong> No iteration envelope &ndash; integration work is data-driven, not creative. No brainstorming or writing-plans &ndash; scope comes from the integration spec. Sanity-check focuses on data integrity rather than content quality.</p>
-<h3 id="attio-integration-sub-chain">Attio Integration Sub-Chain<a class="headerlink" href="#attio-integration-sub-chain" title="Anchor link">&para;</a></h3>
+<h3 id="attio-integration-sub-chain">Attio Integration Sub-Chain<a class="anchor-link" href="#attio-integration-sub-chain" title="Permalink">¶</a></h3>
 <p>When the integration involves Attio CRM specifically, the Attio skills form their own pipeline within the IN chain:</p>
 <div class="highlight"><pre><span></span><code>attio-mapper     --&gt; schema discovery, playbook generation
 attio-optimizer  --&gt; 4-phase health audit with A/B sampling
@@ -632,7 +621,7 @@ attio-qualify    --&gt; ICP classification on new/updated contacts
 </code></pre></div>
 
 <hr />
-<h3 id="ew-engine-work-chain">EW (Engine Work) Chain<a class="headerlink" href="#ew-engine-work-chain" title="Anchor link">&para;</a></h3>
+<h3 id="ew-engine-work-chain">EW (Engine Work) Chain<a class="anchor-link" href="#ew-engine-work-chain" title="Permalink">¶</a></h3>
 <p>For work within a specific engine tenant &ndash; research, deliverables, client tasks. Structurally similar to CP but with mandatory brainstorming and engine context loading.</p>
 <div class="highlight"><pre><span></span><code> 1. phase-controller            --&gt; classify as EW, build run plan
  2. depth-governor              --&gt; classify topics for the engine work
@@ -668,9 +657,9 @@ attio-qualify    --&gt; ICP classification on new/updated contacts
 
 <p><strong>What makes EW distinct:</strong> Both brainstorming AND writing-plans are mandatory. Engine context loads explicitly (CONTEXT.md, operator files). Tasks within the execution step can invoke their own skill sub-chains per type classification.</p>
 <hr />
-<h2 id="prompt-to-chain-traces">Prompt-to-Chain Traces<a class="headerlink" href="#prompt-to-chain-traces" title="Anchor link">&para;</a></h2>
+<h2 id="prompt-to-chain-traces">Prompt-to-Chain Traces<a class="anchor-link" href="#prompt-to-chain-traces" title="Permalink">¶</a></h2>
 <p>Five concrete examples showing what fires when the operator types a command.</p>
-<h3 id="1-start-a-new-session">1. &ldquo;Start a new session&rdquo;<a class="headerlink" href="#1-start-a-new-session" title="Anchor link">&para;</a></h3>
+<h3 id="1-start-a-new-session">1. &ldquo;Start a new session&rdquo;<a class="anchor-link" href="#1-start-a-new-session" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>Operator: &quot;Start a new session&quot;
          |
          v
@@ -695,7 +684,7 @@ Routes to phase-controller when operator states intent
 
 <p><strong>Written to disk:</strong> CONTEXT.md updated with session start timestamp. Activity log entry for session-orchestrator invocation.</p>
 <hr />
-<h3 id="2-research-company-x">2. &ldquo;Research company X&rdquo;<a class="headerlink" href="#2-research-company-x" title="Anchor link">&para;</a></h3>
+<h3 id="2-research-company-x">2. &ldquo;Research company X&rdquo;<a class="anchor-link" href="#2-research-company-x" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>Operator: &quot;Research Acme Corp before our engagement&quot;
          |
          v
@@ -744,7 +733,7 @@ CONTEXT.md: updated with research summary
 
 <p><strong>Written to disk:</strong> Run plan (5 layers populated). Company research profile in engine&rsquo;s research directory. KB file updates via content-updater. Activity log entries for each skill invocation. Intelligence log entry if research contradicted prior understanding.</p>
 <hr />
-<h3 id="3-build-an-email-campaign-for-segment-y">3. &ldquo;Build an email campaign for segment Y&rdquo;<a class="headerlink" href="#3-build-an-email-campaign-for-segment-y" title="Anchor link">&para;</a></h3>
+<h3 id="3-build-an-email-campaign-for-segment-y">3. &ldquo;Build an email campaign for segment Y&rdquo;<a class="anchor-link" href="#3-build-an-email-campaign-for-segment-y" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>Operator: &quot;Build a nurture campaign for mid-market SaaS CFOs&quot;
          |
          v
@@ -791,7 +780,7 @@ audit-logging: log campaign creation
 
 <p><strong>Written to disk:</strong> Run plan with all layers. Campaign deliverable in engine&rsquo;s deliverables/campaigns/ directory. Activity log entries. Intelligence log if strategic positioning decision was made.</p>
 <hr />
-<h3 id="4-audit-the-crm">4. &ldquo;Audit the CRM&rdquo;<a class="headerlink" href="#4-audit-the-crm" title="Anchor link">&para;</a></h3>
+<h3 id="4-audit-the-crm">4. &ldquo;Audit the CRM&rdquo;<a class="anchor-link" href="#4-audit-the-crm" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>Operator: &quot;Audit the CRM&quot;
          |
          v
@@ -841,7 +830,7 @@ CONTEXT.md: updated with CRM audit state
 
 <p><strong>Written to disk:</strong> Schema caches at <code>engines/[engine]/integrations/attio/schemas/</code>. Playbook at <code>engines/[engine]/integrations/attio/attio-playbook/</code>. Audit report. Refined findings with work orders. Activity log entries for every operation. Intelligence log if schema drift or MCP bugs detected.</p>
 <hr />
-<h3 id="5-process-this-meeting-transcript">5. &ldquo;Process this meeting transcript&rdquo;<a class="headerlink" href="#5-process-this-meeting-transcript" title="Anchor link">&para;</a></h3>
+<h3 id="5-process-this-meeting-transcript">5. &ldquo;Process this meeting transcript&rdquo;<a class="anchor-link" href="#5-process-this-meeting-transcript" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>Operator: [pastes meeting transcript]
          |
          v
@@ -894,7 +883,7 @@ audit-logging:
 
 <p><strong>Written to disk:</strong> Synthesis report in engine&rsquo;s analysis directory. KB file updates via content-updater. Source logged in references. Context file updated with thread reference. Profile files if operator confirms. Activity + intelligence log entries.</p>
 <hr />
-<h3 id="6-recall-manual-second-brain-lookup">6. &ldquo;/recall <query>&rdquo; &ndash; Manual second-brain lookup<a class="headerlink" href="#6-recall-manual-second-brain-lookup" title="Anchor link">&para;</a></h3>
+<h3 id="6-recall-manual-second-brain-lookup">6. &ldquo;/recall <query>&rdquo; &ndash; Manual second-brain lookup<a class="anchor-link" href="#6-recall-manual-second-brain-lookup" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>Operator: &quot;/recall credibility tiers&quot;
          |
          v
@@ -927,7 +916,7 @@ recall fires (Read-only, no run plan required)
 
 <p><strong>Written to disk:</strong> Nothing &ndash; read-only. Recall is search infrastructure, not a producer. The operator does the synthesis after seeing the hits. If the operator decides the recalled context warrants a new article or intelligence-log entry, that write goes through content-updater or audit-logging separately.</p>
 <hr />
-<h2 id="methodology-to-skill-relationship">Methodology-to-Skill Relationship<a class="headerlink" href="#methodology-to-skill-relationship" title="Anchor link">&para;</a></h2>
+<h2 id="methodology-to-skill-relationship">Methodology-to-Skill Relationship<a class="anchor-link" href="#methodology-to-skill-relationship" title="Permalink">¶</a></h2>
 <p>Skills automate methodology. The <code>methodology/</code> directory contains 15 formalized documents encoding proven research and quality methodology. Skills reference these documents during execution; methodology documents are immutable without operator approval (enforced by <code>.claude/rules/methodology-immutable.md</code>).</p>
 <p>Five skills have direct methodology companions &ndash; the skill operationalizes what the methodology document defines:</p>
 <table>
@@ -969,7 +958,7 @@ recall fires (Read-only, no run plan required)
 <p>Other skills reference methodology documents without having a dedicated companion. The phase-controller references <code>methodology/ecosystem-build.md</code> for BL chains and <code>methodology/adversarial-validation.md</code> for evaluation methodology. The market-scanner references <code>methodology/credibility-tiers.md</code> for source quality classification and <code>methodology/dual-source-intelligence.md</code> for cross-validation discipline.</p>
 <p>The separation matters: methodology can be updated independently of skill behavior, and skill behavior can be refined without changing the underlying methodology. When the credibility tier system gets a new tier or reclassification rule, the methodology document changes; the market-scanner&rsquo;s reference to it means the updated methodology takes effect on the next invocation without touching the skill.</p>
 <hr />
-<h2 id="how-this-connects-to-enforcement">How This Connects to Enforcement<a class="headerlink" href="#how-this-connects-to-enforcement" title="Anchor link">&para;</a></h2>
+<h2 id="how-this-connects-to-enforcement">How This Connects to Enforcement<a class="anchor-link" href="#how-this-connects-to-enforcement" title="Permalink">¶</a></h2>
 <p>The skill system does not enforce itself. Three mechanisms external to skills make the chains non-optional:</p>
 <ol>
 <li>
@@ -983,19 +972,22 @@ recall fires (Read-only, no run plan required)
 </li>
 </ol>
 <p>For the full enforcement architecture, see <a href="governance.html">governance.md</a>.</p>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

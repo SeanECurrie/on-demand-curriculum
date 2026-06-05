@@ -6,71 +6,60 @@
   <title>FAQ — EngineOS Docs</title>
   <meta name="description" content="Questions a developer, systems architect, or technical reviewer would actually ask about EngineOS.">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link active" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item active" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">FAQ</h1>
-    <p class="report-header__subtitle">Questions a developer, systems architect, or technical reviewer would actually ask about EngineOS.</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s14">
+  <div class="eyebrow">EngineOS System Documentation · Section 14 · Built 2026-06-05</div>
+  <h1>FAQ</h1>
+  <p class="subhead">Questions a developer, systems architect, or technical reviewer would actually ask about EngineOS.</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="faq-technical-peer-questions">FAQ — Technical Peer Questions<a class="headerlink" href="#faq-technical-peer-questions" title="Anchor link">&para;</a></h1>
+<section class="content">
 <p>Questions a developer, systems architect, or technical reviewer would actually ask about EngineOS.</p>
 <hr />
-<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Anchor link">&para;</a></h2>
-<h3 id="why-not-just-use-a-monolithic-prompt">&ldquo;Why not just use a monolithic prompt?&rdquo;<a class="headerlink" href="#why-not-just-use-a-monolithic-prompt" title="Anchor link">&para;</a></h3>
+<h2 id="architecture">Architecture<a class="anchor-link" href="#architecture" title="Permalink">¶</a></h2>
+<h3 id="why-not-just-use-a-monolithic-prompt">&ldquo;Why not just use a monolithic prompt?&rdquo;<a class="anchor-link" href="#why-not-just-use-a-monolithic-prompt" title="Permalink">¶</a></h3>
 <p>Because context is finite and expensive.</p>
 <p>The Sales Enablement Engine (SEE), EngineOS&rsquo;s primary donor, started with a monolithic approach: load all 49 skills, all patterns, all templates at session start. It worked when the system was small. At scale, it consumed so much of Claude Code&rsquo;s context window that there was barely room for the actual work.</p>
 <p>EngineOS&rsquo;s four-tier context budget (D11) reduced context consumption by 68%. Tier 1 loads ~340 lines unconditionally (the constitution). Tier 2 adds rules only when you touch files in matching paths. Tier 3 loads skill descriptions passively at ~2% and full content only on invocation. Tier 4 (methodology, patterns, templates) loads only when explicitly needed.</p>
 <p>A session that uses 3 of 29 skills loads 3 skills, not 29. The savings compound with every additional skill that <em>doesn&rsquo;t</em> need to load.</p>
 <p>See <a href="architecture.html">Architecture</a> for the full four-tier model.</p>
-<h3 id="how-does-context-not-explode-with-29-skills-70-patterns-and-15-methodology-docs">&ldquo;How does context not explode with 29 skills, 70 patterns, and 15 methodology docs?&rdquo;<a class="headerlink" href="#how-does-context-not-explode-with-29-skills-70-patterns-and-15-methodology-docs" title="Anchor link">&para;</a></h3>
+<h3 id="how-does-context-not-explode-with-29-skills-70-patterns-and-15-methodology-docs">&ldquo;How does context not explode with 29 skills, 70 patterns, and 15 methodology docs?&rdquo;<a class="anchor-link" href="#how-does-context-not-explode-with-29-skills-70-patterns-and-15-methodology-docs" title="Permalink">¶</a></h3>
 <p>The four-tier loading model means most of that content never enters context during a typical session. Skills are discovered via one-liner descriptions (~2% of context); their full content (sometimes 700+ lines) loads only when invoked. Patterns are loaded only when a failure mode is detected. Methodology docs load only when a skill chain mandates them (e.g., the BL chain requires <code>ecosystem-build.md</code>).</p>
 <p>The key design decision (D12) was making CLAUDE.md a short routing layer, not a reference manual. SEE&rsquo;s 918-line CLAUDE.md tried to be comprehensive. EngineOS&rsquo;s CLAUDE.md (currently ~160 lines) points to detail stored elsewhere, loaded on demand.</p>
-<h3 id="what-happens-when-the-context-window-fills-up">&ldquo;What happens when the context window fills up?&rdquo;<a class="headerlink" href="#what-happens-when-the-context-window-fills-up" title="Anchor link">&para;</a></h3>
+<h3 id="what-happens-when-the-context-window-fills-up">&ldquo;What happens when the context window fills up?&rdquo;<a class="anchor-link" href="#what-happens-when-the-context-window-fills-up" title="Permalink">¶</a></h3>
 <p>Claude Code compacts older context. EngineOS is designed for this:</p>
 <ol>
 <li><strong>PostCompact hook</strong> fires and re-injects core governance behaviors, active run plan awareness, and engine tenant list.</li>
@@ -79,27 +68,27 @@
 <li><strong>Tier 1 files</strong> are re-read on every interaction after compaction.</li>
 </ol>
 <p>The design principle: anything that must survive compaction lives on disk at a predictable path. The context window is a working space, not a storage system.</p>
-<h3 id="how-is-this-different-from-just-having-a-really-good-claudemd">&ldquo;How is this different from just having a really good CLAUDE.md?&rdquo;<a class="headerlink" href="#how-is-this-different-from-just-having-a-really-good-claudemd" title="Anchor link">&para;</a></h3>
+<h3 id="how-is-this-different-from-just-having-a-really-good-claudemd">&ldquo;How is this different from just having a really good CLAUDE.md?&rdquo;<a class="anchor-link" href="#how-is-this-different-from-just-having-a-really-good-claudemd" title="Permalink">¶</a></h3>
 <p>A CLAUDE.md gives you instructions. EngineOS gives you infrastructure.</p>
 <p>The difference is enforcement. A CLAUDE.md says &ldquo;always run quality checks before declaring done.&rdquo; EngineOS has a PreToolUse hook that mechanically blocks deliverable writes without an active run plan, a phase-controller that forces quality skills into every production chain, an adversarial evaluator that scores output with independent context, and iteration envelopes that automatically retry on failure.</p>
 <p>When a confident AI agent judges that it doesn&rsquo;t need the planning step (documented across 3 consecutive sessions — WS3-WS5), the CLAUDE.md instruction gets skipped. The hook doesn&rsquo;t care how confident the agent is.</p>
 <hr />
-<h2 id="governance">Governance<a class="headerlink" href="#governance" title="Anchor link">&para;</a></h2>
-<h3 id="what-does-the-enforcement-actually-do-cant-the-ai-just-ignore-it">&ldquo;What does the enforcement actually do? Can&rsquo;t the AI just ignore it?&rdquo;<a class="headerlink" href="#what-does-the-enforcement-actually-do-cant-the-ai-just-ignore-it" title="Anchor link">&para;</a></h3>
+<h2 id="governance">Governance<a class="anchor-link" href="#governance" title="Permalink">¶</a></h2>
+<h3 id="what-does-the-enforcement-actually-do-cant-the-ai-just-ignore-it">&ldquo;What does the enforcement actually do? Can&rsquo;t the AI just ignore it?&rdquo;<a class="anchor-link" href="#what-does-the-enforcement-actually-do-cant-the-ai-just-ignore-it" title="Permalink">¶</a></h3>
 <p>The enforcement has two layers, and they&rsquo;re honestly different in how hard they are to ignore.</p>
 <p><strong>Mechanical enforcement (hooks)</strong> cannot be bypassed by the agent. The PreToolUse hook intercepts every Write and Edit tool call. If there&rsquo;s no recent run plan at the correct scope-matched path, it returns <code>permissionDecision: "deny"</code> and the tool call doesn&rsquo;t execute. The agent can&rsquo;t write the file. Period.</p>
 <p><strong>Advisory enforcement (rules, CLAUDE.md, skill chains)</strong> depends on the agent following instructions. It works most of the time — ~90% — but fails predictably when the agent is confident about a straightforward task (the <code>advisory-governance-failure</code> pattern, documented from the J3 &ldquo;Sardine resume&rdquo; incident).</p>
 <p>EngineOS is honest about this gap. From CLAUDE.md: &ldquo;This is methodology-as-infrastructure for a single operator. It works because the operator is engaged. It does not claim to be deterministic enforcement.&rdquo; The mechanical hooks catch the cases where advisory enforcement fails. The operator catches everything else.</p>
 <p>See <a href="governance.html">Governance</a> for the full enforcement stack.</p>
-<h3 id="why-not-make-everything-mechanical">&ldquo;Why not make everything mechanical?&rdquo;<a class="headerlink" href="#why-not-make-everything-mechanical" title="Anchor link">&para;</a></h3>
+<h3 id="why-not-make-everything-mechanical">&ldquo;Why not make everything mechanical?&rdquo;<a class="anchor-link" href="#why-not-make-everything-mechanical" title="Permalink">¶</a></h3>
 <p>Because you can&rsquo;t mechanize judgment.</p>
 <p>A hook can check &ldquo;does a run plan exist?&rdquo; (binary, deterministic). It can&rsquo;t check &ldquo;is this research synthesis well-reasoned?&rdquo; or &ldquo;does this campaign match the client&rsquo;s voice?&rdquo; Those require semantic evaluation, which is what the advisory layer (rules, skill chains, adversarial evaluator) provides.</p>
 <p>The split is deliberate: mechanical enforcement for deterministic operations (logging every write, checking for run plans), advisory enforcement for semantic operations (quality assessment, depth classification, research credibility). The operator is the final layer for everything else.</p>
-<h3 id="what-happens-when-the-adversarial-evaluator-disagrees-with-the-output">&ldquo;What happens when the adversarial evaluator disagrees with the output?&rdquo;<a class="headerlink" href="#what-happens-when-the-adversarial-evaluator-disagrees-with-the-output" title="Anchor link">&para;</a></h3>
+<h3 id="what-happens-when-the-adversarial-evaluator-disagrees-with-the-output">&ldquo;What happens when the adversarial evaluator disagrees with the output?&rdquo;<a class="anchor-link" href="#what-happens-when-the-adversarial-evaluator-disagrees-with-the-output" title="Permalink">¶</a></h3>
 <p>The iteration envelope retries. The deliverable is reproduced with the evaluator&rsquo;s feedback injected (specifically, the <code>critical_issues</code> array and per-criterion feedback for failed criteria). The evaluator scores again. If it passes, the envelope exits. If it fails again, another retry. After 3 failed attempts, the system stops and escalates to the operator with the full iteration history — all attempts, all scores, all feedback.</p>
 <p>The evaluator runs in independent context (a subagent with no access to the executor&rsquo;s working state). It receives only the deliverable and the success criteria JSON. This prevents the evaluator from being influenced by the executor&rsquo;s reasoning. Mechanical distrust is built in: the system recalculates pass/fail from the raw scores rather than trusting the evaluator&rsquo;s self-reported <code>passed</code> field.</p>
 <p>Real example: During the WS6 planning-enforcement.md production, the evaluator caught fabricated citations in iterations 1 and 2. The agent had generated plausible quotes attributed to specific source locations that didn&rsquo;t exist. The self-tests (output-self-test) passed both times — confirming that self-evaluation has structural blind spots that only independent evaluation catches.</p>
-<h3 id="whats-in-a-run-plan-why-disk-persist-it">&ldquo;What&rsquo;s in a run plan? Why disk-persist it?&rdquo;<a class="headerlink" href="#whats-in-a-run-plan-why-disk-persist-it" title="Anchor link">&para;</a></h3>
+<h3 id="whats-in-a-run-plan-why-disk-persist-it">&ldquo;What&rsquo;s in a run plan? Why disk-persist it?&rdquo;<a class="anchor-link" href="#whats-in-a-run-plan-why-disk-persist-it" title="Permalink">¶</a></h3>
 <p>A run plan is a 6-layer markdown artifact:
 - <strong>Layer 0:</strong> Raw intake (what the operator said, uninterpreted)
 - <strong>Layer 1:</strong> Classification + context (operation type, current state, staleness check)
@@ -112,28 +101,28 @@
 2. <strong>Mechanical gate key.</strong> The PreToolUse hook checks for a recent <code>.md</code> file at the canonical run-plans path. The run plan&rsquo;s existence is what unlocks deliverable writes. This bridges the advisory enforcement (phase-controller creates the plan) and mechanical enforcement (the hook checks for it).</p>
 <p>See <a href="governance.html">Governance</a> for a real run plan example.</p>
 <hr />
-<h2 id="methodology">Methodology<a class="headerlink" href="#methodology" title="Anchor link">&para;</a></h2>
-<h3 id="why-patterns-over-more-rules">&ldquo;Why patterns over more rules?&rdquo;<a class="headerlink" href="#why-patterns-over-more-rules" title="Anchor link">&para;</a></h3>
+<h2 id="methodology">Methodology<a class="anchor-link" href="#methodology" title="Permalink">¶</a></h2>
+<h3 id="why-patterns-over-more-rules">&ldquo;Why patterns over more rules?&rdquo;<a class="anchor-link" href="#why-patterns-over-more-rules" title="Permalink">¶</a></h3>
 <p>Patterns and rules serve different purposes.</p>
 <p><strong>Rules</strong> encode process: &ldquo;always log file operations,&rdquo; &ldquo;verify state before reporting,&rdquo; &ldquo;don&rsquo;t modify methodology without approval.&rdquo; They&rsquo;re about what to DO.</p>
 <p><strong>Patterns</strong> encode experience: &ldquo;here&rsquo;s a failure mode we observed, here&rsquo;s the incident that produced it, here&rsquo;s how to recognize it, here&rsquo;s how to prevent it.&rdquo; They&rsquo;re about what to WATCH FOR.</p>
 <p>EngineOS has 7 rules and 70 patterns. The rules are few because process should be minimal. The patterns are many because the system has encountered many failure modes across 105+ days of production work. Every pattern comes from a real incident — none are hypothetical.</p>
 <p>The <code>sanity-check</code> skill&rsquo;s 11 spot-check tests are the bridge: they encode specific pattern-derived failure modes as quick binary checks that run periodically during work.</p>
 <p>See <a href="patterns-reference.html">Patterns Reference</a> for 10 key patterns with their incident stories.</p>
-<h3 id="why-never-delete-doesnt-that-just-create-bloat">&ldquo;Why &lsquo;never-delete&rsquo;? Doesn&rsquo;t that just create bloat?&rdquo;<a class="headerlink" href="#why-never-delete-doesnt-that-just-create-bloat" title="Anchor link">&para;</a></h3>
+<h3 id="why-never-delete-doesnt-that-just-create-bloat">&ldquo;Why &lsquo;never-delete&rsquo;? Doesn&rsquo;t that just create bloat?&rdquo;<a class="anchor-link" href="#why-never-delete-doesnt-that-just-create-bloat" title="Permalink">¶</a></h3>
 <p>The cost of losing history is asymmetric.</p>
 <p>Three failure modes that never-delete prevents:
 1. <strong>The vanished rationale.</strong> A decision was made six weeks ago. Why? If the context was deleted, you pay the full cost of re-researching it. If it was marked outdated with a reason, the rationale is still there.
 2. <strong>The repeated experiment.</strong> A configuration was tried and failed. Without a trace, you&rsquo;ll try it again. With a trace, you skip it.
 3. <strong>Undetectable drift.</strong> Small deletions accumulate. After 20 sessions, the system has quietly changed and nobody noticed. Append-only history makes drift visible.</p>
 <p>In practice, the mechanism is lightweight: outdated content gets a date and reason stamp. Active content stays clean. CONTEXT-HISTORY.md archives older context entries so CONTEXT.md stays focused. Logs are append-only by nature.</p>
-<h3 id="whats-the-difference-between-sanity-check-and-output-self-test">&ldquo;What&rsquo;s the difference between sanity-check and output-self-test?&rdquo;<a class="headerlink" href="#whats-the-difference-between-sanity-check-and-output-self-test" title="Anchor link">&para;</a></h3>
+<h3 id="whats-the-difference-between-sanity-check-and-output-self-test">&ldquo;What&rsquo;s the difference between sanity-check and output-self-test?&rdquo;<a class="anchor-link" href="#whats-the-difference-between-sanity-check-and-output-self-test" title="Permalink">¶</a></h3>
 <p><strong>Output-self-test</strong> runs before declaring work complete. It&rsquo;s a battery of binary YES/NO tests calibrated by output type (Research, Content, Integration, HTML, Cross-Cutting). &ldquo;Does every recommendation have evidence behind it?&rdquo; YES or NO. A NO means fix it before proceeding. It&rsquo;s fast — 30-60 seconds.</p>
 <p><strong>Sanity-check</strong> runs periodically at natural pause points during work. It checks for 11 known failure modes: Premature Confidence, Staleness Blindness, Scope Ratchet, Generic Output, Claim Hallucination, Missing Source Trail, Contradictory Frame, Agent Hallucinated Success, Depth Miscalibration, Cross-Engine Contamination, Unverified State Claim. Each failure mode has a binary test and a citation to the real production incident that created it. It takes about 2 minutes.</p>
 <p>Output-self-test asks &ldquo;is this output ready?&rdquo; Sanity-check asks &ldquo;am I making known mistakes right now?&rdquo;</p>
 <hr />
-<h2 id="memory-and-retrieval">Memory and Retrieval<a class="headerlink" href="#memory-and-retrieval" title="Anchor link">&para;</a></h2>
-<h3 id="how-does-engineos-find-prior-context-during-work">&ldquo;How does EngineOS find prior context during work?&rdquo;<a class="headerlink" href="#how-does-engineos-find-prior-context-during-work" title="Anchor link">&para;</a></h3>
+<h2 id="memory-and-retrieval">Memory and Retrieval<a class="anchor-link" href="#memory-and-retrieval" title="Permalink">¶</a></h2>
+<h3 id="how-does-engineos-find-prior-context-during-work">&ldquo;How does EngineOS find prior context during work?&rdquo;<a class="anchor-link" href="#how-does-engineos-find-prior-context-during-work" title="Permalink">¶</a></h3>
 <p>Three layers, none of them a vector database.</p>
 <ol>
 <li><strong>SessionStart injection</strong> &ndash; when a session opens, the hook reads recent CONTEXT.md, recent daily logs, and the active run plan (if any) into the prompt. Prior-session continuity is automatic, not on-demand.</li>
@@ -141,7 +130,7 @@
 <li><strong><code>/recall</code> skill (manual)</strong> &ndash; when the operator (or the agent) wants to query the second brain explicitly, the <code>recall</code> skill runs Read/Grep/Glob across knowledge index, intelligence log, KB articles, recent daily logs, and recent run plans. Pure filesystem search, zero API cost.</li>
 </ol>
 <p>See <a href="second-brain.html">Second Brain</a> for the full architecture.</p>
-<h3 id="whats-the-second-brain">&ldquo;What&rsquo;s the second brain?&rdquo;<a class="headerlink" href="#whats-the-second-brain" title="Anchor link">&para;</a></h3>
+<h3 id="whats-the-second-brain">&ldquo;What&rsquo;s the second brain?&rdquo;<a class="anchor-link" href="#whats-the-second-brain" title="Permalink">¶</a></h3>
 <p>EngineOS&rsquo;s persistent memory layer. Five components:</p>
 <ul>
 <li><code>knowledge/</code> &ndash; distilled KB articles (the durable lessons)</li>
@@ -151,12 +140,12 @@
 <li>Capture pipeline (<code>scripts/flush.py</code>, <code>scripts/compile.py</code>) + retrieval surface (<code>/recall</code> skill, prompt-retrieval hook, SessionStart injection)</li>
 </ul>
 <p>Everything is markdown on disk. Nothing requires a running service. See <a href="second-brain.html">Second Brain</a> for the full pipeline.</p>
-<h3 id="why-no-vector-db">&ldquo;Why no vector DB?&rdquo;<a class="headerlink" href="#why-no-vector-db" title="Anchor link">&para;</a></h3>
+<h3 id="why-no-vector-db">&ldquo;Why no vector DB?&rdquo;<a class="anchor-link" href="#why-no-vector-db" title="Permalink">¶</a></h3>
 <p>D32 answered this explicitly: at the current scale (well under 500 KB articles), ripgrep over markdown beats a vector index on three axes &ndash; speed, simplicity, and trustworthiness of the results. There is no embedding drift, no index staleness, no separate service to keep alive. The operator can read the same files the retrieval layer reads.</p>
 <p>The decision is not permanent. D32 sets a revisit threshold: if the KB exceeds roughly 2000 articles, or if cross-domain semantic queries start missing matches that obviously should hit, the architecture gets re-evaluated. Until then, ripgrep wins.</p>
 <hr />
-<h2 id="engines">Engines<a class="headerlink" href="#engines" title="Anchor link">&para;</a></h2>
-<h3 id="could-someone-else-use-this-system">&ldquo;Could someone else use this system?&rdquo;<a class="headerlink" href="#could-someone-else-use-this-system" title="Anchor link">&para;</a></h3>
+<h2 id="engines">Engines<a class="anchor-link" href="#engines" title="Permalink">¶</a></h2>
+<h3 id="could-someone-else-use-this-system">&ldquo;Could someone else use this system?&rdquo;<a class="anchor-link" href="#could-someone-else-use-this-system" title="Permalink">¶</a></h3>
 <p>Yes. EngineOS is operator-agnostic by design.</p>
 <p>The <code>operator/</code> directory personalizes the system through a structured Phase 0 onboarding process (37-question intake via the <code>profile-builder</code> skill). The OS and its engines work for anyone. Nothing in the governance, methodology, skills, or patterns assumes a specific person. The operator identity is layered on top, not baked in.</p>
 <p>A new user would:
@@ -166,7 +155,7 @@
 4. The system generates <code>PROFILE.md</code>, <code>COLLABORATION-STYLE.md</code>, and <code>WRITING-STYLE.md</code>
 5. Everything personalizes around the new operator</p>
 <p>The engine tenant model means domain-specific work lives in isolated tenants. A new user could create their own engines without touching the existing ones.</p>
-<h3 id="how-do-you-add-a-new-engine">&ldquo;How do you add a new engine?&rdquo;<a class="headerlink" href="#how-do-you-add-a-new-engine" title="Anchor link">&para;</a></h3>
+<h3 id="how-do-you-add-a-new-engine">&ldquo;How do you add a new engine?&rdquo;<a class="anchor-link" href="#how-do-you-add-a-new-engine" title="Permalink">¶</a></h3>
 <p>Four steps:
 1. Create <code>engines/&lt;engine-name&gt;/</code> with README.md, CONTEXT.md, DECISIONS.md
 2. Add domain-specific directories as needed (engagements, knowledge, projects, skills)
@@ -175,8 +164,8 @@
 <p>The engine inherits all OS-level capabilities automatically. It references OS skills, methodology, patterns, and the design system. It doesn&rsquo;t duplicate them.</p>
 <p>See <a href="engine-model.html">Engine Model</a> for the full tenant architecture.</p>
 <hr />
-<h2 id="process">Process<a class="headerlink" href="#process" title="Anchor link">&para;</a></h2>
-<h3 id="whats-the-biggest-thing-that-went-wrong-during-the-build">&ldquo;What&rsquo;s the biggest thing that went wrong during the build?&rdquo;<a class="headerlink" href="#whats-the-biggest-thing-that-went-wrong-during-the-build" title="Anchor link">&para;</a></h3>
+<h2 id="process">Process<a class="anchor-link" href="#process" title="Permalink">¶</a></h2>
+<h3 id="whats-the-biggest-thing-that-went-wrong-during-the-build">&ldquo;What&rsquo;s the biggest thing that went wrong during the build?&rdquo;<a class="anchor-link" href="#whats-the-biggest-thing-that-went-wrong-during-the-build" title="Permalink">¶</a></h3>
 <p>Four candidates:</p>
 <ol>
 <li>
@@ -193,23 +182,26 @@
 </li>
 </ol>
 <p>Each failure produced concrete infrastructure improvements. The system learned from its mistakes in a way that prevents recurrence.</p>
-<h3 id="how-was-this-documentation-produced">&ldquo;How was this documentation produced?&rdquo;<a class="headerlink" href="#how-was-this-documentation-produced" title="Anchor link">&para;</a></h3>
+<h3 id="how-was-this-documentation-produced">&ldquo;How was this documentation produced?&rdquo;<a class="anchor-link" href="#how-was-this-documentation-produced" title="Permalink">¶</a></h3>
 <p>By EngineOS itself, using the On-Demand Curriculum engine.</p>
 <p>The operation was classified as Type A (New Output from Scratch) by the ODC&rsquo;s pipeline-start skill. A design doc was produced through the brainstorming process. Three parallel audit agents read every source file in the system (all 29 skills, 15 methodology docs, 70 patterns, 8 wired hook events, 7 rules, 4 engine tenants, design system, templates, decisions, intelligence log). 13 reference docs were produced by parallel subagents reading source files directly. This FAQ was written last because it draws from all other docs. The HTML walkthrough was built section-by-section using the section-construction methodology.</p>
 <p>The operation was governed by a disk-persisted run plan at <code>engines/on-demand-curriculum/outputs/engineos-documentation/run-plans/2026-04-06-engineos-documentation.md</code>. The PreToolUse hook verified the run plan existed before every file write. The meta-demonstration is real: this documentation is a product of the system it describes.</p>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

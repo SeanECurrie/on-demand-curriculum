@@ -4,60 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Second Brain — EngineOS Docs</title>
-  <meta name="description" content="&quot;Capture without retrieval is a write-only system.&quot; -- methodology/memory-architecture.md § Retrieval Surfaces">
+  <meta name="description" content="EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 216-article knowledge base, 30+ daily logs, 44+ run plans, 15 methodology docs. Until 2026-06-04, that&#x27;s all it did -">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link active" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item active" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Second Brain</h1>
-    <p class="report-header__subtitle">&quot;Capture without retrieval is a write-only system.&quot; -- methodology/memory-architecture.md § Retrieval Surfaces</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s10">
+  <div class="eyebrow">EngineOS System Documentation · Section 10 · Built 2026-06-05</div>
+  <h1>Second Brain</h1>
+  <p class="subhead">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 216-article knowledge base, 30+ daily logs, 44+ run plans, 15 methodology docs. Until 2026-06-04, that&#x27;s all it did -- a marathon-arc audit showed zero reads of knowledge/concepts/.md across ~30 hours of substantive work despite a corpus</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="second-brain-capture-and-retrieval-pipeline">Second Brain &ndash; Capture and Retrieval Pipeline<a class="headerlink" href="#second-brain-capture-and-retrieval-pipeline" title="Anchor link">&para;</a></h1>
+<section class="content">
 <blockquote>
 <p>&ldquo;Capture without retrieval is a write-only system.&rdquo;</p>
 <p>&ndash; <code>methodology/memory-architecture.md</code> § Retrieval Surfaces</p>
@@ -65,7 +54,7 @@
 <p>EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 216-article knowledge base, 30+ daily logs, 44+ run plans, 15 methodology docs. Until 2026-06-04, that&rsquo;s all it did &ndash; a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work despite a corpus of 216 articles. The capture pipeline (DECISIONS.md D29-D31) and the retrieval pipeline (DECISIONS.md D32) close the loop. Together they constitute EngineOS&rsquo;s second brain.</p>
 <p>This document is the canonical reference. Architecture (<code>docs/source/architecture.md</code>), governance (<code>docs/source/governance.md</code>), and methodology (<code>docs/source/methodology.md</code>) cross-link here for depth.</p>
 <hr />
-<h2 id="what-it-is">What It Is<a class="headerlink" href="#what-it-is" title="Anchor link">&para;</a></h2>
+<h2 id="what-it-is">What It Is<a class="anchor-link" href="#what-it-is" title="Permalink">¶</a></h2>
 <p>The second brain is a two-pipeline system layered on top of EngineOS:</p>
 <ul>
 <li><strong>Capture pipeline (write-side)</strong> &ndash; Two hook firing points (<code>SessionEnd</code>, <code>PreCompact</code>) spawn <code>scripts/flush.py</code>, which uses the Claude Agent SDK to compress the session arc into a structured daily-log entry. <code>scripts/compile.py</code> periodically promotes high-signal daily-log content into a knowledge-base of compiled concept articles. <code>scripts/ingest.py</code> ingests external source material into the same KB structure.</li>
@@ -74,7 +63,7 @@
 <p>Both pipelines are observable: append-only health logs at <code>scripts/hook-health.jsonl</code> (capture-side) and <code>scripts/retrieval-health.jsonl</code> (retrieval-side) are summarized by <code>scripts/health-review.py</code> and <code>scripts/retrieval-review.py</code> for operator-driven keep/tune/kill decisions.</p>
 <p>The principle holding it together is simple. Anything that must survive across sessions or compaction lives on disk at a predictable path. The context window is working space, not storage.</p>
 <hr />
-<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Anchor link">&para;</a></h2>
+<h2 id="architecture-overview">Architecture Overview<a class="anchor-link" href="#architecture-overview" title="Permalink">¶</a></h2>
 <div class="highlight"><pre><span></span><code>  CAPTURE                                RETRIEVAL
   (write-side)                           (read-side)
   ─────────────                          ─────────────
@@ -99,9 +88,9 @@
 
 <p>The two pipelines share a six-surface corpus (<code>logs/intelligence-log.md</code>, <code>knowledge/index.md</code>, <code>knowledge/concepts/</code>+<code>connections/</code>, <code>daily/</code>, <code>run-plans/</code>, <code>methodology/</code>). Both pipelines have observability infrastructure attached. Both follow the same governance rhythm: implement with conservative caps, instrument with append-only health logs, review after ~10 sessions, decide keep/tune/kill.</p>
 <hr />
-<h2 id="capture-pipeline">Capture Pipeline<a class="headerlink" href="#capture-pipeline" title="Anchor link">&para;</a></h2>
+<h2 id="capture-pipeline">Capture Pipeline<a class="anchor-link" href="#capture-pipeline" title="Permalink">¶</a></h2>
 <p>The capture pipeline turns transient session conversation into durable disk state. It runs in three stages: hook-driven extraction (<code>session-end.py</code>, <code>pre-compact.py</code>), SDK-driven summarization (<code>flush.py</code>), and SDK-driven KB compilation (<code>compile.py</code>). External documents enter the same KB via <code>ingest.py</code>.</p>
-<h3 id="firing-points-session-endpy-pre-compactpy">Firing Points: <code>session-end.py</code> + <code>pre-compact.py</code><a class="headerlink" href="#firing-points-session-endpy-pre-compactpy" title="Anchor link">&para;</a></h3>
+<h3 id="firing-points-session-endpy-pre-compactpy">Firing Points: <code>session-end.py</code> + <code>pre-compact.py</code><a class="anchor-link" href="#firing-points-session-endpy-pre-compactpy" title="Permalink">¶</a></h3>
 <p>Two hook events fire <code>flush.py</code>:</p>
 <table>
 <thead>
@@ -129,7 +118,7 @@
 </table>
 <p>Both hooks read a JSONL transcript, extract the recent conversation as markdown, write it to a temp file at <code>scripts/session-flush-&lt;id&gt;-&lt;ts&gt;.md</code>, and spawn <code>flush.py</code> as a background subprocess. The hooks themselves do no API calls &ndash; they finish in under 10s of local file I/O. All API work happens in the spawned <code>flush.py</code> process so the agent&rsquo;s session-close path is never blocked.</p>
 <p>Both hooks have a recursion guard: if <code>CLAUDE_INVOKED_BY</code> is set in the environment (meaning the parent process was <code>flush.py</code> calling the Agent SDK, which runs Claude Code, which would fire <code>SessionEnd</code> again), they exit immediately. Without this guard the capture pipeline would loop on itself.</p>
-<h3 id="shared-module-hooks_flush_commonpy">Shared Module: <code>hooks/_flush_common.py</code><a class="headerlink" href="#shared-module-hooks_flush_commonpy" title="Anchor link">&para;</a></h3>
+<h3 id="shared-module-hooks_flush_commonpy">Shared Module: <code>hooks/_flush_common.py</code><a class="anchor-link" href="#shared-module-hooks_flush_commonpy" title="Permalink">¶</a></h3>
 <p>D29 (2026-06-04) extracted the duplicated extraction/spawn logic from <code>session-end.py</code> and <code>pre-compact.py</code> into a shared module. This is anti-drift discipline. The two hook scripts both call:</p>
 <ul>
 <li><code>parse_hook_input()</code> &ndash; read JSON from stdin, repair Windows backslash issues</li>
@@ -142,7 +131,7 @@
 </code></pre></div>
 
 <p>These were bumped from <code>MAX_TURNS=30</code>/<code>MAX_CONTEXT_CHARS=15_000</code> in D29 after the 2026-06-01 session-capture experiment showed marathon sessions were silently truncating their substantive arc. Both firing points now share the same caps automatically &ndash; bumping one in the future propagates without the next person having to remember the other.</p>
-<h3 id="scriptsflushpy-session-arc-summarization"><code>scripts/flush.py</code> &ndash; session-arc summarization<a class="headerlink" href="#scriptsflushpy-session-arc-summarization" title="Anchor link">&para;</a></h3>
+<h3 id="scriptsflushpy-session-arc-summarization"><code>scripts/flush.py</code> &ndash; session-arc summarization<a class="anchor-link" href="#scriptsflushpy-session-arc-summarization" title="Permalink">¶</a></h3>
 <p>Spawned as a background process, <code>flush.py</code> reads the pre-extracted conversation context and uses the Claude Agent SDK (<code>claude_agent_sdk.query()</code> with <code>allowed_tools=[]</code>, <code>max_turns=2</code>) to produce a structured daily-log entry. The prompt template (<code>scripts/flush.py:115-145</code>) requests:</p>
 <div class="highlight"><pre><span></span><code>**Context:** [One line about what the user was working on]
 
@@ -164,11 +153,11 @@
 <p><strong>Retry layer (D30, 2026-06-04):</strong> <code>_run_flush_attempt</code> is wrapped in a 2-attempt loop with a 3s sleep between attempts. Transient SDK errors (concurrent-session lock, rate, OAuth refresh) usually succeed on retry. The retry attempt count is recorded in the health log.</p>
 <p><strong>Health observability:</strong> every invocation emits one JSON record to <code>scripts/hook-health.jsonl</code> (see Observability section below).</p>
 <p><strong>End-of-day compile trigger:</strong> after <code>flush.py</code> completes a successful save, <code>maybe_trigger_compilation()</code> checks two conditions: is it past 18:00 local? Has today&rsquo;s daily log changed since the last compile (hash check against <code>scripts/state.json</code>)? If both yes, <code>compile.py</code> is spawned as a detached background process. This is the cron-less compile loop.</p>
-<h3 id="scriptscompilepy-kb-promotion"><code>scripts/compile.py</code> &ndash; KB promotion<a class="headerlink" href="#scriptscompilepy-kb-promotion" title="Anchor link">&para;</a></h3>
+<h3 id="scriptscompilepy-kb-promotion"><code>scripts/compile.py</code> &ndash; KB promotion<a class="anchor-link" href="#scriptscompilepy-kb-promotion" title="Permalink">¶</a></h3>
 <p><code>compile.py</code> is the LLM compiler: daily logs are source code, KB articles are the executable. Each daily-log entry is read once, passed through the Agent SDK with the schema in <code>knowledge/AGENTS.md</code> and the current <code>knowledge/index.md</code> catalog as prompt context, and produces zero or more updates to <code>knowledge/concepts/*.md</code> and <code>knowledge/connections/*.md</code>.</p>
 <p>Compile state lives at <code>scripts/state.json</code>. Each ingested daily log is tracked with its content hash, so a log that hasn&rsquo;t changed since its last compile is skipped. Force-recompile is available via <code>--all</code> or <code>--file &lt;path&gt;</code>.</p>
 <p><strong>Recursion guard + buffering fix (D31, 2026-06-04):</strong> <code>compile.py</code> sets <code>os.environ["CLAUDE_INVOKED_BY"] = "knowledge_compile"</code> BEFORE any import that could trigger Claude Code &ndash; without this, compile.py&rsquo;s internal Claude Code sessions recursively fire <code>SessionEnd</code> → <code>flush.py</code>, adding noise entries to today&rsquo;s daily log. The same fix added <code>sys.stdout.reconfigure(line_buffering=True)</code> to the main entry point so <code>compile.log</code> reflects activity in real time instead of being silently block-buffered. The misdiagnosis of &ldquo;compile.py broken since 2026-05-12&rdquo; was actually just buffering &ndash; compile.py was running fine, the log file just looked frozen.</p>
-<h3 id="scriptsingestpy-external-source-ingestion"><code>scripts/ingest.py</code> &ndash; external source ingestion<a class="headerlink" href="#scriptsingestpy-external-source-ingestion" title="Anchor link">&para;</a></h3>
+<h3 id="scriptsingestpy-external-source-ingestion"><code>scripts/ingest.py</code> &ndash; external source ingestion<a class="anchor-link" href="#scriptsingestpy-external-source-ingestion" title="Permalink">¶</a></h3>
 <p>Companion to <code>compile.py</code> with the same output format. Where <code>compile.py</code> reads conversation logs, <code>ingest.py</code> reads curated source documents (methodology docs, patterns, reference material). Usage:</p>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/ingest.py<span class="w"> </span>source.md<span class="w">                   </span><span class="c1"># single file</span>
 uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/ingest.py<span class="w"> </span>file1.md<span class="w"> </span>file2.md<span class="w"> </span>...<span class="w">        </span><span class="c1"># multi-file grouped ingest</span>
@@ -178,7 +167,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </code></pre></div>
 
 <p>The prompt template signals to the SDK that these are polished references, not conversation &ndash; &ldquo;Extract concepts with the depth the source deserves.&rdquo; Use this when adding new methodology or patterns to the KB so the LLM treats them with appropriate weight.</p>
-<h3 id="daily-logs-daily">Daily Logs (<code>daily/</code>)<a class="headerlink" href="#daily-logs-daily" title="Anchor link">&para;</a></h3>
+<h3 id="daily-logs-daily">Daily Logs (<code>daily/</code>)<a class="anchor-link" href="#daily-logs-daily" title="Permalink">¶</a></h3>
 <p>Append-only per-day session arcs. As of 2026-06-05 the directory contains 19 files spanning 2026-04-12 → 2026-06-05 (with backfilled gaps). Each file has the structure:</p>
 <div class="highlight"><pre><span></span><code><span class="gh"># Daily Log: YYYY-MM-DD</span>
 
@@ -194,7 +183,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </code></pre></div>
 
 <p>Daily logs serve three pipelines: they are the compile.py input that feeds the KB; they are surface #4 in the retrieval corpus; and the last 30 lines of today&rsquo;s log are injected at every session start via Layer 1.</p>
-<h3 id="knowledge-base-knowledge">Knowledge Base (<code>knowledge/</code>)<a class="headerlink" href="#knowledge-base-knowledge" title="Anchor link">&para;</a></h3>
+<h3 id="knowledge-base-knowledge">Knowledge Base (<code>knowledge/</code>)<a class="anchor-link" href="#knowledge-base-knowledge" title="Permalink">¶</a></h3>
 <p>The compiled output. Current state:</p>
 <table>
 <thead>
@@ -239,7 +228,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </table>
 <p>The KB is the second brain&rsquo;s long-term memory. It is read by retrieval Layers 1-3 (the index is injected at SessionStart; the concepts are grepped by the UserPromptSubmit hook; the full articles are read by <code>/recall</code> when matches surface).</p>
 <hr />
-<h2 id="retrieval-pipeline">Retrieval Pipeline<a class="headerlink" href="#retrieval-pipeline" title="Anchor link">&para;</a></h2>
+<h2 id="retrieval-pipeline">Retrieval Pipeline<a class="anchor-link" href="#retrieval-pipeline" title="Permalink">¶</a></h2>
 <p>The retrieval pipeline (D32, 2026-06-04) is the read-side complement to the capture pipeline. It has three layers, all reading the same six-surface corpus in the same priority order.</p>
 <table>
 <thead>
@@ -276,7 +265,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </tbody>
 </table>
 <p>Layer 1 establishes orientation at session start. Layer 2 fills in mid-work context mechanically before the prompt reaches Tier 3 skill loading. Layer 3 escalates when the hook misses or the decision is load-bearing.</p>
-<h3 id="layer-1-sessionstart-injection-hookssession-startpy">Layer 1 &ndash; SessionStart Injection (<code>hooks/session-start.py</code>)<a class="headerlink" href="#layer-1-sessionstart-injection-hookssession-startpy" title="Anchor link">&para;</a></h3>
+<h3 id="layer-1-sessionstart-injection-hookssession-startpy">Layer 1 &ndash; SessionStart Injection (<code>hooks/session-start.py</code>)<a class="anchor-link" href="#layer-1-sessionstart-injection-hookssession-startpy" title="Permalink">¶</a></h3>
 <p>Fires once per session, before any user interaction. Reads two surfaces:</p>
 <ul>
 <li><strong><code>knowledge/index.md</code></strong> &ndash; the full KB catalog. Injected verbatim so the agent knows what articles exist before deciding what to look up.</li>
@@ -284,7 +273,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </ul>
 <p>The combined context is wrapped with date headers and emitted as <code>hookSpecificOutput.additionalContext</code> (Claude Code SessionStart convention). Hard cap at <code>MAX_CONTEXT_CHARS=20_000</code> &ndash; truncates with <code>...(truncated)</code> if exceeded. Configured in <code>.claude/settings.json</code> under <code>SessionStart</code> with a 15s timeout.</p>
 <p>Layer 1 is the orientation layer. It cannot answer specific queries &ndash; those need Layer 2 or 3 &ndash; but it ensures the agent never starts cold.</p>
-<h3 id="layer-2-userpromptsubmit-mid-work-hook-hooksprompt-retrievalpy">Layer 2 &ndash; UserPromptSubmit Mid-Work Hook (<code>hooks/prompt-retrieval.py</code>)<a class="headerlink" href="#layer-2-userpromptsubmit-mid-work-hook-hooksprompt-retrievalpy" title="Anchor link">&para;</a></h3>
+<h3 id="layer-2-userpromptsubmit-mid-work-hook-hooksprompt-retrievalpy">Layer 2 &ndash; UserPromptSubmit Mid-Work Hook (<code>hooks/prompt-retrieval.py</code>)<a class="anchor-link" href="#layer-2-userpromptsubmit-mid-work-hook-hooksprompt-retrievalpy" title="Permalink">¶</a></h3>
 <p>The mechanical retrieval layer. Fires on every prompt the operator submits. Configured in <code>.claude/settings.json</code> under <code>UserPromptSubmit</code> with a 3s timeout.</p>
 <p><strong>Heuristic gate</strong> &ndash; the hook only does work when the prompt looks like it might benefit from prior-context injection. Two conditions trigger the gate:</p>
 <table>
@@ -339,7 +328,7 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <li>Every error path is swallowed; the hook never blocks the user&rsquo;s prompt cycle. On any failure it emits a health record with the failure mode and exits 0.</li>
 </ul>
 <p><strong>Health observability</strong> &ndash; one record per invocation appended to <code>scripts/retrieval-health.jsonl</code>. See Observability section.</p>
-<h3 id="layer-3-manual-recall-skill-claudeskillsrecallskillmd">Layer 3 &ndash; Manual <code>/recall</code> Skill (<code>.claude/skills/recall/SKILL.md</code>)<a class="headerlink" href="#layer-3-manual-recall-skill-claudeskillsrecallskillmd" title="Anchor link">&para;</a></h3>
+<h3 id="layer-3-manual-recall-skill-claudeskillsrecallskillmd">Layer 3 &ndash; Manual <code>/recall</code> Skill (<code>.claude/skills/recall/SKILL.md</code>)<a class="anchor-link" href="#layer-3-manual-recall-skill-claudeskillsrecallskillmd" title="Permalink">¶</a></h3>
 <p>The operator-driven escalation layer. Pure Read/Grep/Glob, zero API cost (the skill&rsquo;s <code>allowed-tools</code> frontmatter restricts it to <code>Read, Grep, Glob</code>). Invoked when:</p>
 <ul>
 <li>Operator types <code>/recall &lt;query&gt;</code> explicitly</li>
@@ -356,7 +345,7 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <li>Does NOT hallucinate hits &ndash; &ldquo;nothing found&rdquo; is the correct answer when nothing matches.</li>
 <li>Does NOT search across engine tenants by default &ndash; OS-level corpus only unless the query names an engine.</li>
 </ul>
-<h3 id="why-no-vector-db">Why No Vector DB<a class="headerlink" href="#why-no-vector-db" title="Anchor link">&para;</a></h3>
+<h3 id="why-no-vector-db">Why No Vector DB<a class="anchor-link" href="#why-no-vector-db" title="Permalink">¶</a></h3>
 <p>At personal-KB scale (&lt;500 articles, currently 225 indexed), structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob &ndash; zero API cost, no infrastructure, no embeddings drift.</p>
 <p>Phase C (vector DB layer) is deferred per D32 with explicit revisit conditions:</p>
 <ul>
@@ -367,7 +356,7 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 </ul>
 <p>External research synthesis in <code>run-plans/2026-06-04-retrieval-layer.md</code> Layer 3 (Karpathy + Cole Medin + Mem0 benchmarks) confirms grep + markdown index beats vector retrieval at this scale.</p>
 <hr />
-<h2 id="six-surface-corpus">Six-Surface Corpus<a class="headerlink" href="#six-surface-corpus" title="Anchor link">&para;</a></h2>
+<h2 id="six-surface-corpus">Six-Surface Corpus<a class="anchor-link" href="#six-surface-corpus" title="Permalink">¶</a></h2>
 <p>All three retrieval layers read the same corpus in the same priority order. Higher surfaces have higher signal-to-noise. The stopping rule for <code>/recall</code> and the discipline pattern: if surfaces 1-2 yield 3+ strong hits, don&rsquo;t sweep the lower surfaces.</p>
 <table>
 <thead>
@@ -426,9 +415,9 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 </table>
 <p>Also reachable on demand by <code>/recall</code> (not by the hook): <code>DECISIONS.md</code>, <code>CONTEXT.md</code>, engine-level <code>engines/*/CONTEXT.md</code> and <code>engines/*/DECISIONS.md</code>, <code>patterns/problems/*.md</code>, <code>patterns/frameworks/*.md</code>.</p>
 <hr />
-<h2 id="observability">Observability<a class="headerlink" href="#observability" title="Anchor link">&para;</a></h2>
+<h2 id="observability">Observability<a class="anchor-link" href="#observability" title="Permalink">¶</a></h2>
 <p>Both pipelines emit append-only health logs reviewed periodically by the operator.</p>
-<h3 id="capture-side-scriptshook-healthjsonl">Capture-side: <code>scripts/hook-health.jsonl</code><a class="headerlink" href="#capture-side-scriptshook-healthjsonl" title="Anchor link">&para;</a></h3>
+<h3 id="capture-side-scriptshook-healthjsonl">Capture-side: <code>scripts/hook-health.jsonl</code><a class="anchor-link" href="#capture-side-scriptshook-healthjsonl" title="Permalink">¶</a></h3>
 <p>One record per <code>flush.py</code> invocation. Schema:</p>
 <div class="highlight"><pre><span></span><code>ts, session_id, chars_input, turn_count, cap_hit, attempts, result, response_chars
 </code></pre></div>
@@ -445,7 +434,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </code></pre></div>
 
 <p>The script reports result distribution, retry usage (and retry success rate), cap-hit distribution, and input/output character distributions. Heuristic: if more than half of sessions are hitting a cap, the script suggests another bump.</p>
-<h3 id="retrieval-side-scriptsretrieval-healthjsonl">Retrieval-side: <code>scripts/retrieval-health.jsonl</code><a class="headerlink" href="#retrieval-side-scriptsretrieval-healthjsonl" title="Anchor link">&para;</a></h3>
+<h3 id="retrieval-side-scriptsretrieval-healthjsonl">Retrieval-side: <code>scripts/retrieval-health.jsonl</code><a class="anchor-link" href="#retrieval-side-scriptsretrieval-healthjsonl" title="Permalink">¶</a></h3>
 <p>One record per <code>UserPromptSubmit</code> invocation. Schema:</p>
 <div class="highlight"><pre><span></span><code>ts, session_id, prompt_chars, query_terms, gate_triggered, gate_reasons,
 corpus_searched, matches_found, matches_returned, chars_injected, exec_ms, result
@@ -464,7 +453,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </code></pre></div>
 
 <p>The script reports gate fire rate, injection size distribution, exec-time distribution (flagging invocations that exceeded the 1000ms budget), top query terms, and top gate-fire reasons.</p>
-<h3 id="keep-tune-kill-cadence">Keep / Tune / Kill Cadence<a class="headerlink" href="#keep-tune-kill-cadence" title="Anchor link">&para;</a></h3>
+<h3 id="keep-tune-kill-cadence">Keep / Tune / Kill Cadence<a class="anchor-link" href="#keep-tune-kill-cadence" title="Permalink">¶</a></h3>
 <p>Both review scripts encode decision rules. The operator runs them periodically &ndash; weekly is a reasonable default; after major load shifts (KB doubling, hook-config changes) is mandatory.</p>
 <p><strong>Capture-side decision rules</strong> (from <code>scripts/health-review.py</code>):</p>
 <ul>
@@ -482,17 +471,17 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </ul>
 <p>First decision pass is after ~10 sessions live. Subsequent reviews are ad hoc when suspecting drift.</p>
 <hr />
-<h2 id="discipline-patterns">Discipline Patterns<a class="headerlink" href="#discipline-patterns" title="Anchor link">&para;</a></h2>
+<h2 id="discipline-patterns">Discipline Patterns<a class="anchor-link" href="#discipline-patterns" title="Permalink">¶</a></h2>
 <p>The pipelines have mechanical backing, but mechanical backing alone does not guarantee the agent uses them well. Two framework patterns encode the discipline layer:</p>
-<h3 id="write-side-patternsframeworkssession-end-audit-before-flushmd">Write-Side: <code>patterns/frameworks/session-end-audit-before-flush.md</code><a class="headerlink" href="#write-side-patternsframeworkssession-end-audit-before-flushmd" title="Anchor link">&para;</a></h3>
+<h3 id="write-side-patternsframeworkssession-end-audit-before-flushmd">Write-Side: <code>patterns/frameworks/session-end-audit-before-flush.md</code><a class="anchor-link" href="#write-side-patternsframeworkssession-end-audit-before-flushmd" title="Permalink">¶</a></h3>
 <p>Before <code>/exit</code> on any substantial session, audit the second-brain coverage gap and close it manually. <code>flush.py</code>&rsquo;s extraction window misses substance in marathon multi-day sessions &ndash; the audit-before-flush discipline closes the gap that the hook architecture cannot.</p>
 <p>The audit covers 8 surfaces: <code>daily/</code>, <code>logs/intelligence-log.md</code>, <code>logs/activity-log.md</code>, <code>knowledge/log.md</code>, engine <code>CONTEXT.md</code> files, engine <code>DECISIONS.md</code> files, <code>memory/MEMORY.md</code>, and the patterns directory. The discipline fires reflexively on close-out signals &ndash; &ldquo;wrap up&rdquo;, &ldquo;before I exit&rdquo;, &ldquo;did this get captured?&rdquo;, session crossings 50+ tool calls, run plan marked COMPLETE.</p>
 <p>Validated 2026-05-23 (Crawford engagement marathon): 9 deliverables captured, full hook chain validated end-to-end, governance hook fired mid-execution to enforce the same discipline mechanically.</p>
-<h3 id="read-side-patternsframeworksretrieval-before-decidemd">Read-Side: <code>patterns/frameworks/retrieval-before-decide.md</code><a class="headerlink" href="#read-side-patternsframeworksretrieval-before-decidemd" title="Anchor link">&para;</a></h3>
+<h3 id="read-side-patternsframeworksretrieval-before-decidemd">Read-Side: <code>patterns/frameworks/retrieval-before-decide.md</code><a class="anchor-link" href="#read-side-patternsframeworksretrieval-before-decidemd" title="Permalink">¶</a></h3>
 <p>Before recommending or implementing in a domain where EngineOS has prior intelligence, query the second brain first. Don&rsquo;t trust the agent to remember to look &ndash; fire the lookup mechanically (Layer 2 hook) or invoke it deliberately (<code>/recall</code>, Layer 3).</p>
 <p>The pattern names internal-archive retrieval as a first-class part of &ldquo;research before agreeing&rdquo; (CLAUDE.md Core Behavior #1). The instruction targets external sources by default &ndash; Bright Data, Context7, web search &ndash; and does not reliably trigger internal-archive lookup. The discipline pattern closes that category gap.</p>
 <p>Trigger signals: operator prompts containing <code>we</code>, <code>our</code>, <code>before</code>, <code>prior</code>, <code>previous</code>, <code>remember</code>, <code>similar</code>, <code>again</code>, <code>last time</code>; question-form prompts; about to recommend architecture/methodology/pattern in a known-domain; about to defer something (check first if it&rsquo;s been considered before).</p>
-<h3 id="composition">Composition<a class="headerlink" href="#composition" title="Anchor link">&para;</a></h3>
+<h3 id="composition">Composition<a class="anchor-link" href="#composition" title="Permalink">¶</a></h3>
 <p>The two patterns are sister disciplines. Capture without retrieval is a write-only system. Retrieval without capture is a read-empty system. Both need their respective discipline layers because the mechanical hooks are best-effort, not exhaustive:</p>
 <ul>
 <li><code>audit-before-flush</code> &ndash; ensures substance lands in the second brain (write-side)</li>
@@ -500,7 +489,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </ul>
 <p>Memory-feedback files (<code>~/.claude/projects/.../memory/feedback_*.md</code>) provide the auto-fire triggers so the disciplines self-fire on natural operator language without requiring the operator to remember to invoke them.</p>
 <hr />
-<h2 id="decisions">Decisions<a class="headerlink" href="#decisions" title="Anchor link">&para;</a></h2>
+<h2 id="decisions">Decisions<a class="anchor-link" href="#decisions" title="Permalink">¶</a></h2>
 <p>The decision record lives in <code>DECISIONS.md</code>. Summaries:</p>
 <table>
 <thead>
@@ -540,8 +529,8 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </table>
 <p>D29-D31 hardened the capture pipeline; D32 added the retrieval pipeline on top; D33 added the render-side discipline so the docs surface itself stays current with the substrate. Together they constitute the second-brain operational layer plus the lookup surface that reads from it.</p>
 <hr />
-<h2 id="how-to-use">How To Use<a class="headerlink" href="#how-to-use" title="Anchor link">&para;</a></h2>
-<h3 id="looking-something-up-recall">Looking something up (<code>/recall</code>)<a class="headerlink" href="#looking-something-up-recall" title="Anchor link">&para;</a></h3>
+<h2 id="how-to-use">How To Use<a class="anchor-link" href="#how-to-use" title="Permalink">¶</a></h2>
+<h3 id="looking-something-up-recall">Looking something up (<code>/recall</code>)<a class="anchor-link" href="#looking-something-up-recall" title="Permalink">¶</a></h3>
 <p>When you want to know if EngineOS has prior thinking on a topic:</p>
 <div class="highlight"><pre><span></span><code>/recall &lt;query&gt;
 </code></pre></div>
@@ -552,7 +541,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </code></pre></div>
 
 <p>This has API cost (uses the Agent SDK) but can synthesize across many hits. Use when grep alone isn&rsquo;t enough.</p>
-<h3 id="reading-the-health-logs">Reading the health logs<a class="headerlink" href="#reading-the-health-logs" title="Anchor link">&para;</a></h3>
+<h3 id="reading-the-health-logs">Reading the health logs<a class="anchor-link" href="#reading-the-health-logs" title="Permalink">¶</a></h3>
 <p>After ~10 sessions of any new hook configuration, or weekly as a default cadence:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Capture pipeline</span>
 uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/health-review.py
@@ -562,7 +551,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </code></pre></div>
 
 <p>Decision rules are baked into the scripts&rsquo; output hints. The retrieval review will flag if your gate fire rate is outside the 10-60% healthy band; the capture review will flag if more than half of sessions are hitting a cap.</p>
-<h3 id="tuning-the-retrieval-hook">Tuning the retrieval hook<a class="headerlink" href="#tuning-the-retrieval-hook" title="Anchor link">&para;</a></h3>
+<h3 id="tuning-the-retrieval-hook">Tuning the retrieval hook<a class="anchor-link" href="#tuning-the-retrieval-hook" title="Permalink">¶</a></h3>
 <p>If <code>scripts/retrieval-review.py</code> says the gate is too quiet (&lt;10%) or too noisy (&gt;60%), edit <code>hooks/retrieval-triggers.json</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;trigger_words&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;we&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;our&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;before&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;prior&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;previous&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;remember&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;similar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;again&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;last time&quot;</span><span class="p">],</span>
@@ -584,12 +573,12 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <li>Injections feel thin → bump <code>max_inject_chars</code> to 1500-2048</li>
 <li>Hook timing out → cut <code>runplan_lookback_days</code> and <code>daily_lookback_days</code></li>
 </ul>
-<h3 id="what-to-do-if-retrieval-misfires">What to do if retrieval misfires<a class="headerlink" href="#what-to-do-if-retrieval-misfires" title="Anchor link">&para;</a></h3>
+<h3 id="what-to-do-if-retrieval-misfires">What to do if retrieval misfires<a class="anchor-link" href="#what-to-do-if-retrieval-misfires" title="Permalink">¶</a></h3>
 <p><strong>Hook injected but content was irrelevant</strong> → ignore it. The <code>&lt;prior-context&gt;</code> block is silent; the agent is instructed to ignore if not relevant. If this happens &gt;50% of the time over a review window, tighten triggers or kill the hook (rely on <code>/recall</code>).</p>
 <p><strong>Hook didn&rsquo;t fire and you wanted it to</strong> → invoke <code>/recall &lt;query&gt;</code> directly. The skill is the manual escalation by design. After several manual escalations on similar phrasings, consider adding the operator&rsquo;s natural trigger phrasing to <code>hooks/retrieval-triggers.json</code>.</p>
 <p><strong>Hook fired but found nothing</strong> → either the corpus genuinely doesn&rsquo;t have the answer (<code>/recall</code> will confirm) or your query terms don&rsquo;t match how the corpus indexed the concept. Try synonym rephrasing, or treat the gap as a signal to compile new KB content.</p>
 <p><strong>Hook is silently failing</strong> → check <code>scripts/retrieval-health.jsonl</code> for <code>stdin_error</code>, <code>search_error</code>, or invocations missing entirely. The hook never blocks the prompt cycle; silent failure is by design but observable through the health log.</p>
-<h3 id="compiling-the-kb-manually">Compiling the KB manually<a class="headerlink" href="#compiling-the-kb-manually" title="Anchor link">&para;</a></h3>
+<h3 id="compiling-the-kb-manually">Compiling the KB manually<a class="anchor-link" href="#compiling-the-kb-manually" title="Permalink">¶</a></h3>
 <p>The end-of-day auto-compile (<code>flush.py:maybe_trigger_compilation</code>) fires after 18:00 local when today&rsquo;s daily log has changed since last compile. To force-compile:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Compile new/changed logs only</span>
 uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/compile.py
@@ -605,14 +594,14 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </code></pre></div>
 
 <p>Compile state lives at <code>scripts/state.json</code>. Each daily log is tracked with its content hash so unchanged logs are skipped.</p>
-<h3 id="ingesting-external-source-material">Ingesting external source material<a class="headerlink" href="#ingesting-external-source-material" title="Anchor link">&para;</a></h3>
+<h3 id="ingesting-external-source-material">Ingesting external source material<a class="anchor-link" href="#ingesting-external-source-material" title="Permalink">¶</a></h3>
 <p>To pull methodology docs, patterns, or other curated reference material into the KB:</p>
 <div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/ingest.py<span class="w"> </span>source.md
 uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/ingest.py<span class="w"> </span>--dir<span class="w"> </span>methodology/
 </code></pre></div>
 
 <p><code>ingest.py</code> uses the same output format as <code>compile.py</code> but signals to the SDK that the input is polished reference, not conversation &ndash; the LLM gives the source the depth it deserves.</p>
-<h3 id="when-the-discipline-patterns-fire">When the discipline patterns fire<a class="headerlink" href="#when-the-discipline-patterns-fire" title="Anchor link">&para;</a></h3>
+<h3 id="when-the-discipline-patterns-fire">When the discipline patterns fire<a class="anchor-link" href="#when-the-discipline-patterns-fire" title="Permalink">¶</a></h3>
 <p>You&rsquo;ll feel the read-side discipline (<code>retrieval-before-decide</code>) in moments like:</p>
 <ul>
 <li>About to recommend an architecture choice in a domain EngineOS has explored</li>
@@ -628,7 +617,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </ul>
 <p>Both patterns fire reflexively via memory-feedback triggers (<code>feedback_lookup_before_decide.md</code>, <code>feedback_audit_before_flush.md</code>) without requiring the operator to explicitly invoke them.</p>
 <hr />
-<h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Anchor link">&para;</a></h2>
+<h2 id="related-documents">Related Documents<a class="anchor-link" href="#related-documents" title="Permalink">¶</a></h2>
 <ul>
 <li><code>methodology/memory-architecture.md</code> § Retrieval Surfaces &ndash; the canonical architecture spec</li>
 <li><code>docs/source/architecture.md</code> § Retrieval Architecture &ndash; the architectural slot in the broader system</li>
@@ -639,19 +628,22 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <li><code>DECISIONS.md</code> D29-D32 &ndash; the four 2026-06-04 decisions that built the current state</li>
 <li><code>run-plans/2026-06-04-retrieval-layer.md</code> &ndash; the build plan with hardened criteria and Layer 5 execution evidence</li>
 </ul>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

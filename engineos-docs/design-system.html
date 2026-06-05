@@ -6,66 +6,55 @@
   <title>Design System — EngineOS Docs</title>
   <meta name="description" content="The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two prod">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link active" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item active" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Design System</h1>
-    <p class="report-header__subtitle">The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two prod</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s12">
+  <div class="eyebrow">EngineOS System Documentation · Section 12 · Built 2026-06-05</div>
+  <h1>Design System</h1>
+  <p class="subhead">The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two production-proven sources: MLR&#x27;s enterprise stylesheet (776 lines, November 2025, battle-tested across 13 professional deliv</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="design-system-enterprise-visual-infrastructure">Design System &ndash; Enterprise Visual Infrastructure<a class="headerlink" href="#design-system-enterprise-visual-infrastructure" title="Anchor link">&para;</a></h1>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Anchor link">&para;</a></h2>
+<section class="content">
+<h2 id="overview">Overview<a class="anchor-link" href="#overview" title="Permalink">¶</a></h2>
 <p>The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file &ndash; <code>design-system/enterprise-styles.css</code> &ndash; composited from two production-proven sources: MLR&rsquo;s enterprise stylesheet (776 lines, November 2025, battle-tested across 13 professional deliverables at 9.5/10 quality through 7 iteration cycles) and ODC&rsquo;s walkthrough style guide (March 2026, WCAG AA verified, 50+ tokens with light/dark pairs).</p>
 <p>Engines producing HTML link this stylesheet. Engine-specific visual additions go in engine-level CSS that follows or imports the shared file. No engine duplicates tokens defined at the OS layer.</p>
 <p>The system ships with five companion reference documents: <code>color-tokens.md</code> (full token inventory), <code>typography.md</code> (type scales and spacing), <code>accessibility.md</code> (verified contrast tables), <code>pdf-pipeline.md</code> (Chrome headless generation), and <code>render-validate-pipeline.md</code> (6-step visual QA). This document synthesizes all six sources into one architectural reference.</p>
 <hr />
-<h2 id="7-layer-css-architecture">7-Layer CSS Architecture<a class="headerlink" href="#7-layer-css-architecture" title="Anchor link">&para;</a></h2>
+<h2 id="7-layer-css-architecture">7-Layer CSS Architecture<a class="anchor-link" href="#7-layer-css-architecture" title="Permalink">¶</a></h2>
 <p>The stylesheet is organized into seven layers, ordered by specificity and dependency. Each layer builds on the one before it. The layering exists for three reasons: it enforces a single source of truth for design tokens (Layer 1), it separates concerns cleanly enough that an engine can use Layer 2 for reports without pulling in Layer 3&rsquo;s interactive components, and it keeps print/dark/responsive overrides isolated from the base visual system.</p>
-<h3 id="layer-1-css-custom-properties">Layer 1: CSS Custom Properties<a class="headerlink" href="#layer-1-css-custom-properties" title="Anchor link">&para;</a></h3>
+<h3 id="layer-1-css-custom-properties">Layer 1: CSS Custom Properties<a class="anchor-link" href="#layer-1-css-custom-properties" title="Permalink">¶</a></h3>
 <p>Single source of truth for every design token. Components reference these variables &ndash; never hard-coded hex values. If a color, spacing value, or font stack appears in Layers 2-7, it traces back to a <code>:root</code> variable defined here.</p>
 <div class="highlight"><pre><span></span><code><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c">/* Typography */</span>
@@ -109,7 +98,7 @@
 </code></pre></div>
 
 <p>Every downstream layer references these properties. When dark mode activates, Layer 6 remaps the custom properties &ndash; no component code changes.</p>
-<h3 id="layer-2-core-enterprise-formatting">Layer 2: Core Enterprise Formatting<a class="headerlink" href="#layer-2-core-enterprise-formatting" title="Anchor link">&para;</a></h3>
+<h3 id="layer-2-core-enterprise-formatting">Layer 2: Core Enterprise Formatting<a class="anchor-link" href="#layer-2-core-enterprise-formatting" title="Permalink">¶</a></h3>
 <p>Professional report styling aligned with pandoc output conventions. This layer handles the bread-and-butter elements of any report deliverable: base typography, heading hierarchy with bottom-border anchors, table formatting with alternating rows and hover states, list styles, section boxes, badges (both grayscale and colored priority variants), callouts (enterprise <code>callout-box</code> with 5 semantic variants plus interactive <code>.callout</code> with 4 variants), header patterns, and table-of-contents navigation.</p>
 <p>Representative structure:</p>
 <div class="highlight"><pre><span></span><code><span class="c">/* Tables: enterprise convention */</span>
@@ -142,7 +131,7 @@
 </code></pre></div>
 
 <p>Two callout systems coexist. The enterprise <code>.callout-box</code> (with <code>.important</code>, <code>.success</code>, <code>.info</code>, <code>.warning</code>, <code>.danger</code> modifiers) is from MLR&rsquo;s report convention. The interactive <code>.callout</code> (with <code>.critical</code>, <code>.warning</code>, <code>.tip</code>, <code>.info</code> modifiers and uppercase <code>.callout-label</code>) is from ODC&rsquo;s walkthrough convention. Both are available; use enterprise callouts in reports, interactive callouts in walkthroughs.</p>
-<h3 id="layer-3-interactive-components">Layer 3: Interactive Components<a class="headerlink" href="#layer-3-interactive-components" title="Anchor link">&para;</a></h3>
+<h3 id="layer-3-interactive-components">Layer 3: Interactive Components<a class="anchor-link" href="#layer-3-interactive-components" title="Permalink">¶</a></h3>
 <p>For curriculum walkthroughs and interactive HTML outputs. This layer provides:</p>
 <ul>
 <li><strong>Code blocks</strong> with syntax highlighting (8 token types, monospace font, language labels, copy-to-clipboard buttons)</li>
@@ -188,7 +177,7 @@
 <span class="p">}</span>
 </code></pre></div>
 
-<h3 id="layer-4-data-visualization">Layer 4: Data Visualization<a class="headerlink" href="#layer-4-data-visualization" title="Anchor link">&para;</a></h3>
+<h3 id="layer-4-data-visualization">Layer 4: Data Visualization<a class="anchor-link" href="#layer-4-data-visualization" title="Permalink">¶</a></h3>
 <p>Strategic analysis components from MLR&rsquo;s competitive intelligence deliverables:</p>
 <ul>
 <li><strong>SWOT grids</strong> &ndash; 2x2 CSS grid with color-coded quadrants (green/strengths, red/weaknesses, blue/opportunities, amber/threats), each with section headers and bullet lists</li>
@@ -215,7 +204,7 @@
 <span class="p">.</span><span class="nc">platform</span><span class="p">.</span><span class="nc">subject</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-role-subject</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 
-<h3 id="layer-5-printpdf-optimization">Layer 5: Print/PDF Optimization<a class="headerlink" href="#layer-5-printpdf-optimization" title="Anchor link">&para;</a></h3>
+<h3 id="layer-5-printpdf-optimization">Layer 5: Print/PDF Optimization<a class="anchor-link" href="#layer-5-printpdf-optimization" title="Permalink">¶</a></h3>
 <p>CSS rules that Chrome headless depends on for clean PDF generation. Three mechanisms:</p>
 <ol>
 <li>
@@ -245,7 +234,7 @@
 <span class="p">}</span>
 </code></pre></div>
 
-<h3 id="layer-6-dark-mode-overrides">Layer 6: Dark Mode Overrides<a class="headerlink" href="#layer-6-dark-mode-overrides" title="Anchor link">&para;</a></h3>
+<h3 id="layer-6-dark-mode-overrides">Layer 6: Dark Mode Overrides<a class="anchor-link" href="#layer-6-dark-mode-overrides" title="Permalink">¶</a></h3>
 <p>Activated by setting <code>&lt;html data-theme="dark"&gt;</code>. The implementation remaps every custom property in the <code>:root</code> scope to its dark-mode equivalent. Components that reference <code>--color-stone-700</code> for body text automatically get <code>#d4d4d4</code> instead of <code>#44403c</code>. No component-level dark mode logic is needed.</p>
 <p>The stone scale inverts: <code>--color-stone-50</code> goes from <code>#fafaf9</code> (near-white) to <code>#1a1a1a</code> (near-black). Semantic colors shift to lighter, higher-contrast variants: <code>--color-blue-500</code> goes from <code>#3b82f6</code> to <code>#60a5fa</code>, <code>--color-red-500</code> from <code>#ef4444</code> to <code>#f87171</code>.</p>
 <p>Element-specific overrides handle components that reference hard-coded values or need additional dark treatment: tables, sidebar, expandable triggers, checkboxes, input fields, and syntax highlighting tokens.</p>
@@ -268,7 +257,7 @@
 </code></pre></div>
 
 <p>All dark-mode text-on-background pairings are verified to WCAG AA. The contrast table is in <code>accessibility.md</code>.</p>
-<h3 id="layer-7-responsivemobile">Layer 7: Responsive/Mobile<a class="headerlink" href="#layer-7-responsivemobile" title="Anchor link">&para;</a></h3>
+<h3 id="layer-7-responsivemobile">Layer 7: Responsive/Mobile<a class="anchor-link" href="#layer-7-responsivemobile" title="Permalink">¶</a></h3>
 <p>Triggered at <code>max-width: 768px</code>. Three major adaptations:</p>
 <ol>
 <li>
@@ -302,9 +291,9 @@
 </code></pre></div>
 
 <hr />
-<h2 id="color-system">Color System<a class="headerlink" href="#color-system" title="Anchor link">&para;</a></h2>
+<h2 id="color-system">Color System<a class="anchor-link" href="#color-system" title="Permalink">¶</a></h2>
 <p>50+ semantic tokens across 7 categories, each with light/dark pairs. Every color belongs to a semantic category &ndash; the category determines usage, not aesthetic preference.</p>
-<h3 id="semantic-categories">Semantic Categories<a class="headerlink" href="#semantic-categories" title="Anchor link">&para;</a></h3>
+<h3 id="semantic-categories">Semantic Categories<a class="anchor-link" href="#semantic-categories" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -360,11 +349,11 @@
 </tbody>
 </table>
 <p>The classification rule: ask &ldquo;is this infrastructure, security, external, agent/LLM, data/config, user/operator, or neutral?&rdquo; and use the fill/stroke pair for that category. Do not mix categories on a single element.</p>
-<h3 id="enterprise-report-palette">Enterprise Report Palette<a class="headerlink" href="#enterprise-report-palette" title="Anchor link">&para;</a></h3>
+<h3 id="enterprise-report-palette">Enterprise Report Palette<a class="anchor-link" href="#enterprise-report-palette" title="Permalink">¶</a></h3>
 <p>A separate slate-gray palette for professional reports, aligned with pandoc output. Nine tokens: <code>--color-enterprise-text</code> (#333333), three heading levels (#1a202c, #2d3748, #4a5568), accent (#4a5568 for table headers and section borders), two border weights (#e2e8f0 light, #d0d0d0 heavy), and two backgrounds (#f7f7f7 alt rows, #edf2f7 hover).</p>
-<h3 id="chart-and-visualization-colors">Chart and Visualization Colors<a class="headerlink" href="#chart-and-visualization-colors" title="Anchor link">&para;</a></h3>
+<h3 id="chart-and-visualization-colors">Chart and Visualization Colors<a class="anchor-link" href="#chart-and-visualization-colors" title="Permalink">¶</a></h3>
 <p>Six sequential colors for D3.js charts: <code>--chart-color-1</code> through <code>--chart-color-6</code> (blue, green, red, amber, purple, gray). Five semantic role colors for positioning maps: leader (#4A90E2), challenger (#27AE60), incumbent (#6c757d), threat (#E74C3C), subject (#F5A623).</p>
-<h3 id="diagram-element-colors">Diagram Element Colors<a class="headerlink" href="#diagram-element-colors" title="Anchor link">&para;</a></h3>
+<h3 id="diagram-element-colors">Diagram Element Colors<a class="anchor-link" href="#diagram-element-colors" title="Permalink">¶</a></h3>
 <p>Seven semantic categories for diagram generation (Rough.js, Mermaid, HTML/CSS). Each category provides a fill/stroke pair for both light and dark modes:</p>
 <table>
 <thead>
@@ -429,18 +418,18 @@
 </tbody>
 </table>
 <p>Connectors use stone-500 (<code>#78716c</code> light / <code>#737373</code> dark) at 2px. Security boundary crossings use red at 3px. Optional/future connections are dashed <code>[6, 4]</code>.</p>
-<h3 id="syntax-highlighting">Syntax Highlighting<a class="headerlink" href="#syntax-highlighting" title="Anchor link">&para;</a></h3>
+<h3 id="syntax-highlighting">Syntax Highlighting<a class="anchor-link" href="#syntax-highlighting" title="Permalink">¶</a></h3>
 <p>Eight token types with distinct light/dark pairs: keyword (violet), string (emerald), comment (stone-400/neutral-500), number (amber), property (blue), punctuation (stone-700/neutral-300), command (red), flag (cyan).</p>
 <hr />
-<h2 id="typography">Typography<a class="headerlink" href="#typography" title="Anchor link">&para;</a></h2>
-<h3 id="font-stacks">Font Stacks<a class="headerlink" href="#font-stacks" title="Anchor link">&para;</a></h3>
+<h2 id="typography">Typography<a class="anchor-link" href="#typography" title="Permalink">¶</a></h2>
+<h3 id="font-stacks">Font Stacks<a class="anchor-link" href="#font-stacks" title="Permalink">¶</a></h3>
 <p>Two font stacks, no external font loading:</p>
 <ul>
 <li><strong>Body/UI:</strong> <code>-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif</code> &ndash; system font stack, zero FOUT, renders natively on every platform.</li>
 <li><strong>Monospace:</strong> <code>"SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace</code> &ndash; used for code blocks, inline code, file paths, directory trees, config keys.</li>
 </ul>
 <p>Text rendering is optimized with <code>-webkit-font-smoothing: antialiased</code> and <code>text-rendering: optimizeLegibility</code>.</p>
-<h3 id="two-type-scales">Two Type Scales<a class="headerlink" href="#two-type-scales" title="Anchor link">&para;</a></h3>
+<h3 id="two-type-scales">Two Type Scales<a class="anchor-link" href="#two-type-scales" title="Permalink">¶</a></h3>
 <p>The system has two type scales for two contexts. Selecting the wrong scale for a deliverable type is a common failure mode.</p>
 <p><strong>Interactive / Curriculum Scale (ODC-derived):</strong> 16px body text, detailed type hierarchy for walkthroughs and interactive HTML. Heading sizes: h1 at 28px/700, h2 at 22px/700, h3 at 18px/600. Body at 16px/400 with 1.65 line-height. Code at 14px. Nav items at 14px/500. Max prose width: 780px.</p>
 <p><strong>Enterprise Report Scale (MLR-derived):</strong> 13px body text, conservative hierarchy for professional reports and PDF output. Heading sizes: h1 at 24pt/700, h2 at 18pt/600, h3 at 14pt/600, h4 at 12pt/600. Table headers at 11px/600 uppercase. Max content width: 1200px.</p>
@@ -481,7 +470,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="spacing-system">Spacing System<a class="headerlink" href="#spacing-system" title="Anchor link">&para;</a></h3>
+<h3 id="spacing-system">Spacing System<a class="anchor-link" href="#spacing-system" title="Permalink">¶</a></h3>
 <p>All spacing is built on a 4px grid. Nine tokens:</p>
 <table>
 <thead>
@@ -539,12 +528,12 @@
 </tr>
 </tbody>
 </table>
-<h3 id="heading-rules">Heading Rules<a class="headerlink" href="#heading-rules" title="Anchor link">&para;</a></h3>
+<h3 id="heading-rules">Heading Rules<a class="anchor-link" href="#heading-rules" title="Permalink">¶</a></h3>
 <p>Never skip heading levels (h1 &gt; h2 &gt; h3 &gt; h4). Both scales use bottom borders as visual anchors: the interactive scale puts a 2px border in <code>--color-stone-200</code> on h2; the enterprise scale puts a 3px border in <code>--color-enterprise-accent</code> on h1 and a 2px border in <code>--color-enterprise-border</code> on h2. h3 and h4 get no borders in either scale. All heading levels carry <code>page-break-after: avoid</code> for PDF generation.</p>
 <hr />
-<h2 id="accessibility">Accessibility<a class="headerlink" href="#accessibility" title="Anchor link">&para;</a></h2>
+<h2 id="accessibility">Accessibility<a class="anchor-link" href="#accessibility" title="Permalink">¶</a></h2>
 <p>The design system targets WCAG AA: 4.5:1 contrast ratio for normal text (&lt; 18px), 3:1 for large text (&gt;= 18px or &gt;= 14px bold).</p>
-<h3 id="verified-contrast">Verified Contrast<a class="headerlink" href="#verified-contrast" title="Anchor link">&para;</a></h3>
+<h3 id="verified-contrast">Verified Contrast<a class="anchor-link" href="#verified-contrast" title="Permalink">¶</a></h3>
 <p>Every text-on-background pairing in the stylesheet has been verified. Representative light-mode pairings:</p>
 <table>
 <thead>
@@ -632,13 +621,13 @@
 </tbody>
 </table>
 <p>Known failure pairings that must not be used: light blue (#60a5fa) on white (3.1:1), light green (#4ade80) on white (2.3:1), yellow (#fbbf24) on white (1.9:1), gray (#525252) on dark surface (#262626, 2.4:1).</p>
-<h3 id="focus-states">Focus States<a class="headerlink" href="#focus-states" title="Anchor link">&para;</a></h3>
+<h3 id="focus-states">Focus States<a class="anchor-link" href="#focus-states" title="Permalink">¶</a></h3>
 <p>All interactive elements have visible focus indicators: 2px solid <code>--color-blue-500</code> with 2px offset. Applied to checkboxes (<code>:focus-visible</code>), notes inputs (<code>:focus</code>), expandable triggers, copy buttons, and sidebar nav items. Focus must be visible in both light and dark mode.</p>
-<h3 id="touch-targets">Touch Targets<a class="headerlink" href="#touch-targets" title="Anchor link">&para;</a></h3>
+<h3 id="touch-targets">Touch Targets<a class="anchor-link" href="#touch-targets" title="Permalink">¶</a></h3>
 <p>Mobile touch targets are at least 44x44px per WCAG 2.1 SC 2.5.5. Nav items and expandable triggers get <code>min-height: 44px</code> in the responsive layer. Checkboxes are 20px visually but provide a 44px hit area via padding.</p>
-<h3 id="color-independent-meaning">Color-Independent Meaning<a class="headerlink" href="#color-independent-meaning" title="Anchor link">&para;</a></h3>
+<h3 id="color-independent-meaning">Color-Independent Meaning<a class="anchor-link" href="#color-independent-meaning" title="Permalink">¶</a></h3>
 <p>Color is never the sole indicator: badges include text labels (&ldquo;CRITICAL&rdquo;, &ldquo;HIGH&rdquo;), SWOT boxes include section headers, callout variants include uppercase labels, and diagram semantic categories are reinforced by shape differences (rectangles vs. circles vs. dashed boundaries).</p>
-<h3 id="reduced-motion">Reduced Motion<a class="headerlink" href="#reduced-motion" title="Anchor link">&para;</a></h3>
+<h3 id="reduced-motion">Reduced Motion<a class="anchor-link" href="#reduced-motion" title="Permalink">¶</a></h3>
 <p>For users with <code>prefers-reduced-motion</code>, all transitions and animations collapse to 0.01ms:</p>
 <div class="highlight"><pre><span></span><code><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">prefers-reduced-motion</span><span class="o">:</span><span class="w"> </span><span class="nt">reduce</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="o">*,</span><span class="w"> </span><span class="o">*</span><span class="p">::</span><span class="nd">before</span><span class="o">,</span><span class="w"> </span><span class="o">*</span><span class="p">::</span><span class="nd">after</span><span class="w"> </span><span class="p">{</span>
@@ -651,11 +640,11 @@
 </code></pre></div>
 
 <p>This rule is recommended for inclusion in engine-level CSS that implements interactive behaviors.</p>
-<h3 id="semantic-html-requirements">Semantic HTML Requirements<a class="headerlink" href="#semantic-html-requirements" title="Anchor link">&para;</a></h3>
+<h3 id="semantic-html-requirements">Semantic HTML Requirements<a class="anchor-link" href="#semantic-html-requirements" title="Permalink">¶</a></h3>
 <p>The design system assumes correct semantic structure: <code>&lt;button&gt;</code> for expandable triggers (not <code>&lt;div&gt;</code> with click handlers), <code>&lt;nav&gt;</code> for sidebar, <code>&lt;main&gt;</code> for primary content, proper heading hierarchy, <code>aria-expanded</code> on expandable triggers, <code>aria-current="true"</code> on active nav items.</p>
 <hr />
-<h2 id="production-pipelines">Production Pipelines<a class="headerlink" href="#production-pipelines" title="Anchor link">&para;</a></h2>
-<h3 id="pdf-pipeline">PDF Pipeline<a class="headerlink" href="#pdf-pipeline" title="Anchor link">&para;</a></h3>
+<h2 id="production-pipelines">Production Pipelines<a class="anchor-link" href="#production-pipelines" title="Permalink">¶</a></h2>
+<h3 id="pdf-pipeline">PDF Pipeline<a class="anchor-link" href="#pdf-pipeline" title="Permalink">¶</a></h3>
 <p>Chrome headless generation with no intermediate tooling, no build system, no server. The HTML source is the single source of truth; the PDF is a generated artifact.</p>
 <p><strong>Command:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="s2">&quot;/Applications/Google Chrome.app/Contents/MacOS/Google Chrome&quot;</span><span class="w"> </span><span class="se">\</span>
@@ -680,7 +669,7 @@
 <p><strong>Combined PDFs:</strong> For multi-file deliverables, generate individual PDFs then combine with <code>pdfunite</code> (poppler-utils).</p>
 <p><strong>Common failures:</strong> Tables breaking mid-row (fix: <code>tr { page-break-inside: avoid }</code>), headings orphaned at page bottom (fix: <code>h1-h4 { page-break-after: avoid }</code>), interactive elements visible in PDF (fix: <code>@media print</code> rules hiding sidebar/toggle/copy-btn), expandable sections collapsed (fix: <code>.expandable-content { display: block !important }</code> in print query), color mismatch between browser and PDF (fix: verify in print preview first).</p>
 <p>This pipeline was battle-tested across 13 MLR deliverables through 7 iteration cycles (V1.0 through V2.3, November 2025). Cross-platform: same flags on macOS/Linux/Windows, only the Chrome executable path changes.</p>
-<h3 id="render-validate-pipeline">Render-Validate Pipeline<a class="headerlink" href="#render-validate-pipeline" title="Anchor link">&para;</a></h3>
+<h3 id="render-validate-pipeline">Render-Validate Pipeline<a class="anchor-link" href="#render-validate-pipeline" title="Permalink">¶</a></h3>
 <p>6-step visual verification using Puppeteer. Exists because source code review is insufficient for visual outputs &ndash; four classes of defects are invisible in code:</p>
 <ol>
 <li><strong>CSS hiding content</strong> &ndash; a <code>display:none</code> or zero-height container hides content that has correct markup.</li>
@@ -713,7 +702,7 @@
 <p><strong>The variety rule:</strong> In any output with more than three major diagrams, each should use a different visual pattern. If three diagrams are all left-to-right box-and-arrow layouts, at least two are almost certainly using the wrong pattern for their concept.</p>
 <p><strong>Fallback:</strong> If Puppeteer MCP is unavailable, degrade to manual verification (operator opens the file and provides screenshots). Never degrade to skipping verification.</p>
 <hr />
-<h2 id="source-files">Source Files<a class="headerlink" href="#source-files" title="Anchor link">&para;</a></h2>
+<h2 id="source-files">Source Files<a class="anchor-link" href="#source-files" title="Permalink">¶</a></h2>
 <table>
 <thead>
 <tr>
@@ -755,19 +744,22 @@
 </tr>
 </tbody>
 </table>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

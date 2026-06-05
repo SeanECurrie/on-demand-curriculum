@@ -4,60 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Governance — EngineOS Docs</title>
-  <meta name="description" content="&quot;This is methodology-as-infrastructure for a single operator using orchestration, discipline, and operator review checkpoints. It works because the operator is engaged. It does not claim to be determi">
+  <meta name="description" content="EngineOS governs a confident AI agent -- one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&#x27;t happen, and report filesystem facts from memory">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link active" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item active" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Governance</h1>
-    <p class="report-header__subtitle">&quot;This is methodology-as-infrastructure for a single operator using orchestration, discipline, and operator review checkpoints. It works because the operator is engaged. It does not claim to be determi</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s03">
+  <div class="eyebrow">EngineOS System Documentation · Section 03 · Built 2026-06-05</div>
+  <h1>Governance</h1>
+  <p class="subhead">EngineOS governs a confident AI agent -- one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&#x27;t happen, and report filesystem facts from memory instead of checking disk. The governance stack exists because methodology alone does not survive contact with that agen</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="governance-the-enforcement-stack">Governance &ndash; The Enforcement Stack<a class="headerlink" href="#governance-the-enforcement-stack" title="Anchor link">&para;</a></h1>
+<section class="content">
 <blockquote>
 <p>&ldquo;This is methodology-as-infrastructure for a single operator using orchestration, discipline, and operator review checkpoints. It works because the operator is engaged. It does not claim to be deterministic enforcement.&rdquo;</p>
 <p>&ndash; CLAUDE.md, Enforcement Architecture</p>
@@ -65,8 +54,8 @@
 <p>EngineOS governs a confident AI agent &ndash; one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&rsquo;t happen, and report filesystem facts from memory instead of checking disk. The governance stack exists because methodology alone does not survive contact with that agent. Skills exist, documentation exists, and without forced orchestration the agent defaults to &ldquo;just do the thing.&rdquo;</p>
 <p>The enforcement stack has two layers: mechanical enforcement (shell-script hooks that block tool calls at the Claude Code platform level) and advisory enforcement (instructions in CLAUDE.md, rules files, and skill specifications that depend on the agent following them). A run plan bridges both layers &ndash; it is simultaneously a planning artifact and a mechanical gate key.</p>
 <hr />
-<h2 id="two-enforcement-layers">Two Enforcement Layers<a class="headerlink" href="#two-enforcement-layers" title="Anchor link">&para;</a></h2>
-<h3 id="mechanical-enforcement-hooks">Mechanical Enforcement (Hooks)<a class="headerlink" href="#mechanical-enforcement-hooks" title="Anchor link">&para;</a></h3>
+<h2 id="two-enforcement-layers">Two Enforcement Layers<a class="anchor-link" href="#two-enforcement-layers" title="Permalink">¶</a></h2>
+<h3 id="mechanical-enforcement-hooks">Mechanical Enforcement (Hooks)<a class="anchor-link" href="#mechanical-enforcement-hooks" title="Permalink">¶</a></h3>
 <p>Claude Code supports lifecycle hooks: shell scripts (or Python scripts via <code>uv run</code>) that fire at specific points in the agent&rsquo;s operation. EngineOS deploys <strong>eight wired hook events</strong>, all configured in <code>.claude/settings.json</code>. The hook stack grew from four events (April 2026, the original governance build) to eight events (June 2026, when the second-brain capture and retrieval layer was added per DECISIONS.md D29-D32). The current eight events:</p>
 <table>
 <thead>
@@ -184,7 +173,7 @@
 
 <p>Each hook type fires at a different point in the agent lifecycle. The <code>matcher</code> field on PreToolUse and PostToolUse restricts which tool invocations trigger the hook &ndash; <code>Write|Edit</code> means only file-writing operations. Hooks 1-4 are shell scripts (the April 2026 governance core); hooks 5-8 are Python scripts run via <code>uv</code> (the June 2026 second-brain layer). The two flush hooks (SessionEnd, PreCompact) share extraction and spawn logic via <code>hooks/_flush_common.py</code> (DECISIONS.md D29) so capture caps stay in sync across both firing points &ndash; an anti-drift discipline that prevents bumping one and forgetting the other.</p>
 <hr />
-<h4 id="hook-1-pretooluse-governance-gate-pre-write-governancesh">Hook 1: PreToolUse &ndash; Governance Gate (<code>pre-write-governance.sh</code>)<a class="headerlink" href="#hook-1-pretooluse-governance-gate-pre-write-governancesh" title="Anchor link">&para;</a></h4>
+<h4 id="hook-1-pretooluse-governance-gate-pre-write-governancesh">Hook 1: PreToolUse &ndash; Governance Gate (<code>pre-write-governance.sh</code>)<a class="anchor-link" href="#hook-1-pretooluse-governance-gate-pre-write-governancesh" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PreToolUse (fires before a Write or Edit tool call executes)
 <strong>Trigger:</strong> Every attempt to write or edit any file
 <strong>What it does:</strong> Blocks deliverable writes unless a scope-matched run plan exists on disk</p>
@@ -263,7 +252,7 @@
 </table>
 <p>Root <code>run-plans/</code> always qualifies because OS-level operations (builds, audits) legitimately touch engine files. Engine-specific <code>run-plans/</code> directories scope engine work to its own tenant. The <code>-maxdepth 1</code> enforces canonical flat paths &ndash; no nested subdirectories like <code>engines/X/pipeline/run-plans/</code> (a legacy pattern that was deprecated in the v2 rewrite). The <code>-mtime -2</code> requires the plan to have been modified within the last 2 days &ndash; stale plans don&rsquo;t unlock writes.</p>
 <hr />
-<h4 id="hook-2-posttooluse-activity-logging-post-tool-usesh">Hook 2: PostToolUse &ndash; Activity Logging (<code>post-tool-use.sh</code>)<a class="headerlink" href="#hook-2-posttooluse-activity-logging-post-tool-usesh" title="Anchor link">&para;</a></h4>
+<h4 id="hook-2-posttooluse-activity-logging-post-tool-usesh">Hook 2: PostToolUse &ndash; Activity Logging (<code>post-tool-use.sh</code>)<a class="anchor-link" href="#hook-2-posttooluse-activity-logging-post-tool-usesh" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PostToolUse (fires after a Write or Edit tool call completes)
 <strong>Trigger:</strong> Every successful file write or edit
 <strong>What it does:</strong> Appends a timestamped entry to <code>logs/activity-log.md</code></p>
@@ -294,7 +283,7 @@
 
 <p>Every write produces a row in the activity log with timestamp, engine tag, action type, file path, and attribution. The infinite-loop guard (<code>if [[ "$FILE_PATH" == *"activity-log.md" ]]; then exit 0</code>) prevents the hook from logging its own writes. Attribution reads from <code>$USER</code> environment variable with fallback to &ldquo;operator&rdquo; &ndash; preparing for future multi-user support without breaking the single-operator default.</p>
 <hr />
-<h4 id="hook-3-stop-session-end-check-stopsh">Hook 3: Stop &ndash; Session-End Check (<code>stop.sh</code>)<a class="headerlink" href="#hook-3-stop-session-end-check-stopsh" title="Anchor link">&para;</a></h4>
+<h4 id="hook-3-stop-session-end-check-stopsh">Hook 3: Stop &ndash; Session-End Check (<code>stop.sh</code>)<a class="anchor-link" href="#hook-3-stop-session-end-check-stopsh" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> Stop (fires when a Claude Code session ends)
 <strong>Trigger:</strong> Session termination
 <strong>What it does:</strong> Warns if CONTEXT.md was not updated during the session</p>
@@ -317,7 +306,7 @@
 
 <p>This hook is advisory, not blocking. It does not prevent session end. It surfaces a warning when the session handoff mechanism (CONTEXT.md) was not updated &ndash; catching the case where meaningful work happened but the recovery point was not written. The check covers both the root CONTEXT.md and every engine tenant&rsquo;s CONTEXT.md.</p>
 <hr />
-<h4 id="hook-4-postcompact-compaction-recovery-post-compactsh">Hook 4: PostCompact &ndash; Compaction Recovery (<code>post-compact.sh</code>)<a class="headerlink" href="#hook-4-postcompact-compaction-recovery-post-compactsh" title="Anchor link">&para;</a></h4>
+<h4 id="hook-4-postcompact-compaction-recovery-post-compactsh">Hook 4: PostCompact &ndash; Compaction Recovery (<code>post-compact.sh</code>)<a class="anchor-link" href="#hook-4-postcompact-compaction-recovery-post-compactsh" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PostCompact (fires after Claude Code compacts its context window)
 <strong>Trigger:</strong> Context compaction event
 <strong>What it does:</strong> Re-injects core behaviors and active run plan awareness</p>
@@ -347,7 +336,7 @@
 <p>The hook lists active run plans (files newer than CONTEXT.md at canonical run-plan paths) and reminds the agent to resume them. If no active plans exist, it reminds the agent that the PreToolUse hook will block deliverable writes. The active engine tenants are enumerated so the agent knows which engines exist.</p>
 <p>This hook is the compaction survival mechanism. The run plan on disk persists the full execution state (6 layers of context). The PostCompact hook tells the agent where to find it. Together, they bridge the compaction gap.</p>
 <hr />
-<h4 id="hook-5-userpromptsubmit-retrieval-injection-prompt-retrievalpy">Hook 5: UserPromptSubmit &ndash; Retrieval Injection (<code>prompt-retrieval.py</code>)<a class="headerlink" href="#hook-5-userpromptsubmit-retrieval-injection-prompt-retrievalpy" title="Anchor link">&para;</a></h4>
+<h4 id="hook-5-userpromptsubmit-retrieval-injection-prompt-retrievalpy">Hook 5: UserPromptSubmit &ndash; Retrieval Injection (<code>prompt-retrieval.py</code>)<a class="anchor-link" href="#hook-5-userpromptsubmit-retrieval-injection-prompt-retrievalpy" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> UserPromptSubmit (fires after the operator submits a prompt, before the agent receives it)
 <strong>Trigger:</strong> Every prompt matching the heuristic gate (trigger words, question starts, minimum length)
 <strong>What it does:</strong> Searches the second brain and injects the top 3 matches as <code>&lt;prior-context&gt;...&lt;/prior-context&gt;</code> mid-prompt</p>
@@ -377,7 +366,7 @@
 <p>Every invocation appends one record to <code>scripts/retrieval-health.jsonl</code> &ndash; timestamp, session_id, gate decision, gate reasons, query terms, surfaces searched, matches found/returned, chars injected, exec_ms, result. The operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions and applies the keep/tune/kill rules from D32 (gate hit rate &lt;10% = too quiet; &gt;60% = too noisy; injection size near cap = bump cap; &gt;50% noise judgment = tighten or kill).</p>
 <p>This is governance-by-information-flow rather than governance-by-blocking &ndash; the hook does not deny anything; it changes what the agent sees by the time it answers. The deny-side mechanical layer (Hook 1) addresses &ldquo;research before producing&rdquo;; the inject-side mechanical layer (Hook 5) addresses &ldquo;research before agreeing&rdquo; applied to the agent&rsquo;s own corpus.</p>
 <hr />
-<h4 id="hook-6-sessionstart-orientation-injection-session-startpy">Hook 6: SessionStart &ndash; Orientation Injection (<code>session-start.py</code>)<a class="headerlink" href="#hook-6-sessionstart-orientation-injection-session-startpy" title="Anchor link">&para;</a></h4>
+<h4 id="hook-6-sessionstart-orientation-injection-session-startpy">Hook 6: SessionStart &ndash; Orientation Injection (<code>session-start.py</code>)<a class="anchor-link" href="#hook-6-sessionstart-orientation-injection-session-startpy" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> SessionStart (fires when Claude Code starts a session)
 <strong>Trigger:</strong> Session start
 <strong>What it does:</strong> Reads <code>knowledge/index.md</code> + the last 30 lines of today&rsquo;s (or yesterday&rsquo;s) daily log, injects as orientation context</p>
@@ -393,7 +382,7 @@
 
 <p>This hook does no API calls &ndash; pure local file I/O. The session-orchestrator skill complements it on the agent-discipline side (CONTEXT.md reading, engine detection) but the orientation injection is what makes the KB index visible without the agent having to remember to load it.</p>
 <hr />
-<h4 id="hook-7-sessionend-session-arc-capture-session-endpy">Hook 7: SessionEnd &ndash; Session-Arc Capture (<code>session-end.py</code>)<a class="headerlink" href="#hook-7-sessionend-session-arc-capture-session-endpy" title="Anchor link">&para;</a></h4>
+<h4 id="hook-7-sessionend-session-arc-capture-session-endpy">Hook 7: SessionEnd &ndash; Session-Arc Capture (<code>session-end.py</code>)<a class="anchor-link" href="#hook-7-sessionend-session-arc-capture-session-endpy" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> SessionEnd (fires when a Claude Code session terminates)
 <strong>Trigger:</strong> Session termination, transcript path provided by Claude Code
 <strong>What it does:</strong> Extracts the last ~60 turns / 30K chars from the JSONL transcript, writes them to a context file, spawns <code>flush.py</code> as a background process to extract knowledge into the daily log</p>
@@ -406,7 +395,7 @@
 
 <p>Extraction and spawn logic both live in <code>hooks/_flush_common.py</code> &ndash; shared with Hook 8. The recursion guard prevents infinite loops when flush.py&rsquo;s internal Claude Code session would otherwise re-fire SessionEnd. Hook 3 (Stop) still fires separately and handles the CONTEXT.md update check; the two are independent.</p>
 <hr />
-<h4 id="hook-8-precompact-compaction-time-capture-pre-compactpy">Hook 8: PreCompact &ndash; Compaction-Time Capture (<code>pre-compact.py</code>)<a class="headerlink" href="#hook-8-precompact-compaction-time-capture-pre-compactpy" title="Anchor link">&para;</a></h4>
+<h4 id="hook-8-precompact-compaction-time-capture-pre-compactpy">Hook 8: PreCompact &ndash; Compaction-Time Capture (<code>pre-compact.py</code>)<a class="anchor-link" href="#hook-8-precompact-compaction-time-capture-pre-compactpy" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PreCompact (fires before Claude Code auto-compacts the context window)
 <strong>Trigger:</strong> Imminent compaction
 <strong>What it does:</strong> Same as SessionEnd &ndash; extracts recent transcript turns, spawns <code>flush.py</code> &ndash; but at the marathon-session boundary instead of at session termination</p>
@@ -414,7 +403,7 @@
 <p>Both hooks share <code>hooks/_flush_common.py</code> (DECISIONS.md D29). The shared module exports <code>extract_conversation_context()</code>, <code>parse_hook_input()</code>, <code>spawn_flush_process()</code>, and the cap constants <code>MAX_TURNS=60</code> / <code>MAX_CONTEXT_CHARS=30_000</code> as a single source of truth. Bumping a cap in <code>_flush_common.py</code> updates both firing points automatically &ndash; the anti-drift discipline that prevents the next person from forgetting one of the two hooks. The recursion guard is identical to Hook 7.</p>
 <p><code>MIN_TURNS_TO_FLUSH</code> differs: SessionEnd flushes at ≥1 turn (any real conversation is worth capturing); PreCompact requires ≥5 turns (avoid spurious flushes for incidental compactions early in a session).</p>
 <hr />
-<h3 id="advisory-enforcement-rules-claudemd">Advisory Enforcement (Rules + CLAUDE.md)<a class="headerlink" href="#advisory-enforcement-rules-claudemd" title="Anchor link">&para;</a></h3>
+<h3 id="advisory-enforcement-rules-claudemd">Advisory Enforcement (Rules + CLAUDE.md)<a class="anchor-link" href="#advisory-enforcement-rules-claudemd" title="Permalink">¶</a></h3>
 <p>The mechanical layer handles what can be blocked with a shell script. The advisory layer handles everything else &ndash; quality standards, research discipline, methodology compliance, voice consistency, and the hundreds of judgment calls that cannot be reduced to a <code>deny</code> JSON response.</p>
 <p><strong>CLAUDE.md core behaviors</strong> are the top-level instructions. Six non-negotiable behaviors survive context compaction because CLAUDE.md is always loaded:</p>
 <ol>
@@ -440,10 +429,10 @@
 </ul>
 <p><strong>The honest acknowledgment:</strong> Advisory enforcement depends on the agent following instructions. A sufficiently confident agent can ignore every rule, skip every skill invocation, and produce output that looks professional but followed none of the governance. This is not hypothetical &ndash; it happened in three consecutive sessions (WS3-WS5) where the agent skipped planning skills entirely while producing acceptable output. The mechanical layer (hooks) exists because advisory alone demonstrably fails on confident agents. The advisory layer remains essential for everything the mechanical layer cannot reach.</p>
 <hr />
-<h2 id="phase-controller-the-orchestration-brain">Phase-Controller &ndash; The Orchestration Brain<a class="headerlink" href="#phase-controller-the-orchestration-brain" title="Anchor link">&para;</a></h2>
+<h2 id="phase-controller-the-orchestration-brain">Phase-Controller &ndash; The Orchestration Brain<a class="anchor-link" href="#phase-controller-the-orchestration-brain" title="Permalink">¶</a></h2>
 <p>The phase-controller is the central governance skill. It classifies work, builds run plans, forces skill invocation at every transition, and gates on operator approval before execution begins. Without it, methodology exists but nothing makes it fire.</p>
 <p><strong>Why it exists:</strong> Skills exist. Methodology docs exist. The agent knows about all of them. Without forced orchestration, the agent defaults to &ldquo;just do the thing&rdquo; &ndash; skipping depth governance, quality checks, and structured findings. The root cause is not missing methodology. It is missing orchestration. Phase-controller is the orchestrator.</p>
-<h3 id="7-operation-types">7 Operation Types<a class="headerlink" href="#7-operation-types" title="Anchor link">&para;</a></h3>
+<h3 id="7-operation-types">7 Operation Types<a class="anchor-link" href="#7-operation-types" title="Permalink">¶</a></h3>
 <p>Every piece of work gets classified into one of seven types. Classification takes 60 seconds and determines the planning weight, skill chain, and criteria intensity.</p>
 <table>
 <thead>
@@ -500,8 +489,8 @@
 </tbody>
 </table>
 <p>Classification rules resolve ambiguity: multiple types classify by the heaviest type (an engagement requiring research is EN, not RE). If classification is unclear, the agent asks the operator rather than guessing. The key distinction between BL and MT: BL changes what the system IS; MT changes what the system HAS.</p>
-<h3 id="the-4-step-flow">The 4-Step Flow<a class="headerlink" href="#the-4-step-flow" title="Anchor link">&para;</a></h3>
-<h4 id="step-1-classify-60-seconds">Step 1: Classify (60 seconds)<a class="headerlink" href="#step-1-classify-60-seconds" title="Anchor link">&para;</a></h4>
+<h3 id="the-4-step-flow">The 4-Step Flow<a class="anchor-link" href="#the-4-step-flow" title="Permalink">¶</a></h3>
+<h4 id="step-1-classify-60-seconds">Step 1: Classify (60 seconds)<a class="anchor-link" href="#step-1-classify-60-seconds" title="Permalink">¶</a></h4>
 <p>Read the intake context and classify. No brainstorming. No research. Just classify and present:</p>
 <div class="highlight"><pre><span></span><code>**Classification**
 
@@ -514,7 +503,7 @@ Correct?
 </code></pre></div>
 
 <p><strong>Gate: Do not proceed until the operator confirms.</strong></p>
-<h4 id="step-2-build-the-run-plan-write-to-disk">Step 2: Build the Run Plan (write to disk)<a class="headerlink" href="#step-2-build-the-run-plan-write-to-disk" title="Anchor link">&para;</a></h4>
+<h4 id="step-2-build-the-run-plan-write-to-disk">Step 2: Build the Run Plan (write to disk)<a class="anchor-link" href="#step-2-build-the-run-plan-write-to-disk" title="Permalink">¶</a></h4>
 <p>Create the run plan artifact at a canonical path:</p>
 <ul>
 <li>Engine work: <code>engines/[name]/run-plans/[YYYY-MM-DD]-[short-name].md</code></li>
@@ -564,7 +553,7 @@ Correct?
 </table>
 <p>Plus <strong>Not-Scope</strong> (what is explicitly excluded, never empty) and <strong>Deliverables</strong> (specific files with paths that will exist when the work is done).</p>
 <p>This structure is not decorative. Layer 4 is a structural dependency for production steps (see Contract Hardening below). Layer 5 is the compaction recovery mechanism &ndash; if context compacts mid-execution, the run plan on disk shows what has been done and what remains.</p>
-<h4 id="step-25-contract-hardening">Step 2.5: Contract Hardening<a class="headerlink" href="#step-25-contract-hardening" title="Anchor link">&para;</a></h4>
+<h4 id="step-25-contract-hardening">Step 2.5: Contract Hardening<a class="anchor-link" href="#step-25-contract-hardening" title="Permalink">¶</a></h4>
 <p>Before presenting the plan, the agent self-hardens its success criteria with three questions per criterion:</p>
 <ol>
 <li>
@@ -594,7 +583,7 @@ Correct?
 </code></pre></div>
 
 <p>Criteria intensity scales by operation type: BL operations get 5-10 criteria; MT operations get 2-4.</p>
-<h4 id="step-3-present-for-approval">Step 3: Present for Approval<a class="headerlink" href="#step-3-present-for-approval" title="Anchor link">&para;</a></h4>
+<h4 id="step-3-present-for-approval">Step 3: Present for Approval<a class="anchor-link" href="#step-3-present-for-approval" title="Permalink">¶</a></h4>
 <p>The run plan summary is presented to the operator:</p>
 <div class="highlight"><pre><span></span><code>**Run Plan Written** -&gt; engines/on-demand-curriculum/run-plans/2026-04-06-governance-doc.md
 
@@ -610,9 +599,9 @@ Approve to begin execution?
 </code></pre></div>
 
 <p><strong>Gate: Do not proceed until the operator approves.</strong> Not silence. Not implied consent. Explicit approval.</p>
-<h4 id="step-4-execute-with-forced-skill-invocation">Step 4: Execute with Forced Skill Invocation<a class="headerlink" href="#step-4-execute-with-forced-skill-invocation" title="Anchor link">&para;</a></h4>
+<h4 id="step-4-execute-with-forced-skill-invocation">Step 4: Execute with Forced Skill Invocation<a class="anchor-link" href="#step-4-execute-with-forced-skill-invocation" title="Permalink">¶</a></h4>
 <p>Once approved, the run plan executes step by step under 11 forcing function rules.</p>
-<h3 id="11-forcing-function-rules">11 Forcing Function Rules<a class="headerlink" href="#11-forcing-function-rules" title="Anchor link">&para;</a></h3>
+<h3 id="11-forcing-function-rules">11 Forcing Function Rules<a class="anchor-link" href="#11-forcing-function-rules" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -689,9 +678,9 @@ Approve to begin execution?
 <p><strong>Rule 10</strong> addresses the demonstrated failure pattern where agents skip planning. In three consecutive sessions (WS3-WS5), the agent skipped both brainstorming and writing-plans skills entirely &ndash; while producing acceptable output. The enforcement model is two-tiered: <code>[MANDATORY - structural]</code> steps (writing-plans) create artifacts that the production step reads as a required input &ndash; empty Layer 4 means production cannot proceed. <code>[MANDATORY]</code> steps (brainstorming) use advisory enforcement with transparency &ndash; if skipped, the agent must write a justification visible to the operator at the approval gate. This asymmetry is intentional: structural enforcement works where artifacts are concrete; advisory enforcement with transparency works where artifacts are fuzzy.</p>
 <p><strong>Rule 11</strong> addresses the verified-state-claim failure pattern. An agent declared a directory did not exist after 4 glob attempts. The actual path was <code>WONDA-STUFF</code> (all-caps, hyphens instead of spaces). That wrong negative propagated into an audit conclusion that an entire capability &ldquo;never existed in sources&rdquo; &ndash; structurally invalidating a quadrant of a capability audit. The operator found the path with one case-insensitive <code>ls</code>. Rule 11 requires re-verification against disk before any state claim at a phase transition.</p>
 <hr />
-<h2 id="the-iteration-envelope">The Iteration Envelope<a class="headerlink" href="#the-iteration-envelope" title="Anchor link">&para;</a></h2>
+<h2 id="the-iteration-envelope">The Iteration Envelope<a class="anchor-link" href="#the-iteration-envelope" title="Permalink">¶</a></h2>
 <p>The iteration envelope is a produce-evaluate-retry loop that wraps the production steps in skill chains. It is the mechanism that turns independent evaluation from a concept into a repeating process.</p>
-<h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Anchor link">&para;</a></h3>
+<h3 id="how-it-works">How It Works<a class="anchor-link" href="#how-it-works" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>OUTSIDE ENVELOPE (runs once):
   depth-governor, brainstorming, writing-plans, operator approval gates
 
@@ -717,7 +706,7 @@ AFTER ENVELOPE (runs once on final version):
 [timestamp] Iteration 2: adversarial-evaluator scored avg 7.8. PASSED (all criteria &gt;= threshold).
 </code></pre></div>
 
-<h3 id="adversarial-evaluator">Adversarial Evaluator<a class="headerlink" href="#adversarial-evaluator" title="Anchor link">&para;</a></h3>
+<h3 id="adversarial-evaluator">Adversarial Evaluator<a class="anchor-link" href="#adversarial-evaluator" title="Permalink">¶</a></h3>
 <p>The adversarial evaluator is a subagent with three architectural properties that make it structurally different from self-evaluation:</p>
 <p><strong>Independent context.</strong> The evaluator subagent does NOT share the executor&rsquo;s session. It receives only deliverable paths, criteria JSON, pass threshold, and a one-line task description. It cannot see the executor&rsquo;s reasoning, run plan, or conversation history. This independence is why agent judges disagree with humans only 0.3% of the time, versus 31% for single LLM self-judges (Agent-as-a-Judge, arxiv:2508.02994).</p>
 <p><strong>Tool asymmetry.</strong> The evaluator has Read, Bash, Glob, and Grep tools. It does NOT have Write or Edit. It can read files and run verification commands. It cannot fix what it finds. This is adapted from the adversarial-dev evaluator pattern &ndash; the evaluator&rsquo;s job is to find problems, not to solve them.</p>
@@ -727,7 +716,7 @@ AFTER ENVELOPE (runs once on final version):
 
 <p>If the evaluator says <code>"passed": true</code> but any criterion scores below threshold, the executor overrides to <code>false</code>. The evaluator is an LLM &ndash; it can misjudge its own summary. The scores are the source of truth.</p>
 <p>If the evaluator&rsquo;s output cannot be parsed as JSON (all three parsing strategies fail), the result is a hard fail: all scores = 0, <code>passed = false</code>. Parse failure is treated as evaluation failure. This is the punitive default &ndash; a malformed evaluation does not silently pass.</p>
-<h3 id="real-example-planning-enforcement-methodology-doc">Real Example: Planning-Enforcement Methodology Doc<a class="headerlink" href="#real-example-planning-enforcement-methodology-doc" title="Anchor link">&para;</a></h3>
+<h3 id="real-example-planning-enforcement-methodology-doc">Real Example: Planning-Enforcement Methodology Doc<a class="anchor-link" href="#real-example-planning-enforcement-methodology-doc" title="Permalink">¶</a></h3>
 <p>The production of <code>methodology/planning-enforcement.md</code> (WS6) required 3 iterations through the envelope. The adversarial evaluator caught fabricated citations in the first two attempts &ndash; the concepts being cited were real (Cole&rsquo;s adversarial-dev, Anthropic&rsquo;s guidance), but the specific quotes attributed to those sources were generated from training data rather than verified against the actual documents. The output-self-test skill passed both times &ndash; self-evaluation cannot detect fabricated citations because the agent that wrote them believes they are correct.</p>
 <div class="highlight"><pre><span></span><code>Iteration 1: avg 6.8 — C3 (source fidelity) scored 5/10.
     Evaluator feedback: &quot;Quotes attributed to Cole&#39;s harness.ts are plausible but not
@@ -741,10 +730,10 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 
 <p>This example demonstrates the core value of independent evaluation: the agent was confident its citations were accurate. Self-tests confirmed that confidence. Only an independent context &ndash; one that read the actual source files and compared them against the cited content &ndash; caught the discrepancy.</p>
 <hr />
-<h2 id="retrieval-architecture">Retrieval Architecture<a class="headerlink" href="#retrieval-architecture" title="Anchor link">&para;</a></h2>
+<h2 id="retrieval-architecture">Retrieval Architecture<a class="anchor-link" href="#retrieval-architecture" title="Permalink">¶</a></h2>
 <p>The mechanical-enforcement layer described above is governance-by-blocking: hooks deny tool calls, force run plans, and re-inject behaviors after compaction. The retrieval architecture is the sister mechanism &ndash; <strong>governance-by-information-flow</strong>. It does not block; it changes what the agent sees by the time it acts. Where mechanical enforcement closes &ldquo;research before producing,&rdquo; retrieval closes &ldquo;research before agreeing&rdquo; applied to the agent&rsquo;s own corpus.</p>
 <p>The architecture was added 2026-06-04 per DECISIONS.md D32. The trigger was an audit finding (D32 Context): EngineOS had strong CAPTURE &ndash; <code>flush.py</code> + <code>compile.py</code> + 216 KB articles + 70+ intel-log entries + 18 daily logs + 27 run plans &ndash; but weak RETRIEVAL. During normal work the agent rarely read concept articles or queried the intel log. Mid-task focus suppresses reflexive internal-archive lookup. Capture without retrieval was a write-only system. For full architecture detail, decision rationale, and the why-not-vector-DB analysis, see <strong><code>docs/source/second-brain.md</code></strong> and <code>methodology/memory-architecture.md § Retrieval Surfaces</code>. This section covers the governance-relevant slice.</p>
-<h3 id="three-layers">Three Layers<a class="headerlink" href="#three-layers" title="Anchor link">&para;</a></h3>
+<h3 id="three-layers">Three Layers<a class="anchor-link" href="#three-layers" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -776,7 +765,7 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 </tbody>
 </table>
 <p>Layer 1 establishes orientation. Layer 2 fills in mid-work context mechanically. Layer 3 escalates when the hook misses or the decision is load-bearing.</p>
-<h3 id="six-surface-priority-corpus">Six-Surface Priority Corpus<a class="headerlink" href="#six-surface-priority-corpus" title="Anchor link">&para;</a></h3>
+<h3 id="six-surface-priority-corpus">Six-Surface Priority Corpus<a class="anchor-link" href="#six-surface-priority-corpus" title="Permalink">¶</a></h3>
 <p>All three layers read the same six surfaces in the same priority order:</p>
 <table>
 <thead>
@@ -827,7 +816,7 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 </tbody>
 </table>
 <p>Higher surfaces have higher signal-to-noise. Stopping rule: when surfaces 1-2 yield 3+ strong hits, lower surfaces are skipped. The whole corpus is markdown &ndash; structured KB index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision at personal-KB scale (&lt;500 articles, currently 216). Vector DB / GraphRAG / Mem0-style frameworks are Phase C deferred with explicit revisit conditions in D32 (corpus &gt;2000 articles, sustained semantic-miss complaints, etc.).</p>
-<h3 id="discipline-pattern-pairing">Discipline + Pattern Pairing<a class="headerlink" href="#discipline-pattern-pairing" title="Anchor link">&para;</a></h3>
+<h3 id="discipline-pattern-pairing">Discipline + Pattern Pairing<a class="anchor-link" href="#discipline-pattern-pairing" title="Permalink">¶</a></h3>
 <p>The mechanical layer is paired with an advisory discipline so retrieval still fires when the hook&rsquo;s heuristic gate misses:</p>
 <ul>
 <li><strong>Framework pattern <code>retrieval-before-decide</code></strong> &ndash; the read-side discipline. Before making an architecture/methodology decision in a domain where prior intelligence likely exists, query the second brain first. The discipline names the moments where the hook&rsquo;s word-based gate isn&rsquo;t reliable (the prompt may not contain &ldquo;we&rdquo; or start with &ldquo;what&rdquo; yet the decision is load-bearing).</li>
@@ -836,7 +825,7 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 <li><strong>Companion skill <code>recall</code></strong> &ndash; the manual escalation, pure Read/Grep/Glob, zero API cost. Invoked via <code>/recall &lt;query&gt;</code> or when the agent recognizes a discipline moment.</li>
 </ul>
 <p>Together the four pieces close both halves of the loop: capture (write-side) + retrieval (read-side), mechanical (hook + skill) + advisory (discipline + feedback).</p>
-<h3 id="measurement">Measurement<a class="headerlink" href="#measurement" title="Anchor link">&para;</a></h3>
+<h3 id="measurement">Measurement<a class="anchor-link" href="#measurement" title="Permalink">¶</a></h3>
 <p>The retrieval layer is governance-grade because it is measured. <code>scripts/retrieval-health.jsonl</code> is append-only, one record per UserPromptSubmit invocation. Schema: <code>ts, session_id, prompt_chars, query_terms, gate_triggered, gate_reasons, corpus_searched, matches_found, matches_returned, chars_injected, exec_ms, result</code>. The operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions and applies the keep/tune/kill rules from D32:</p>
 <ul>
 <li>Gate hit rate &lt;10% sustained → too quiet; loosen triggers or kill hook (rely on <code>/recall</code> only)</li>
@@ -845,7 +834,7 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 <li>Operator marks injections subjectively; if &gt;50% noise → tighten or kill</li>
 </ul>
 <p>This is the same evidence-based keep/tune/kill cadence used by the capture-side health log (see Observability below). Three new binary tests added to memory-architecture (#10-#12) verify the layer fires per session.</p>
-<h3 id="observability">Observability<a class="headerlink" href="#observability" title="Anchor link">&para;</a></h3>
+<h3 id="observability">Observability<a class="anchor-link" href="#observability" title="Permalink">¶</a></h3>
 <p>Both the capture-side and retrieval-side mechanical layers emit structured health logs. The operator reviews them periodically &ndash; the system does not silently degrade.</p>
 <ul>
 <li><strong><code>scripts/hook-health.jsonl</code></strong> (DECISIONS.md D30) &ndash; one record per <code>flush.py</code> invocation. Schema includes attempt count, retry success/failure, exec time, cap hits, response size. <code>scripts/health-review.py</code> summarizes failure rate, retry rate, cap-hit distribution, recent-records table.</li>
@@ -854,13 +843,13 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 <p>D30 also added a 2-attempt retry loop (3s sleep) wrapping <code>query()</code> calls in both <code>flush.py:run_flush()</code> and <code>compile.py:compile_daily_log()</code>. The retry absorbs transient SDK errors (concurrent-session lock, rate, OAuth refresh) cheaply; the health log captures evidence about whether deeper investigation is warranted. If retry-success-rate stays high, the layered fix IS the answer; if <code>flush_error</code> rate stays &gt;5% after retries, that&rsquo;s the real signal to escalate. The operator runs <code>health-review.py</code> ad hoc when suspecting drift &ndash; not on a fixed cadence. Operator-driven keep/tune/kill.</p>
 <p>A related operational fix is captured in DECISIONS.md D31: Python&rsquo;s <code>print()</code> uses block buffering when stdout is a file, which had made <code>compile.py</code> look silently broken for ~3 weeks (<code>compile.log</code> mtime froze) when it was actually running fine intermittently. Fix is one line &ndash; <code>sys.stdout.reconfigure(line_buffering=True)</code> at the top of <code>compile.py:main()</code>. Also added: propagation of <code>CLAUDE_INVOKED_BY=knowledge_compile</code> BEFORE imports that could trigger Claude Code, preventing recursive SessionEnd → flush.py → compile.py → SessionEnd loops from spawning noise daily-log entries. The buffering insight is captured as an intelligence-log entry and as the <code>block-buffered-stdout-masks-progress</code> pattern &ndash; reusable across any future background-spawn pattern.</p>
 <hr />
-<h2 id="quality-gates-how-they-layer">Quality Gates &ndash; How They Layer<a class="headerlink" href="#quality-gates-how-they-layer" title="Anchor link">&para;</a></h2>
+<h2 id="quality-gates-how-they-layer">Quality Gates &ndash; How They Layer<a class="anchor-link" href="#quality-gates-how-they-layer" title="Permalink">¶</a></h2>
 <p>EngineOS has four quality gate mechanisms. They are not interchangeable &ndash; each catches a different class of failure, and they layer in a specific order.</p>
-<h3 id="output-self-test-fast-binary-gate">output-self-test (Fast Binary Gate)<a class="headerlink" href="#output-self-test-fast-binary-gate" title="Anchor link">&para;</a></h3>
+<h3 id="output-self-test-fast-binary-gate">output-self-test (Fast Binary Gate)<a class="anchor-link" href="#output-self-test-fast-binary-gate" title="Permalink">¶</a></h3>
 <p>Binary YES/NO questions per output type. Runs before any &ldquo;done&rdquo; declaration. Takes seconds per test. 5 test batteries: Research Output (RS), Content/Deliverable (CD), Integration Output (IO), HTML Output (HD), and Cross-Cutting (XC, always runs).</p>
 <p>Each test has a quick version (for scan-depth work) and a thorough version (for deep-dive work). Every test follows four design rules: answerable YES/NO in under 5 seconds, references specific parts of the output, a NO implies a specific fix, and paired quick/thorough versions.</p>
 <p><strong>What it catches:</strong> Structural problems &ndash; missing citations, placeholder text, generic output, voice mismatch, broken formatting. <strong>What it misses:</strong> Fabricated citations that look correct, criteria that technically pass but miss the intent, quality issues invisible in a quick skim.</p>
-<h3 id="sanity-check-periodic-spot-check">sanity-check (Periodic Spot-Check)<a class="headerlink" href="#sanity-check-periodic-spot-check" title="Anchor link">&para;</a></h3>
+<h3 id="sanity-check-periodic-spot-check">sanity-check (Periodic Spot-Check)<a class="anchor-link" href="#sanity-check-periodic-spot-check" title="Permalink">¶</a></h3>
 <p>11 known failure modes, each with a binary test. Runs at natural pause points during execution &ndash; not at every commit, not mid-sentence, but at phase boundaries and after producing substantial output. Takes under 2 minutes.</p>
 <p>The 11 failure modes, each backed by a real production incident:</p>
 <table>
@@ -930,10 +919,10 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 </tbody>
 </table>
 <p><strong>What it catches:</strong> Drift patterns that accumulate during execution. <strong>What it misses:</strong> Novel failure modes not yet in the gallery. Quality issues that require independent context to detect.</p>
-<h3 id="adversarial-evaluator-independent-evaluation">adversarial-evaluator (Independent Evaluation)<a class="headerlink" href="#adversarial-evaluator-independent-evaluation" title="Anchor link">&para;</a></h3>
+<h3 id="adversarial-evaluator-independent-evaluation">adversarial-evaluator (Independent Evaluation)<a class="anchor-link" href="#adversarial-evaluator-independent-evaluation" title="Permalink">¶</a></h3>
 <p>Scored evaluation by an independent-context subagent. Runs inside the iteration envelope during production. 20-turn budget per evaluation. Evaluates against the run plan&rsquo;s hardened criteria.</p>
 <p><strong>What it catches:</strong> Self-evaluation blind spots &ndash; fabricated citations, criteria gaming, quality issues that the producing agent cannot see because it shares context with the reasoning that produced the work. <strong>What it misses:</strong> Failure modes outside the hardened criteria. Visual/rendering defects that require a browser.</p>
-<h3 id="qa-pipeline-final-comprehensive-gate">qa-pipeline (Final Comprehensive Gate)<a class="headerlink" href="#qa-pipeline-final-comprehensive-gate" title="Anchor link">&para;</a></h3>
+<h3 id="qa-pipeline-final-comprehensive-gate">qa-pipeline (Final Comprehensive Gate)<a class="anchor-link" href="#qa-pipeline-final-comprehensive-gate" title="Permalink">¶</a></h3>
 <p>4-stage composited verification for external-facing deliverables:</p>
 <ol>
 <li><strong>Stage 1: Programmatic Checks</strong> &ndash; Citation compliance (find all numeric claims, verify citations exist), marketing language detection (5 categories of promotional language), cross-document consistency (track data points across files, flag discrepancies), source freshness (flag citations older than 12 months), faithfulness (verify cited sources actually support claims &ndash; dispatches independent subagent at Comprehensive depth).</li>
@@ -942,7 +931,7 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 <li><strong>Stage 4: Domain-Specific Standards</strong> &ndash; Professional checklists by deliverable type (reports, campaigns, lead lists, one-pagers, presentations, HTML interactives). Severity classification (Critical/High/Medium/Low) for every issue found across all stages.</li>
 </ol>
 <p><strong>What it catches:</strong> Everything the previous gates might miss when the deliverable is going to an external audience. <strong>What it misses:</strong> Nothing in scope &ndash; this is the comprehensive final gate.</p>
-<h3 id="the-layering-order">The Layering Order<a class="headerlink" href="#the-layering-order" title="Anchor link">&para;</a></h3>
+<h3 id="the-layering-order">The Layering Order<a class="anchor-link" href="#the-layering-order" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>output-self-test  (fast, every &quot;done&quot; declaration)
     |
 sanity-check  (periodic, at natural pause points)
@@ -954,7 +943,7 @@ qa-pipeline  (final gate, external-facing deliverables only)
 
 <p>Each layer is progressively more expensive and catches progressively subtler failures. output-self-test runs in seconds and catches structural problems. sanity-check runs in 2 minutes and catches drift patterns. adversarial-evaluator runs a full subagent and catches self-evaluation blind spots. qa-pipeline runs programmatic scans, self-tests, browser rendering, and domain checklists &ndash; it is the comprehensive gate that only fires for work going outside the system.</p>
 <hr />
-<h2 id="run-plans-planning-artifacts-and-gate-keys">Run Plans &ndash; Planning Artifacts AND Gate Keys<a class="headerlink" href="#run-plans-planning-artifacts-and-gate-keys" title="Anchor link">&para;</a></h2>
+<h2 id="run-plans-planning-artifacts-and-gate-keys">Run Plans &ndash; Planning Artifacts AND Gate Keys<a class="anchor-link" href="#run-plans-planning-artifacts-and-gate-keys" title="Permalink">¶</a></h2>
 <p>The key architectural insight: run plans serve two purposes simultaneously.</p>
 <p><strong>1. Planning artifact (advisory).</strong> The phase-controller creates a run plan. It captures the raw intake, classifies the work, specifies the skill chain, hardens the success criteria, and persists execution state across compaction boundaries. This is the advisory function &ndash; the plan guides execution.</p>
 <p><strong>2. Mechanical gate key (blocking).</strong> The PreToolUse hook checks for the run plan&rsquo;s existence on disk before allowing deliverable writes. No run plan at the canonical path = no writes. This is the mechanical function &ndash; the plan unlocks writes.</p>
@@ -963,7 +952,7 @@ qa-pipeline  (final gate, external-facing deliverables only)
 - Engine work: <code>engines/[name]/run-plans/[YYYY-MM-DD]-[short-name].md</code>
 - OS-level work: <code>run-plans/[YYYY-MM-DD]-[short-name].md</code></p>
 <p>No nested subdirectories. The hook scans at <code>-maxdepth 1</code>. Legacy paths like <code>engines/X/pipeline/run-plans/</code> are deprecated.</p>
-<h3 id="a-real-run-plan">A Real Run Plan<a class="headerlink" href="#a-real-run-plan" title="Anchor link">&para;</a></h3>
+<h3 id="a-real-run-plan">A Real Run Plan<a class="anchor-link" href="#a-real-run-plan" title="Permalink">¶</a></h3>
 <p>The substrate tightening run plan (<code>run-plans/2026-04-05-engineos-substrate-tightening.md</code>) is a real BL-type (Build/Audit) run plan that executed to COMPLETE status. It demonstrates the 6-layer structure:</p>
 <details>
 <summary>Layer 0: Raw Intake (condensed)</summary>
@@ -1050,7 +1039,7 @@ Operator commissioned external audit. Two-pass structural analysis identified co
 
 <p>This run plan bridged both purposes: it guided the 35-step execution (planning artifact) and its presence at <code>run-plans/</code> unlocked every write across 4 phases of substrate changes (gate key).</p>
 <hr />
-<h2 id="the-operator-as-final-enforcement-layer">The Operator as Final Enforcement Layer<a class="headerlink" href="#the-operator-as-final-enforcement-layer" title="Anchor link">&para;</a></h2>
+<h2 id="the-operator-as-final-enforcement-layer">The Operator as Final Enforcement Layer<a class="anchor-link" href="#the-operator-as-final-enforcement-layer" title="Permalink">¶</a></h2>
 <p>EngineOS does not claim to be self-governing. The operator is the final enforcement layer.</p>
 <p><strong>Gates require explicit approval.</strong> Not silence, not implied consent, not &ldquo;I think they would want&hellip;&rdquo; The agent stops and waits. In production, this means the operator reviews the work, asks questions, pushes back on scope, redirects approach, and says &ldquo;proceed&rdquo; only when satisfied. The operator has caught the evaluator validating against the wrong baseline, redirected substrate work that was drifting toward feature scope, and collapsed gate boundaries when the plan was well-designed and pre-approved.</p>
 <p><strong>Operator overrides advisory guidance.</strong> The operator&rsquo;s explicit instructions override all guidance except safety constraints. If the operator says &ldquo;skip evaluation,&rdquo; the iteration envelope is bypassed. If the operator says &ldquo;proceed without a full plan,&rdquo; the agent proceeds. The governance exists to serve the operator, not to constrain them.</p>
@@ -1058,19 +1047,22 @@ Operator commissioned external audit. Two-pass structural analysis identified co
 <p><strong>Iteration exhaustion escalates to operator.</strong> When the adversarial evaluator fails a deliverable 3 times, the agent does not decide what to do. It presents the full iteration history &ndash; all attempts, all scores, all feedback &ndash; and the operator decides: accept as-is, provide specific guidance for another attempt, or take over manually.</p>
 <p><strong>The operator can skip the iteration envelope</strong> by saying &ldquo;skip evaluation&rdquo; at any approval gate. This is the only way to bypass the envelope. The agent cannot skip it on its own confidence &ndash; that is the advisory-governance-failure pattern, the exact behavior the enforcement stack was built to prevent.</p>
 <p>The system works because the operator is engaged. This is stated plainly in CLAUDE.md and repeated here without apology: methodology-as-infrastructure for a single engaged operator is not the same as deterministic enforcement, and it does not claim to be. What it claims &ndash; and what the evidence from 100+ days of production use supports &ndash; is that mechanical hooks catch what advisory governance misses, advisory governance covers what mechanical hooks cannot reach, and the operator catches what both miss.</p>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>

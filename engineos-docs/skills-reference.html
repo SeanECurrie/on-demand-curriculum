@@ -6,62 +6,51 @@
   <title>Skills Reference — EngineOS Docs</title>
   <meta name="description" content="EngineOS ships 29 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a">
   <link rel="stylesheet" href="assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
-<div class="progress-bar"><div class="progress-bar__fill"></div></div>
 <aside class="sidebar">
-  <div class="sidebar__brand">
-    <div class="sidebar__org">EngineOS</div>
-    <div class="sidebar__title">System Documentation</div>
-    <div class="sidebar__subtitle">Living docs · rebuilt from disk</div>
+  <div class="sidebar-header">
+    <div class="sidebar-title">EngineOS · Docs</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
   </div>
-  <nav class="sidebar__nav">
-    <div class="sidebar__section-label">Overview</div>
-    <a class="sidebar__link" href="overview.html">Overview</a>
-    <div class="sidebar__section-label">System</div>
-    <a class="sidebar__link" href="architecture.html">Architecture</a>
-    <a class="sidebar__link" href="governance.html">Governance</a>
-    <a class="sidebar__link" href="engine-model.html">Engine Model</a>
-    <div class="sidebar__section-label">Skills &amp; Patterns</div>
-    <a class="sidebar__link" href="skill-system.html">Skill System</a>
-    <a class="sidebar__link active" href="skills-reference.html">Skills Reference</a>
-    <a class="sidebar__link" href="patterns-reference.html">Patterns Reference</a>
-    <div class="sidebar__section-label">Methodology</div>
-    <a class="sidebar__link" href="methodology.html">Methodology</a>
-    <a class="sidebar__link" href="methodology-index.html">Methodology Index</a>
-    <div class="sidebar__section-label">Memory</div>
-    <a class="sidebar__link" href="second-brain.html">Second Brain</a>
-    <div class="sidebar__section-label">Infrastructure</div>
-    <a class="sidebar__link" href="integrations.html">Integrations</a>
-    <a class="sidebar__link" href="design-system.html">Design System</a>
-    <a class="sidebar__link" href="templates-reference.html">Templates Reference</a>
-    <div class="sidebar__section-label">Reference</div>
-    <a class="sidebar__link" href="faq.html">FAQ</a>
-  </nav>
-  <div class="sidebar__footer">
-    Rebuild: <code>uv run scripts/build-docs.py</code><br>
-    Drift check: <code>uv run scripts/docs-staleness.py</code>
-  </div>
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="overview.html"><span class="nav-num">01</span>Overview</a>
+  <div class="nav-group-label">System</div>
+  <a class="nav-item" href="architecture.html"><span class="nav-num">02</span>Architecture</a>
+  <a class="nav-item" href="governance.html"><span class="nav-num">03</span>Governance</a>
+  <a class="nav-item" href="engine-model.html"><span class="nav-num">04</span>Engine Model</a>
+  <div class="nav-group-label">Skills &amp; Patterns</div>
+  <a class="nav-item" href="skill-system.html"><span class="nav-num">05</span>Skill System</a>
+  <a class="nav-item active" href="skills-reference.html"><span class="nav-num">06</span>Skills Reference</a>
+  <a class="nav-item" href="patterns-reference.html"><span class="nav-num">07</span>Patterns Reference</a>
+  <div class="nav-group-label">Methodology</div>
+  <a class="nav-item" href="methodology.html"><span class="nav-num">08</span>Methodology</a>
+  <a class="nav-item" href="methodology-index.html"><span class="nav-num">09</span>Methodology Index</a>
+  <div class="nav-group-label">Memory</div>
+  <a class="nav-item" href="second-brain.html"><span class="nav-num">10</span>Second Brain</a>
+  <div class="nav-group-label">Infrastructure</div>
+  <a class="nav-item" href="integrations.html"><span class="nav-num">11</span>Integrations</a>
+  <a class="nav-item" href="design-system.html"><span class="nav-num">12</span>Design System</a>
+  <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
-<header class="report-header">
-  <div class="page-wrapper">
-    <div class="report-header__org">EngineOS</div>
-    <h1 class="report-header__title">Skills Reference</h1>
-    <p class="report-header__subtitle">EngineOS ships 29 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a</p>
-    <div class="report-header__meta">
-      <span>Built 2026-06-05</span>
-      <span>Source: docs/source/</span>
-      <span><a href="index.html" style="color: rgba(255,255,255,0.65);">All sections →</a></span>
-    </div>
-  </div>
+<main>
+<header class="hero" id="s06">
+  <div class="eyebrow">EngineOS System Documentation · Section 06 · Built 2026-06-05</div>
+  <h1>Skills Reference</h1>
+  <p class="subhead">EngineOS ships 29 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, and integration points.</p>
 </header>
-<main class="page-wrapper">
-  <section class="section">
-    <h1 id="skills-reference-29-skills">Skills Reference &ndash; 29 Skills<a class="headerlink" href="#skills-reference-29-skills" title="Anchor link">&para;</a></h1>
+<section class="content">
 <p>EngineOS ships 29 skills at <code>.claude/skills/</code>. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, and integration points.</p>
 <p>Skills load passively via native discovery (descriptions only, ~2% of context). Full content loads only on invocation. Every skill declares its <code>allowed-tools</code> in frontmatter, restricting what tools it can access.</p>
 <hr />
-<h2 id="summary-table">Summary Table<a class="headerlink" href="#summary-table" title="Anchor link">&para;</a></h2>
+<h2 id="summary-table">Summary Table<a class="anchor-link" href="#summary-table" title="Permalink">¶</a></h2>
 <table>
 <thead>
 <tr>
@@ -249,11 +238,11 @@
 </tbody>
 </table>
 <hr />
-<h2 id="categories">Categories<a class="headerlink" href="#categories" title="Anchor link">&para;</a></h2>
-<h3 id="research-and-intelligence">Research and Intelligence<a class="headerlink" href="#research-and-intelligence" title="Anchor link">&para;</a></h3>
+<h2 id="categories">Categories<a class="anchor-link" href="#categories" title="Permalink">¶</a></h2>
+<h3 id="research-and-intelligence">Research and Intelligence<a class="anchor-link" href="#research-and-intelligence" title="Permalink">¶</a></h3>
 <p>Seven skills that gather, classify, and structure external information. <code>recall</code> is the read-side retrieval companion &ndash; it searches the internal corpus (intelligence log, KB, daily logs, run-plans, methodology) before external research begins.</p>
 <hr />
-<h4 id="market-scanner">market-scanner<a class="headerlink" href="#market-scanner" title="Anchor link">&para;</a></h4>
+<h4 id="market-scanner">market-scanner<a class="anchor-link" href="#market-scanner" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Market intelligence, company research, and industry scanning for any engine.</p>
 <p><strong>Triggers:</strong> &ldquo;research [company]&rdquo;, &ldquo;scan the [industry] market&rdquo;, &ldquo;what&rsquo;s happening at [company]&rdquo;, &ldquo;competitive landscape for [space]&rdquo;, &ldquo;validate this hypothesis&rdquo;, &ldquo;market intelligence on [topic]&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__brightdata__*, mcp__context7__*</code></p>
@@ -264,7 +253,7 @@
 <p><strong>Invokes:</strong> depth-governor (before execution), findings-formatter (to structure output)</p>
 <p><strong>Invoked by:</strong> research-engine, lead-builder, campaign-builder, attio-optimizer</p>
 <hr />
-<h4 id="research-engine">research-engine<a class="headerlink" href="#research-engine" title="Anchor link">&para;</a></h4>
+<h4 id="research-engine">research-engine<a class="anchor-link" href="#research-engine" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Orchestrate research and analysis work across EngineOS capabilities. This is the routing layer &ndash; it classifies the domain, looks up capabilities in the registry, and invokes them.</p>
 <p><strong>Triggers:</strong> &ldquo;research [topic]&rdquo;, &ldquo;analyze [company/market]&rdquo;, &ldquo;benchmark [metric]&rdquo;, &ldquo;competitive analysis of [space]&rdquo;, &ldquo;what does the data say about [question]&rdquo;, or any request for a consulting-grade research deliverable.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
@@ -275,7 +264,7 @@
 <p><strong>Invokes:</strong> market-scanner, findings-formatter, section-construction, render-validate, qa-pipeline, depth-governor (via registry resolution)</p>
 <p><strong>Invoked by:</strong> phase-controller (via skill chain), eos-assistant (in production mode)</p>
 <hr />
-<h4 id="depth-governor">depth-governor<a class="headerlink" href="#depth-governor" title="Anchor link">&para;</a></h4>
+<h4 id="depth-governor">depth-governor<a class="anchor-link" href="#depth-governor" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Mandatory 30-second depth classification (scan vs. deep-dive) before starting any substantive work.</p>
 <p><strong>Triggers:</strong> Starting research, synthesis, or output generation. Invoked by phase-controller as part of run plan creation.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
@@ -286,7 +275,7 @@
 <p><strong>Invokes:</strong> None (read-only governance skill)</p>
 <p><strong>Invoked by:</strong> phase-controller, market-scanner, research-engine, findings-formatter, output-self-test, section-construction, content-updater</p>
 <hr />
-<h4 id="findings-formatter">findings-formatter<a class="headerlink" href="#findings-formatter" title="Anchor link">&para;</a></h4>
+<h4 id="findings-formatter">findings-formatter<a class="anchor-link" href="#findings-formatter" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Select and apply the right structure for research findings during synthesis. Seven patterns plus an escape hatch.</p>
 <p><strong>Triggers:</strong> Writing knowledge base entries, intelligence log entries, research reports, or structured findings. Especially when catching yourself writing &ldquo;we found that&hellip;&rdquo; prose paragraphs.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep</code></p>
@@ -297,7 +286,7 @@
 <p><strong>Invokes:</strong> depth-governor (to check depth classification)</p>
 <p><strong>Invoked by:</strong> research-engine, market-scanner (indirectly, as structured output stage)</p>
 <hr />
-<h4 id="codebase-onboarder">codebase-onboarder<a class="headerlink" href="#codebase-onboarder" title="Anchor link">&para;</a></h4>
+<h4 id="codebase-onboarder">codebase-onboarder<a class="anchor-link" href="#codebase-onboarder" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> First-time codebase analysis &ndash; creates CLAUDE.md and context structure for any repository adopting Claude Code.</p>
 <p><strong>Triggers:</strong> &ldquo;onboard this codebase&rdquo;, &ldquo;set up Claude Code for this repo&rdquo;, first time using Claude Code with an existing repository, after major architectural changes.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Bash</code></p>
@@ -308,7 +297,7 @@
 <p><strong>Invokes:</strong> None</p>
 <p><strong>Invoked by:</strong> Manual invocation only</p>
 <hr />
-<h4 id="recall">recall<a class="headerlink" href="#recall" title="Anchor link">&para;</a></h4>
+<h4 id="recall">recall<a class="anchor-link" href="#recall" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Search EngineOS&rsquo;s second brain (intelligence log, knowledge index, KB concepts/connections, recent daily logs, recent run-plans, methodology) for prior context relevant to a topic. Pure Read/Grep/Glob &ndash; zero API cost.</p>
 <p><strong>Triggers:</strong> <code>/recall &lt;query&gt;</code>, &ldquo;have we seen this&rdquo;, &ldquo;what&rsquo;s our prior thinking on X&rdquo;, &ldquo;what did we decide about&rdquo;, &ldquo;do we have notes on&rdquo;, &ldquo;remember&rdquo;, &ldquo;look up&rdquo;, &ldquo;search the second brain&rdquo;, or before making an architecture/methodology/pattern decision in a domain where prior intelligence likely exists.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
@@ -321,10 +310,10 @@
 <p><strong>Invokes:</strong> None (read-only governance skill)</p>
 <p><strong>Invoked by:</strong> Manual <code>/recall &lt;query&gt;</code> invocation; auto-fire via the <code>UserPromptSubmit</code> retrieval hook&rsquo;s heuristic gate (<code>hooks/prompt-retrieval.py</code>, ~90% of retrieval) and the <code>retrieval-before-decide</code> framework pattern at architecture/methodology decision points.</p>
 <hr />
-<h3 id="content-and-deliverable-production">Content and Deliverable Production<a class="headerlink" href="#content-and-deliverable-production" title="Anchor link">&para;</a></h3>
+<h3 id="content-and-deliverable-production">Content and Deliverable Production<a class="anchor-link" href="#content-and-deliverable-production" title="Permalink">¶</a></h3>
 <p>Seven skills that produce client-facing or operator-facing content. framework-explainer is cross-listed from Research.</p>
 <hr />
-<h4 id="campaign-builder">campaign-builder<a class="headerlink" href="#campaign-builder" title="Anchor link">&para;</a></h4>
+<h4 id="campaign-builder">campaign-builder<a class="anchor-link" href="#campaign-builder" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Email sequence and outreach campaign creation. Orchestration tier &ndash; invokes content-updater for KB updates and qa-pipeline before delivery.</p>
 <p><strong>Triggers:</strong> &ldquo;create email sequence&rdquo;, &ldquo;build a campaign&rdquo;, &ldquo;write outreach emails&rdquo;, &ldquo;nurture sequence for [segment]&rdquo;, &ldquo;sales cadence&rdquo;, &ldquo;follow-up sequence&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
@@ -335,7 +324,7 @@
 <p><strong>Invokes:</strong> content-updater (for KB updates during campaign research), qa-pipeline (before delivery)</p>
 <p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
 <hr />
-<h4 id="lead-builder">lead-builder<a class="headerlink" href="#lead-builder" title="Anchor link">&para;</a></h4>
+<h4 id="lead-builder">lead-builder<a class="anchor-link" href="#lead-builder" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Enriched lead list and prospect profile generation for targeted outreach.</p>
 <p><strong>Triggers:</strong> &ldquo;build a lead list&rdquo;, &ldquo;find prospects in [industry/segment]&rdquo;, &ldquo;who should we target&rdquo;, &ldquo;create target account list&rdquo;, &ldquo;enrich these leads&rdquo;, &ldquo;prioritize prospects&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__brightdata__*, mcp__attio-mcp__*</code></p>
@@ -346,7 +335,7 @@
 <p><strong>Invokes:</strong> market-scanner, attio-ops, qa-pipeline</p>
 <p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
 <hr />
-<h4 id="transcript-processor">transcript-processor<a class="headerlink" href="#transcript-processor" title="Anchor link">&para;</a></h4>
+<h4 id="transcript-processor">transcript-processor<a class="anchor-link" href="#transcript-processor" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Process meeting transcripts, stakeholder conversations, and session notes into structured intelligence.</p>
 <p><strong>Triggers:</strong> User pastes a meeting transcript, shares call notes, session notes, brain dumps, Slack/email threads, or any raw dialogue containing intelligence.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
@@ -357,7 +346,7 @@
 <p><strong>Invokes:</strong> content-updater (for KB updates), profile-builder (when new stakeholder detected), audit-logging</p>
 <p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
 <hr />
-<h4 id="profile-builder">profile-builder<a class="headerlink" href="#profile-builder" title="Anchor link">&para;</a></h4>
+<h4 id="profile-builder">profile-builder<a class="anchor-link" href="#profile-builder" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Build operator profile from source material and structured intake. Generates the identity files EngineOS personalizes around.</p>
 <p><strong>Triggers:</strong> &ldquo;set up my profile&rdquo;, &ldquo;who am I&rdquo;, Phase 0 onboarding, missing PROFILE.md detected by session-orchestrator.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
@@ -368,7 +357,7 @@
 <p><strong>Invokes:</strong> content-updater (for file updates)</p>
 <p><strong>Invoked by:</strong> session-orchestrator (when PROFILE.md is missing), transcript-processor (when new stakeholder detected)</p>
 <hr />
-<h4 id="section-construction">section-construction<a class="headerlink" href="#section-construction" title="Anchor link">&para;</a></h4>
+<h4 id="section-construction">section-construction<a class="anchor-link" href="#section-construction" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Incremental build for complex outputs. Prevents single-pass quality degradation on outputs exceeding ~500 lines.</p>
 <p><strong>Triggers:</strong> &ldquo;build the walkthrough&rdquo;, &ldquo;generate the report&rdquo;, &ldquo;create the interactive HTML&rdquo;, &ldquo;produce the output&rdquo;, or any variation of generating a large structured deliverable.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep</code></p>
@@ -379,7 +368,7 @@
 <p><strong>Invokes:</strong> depth-governor (referenced for classification)</p>
 <p><strong>Invoked by:</strong> research-engine, framework-explainer, phase-controller (via skill chain)</p>
 <hr />
-<h4 id="render-validate">render-validate<a class="headerlink" href="#render-validate" title="Anchor link">&para;</a></h4>
+<h4 id="render-validate">render-validate<a class="anchor-link" href="#render-validate" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Mandatory visual verification for interactive HTML outputs via browser rendering and screenshot review.</p>
 <p><strong>Triggers:</strong> &ldquo;the output is ready&rdquo;, &ldquo;HTML complete&rdquo;, &ldquo;check the render&rdquo;, &ldquo;does it look right?&rdquo;, or any variation of declaring a visual output finished.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, mcp__puppeteer-mcp-claude__puppeteer_launch, mcp__puppeteer-mcp-claude__puppeteer_navigate, mcp__puppeteer-mcp-claude__puppeteer_screenshot, mcp__puppeteer-mcp-claude__puppeteer_evaluate, mcp__puppeteer-mcp-claude__puppeteer_click, mcp__puppeteer-mcp-claude__puppeteer_wait_for_selector, mcp__puppeteer-mcp-claude__puppeteer_close_browser, mcp__puppeteer-mcp-claude__puppeteer_new_page, mcp__puppeteer-mcp-claude__puppeteer_close_page, mcp__puppeteer-mcp-claude__puppeteer_get_text</code></p>
@@ -390,7 +379,7 @@
 <p><strong>Invokes:</strong> None (verification-only)</p>
 <p><strong>Invoked by:</strong> research-engine, qa-pipeline (as Stage 3), framework-explainer, phase-controller (via skill chain)</p>
 <hr />
-<h4 id="framework-explainer">framework-explainer<a class="headerlink" href="#framework-explainer" title="Anchor link">&para;</a></h4>
+<h4 id="framework-explainer">framework-explainer<a class="anchor-link" href="#framework-explainer" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Generate interactive HTML presentations that explain frameworks, methodologies, or complex systems to stakeholders.</p>
 <p><strong>Triggers:</strong> &ldquo;explain the framework&rdquo;, &ldquo;create a presentation&rdquo;, &ldquo;visualize how this works&rdquo;, &ldquo;make an interactive demo&rdquo;, &ldquo;walk me through this system&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep</code></p>
@@ -402,10 +391,10 @@
 <p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
 <p><em>Cross-listed: Also appears under Research and Intelligence as it explains complex systems.</em></p>
 <hr />
-<h3 id="integration">Integration<a class="headerlink" href="#integration" title="Anchor link">&para;</a></h3>
+<h3 id="integration">Integration<a class="anchor-link" href="#integration" title="Permalink">¶</a></h3>
 <p>Seven skills that connect EngineOS to external platforms (Attio CRM and Notion).</p>
 <hr />
-<h4 id="attio-mapper">attio-mapper<a class="headerlink" href="#attio-mapper" title="Anchor link">&para;</a></h4>
+<h4 id="attio-mapper">attio-mapper<a class="anchor-link" href="#attio-mapper" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Map Attio CRM workspaces to generate schema caches and playbooks consumed by all other Attio skills.</p>
 <p><strong>Triggers:</strong> &ldquo;map this Attio workspace&rdquo;, &ldquo;map Attio&rdquo;, &ldquo;check for Attio schema changes&rdquo;, &ldquo;refresh Attio schemas&rdquo;, &ldquo;what objects are in Attio&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, mcp__attio-mcp__records_get_attributes</code></p>
@@ -416,7 +405,7 @@
 <p><strong>Invokes:</strong> audit-logging</p>
 <p><strong>Invoked by:</strong> attio-ops (prerequisite), attio-qualify (prerequisite), attio-optimizer (prerequisite), session-orchestrator (can trigger refresh)</p>
 <hr />
-<h4 id="attio-ops">attio-ops<a class="headerlink" href="#attio-ops" title="Anchor link">&para;</a></h4>
+<h4 id="attio-ops">attio-ops<a class="anchor-link" href="#attio-ops" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Attio CRM operations &ndash; CSV import, list population, bulk operations. The single skill for all write-path Attio operations.</p>
 <p><strong>Triggers:</strong> &ldquo;import CSV to Attio&rdquo;, &ldquo;populate list&rdquo;, &ldquo;add contacts to list&rdquo;, &ldquo;sync list&rdquo;, &ldquo;bulk update&rdquo;, &ldquo;import contacts&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, mcp__attio-mcp__records_search_advanced, mcp__attio-mcp__records_get_details, mcp__attio-mcp__records_list, mcp__attio-mcp__lists_list, mcp__attio-mcp__lists_get_entries, mcp__attio-mcp__objects_list_attributes, mcp__attio-mcp__records_create, mcp__attio-mcp__records_update, mcp__attio-mcp__records_add_to_list</code></p>
@@ -427,7 +416,7 @@
 <p><strong>Invokes:</strong> attio-mapper (if schemas missing), audit-logging, content-updater</p>
 <p><strong>Invoked by:</strong> attio-refiner (downstream execution), lead-builder, phase-controller (via skill chain)</p>
 <hr />
-<h4 id="attio-qualify">attio-qualify<a class="headerlink" href="#attio-qualify" title="Anchor link">&para;</a></h4>
+<h4 id="attio-qualify">attio-qualify<a class="anchor-link" href="#attio-qualify" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> ICP classification and lead qualification for Attio contacts. Assigns ICP personas using configurable keyword matching with confidence scoring.</p>
 <p><strong>Triggers:</strong> &ldquo;assign ICPs&rdquo;, &ldquo;enrich contacts&rdquo;, &ldquo;qualify users&rdquo;, &ldquo;classify leads&rdquo;, &ldquo;ICP coverage&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Glob, Grep, mcp__attio-mcp__records_search_advanced, mcp__attio-mcp__records_get_details, mcp__attio-mcp__records_list, mcp__attio-mcp__records_search</code></p>
@@ -438,7 +427,7 @@
 <p><strong>Invokes:</strong> attio-mapper (prerequisite), audit-logging, content-updater</p>
 <p><strong>Invoked by:</strong> attio-refiner (downstream execution), attio-ops (two-stage import pattern), phase-controller (via skill chain)</p>
 <hr />
-<h4 id="attio-optimizer">attio-optimizer<a class="headerlink" href="#attio-optimizer" title="Anchor link">&para;</a></h4>
+<h4 id="attio-optimizer">attio-optimizer<a class="anchor-link" href="#attio-optimizer" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> CRM health audit, best practices research, and optimization recommendations. Four-phase process: Audit, Research, Recommend, Visualize.</p>
 <p><strong>Triggers:</strong> &ldquo;audit the CRM&rdquo;, &ldquo;CRM health check&rdquo;, &ldquo;how healthy is our Attio&rdquo;, &ldquo;clean up Attio&rdquo;, &ldquo;optimize CRM&rdquo;, &ldquo;CRM optimization report&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, mcp__attio-mcp__records_search, mcp__attio-mcp__records_search_advanced, mcp__attio-mcp__records_search_batch, mcp__attio-mcp__records_search_by_relationship, mcp__attio-mcp__records_search_by_timeframe, mcp__attio-mcp__records_get_details, mcp__attio-mcp__records_get_info, mcp__attio-mcp__records_get_attributes, mcp__attio-mcp__records_list, mcp__attio-mcp__lists_list, mcp__attio-mcp__lists_get_entries, mcp__attio-mcp__objects_list_attributes, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__brightdata__search_engine, mcp__brightdata__search_engine_batch, mcp__brightdata__scrape_as_markdown</code></p>
@@ -449,7 +438,7 @@
 <p><strong>Invokes:</strong> attio-mapper (prerequisite &ndash; fresh schemas required), audit-logging</p>
 <p><strong>Invoked by:</strong> Phase-controller (via skill chain). Feeds into attio-refiner.</p>
 <hr />
-<h4 id="attio-refiner">attio-refiner<a class="headerlink" href="#attio-refiner" title="Anchor link">&para;</a></h4>
+<h4 id="attio-refiner">attio-refiner<a class="anchor-link" href="#attio-refiner" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Operator-driven audit refinement. Takes attio-optimizer output and produces annotated findings plus approved work orders through structured Q&amp;A.</p>
 <p><strong>Triggers:</strong> &ldquo;refine the audit&rdquo;, &ldquo;review CRM findings&rdquo;, &ldquo;let&rsquo;s work through the audit&rdquo;, &ldquo;approve CRM actions&rdquo;, &ldquo;triage the audit actions&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Glob, Grep, mcp__attio-mcp__records_search, mcp__attio-mcp__records_search_advanced, mcp__attio-mcp__records_search_by_relationship, mcp__attio-mcp__records_search_by_timeframe, mcp__attio-mcp__records_get_details, mcp__attio-mcp__records_get_info, mcp__attio-mcp__records_list, mcp__attio-mcp__lists_list, mcp__attio-mcp__lists_get_entries</code></p>
@@ -460,7 +449,7 @@
 <p><strong>Invokes:</strong> attio-ops (downstream &ndash; executes approved CSV/list actions), attio-qualify (downstream &ndash; executes approved ICP actions), audit-logging, content-updater</p>
 <p><strong>Invoked by:</strong> Operator-initiated after reviewing attio-optimizer output. Valuable but not gating &ndash; operators can skip it.</p>
 <hr />
-<h4 id="notion-mapper">notion-mapper<a class="headerlink" href="#notion-mapper" title="Anchor link">&para;</a></h4>
+<h4 id="notion-mapper">notion-mapper<a class="anchor-link" href="#notion-mapper" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Map any Notion workspace to generate a playbook with working code examples, database mappings, and relationship documentation.</p>
 <p><strong>Triggers:</strong> &ldquo;map this Notion workspace&rdquo;, &ldquo;map from this page down&rdquo;, &ldquo;check for Notion changes&rdquo;, &ldquo;refresh the playbook&rdquo;.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, mcp__claude_ai_Notion__notion-search, mcp__claude_ai_Notion__notion-fetch, mcp__claude_ai_Notion__notion-query-database-view</code></p>
@@ -471,7 +460,7 @@
 <p><strong>Invokes:</strong> audit-logging</p>
 <p><strong>Invoked by:</strong> notion-ops (prerequisite), session-orchestrator (can trigger refresh)</p>
 <hr />
-<h4 id="notion-ops">notion-ops<a class="headerlink" href="#notion-ops" title="Anchor link">&para;</a></h4>
+<h4 id="notion-ops">notion-ops<a class="anchor-link" href="#notion-ops" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Read/write operations for Notion databases. Querying, creating, updating, and analyzing Notion content.</p>
 <p><strong>Triggers:</strong> User mentions &ldquo;Notion&rdquo; or database names, wants to add content matching database patterns, asks about tracked data or database structure.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Bash, mcp__claude_ai_Notion__*</code></p>
@@ -482,10 +471,10 @@
 <p><strong>Invokes:</strong> notion-mapper (prerequisite if playbook missing), audit-logging</p>
 <p><strong>Invoked by:</strong> transcript-processor (for action item routing), session-orchestrator (auto-suggest)</p>
 <hr />
-<h3 id="governance-and-quality">Governance and Quality<a class="headerlink" href="#governance-and-quality" title="Anchor link">&para;</a></h3>
+<h3 id="governance-and-quality">Governance and Quality<a class="anchor-link" href="#governance-and-quality" title="Permalink">¶</a></h3>
 <p>Eight skills that enforce methodology, quality gates, and operational discipline.</p>
 <hr />
-<h4 id="phase-controller">phase-controller<a class="headerlink" href="#phase-controller" title="Anchor link">&para;</a></h4>
+<h4 id="phase-controller">phase-controller<a class="anchor-link" href="#phase-controller" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> The run controller for all substantive EngineOS work. Classifies operations, builds disk-persisted run plans, forces skill chains, and gates on operator approval.</p>
 <p><strong>Triggers:</strong> Starting any new work &ndash; research, engagement tasks, content production, integration work, system builds/audits, or OS maintenance. Invoked after session-orchestrator has oriented the session.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
@@ -496,7 +485,7 @@
 <p><strong>Invokes:</strong> depth-governor, market-scanner, research-engine, findings-formatter, campaign-builder, lead-builder, qa-pipeline, output-self-test, render-validate, adversarial-evaluator, section-construction, content-updater, audit-logging (any skill needed by the chain)</p>
 <p><strong>Invoked by:</strong> session-orchestrator (hands off to phase-controller after routing), eos-assistant (in production mode)</p>
 <hr />
-<h4 id="session-orchestrator">session-orchestrator<a class="headerlink" href="#session-orchestrator" title="Anchor link">&para;</a></h4>
+<h4 id="session-orchestrator">session-orchestrator<a class="anchor-link" href="#session-orchestrator" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Orient the OS at session start. Detects phase, loads tiered context, shows engine states, routes by intent.</p>
 <p><strong>Triggers:</strong> Beginning of every session. <code>/start-session</code>.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
@@ -507,7 +496,7 @@
 <p><strong>Invokes:</strong> profile-builder (when PROFILE.md missing), phase-controller (after routing), attio-mapper / notion-mapper (can trigger integration refresh)</p>
 <p><strong>Invoked by:</strong> First skill to run in any session. Not invoked by other skills.</p>
 <hr />
-<h4 id="qa-pipeline">qa-pipeline<a class="headerlink" href="#qa-pipeline" title="Anchor link">&para;</a></h4>
+<h4 id="qa-pipeline">qa-pipeline<a class="anchor-link" href="#qa-pipeline" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Pre-delivery quality assurance pipeline with 4 stages: programmatic checks, binary self-tests, visual verification, and domain-specific standards.</p>
 <p><strong>Triggers:</strong> &ldquo;QA this&rdquo;, &ldquo;check before sending&rdquo;, &ldquo;is this ready?&rdquo;, &ldquo;verify quality&rdquo;, &ldquo;review before delivery&rdquo;, or as part of a phase-controller skill chain.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Agent, mcp__puppeteer-mcp-claude__puppeteer_launch, mcp__puppeteer-mcp-claude__puppeteer_navigate, mcp__puppeteer-mcp-claude__puppeteer_screenshot, mcp__puppeteer-mcp-claude__puppeteer_evaluate, mcp__puppeteer-mcp-claude__puppeteer_click, mcp__puppeteer-mcp-claude__puppeteer_wait_for_selector, mcp__puppeteer-mcp-claude__puppeteer_close_browser, mcp__puppeteer-mcp-claude__puppeteer_new_page, mcp__puppeteer-mcp-claude__puppeteer_close_page, mcp__puppeteer-mcp-claude__puppeteer_get_text</code></p>
@@ -518,7 +507,7 @@
 <p><strong>Invokes:</strong> output-self-test (Stage 2), render-validate (Stage 3, for HTML outputs), adversarial-evaluator (can be a stage)</p>
 <p><strong>Invoked by:</strong> phase-controller (as QA gate in skill chains), campaign-builder, lead-builder, research-engine, framework-explainer</p>
 <hr />
-<h4 id="output-self-test">output-self-test<a class="headerlink" href="#output-self-test" title="Anchor link">&para;</a></h4>
+<h4 id="output-self-test">output-self-test<a class="anchor-link" href="#output-self-test" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Run binary self-tests against output before declaring it complete. Yes/no questions, not judgment calls.</p>
 <p><strong>Triggers:</strong> About to say &ldquo;done&rdquo;, &ldquo;complete&rdquo;, &ldquo;ready for review&rdquo;. Invoked when finishing any research, content production, integration output, or deliverable.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
@@ -529,7 +518,7 @@
 <p><strong>Invokes:</strong> None (read-only)</p>
 <p><strong>Invoked by:</strong> qa-pipeline (Stage 2), phase-controller (via skill chain), findings-formatter (self-test step)</p>
 <hr />
-<h4 id="sanity-check">sanity-check<a class="headerlink" href="#sanity-check" title="Anchor link">&para;</a></h4>
+<h4 id="sanity-check">sanity-check<a class="anchor-link" href="#sanity-check" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Quick scan for 11 known failure modes at natural pause points. A pulse check, not a gate.</p>
 <p><strong>Triggers:</strong> &ldquo;sanity check this&rdquo;, something feels off, after producing a large chunk of work, natural pause points between phases.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
@@ -540,7 +529,7 @@
 <p><strong>Invokes:</strong> None (read-only)</p>
 <p><strong>Invoked by:</strong> eos-assistant (complementary spot-checks), phase-controller (periodic invocation during long operations)</p>
 <hr />
-<h4 id="content-updater">content-updater<a class="headerlink" href="#content-updater" title="Anchor link">&para;</a></h4>
+<h4 id="content-updater">content-updater<a class="anchor-link" href="#content-updater" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Choke point for all content updates. Routes updates through origin-skill audit requirements, logs with user attribution, cascades to related files.</p>
 <p><strong>Triggers:</strong> &ldquo;update [entity]&rdquo;, &ldquo;status change&rdquo;, &ldquo;new development&rdquo;, any modification to profiles, KB files, patterns, or tracked content. Key signal words: update, change, new development, refresh, status change.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
@@ -551,7 +540,7 @@
 <p><strong>Invokes:</strong> audit-logging (always), origin skill&rsquo;s audit requirements (loaded dynamically)</p>
 <p><strong>Invoked by:</strong> campaign-builder, transcript-processor, profile-builder, attio-ops, attio-qualify, attio-refiner, and any skill that modifies tracked content</p>
 <hr />
-<h4 id="audit-logging">audit-logging<a class="headerlink" href="#audit-logging" title="Anchor link">&para;</a></h4>
+<h4 id="audit-logging">audit-logging<a class="anchor-link" href="#audit-logging" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Two-layer audit system. Layer 1 (Activity Log) captures breadcrumb trails of all file operations. Layer 2 (Intelligence Log) captures strategic moments with engine tagging.</p>
 <p><strong>Triggers:</strong> Invoked to understand logging requirements, record strategic insights, or check logs before starting work.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep</code></p>
@@ -562,7 +551,7 @@
 <p><strong>Invokes:</strong> None</p>
 <p><strong>Invoked by:</strong> Every skill in EngineOS. All skills must append to the activity log after completing work and selectively log to the intelligence log when trigger conditions are met.</p>
 <hr />
-<h4 id="adversarial-evaluator">adversarial-evaluator<a class="headerlink" href="#adversarial-evaluator" title="Anchor link">&para;</a></h4>
+<h4 id="adversarial-evaluator">adversarial-evaluator<a class="anchor-link" href="#adversarial-evaluator" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Spawn an independent evaluator subagent to adversarially score deliverables against structured criteria. The evaluator has no access to the executor&rsquo;s context.</p>
 <p><strong>Triggers:</strong> After producing any research document, engagement deliverable, or content piece. As a step in a phase-controller skill chain. When the operator requests &ldquo;evaluate this&rdquo; or &ldquo;score this against criteria.&rdquo;</p>
 <p><strong>Allowed tools:</strong> <code>Read, Bash, Glob, Grep</code></p>
@@ -573,10 +562,10 @@
 <p><strong>Invokes:</strong> None (dispatches a subagent, does not invoke other skills)</p>
 <p><strong>Invoked by:</strong> phase-controller (as evaluation step in skill chains), qa-pipeline (can be a stage)</p>
 <hr />
-<h3 id="system-awareness">System Awareness<a class="headerlink" href="#system-awareness" title="Anchor link">&para;</a></h3>
+<h3 id="system-awareness">System Awareness<a class="anchor-link" href="#system-awareness" title="Permalink">¶</a></h3>
 <p>One skill that provides strategic conversation and system awareness.</p>
 <hr />
-<h4 id="eos-assistant">eos-assistant<a class="headerlink" href="#eos-assistant" title="Anchor link">&para;</a></h4>
+<h4 id="eos-assistant">eos-assistant<a class="anchor-link" href="#eos-assistant" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> EngineOS-aware conversational partner. Knows the system cold &ndash; current state, engine health, methodology, patterns, connections, history.</p>
 <p><strong>Triggers:</strong> <code>/eos-assistant</code>, &ldquo;fire up the EOS assistant&rdquo;, or any request that is about the system itself rather than a task within it.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Skill, Bash</code></p>
@@ -587,7 +576,7 @@
 <p><strong>Invokes:</strong> phase-controller (in production mode), any skill via on-demand loading based on conversation topic</p>
 <p><strong>Invoked by:</strong> Manual invocation only. Not invoked by other skills.</p>
 <hr />
-<h3 id="cross-category-notes">Cross-Category Notes<a class="headerlink" href="#cross-category-notes" title="Anchor link">&para;</a></h3>
+<h3 id="cross-category-notes">Cross-Category Notes<a class="anchor-link" href="#cross-category-notes" title="Permalink">¶</a></h3>
 <p>Several skills appear in multiple categories by nature of their function:</p>
 <ul>
 <li><strong>framework-explainer</strong> is primarily a Content and Deliverable Production skill (it generates interactive HTML) but also serves Research and Intelligence (it explains complex systems and can include competitive positioning research).</li>
@@ -612,19 +601,22 @@ depth  output sanity adversarial
 </code></pre></div>
 
 <p>Content-updater and audit-logging sit beneath everything as cross-cutting infrastructure that all other skills invoke.</p>
-  </section>
+</section>
+
 </main>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <script>
-(function() {
-  var bar = document.querySelector(".progress-bar__fill");
-  if (!bar) return;
-  function update() {
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    bar.style.width = (isFinite(pct) ? pct : 0) + "%";
-  }
-  document.addEventListener("scroll", update, {passive: true});
-  update();
+function toggleTheme(){
+  var d=document.documentElement;
+  if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
+  else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
+}
+(function(){
+  var btn=document.querySelector(".back-to-top");
+  if(!btn)return;
+  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
+  document.addEventListener("scroll", tick, {passive:true});
+  tick();
 })();
 </script>
 </body>
