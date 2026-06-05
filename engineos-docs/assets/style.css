@@ -1083,7 +1083,8 @@ main {
   z-index: 90;
   background: var(--surface-alt);
   border-bottom: 1px solid var(--border);
-  padding: 10px 14px;
+  padding: max(10px, env(safe-area-inset-top)) 14px 10px;
+  flex-direction: row;
   align-items: center;
   gap: 10px;
   -webkit-backdrop-filter: saturate(180%) blur(8px);
