@@ -1075,15 +1075,90 @@ main {
 .section.content { /* unused but reserved */ }
 .section .section-number { background: var(--accent); }
 
-/* ─── Mobile ─── */
+/* ─── Mobile header (visible <=900px) ─── */
+.mobile-header {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  align-items: center;
+  gap: 10px;
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+  backdrop-filter: saturate(180%) blur(8px);
+}
+.mobile-header__brand {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-heading);
+  flex: 1;
+}
+.mobile-header__btn {
+  width: 36px; height: 36px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-body);
+  padding: 0;
+}
+.mobile-header__btn:active { background: var(--code-bg); }
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 150;
+}
+.sidebar-overlay.open { display: block; }
+
+/* ─── Mobile layout ─── */
 @media (max-width: 900px) {
+  .mobile-header { display: flex; }
+  /* Override Fresha's 720px sidebar-in-flow rule so it slides in over content */
   .sidebar {
+    position: fixed !important;
+    top: 0; left: 0;
+    width: 280px !important;
+    height: 100vh !important;
     transform: translateX(-100%);
-    transition: transform 0.2s;
+    transition: transform 0.22s ease;
+    z-index: 200;
+    border-right: 1px solid var(--border);
+    border-bottom: none;
   }
   .sidebar.open { transform: translateX(0); }
-  main { margin-left: 0; padding: 24px 20px 80px; }
-  .hero h1 { font-size: 30px; }
-  .card-grid { grid-template-columns: 1fr; }
-  .back-to-top { bottom: 16px; right: 16px; }
+  main { margin-left: 0 !important; padding: 16px 18px 96px !important; }
+  .hero { padding-bottom: 18px; margin-bottom: 20px; }
+  .hero h1 { font-size: 28px; line-height: 1.2; }
+  .hero .eyebrow { font-size: 11px; }
+  .hero .subhead { font-size: 16px; }
+  .stat-strip { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-card { padding: 12px 14px; }
+  .card-grid { grid-template-columns: 1fr; gap: 10px; }
+  .doc-card { padding: 14px 16px; }
+  .back-to-top { bottom: 18px; right: 18px; }
+  table { font-size: 13px; }
+  pre, .highlight pre { font-size: 12px; }
 }
+
+/* Card affordance — visible arrow on every card so touch users know it's tappable */
+.doc-card { position: relative; padding-right: 36px; }
+.doc-card::after {
+  content: "→";
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.6;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.doc-card:hover::after,
+.doc-card:active::after { opacity: 1; transform: translateX(4px); }

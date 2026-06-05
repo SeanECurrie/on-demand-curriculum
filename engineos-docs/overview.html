@@ -9,6 +9,12 @@
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
+<div class="mobile-header">
+  <button class="mobile-header__btn" onclick="toggleNav()" aria-label="Open navigation"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  <div class="mobile-header__brand">EngineOS · Docs</div>
+  <button class="mobile-header__btn" onclick="toggleTheme()" aria-label="Toggle theme"><svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
+</div>
+<div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">EngineOS · Docs</div>
@@ -47,7 +53,6 @@
   <p class="subhead">EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines: domain-specific tenants that inherit OS capabilities and keep their own engagement data, knowl</p>
 </header>
 <section class="content">
-<p>EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS: shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines: domain-specific tenants that inherit OS capabilities and keep their own engagement data, knowledge bases, and domain-adapted workflows.</p>
 <p>It is not a prompt library. It is not a collection of Claude Code skills taped together. It is an operating system with mechanical enforcement, adversarial quality evaluation, disk-persisted governance, and a methodology layer distilled from 105+ days of production work across 11 projects.</p>
 <p>EngineOS is operator-agnostic. The <code>operator/</code> directory personalizes the system at runtime through a structured 37-question intake process. The OS and its engines work for anyone; nothing assumes a specific person until <code>operator/PROFILE.md</code> exists.</p>
 <hr />
@@ -313,12 +318,20 @@ function toggleTheme(){
   if(d.getAttribute("data-theme")==="dark"){d.removeAttribute("data-theme");localStorage.setItem("theme","light");}
   else{d.setAttribute("data-theme","dark");localStorage.setItem("theme","dark");}
 }
+function toggleNav(){
+  document.querySelector(".sidebar").classList.toggle("open");
+  document.querySelector(".sidebar-overlay").classList.toggle("open");
+}
 (function(){
   var btn=document.querySelector(".back-to-top");
-  if(!btn)return;
-  function tick(){btn.classList.toggle("visible", window.scrollY>320);}
-  document.addEventListener("scroll", tick, {passive:true});
-  tick();
+  if(btn){function tick(){btn.classList.toggle("visible",window.scrollY>320);}
+  document.addEventListener("scroll",tick,{passive:true});tick();}
+  document.querySelectorAll(".sidebar .nav-item").forEach(function(a){
+    a.addEventListener("click",function(){
+      if(window.innerWidth<=900){
+        document.querySelector(".sidebar").classList.remove("open");
+        document.querySelector(".sidebar-overlay").classList.remove("open");}});
+  });
 })();
 </script>
 </body>
