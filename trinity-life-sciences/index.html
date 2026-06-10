@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trinity Life Sciences — A Strategic Briefing for Brian Voellmecke</title>
+  <style>
+/* ─── CSS Custom Properties ─── */
+:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  --color-blue-50: #eff6ff; --color-blue-100: #dbeafe; --color-blue-200: #bfdbfe;
+  --color-blue-500: #3b82f6; --color-blue-600: #2563eb; --color-blue-700: #1d4ed8;
+  --color-red-50: #fef2f2; --color-red-100: #fee2e2;
+  --color-red-500: #ef4444; --color-red-600: #dc2626;
+  --color-green-50: #f0fdf4; --color-green-100: #dcfce7;
+  --color-green-500: #22c55e; --color-green-600: #16a34a;
+  --color-amber-50: #fffbeb; --color-amber-100: #fef3c7;
+  --color-amber-500: #f59e0b; --color-amber-800: #92400e;
+  --color-purple-50: #faf5ff; --color-purple-100: #f3e8ff;
+  --color-purple-500: #a855f7; --color-purple-600: #9333ea;
+  --color-stone-50: #fafaf9; --color-stone-100: #f5f5f4; --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1; --color-stone-400: #a8a29e; --color-stone-500: #78716c;
+  --color-stone-700: #44403c; --color-stone-800: #292524; --color-stone-900: #1c1917;
+
+  --bg: var(--color-stone-50);
+  --surface: var(--color-stone-100);
+  --surface-alt: white;
+  --code-bg: var(--color-stone-200);
+  --border: var(--color-stone-200);
+  --border-subtle: var(--color-stone-300);
+  --text-muted: var(--color-stone-400);
+  --text-secondary: var(--color-stone-500);
+  --text-body: var(--color-stone-700);
+  --text-heading: var(--color-stone-800);
+  --text-strongest: var(--color-stone-900);
+  --link: var(--color-blue-500);
+  --link-hover: var(--color-blue-600);
+
+  --callout-critical-bg: var(--color-red-50);
+  --callout-critical-border: var(--color-red-500);
+  --callout-critical-label: var(--color-red-600);
+  --callout-warning-bg: var(--color-amber-50);
+  --callout-warning-border: var(--color-amber-500);
+  --callout-warning-label: var(--color-amber-800);
+  --callout-tip-bg: var(--color-green-50);
+  --callout-tip-border: var(--color-green-500);
+  --callout-tip-label: var(--color-green-600);
+  --callout-info-bg: var(--color-blue-50);
+  --callout-info-border: var(--color-blue-500);
+  --callout-info-label: var(--color-blue-600);
+
+  --nav-active-bg: var(--color-blue-100);
+  --nav-active-color: var(--color-blue-700);
+  --nav-active-border: var(--color-blue-500);
+
+  --sidebar-bg: var(--color-stone-100);
+  --sidebar-border: var(--color-stone-200);
+
+  --trinity-navy: #1e3a8a;
+  --trinity-navy-soft: #e0e7ff;
+  --trinity-accent: #0f766e;
+  --trinity-accent-soft: #ccfbf1;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --surface: #262626;
+  --surface-alt: #1f1f1f;
+  --code-bg: #2d2d2d;
+  --border: #404040;
+  --border-subtle: #333333;
+  --text-muted: #737373;
+  --text-secondary: #a3a3a3;
+  --text-body: #d4d4d4;
+  --text-heading: #e5e5e5;
+  --text-strongest: #f5f5f5;
+  --link: #60a5fa;
+  --link-hover: #3b82f6;
+
+  --callout-critical-bg: #450a0a;
+  --callout-critical-border: #f87171;
+  --callout-critical-label: #fca5a5;
+  --callout-warning-bg: #451a03;
+  --callout-warning-border: #fbbf24;
+  --callout-warning-label: #fcd34d;
+  --callout-tip-bg: #052e16;
+  --callout-tip-border: #4ade80;
+  --callout-tip-label: #86efac;
+  --callout-info-bg: #1e3a5f;
+  --callout-info-border: #60a5fa;
+  --callout-info-label: #93c5fd;
+
+  --nav-active-bg: #1e3a5f;
+  --nav-active-color: #93c5fd;
+  --nav-active-border: #3b82f6;
+
+  --sidebar-bg: #1f1f1f;
+  --sidebar-border: #333333;
+
+  --trinity-navy: #6366f1;
+  --trinity-navy-soft: rgba(99, 102, 241, 0.18);
+  --trinity-accent: #2dd4bf;
+  --trinity-accent-soft: rgba(45, 212, 191, 0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ul, ol { padding-left: 24px; }
+* { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-body);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+h1, h2, h3, h4 { color: var(--text-heading); line-height: 1.25; font-weight: 700; }
+h1 { font-size: 36px; margin-bottom: 16px; }
+h2 { font-size: 28px; margin: 40px 0 16px; }
+h3 { font-size: 20px; margin: 28px 0 12px; }
+h4 { font-size: 16px; margin: 20px 0 8px; }
+
+p { margin-bottom: 16px; }
+strong { color: var(--text-strongest); font-weight: 600; }
+
+code {
+  font-family: var(--font-mono);
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  background: var(--surface);
+  color: var(--text-heading);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+blockquote {
+  border-left: 4px solid var(--trinity-navy);
+  background: var(--trinity-navy-soft);
+  padding: 16px 20px;
+  margin: 18px 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--text-heading);
+}
+blockquote .attribution {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sidebar {
+  width: 280px;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 24px 0 16px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.01em;
+}
+.sidebar-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 0 20px 16px;
+}
+
+.theme-toggle {
+  width: 32px; height: 32px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-body);
+}
+.theme-toggle:hover { background: var(--code-bg); }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="dark"] .icon-sun { display: block; }
+:root:not([data-theme="dark"]) .icon-sun { display: none; }
+:root:not([data-theme="dark"]) .icon-moon { display: block; }
+
+.nav-group-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 12px 20px 6px;
+  margin-top: 4px;
+}
+
+.nav-item {
+  display: flex; align-items: center;
+  padding: 8px 20px;
+  font-size: 13px;
+  color: var(--text-body);
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.nav-item:hover { background: var(--code-bg); text-decoration: none; }
+.nav-item.active {
+  background: var(--nav-active-bg);
+  color: var(--nav-active-color);
+  border-left-color: var(--nav-active-border);
+  font-weight: 600;
+}
+.nav-num {
+  display: inline-block;
+  width: 30px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.nav-item.active .nav-num { color: var(--nav-active-color); }
+
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 14px; left: 14px;
+  z-index: 200;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 40px; height: 40px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-heading);
+}
+
+main {
+  margin-left: 280px;
+  padding: 48px 56px;
+  max-width: 1100px;
+}
+
+.hero {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 28px;
+  margin-bottom: 32px;
+}
+.hero .eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--trinity-navy);
+  margin-bottom: 12px;
+}
+.hero h1 { font-size: 42px; letter-spacing: -0.02em; }
+.hero .subhead {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  max-width: 760px;
+}
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  margin: 24px 0 8px;
+}
+.stat-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.stat-card .num {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-strongest);
+  letter-spacing: -0.01em;
+}
+.stat-card .label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.section {
+  scroll-margin-top: 24px;
+  padding-top: 32px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.section-number {
+  background: var(--trinity-navy);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+.section-tag {
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+/* ─── Tier badges ─── */
+.tier {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin: 0 2px;
+  letter-spacing: 0.02em;
+  vertical-align: baseline;
+  border: 1px solid transparent;
+}
+.tier-1 { background: var(--color-green-50); color: var(--color-green-600); border-color: var(--color-green-100); }
+.tier-2 { background: var(--color-blue-50); color: var(--color-blue-600); border-color: var(--color-blue-100); }
+.tier-3 { background: var(--color-amber-50); color: var(--color-amber-800); border-color: var(--color-amber-100); }
+.tier-4 { background: var(--color-stone-200); color: var(--color-stone-700); border-color: var(--color-stone-300); }
+.tier-5 { background: var(--color-red-50); color: var(--color-red-600); border-color: var(--color-red-100); }
+[data-theme="dark"] .tier-1 { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+[data-theme="dark"] .tier-2 { background: rgba(59,130,246,0.18); color: #93c5fd; border-color: rgba(59,130,246,0.35); }
+[data-theme="dark"] .tier-3 { background: rgba(245,158,11,0.15); color: #fcd34d; border-color: rgba(245,158,11,0.3); }
+[data-theme="dark"] .tier-4 { background: rgba(120,113,108,0.25); color: #d6d3d1; border-color: rgba(120,113,108,0.4); }
+[data-theme="dark"] .tier-5 { background: rgba(239,68,68,0.15); color: #fca5a5; border-color: rgba(239,68,68,0.3); }
+
+/* ─── Callouts ─── */
+.callout {
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid;
+  margin: 16px 0;
+}
+.callout-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.callout.critical { background: var(--callout-critical-bg); border-color: var(--callout-critical-border); }
+.callout.critical .callout-label { color: var(--callout-critical-label); }
+.callout.warning { background: var(--callout-warning-bg); border-color: var(--callout-warning-border); }
+.callout.warning .callout-label { color: var(--callout-warning-label); }
+.callout.tip { background: var(--callout-tip-bg); border-color: var(--callout-tip-border); }
+.callout.tip .callout-label { color: var(--callout-tip-label); }
+.callout.info { background: var(--callout-info-bg); border-color: var(--callout-info-border); }
+.callout.info .callout-label { color: var(--callout-info-label); }
+.callout p:last-child { margin-bottom: 0; }
+.callout ul { margin-top: 6px; padding-left: 22px; }
+.callout ul li { margin-bottom: 4px; }
+
+/* ─── Coach Card (Section 09) ─── */
+.coach-card {
+  background: linear-gradient(135deg, var(--callout-tip-bg) 0%, var(--surface-alt) 100%);
+  border: 2px solid var(--color-green-500);
+  border-radius: 14px;
+  padding: 22px 26px;
+  margin: 22px 0;
+  position: relative;
+}
+.coach-card::before {
+  content: "COACH CARD";
+  position: absolute;
+  top: -10px; left: 22px;
+  background: var(--color-green-600);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+.coach-card h4 {
+  margin-top: 6px;
+  color: var(--color-green-600);
+  font-size: 17px;
+}
+[data-theme="dark"] .coach-card h4 { color: #86efac; }
+.coach-card p:last-child { margin-bottom: 0; }
+
+/* ─── Diagrams ─── */
+.diagram-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+}
+.diagram-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.diagram-caption {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 14px;
+  font-style: italic;
+}
+
+/* ─── 2x2 positioning matrix ─── */
+.matrix-wrapper {
+  position: relative;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 28px 14px 28px;
+  margin: 12px 0;
+}
+.matrix-grid {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 2px solid var(--border-subtle);
+  background:
+    linear-gradient(to right, transparent 49.7%, var(--border-subtle) 49.7%, var(--border-subtle) 50.3%, transparent 50.3%),
+    linear-gradient(to bottom, transparent 49.7%, var(--border-subtle) 49.7%, var(--border-subtle) 50.3%, transparent 50.3%);
+}
+.matrix-axis-y {
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translate(-100%, -50%) rotate(-90deg);
+  transform-origin: right center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.matrix-axis-y-top, .matrix-axis-y-bot {
+  position: absolute;
+  left: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.matrix-axis-y-top { top: 10px; }
+.matrix-axis-y-bot { bottom: 10px; }
+.matrix-axis-x {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-top: 32px;
+}
+.matrix-axis-x-left, .matrix-axis-x-right {
+  position: absolute;
+  bottom: -22px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.matrix-axis-x-left { left: 8px; }
+.matrix-axis-x-right { right: 8px; }
+.matrix-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: var(--surface-alt);
+  border: 2px solid var(--color-stone-500);
+  color: var(--text-heading);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 14px;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.matrix-dot.subject {
+  background: var(--trinity-navy);
+  color: white;
+  border-color: var(--trinity-navy);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(30,58,138,0.4);
+}
+.matrix-dot.major {
+  border-color: var(--color-blue-500);
+  background: var(--color-blue-50);
+  color: var(--color-blue-700);
+}
+[data-theme="dark"] .matrix-dot.major { background: rgba(59,130,246,0.15); color: #93c5fd; }
+.matrix-dot.tier-c {
+  border-color: var(--color-stone-400);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+/* ─── Org chart ─── */
+.orgchart { text-align: center; margin: 20px 0; }
+.org-node {
+  display: inline-block;
+  background: var(--surface-alt);
+  border: 2px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 18px;
+  min-width: 180px;
+  font-size: 13px;
+  text-align: left;
+  margin: 6px;
+}
+.org-node .role {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.org-node .name {
+  font-weight: 700;
+  color: var(--text-heading);
+  font-size: 14px;
+}
+.org-node .geo {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.org-node.parent { border-color: var(--trinity-navy); background: var(--trinity-navy-soft); }
+.org-node.parent .role { color: var(--trinity-navy); }
+.org-node.division { border-color: var(--trinity-accent); background: var(--trinity-accent-soft); }
+.org-node.division .role { color: var(--trinity-accent); }
+.org-node.new {
+  border-color: var(--color-green-500);
+  border-style: dashed;
+  background: var(--color-green-50);
+}
+.org-node.new .role { color: var(--color-green-600); }
+[data-theme="dark"] .org-node.new { background: rgba(34,197,94,0.12); }
+.org-connector {
+  width: 2px;
+  height: 24px;
+  background: var(--border-subtle);
+  margin: 0 auto;
+}
+.org-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+/* ─── Timeline (vertical) ─── */
+.vtimeline {
+  position: relative;
+  margin: 24px 0;
+  padding-left: 28px;
+}
+.vtimeline::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border-subtle);
+}
+.vt-item {
+  position: relative;
+  margin-bottom: 18px;
+}
+.vt-item::before {
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--trinity-navy);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--border-subtle);
+}
+.vt-item.major::before { background: var(--color-green-500); width: 14px; height: 14px; left: -29px; top: 5px; box-shadow: 0 0 0 3px rgba(34,197,94,0.25); }
+.vt-item.amber::before { background: var(--color-amber-500); }
+.vt-item.red::before { background: var(--color-red-500); }
+.vt-date {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.vt-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.vt-body {
+  font-size: 14px;
+  color: var(--text-body);
+  margin: 0;
+}
+
+/* ─── Process flow ─── */
+.process-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 20px 0;
+}
+.pf-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--trinity-navy);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.pf-num {
+  background: var(--trinity-navy);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pf-content { flex: 1; }
+.pf-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.pf-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.pf-time {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: var(--code-bg);
+  padding: 2px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* ─── Parallel agent visualization ─── */
+.agent-fan {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin: 14px 0;
+}
+.agent-chip {
+  background: var(--color-purple-50);
+  border: 1px solid var(--color-purple-500);
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-purple-600);
+  line-height: 1.3;
+}
+[data-theme="dark"] .agent-chip {
+  background: rgba(168,85,247,0.12);
+  color: #d8b4fe;
+}
+
+/* ─── Three-up comparison block ─── */
+.three-up {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 18px 0;
+}
+.battle-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--trinity-navy);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.battle-card h4 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.battle-card .battle-sub {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+.battle-card ul { padding-left: 18px; margin: 8px 0; }
+.battle-card li { font-size: 13px; margin-bottom: 4px; }
+
+/* ─── KPI grid ─── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.kpi-cell {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.kpi-cell .v { font-size: 18px; font-weight: 800; color: var(--text-strongest); }
+.kpi-cell .l { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
+/* ─── Portfolio matrix (4 quadrants) ─── */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+.portfolio-cell {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.portfolio-cell .pc-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.portfolio-cell.growth { border-left: 4px solid var(--color-green-500); }
+.portfolio-cell.growth .pc-label { color: var(--color-green-600); }
+.portfolio-cell.cash { border-left: 4px solid var(--color-blue-500); }
+.portfolio-cell.cash .pc-label { color: var(--color-blue-600); }
+.portfolio-cell.emerging { border-left: 4px solid var(--color-amber-500); }
+.portfolio-cell.emerging .pc-label { color: var(--color-amber-800); }
+.portfolio-cell.harvest { border-left: 4px solid var(--color-stone-500); }
+.portfolio-cell.harvest .pc-label { color: var(--color-stone-700); }
+[data-theme="dark"] .portfolio-cell.harvest .pc-label { color: var(--color-stone-300); }
+.portfolio-cell ul { padding-left: 18px; font-size: 13px; }
+.portfolio-cell li { margin-bottom: 4px; }
+
+/* ─── Source block ─── */
+.src-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+.src-block h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+.src-block ul { padding-left: 22px; margin: 4px 0; }
+.src-block li { font-size: 12px; margin-bottom: 3px; color: var(--text-secondary); }
+
+/* ─── Signal-watch grid (Section 10) ─── */
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+.signal-cell {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--trinity-accent);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.signal-cell h4 {
+  font-size: 14px;
+  margin: 0 0 6px;
+  color: var(--text-heading);
+}
+.signal-cell .signal-cat {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--trinity-accent);
+  margin-bottom: 4px;
+}
+.signal-cell p { font-size: 13px; margin: 6px 0 0; color: var(--text-body); }
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .three-up, .portfolio-grid { grid-template-columns: 1fr; }
+  .agent-fan { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 900px) {
+  .sidebar { width: 240px; }
+  main { margin-left: 240px; padding: 24px 28px; }
+}
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 250ms ease;
+    width: 280px;
+  }
+  .sidebar.open { transform: translateX(0); }
+  main { margin-left: 0; padding: 64px 18px 24px; }
+  .hero h1 { font-size: 28px; }
+  .stat-strip { grid-template-columns: repeat(2, 1fr); }
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  code {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
+  }
+  .agent-chip {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .src-block li,
+  .src-block p {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
+@media print {
+  .sidebar, .hamburger { display: none; }
+  main { margin-left: 0; max-width: 100%; }
+  .section { page-break-before: auto; }
+  .theme-toggle { display: none; }
+}
+  </style>
+</head>
+<body>
+
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Trinity LS · Strategic Briefing</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+  <div class="sidebar-sub">Built 2026-06-10 · for Brian Voellmecke</div>
+
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="#s00"><span class="nav-num">00</span>Hero</a>
+  <a class="nav-item" href="#s01"><span class="nav-num">01</span>TL;DR — six things</a>
+
+  <div class="nav-group-label">The company</div>
+  <a class="nav-item" href="#s02"><span class="nav-num">02</span>Strategic position</a>
+  <a class="nav-item" href="#s03"><span class="nav-num">03</span>Financial trajectory</a>
+  <a class="nav-item" href="#s04"><span class="nav-num">04</span>Competitive landscape</a>
+  <a class="nav-item" href="#s05"><span class="nav-num">05</span>Vertical context</a>
+
+  <div class="nav-group-label">Inside Trinity</div>
+  <a class="nav-item" href="#s06"><span class="nav-num">06</span>TGaS + CMIT</a>
+  <a class="nav-item" href="#s07"><span class="nav-num">07</span>Leadership signals</a>
+  <a class="nav-item" href="#s08"><span class="nav-num">08</span>Moat + clients</a>
+
+  <div class="nav-group-label">The read</div>
+  <a class="nav-item" href="#s09"><span class="nav-num">09</span>Synthesis</a>
+  <a class="nav-item" href="#s10"><span class="nav-num">10</span>What to monitor</a>
+
+  <div class="nav-group-label">Meta</div>
+  <a class="nav-item" href="#s11"><span class="nav-num">11</span>How this was built</a>
+  <a class="nav-item" href="#s99"><span class="nav-num">99</span>Sources &amp; methodology</a>
+
+  <div class="nav-group-label">Source tiers</div>
+  <div style="padding: 6px 20px 16px; font-size: 11px; color: var(--text-secondary); line-height: 1.6;">
+    <span class="tier tier-1">T1</span> Primary / official<br>
+    <span class="tier tier-2">T2</span> Reputable secondary<br>
+    <span class="tier tier-3">T3</span> Sentiment / community<br>
+    <span class="tier tier-4">T4</span> Third-party aggregator<br>
+    <span class="tier tier-5">T5</span> Inference / weak signal
+  </div>
+</aside>
+
+<main>
+
+<header class="hero" id="s00">
+  <div class="eyebrow">For Brian Voellmecke · Head of CMIT Practice · TGaS · 2026-06-10</div>
+  <h1>Trinity Life Sciences — A Strategic Briefing</h1>
+  <p class="subhead">What the public record says about your employer, calibrated honestly. Built for one decision: is Trinity Life Sciences a viable continuing employer for Brian Voellmecke?</p>
+
+  <div class="stat-strip">
+    <div class="stat-card"><span class="num">~1,300</span><span class="label">Employees (Trinity self-reported, Nov 2025)</span></div>
+    <div class="stat-card"><span class="num">1,672</span><span class="label">LinkedIn count (June 2026)</span></div>
+    <div class="stat-card"><span class="num">14</span><span class="label">Offices · 5 continents</span></div>
+    <div class="stat-card"><span class="num">350+</span><span class="label">Pharma/biotech clients</span></div>
+    <div class="stat-card"><span class="num">~$137M</span><span class="label">Last anchored revenue (2021, Inc. 5000)</span></div>
+    <div class="stat-card"><span class="num">Kohlberg</span><span class="label">PE owner since Nov 30, 2021</span></div>
+    <div class="stat-card"><span class="num">4.5+ yrs</span><span class="label">Hold period as of June 2026</span></div>
+    <div class="stat-card"><span class="num">14–15</span><span class="label">TGaS practices · CMIT newest</span></div>
+  </div>
+
+  <div class="callout info" style="margin-top: 18px;">
+    <div class="callout-label">▸ What this is, what it isn't</div>
+    <p><strong>It is:</strong> an evidence-backed strategic read on Trinity Life Sciences as an employer, anchored in 162 tier-coded public sources, written for one reader making one decision.</p>
+    <p><strong>It is not:</strong> an HR recommendation, a board memo, an M&amp;A advisory, or a substitute for insider knowledge you already have. Every hard claim carries a credibility tier <span class="tier tier-1">T1</span>–<span class="tier tier-5">T5</span> so you can see what is load-bearing and what is hedged inference.</p>
+  </div>
+</header>
+</content>
+</invoke>
+<!-- ═══════════════════════════════════════════════════════ 01 TL;DR -->
+<section id="s01" class="section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 style="margin:0;">TL;DR — six things to know</h2>
+    <span class="section-tag">4 min read</span>
+  </div>
+  <p>Brian — if you read nothing else, read this. Each line is unpacked in the sections that follow.</p>
+
+  <ol style="padding-left: 24px;">
+    <li style="margin-bottom: 12px;"><strong>Trinity is mid-PE-hold, behaving like exit-prep.</strong> Kohlberg &amp; Company has owned Trinity since Nov 30, 2021 <span class="tier tier-1">T1</span>. That puts the hold at 4.5+ years as of June 2026 — squarely inside the typical 4–7 year PE window <span class="tier tier-2">T2</span>. The cluster of Oct–Nov 2025 events (brand refresh, EVERSANA APACME acquisition, new CEO from Kohlberg's own bench) reads as positioning-for-exit, not harvest <span class="tier tier-3">T3</span>.</li>
+
+    <li style="margin-bottom: 12px;"><strong>Growth signals dominate the public record — but they're M&amp;A-driven, not organic-only.</strong> Headcount went from ~1,200 (Aug 2024) to ~1,672 on LinkedIn (June 2026), a ~39% jump in 22 months, largely from 6–9 acquisitions since 2018 (4 in the last five years) <span class="tier tier-1">T1</span>. No US WARN filings <span class="tier tier-1">T1</span>. Inc. 5000 four years running <span class="tier tier-1">T1</span>.</li>
+
+    <li style="margin-bottom: 12px;"><strong>TGaS is the most defensible asset in the Trinity portfolio.</strong> The benchmarking model (110+ member companies, 400+ brand assessment database, 9-year flagship "Best of Benchmark" event franchise) is network-effected and not replicable by ZS, IQVIA, or Deloitte at any sensible price <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span>. Bain &amp; Company took an undisclosed minority equity stake in Trinity in Aug 2022 and explicitly cites TGaS benchmarking and RWE/RWD work for its own pharma-client engagements <span class="tier tier-1">T1</span> — the strongest channel credentialing signal in the file.</li>
+
+    <li style="margin-bottom: 12px;"><strong>CMIT is the newest TGaS practice; Karl Kraft's public framing names it as the fourth pillar applying the proven model.</strong> Trinity-LinkedIn + Kraft-LinkedIn (Nov 2026): <em>"We've applied the same model that has been so successful in Commercial Operations, Market Access and Medical Affairs now to Information Technology"</em> <span class="tier tier-1">T1</span>. Your VP title is in the Fall Client Summit 2025 roster; "Head of CMIT Practice" is not yet branded the way Sarah Odeh's Medical Affairs seat is <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span>. Read as early go-to-market, not failure.</li>
+
+    <li style="margin-bottom: 12px;"><strong>Competitive position is being squeezed from both sides on AI/analytics.</strong> ZS Associates (~13,000 employees, 35 offices, 49 of top-50 pharma) and IQVIA (~88,000 employees, $16.3B FY2025) are 10–100x Trinity's scale on AI/analytics <span class="tier tier-1">T1</span>. ZS acquired Torrent (Oct 2025) for Salesforce Health Cloud + Veeva positioning <span class="tier tier-1">T1</span>; IQVIA inked AWS strategic collaboration (Dec 2025) <span class="tier tier-1">T1</span>. Trinity's most credible analyst-house recognition is from Forbes / Vault / Poets&amp;Quants — broad consulting lists, not pharma-LS-specific Magic Quadrant or Forrester Wave <span class="tier tier-2">T2</span>.</li>
+
+    <li style="margin-bottom: 0;"><strong>Leadership turnover at the top is notable; below the C-suite the bench is intact.</strong> Three CEOs in 30 months (Fitzhenry → Orne July 2023 → Evangelista Nov 17, 2025) <span class="tier tier-1">T1</span>. The new CEO is a Kohlberg Operating Executive — that means PE-aligned, not founder-aligned <span class="tier tier-1">T1</span>. But Orne transitioned cleanly to Board + Senior Advisor; her predecessor Fitzhenry remains on the Board; Kraft, Odeh, McNamara, Fleming, Martin de Bustamante, Deshpande, Ismail, Rangachari, Jenkins are all publicly named and accounted for as of June 2026 <span class="tier tier-1">T1</span>.</li>
+  </ol>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ The single most useful frame</div>
+    <p>Trinity is a <strong>roll-up platform mid-PE-hold</strong>, not a stable mid-cap consultancy. The implications cascade: most of the strategic motion you're seeing — new CEO, brand refresh, APACME acquisition, AI/EDGE positioning — is in service of <em>positioning the asset for sale in the next 12–24 months</em>. Internalize that, and every other finding in the briefing makes sense in context. (See <a href="#s09">Section 09</a> for what to do with that frame.)</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 02 STRATEGIC POSITION -->
+<section id="s02" class="section">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2 style="margin:0;">Strategic position — Trinity LS + TGaS structure</h2>
+    <span class="section-tag">10 min read</span>
+  </div>
+
+  <p><strong>TL;DR for this section:</strong> Trinity is a private, PE-owned (Kohlberg, since Nov 30, 2021) life-sciences strategy + commercialization platform that acquired TGaS Advisors in September 2018 and runs it as a wholly-owned division retaining its own brand. TGaS is the analytical-benchmarking unit (~14–15 sub-practices) and the most defensible asset in the portfolio. Trinity sits in a specialized-mid-tier slot — too small for the IQVIA/ZS scale game, too broad for boutique mindshare against ClearView/Putnam.</p>
+
+  <h3>The entity structure, definitively</h3>
+
+  <p>The structure was the first thing to verify with primary sources, because the line between "wholly-owned subsidiary" and "wholly-owned division/brand" matters for how integrated TGaS actually is. Here is what the press records say:</p>
+
+  <ul>
+    <li><strong>Sept 6, 2018:</strong> Trinity Partners (legal name at the time; now Trinity Life Sciences) acquired TGaS Advisors. The acquisition press release uses the language <em>"wholly-owned division"</em> — meaning brand/business unit within the parent legal entity, not a separately-incorporated subsidiary <span class="tier tier-1">T1</span>.</li>
+    <li><strong>TGaS retains independent brand identity 8+ years on:</strong> own LinkedIn company page (70 employees listed there separately) <span class="tier tier-1">T1</span>, registered trademark, the annual TGaS Client Summit (9th cycle in 2026), East Norriton PA HQ separate from Trinity's Waltham MA HQ <span class="tier tier-1">T1</span>. Co-branded as "TGaS Advisors | Trinity" in 2026 communications <span class="tier tier-1">T1</span>.</li>
+    <li><strong>CMIT sits inside TGaS as the newest of 14–15 publicly-enumerated functional practice areas.</strong> Per Karl Kraft (TGaS President), the franchise is now organized around four pillars: Commercial Operations, Market Access, Medical Affairs, and Information Technology (CMIT) <span class="tier tier-1">T1</span>.</li>
+  </ul>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Entity hierarchy · Trinity LS → TGaS → CMIT</div>
+    <div class="orgchart">
+      <div class="org-row">
+        <div class="org-node parent">
+          <div class="role">Parent</div>
+          <div class="name">Trinity Life Sciences</div>
+          <div class="geo">Waltham MA · Kohlberg-owned since 2021</div>
+        </div>
+      </div>
+      <div class="org-connector"></div>
+      <div class="org-row">
+        <div class="org-node division">
+          <div class="role">Wholly-owned division</div>
+          <div class="name">TGaS Advisors</div>
+          <div class="geo">East Norriton PA · own brand · acquired Sept 2018</div>
+        </div>
+      </div>
+      <div class="org-connector"></div>
+      <div class="org-row">
+        <div class="org-node"><div class="role">Pillar 1 · Mature</div><div class="name">Commercial Ops</div></div>
+        <div class="org-node"><div class="role">Pillar 2 · Mature</div><div class="name">Market Access</div></div>
+        <div class="org-node"><div class="role">Pillar 3 · 2019</div><div class="name">Medical Affairs</div></div>
+        <div class="org-node new"><div class="role">Pillar 4 · NEW</div><div class="name">CMIT (IT)</div><div class="geo">Brian's practice</div></div>
+      </div>
+      <div style="margin-top: 16px; padding: 10px 14px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--text-secondary); text-align: left;">
+        <strong>~14–15 functional sub-practices total (publicly enumerated):</strong> Commercial Analytics &amp; Insights · Executive Commercial Operations · Field Operations (incl. ICE) · L&amp;D · Marketing Operations · Omnichannel/Digital · MRL/PRC Promotional Review · Pricing/Contracting · Medical Affairs Advisory (May 2019) · Government Pricing (June 2022) · Patient Support Services · Emerging Life Sciences Network (elsN) · Master Data Management · CMIT.
+      </div>
+    </div>
+    <div class="diagram-caption">Sources: Trinity press releases on TGaS acquisition + Medical Affairs + Government Pricing launches; Kraft public LinkedIn framing (Nov 2026); 9th Annual Best of Benchmark categories list.</div>
+  </div>
+
+  <h3>Where Trinity sits in the life-sciences consulting peer set</h3>
+
+  <p>The picture below is the cleanest way to read Trinity's position. The horizontal axis is service breadth (single-vertical depth vs broad-platform); the vertical axis is specialization depth in pharma/life-sciences (deep-vertical-IP vs adjacent-coverage). Trinity sits in the deep-pharma + multi-service quadrant — but with a scale gap to IQVIA and ZS that matters for AI/analytics deals.</p>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Competitive positioning · pharma-specialization × service breadth</div>
+    <div class="matrix-wrapper">
+      <div style="position: relative; padding-left: 40px; padding-right: 10px;">
+        <div class="matrix-axis-y">Pharma specialization</div>
+        <div class="matrix-grid">
+          <div class="matrix-axis-y-top">Deep pharma/LS IP</div>
+          <div class="matrix-axis-y-bot">Adjacent / broad</div>
+          <div class="matrix-axis-x-left">Single-service depth</div>
+          <div class="matrix-axis-x-right">Multi-service platform</div>
+
+          <!-- Top-right: deep pharma + broad service -->
+          <div class="matrix-dot subject" style="top: 22%; left: 70%;">TRINITY ★</div>
+          <div class="matrix-dot major" style="top: 14%; left: 84%;">IQVIA</div>
+          <div class="matrix-dot major" style="top: 18%; left: 76%;">ZS Associates</div>
+          <div class="matrix-dot major" style="top: 30%; left: 62%;">EVERSANA</div>
+
+          <!-- Top-left: deep pharma + narrow -->
+          <div class="matrix-dot major" style="top: 25%; left: 22%;">ClearView</div>
+          <div class="matrix-dot tier-c" style="top: 22%; left: 12%;">Putnam (Inizio)</div>
+          <div class="matrix-dot tier-c" style="top: 32%; left: 28%;">Beghou</div>
+          <div class="matrix-dot tier-c" style="top: 38%; left: 16%;">Charles River Assoc.</div>
+          <div class="matrix-dot tier-c" style="top: 28%; left: 8%;">Blue Matter</div>
+
+          <!-- Bottom-right: broad strategy + broad service -->
+          <div class="matrix-dot major" style="top: 75%; left: 82%;">Deloitte LS</div>
+          <div class="matrix-dot major" style="top: 78%; left: 72%;">McKinsey LS</div>
+          <div class="matrix-dot tier-c" style="top: 70%; left: 86%;">Accenture LS</div>
+
+          <!-- Bottom-left: broad strategy + narrow service -->
+          <div class="matrix-dot tier-c" style="top: 65%; left: 18%;">Bain LS</div>
+          <div class="matrix-dot tier-c" style="top: 72%; left: 28%;">EY-Parthenon</div>
+          <div class="matrix-dot tier-c" style="top: 80%; left: 14%;">Real Chemistry</div>
+        </div>
+      </div>
+      <div class="matrix-axis-x">Service breadth →</div>
+    </div>
+    <div class="diagram-caption">Navy dot = Trinity. Blue = direct peers Trinity is regularly compared against. Gray = adjacent set. Source: Threads 1, 4 synthesis from Crunchbase / Wikipedia / EY-Parthenon / company sites. <em>Trinity's actual position depends on whether you weight TGaS benchmarking (deep IP) or general advisory (broad coverage).</em></div>
+  </div>
+
+  <p><strong>What this picture says:</strong> Trinity has chosen the hardest quadrant — deep-pharma + multi-service — and is the smallest player in it by an order of magnitude. The advantage is that nobody at IQVIA's scale also has TGaS's benchmarking IP and Bain channel; the disadvantage is that the AI/analytics scale game (RWD platforms, generative AI tooling, Veeva Vault systems integration) increasingly rewards size, and Trinity is sub-tenth of ZS by headcount.</p>
+
+  <h3>Market segment + footprint</h3>
+
+  <p>Self-reported footprint as of the Nov 2025 CEO announcement: <strong>~1,300 employees</strong>, 14 offices, 5 continents, 350+ clients, claims involvement in 70-75% of all new U.S. drug launches <span class="tier tier-1">T1</span> (self-reported). LinkedIn shows 1,672 employees in June 2026 — that's an over-count by ~10–20% per typical LinkedIn-vs-payroll patterns, but the trajectory is unambiguous: <strong>growth, not contraction</strong> <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span>.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-cell"><div class="v">1,300</div><div class="l">Self-reported headcount (Nov 2025)</div></div>
+    <div class="kpi-cell"><div class="v">1,672</div><div class="l">LinkedIn count (June 2026)</div></div>
+    <div class="kpi-cell"><div class="v">14</div><div class="l">Offices</div></div>
+    <div class="kpi-cell"><div class="v">5</div><div class="l">Continents</div></div>
+    <div class="kpi-cell"><div class="v">350+</div><div class="l">Clients</div></div>
+    <div class="kpi-cell"><div class="v">70-75%</div><div class="l">U.S. new drug launches touched (self-reported)</div></div>
+    <div class="kpi-cell"><div class="v">~500+</div><div class="l">India headcount (largest non-US center)</div></div>
+    <div class="kpi-cell"><div class="v">14-15</div><div class="l">TGaS sub-practices</div></div>
+  </div>
+
+  <h3>Ownership structure</h3>
+
+  <p><strong>Trinity is private.</strong> Kohlberg &amp; Company has been the lead PE sponsor since the recapitalization announced November 30, 2021 <span class="tier tier-1">T1</span>. Parthenon Capital was the prior sponsor (March 2018 → November 2021) and is no longer involved <span class="tier tier-1">T1</span>. The Investment Management Corporation of Ontario (IMCO, ~$9.5B PE assets) co-invested with Kohlberg in the 2021 recap as a minority partner <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span>. In August 2022, <strong>Bain &amp; Company itself took an undisclosed minority equity stake in Trinity</strong> alongside the strategic-partnership announcement — meaning Trinity's most prestigious channel partner is also a small equity holder <span class="tier tier-1">T1</span>.</p>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ The PE structure matters — and the grip is operationally tight</div>
+    <p>The November 2025 CEO appointment surfaces something important: Kohlberg is not a passive financial sponsor here. Executive Chairman <strong>Matt Jennings</strong> is also a Kohlberg Operating Partner. The new CEO <strong>Scott Evangelista</strong> was a "Kohlberg Operating Executive" and sat on Trinity's Board of Advisors for the prior three years before being elevated. Six other Board members (Christopher Anderson, Sam Frieder, Whitney Hanson, Wayne Hull, Christopher McKinney, Patty Morrison) are Kohlberg-aligned per public LinkedIn cross-references <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span>. <em>This is a PE-run company, not a founder-led one with PE money.</em> That has real implications for how decisions get made over the next 12–24 months.</p>
+  </div>
+
+  <h3>The strategic narrative Trinity tells about itself</h3>
+
+  <p>The October 2025 brand transformation announced Trinity as <em>"the AI-powered, insight-driven leader in life sciences strategy and analytics"</em> and rolled out <strong>TrinityEDGE</strong> as the unifying technology brand <span class="tier tier-1">T1</span>. The accompanying messaging emphasizes proprietary AI (the Annual Drug Index, AI Readiness Benchmark, RealWorldEDGE), the breadth of the integrated platform, and Trinity's positioning across the full commercialization lifecycle.</p>
+
+  <p>What the market signals say in response: the recognition is uneven. Trinity is on Forbes Best Management Consulting Firms (2024 + 2025), Vault 2026 #1 in some life-sciences slices, and Poets &amp; Quants 2026 Top 50 with a 4.843 rating <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span>. But it is <strong>absent from the Umbrex curated pharma-specialist list</strong>, has not appeared in a recent Gartner Magic Quadrant or Forrester Wave for life-sciences AI/analytics, and the one major analyst placement that does exist — Everest Group's 2025 Life Sciences AI/Analytics PEAK Matrix — is contested across distributors (see <a href="#s04">Section 04</a>) <span class="tier tier-2">T2</span>.</p>
+
+  <blockquote>
+    "Trinity Life Sciences is well-positioned at the intersection of strategy, analytics, and AI… we are excited to lead the next chapter of growth."
+    <span class="attribution">— Scott Evangelista, CEO, on appointment (Nov 17, 2025) <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <div class="callout info">
+    <div class="callout-label">▸ The "Trinity tells about itself" vs "what the market signals" gap</div>
+    <p>Trinity's self-narrative emphasizes leadership in AI/analytics. The independent analyst record is mixed-to-thin. This is not the same as the self-narrative being wrong — it's that the differentiating proof points (TGaS benchmarking, Annual Drug Index, Bain partnership, Komodo integration) live in domains where there isn't a clean third-party scoreboard. <strong>The Forbes-Vault-Poets&amp;Quants recognition is real and consistent</strong>; it just operates in the "good consulting firm to work for" register, not the "Gartner Magic Quadrant leader" register. For Brian's purposes, that distinction matters more than it would for, say, a vendor sales motion.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 03 FINANCIAL TRAJECTORY -->
+<section id="s03" class="section">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2 style="margin:0;">Financial trajectory</h2>
+    <span class="section-tag">11 min read · private-company caveat</span>
+  </div>
+
+  <p><strong>TL;DR for this section:</strong> Trinity is private, so most financial detail is inferred from headcount proxies, acquisition cadence, PE behavior, and a single 2021 Inc. 5000 revenue anchor (~$137M). The signals point unambiguously to growth — but the growth is M&amp;A-driven, the timing of the activity cluster reads as exit-prep, and the hold-period math says a sponsor change is likely in 12–24 months. None of that is contraction; all of it is restructuring risk.</p>
+
+  <h3>The honest framing on financials</h3>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ What you can know vs what you have to infer</div>
+    <p><strong>What's public:</strong> Inc. 5000 disclosure that Trinity was #2743 in 2021 with $137M revenue and 147% three-year growth (the only revenue figure that is primary-sourced and dated) <span class="tier tier-1">T1</span>. PE-Hub paywalled leak indicated <strong>"&gt;$50M EBITDA"</strong> at time of the 2021 sale to Kohlberg — single-source flag <span class="tier tier-2">T2</span>. Inc. 5000 four years running (2021–2024) <span class="tier tier-1">T1</span>. Headcount tracked via LinkedIn, press releases, and acquisition announcements.</p>
+    <p><strong>What's not public:</strong> current revenue, current EBITDA, debt structure, distributions to Kohlberg, executive compensation, customer concentration, billing rates. <strong>Treat 2026 revenue estimates as inference. The aggregator $74M figure on RocketReach is unreliable and almost certainly mislabeled.</strong></p>
+  </div>
+
+  <h3>The major events timeline (last 5 years)</h3>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Trinity LS · major events 2021 → 2026</div>
+    <div class="vtimeline">
+      <div class="vt-item major">
+        <div class="vt-date">Nov 30, 2021</div>
+        <div class="vt-title">Kohlberg &amp; Company recapitalization · IMCO co-invest</div>
+        <p class="vt-body">Parthenon exits after ~3.5-year hold (Mar 2018 → Nov 2021). Kohlberg becomes lead sponsor with IMCO ($9.5B PE assets) as co-investor. PE-Hub leak: ">$50M EBITDA" at time of sale <span class="tier tier-2">T2</span>.</p>
+      </div>
+      <div class="vt-item">
+        <div class="vt-date">Aug 8, 2022</div>
+        <div class="vt-title">Bain &amp; Company strategic partnership + minority equity</div>
+        <p class="vt-body">Bain takes undisclosed minority equity stake in Trinity alongside formal strategic partnership <span class="tier tier-1">T1</span>. Bain explicitly cites TGaS benchmarking and Trinity's RWE/RWD analytics for its own pharma-client engagements.</p>
+      </div>
+      <div class="vt-item">
+        <div class="vt-date">Jul 2022</div>
+        <div class="vt-title">D Cube Analytics acquisition · 250+ employees added</div>
+        <p class="vt-body">India-based AI/analytics specialist. Largest single-acquisition headcount addition before APACME <span class="tier tier-1">T1</span>.</p>
+      </div>
+      <div class="vt-item">
+        <div class="vt-date">Jan 2023</div>
+        <div class="vt-title">Havas Health &amp; You strategic partnership/investor</div>
+        <p class="vt-body">Listed as "Investor" on LinkedIn-Crunchbase profile; terms undisclosed <span class="tier tier-2">T2</span>.</p>
+      </div>
+      <div class="vt-item">
+        <div class="vt-date">Jul 1, 2023</div>
+        <div class="vt-title">CEO transition · Fitzhenry → Orne</div>
+        <p class="vt-body">First CEO change under Kohlberg ownership. Orne had 24+ years at Trinity; Fitzhenry remains on Board <span class="tier tier-1">T1</span>.</p>
+      </div>
+      <div class="vt-item">
+        <div class="vt-date">Aug 2024</div>
+        <div class="vt-title">Inc. 5000 four-year stretch · "over 1,200 people"</div>
+        <p class="vt-body">First public Trinity figure naming headcount in the 1,200+ range. Pre-acquisition baseline before the EVERSANA APACME deal <span class="tier tier-1">T1</span>.</p>
+      </div>
+      <div class="vt-item">
+        <div class="vt-date">Jul 2025</div>
+        <div class="vt-title">Mexico City office opens</div>
+        <p class="vt-body">Single-source LatAm footprint expansion <span class="tier tier-2">T2</span>.</p>
+      </div>
+      <div class="vt-item major">
+        <div class="vt-date">Oct 2, 2025</div>
+        <div class="vt-title">Brand transformation · TrinityEDGE rollout</div>
+        <p class="vt-body">"AI-powered, insight-driven leader" repositioning. Unified technology brand across Annual Drug Index, AI Readiness Benchmark, RealWorldEDGE <span class="tier tier-1">T1</span>.</p>
+      </div>
+      <div class="vt-item major">
+        <div class="vt-date">Nov 3, 2025</div>
+        <div class="vt-title">EVERSANA APACME acquisition · 65+ professionals + 6 APAC/Middle East offices</div>
+        <p class="vt-body">Adds Singapore, Tokyo, Mumbai, Shanghai, Sydney, Dubai. Largest geographic expansion in the company's history <span class="tier tier-1">T1</span>.</p>
+      </div>
+      <div class="vt-item major">
+        <div class="vt-date">Nov 17, 2025</div>
+        <div class="vt-title">CEO transition · Orne → Evangelista (Kohlberg Operating Executive)</div>
+        <p class="vt-body">Second CEO change under Kohlberg in 28 months. Evangelista appointed from Kohlberg's own Operating Executive bench; had been on Trinity's Board of Advisors three years prior <span class="tier tier-1">T1</span>.</p>
+      </div>
+      <div class="vt-item">
+        <div class="vt-date">Q1-Q2 2026</div>
+        <div class="vt-title">Yogesh Soneji departs after 21 years (single-source)</div>
+        <p class="vt-body">Senior departure surfaced via LinkedIn farewell post + Orne comment. Treat as single-source until corroborated <span class="tier tier-3">T3</span>.</p>
+      </div>
+      <div class="vt-item">
+        <div class="vt-date">May 2026</div>
+        <div class="vt-title">9th Annual Best of Benchmark + AI Readiness Benchmark launch</div>
+        <p class="vt-body">TGaS flagship event franchise intact for 9th cycle. AI Readiness Benchmark is a structured assessment of enterprise AI maturity across 8 dimensions — adjacent to CMIT's surface area <span class="tier tier-1">T1</span>.</p>
+      </div>
+    </div>
+    <div class="diagram-caption">Sources: Trinity press, Kohlberg portfolio page, Mergr, Bain press, BusinessWire, LinkedIn. Major events highlighted in green; PE/leadership events in navy. Note the late-2025 cluster: brand refresh + APACME + new CEO within 6 weeks.</div>
+  </div>
+
+  <h3>The headcount trajectory (the cleanest growth signal)</h3>
+
+  <p>Since Trinity is private, headcount is the strongest publicly-trackable proxy for growth. The trajectory is unambiguous:</p>
+
+  <ul>
+    <li><strong>Pre-2020 baseline:</strong> Management Consulted profile lists Trinity Partners (pre-rename) at ~350+ employees <span class="tier tier-2">T2</span>.</li>
+    <li><strong>August 2024:</strong> Inc. 5000 profile cites "over 1,200 people" <span class="tier tier-1">T1</span>.</li>
+    <li><strong>November 2025:</strong> CEO announcement press release names "approximately 1,300 employees" <span class="tier tier-1">T1</span>.</li>
+    <li><strong>June 2026 (LinkedIn):</strong> 1,672 — over-counts typical-LinkedIn by ~10-20%, but the trajectory line is correct <span class="tier tier-1">T1</span>.</li>
+    <li><strong>India:</strong> ~500+ employees per AmbitionBox + D Cube acquisition disclosure — Trinity's largest non-US center <span class="tier tier-2">T2</span>.</li>
+  </ul>
+
+  <p><strong>Headline:</strong> ~1,200 → ~1,672 in 22 months. <strong>~39% headcount growth.</strong> Largely M&amp;A-driven (D Cube + APACME alone account for 315+ heads), but not entirely — Inc. 5000 organic-growth criteria are met for four consecutive years.</p>
+
+  <h3>The acquisition cadence (the second-cleanest growth signal)</h3>
+
+  <p>Trinity is on a roll-up trajectory. <strong>6–9 disclosed acquisitions since 2018; 4 in the last 5 years.</strong></p>
+
+  <table>
+    <thead><tr><th>Date</th><th>Acquisition</th><th>Headcount added</th><th>Strategic role</th></tr></thead>
+    <tbody>
+      <tr><td>Sept 2018</td><td>TGaS Advisors</td><td>~70 (Trinity-Partner-era)</td><td>Benchmarking IP + member network <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Dec 2020</td><td>BluePrint</td><td>Undisclosed</td><td>Market access &amp; reimbursement <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Oct 2021</td><td>CBPartners</td><td>75+</td><td>Pricing &amp; market access advisory <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>~2021</td><td>Bell Canyon</td><td>Undisclosed</td><td>Brand strategy / commercial <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Jul 2022</td><td><strong>D Cube Analytics</strong></td><td><strong>250+</strong></td><td>India-based AI/analytics scale-up <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>~2022-23</td><td>Vancery</td><td>Undisclosed</td><td>Expert network <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Nov 2025</td><td><strong>EVERSANA APACME</strong></td><td><strong>65+</strong></td><td>APAC + Middle East geographic footprint <span class="tier tier-1">T1</span></td></tr>
+    </tbody>
+  </table>
+
+  <p>Plus the two strategic-equity partnerships that aren't full acquisitions: <strong>Bain &amp; Company (Aug 2022, minority equity)</strong> and <strong>Havas Health &amp; You (Jan 2023, minority/strategic investor)</strong> <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span>.</p>
+
+  <h3>The PE hold-period math</h3>
+
+  <p>This is the load-bearing analytical inference in the section.</p>
+
+  <ul>
+    <li>Kohlberg has owned Trinity since November 30, 2021 — <strong>4.5+ years as of June 2026</strong> <span class="tier tier-1">T1</span>.</li>
+    <li>Mid-market PE funds typically hold 4–7 years; at 4.5+ years into the Kohlberg hold (since Nov 30, 2021), Trinity sits inside the standard harvest window <span class="tier tier-2">T2</span>.</li>
+    <li>Kohlberg's portfolio page <strong>still lists Trinity as current as of June 2026</strong> — meaning no public exit has been announced <span class="tier tier-1">T1</span>.</li>
+    <li>The late-2025 cluster — brand refresh (Oct 2), APACME acquisition (Nov 3), new Kohlberg-bench CEO (Nov 17) — fits the textbook pre-exit playbook: clean the brand, plug the strategic gaps, install a CEO who can take the company through transition <span class="tier tier-3">T3</span> (analytic inference).</li>
+  </ul>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ The structural read on exit timing</div>
+    <p>If Kohlberg follows industry-standard hold patterns, a sale process is most likely to surface publicly in the <strong>12–24 month window</strong> from now. That doesn't mean a sale is imminent — it means the activity Brian is watching from inside is most-plausibly read as <em>positioning Trinity for sale to a new sponsor, a strategic acquirer, or (less likely given scale) an IPO</em>. The implication: the <em>highest leadership-change / restructuring risk in the next 5 years sits in that 12–24 month window</em>. Sub-practice rationalization typically happens during integration <em>after</em> exit closes — which is the moment to watch for CMIT specifically.</p>
+  </div>
+
+  <h3>The "no contraction signal" signal</h3>
+
+  <p>One of the cleanest absences in the file: <strong>no US WARN notices surfaced for Trinity</strong> at federal DoL or Massachusetts state level, across the entire Kohlberg hold period <span class="tier tier-1">T1</span> (absence-verified). Glassdoor surfaces only 2 layoff-tagged reviews out of 552 total reviews <span class="tier tier-3">T3</span>. No layoffs.fyi entry. No publicly-disclosed workforce reductions. <strong>Trinity is growing headcount, not shedding.</strong></p>
+
+  <p>The honest hedge: WARN thresholds (50+ employees at a single site for 30+ days) wouldn't capture small or distributed reductions. So the strong claim is "no large-scale layoff signal at WARN threshold" — not "zero reductions ever." But for a 1,300+ employee firm operating across 14 offices, the absence of any WARN filing is meaningful.</p>
+
+  <h3>Executive compensation + vendor signals (thin)</h3>
+
+  <p>Trinity is not subject to executive-compensation disclosure rules. No public Form 5500 filings, no executive pay leakage from depositions or litigation, no public vendor contract awards. The PE Hub leak ("$50M+ EBITDA") is the strongest specific financial number — and it's a 2021 paywalled figure from a partial press leak, so should be treated as directional only.</p>
+
+  <div class="callout info">
+    <div class="callout-label">▸ What you (Brian) likely know that the public record doesn't</div>
+    <p>Current revenue. Margin trajectory. PE distributions. Internal hiring plan. Customer concentration. EBITDA trajectory and bonus pool sizing. <em>Internal financial metrics are the single biggest gap between what this briefing can say and what you can verify from inside.</em> Treat the public-financial picture as "growth-mode, exit-prep posture, no contraction signal" — and triangulate the rest from your seat.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 04 COMPETITIVE LANDSCAPE -->
+<section id="s04" class="section">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2 style="margin:0;">Competitive landscape</h2>
+    <span class="section-tag">13 min read</span>
+  </div>
+
+  <p><strong>TL;DR for this section:</strong> Trinity faces three different competitive sets running on three different game theories. The scale gap to IQVIA / ZS on AI/analytics is material and widening. Against boutique-specialist peers (ClearView, Putnam, Beghou, Blue Matter) Trinity has scale on its side but the boutiques are out-investing it on specific AI/IP plays. Against big-strategy adjacent set (McKinsey, Bain, Deloitte LS, EY-Parthenon) Trinity wins on pharma-specialization and loses on brand/network. The Veeva Vault CRM 2025-2030 transition is the most consequential single market event for CMIT-relevant capabilities; Trinity's positioning is the single biggest competitive unknown in the file.</p>
+
+  <h3>The three competitive sets, mapped</h3>
+
+  <p>Trinity is regularly compared against three different sets depending on the deal shape. The cleanest way to see Trinity's position is on the matrix in <a href="#s02">Section 02</a> — here we walk each set in detail.</p>
+
+  <h3>Set 1 — The scale players (IQVIA, ZS, EVERSANA)</h3>
+
+  <table>
+    <thead><tr><th></th><th>Trinity LS</th><th>IQVIA</th><th>ZS Associates</th><th>EVERSANA</th></tr></thead>
+    <tbody>
+      <tr><td>Employees</td><td>~1,300-1,672</td><td>~88,000 globally <span class="tier tier-1">T1</span></td><td>13,000+ <span class="tier tier-2">T2</span></td><td>Parent scale not researched in this build</td></tr>
+      <tr><td>Revenue</td><td>$137M (2021 anchor) <span class="tier tier-1">T1</span></td><td>$16.3B FY2025 <span class="tier tier-1">T1</span></td><td>~$2.5-3B+ est. <span class="tier tier-2">T2</span></td><td>Private; PE-owned</td></tr>
+      <tr><td>Offices</td><td>14</td><td>100+ countries</td><td>35 <span class="tier tier-2">T2</span></td><td>Global</td></tr>
+      <tr><td>Top-pharma penetration</td><td>~70-75% U.S. launches (self-reported) <span class="tier tier-1">T1</span></td><td>Essentially all <span class="tier tier-1">T1</span></td><td>49 of top 50 pharma <span class="tier tier-2">T2</span></td><td>Top 50</td></tr>
+      <tr><td>Recent AI move</td><td>TrinityEDGE rebrand (Oct 2025); AI Readiness Benchmark (May 2026); Komodo Health partnership</td><td>AWS strategic collab (Dec 2025) <span class="tier tier-1">T1</span>; 5 EU drug-discovery sites $145M (Feb 2025); Whiz acquisition (May 2025)</td><td><strong>Torrent Consulting acquisition (Oct 2, 2025, 130 people)</strong> for Salesforce Health Cloud + Vault positioning <span class="tier tier-1">T1</span></td><td>Mid-tier full-service M&amp;A play</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout critical">
+    <div class="callout-label">▸ The scale gap is the most material competitive fact</div>
+    <p>Trinity is <strong>sub-tenth of ZS Associates by headcount and less than 2% of IQVIA</strong>. For sponsorship-dollar-attracting AI/analytics RFPs at top-20 pharma, scale increasingly drives selection — and Trinity does not have it. The mitigants are real (TGaS benchmarking, Bain channel, deep launch-services bench) but they don't close the scale gap on data-engineering, generative-AI tooling, or Veeva systems integration.</p>
+  </div>
+
+  <h3>Set 2 — The boutique specialists (ClearView, Putnam, Beghou, Blue Matter, Charles River)</h3>
+
+  <p>This is Trinity's most-contested deal shape. Each of these peers is smaller but is out-investing Trinity on specific high-leverage moves:</p>
+
+  <div class="three-up">
+    <div class="battle-card">
+      <h4>ClearView Healthcare</h4>
+      <div class="battle-sub">Boutique · LS Strategy</div>
+      <ul>
+        <li>Strategic investment in <strong>Epistemic AI ($4M, Jan 2025)</strong> for proprietary GenAI platform <span class="tier tier-1">T1</span></li>
+        <li>Leerink / McKinsey lineage at leadership</li>
+        <li>Most direct ICP overlap with Trinity for top-pharma strategy work</li>
+      </ul>
+    </div>
+    <div class="battle-card">
+      <h4>Putnam (Inizio Ignite)</h4>
+      <div class="battle-sub">Boutique → Platform</div>
+      <ul>
+        <li>550+ team via Inizio Ignite (Jan 2026 rebrand) <span class="tier tier-1">T1</span></li>
+        <li>Inizio platform gives Putnam scale-via-affiliation</li>
+        <li>Strong commercial-strategy positioning</li>
+      </ul>
+    </div>
+    <div class="battle-card">
+      <h4>Beghou Consulting</h4>
+      <div class="battle-sub">Commercial analytics specialist</div>
+      <ul>
+        <li><strong>Bengaluru GenAI hub (Apr 2025)</strong> — direct play at Trinity's India base <span class="tier tier-1">T1</span></li>
+        <li>+4 partners added in 2025 <span class="tier tier-2">T2</span></li>
+        <li>Sharpest CMIT-adjacent competitor on analytics</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>Two others worth naming explicitly:</p>
+  <ul>
+    <li><strong>Blue Matter Consulting:</strong> deep LS strategy boutique, smaller than ClearView, well-respected in launch strategy <span class="tier tier-2">T2</span>.</li>
+    <li><strong>Charles River Associates (CRA):</strong> expanded LS practice with VP hires Aug–Sept 2025 <span class="tier tier-1">T1</span>; market-access / health economics specialist.</li>
+    <li><strong>Real Chemistry:</strong> double-digit YoY 2025 growth + 2 acquisitions (Oct 2025) <span class="tier tier-1">T1</span>; tech-enabled commercialization positioning.</li>
+  </ul>
+
+  <h3>Set 3 — The big-strategy adjacent set (McKinsey, Bain, Deloitte LS, EY-Parthenon, Accenture)</h3>
+
+  <p>This is where the brand asymmetry hurts Trinity. Big strategy firms have:</p>
+  <ul>
+    <li><strong>McKinsey:</strong> Advanced-therapies unit launched Oct 2025 with 15 ex-FDA practitioners <span class="tier tier-1">T1</span> — direct play at the regulatory-strategic adjacency where Trinity's market access practice operates.</li>
+    <li><strong>Deloitte LS:</strong> Singapore expansion Jan 2026 with +85 professionals <span class="tier tier-1">T1</span>; aggressive Veeva positioning.</li>
+    <li><strong>Accenture LS:</strong> scale + technology-integration moat; Veeva and Salesforce systems-integration play.</li>
+    <li><strong>EY-Parthenon:</strong> 25,000+ professionals; LS strategy is one slice of a broader platform <span class="tier tier-2">T2</span>.</li>
+    <li><strong>Bain &amp; Company:</strong> the partner-not-competitor. Bain's strategic partnership with Trinity (Aug 2022 + minority equity) explicitly cites TGaS benchmarking for its pharma-client work — meaning Bain is effectively channel-partner, not direct competitor, in the deals where the partnership applies <span class="tier tier-1">T1</span>.</li>
+  </ul>
+
+  <h3>The Everest PEAK Matrix contested-positioning</h3>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ Operator-verification flag</div>
+    <p>Trinity's October 2025 press release self-describes Trinity as <strong>"a Leader"</strong> in the 2025 Everest Group Life Sciences AI/Analytics PEAK Matrix for Commercial (alongside Accenture, Axtria, Cognizant, EVERSANA, Indegene, IQVIA, Real Chemistry, WNS, ZS) <span class="tier tier-1">T1</span> (Trinity's own press + Everest abstract PDF). However, distributions of the same Everest report by IQVIA and ZS position <strong>ZS highest</strong>, and the framing in those distributions does <em>not</em> describe Trinity as a Leader in the same way <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span>. <strong>PEAK Matrices have multiple Leaders</strong>, and "in Leaders quadrant" is distinct from "highest-positioned" — so both framings can technically be true but they tell different stories.</p>
+    <p><strong>Safer framing for the briefing:</strong> "Included in the 2025 Everest LS AI/Analytics PEAK Matrix per Trinity's own press; ZS positioned highest per ZS/IQVIA distributions; specific tier-position not independently verified."</p>
+  </div>
+
+  <h3>The competitive moves of the last 12 months — Trinity vs the field</h3>
+
+  <table>
+    <thead><tr><th>Player</th><th>Key recent move</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Trinity</strong></td><td>EVERSANA APACME (Nov 2025, 65+ ppl); TrinityEDGE brand (Oct 2025); AI Readiness Benchmark (May 2026)</td><td>Geographic expansion + brand consolidation; AI positioning push</td></tr>
+      <tr><td>IQVIA</td><td>AWS collab (Dec 2025); 5 EU drug-discovery sites $145M (Feb 2025); Whiz acquisition (May 2025)</td><td>Hyperscaler partnership + R&amp;D-side capabilities</td></tr>
+      <tr><td><strong>ZS</strong></td><td>Torrent Consulting acquisition (Oct 2, 2025, 130 ppl) for Salesforce Health Cloud + Veeva positioning</td><td>Direct CMIT-relevant capability acquisition <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>ClearView</td><td>Epistemic AI investment (Jan 2025)</td><td>Proprietary GenAI IP play</td></tr>
+      <tr><td>Beghou</td><td>Bengaluru office (Apr 2025); +4 partners 2025</td><td>India scale-up; direct overlap with Trinity D Cube base</td></tr>
+      <tr><td>Inizio Ignite</td><td>Jan 2026 rebrand of Putnam + sister brands</td><td>Boutique consolidation into platform</td></tr>
+      <tr><td>McKinsey</td><td>Advanced-therapies unit (Oct 2025, 15 ex-FDA)</td><td>Regulatory-strategic positioning</td></tr>
+      <tr><td>Deloitte LS</td><td>Singapore +85 (Jan 2026)</td><td>APAC scale-up</td></tr>
+      <tr><td>Real Chemistry</td><td>Double-digit growth 2025 + 2 acquisitions (Oct 2025)</td><td>Tech-enabled commercialization platform</td></tr>
+    </tbody>
+  </table>
+
+  <h3>CMIT-specific competitive context</h3>
+
+  <p>Brian — this is the slice that matters most for your seat. The direct CMIT competitors are:</p>
+  <ul>
+    <li><strong>ZS commercial-ops + Torrent Salesforce/Vault practice</strong> — scale advantage + Salesforce Health Cloud capability after the Torrent acquisition. The most direct head-to-head <span class="tier tier-1">T1</span>.</li>
+    <li><strong>Beghou commercial analytics</strong> — smaller but sharper on specific analytics workstreams; Bengaluru hub overlaps with Trinity's India base.</li>
+    <li><strong>Deloitte commercial transformation</strong> — Veeva systems-integration tilt; bigger budgets, less benchmarking IP.</li>
+    <li><strong>Accenture LS</strong> — systems-integration scale; commodity-positioned on advisory.</li>
+  </ul>
+
+  <p><strong>CMIT's structural edge:</strong> the benchmarking-and-peer-network model. CMIT inside TGaS inherits the 110+ member network, 400+ brand database, 9-year event franchise. ZS doesn't have that. Beghou doesn't have that. Deloitte doesn't have that. <em>That's the moat.</em></p>
+
+  <p><strong>CMIT's structural disadvantage:</strong> none of those competitors are mid-PE-hold under a sponsor whose hold-period math says 12-24 months to exit. Trinity's go-to-market discipline is constrained by a different optimization function than ZS or Deloitte.</p>
+
+  <h3>The Veeva Vault CRM transition — the most consequential single market event</h3>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ R5 from findings — Trinity's Veeva positioning is the biggest competitive unknown</div>
+    <p>Veeva Vault CRM transition is the largest single commercial-ops transformation event in pharma 2025-2030 — <strong>~$2B services market by 2025</strong> per Everest <span class="tier tier-2">T2</span>. ZS (via Torrent), Deloitte, and Accenture are all positioning aggressively. <strong>Trinity's Vault positioning is unclear from public sources.</strong> No major Veeva partnership press, no named Veeva-certified practice lead, no Vault-systems case studies surfaced. <em>CMIT is the most affected practice if Trinity lacks a Vault strategy.</em> Worth probing directly from inside.</p>
+  </div>
+
+  <h3>Recognition battle — where Trinity is losing</h3>
+
+  <p>Synthesis from Comparison findings CMP3 and CMP4:</p>
+  <ul>
+    <li>ZS positioned highest in 2025 Everest PEAK Matrix per ZS's own distribution <span class="tier tier-2">T2</span>.</li>
+    <li>IQVIA is also a Leader + has AWS partnership + an AI Assistant product <span class="tier tier-1">T1</span>.</li>
+    <li>ClearView + Epistemic AI is an active analyst-house story <span class="tier tier-1">T1</span>.</li>
+    <li>Beghou's Bengaluru GenAI hub is an active analyst-house story <span class="tier tier-1">T1</span>.</li>
+    <li>Trinity's analyst-house recognition is uneven — Forbes / Vault / Poets&amp;Quants (broad consulting) is solid, but Magic-Quadrant-level pharma-specific recognition is thin <span class="tier tier-2">T2</span>.</li>
+  </ul>
+
+  <p>This isn't a fatal weakness, but it's a structural one. The recognition battle is happening in venues where Trinity's TGaS moat isn't visible to the people drawing the matrices.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 05 VERTICAL CONTEXT -->
+<section id="s05" class="section">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2 style="margin:0;">Vertical context — life-sciences consulting market</h2>
+    <span class="section-tag">8 min read</span>
+  </div>
+
+  <p><strong>TL;DR for this section:</strong> Life-sciences consulting is a ~$35-38B market growing at ~9.4% CAGR to $60B by 2031 — faster than overall consulting. But the macro is bifurcating: pharma R&amp;D is contracting (top-16 down 3.6% in 2025), patent cliff hitting ($400B at risk 2026-2033), IRA negotiated prices effective 2026, FDA in turmoil. <strong>Compression in legacy services + tailwind in market-access, RWE, and AI/analytics.</strong> Trinity's service mix straddles both — TGaS benchmarking and market access are in the tailwind segments; some legacy advisory work isn't.</p>
+
+  <h3>Market size + growth</h3>
+
+  <div class="kpi-grid">
+    <div class="kpi-cell"><div class="v">~$35-38B</div><div class="l">LS consulting market size 2025-26 (multi-aggregator) <span class="tier tier-4">T4</span></div></div>
+    <div class="kpi-cell"><div class="v">9.4% CAGR</div><div class="l">Through 2031 → ~$60B <span class="tier tier-4">T4</span></div></div>
+    <div class="kpi-cell"><div class="v">14.3-14.4%</div><div class="l">RWE solutions CAGR — faster than overall <span class="tier tier-4">T4</span></div></div>
+    <div class="kpi-cell"><div class="v">58.4%</div><div class="l">RWE market = services share</div></div>
+    <div class="kpi-cell"><div class="v">~$2B</div><div class="l">Veeva services market by 2025 per Everest <span class="tier tier-2">T2</span></div></div>
+    <div class="kpi-cell"><div class="v">-3.6%</div><div class="l">Top-16 pharma R&amp;D in 2025 vs prior year <span class="tier tier-2">T2</span></div></div>
+  </div>
+
+  <h3>The four macro forces shaping pharma-buyer behavior</h3>
+
+  <h4>1. Pharma R&amp;D contraction</h4>
+  <p>Top-16 pharma R&amp;D fell <strong>3.6% in 2025 to $159.1B</strong> — J&amp;J -15%, AbbVie -29%, Pfizer -4%; only AstraZeneca (+5%) and Amgen (+22%) grew <span class="tier tier-2">T2</span>. Trump administration policy positioning is a meaningful contributor. <strong>Implication for Trinity:</strong> R&amp;D-side budgets are tightening; consulting that supports R&amp;D decisions (Trinity's launch strategy, market sizing, forecasting) faces buyer-side pressure on rate and scope.</p>
+
+  <h4>2. Patent cliff — $400B at risk 2026-2033</h4>
+  <p>Keytruda 2028 (~$29.5B annual revenue at risk), Eliquis 2027-29 ($10B+/yr), Ibrance, Xtandi — <strong>~200 drugs lose exclusivity in 5 years</strong> <span class="tier tier-2">T2</span>. <strong>Implication for Trinity:</strong> patent-cliff prep is a structural tailwind for market access, lifecycle management, and biosimilars-defense advisory. Trinity sits well here — these are TGaS and market-access territories.</p>
+
+  <h4>3. IRA negotiated prices effective 2026 + MFN</h4>
+  <p>First Medicare-negotiated drug prices take effect January 2026 <span class="tier tier-1">T1</span>. Most-Favored-Nation pricing executive orders add reference-pricing pressure. <strong>Implication for Trinity:</strong> Government Pricing Services (a TGaS practice launched June 2022) is structurally well-positioned. Pharma needs help modeling new pricing regimes and rebuild commercial models.</p>
+
+  <h4>4. FDA in turmoil</h4>
+  <p>Makary resigned May 2026; three top drug-review FDA roles in "acting" status; trade press calling it the <em>"most damaging period in FDA history"</em> <span class="tier tier-2">T2</span>. <strong>Implication for Trinity:</strong> regulatory uncertainty = more advisory demand on regulatory strategy. McKinsey's 15-ex-FDA advanced-therapies unit (Oct 2025) is the play; Trinity does not appear to have moved as quickly here.</p>
+
+  <h3>What's growing vs what's compressing</h3>
+
+  <div class="portfolio-grid">
+    <div class="portfolio-cell growth">
+      <div class="pc-label">▲ Growing — structural tailwinds</div>
+      <ul>
+        <li>Market access &amp; reimbursement (IRA + MFN + payer mix)</li>
+        <li>Government pricing advisory (post-IRA effective date)</li>
+        <li>Real-world evidence (FDA Dec 2025 guidance expanded RWE acceptance for medical devices)</li>
+        <li>AI/analytics for commercial (Everest PEAK Matrix category)</li>
+        <li>Patent-cliff lifecycle management</li>
+        <li>Biosimilars-defense advisory</li>
+        <li>Veeva Vault systems integration</li>
+      </ul>
+    </div>
+    <div class="portfolio-cell harvest">
+      <div class="pc-label">▼ Compressing — buyer-side headwinds</div>
+      <ul>
+        <li>Traditional brand-marketing services (procurement consolidation, in-housing)</li>
+        <li>Launch services with weak differentiation (commodity register)</li>
+        <li>R&amp;D-side advisory tied to discretionary R&amp;D budgets</li>
+        <li>Generic strategy consulting without proprietary IP layer</li>
+        <li>Custom data analytics without scaled platform tooling</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>M&amp;A heat in the vertical</h3>
+
+  <p>Pharma M&amp;A itself surged to <strong>~$70B in 2025</strong> ($228B+ announced biotech; 17+ billion-dollar deals): J&amp;J / Intra-Cellular $14.6B; Merck / Verona $10B; Sanofi / Blueprint $9.5B; Pfizer / Metsera $9.8B <span class="tier tier-2">T2</span>. <strong>Implication:</strong> pharma M&amp;A drives advisory demand on integration, portfolio rationalization, and post-deal commercial planning. Trinity-relevant tailwind.</p>
+
+  <p>Within the LS-consulting category itself, consolidation is real: Inizio (Putnam + sister brands), EVERSANA, IQVIA's serial acquisition cadence. Trinity is in the consolidating-set on both sides — roll-up acquirer at home, candidate target externally.</p>
+
+  <h3>Procurement consolidation — the buyer-side margin pressure</h3>
+
+  <p>Pharma procurement is consolidating vendors; preferred-vendor lists are shrinking; rate-card pressure is increasing <span class="tier tier-2">T2</span>. <strong>Implication for Trinity:</strong> mid-tier specialists without scale or proprietary platform tooling are most exposed. Trinity's TGaS moat is the protection against commoditization; Trinity's non-TGaS advisory layer is more exposed.</p>
+
+  <div class="callout info">
+    <div class="callout-label">▸ How the vertical context reads for Trinity specifically</div>
+    <p>Net assessment: <strong>the vertical macro is mostly tailwind for Trinity-the-portfolio</strong>, with the caveat that the tailwinds are concentrated in TGaS-adjacent capabilities (benchmarking, market access, government pricing, RWE) and the headwinds hit generic-strategy and traditional brand-marketing advisory. The Veeva Vault transition is the single largest opportunity and the biggest unknown — Trinity's position there is not visible from public sources, which itself is a signal.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 06 TGAS WITHIN TRINITY -->
+<section id="s06" class="section">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2 style="margin:0;">TGaS within Trinity LS — services portfolio + CMIT context</h2>
+    <span class="section-tag">11 min read</span>
+  </div>
+
+  <p><strong>TL;DR for this section:</strong> TGaS is the analytical-benchmarking unit of Trinity and the most defensible asset in the portfolio. Its public surface enumerates ~14-15 functional sub-practices organized by Karl Kraft into four pillars (Commercial Ops, Market Access, Medical Affairs, IT/CMIT). CMIT is the newest and thinnest in public footprint, but its thinness reads as early-go-to-market, not failure — and the strategic framing (apply the proven benchmarking model to IT) is the constructive interpretation.</p>
+
+  <h3>The TGaS sub-practice taxonomy (publicly enumerated)</h3>
+
+  <p>From the 9th Annual Best of Benchmark Awards categories list, the Medical Affairs launch press release (May 2019), the Government Pricing launch press release (June 2022), and the TGaS Benchmarking Membership page — the visible TGaS practice surface is:</p>
+
+  <table>
+    <thead><tr><th>Practice area</th><th>Pillar</th><th>Vintage</th><th>Public lead (where surfaced)</th></tr></thead>
+    <tbody>
+      <tr><td>Commercial Analytics &amp; Insights</td><td>Commercial Ops</td><td>Mature</td><td>—</td></tr>
+      <tr><td>Executive Commercial Operations</td><td>Commercial Ops</td><td>Mature</td><td>—</td></tr>
+      <tr><td>Field Operations (incl. ICE)</td><td>Commercial Ops</td><td>Mature</td><td>Erik Meurer (ED)</td></tr>
+      <tr><td>L&amp;D · Learning &amp; Development</td><td>Commercial Ops</td><td>Mature</td><td>Gayle Shaw-Hones, PhD</td></tr>
+      <tr><td>Marketing Operations</td><td>Commercial Ops</td><td>Mature</td><td>—</td></tr>
+      <tr><td>Omnichannel / Digital Marketing</td><td>Commercial Ops</td><td>Mature</td><td>—</td></tr>
+      <tr><td>MRL/PRC Promotional Review Excellence</td><td>Commercial Ops</td><td>Mature</td><td>Erik Meurer (ED, Promo Review)</td></tr>
+      <tr><td>Pricing &amp; Contracting</td><td>Market Access</td><td>Mature</td><td>—</td></tr>
+      <tr><td><strong>Medical Affairs Advisory</strong></td><td>Medical Affairs</td><td>Launched May 2019</td><td>Sarah Odeh (VP) <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Government Pricing Services</td><td>Market Access</td><td>Launched June 2022</td><td>—</td></tr>
+      <tr><td>Patient Support Services</td><td>Market Access</td><td>Active</td><td>—</td></tr>
+      <tr><td>Emerging Life Sciences Network (elsN)</td><td>Cross-pillar</td><td>Active</td><td>Tom Staab (SVP) <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Master Data Management Operations</td><td>Commercial Ops</td><td>Active</td><td>—</td></tr>
+      <tr><td><strong>CMIT · Commercial and Medical IT</strong></td><td>IT (NEW)</td><td>Newest</td><td>Brian Voellmecke (VP) <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span></td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Kraft's four-pillar framing</strong> (LinkedIn, Nov 2026): <em>"We've applied the same model that has been so successful in Commercial Operations, Market Access and Medical Affairs now to Information Technology (IT). Join our growing network and answer the question, 'how do other companies do it?'"</em> <span class="tier tier-1">T1</span></p>
+
+  <h3>CMIT as the newest pillar — what's public, what's thin</h3>
+
+  <p>The "CMIT" naming convention itself is informative. Trinity's house style is <strong>"Commercial and Medical IT (CMIT)"</strong> — explicitly addressing pharma IT leaders who serve commercial AND medical-affairs digital stacks <span class="tier tier-1">T1</span>. The naming positions CMIT at the IT-business-partnership layer, not the pure IT-operations layer.</p>
+
+  <p><strong>What's publicly visible about CMIT:</strong></p>
+  <ul>
+    <li>Trinity Life Sciences LinkedIn company post (May/June 2026): "Many pharma Commercial and Medical IT (CMIT) leaders…" — the post the practice is being publicly seeded through <span class="tier tier-1">T1</span>.</li>
+    <li>Karl Kraft personal LinkedIn reshare of same — TGaS President owning the public framing <span class="tier tier-1">T1</span>.</li>
+    <li>Marquee deliverable: <strong>"Pharma Digital/IT Landscape: CMIT Decisions on AI, Data, and Value"</strong> brief, downloadable from Trinity <span class="tier tier-1">T1</span>.</li>
+    <li>"CMIT virtual How" survey landing page at <code>trinitylifesciences.com/vhowcomplete_cit/</code> (URL slug <code>_cit</code>) — pattern matches how TGaS does benchmarking intake for member companies <span class="tier tier-1">T1</span>.</li>
+    <li>TGaS Fall Client Summit 2025 roster lists <strong>Brian Voellmecke as Vice President</strong> <span class="tier tier-1">T1</span>.</li>
+    <li>Brian's own LinkedIn comment (June 2026): <em>"It is definitely an interesting time for Commercial and Medical IT leaders…"</em> <span class="tier tier-1">T1</span>.</li>
+    <li><strong>AI Readiness Benchmark</strong> (May 2026 launch): structured assessment of enterprise AI maturity across 8 dimensions for commercial and medical teams — adjacent to CMIT and useful as CMIT's flagship benchmarking framework <span class="tier tier-1">T1</span>.</li>
+  </ul>
+
+  <p><strong>What's not visible:</strong></p>
+  <ul>
+    <li>No dedicated CMIT services page on trinitylifesciences.com (site:search returns the post + survey landing, not a permanent practice page).</li>
+    <li>No formal CMIT launch press release — by contrast, Medical Affairs (May 2019) and Government Pricing (June 2022) both got dedicated launch press releases <span class="tier tier-1">T1</span>.</li>
+    <li>No CMIT category at the 9th Annual Best of Benchmark Awards (May 2026) — TGaS's flagship recognition event has not yet absorbed CMIT into its taxonomy.</li>
+    <li>No public "Head of CMIT Practice" title naming convention — Brian's "Head of CMIT" framing per the operator brief does not appear verbatim on any single public Trinity page.</li>
+    <li>Minimal CMIT speaker billing at industry conferences (search across PMSA, BIO-IT World, ePharma Summit, DIA returned no CMIT-tagged sessions as of June 2026).</li>
+  </ul>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ Reading the CMIT public-footprint thinness honestly</div>
+    <p>This could indicate either (a) <strong>early go-to-market</strong> — the practice is real, the leader is real, the methodology is real, and the public-marketing motion just hasn't fired yet; or (b) <strong>uncertain commercial commitment</strong> — the practice has launched but Trinity hasn't decided how much marketing oxygen to give it relative to the mature pillars. The active thought-leadership signal (Trinity company-post + Kraft reshare + downloadable brief + AI Readiness Benchmark adjacent launch) leans toward (a), the constructive interpretation. The absence of a formal launch press release and Best-of-Benchmark category leans toward "the marketing infrastructure is not yet built around CMIT," which is consistent with (a) and not yet contradicted by data.</p>
+  </div>
+
+  <h3>The TGaS portfolio matrix — growth bets vs cash cows</h3>
+
+  <p>Based on public signals (launch dates, press cadence, event programming, leadership emphasis), the TGaS sub-practices sort plausibly into four quadrants:</p>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">TGaS portfolio · strategic role of each sub-practice</div>
+    <div class="portfolio-grid">
+      <div class="portfolio-cell growth">
+        <div class="pc-label">▲ Growth bets — public-marketing oxygen</div>
+        <ul>
+          <li><strong>CMIT</strong> — new pillar, Kraft personally championing</li>
+          <li>AI Readiness Benchmark / TrinityEDGE — Oct 2025 brand-refresh adjacent</li>
+          <li>Government Pricing Services — IRA tailwind</li>
+          <li>RealWorldEDGE / RWE practice — FDA Dec 2025 guidance tailwind</li>
+        </ul>
+      </div>
+      <div class="portfolio-cell cash">
+        <div class="pc-label">★ Cash cows — mature franchise</div>
+        <ul>
+          <li>Commercial Analytics &amp; Insights</li>
+          <li>Executive Commercial Operations</li>
+          <li>Field Operations / ICE</li>
+          <li>MRL/PRC Promotional Review</li>
+          <li>Best of Benchmark Awards event franchise (9-yr cycle)</li>
+        </ul>
+      </div>
+      <div class="portfolio-cell emerging">
+        <div class="pc-label">◆ Emerging — mid-stage</div>
+        <ul>
+          <li>Medical Affairs Advisory (2019 launch)</li>
+          <li>Pricing &amp; Contracting</li>
+          <li>Patient Support Services</li>
+          <li>Omnichannel/Digital Marketing</li>
+        </ul>
+      </div>
+      <div class="portfolio-cell harvest">
+        <div class="pc-label">○ Quieter — harvested-not-reinvested?</div>
+        <ul>
+          <li>Master Data Management Operations</li>
+          <li>L&amp;D (still active, lower press cadence)</li>
+          <li>Marketing Operations</li>
+          <li>Emerging Life Sciences Network (elsN) — small-pharma membership track; active but quieter externally</li>
+        </ul>
+      </div>
+    </div>
+    <div class="diagram-caption">Inferential classification based on public press cadence, event programming, leadership emphasis, and absence-of-recent-marketing signals. Not Trinity-disclosed. <span class="tier tier-3">T3</span> analytic inference — operator-verifiable.</div>
+  </div>
+
+  <h3>The strategic logic of the brand refresh + sub-practice consolidation risk</h3>
+
+  <p>This is R7 from findings — flagged as analytic but worth surfacing here. The October 2025 brand refresh introduced <strong>TrinityEDGE as the unifying technology brand</strong> across the AI/analytics surface (Annual Drug Index, AI Readiness Benchmark, RealWorldEDGE). The CMIT-related thought-leadership content is being published under the <em>Trinity</em> brand (not the TGaS sub-brand). Combined with a Kohlberg-installed CEO and exit-positioning hold-period math, the structural pressure on TGaS as a sub-brand may be:</p>
+  <ul>
+    <li>continued co-branding ("TGaS Advisors | Trinity") with the parent brand getting steadily more weight; or</li>
+    <li>at the next sponsor-change inflection point, formal sub-brand consolidation under Trinity / TrinityEDGE.</li>
+  </ul>
+  <p>This isn't a prediction, it's an analytic read. The TGaS-as-independent-brand-identity 8-year arc is real <span class="tier tier-1">T1</span>; the integration pressure is also real <span class="tier tier-3">T3</span>. The two reconcile if you treat the integration pressure as the slow background trend and the 9-year flagship event franchise as the active counter-signal.</p>
+
+  <div class="callout info">
+    <div class="callout-label">▸ Sensitivity gate — what this section does NOT do</div>
+    <p>Everything above is sourced from publicly-disclosed materials only. No insider TGaS structural signal is surfaced. The actual TGaS practice count, internal head-count per practice, internal revenue per practice, and CMIT-specific internal metrics are deliberately not addressed — those are Brian's domain, not the public record's. The role of this section is to surface the publicly-visible scaffolding so Brian can layer his insider knowledge on top.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 07 LEADERSHIP -->
+<section id="s07" class="section">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2 style="margin:0;">Leadership + personnel signals</h2>
+    <span class="section-tag">8 min read · public-LinkedIn-only</span>
+  </div>
+
+  <p><strong>TL;DR for this section:</strong> Three CEOs in 30 months is the eye-catching number, but it's misleading. The transitions are clean (Orne to Senior Advisor + Board; Fitzhenry still on Board), the C-suite is fully populated as of June 2026, the TGaS bench has institutional depth, and the only confirmed senior departure (Soneji, 21-year veteran) is single-sourced. The PE governance overlay is tight — Kohlberg has Executive Chairman + new CEO + 6 Board members — which is a feature, not a bug, in PE-owned mid-cap consultancies.</p>
+
+  <h3>The CEO succession arc</h3>
+
+  <table>
+    <thead><tr><th>CEO</th><th>Tenure as CEO</th><th>Total time at Trinity</th><th>Where they went</th></tr></thead>
+    <tbody>
+      <tr><td>Dave Fitzhenry</td><td>Pre-July 2023</td><td>Long-tenured</td><td>Board of Directors (still active June 2026) <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Leslie Orne</td><td>July 1, 2023 → Nov 17, 2025 (~28 months)</td><td>24+ years</td><td>Senior Advisor + Board <span class="tier tier-1">T1</span></td></tr>
+      <tr><td><strong>Scott Evangelista</strong></td><td>Nov 17, 2025 → present</td><td>Board of Advisors 3 yrs prior; CEO now</td><td>Sitting CEO <span class="tier tier-1">T1</span></td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>The Evangelista appointment specifically</strong>: he came from Kohlberg's own Operating Executive bench, sits on the board of Worldwide Clinical Trials (another Kohlberg portfolio company), and had been on Trinity's Board of Advisors for the prior three years before being elevated <span class="tier tier-1">T1</span>. Prior senior roles: IQVIA, Ironshore Pharmaceuticals, Deloitte; founder of Swiftwater Group. The public framing of the appointment is unambiguously PE-aligned — the press release foregrounds Matt Jennings (Executive Chairman + Kohlberg Operating Partner) as the introducer.</p>
+
+  <blockquote>
+    "Scott's deep experience scaling life-sciences companies and his strategic vision make him the right leader to take Trinity into our next chapter."
+    <span class="attribution">— Matt Jennings, Executive Chairman + Kohlberg Operating Partner, Nov 17, 2025 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <h3>The C-suite, fully populated</h3>
+
+  <p>As of June 2026, Trinity's full leadership roster (per trinitylifesciences.com/company/leadership/) is:</p>
+
+  <div class="orgchart">
+    <div class="org-row">
+      <div class="org-node parent">
+        <div class="role">CEO</div>
+        <div class="name">Scott Evangelista</div>
+        <div class="geo">Nov 17, 2025</div>
+      </div>
+      <div class="org-node">
+        <div class="role">Executive Chairman</div>
+        <div class="name">Matt Jennings</div>
+        <div class="geo">+Kohlberg Operating Partner</div>
+      </div>
+      <div class="org-node">
+        <div class="role">Board Chair</div>
+        <div class="name">Anne Whitaker</div>
+      </div>
+    </div>
+    <div class="org-row">
+      <div class="org-node"><div class="role">CFO</div><div class="name">McNamara</div></div>
+      <div class="org-node"><div class="role">CSO</div><div class="name">Omer Ismail</div></div>
+      <div class="org-node"><div class="role">CTO</div><div class="name">Rangachari</div></div>
+      <div class="org-node"><div class="role">Head Digital &amp; AI</div><div class="name">Jenkins</div></div>
+    </div>
+    <div class="org-row">
+      <div class="org-node"><div class="role">EVP Clients (was COO)</div><div class="name">Stephen Fleming</div></div>
+      <div class="org-node"><div class="role">President · Advisory</div><div class="name">Monica Martin de Bustamante</div></div>
+      <div class="org-node"><div class="role">President · Insights &amp; Analytics</div><div class="name">Aparna Deshpande</div></div>
+    </div>
+    <div class="org-row">
+      <div class="org-node division">
+        <div class="role">President · TGaS</div>
+        <div class="name">Karl J. Kraft</div>
+        <div class="geo">25+ yrs commercial ops</div>
+      </div>
+      <div class="org-node"><div class="role">VP · TGaS Medical Affairs</div><div class="name">Sarah Odeh</div></div>
+      <div class="org-node new"><div class="role">VP · TGaS CMIT</div><div class="name">Brian Voellmecke</div><div class="geo">Newest pillar</div></div>
+    </div>
+  </div>
+
+  <h3>The PE governance layer</h3>
+
+  <p>The Board of Directors carries dense Kohlberg representation:</p>
+  <ul>
+    <li><strong>Matt Jennings</strong> — Executive Chairman + Kohlberg Operating Partner <span class="tier tier-1">T1</span></li>
+    <li><strong>Scott Evangelista</strong> — CEO + former Kohlberg Operating Executive <span class="tier tier-1">T1</span></li>
+    <li><strong>Anne Whitaker</strong> — Board Chair (also listed at Board of Advisors)</li>
+    <li><strong>Dave Fitzhenry</strong> — Former CEO, still on Board <span class="tier tier-1">T1</span></li>
+    <li><strong>Leslie Orne</strong> — Former CEO, Senior Advisor + Board <span class="tier tier-1">T1</span></li>
+    <li>Kohlberg-aligned per LinkedIn cross-references: Christopher Anderson, Sam Frieder, Whitney Hanson, Wayne Hull, Christopher McKinney, Patty Morrison <span class="tier tier-2">T2</span></li>
+  </ul>
+
+  <p><strong>Read this honestly:</strong> the PE governance overlay is dense. That's normal for a PE-owned mid-cap; it's also the architecture that enables the sponsor to drive an exit on its own timeline. For Brian, the relevant implication is that strategic direction at the Trinity-LS-level is set by Kohlberg's portfolio strategy, not by founder/operator instinct.</p>
+
+  <h3>The senior departures — narrow signal</h3>
+
+  <p>The only confirmed senior departure surfacing in public sources during the Evangelista-transition window is <strong>Yogesh Soneji</strong>, who departed Trinity after 21 years in Q1-Q2 2026. Single-sourced via his LinkedIn farewell post, with confirmation from Orne's public comment <span class="tier tier-3">T3</span>. This is a notable departure (21 years!) but a single departure doesn't constitute exodus pattern.</p>
+
+  <p><strong>What would constitute a real signal:</strong> a second senior practice-president or sub-practice head departing publicly in the next 3-6 months. That's the R9 watch-item.</p>
+
+  <h3>The TGaS leadership bench</h3>
+
+  <p>Beyond Kraft, the publicly-named TGaS bench includes:</p>
+  <ul>
+    <li><strong>Sarah Odeh</strong> — VP, Medical Affairs Practice (publicly named since 2019 launch press release) <span class="tier tier-1">T1</span></li>
+    <li><strong>Erik Meurer</strong> — Executive Director, Promotional Review Excellence <span class="tier tier-1">T1</span></li>
+    <li><strong>Gayle Shaw-Hones, PhD</strong> — Training &amp; L&amp;D research <span class="tier tier-1">T1</span></li>
+    <li><strong>Lisa Klein</strong> — TGaS executive (LTEN article) <span class="tier tier-2">T2</span></li>
+    <li><strong>Tom Staab</strong> — SVP, Emerging Life Sciences Network (elsN) <span class="tier tier-2">T2</span></li>
+    <li><strong>Brian Voellmecke</strong> — VP, CMIT <span class="tier tier-1">T1</span></li>
+    <li>Predecessor: <strong>Gary McWalters</strong> — President of TGaS as of Fall 2024, succeeded by Kraft <span class="tier tier-1">T1</span></li>
+  </ul>
+
+  <p>The 9-year arc of the Best of Benchmark Awards plus the active LTEN/PMSA conference participation indicates an institutional bench that is broader than just the named C-suite — meaningful for stability assessment.</p>
+
+  <h3>Industry events Trinity LS leaders speak at</h3>
+  <ul>
+    <li>PMSA Annual Conference (Karl Svensson [Amgen] + Nabha Subramanya [Trinity] co-presentation 2024) <span class="tier tier-2">T2</span></li>
+    <li>BIO-IT 2025 — Trinity Snowflake Cortex case study <span class="tier tier-2">T2</span></li>
+    <li>Women in Bio National — Sarah Odeh (Medical Affairs) <span class="tier tier-1">T1</span>+<span class="tier tier-2">T2</span></li>
+    <li>TGaS Best of Benchmark Awards (9th cycle May 2026) — Karl Kraft as public face <span class="tier tier-1">T1</span></li>
+    <li>TGaS Fall Client Summit 2025 — Brian Voellmecke listed as VP <span class="tier tier-1">T1</span></li>
+  </ul>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ Net assessment on leadership</div>
+    <p>Leadership turnover at the top is real (3 CEOs in 30 months) but contained. The Orne transition was clean. Predecessor still on Board. New CEO is PE-aligned not anti-incumbent. C-suite fully populated. TGaS bench institutionally deep. <strong>One veteran departure (single-sourced) — watch for a second.</strong> The leadership-stability picture is "PE-typical mid-hold reshuffling," not "company in crisis."</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 08 MOAT + CLIENTS -->
+<section id="s08" class="section">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <h2 style="margin:0;">Monetization moat + client signals</h2>
+    <span class="section-tag">7 min read</span>
+  </div>
+
+  <p><strong>TL;DR for this section:</strong> Trinity's defensible moat lives in TGaS, not in the generic-strategy advisory layer. The TGaS benchmarking model (110+ members, 400+ brands) plus the Trinity Annual Drug Index (250+ U.S. drug launches, 10-yr longitudinal) plus the Bain &amp; Company strategic partnership = the three load-bearing assets. Komodo Health 330M-patient-journey integration is real but licensed, not proprietary. Public clients include AbbVie, AstraZeneca, J&amp;J, Novartis, Sage. The Glassdoor signal is 3.3/5 across 552 reviews — middle-of-pack for the segment.</p>
+
+  <h3>The three load-bearing moat assets</h3>
+
+  <h4>1. TGaS Benchmarking — the network-effect asset</h4>
+  <ul>
+    <li><strong>110+ member companies</strong> in the TGaS benchmarking network as of 2026 (up from 100+ at acquisition in 2018) <span class="tier tier-1">T1</span></li>
+    <li><strong>400+ brands</strong> in the TGaS Brand Assessment Database — 75+ member companies contributing <span class="tier tier-2">T2</span></li>
+    <li><strong>9-year Best of Benchmark Awards franchise</strong> as the institutional credentialing event <span class="tier tier-1">T1</span></li>
+    <li><strong>"How do other companies do it?"</strong> — the Kraft framing that captures the network value proposition <span class="tier tier-1">T1</span></li>
+  </ul>
+  <p>This is the asset that's hardest to replicate. ZS doesn't have it. IQVIA doesn't have it. Deloitte doesn't have it. The network compounds — each new member contributes data, increasing the value to all members. Trinity-acquired it in 2018; the 8-year compound since then is structural.</p>
+
+  <h4>2. Trinity Annual Drug Index — the proprietary IP layer</h4>
+  <ul>
+    <li><strong>250+ U.S. drug launches</strong> tracked since 2014, 20+ variables per launch <span class="tier tier-1">T1</span></li>
+    <li>Trinity-authored AI algorithm reportedly predicts launch revenue outcomes with <strong>&gt;90% accuracy on 180 drugs</strong> (63/67 blockbusters, 108/113 underperformers) vs Wall Street's 56% <span class="tier tier-1">T1</span> (Trinity-self-reported; methodology not independently audited — single-source flag)</li>
+    <li>Cited by Fierce Pharma in coverage of latest drug-launch analyses <span class="tier tier-2">T2</span></li>
+  </ul>
+  <p>The 10-year longitudinal depth is real and not easily replicable. The 90% accuracy claim should be treated as directional pending independent audit.</p>
+
+  <h4>3. Bain &amp; Company strategic partnership + minority equity</h4>
+  <p>Of every channel signal in the file, this one carries the most weight. Bain took minority equity in Trinity in August 2022 alongside a formal strategic partnership announcement <span class="tier tier-1">T1</span>. Bain's pharmaceuticals industry page <em>explicitly cites TGaS benchmarking and Trinity's RWE/RWD analytics for its own pharma-client engagements</em> <span class="tier tier-1">T1</span>. That's not a marketing co-mention — it's Bain credentializing Trinity's IP to Bain's own client base.</p>
+
+  <h3>The supporting technology stack</h3>
+  <ul>
+    <li><strong>Komodo Health partnership</strong>: 330M de-identified patient journeys integrated into Trinity's EvidenceFirst platform <span class="tier tier-1">T1</span>. <em>Caveat:</em> licensed from Komodo, not proprietary to Trinity. Other consultancies can license similar.</li>
+    <li><strong>Snowflake / Snowpark architecture</strong> + Trinity Real Insights + RealWorldEDGE analytics stack <span class="tier tier-2">T2</span>.</li>
+    <li><strong>Veeva positioning</strong>: unclear from public sources — the biggest competitive unknown.</li>
+  </ul>
+
+  <h3>Publicly-disclosed clients</h3>
+
+  <p>From TGaS press releases (8th + 9th Annual Best of Benchmark winner lists), conference co-presentations, and case studies:</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-cell"><div class="v">AbbVie</div><div class="l">BoB winner, multi-cycle</div></div>
+    <div class="kpi-cell"><div class="v">AstraZeneca</div><div class="l">BoB winner</div></div>
+    <div class="kpi-cell"><div class="v">J&amp;J</div><div class="l">BoB winner</div></div>
+    <div class="kpi-cell"><div class="v">Novartis</div><div class="l">BoB winner</div></div>
+    <div class="kpi-cell"><div class="v">Sage</div><div class="l">BoB winner</div></div>
+    <div class="kpi-cell"><div class="v">Amgen</div><div class="l">PMSA co-presentation 2024</div></div>
+    <div class="kpi-cell"><div class="v">Pfizer (Jane Smith)</div><div class="l">BIO-IT 2025 named</div></div>
+    <div class="kpi-cell"><div class="v">350+</div><div class="l">Total client count (self-reported)</div></div>
+  </div>
+
+  <p>All publicly-disclosed. The TGaS-self-reported "75+ member companies contributing brand-assessment data" and the broader "70-75% of U.S. drug launches involved" claim suggest deep top-25 pharma penetration. Client logo concentration cannot be inferred from public materials.</p>
+
+  <h3>Glassdoor + community sentiment</h3>
+  <ul>
+    <li>Trinity Life Sciences Glassdoor: <strong>3.3 / 5</strong> across 552 reviews <span class="tier tier-3">T3</span></li>
+    <li>Layoff-tagged reviews: <strong>2</strong> out of 552 (~0.4%) <span class="tier tier-2">T2</span></li>
+    <li>AmbitionBox (India): Gurgaon location sentiment — mixed-to-positive <span class="tier tier-3">T3</span></li>
+  </ul>
+  <p>3.3/5 is middle-of-pack for the segment — broadly in line with peers, though specific peer Glassdoor numbers were not pulled in this build; verify if material to decision. It's a softer signal than the Forbes/Vault/Poets&amp;Quants recognition would suggest.</p>
+
+  <h3>Pricing posture + RFP positioning</h3>
+
+  <p>No public RFP response leaks. No public pricing-card disclosure. Pitchbook advisor profile gives directional positioning <span class="tier tier-2">T2</span>. Trinity's pricing posture is opaque from public sources — which is normal for the segment.</p>
+
+  <h3>Industry-analyst quoted positioning</h3>
+
+  <p>Per V7 from findings:</p>
+  <ul>
+    <li><strong>Forbes Best Management Consulting Firms 2024 + 2025</strong> — strong but broad-consulting category <span class="tier tier-1">T1</span></li>
+    <li><strong>Vault 2026 #1</strong> in some life-sciences slices <span class="tier tier-2">T2</span></li>
+    <li><strong>Poets &amp; Quants 2026 Top 50 consulting firms to work for</strong> — Trinity at 4.843 <span class="tier tier-2">T2</span></li>
+    <li><strong>Umbrex curated pharma-specialist list</strong> — Trinity ABSENT <span class="tier tier-2">T2</span></li>
+    <li>No recent Gartner Magic Quadrant or Forrester Wave for life-sciences AI/analytics surfaced with Trinity prominently positioned</li>
+  </ul>
+
+  <div class="callout info">
+    <div class="callout-label">▸ Net assessment on moat</div>
+    <p>The moat is real but it lives in TGaS — specifically in the benchmarking network and the Annual Drug Index — supported by the Bain channel partnership. Trinity's broader "AI-powered, insight-driven leader" positioning is partially supported by the underlying assets (Annual Drug Index AI work, AI Readiness Benchmark, Komodo integration) but is also <em>partially overclaimed</em> in public materials. The defensible-asset story is much stronger if you stay close to TGaS specifically than if you generalize to all-of-Trinity.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 09 SYNTHESIS -->
+<section id="s09" class="section">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <h2 style="margin:0;">Synthesis — the strategic read for Brian</h2>
+    <span class="section-tag">11 min read · the heart of the briefing</span>
+  </div>
+
+  <p>Brian — this is the section that has to earn its keep. The question is "Is Trinity Life Sciences a viable continuing employer?" — not "is Trinity a good company" in the abstract, not "should TGaS be carved out and sold," not "what is the M&amp;A play here." The question is yours, the seat is yours, and what follows is an honest read calibrated to the evidence.</p>
+
+  <h3>The strategic read in one paragraph</h3>
+
+  <p style="font-size: 17px; padding: 16px 20px; background: var(--surface); border-left: 4px solid var(--trinity-navy); border-radius: 0 8px 8px 0;">
+    <strong>Trinity Life Sciences is a growing, PE-owned roll-up platform mid-hold, behaving exactly as one would expect 4.5 years into a sponsor cycle.</strong> The growth signals are real (+39% headcount in 22 months, no WARN, four-year Inc. 5000, active M&amp;A through Nov 2025, new practice launches). The risk signals are also real (Kohlberg-aligned C-suite, three CEOs in 30 months, scale-gap to ZS/IQVIA on AI/analytics widening, recognition unevenness, Veeva positioning unclear). The most-plausible read of the late-2025 activity cluster — brand refresh + APACME + new Kohlberg-bench CEO — is <em>positioning for exit in the 12–24 month window</em>, not harvest. For CMIT specifically, the public footprint is thin but the strategic framing (Kraft positioning CMIT as the fourth pillar applying the proven benchmarking model) is the constructive interpretation, and TGaS itself remains the most defensible asset in the entire Trinity portfolio. <strong>The viable-employer answer is yes — provisionally, hedged, with three named watch-signals — within a 12–18 month operating window where the highest leadership-change and sub-practice-rationalization risk in the next 5 years sits.</strong>
+  </p>
+
+  <h3>Three recommendations from the synthesis</h3>
+
+  <h4>RC1 — Treat Trinity as "growing platform mid-PE-hold" for the next 12-18 months</h4>
+  <p>Not "stable mid-cap consultancy," not "company in trouble." The trajectory is growth (headcount, M&amp;A, new launches, no WARN, clean CEO transition). The Kohlberg behavior cluster (Oct-Nov 2025) reads as exit-positioning, not harvest-positioning. <strong>Caveat:</strong> the highest leadership-change / restructuring risk in the next 5 years sits in this 12-24 month window. Sub-practice rationalization typically happens during integration <em>after</em> exit closes — not during the prep window. <span class="tier tier-1">T1</span> facts + <span class="tier tier-3">T3</span> inference.</p>
+
+  <h4>RC2 — CMIT inherits TGaS' moat only if operating inside the benchmarking model</h4>
+  <p>TGaS is Trinity's most defensible asset. CMIT inside the benchmarking model inherits the 110+ member network, 400+ brand database, 9-year event franchise. CMIT operating as custom consulting <em>outside</em> the benchmarking model is competing in commodity space against ZS (post-Torrent), Beghou, and Deloitte at scale disadvantage. <strong>Kraft's public framing explicitly positions CMIT as a benchmarking-model extension</strong> ("we've applied the same model that has been so successful…") — this is the constructive signal. The constructive read holds <em>only if</em> the practice is genuinely operating inside the network model, not just rhetorically. Brian can validate this from inside in a way the public record cannot.</p>
+
+  <h4>RC3 — Track three watch signals over the next 6 months</h4>
+  <p>The synthesis lands on three specific, falsifiable watch-items. If <em>any one</em> of these signals fires, the read shifts toward cut-bait. If none of them fire across 6 months, the read consolidates toward stay-and-build. (Full watchlist in <a href="#s10">Section 10</a>.)</p>
+
+  <ol>
+    <li><strong>A second senior practice-president or sub-practice head departing publicly</strong> — Soneji is single. A second in the same window is a pattern.</li>
+    <li><strong>TGaS event franchise quieting or named TGaS leaders disappearing from the public-leadership page</strong> — the 9-year Best of Benchmark event is the most visible TGaS health signal.</li>
+    <li><strong>Evangelista's public posture pivoting from growth to margin/cost rhetoric</strong> — the public language right now is growth. A pivot to margin/cost is the public-tell of harvest-mode replacing exit-prep-mode.</li>
+  </ol>
+
+  <h3>The Coach Card — if I were sitting where you sit</h3>
+
+  <div class="coach-card">
+    <h4>If I were sitting where you sit, Brian — here's the framework I'd use</h4>
+    <p><strong>The fundamental frame:</strong> Trinity is not the question. TGaS-as-a-platform-for-CMIT is the question. Trinity-LS-level dynamics are the operating environment; TGaS is your operating substrate; CMIT's coupling to TGaS is your structural protection.</p>
+
+    <p><strong>The three calibration tests over the next 6 months:</strong></p>
+    <ol>
+      <li><em>"Is CMIT inside the benchmarking model, or beside it?"</em> — if CMIT is genuinely operating as a benchmarking-network practice (member-companies paying for network access; "how do other companies do it" as the value proposition; structured assessments going into a Brand-Assessment-Database-style asset) then CMIT inherits the most defensible IP in Trinity. If CMIT is custom-project advisory using the TGaS brand for credibility, it's competing in commodity AI/analytics space.</li>
+      <li><em>"Is TGaS quietly being integrated, or actively being protected?"</em> — Kraft's recent leadership cadence (active LinkedIn, BoB event public-face, four-pillar framing) suggests active protection. The brand refresh language and CMIT-under-Trinity-brand publishing suggest some integration pressure. Brian can read this from internal signals (budgeting, hiring authority, sub-brand discipline in customer-facing materials) in ways the public record cannot.</li>
+      <li><em>"What's Evangelista actually optimizing for?"</em> — exit-prep optimization (growth, brand polish, geographic expansion, capability gap-filling) and harvest optimization (margin expansion, cost discipline, sub-brand consolidation, practice rationalization) look very different from inside. The public posture as of June 2026 is growth. Brian will see the inflection before the public record does.</li>
+    </ol>
+
+    <p><strong>What I'd do operationally:</strong></p>
+    <ul>
+      <li><strong>Stay through the exit-prep window.</strong> The 12-18 month window is the highest-leverage period of Kohlberg's hold — when capabilities are being polished, geographies expanded, and the practice-platform is being positioned as a sellable asset. Building CMIT now (and being publicly tied to that build) lands in the new sponsor's lap as a credentialing line on day one.</li>
+      <li><strong>Bias toward over-publishing CMIT external signal.</strong> The thin-public-footprint is the single-most-fixable gap. A formal CMIT launch press release. A dedicated CMIT services page on trinitylifesciences.com. CMIT as a Best of Benchmark category for the 10th annual. CMIT speaker billing at PMSA / BIO-IT / DIA. <em>Visible practice = harder to rationalize during integration.</em></li>
+      <li><strong>Reduce idiosyncratic risk by deepening the TGaS-membership coupling.</strong> If CMIT lives inside the benchmarking model with named member companies and a structured "how do other companies do it" assessment, the practice-rationalization risk drops materially.</li>
+      <li><strong>Maintain external optionality.</strong> Mid-PE-hold means a known unknown about who Trinity belongs to in 18 months. Keep public-facing thought leadership (the Kraft model — active LinkedIn, named industry speaking, identifiable IP) up to date. If the new sponsor restructures, optionality is the protection.</li>
+      <li><strong>Watch RC3's three signals at 30/60/90 day cadence.</strong> Set the watch and run it — if any one fires, the read shifts.</li>
+    </ul>
+
+    <p style="margin-top: 12px;"><strong>Net:</strong> Trinity is a viable continuing employer for the next 12-18 months. The risk profile is real but contained, and your structural position (newest pillar at the most defensible asset in the portfolio, championed by the TGaS President) is closer to the protected interior than the exposed periphery. The decision isn't "should I leave" — it's "what should I build in this window."</p>
+  </div>
+
+  <h3>What would shift the read</h3>
+
+  <p>Three scenarios, in increasing severity:</p>
+
+  <div class="three-up">
+    <div class="battle-card" style="border-top-color: var(--color-amber-500);">
+      <h4>Soft drift (warning)</h4>
+      <div class="battle-sub">amber callout</div>
+      <p style="font-size: 13px;">TGaS event franchise quieting · CMIT under-marketed for two more cycles · Veeva positioning still absent from public materials at next sponsor change · CMIT not added to 10th Best of Benchmark category list. Read: "platform is real, CMIT is at risk of being a footnote." <em>Action: harder push on RC2 calibration.</em></p>
+    </div>
+    <div class="battle-card" style="border-top-color: var(--color-amber-500);">
+      <h4>Active concern (warning)</h4>
+      <div class="battle-sub">amber callout</div>
+      <p style="font-size: 13px;">Second senior departure in 3-6 months · Evangelista language pivots from growth to margin · TGaS named leaders quietly removed from public-leadership page · sub-brand consolidation accelerates (TGaS dropped from co-branding). Read: "exit-prep is shifting toward harvest-prep." <em>Action: increase external optionality posture.</em></p>
+    </div>
+    <div class="battle-card" style="border-top-color: var(--color-red-500);">
+      <h4>Cut-bait signal (critical)</h4>
+      <div class="battle-sub">red callout</div>
+      <p style="font-size: 13px;">Public WARN filing · sub-practice rationalization announced (a practice closed or merged) · Kraft transitions out of TGaS President role under non-clean circumstances · sponsor change announced with explicit cost-rationalization mandate. Read: "the protected interior just got exposed." <em>Action: external move.</em></p>
+    </div>
+  </div>
+
+  <h3>Secondary line of inquiry — flagged for follow-up only</h3>
+
+  <p><strong>TGaS as its own analytical unit</strong> is the natural next-question that this briefing deliberately did NOT develop. The structural case for it is real:</p>
+  <ul>
+    <li>TGaS is the most defensible asset in the portfolio.</li>
+    <li>The benchmarking-network business model is fundamentally different from generic-strategy advisory.</li>
+    <li>An independent TGaS could plausibly attract its own analyst coverage, its own pricing posture, its own technology investments without competing internally for Trinity-LS-level budget.</li>
+    <li>A carve-out / spin-out / minority sale of TGaS specifically is a structurally credible exit path for Kohlberg — though no public signal suggests it's being actively considered.</li>
+  </ul>
+  <p>Flagging for follow-up: if Brian wants this developed at depth — particularly the carve-out optionality and what it would mean for CMIT specifically — that's a 30-minute parallel deliverable, not a Section 09 detour.</p>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ The one-sentence version of the read</div>
+    <p><strong>Trinity is a viable continuing employer for the next 12-18 months; CMIT's structural position is closer to protected than exposed; the highest leadership-change risk sits in the exit-prep window; build visibly, watch the three signals, maintain external optionality.</strong></p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 10 WHAT TO MONITOR -->
+<section id="s10" class="section">
+  <div class="section-header">
+    <span class="section-number">10</span>
+    <h2 style="margin:0;">What to monitor — next 90 days</h2>
+    <span class="section-tag">5 min read · operational watchlist</span>
+  </div>
+
+  <p>Concrete watchlist of public signals that would shift the read if they appear. Organized into the five domains Brian's monitoring effort should cover. Each item is falsifiable — meaning there's a specific observable event that constitutes "yes, this fired" or "no, it didn't."</p>
+
+  <h3>Domain 1 — Financial / PE leakage signals</h3>
+
+  <div class="signal-grid">
+    <div class="signal-cell">
+      <div class="signal-cat">Financial · 90 days</div>
+      <h4>Public WARN filing</h4>
+      <p>Federal DoL + Massachusetts state WARN search. Currently zero. A first filing for Trinity would be a clear inflection.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Financial · 90 days</div>
+      <h4>Kohlberg portfolio page change</h4>
+      <p>kohlberg.com/investments/ currently lists Trinity as "Current." A move to "Realized" or removal entirely = public-tell of exit closing.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Financial · 90 days</div>
+      <h4>PE-press leak of sale process</h4>
+      <p>PE Hub / Reuters / Axios deal-sourcing on "Kohlberg exploring Trinity sale" — common ~6 months before announced sale.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Financial · 90 days</div>
+      <h4>Executive compensation litigation</h4>
+      <p>Any executive-comp related lawsuit, deposition leakage, or settlement disclosure becomes public-financial-data.</p>
+    </div>
+  </div>
+
+  <h3>Domain 2 — Competitive moves</h3>
+
+  <div class="signal-grid">
+    <div class="signal-cell">
+      <div class="signal-cat">Competitive · 90 days</div>
+      <h4>Peer Veeva positioning escalation</h4>
+      <p>Additional ZS / Deloitte / Accenture Veeva acquisition or major partnership announcement. ZS already took Torrent; a follow-on widens the gap.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Competitive · 90 days</div>
+      <h4>Leadership poaches at peers</h4>
+      <p>ZS, Beghou, ClearView, IQVIA, Deloitte hiring named TGaS or Trinity practice leads via LinkedIn job-change tracking.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Competitive · 90 days</div>
+      <h4>Boutique consolidation continues</h4>
+      <p>Inizio Ignite + another roll-up. Putnam absorbed; ClearView, Blue Matter, or Beghou as the next targets.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Competitive · 90 days</div>
+      <h4>Direct CMIT-competitor capability launch</h4>
+      <p>ZS or Beghou launching a "CMIT-style" practice or named benchmarking network. Currently no such launches surfaced.</p>
+    </div>
+  </div>
+
+  <h3>Domain 3 — Client signals</h3>
+
+  <div class="signal-grid">
+    <div class="signal-cell">
+      <div class="signal-cat">Client · 90 days</div>
+      <h4>Public logo wins at Trinity</h4>
+      <p>10th annual Best of Benchmark winners (May 2027 if cycle continues) · case-study additions · conference co-presentations with named pharma clients.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Client · 90 days</div>
+      <h4>Public logo losses</h4>
+      <p>A top-25 pharma publicly naming a non-Trinity (e.g. ZS Torrent) for a commercial-ops or CMIT-relevant transformation that would historically have been Trinity-territory.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Client · 90 days</div>
+      <h4>Bain partnership escalation or quieting</h4>
+      <p>Bain's pharmaceuticals industry page citing TGaS continues to be active. Removal or reduced visibility = signal.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Client · 90 days</div>
+      <h4>Trinity / Bain joint press</h4>
+      <p>A new public Trinity-Bain joint announcement (capability expansion, client engagement) = positive escalation.</p>
+    </div>
+  </div>
+
+  <h3>Domain 4 — Vertical signals</h3>
+
+  <div class="signal-grid">
+    <div class="signal-cell">
+      <div class="signal-cat">Vertical · 90 days</div>
+      <h4>Top-20 pharma R&amp;D guidance</h4>
+      <p>Q1-Q2 2026 earnings calls — does the -3.6% 2025 contraction continue? Stabilize? Reverse? Trinity exposure scales with pharma R&amp;D spend.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Vertical · 90 days</div>
+      <h4>IRA next-tranche selections</h4>
+      <p>CMS announcement of next negotiated-drug list. Drives demand for Trinity's Government Pricing practice.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Vertical · 90 days</div>
+      <h4>FDA leadership reshuffling</h4>
+      <p>Post-Makary FDA leadership confirmations or further departures. Regulatory uncertainty drives advisory demand.</p>
+    </div>
+    <div class="signal-cell">
+      <div class="signal-cat">Vertical · 90 days</div>
+      <h4>Major pharma M&amp;A</h4>
+      <p>Continued $70B+ pharma M&amp;A pace = continued integration-advisory tailwind for Trinity.</p>
+    </div>
+  </div>
+
+  <h3>Domain 5 — Internal signals (Brian's domain — not in this deliverable)</h3>
+
+  <p>Items this briefing cannot observe but Brian can:</p>
+  <ul>
+    <li><strong>Internal compensation discipline</strong> — bonus pool messaging Q1 2026, RSU/equity-substitute movements, hiring-freeze rumors, "do more with less" rhetoric in all-hands</li>
+    <li><strong>CMIT hiring authority</strong> — is the practice net-hiring through 2026? At what level? Is the headcount plan from inside aligned with the public growth narrative?</li>
+    <li><strong>Veeva positioning</strong> — does Trinity have a named Veeva partnership, a Veeva-certified practice lead, an internal Veeva systems-integration capability? This is the single biggest competitive unknown publicly; Brian can resolve it internally in one conversation.</li>
+    <li><strong>Sponsor-handoff narrative</strong> — is Evangelista's internal narrative consistent with exit-prep, harvest-prep, or status-quo-extend-the-hold? The public narrative is growth; the internal narrative will diverge before the public one does.</li>
+    <li><strong>TGaS sub-brand discipline</strong> — in internal materials, is TGaS treated as an independent brand or as a Trinity sub-product? Trend over 6 months matters more than any single instance.</li>
+    <li><strong>CMIT roadmap and member-network commitment</strong> — is CMIT explicitly tied to the benchmarking model in internal planning, or is it operating as project-billable advisory?</li>
+  </ul>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ Operational cadence</div>
+    <p>Run the public-signal watch at 30/60/90 days. Run the internal-signal watch continuously. If any RC3 signal fires (or any "Cut-bait signal" item from Section 09), the read changes — and the briefing is intended to be a 30-minute rebuild on the new facts, not a permanent artifact.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 11 META -->
+<section id="s11" class="section">
+  <div class="section-header">
+    <span class="section-number">11</span>
+    <h2 style="margin:0;">How this was built — for Brian as evaluator</h2>
+    <span class="section-tag">10 min read · meta · productize pitch</span>
+  </div>
+
+  <p style="font-size: 18px; color: var(--text-heading);"><strong>Brian — what you just read was produced by one operator and a systematic process. Here is what that process is, what it can and can't do, and what it would mean if you wanted to use it inside CMIT.</strong></p>
+
+  <p>This section exists because two evaluations are happening at once. The first is the one the briefing is overtly for: should you treat Trinity Life Sciences as a viable continuing employer. The second — which Jimmy commissioned this briefing partly to surface — is whether the underlying capability that produced this briefing is one worth leveraging for your practice. The honest version of that second question requires showing the work.</p>
+
+  <h3>The process, in order — actual telemetry from this build</h3>
+
+  <div class="process-flow">
+    <div class="pf-step">
+      <div class="pf-num">1</div>
+      <div class="pf-content">
+        <div class="pf-title">Single prompt — operator-to-system</div>
+        <div class="pf-desc">Jimmy commissioned the briefing on June 10, 2026. Sean (the operator) translated that into a single internal prompt: "build a Trinity Life Sciences walking-in briefing for Brian Voellmecke, Head of CMIT Practice, calibrated to a cut-bait-or-stay decision, with the meta-section landing the productize pitch." That single prompt kicked off everything that follows.</div>
+      </div>
+      <div class="pf-time">~5 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">2</div>
+      <div class="pf-content">
+        <div class="pf-title">Run plan written to disk</div>
+        <div class="pf-desc">phase-controller classifies the operation, applies the depth-governor (deep-dive), writes a 5-phase run plan to <code>engines/on-demand-curriculum/run-plans/2026-06-10-trinity-ls-briefing.md</code>. Disk-persistent state survives context compaction. Hardened acceptance criteria written upfront, not negotiated mid-build.</div>
+      </div>
+      <div class="pf-time">~3 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">3</div>
+      <div class="pf-content">
+        <div class="pf-title">7 parallel research subagents dispatched</div>
+        <div class="pf-desc">Each subagent gets one orthogonal thread — Strategic Position, Financial Trajectory, Services Portfolio + CMIT, Competitive Landscape, Key Personnel, Moat + Clients, Vertical Context. All seven run concurrently against public sources only (WebFetch + WebSearch + Bright Data scraping). Public-source discipline locked into every thread brief — zero insider surface.</div>
+      </div>
+      <div class="pf-time">~7 min wall</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">4</div>
+      <div class="pf-content">
+        <div class="pf-title">Findings synthesis with credibility-tier discipline</div>
+        <div class="pf-desc">findings-formatter consolidates 7 thread files into <code>research/findings.md</code>. T1-T5 tier discipline applied. <strong>Contradictions surfaced not hidden</strong> — Thread 7 conflated Parthenon (prior PE sponsor) with Kohlberg (current); resolved in favor of Kohlberg with explicit note. Everest PEAK Matrix tier-position contested across distributions; explicit operator-verification flag added. Single-source flags listed openly. Dual-source corroboration table maintained.</div>
+      </div>
+      <div class="pf-time">~4 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">5</div>
+      <div class="pf-content">
+        <div class="pf-title">Design doc with explicit acceptance criteria</div>
+        <div class="pf-desc">12-section architecture written to <code>design.md</code> with per-section line budgets, content briefs, diagram specs, the synthesis spine, and the meta-pitch frame. Operator review checkpoint before construction.</div>
+      </div>
+      <div class="pf-time">~5 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">6</div>
+      <div class="pf-content">
+        <div class="pf-title">HTML construction</div>
+        <div class="pf-desc">section-construction skill builds the file incrementally. HPAC design system (light/dark theme, sidebar nav, callout system, tier badges, mobile drawer, scroll-spy). Inline SVG/CSS diagrams — no external assets. Every claim tier-tagged. Coach Card visual treatment for the synthesis. Pull quotes for Trinity leadership public statements.</div>
+      </div>
+      <div class="pf-time">~15 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">7</div>
+      <div class="pf-content">
+        <div class="pf-title">Render-validate (Puppeteer)</div>
+        <div class="pf-desc">Screenshots at 1440px and 768px, light + dark themes. Visual verification: does the file actually render? Console errors? Layout breakage? Tier-badge contrast? Mandatory non-negotiable gate.</div>
+      </div>
+      <div class="pf-time">~3 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">8</div>
+      <div class="pf-content">
+        <div class="pf-title">Adversarial evaluator</div>
+        <div class="pf-desc">Independent-context subagent receives only the deliverable + scoring rubric. No access to the writer's reasoning. Returns scored evaluation — surfaces over-claims, missing citations, structural failures, tone misses. Bounded iteration envelope on remediation.</div>
+      </div>
+      <div class="pf-time">~5 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">9</div>
+      <div class="pf-content">
+        <div class="pf-title">Ship</div>
+        <div class="pf-desc">Activity log captures every file operation. Intelligence log captures reusable patterns. CONTEXT.md updated for next session. Sources page compiled and tier-grouped. Briefing ready to send.</div>
+      </div>
+      <div class="pf-time">~3 min</div>
+    </div>
+  </div>
+
+  <p><strong>Total wall time: approximately 45 minutes from "build this" to "deliverable in hand."</strong> Closer to 90 minutes when you count operator-review checkpoints, evaluator-remediation iterations, and the design-doc operator-sign-off gate.</p>
+
+  <h3>The 7 parallel research agents, visualized</h3>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Phase 3 · parallel research fanout</div>
+    <div class="agent-fan">
+      <div class="agent-chip">Agent 1<br>Strategic position<br><span style="font-weight:400;">Trinity ↔ TGaS structure · ownership · positioning</span></div>
+      <div class="agent-chip">Agent 2<br>Financial trajectory<br><span style="font-weight:400;">PE · headcount · acquisitions · WARN · vendors</span></div>
+      <div class="agent-chip">Agent 3<br>Services + CMIT<br><span style="font-weight:400;">TGaS sub-practices · CMIT public footprint · Kraft framing</span></div>
+      <div class="agent-chip">Agent 4<br>Competitive<br><span style="font-weight:400;">IQVIA · ZS · Beghou · ClearView · Big-strategy · Veeva</span></div>
+      <div class="agent-chip">Agent 5<br>Key personnel<br><span style="font-weight:400;">C-suite · TGaS bench · Board · departures · LinkedIn</span></div>
+      <div class="agent-chip">Agent 6<br>Moat + clients<br><span style="font-weight:400;">Benchmarking · Drug Index · Bain · Komodo · Glassdoor</span></div>
+      <div class="agent-chip">Agent 7<br>Vertical context<br><span style="font-weight:400;">LS-consulting market · pharma R&amp;D · IRA · FDA · M&amp;A</span></div>
+    </div>
+    <div style="text-align:center; color: var(--text-secondary); font-size: 12px; margin: 12px 0;">↓ Each agent: WebFetch + WebSearch + Bright Data MCPs · independent context · public-source-only discipline</div>
+    <div style="text-align:center; padding: 12px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 8px; font-size: 13px;">
+      <strong>findings-formatter</strong> · tier-discipline synthesis · contradiction reconciliation · dual-source rule · 7 thread files + consolidated findings written to disk
+    </div>
+    <div style="text-align:center; padding: 8px 12px; margin-top: 8px; font-size: 12px; color: var(--text-secondary);">
+      → design.md → section-construction → render-validate → adversarial-evaluator → ship
+    </div>
+    <div class="diagram-caption">All seven agents run concurrently. Wall time ≈ slowest agent (~7 min), not sum of agents. Total source surface: 162 unique tier-coded URLs across T1-T4.</div>
+  </div>
+
+  <h3>What was sourced — the discipline behind the tier badges</h3>
+
+  <p><strong>162 unique URLs</strong> across credibility tiers, every one inventoried in <a href="#s99">Section 99</a>:</p>
+  <ul>
+    <li><strong>T1 (primary / authoritative) — 84 URLs:</strong> Trinity press releases, Kohlberg portfolio page, Bain press, IQVIA press, ZS press, EVERSANA APACME release, Trinity LinkedIn company posts, named-leader LinkedIn posts (Kraft, Evangelista, Orne, Jennings, Voellmecke), Everest abstract PDF, government regulatory sources (CMS / IRA / SEC filings).</li>
+    <li><strong>T2 (reputable secondary) — 67 URLs:</strong> ConsultingMag, William Blair, PrivSource, Mergr, BusinessWire, PRNewswire, BioSpace, BioPharma Dive, FiercePharma, FierceBiotech, STAT News, Pharm Exec, Pharmaphorum, Deloitte, McKinsey thought leadership, Wikipedia (used cautiously for scale benchmarking only).</li>
+    <li><strong>T3 (sentiment / community) — 5 URLs:</strong> Glassdoor (overall, layoff-tagged, location-filtered), AmbitionBox, Fishbowl (flagged unreliable). Used for direction, not as load-bearing evidence.</li>
+    <li><strong>T4 (third-party aggregator) — 6 URLs:</strong> Mordor Intelligence, Towards Healthcare, MMR Statistics, RocketReach (flagged unreliable), Owler. Market-sizing only.</li>
+  </ul>
+
+  <p>Every claim in the body has an inline tier badge. <strong>The Everest PEAK Matrix contested-positioning</strong> is the cleanest example of the discipline at work: the unqualified "Leader" framing on Trinity's own press would have been the easy synthesis; the cross-distribution check against IQVIA's and ZS's distributions of the same report surfaced the contradiction; the resolution lives in <a href="#s04">Section 04</a> with an explicit operator-verification flag.</p>
+
+  <h3>Capabilities used — the named system</h3>
+
+  <div class="three-up">
+    <div class="battle-card">
+      <h4>SEE methodology</h4>
+      <div class="battle-sub">Sales Enablement Engine</div>
+      <p style="font-size: 13px; margin: 0;">Credibility tiers · dual-source intelligence · market-scanner discipline · contradiction reconciliation · sources-by-tier accounting · adversarial evaluator · public-source-only sensitivity gate.</p>
+    </div>
+    <div class="battle-card">
+      <h4>ODC HTML pattern</h4>
+      <div class="battle-sub">On-Demand Curriculum Engine</div>
+      <p style="font-size: 13px; margin: 0;">HPAC design language · single-file interactive HTML · sidebar nav + scroll-spy · light/dark theme · callout system · Coach Card · inline SVG diagrams · render-validate Puppeteer loop.</p>
+    </div>
+    <div class="battle-card">
+      <h4>EngineOS shared layer</h4>
+      <div class="battle-sub">Governance + skills</div>
+      <p style="font-size: 13px; margin: 0;">phase-controller · session-orchestrator · depth-governor · findings-formatter · section-construction · render-validate · adversarial-evaluator · output-self-test · audit-logging · company-briefing skill.</p>
+    </div>
+  </div>
+
+  <h3>What this means for your practice, Brian</h3>
+
+  <p style="font-size: 17px;"><strong>Every CMIT-relevant target — competitor, partner, acquisition candidate, hiring profile, strategic-account target — can be briefed at this depth in a half-day.</strong></p>
+
+  <p>The capability isn't "AI wrote a research report." It's an operator-shaped system, calibrated by SEE's research methodology and ODC's deliverable discipline, that compresses the work of a small consulting team (research analyst + senior analyst + design + QA) into a single 45-minute wall-time deliverable cycle.</p>
+
+  <p><strong>Concrete CMIT-relevant applications:</strong></p>
+  <ul>
+    <li><strong>Member-company briefings</strong> — when a new pharma is joining the CMIT benchmarking network, brief CMIT's senior team on the new member's commercial-IT posture, public technology partnerships, RFP language, named IT-leadership in 90 minutes.</li>
+    <li><strong>Competitive briefings on ZS Torrent, Beghou Bengaluru, Deloitte Veeva</strong> — the kind of competitive intel that informs CMIT's positioning at any given customer conversation, refreshed quarterly.</li>
+    <li><strong>Pre-conference target briefings</strong> — DIA, BIO-IT, PMSA, ePharma Summit. For each conference, brief the 5-10 highest-leverage attendees Brian wants to engage. 30 min per target.</li>
+    <li><strong>Hiring-target briefings</strong> — for every prospective senior CMIT hire, a structured public-record briefing on their career arc, public thought leadership, and structural fit to the CMIT model.</li>
+    <li><strong>Strategic-account intelligence</strong> — for each top-25 pharma customer of TGaS, a quarterly-refreshed briefing on their public commercial-IT moves, leadership changes, and technology partnerships.</li>
+  </ul>
+
+  <h3>What this system is honest about</h3>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ The honest version of what the system does and doesn't do</div>
+    <p>The system <strong>amplifies expertise. It does not fabricate it.</strong> This briefing has weight because (a) the underlying research is properly tier-tagged, (b) contradictions are surfaced not hidden, (c) the operator-in-the-loop calibrated the synthesis against domain knowledge of life-sciences consulting, PE dynamics, and what Brian actually needs from a strategic read. If you pointed the system at a domain where the operator had no domain expertise, it would still produce something structurally similar — but the calibration would be hollow.</p>
+    <p>The <strong>operator-in-the-loop is load-bearing</strong>. That's the honest version. It's also why this scales — not by replacing experts, but by giving experts a 5x-to-10x leverage multiplier on the parts of their work that are research-and-synthesis-shaped.</p>
+  </div>
+
+  <h3>What the system did NOT do</h3>
+  <ul>
+    <li><strong>Did not trust training data.</strong> Every Trinity finding is anchored to a 2025-2026 source. The Parthenon-vs-Kohlberg PE-sponsor question was actively resolved against current sources, not assumed from older information.</li>
+    <li><strong>Did not pick one number when sources disagreed.</strong> Trinity self-reports 1,300 employees; LinkedIn shows 1,672; Inc. 5000 cites "over 1,200" (Aug 2024). All three surfaced, reconciliation explained, ranges treated as directional.</li>
+    <li><strong>Did not flatter Trinity.</strong> The Everest PEAK Matrix contested-positioning, the Veeva positioning unknown, the AI-recognition unevenness, the three-CEOs-in-30-months pattern, and the PE-sponsor-tight-grip are all in the document. The reader (Brian) gets the read calibrated to evidence, not to a recruiter pitch.</li>
+    <li><strong>Did not pretend the operator wrote every line by hand.</strong> The system did the heavy lifting on research and structural construction. The operator did the calibration work — which findings to lead with, which contradictions to surface, what the synthesis should land on.</li>
+    <li><strong>Did not surface insider knowledge of TGaS or Trinity.</strong> Public-source-only discipline was locked into every research thread. The deliverable adds nothing Brian doesn't already know about Trinity's internal workings; it adds the calibrated external read he can layer his insider knowledge on top of.</li>
+  </ul>
+
+  <h3>Honest caveats — what this can't do well</h3>
+
+  <ul>
+    <li><strong>Domains with no public surface.</strong> If the target company has no LinkedIn presence, no press releases, no analyst coverage, and no third-party citations — the system will produce a thin briefing with a lot of "absence is signal" framing. Worse than useless if the reader expects fact density.</li>
+    <li><strong>Audience definition is load-bearing.</strong> This briefing was sharp because the audience profile was specific: "Brian, Head of CMIT, weighing cut-bait-or-stay on Trinity LS, reading with Jimmy in the loop." Generic-audience briefings produce generic-quality briefings. The intake matters.</li>
+    <li><strong>Contradictions inside the operator's framing.</strong> If the operator commissioning the briefing has the wrong question, the system will faithfully answer the wrong question. Brian's actual decision lens (cut-bait-or-stay on Trinity LS) had to be locked at intake; if it had been "is TGaS the unit of analysis" instead, the structure would have been different.</li>
+    <li><strong>Quantitative claims that require new primary research.</strong> The Trinity ">$50M EBITDA" 2021 figure is the strongest public-financial number; everything beyond that is private. The system cannot infer what is not knowable.</li>
+    <li><strong>Time-sensitive predictions.</strong> The "12-24 month exit window" inference is a calibrated range, not a forecast. Sponsors hold for 3 years or 10 years and both are normal. The system is honest about that.</li>
+  </ul>
+
+  <h3>The productize claim, named directly</h3>
+
+  <blockquote style="font-size: 16px; line-height: 1.6;">
+    "If you want to evaluate this as a capability for your practice, Brian — this briefing IS the evaluation artifact. The question isn't whether the underlying methodology is sound (the evidence is in your hands). The question is what your practice would do with a half-day-to-briefing cycle applied to the targets, partnerships, and personnel that matter to CMIT specifically."
+    <span class="attribution">— The framing for the next conversation, if it makes sense to have one.</span>
+  </blockquote>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ The one-sentence productize pitch</div>
+    <p><strong>Every research-and-synthesis-shaped problem that currently takes your practice a week-plus can run as a 45-minute-wall-time deliverable cycle inside this system — calibrated by an operator who understands what you actually need from the read.</strong></p>
+  </div>
+
+  <p style="margin-top: 24px; padding: 16px 20px; background: var(--surface); border-radius: 10px; font-size: 14px;">
+    <strong>One last thing.</strong> The 45-minute build is the visible win. The underlying compounding infrastructure — the methodology lift from SEE, the deliverable patterns from ODC, the governance layer from EngineOS, the operator's decade-plus of domain calibration — is the actual story. Most "AI-powered research" outputs are a clever prompt and a single output. This is an operating system. If the value of that lands, the next conversation is about what your practice actually needs.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 99 SOURCES -->
+<section id="s99" class="section">
+  <div class="section-header">
+    <span class="section-number">99</span>
+    <h2 style="margin:0;">Sources &amp; methodology</h2>
+    <span class="section-tag">Reference</span>
+  </div>
+
+  <p>Date stamp: <strong>2026-06-10</strong>. Every hard claim in this briefing carries an inline tier badge <span class="tier tier-1">T1</span>–<span class="tier tier-4">T4</span> indicating credibility. The full 162-URL master inventory is at <code>engines/on-demand-curriculum/outputs/trinity-life-sciences/research/sources.md</code>. The condensed tier-grouped list below covers the load-bearing URLs by section role; to verify any specific claim, find the section the claim is in, find the tier badge, then locate the source in the matching block or the master inventory.</p>
+
+  <div class="src-block">
+    <h4>Tier 1 — Primary / authoritative · Trinity company press</h4>
+    <ul>
+      <li>trinitylifesciences.com/company/press-releases/trinity-partners-to-acquire-tgas-advisors/ (Sept 2018, "wholly-owned division" language)</li>
+      <li>trinitylifesciences.com/company/press-releases/trinity-life-sciences-recapitalizes-with-kohlberg-company/ (Nov 30, 2021 recap)</li>
+      <li>trinitylifesciences.com/company/press-releases/scott-evangelista-ceo-to-lead-next-chapter/ (CEO appointment Nov 17, 2025; 1,300 employees)</li>
+      <li>trinitylifesciences.com/company/press-releases/strategic-brand-transformation-2025/ (Oct 2, 2025 brand refresh)</li>
+      <li>trinitylifesciences.com/company/press-releases/trinity-expands-global-footprint-with-acquisition-of-eversanas-apacme-advisory-services/ (Nov 3, 2025)</li>
+      <li>trinitylifesciences.com/company/press-releases/tgas-launches-medical-affairs-advisory-practice/ (May 2019 launch; Sarah Odeh)</li>
+      <li>trinitylifesciences.com/company/press-releases/trinity-life-sciences-launches-tgas-advisors-government-pricing-services/ (June 2022 launch)</li>
+      <li>trinitylifesciences.com/company/press-releases/ai-algorithm-predicts-outcomes-drug-launches/ (Annual Drug Index; 90% accuracy)</li>
+      <li>trinitylifesciences.com/company/leadership/ (full C-suite + Board roster)</li>
+      <li>trinitylifesciences.com/services/benchmarking/ (110+ member companies; AI Readiness Benchmark)</li>
+      <li>trinitylifesciences.com/resources/tgas-fall-client-summit-2025/ (Voellmecke listed as VP)</li>
+      <li>trinitylifesciences.com/vhowcomplete_cit/ (CMIT virtual How survey)</li>
+      <li>trinitylifesciences.com/products/benchmarking-membership/ (TGaS sub-practice taxonomy)</li>
+      <li>trinitylifesciences.com/company/press-releases/trinity-life-sciences-makes-the-inc-5000-list-for-the-fourth-year-in-a-row/ (1,200+ employees Aug 2024)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 1 — LinkedIn (company + named-leader posts)</h4>
+    <ul>
+      <li>linkedin.com/company/trinitylifesciences (1,672 employees June 2026)</li>
+      <li>linkedin.com/company/tgas-advisors (Division of Trinity; 70 employees)</li>
+      <li>linkedin.com/posts/trinitylifesciences_many-pharma-commercial-and-medical-it-cmit-activity-7467574347268800512-zCRD (Trinity CMIT thought-leadership post)</li>
+      <li>linkedin.com/posts/karl-j-kraft-a593502_weve-applied-the-same-model-that-has-been-activity-7467693867283427328-RA2a (Kraft 4-pillar framing)</li>
+      <li>linkedin.com/posts/trinitylifesciences_congratulations-to-the-winners-of-the-9th-activity-7459980539257614336-6iia (9th BoB May 2026)</li>
+      <li>linkedin.com/posts/brianvoellmecke_it-is-definitely-an-interesting-time-for-activity-7467684392438587393-Yj4s (Brian's CMIT comment)</li>
+      <li>linkedin.com/in/scott-evangelista-428a241/ (CEO profile)</li>
+      <li>linkedin.com/in/leslie-orne-1676594/ (former CEO profile)</li>
+      <li>linkedin.com/in/karl-j-kraft-a593502 (TGaS President)</li>
+      <li>linkedin.com/in/matt-jennings-9071b818/ (Executive Chairman + Kohlberg)</li>
+      <li>linkedin.com/posts/yogeshsoneji_after-an-incredible-21-years-at-trinity-life-activity-7447722817086853120-mahw (single-source departure)</li>
+      <li>linkedin.com/posts/leslie-orne-1676594_so-excited-to-welcome-the-eversana-apacme-activity-7391126869682827264-yZf4 (APACME welcome)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 1 — PE sponsors + strategic partners</h4>
+    <ul>
+      <li>kohlberg.com/trinity-life-sciences-recapitalizes-with-kohlberg-company/ (Kohlberg portfolio page)</li>
+      <li>kohlberg.com/investments/ (Trinity listed Current as of June 2026)</li>
+      <li>parthenoncapital.com/news/parthenon-capital-announces-partnership-transaction-with-trinity-partners/ (Parthenon Mar 2018)</li>
+      <li>parthenoncapital.com/news/trinity-life-sciences-recapitalizes-with-kohlberg-company/ (Parthenon exit press)</li>
+      <li>leerink.com/transaction/trinity-life-sciences-recapitalization-with-kohlberg-company/ (SVB Leerink confirmation)</li>
+      <li>bain.com/about/media-center/press-releases/2022/bain--company-and-trinity-life-sciences-announce-strategic-partnership/ (Bain partnership Aug 2022 + minority equity)</li>
+      <li>bain.com/industry-expertise/healthcare/pharmaceuticals/trinity-life-sciences/ (Bain practice page citing TGaS)</li>
+      <li>komodohealth.com/press/trinity-life-sciences-partners-with-komodo-health/ (330M patient journeys)</li>
+      <li>everestgrp.com/wp-content/uploads/2025/07/Everest_Group_-_Life_Sciences_AI_and_Analytics_for_Commercial_PEAK_Matrix_Assessment_2025_-_Complimentary_Abstract.pdf (CONTESTED — see Section 04)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 1 — Competitive set primary</h4>
+    <ul>
+      <li>iqvia.com/newsroom/2025/07/iqvia-reports-second-quarter-2025-results · 2025/10 Q3 results · 2025/12 IQVIA-AWS partnership</li>
+      <li>iqvia.com/-/media/iqvia/pdfs/library/publications/2025/everest-group-life-sciences-ai-and-analytics-services-for-commercial-peak-matrix-assessment-2025.pdf (IQVIA distribution)</li>
+      <li>prnewswire.com/news-releases/zs-acquires-torrent-consulting-to-fuel-salesforces-healthcare-life-sciences-ai-solutions-302635333.html (Oct 2025)</li>
+      <li>zs.com/about/newsroom/zs-acquires-torrent-consulting-salesforce-ai (corroborating)</li>
+      <li>crainternationalinc.gcs-web.com/news-releases/news-release-details/charles-river-associates-cra-expands-its-life-sciences-2 (CRA VP hires)</li>
+      <li>beghou.com/blog/beghou-consulting-expands-global-footprint-with-new-bengaluru-office (Apr 2025)</li>
+      <li>globenewswire.com/news-release/2025/01/13/3008289/0/en/ClearView-Healthcare-Partners-Makes-Strategic-Investment-in-Epistemic-AI</li>
+      <li>realchemistry.com/real-chemistry-strengthens-media-and-omnichannel-leadership-with-acquisition-of-spring-and-bond/</li>
+      <li>inizio.com/our-businesses/ignite/ · inizio.com/our-businesses/ignite/about-inizio-ignite/ (Jan 2026)</li>
+      <li>putassoc.com/ (Putnam 550+ team)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 1 — Government / regulatory + industry trade press</h4>
+    <ul>
+      <li>cms.gov/initiatives/medicare-prescription-drug-affordability/overview/medicare-drug-price-negotiation-program/selected-drugs-negotiated-prices (IRA 2026 effective date)</li>
+      <li>congress.gov/crs-product/R47872 (CRS report on IRA pricing)</li>
+      <li>businesswire.com/news/home/20251002950700/en/Trinity-Life-Sciences-Accelerates-Future-with-Strategic-Brand-Transformation-and-AI-Enabled-Solutions (Oct 2025 brand transformation)</li>
+      <li>businesswire.com/news/home/20250417902433/en/Trinity-Life-Sciences-AI-Algorithm-Accurately-Predicts-Revenue-Outcomes-for-Over-90-of-U.S.-Drug-Launches</li>
+      <li>businesswire.com/news/home/20230607005285/en/ (Orne CEO succession July 2023)</li>
+      <li>businesswire.com/news/home/20250827458798/en/Trinity-Life-Sciences-Named-to-Forbes-Best-Management-Consulting-Firms-of-2025-Second-Year-in-a-Row</li>
+      <li>prnewswire.com/news-releases/trinitys-tgas-advisors-announces-winners-of-9th-annual-best-of-benchmark-awards-302768838.html</li>
+      <li>prnewswire.com/news-releases/ai-adoption-is-acceleratingtrinitys-benchmark-reveals-where-you-stand-vs-peers-302782525.html (AI Readiness Benchmark May 2026)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 2 — Reputable secondary · deal records + trade press</h4>
+    <ul>
+      <li>consultingmag.com/2025/11/19/trinity-appoints-scott-evangelista-as-new-ceo/</li>
+      <li>consulting.us/news/12657/trinity-hires-scott-evangelista-as-ceo</li>
+      <li>williamblair.com/News/D-Cube-Analytics-Transaction (Trinity as Kohlberg portfolio July 2022)</li>
+      <li>privsource.com/acquisitions/deal/trinity-life-sciences-acquires-cbpartners-zqSyLq · /trinity-life-sciences-acquires-d-cube-analytics-4dS4o9 · /trinity-acquires-eversana-s-apacme-advisory-services-ArSJEY</li>
+      <li>mergr.com/transaction/kohlberg-company-acquires-trinity-life-sciences (Kohlberg + IMCO co-invest)</li>
+      <li>mergr.com/transaction/trinity-life-sciences-acquires-d-cube-analytics</li>
+      <li>pehub.com/parthenon-readies-sale-of-trinity-life-sciences/ ($50M+ EBITDA paywalled leak)</li>
+      <li>berkerynoyes.com/trinity-partners-to-acquire-tgas-advisors/ (TGaS deal data)</li>
+      <li>cbinsights.com/company/trinity-partners/financials (acquisition log)</li>
+      <li>scribd.com/document/580835708/Inc-5000-List-2021-Someka-V1F (Trinity #2743, $137M 2021)</li>
+      <li>biospace.com/how-do-other-pharmaceutical-companies-do-it-b-tgas-b-benchmarks-its-400th-brand (TGaS BAD 400+ brands)</li>
+      <li>biospace.com/business/pharma-r-d-spend-drops-3-6-as-pipeline-prioritizations-take-shape (-3.6% R&amp;D 2025)</li>
+      <li>biospace.com/business/5-pharma-powerhouses-facing-massive-patent-cliffs-and-what-theyre-doing-about-it ($400B patent cliff)</li>
+      <li>biospace.com/business/the-7-most-impactful-m-a-deals-of-2025 (pharma M&amp;A 2025)</li>
+      <li>biospace.com/fda/after-most-damaging-period-in-fda-history-makary-will-be-hard-to-replace</li>
+      <li>biopharmadive.com/news/makary-fda-resign-biotech-impact/820090/</li>
+      <li>statnews.com/2025/12/22/fda-2026-outlook-commissioner-makary-future-vaccine-policy-deregulation/</li>
+      <li>fiercepharma.com/pharma/top-10-pharma-rd-budgets-2025</li>
+      <li>fiercepharma.com/pharma/argenxs-vyvgart-tops-trinitys-latest-drug-launch-analysis (Trinity Drug Index citation)</li>
+      <li>drugdiscoverytrends.com/2025-pharma-ma-surges-to-70-billion/</li>
+      <li>genengnews.com/topics/drug-discovery/top-20-drugs-heading-for-the-patent-cliff-2026-2029/</li>
+      <li>en.wikipedia.org/wiki/ZS_Associates · en.wikipedia.org/wiki/EY-Parthenon (used cautiously for scale benchmarking)</li>
+      <li>intuitionlabs.ai/articles/veeva-consulting-ecosystem (Veeva Vault transition $2B services market)</li>
+      <li>medium.com/snowflake/trinity-life-sciences-snowflake-advancing-pharmaceutical-insights-4a743ac9f73e</li>
+      <li>pharmexec.com/view/trinity-life-sciences-tgas-digital-marketing-competency-report (DMC Report)</li>
+      <li>poetsandquants.com/2026/02/13/top-50-consulting-firms-to-work-for-in-2026/4/ (Trinity 4.843)</li>
+      <li>umbrex.com/resources/top-consulting-firms/top-pharmaceutical-consulting-firms/ (Trinity ABSENT — meaningful)</li>
+      <li>managementconsulted.com/trinity-life-sciences/ (pre-2020 ~350+ employees)</li>
+      <li>officesnapshots.com/2024/11/21/trinity-life-sciences-offices-london/ (London office)</li>
+      <li>ambitionbox.com/overview/trinity-life-sciences-overview (~500+ India)</li>
+      <li>community.womeninbio.org/events/view/national32626 (Sarah Odeh Women in Bio)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 3 — Sentiment / community</h4>
+    <ul>
+      <li>glassdoor.co.uk/Reviews/Trinity-Life-Sciences-Reviews-E305434.htm (3.3 / 5 across 552 reviews)</li>
+      <li>glassdoor.com/Reviews/Trinity-Life-Sciences-layoff-Reviews-EI_IE305434.0,21_KH22,28.htm (2 layoff-tagged of 552)</li>
+      <li>ambitionbox.com/reviews/trinity-life-sciences-reviews/gurgaon-location</li>
+      <li>fishbowlapp.com (Trinity vs ClearView thread, flagged unreliable — page not retrievable)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 4 — Third-party aggregator (used for market sizing only)</h4>
+    <ul>
+      <li>mordorintelligence.com/industry-reports/life-sciences-consulting-market ($35-38B → $60B by 2031, 9.4% CAGR)</li>
+      <li>towardshealthcare.com/insights/life-science-consulting-market-sizing</li>
+      <li>mmrstatistics.com/reports/502781/real-world-evidence-rwe-solutions-market (RWE 14.3-14.4% CAGR)</li>
+      <li>rocketreach.co/trinity-life-sciences-profile_b5c6448af42e0cbe (FLAGGED UNRELIABLE — $74M figure inconsistent with primary disclosures)</li>
+      <li>owler.com/company/zsassociatesinc</li>
+    </ul>
+  </div>
+
+  <h3>How to verify any specific claim</h3>
+  <ol>
+    <li>Find the claim in the section it appears in.</li>
+    <li>Read the tier badge immediately after the claim — that's the credibility class of the source.</li>
+    <li>Locate the source in the matching tier block above, or in the full master inventory at <code>research/sources.md</code>.</li>
+    <li>For T1 claims, the underlying URL is Trinity press, Kohlberg portfolio page, Bain press, a named-leader LinkedIn, or a government regulatory source — direct verification possible.</li>
+    <li>For T2 claims, expect reputable secondary (trade press, deal-data services) — verification is one step indirect but reliably traceable.</li>
+    <li>For T3 sentiment claims, treat as directional — they are real signals but cohort-level, not load-bearing.</li>
+    <li>For T4 aggregator claims, treat as range-not-point — used for market sizing and macro context.</li>
+  </ol>
+
+  <h3>Single-source flags (called out explicitly)</h3>
+  <ul>
+    <li>Trinity AI algorithm 90% accuracy — Trinity-authored only; no third-party audit (see <a href="#s08">Section 08</a>)</li>
+    <li>Yogesh Soneji 21-year departure — single LinkedIn post + Orne comment (see <a href="#s07">Section 07</a>)</li>
+    <li>Mexico City office July 2025 — single thread reference (see <a href="#s03">Section 03</a>)</li>
+    <li>PE-Hub $50M+ EBITDA 2021 — single paywalled press leak (see <a href="#s03">Section 03</a>)</li>
+    <li>70% vs 75% drug launches — Trinity self-reported inconsistency between materials</li>
+  </ul>
+
+  <h3>Sources NOT used due to reliability concerns</h3>
+  <ul>
+    <li>RocketReach Trinity LS $74M revenue (contradicts primary disclosures; likely stale or mislabeled aggregate)</li>
+    <li>RocketReach TGaS $74M revenue (almost certainly mislabeled — appears to be the parent figure attached to the subsidiary entry)</li>
+    <li>Fishbowl 2021 Trinity-vs-ClearView thread (page not retrievable on access; sentiment-only and undated)</li>
+  </ul>
+
+  <p style="margin-top: 24px; color: var(--text-secondary); font-size: 13px; font-style: italic;">
+    If a claim in this briefing is wrong, it's because a source was stale or misread. The methodology — credibility-tiered citation, dual-source corroboration where possible, single-source flagged explicitly, contradiction reconciliation surfaced, public-source-only sensitivity discipline — is what gives the rest of the document its weight. The methodology is also what allows the reader to find and correct any single error without invalidating the whole. Date stamp: <strong>2026-06-10</strong>.
+  </p>
+</section>
+
+<footer style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+  <p><strong>Trinity Life Sciences · A Strategic Briefing for Brian Voellmecke</strong></p>
+  <p>Built 2026-06-10. Single-file HTML, opens from Finder. CSS custom properties for light/dark theming. All claims tier-tagged T1–T4. 162 unique tier-coded source URLs.</p>
+  <p>Produced by EngineOS — SEE methodology (credibility tiers, dual-source intelligence, market-scanner) + ODC HTML pattern (HPAC, section-construction, render-validate) + EngineOS shared governance layer. Approximate wall time: 45 minutes from prompt to validated output. Seven parallel research subagents dispatched against public sources only via WebFetch + WebSearch + Bright Data MCPs.</p>
+  <p style="margin-top: 12px; font-style: italic;">For Brian Voellmecke · Head of CMIT Practice · TGaS · 2026-06-10 — calibrated honestly, public-source-only, no insider surface.</p>
+</footer>
+
+</main>
+
+<script>
+const THEME_KEY = 'trinity-ls-theme';
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+}
+(function initTheme() {
+  let saved;
+  try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+})();
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (sb) sb.classList.toggle('open');
+}
+
+const sections = document.querySelectorAll('section.section, header.hero');
+const navLinks = document.querySelectorAll('.nav-item');
+function setActive() {
+  let active = null;
+  const scrollPos = window.scrollY + 120;
+  sections.forEach(s => {
+    if (s.offsetTop <= scrollPos) active = s.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + active);
+  });
+}
+window.addEventListener('scroll', setActive, { passive: true });
+setActive();
+
+// Close mobile drawer on nav click
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+      const sb = document.getElementById('sidebar');
+      if (sb) sb.classList.remove('open');
+    }
+  });
+});
+
+if (window.location.hash) {
+  const target = document.querySelector(window.location.hash);
+  if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+}
+</script>
+
+</body>
+</html>
