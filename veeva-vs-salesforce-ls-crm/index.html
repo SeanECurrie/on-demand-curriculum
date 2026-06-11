@@ -74,53 +74,6 @@
   --brian-accent-soft: #e0e7ff;
 }
 
-[data-theme="dark"] {
-  --bg: #1a1a1a;
-  --surface: #262626;
-  --surface-alt: #1f1f1f;
-  --code-bg: #2d2d2d;
-  --border: #404040;
-  --border-subtle: #333333;
-  --text-muted: #737373;
-  --text-secondary: #a3a3a3;
-  --text-body: #d4d4d4;
-  --text-heading: #e5e5e5;
-  --text-strongest: #f5f5f5;
-  --link: #60a5fa;
-  --link-hover: #3b82f6;
-
-  --callout-critical-bg: #450a0a;
-  --callout-critical-border: #f87171;
-  --callout-critical-label: #fca5a5;
-  --callout-warning-bg: #451a03;
-  --callout-warning-border: #fbbf24;
-  --callout-warning-label: #fcd34d;
-  --callout-tip-bg: #052e16;
-  --callout-tip-border: #4ade80;
-  --callout-tip-label: #86efac;
-  --callout-info-bg: #1e3a5f;
-  --callout-info-border: #60a5fa;
-  --callout-info-label: #93c5fd;
-
-  --nav-active-bg: #1e3a5f;
-  --nav-active-color: #93c5fd;
-  --nav-active-border: #3b82f6;
-
-  --sidebar-bg: #1f1f1f;
-  --sidebar-border: #333333;
-
-  --brief-primary: #94a3b8;
-  --brief-primary-soft: rgba(148,163,184,0.18);
-  --brief-accent: #cbd5e1;
-  --brief-accent-soft: rgba(203,213,225,0.12);
-  --veeva-tint: #c4b5fd;
-  --veeva-tint-soft: rgba(196,181,253,0.15);
-  --sfdc-tint: #67e8f9;
-  --sfdc-tint-soft: rgba(103,232,249,0.12);
-  --brian-accent: #93c5fd;
-  --brian-accent-soft: rgba(147,197,253,0.15);
-}
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 ul, ol { padding-left: 24px; }
 * { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
@@ -228,21 +181,6 @@ blockquote .attribution {
   color: var(--text-muted);
   padding: 0 20px 16px;
 }
-
-.theme-toggle {
-  width: 32px; height: 32px;
-  background: transparent;
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-body);
-}
-.theme-toggle:hover { background: var(--code-bg); }
-[data-theme="dark"] .icon-moon { display: none; }
-[data-theme="dark"] .icon-sun { display: block; }
-:root:not([data-theme="dark"]) .icon-sun { display: none; }
-:root:not([data-theme="dark"]) .icon-moon { display: block; }
 
 .nav-group-label {
   font-size: 11px; font-weight: 700;
@@ -368,7 +306,6 @@ main {
   border-radius: 6px;
   letter-spacing: 0.02em;
 }
-[data-theme="dark"] .section-number { color: #0f172a; }
 .section-tag {
   background: var(--surface);
   color: var(--text-secondary);
@@ -399,11 +336,6 @@ main {
 .tier-3 { background: var(--color-amber-50); color: var(--color-amber-800); border-color: var(--color-amber-100); }
 .tier-4 { background: var(--color-stone-200); color: var(--color-stone-700); border-color: var(--color-stone-300); }
 .tier-5 { background: var(--color-red-50); color: var(--color-red-600); border-color: var(--color-red-100); }
-[data-theme="dark"] .tier-1 { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.3); }
-[data-theme="dark"] .tier-2 { background: rgba(59,130,246,0.18); color: #93c5fd; border-color: rgba(59,130,246,0.35); }
-[data-theme="dark"] .tier-3 { background: rgba(245,158,11,0.15); color: #fcd34d; border-color: rgba(245,158,11,0.3); }
-[data-theme="dark"] .tier-4 { background: rgba(120,113,108,0.25); color: #d6d3d1; border-color: rgba(120,113,108,0.4); }
-[data-theme="dark"] .tier-5 { background: rgba(239,68,68,0.15); color: #fca5a5; border-color: rgba(239,68,68,0.3); }
 
 /* Finding ID inline citation */
 .fid {
@@ -480,7 +412,6 @@ main {
   color: var(--color-green-600);
   font-size: 17px;
 }
-[data-theme="dark"] .coach-card h4 { color: #86efac; }
 .coach-card p:last-child { margin-bottom: 0; }
 
 /* ─── Diagrams ─── */
@@ -541,8 +472,6 @@ main {
 }
 .cap-matrix th.col-veeva { background: var(--veeva-tint-soft); color: var(--veeva-tint); }
 .cap-matrix th.col-sfdc { background: var(--sfdc-tint-soft); color: var(--sfdc-tint); }
-[data-theme="dark"] .cap-matrix th.col-veeva { color: #c4b5fd; }
-[data-theme="dark"] .cap-matrix th.col-sfdc { color: #67e8f9; }
 .cap-matrix td.row-label {
   font-weight: 700;
   color: var(--text-heading);
@@ -605,7 +534,6 @@ main {
 .split-cell.bounded .pc-label { color: var(--color-green-600); }
 .split-cell.open { border-left: 4px solid var(--color-amber-500); }
 .split-cell.open .pc-label { color: var(--color-amber-800); }
-[data-theme="dark"] .split-cell.open .pc-label { color: #fcd34d; }
 .split-cell .pc-label {
   font-size: 11px;
   font-weight: 700;
@@ -661,7 +589,6 @@ main {
 .three-up-cell.lane-v .lane-tag { color: var(--veeva-tint); }
 .three-up-cell.lane-s .lane-tag { color: var(--sfdc-tint); }
 .three-up-cell.lane-dual .lane-tag { color: var(--color-amber-800); }
-[data-theme="dark"] .three-up-cell.lane-dual .lane-tag { color: #fcd34d; }
 
 /* Timeline */
 .vtimeline {
@@ -870,7 +797,6 @@ main {
   .sidebar, .hamburger { display: none; }
   main { margin-left: 0; max-width: 100%; }
   .section { page-break-before: auto; }
-  .theme-toggle { display: none; }
 }
   </style>
 </head>
@@ -883,10 +809,6 @@ main {
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">Veeva vs Salesforce LS · Platform Comparison</div>
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-    </button>
   </div>
   <div class="sidebar-sub">Built 2026-06-10 · 187 tier-coded findings · 8 research threads</div>
 
@@ -2192,7 +2114,7 @@ main {
 
   <p>The structural point: <strong>the substrate's discipline compounds across builds.</strong> The prior build caught its own defects. This build inherited those catches as constraints. Future builds inherit both. That compounding — not the AI itself — is the productize claim.</p>
 
-  <p>One non-defect noted by render-validate: Puppeteer's headless screenshot rasterizer returned stale dark-theme pixels in light-mode screenshots after the theme toggle (a known Chromium quirk with dynamic CSS custom properties). The CSS itself flips correctly per <code>getComputedStyle</code>. Operator manual-confirmation in a real browser recommended for the light-theme view.</p>
+  <p>[Historical note, 2026-06-11] An earlier iteration of this walkthrough shipped a light/dark theme toggle. Render-validate flagged a known Chromium quirk: Puppeteer's headless screenshot rasterizer returned stale dark-theme pixels in light-mode screenshots after the toggle, even though the CSS flipped correctly per <code>getComputedStyle</code>. The walkthrough now ships light-theme only, removing both the rasterizer verification issue and the audience-mismatch (C-suite readers consume in light theme). See <code>engines/on-demand-curriculum/templates/walkthrough-style-guide.md</code> § Theme Discipline.</p>
 
   <h3>What this substrate can produce</h3>
 
@@ -2394,7 +2316,7 @@ main {
 
 <footer style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
   <p><strong>Veeva Vault CRM vs Salesforce Life Sciences CRM · 2026 Platform Comparison</strong></p>
-  <p>Built 2026-06-10. Single-file HTML, opens from Finder. CSS custom properties for light/dark theming. All claims finding-ID-traceable to per-thread research files. 187 tier-coded findings across 8 orthogonal research threads.</p>
+  <p>Built 2026-06-10. Single-file HTML, opens from Finder. CSS custom properties for light-theme styling. All claims finding-ID-traceable to per-thread research files. 187 tier-coded findings across 8 orthogonal research threads.</p>
   <p>Produced by EngineOS — SEE methodology (credibility tiers, dual-source intelligence, market-scanner) + ODC HTML pattern (HPAC, section-construction, render-validate, two-platform balance C11) + EngineOS shared governance layer. Approximate wall time: ≈ slowest thread (~7 min for T8), not sum of agents. Eight parallel research subagents dispatched against public sources only via WebFetch + WebSearch + Bright Data MCPs.</p>
   <p style="margin-top: 12px; font-style: italic;">2026-06-10 — calibrated honestly, public-source-only, no thumb on the scale.</p>
 </footer>
@@ -2402,23 +2324,6 @@ main {
 </main>
 
 <script>
-const THEME_KEY = 'veeva-sfdc-ls-theme';
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
-}
-(function initTheme() {
-  let saved;
-  try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
-  if (saved) {
-    document.documentElement.setAttribute('data-theme', saved);
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  }
-})();
-
 function toggleSidebar() {
   const sb = document.getElementById('sidebar');
   if (sb) sb.classList.toggle('open');
