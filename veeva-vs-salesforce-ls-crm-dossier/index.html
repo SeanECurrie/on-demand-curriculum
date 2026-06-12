@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veeva Vault CRM vs Salesforce LS CRM: A Comparison</title>
+  <style>
+/* ─── CSS Custom Properties (inherits HPAC tokens from walkthrough.html) ─── */
+:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  --color-blue-50: #eff6ff; --color-blue-100: #dbeafe; --color-blue-200: #bfdbfe;
+  --color-blue-500: #3b82f6; --color-blue-600: #2563eb; --color-blue-700: #1d4ed8;
+  --color-red-50: #fef2f2; --color-red-100: #fee2e2;
+  --color-red-500: #ef4444; --color-red-600: #dc2626;
+  --color-green-50: #f0fdf4; --color-green-100: #dcfce7;
+  --color-green-500: #22c55e; --color-green-600: #16a34a;
+  --color-amber-50: #fffbeb; --color-amber-100: #fef3c7;
+  --color-amber-500: #f59e0b; --color-amber-800: #92400e;
+  --color-purple-50: #faf5ff; --color-purple-100: #f3e8ff;
+  --color-purple-500: #a855f7; --color-purple-600: #9333ea;
+  --color-stone-50: #fafaf9; --color-stone-100: #f5f5f4; --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1; --color-stone-400: #a8a29e; --color-stone-500: #78716c;
+  --color-stone-700: #44403c; --color-stone-800: #292524; --color-stone-900: #1c1917;
+
+  --bg: var(--color-stone-50);
+  --surface: var(--color-stone-100);
+  --surface-alt: white;
+  --code-bg: var(--color-stone-200);
+  --border: var(--color-stone-200);
+  --border-subtle: var(--color-stone-300);
+  --text-muted: var(--color-stone-400);
+  --text-secondary: var(--color-stone-500);
+  --text-body: var(--color-stone-700);
+  --text-heading: var(--color-stone-800);
+  --text-strongest: var(--color-stone-900);
+  --link: var(--color-blue-500);
+  --link-hover: var(--color-blue-600);
+
+  --callout-critical-bg: var(--color-red-50);
+  --callout-critical-border: var(--color-red-500);
+  --callout-critical-label: var(--color-red-600);
+  --callout-warning-bg: var(--color-amber-50);
+  --callout-warning-border: var(--color-amber-500);
+  --callout-warning-label: var(--color-amber-800);
+  --callout-tip-bg: var(--color-green-50);
+  --callout-tip-border: var(--color-green-500);
+  --callout-tip-label: var(--color-green-600);
+  --callout-info-bg: var(--color-blue-50);
+  --callout-info-border: var(--color-blue-500);
+  --callout-info-label: var(--color-blue-600);
+
+  --nav-active-bg: var(--color-blue-100);
+  --nav-active-color: var(--color-blue-700);
+  --nav-active-border: var(--color-blue-500);
+
+  --sidebar-bg: var(--color-stone-100);
+  --sidebar-border: var(--color-stone-200);
+
+  --brief-primary: #334155;
+  --brief-primary-soft: #e2e8f0;
+  --brief-accent: #475569;
+  --brief-accent-soft: #f1f5f9;
+  --veeva-tint: #5b21b6;
+  --veeva-tint-soft: #ede9fe;
+  --sfdc-tint: #0e7490;
+  --sfdc-tint-soft: #cffafe;
+
+  /* SME-prompt accent, distinct from advisor blockquote color used in walkthrough */
+  --sme-accent: #b45309;            /* amber-700: "react here" surface */
+  --sme-accent-soft: #fef3c7;       /* amber-100 background tint */
+  --sme-accent-border: #f59e0b;     /* amber-500 left border */
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ul, ol { padding-left: 24px; }
+* { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-body);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
+
+a { color: var(--link); text-decoration: none; word-break: break-word; overflow-wrap: anywhere; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+h1, h2, h3, h4 { color: var(--text-heading); line-height: 1.25; font-weight: 700; }
+h1 { font-size: 36px; margin-bottom: 16px; }
+h2 { font-size: 26px; margin: 32px 0 14px; }
+h3 { font-size: 18px; margin: 22px 0 10px; }
+h4 { font-size: 15px; margin: 16px 0 6px; }
+
+p { margin-bottom: 14px; }
+strong { color: var(--text-strongest); font-weight: 600; }
+
+code {
+  font-family: var(--font-mono);
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: var(--surface); color: var(--text-heading); font-weight: 600; font-size: 13px; }
+
+/* Sidebar */
+.sidebar { width: 270px; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto;
+  background: var(--sidebar-bg); border-right: 1px solid var(--sidebar-border); padding: 22px 0 16px; z-index: 100;
+  display: flex; flex-direction: column; }
+.sidebar-header { display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px 14px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+.sidebar-title { font-size: 13px; font-weight: 700; color: var(--text-heading); letter-spacing: -0.01em; }
+.sidebar-sub { font-size: 11px; color: var(--text-muted); padding: 0 20px 14px; }
+
+.nav-group-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted); padding: 12px 20px 6px; margin-top: 4px; }
+.nav-item { display: flex; align-items: center; padding: 7px 20px; font-size: 13px; color: var(--text-body);
+  border-left: 3px solid transparent; cursor: pointer; text-decoration: none; line-height: 1.4; }
+.nav-item:hover { background: var(--code-bg); text-decoration: none; }
+.nav-item.active { background: var(--nav-active-bg); color: var(--nav-active-color);
+  border-left-color: var(--nav-active-border); font-weight: 600; }
+.nav-num { display: inline-block; width: 30px; font-size: 11px; color: var(--text-muted); font-weight: 600; }
+.nav-item.active .nav-num { color: var(--nav-active-color); }
+
+.hamburger { display: none; position: fixed; top: 14px; left: 14px; z-index: 200;
+  background: var(--surface-alt); border: 1px solid var(--border); border-radius: 8px;
+  width: 40px; height: 40px; cursor: pointer; align-items: center; justify-content: center; color: var(--text-heading); }
+
+main { margin-left: 270px; margin-right: 300px; padding: 44px 52px; max-width: 1100px; }
+
+.hero { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 28px; }
+.hero .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--brief-primary); margin-bottom: 10px; }
+.hero h1 { font-size: 38px; letter-spacing: -0.02em; }
+.hero .subhead { font-size: 17px; color: var(--text-secondary); margin-top: 8px; max-width: 760px; }
+
+.section { scroll-margin-top: 24px; padding-top: 28px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.section-number { background: var(--brief-primary); color: white; font-size: 12px; font-weight: 700;
+  padding: 4px 10px; border-radius: 6px; letter-spacing: 0.02em; }
+.section-tag { background: var(--surface); color: var(--text-secondary); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--border); }
+
+/* Tier badges */
+.tier { display: inline-block; font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 4px; margin: 0 2px; letter-spacing: 0.02em; vertical-align: baseline; border: 1px solid transparent; }
+.tier-1 { background: var(--color-green-50); color: var(--color-green-600); border-color: var(--color-green-100); }
+.tier-2 { background: var(--color-blue-50); color: var(--color-blue-600); border-color: var(--color-blue-100); }
+.tier-3 { background: var(--color-amber-50); color: var(--color-amber-800); border-color: var(--color-amber-100); }
+.tier-4 { background: var(--color-stone-200); color: var(--color-stone-700); border-color: var(--color-stone-300); }
+.tier-5 { background: var(--color-red-50); color: var(--color-red-600); border-color: var(--color-red-100); }
+/* Finding ID inline citation: discreet glyph marker. Single-source = one *, cluster = one * with all IDs in tooltip. */
+.fid {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  vertical-align: super;
+  line-height: 0;
+  color: var(--text-muted);
+  background: transparent;
+  padding: 0;
+  margin: 0 1px 0 0;
+  white-space: nowrap;
+  cursor: help;
+  font-weight: 600;
+}
+.fid:hover, .fid:focus { color: var(--brief-primary); outline: none; }
+.fid-cluster { color: var(--text-secondary); }
+.fid-cluster:hover, .fid-cluster:focus { color: var(--brief-primary); outline: none; }
+
+/* Custom tooltip: instant, styled, tap-friendly via :focus */
+.fid {
+  position: relative;
+}
+.fid::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  font-feature-settings: normal;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  white-space: normal;
+  width: max-content;
+  max-width: 280px;
+  text-align: left;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+  z-index: 100;
+  vertical-align: baseline;
+}
+.fid::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #1a1a1a;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+.fid:hover::after, .fid:focus::after,
+.fid:hover::before, .fid:focus::before {
+  opacity: 1;
+}
+
+/* Callouts */
+.callout { padding: 14px 18px; border-radius: 8px; border-left: 4px solid; margin: 14px 0; }
+.callout-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.callout.critical { background: var(--callout-critical-bg); border-color: var(--callout-critical-border); }
+.callout.critical .callout-label { color: var(--callout-critical-label); }
+.callout.warning { background: var(--callout-warning-bg); border-color: var(--callout-warning-border); }
+.callout.warning .callout-label { color: var(--callout-warning-label); }
+.callout.tip { background: var(--callout-tip-bg); border-color: var(--callout-tip-border); }
+.callout.tip .callout-label { color: var(--callout-tip-label); }
+.callout.info { background: var(--callout-info-bg); border-color: var(--callout-info-border); }
+.callout.info .callout-label { color: var(--callout-info-label); }
+.callout p:last-child { margin-bottom: 0; }
+.callout ul { margin-top: 6px; padding-left: 22px; }
+.callout ul li { margin-bottom: 4px; }
+
+/* Capability matrix (preserved from walkthrough) */
+.matrix-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; }
+.cap-matrix { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 13px;
+  background: var(--surface-alt); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+.cap-matrix th, .cap-matrix td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.cap-matrix thead th { background: var(--brief-primary-soft); color: var(--text-heading); font-weight: 700;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid var(--brief-primary); }
+.cap-matrix th.col-veeva { background: var(--veeva-tint-soft); color: var(--veeva-tint); }
+.cap-matrix th.col-sfdc { background: var(--sfdc-tint-soft); color: var(--sfdc-tint); }
+.cap-matrix td.row-label { font-weight: 700; color: var(--text-heading); background: var(--surface); width: 22%; min-width: 140px; }
+.cap-matrix td.read { font-style: italic; color: var(--text-body); background: var(--brief-accent-soft); width: 28%; min-width: 200px; }
+.cap-matrix tbody tr:hover { background: var(--brief-primary-soft); }
+.cap-matrix tbody tr:hover td.read { background: var(--brief-primary-soft); }
+
+/* Quick-scan feature grid: skimmable 5-second read above the deep matrix */
+.quick-scan {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px 8px;
+  margin: 16px 0 24px;
+}
+.quick-scan-header { margin-bottom: 12px; }
+.quick-scan-header h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.quick-scan-sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.quick-scan-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 13.5px;
+}
+.quick-scan-table thead th {
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-heading);
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--brief-primary);
+  background: var(--brief-primary-soft);
+}
+.quick-scan-table thead th.qs-platform { text-align: center; width: 18%; min-width: 110px; }
+.quick-scan-table thead th.qs-platform-v { background: var(--veeva-tint-soft); color: var(--veeva-tint); }
+.quick-scan-table thead th.qs-platform-s { background: var(--sfdc-tint-soft); color: var(--sfdc-tint); }
+.quick-scan-table tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.quick-scan-table tbody tr:nth-child(even) td { background: var(--color-stone-50); }
+.quick-scan-table tbody tr:hover td { background: var(--brief-accent-soft); }
+.quick-scan-table tbody tr:last-child td { border-bottom: none; }
+.quick-scan-table td.qs-feature {
+  font-weight: 600;
+  color: var(--text-heading);
+  line-height: 1.4;
+}
+.quick-scan-table td.qs-check {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  font-family: var(--font-body);
+}
+.quick-scan-table td.qs-yes { color: #16a34a; }
+.quick-scan-table td.qs-partial { color: #d97706; }
+.quick-scan-table td.qs-no { color: var(--color-stone-400); }
+.qs-deep-link {
+  display: block;
+  margin: 4px 0 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+@media (max-width: 640px) {
+  .quick-scan { padding: 14px 14px 4px; }
+  .quick-scan-table { font-size: 12.5px; }
+  .quick-scan-table thead th.qs-platform { min-width: 70px; }
+  .quick-scan-table td.qs-check { font-size: 19px; }
+}
+
+/* Observation list: replaces "Things to consider" without the advisor voice */
+.obs-list { list-style: none; padding: 0; margin: 20px 0; }
+.obs-list > li {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--brief-primary);
+  border-radius: 0 8px 8px 0;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-body);
+}
+.obs-list > li:last-child { margin-bottom: 0; }
+.obs-list .obs-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brief-primary);
+  background: var(--brief-primary-soft);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.obs-list > li > strong:first-of-type {
+  display: block;
+  font-size: 17.5px;
+  line-height: 1.45;
+  font-weight: 700;
+  color: var(--text-strongest);
+  margin-bottom: 10px;
+}
+
+/* Bounded vs open split (preserved) */
+.split-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+.split-cell { background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; }
+.split-cell.bounded { border-left: 4px solid var(--color-green-500); }
+.split-cell.bounded .pc-label { color: var(--color-green-600); }
+.split-cell.open { border-left: 4px solid var(--color-amber-500); }
+.split-cell.open .pc-label { color: var(--color-amber-800); }
+.split-cell .pc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.split-cell ul { padding-left: 18px; }
+.split-cell li { font-size: 13px; margin-bottom: 5px; }
+
+/* Compare grid (preserved) */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+.compare-cell { background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; }
+.compare-cell.veeva { border-top: 3px solid var(--veeva-tint); }
+.compare-cell.sfdc { border-top: 3px solid var(--sfdc-tint); }
+.compare-cell .ph-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.compare-cell.veeva .ph-label { color: var(--veeva-tint); }
+.compare-cell.sfdc .ph-label { color: var(--sfdc-tint); }
+.compare-cell h4 { margin: 0 0 6px; font-size: 14px; }
+.compare-cell ul { padding-left: 18px; }
+.compare-cell li { font-size: 13px; margin-bottom: 4px; }
+
+/* KPI grid (preserved, denser) */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 14px 0; }
+.kpi-cell { background: var(--surface-alt); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.kpi-cell .v { font-size: 17px; font-weight: 800; color: var(--text-strongest); }
+.kpi-cell .l { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
+/* Source block (preserved) */
+.src-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin: 12px 0; }
+.src-block h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+.src-block ul { padding-left: 22px; margin: 4px 0; }
+.src-block li { font-size: 12px; margin-bottom: 4px; color: var(--text-secondary); word-break: break-word; overflow-wrap: anywhere; }
+
+/* ─── Inline response prompts + Compile zone ─── */
+.sme-prompt {
+  background: var(--sme-accent-soft);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--sme-accent-border);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin: 22px 0 26px;
+}
+.sme-prompt-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sme-accent);
+  margin-bottom: 8px;
+}
+.sme-prompt-input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-body);
+  background: var(--surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 10px;
+  resize: vertical;
+  min-height: 80px;
+}
+.sme-prompt-input:focus { outline: 2px solid var(--sme-accent-border); outline-offset: 1px; border-color: var(--sme-accent-border); }
+
+.sme-compile-zone {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--sme-accent-border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 18px 0;
+}
+.sme-compile-zone h3 { margin-top: 0; color: var(--sme-accent); font-size: 16px; }
+.sme-compile-btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: white;
+  background: var(--sme-accent);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.sme-compile-btn:hover { filter: brightness(0.95); }
+.sme-compile-btn:focus-visible { outline: 2px solid var(--brief-primary); outline-offset: 2px; }
+.sme-compile-confirmation {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--color-green-600);
+  font-weight: 600;
+}
+
+/* ─── Notes rail (right side) ─── */
+.notes-rail {
+  width: 300px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--sidebar-bg);
+  border-left: 1px solid var(--sidebar-border);
+  padding: 22px 0 16px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+.notes-rail-header {
+  padding: 0 20px 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+.notes-rail-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.01em;
+}
+.notes-rail-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.notes-rail-list {
+  padding: 8px 16px 16px;
+  flex: 1;
+}
+.notes-empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.5;
+  padding: 12px 4px;
+}
+.note-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--sme-accent-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.note-card:hover {
+  background: var(--sme-accent-soft);
+  border-left-color: var(--sme-accent);
+}
+.note-card-section {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sme-accent);
+  margin-bottom: 4px;
+}
+.note-card-snippet {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-body);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.notes-rail-toggle {
+  display: none;
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 200;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-heading);
+  font-family: var(--font-body);
+}
+.notes-rail-toggle .note-badge {
+  display: inline-block;
+  margin-left: 6px;
+  background: var(--sme-accent);
+  color: white;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.notes-rail-toggle .note-badge[hidden] { display: none; }
+
+/* ─── Pagination: one section visible at a time ─── */
+.dossier-page { display: none; }
+.dossier-page.active { display: block; }
+
+.page-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 40px 0 8px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+.page-nav-prev, .page-nav-next {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 8px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.page-nav-prev {
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+}
+.page-nav-prev:hover { color: var(--text-heading); border-color: var(--text-secondary); }
+.page-nav-next {
+  color: white;
+  background: var(--brief-primary);
+  border: 1px solid var(--brief-primary);
+  margin-left: auto;
+}
+.page-nav-next:hover { filter: brightness(0.92); }
+.page-nav-prev:focus-visible, .page-nav-next:focus-visible {
+  outline: 2px solid var(--color-blue-500); outline-offset: 2px;
+}
+.page-nav-spacer { flex: 1; }
+
+/* Responsive */
+@media (max-width: 1280px) {
+  .notes-rail { transform: translateX(100%); transition: transform 250ms ease; }
+  .notes-rail.open { transform: translateX(0); box-shadow: -4px 0 20px rgba(0,0,0,0.08); }
+  .notes-rail-toggle { display: inline-flex; align-items: center; }
+  main { margin-right: 0; }
+}
+@media (max-width: 1024px) {
+  .compare-grid, .split-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .sidebar { width: 230px; }
+  main { margin-left: 230px; padding: 24px 26px; }
+}
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .sidebar { transform: translateX(-100%); transition: transform 250ms ease; width: 280px; }
+  .sidebar.open { transform: translateX(0); }
+  main { margin-left: 0; padding: 60px 18px 24px; }
+  .hero h1 { font-size: 26px; }
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  .src-block li, .src-block p { overflow-wrap: anywhere; word-break: break-word; }
+  .page-nav { flex-wrap: wrap; }
+}
+@media print {
+  .sidebar, .hamburger, .notes-rail, .notes-rail-toggle { display: none; }
+  main { margin-left: 0; margin-right: 0; max-width: 100%; }
+  .sme-compile-btn { display: none; }
+  .sme-prompt { background: transparent; }
+  .dossier-page { display: block !important; }
+  .page-nav { display: none; }
+}
+  </style>
+</head>
+<body>
+
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Veeva Vault CRM vs Salesforce LS CRM</div>
+  </div>
+  <div class="sidebar-sub">A comparison · 2026-06-11</div>
+
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="#s00"><span class="nav-num">00</span>Overview</a>
+
+  <div class="nav-group-label">The comparison</div>
+  <a class="nav-item" href="#s01"><span class="nav-num">01</span>What stands out</a>
+  <a class="nav-item" href="#s02"><span class="nav-num">02</span>Capability matrix</a>
+  <a class="nav-item" href="#s03"><span class="nav-num">03</span>Customer-base divergence</a>
+  <a class="nav-item" href="#s04"><span class="nav-num">04</span>TCO asymmetry</a>
+
+  <div class="nav-group-label">AI in depth</div>
+  <a class="nav-item" href="#s05"><span class="nav-num">05</span>AI capabilities</a>
+
+  <div class="nav-group-label">The transition</div>
+  <a class="nav-item" href="#s06"><span class="nav-num">06</span>Transition arc</a>
+
+  <div class="nav-group-label">The gaps</div>
+  <a class="nav-item" href="#s07"><span class="nav-num">07</span>What we couldn't find</a>
+
+  <div class="nav-group-label">Your turn</div>
+  <a class="nav-item" href="#s08"><span class="nav-num">08</span>Compile your notes</a>
+
+  <div class="nav-group-label">Reference</div>
+  <a class="nav-item" href="#s99"><span class="nav-num">99</span>Sources legend</a>
+
+  <div class="nav-group-label">Source tiers</div>
+  <div style="padding: 6px 20px 16px; font-size: 11px; color: var(--text-secondary); line-height: 1.6;">
+    <span class="tier tier-1">T1</span> Primary / official<br>
+    <span class="tier tier-2">T2</span> Reputable secondary<br>
+    <span class="tier tier-3">T3</span> Sentiment / community<br>
+    <span class="tier tier-4">T4</span> Third-party aggregator<br>
+    <span class="tier tier-5">T5</span> Inference / weak signal
+  </div>
+</aside>
+
+<button class="notes-rail-toggle" type="button" onclick="toggleNotesRail()" aria-label="Toggle your notes panel">
+  Your notes<span class="note-badge" id="notes-rail-badge" hidden>0</span>
+</button>
+
+<aside class="notes-rail" id="notes-rail" aria-label="Your notes">
+  <div class="notes-rail-header">
+    <div class="notes-rail-title">Your notes</div>
+    <div class="notes-rail-sub">Live mirror. Click any note to jump back to where you typed it.</div>
+  </div>
+  <div class="notes-rail-list" id="notes-rail-list">
+    <div class="notes-empty" id="notes-empty">Anything you type into the response boxes below will show up here. Compile your notes at the end when you're done.</div>
+  </div>
+</aside>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════ 00 OVERVIEW -->
+<header class="hero dossier-page active" id="s00">
+  <div class="eyebrow">A head-to-head comparison · 2026-06-11</div>
+  <h1>Veeva Vault CRM vs Salesforce LS CRM</h1>
+  <p class="subhead">A 2026 head-to-head across platform substrate, capability depth, customer-base shape, pricing posture, and the 2025 to 2030 transition arc.</p>
+
+  <div class="kpi-grid" style="margin-top: 22px;">
+    <div class="kpi-cell"><div class="v">209</div><div class="l">Cited findings</div></div>
+    <div class="kpi-cell"><div class="v">9</div><div class="l">Dimensions covered</div></div>
+    <div class="kpi-cell"><div class="v">14</div><div class="l">Head-to-head rows</div></div>
+    <div class="kpi-cell"><div class="v">2026-06-10</div><div class="l">Evidence cut-off</div></div>
+  </div>
+
+  <p style="margin-top: 22px;">The eight dimensions: Veeva Vault CRM substrate, Salesforce Life Sciences Cloud (LSC) substrate, architecture and data model, feature coverage, ecosystem and extensibility, total cost of ownership (TCO) and contracting, customer reference patterns, and the 2025 to 2030 transition arc. Every claim carries an inline finding ID and a source-tier badge. The sources legend at §99 maps the lot.</p>
+
+  <div class="page-nav">
+    <span class="page-nav-spacer"></span>
+    <button class="page-nav-next" type="button" data-next="s01">Start the comparison →</button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════ 01 WHAT STANDS OUT -->
+<section id="s01" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 style="margin:0;">What stands out</h2>
+    <span class="section-tag">~5 min</span>
+  </div>
+
+  <p>Before the observations: Veeva Vault CRM is the depth-and-vertical-integration platform. It is vertical SaaS purpose-built for pharma commercial since 2007 on its own Vault Platform substrate. Salesforce Life Sciences Cloud (LSC) is the open-ecosystem-and-platform-AI platform: a vertical product on the broader Salesforce platform, generally available October 2025, evolving rapidly. The observations below pull from across both substrates and find the patterns that recur. Each one states what the evidence shows, with two-sided reads kept two-sided rather than collapsed.</p>
+
+  <ul class="obs-list">
+    <li>
+      <span class="obs-tag">Feature depth vs roadmap velocity</span>
+      <strong>Feature depth today favors Veeva; roadmap velocity favors Salesforce. Both are true.</strong>
+      Across the seven canonical Life Sciences CRM capability areas, Veeva leads decisively today on call planning, MSL (Medical Science Liaison) workflows, sample management, MCCP (multi-channel cycle planning), and content / MLR (Medical, Legal, Regulatory) review <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.6, F4.12, F4.18, F4.21, F4.24, F4.27 (see Sources legend at end)">*</span>. Salesforce LSC is announced-closing the gap through 2026 with Medical Inquiry Management (GA), Sample Inventory Management (Oct 2026+), Events Management (Oct 2026+), and Cycle Plans in Engagement Planning <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.11, F4.16, F4.20 (see Sources legend at end)">*</span>. AI is real on both sides, with divergent strategies. Veeva ships 8+ in-application agents across Vault CRM, PromoMats, Safety, and Quality, plus the new Falcon agentic-labor platform (early adopter Nov 2026) and the March 2026 Ostro acquisition (~$100M) marketed for "zero hallucination" conversational AI <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.32, F4.38, F9.1, F9.5, F9.6 (see Sources legend at end)">*</span>. Salesforce Agentforce LS is broader and platform-level, and Salesforce currently leads on MCP (Model Context Protocol) openness. Agentforce LS already ships as headless services running inside Anthropic Claude per Salesforce SVP/GM Joe Ferraro <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.36, F9.13, F9.17 (see Sources legend at end)">*</span>. Veeva CEO Peter Gassner committed Vault to becoming an MCP server during 2026 (September 2025 LinkedIn) but the native Vault MCP server has not yet shipped <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.2, F9.3, F9.4 (see Sources legend at end)">*</span>. Accuracy is contested ground. Salesforce's own Customer Zero May 2026 reported 92% accuracy, meaning 8% inaccuracy, material in pharma compliance <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.13, F9.16 (see Sources legend at end)">*</span>; practitioner skepticism is documented across Reddit and analyst posts <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.12, F9.14, F9.15, F9.17, F9.18, F9.19, F9.20 (see Sources legend at end)">*</span>; no public head-to-head benchmark exists. Sunshine reporting is a draw <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.31 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span>
+    </li>
+
+    <li>
+      <span class="obs-tag">Architecture philosophy</span>
+      <strong>Architecture philosophy split. Salesforce frames "open ecosystem"; Veeva frames "vertical integration." Both are accurate self-descriptions.</strong>
+      Salesforce runs a single shared multitenant database, with sObjects virtual not physical. Apex enforces hard per-transaction limits: 100 SOQL (Salesforce Object Query Language) queries, 150 DML (Data Manipulation Language) statements, and a 10-second synchronous CPU cap. The development paradigm is Lightning Web Components, Flow, and Apex <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F3.1, F3.4, F3.6 (see Sources legend at end)">*</span>. Veeva Vault is a managed application platform with controlled APIs and per-Vault instance isolation. Configuration runs through MDL (Metadata Definition Language), the Java SDK runs as a service account, X-Pages handles UI (there is no equivalent of Lightning Web Components), and the Vault Object Framework supports roughly 500 custom objects with 500 fields each <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F3.2, F3.3, F3.5, F3.7, F3.10 (range, see Sources legend at end)">*</span>. Both are building agentic AI in 2025-2026. Each is bolted to its own native substrate <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F3.19 (see Sources legend at end)">*</span>. Salesforce explicitly frames its strategy as "open ecosystem" contrasting Veeva <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.17 (see Sources legend at end)">*</span>, with agent-to-agent collaboration as its architectural bet against Veeva's vertical integration <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.23 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span>
+    </li>
+
+    <li>
+      <span class="obs-tag">Customer-base shape</span>
+      <strong>Customer-base divergence is real and bifurcated, with marquee migrations both directions.</strong>
+      Veeva counts 10 of top-20 biopharma committed at FY26 close <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.1 (see Sources legend at end)">*</span>; a separate 247WallSt tracker puts top-20 commitments at 14 in Q3 FY26 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.8 (see Sources legend at end)">*</span>. Most likely a metric-definition difference (Veeva's "committed" vs the tracker's broader read), flagged as such. Salesforce LSC: 140+ organizations by May 2026, doubled in nine months from 70+ in Aug 2025 <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F2.10, F7.4 (see Sources legend at end)">*</span>. Marquee defections both ways. Dual-vendor patterns emerging as their own cohort, not exotic <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.10 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span>
+    </li>
+
+    <li>
+      <span class="obs-tag">TCO transparency</span>
+      <strong>Pricing-transparency asymmetry. Salesforce publishes list pricing across four SKUs; Veeva publishes zero. The asymmetry itself is the finding.</strong>
+      Salesforce LSC has list pricing on four published SKUs, Premier Success Plan signature support pricing, and an announced 6% average list-price increase on Aug 1, 2025 <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F6.1, F6.2, F6.3 (see Sources legend at end)">*</span>. Veeva publishes zero list pricing for any Vault product, including Vault CRM <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.4 (see Sources legend at end)">*</span>. The procurement signal that does exist: the Vendr median for Veeva Systems contracts is $211,872/year <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.5 (see Sources legend at end)">*</span>. Vault CRM also runs geography-tiered licensing in three tiers <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.7 (see Sources legend at end)">*</span>. This is observation, not critique. The asymmetry is a fact about how each vendor approaches procurement disclosure. <span class="tier tier-1">T1</span>
+    </li>
+
+    <li>
+      <span class="obs-tag">Transition dates</span>
+      <strong>The transition arc has two dates, not one. They are different things announced in different documents.</strong>
+      <strong>September 2030</strong> is the contractual five-year wind-down clause embedded in the original Veeva-Salesforce agreement <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.3, F7.14 (see Sources legend at end)">*</span>. <strong>December 2029</strong> is Veeva's separately-announced product-support extension on legacy Veeva-on-Salesforce CRM <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F1.8, F8.3 (see Sources legend at end)">*</span>. They were announced in two different documents. The product-support extension is Veeva signaling a longer legacy runway to give migration time. The contractual wind-down is the hard customer-facing forcing function. Conflating them is the obvious failure mode. <span class="tier tier-1">T1</span>
+    </li>
+
+    <li>
+      <span class="obs-tag">Catch · F8.17</span>
+      <strong>No public Forrester Wave or Gartner Magic Quadrant for Life Sciences CRM exists in 2024 or 2025. KLAS LS-CRM ranking also does not appear to exist publicly.</strong>
+      Generic "industry analysts say..." framings die at this fact <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.17 (see Sources legend at end)">*</span>. The defensible analyst-layer floor: <strong>Everest Group's "wash" position</strong> on the separation <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.13 (see Sources legend at end)">*</span>, plus <strong>RBC's Rishi Jaluria</strong> as the most consistent sell-side voice on the transition across 2023-2026 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.14 (see Sources legend at end)">*</span>. This catch surfaces here because it constrains every analyst-layer claim downstream of it. <span class="tier tier-1">T1</span>
+    </li>
+  </ul>
+
+  <div class="sme-prompt" data-section="what-stands-out">
+    <label class="sme-prompt-label" for="sme-01">What would you add, or where would you push back?</label>
+    <textarea class="sme-prompt-input" id="sme-01" rows="4" placeholder="Your notes get compiled at the end."></textarea>
+  </div>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s00">← Previous</button>
+    <button class="page-nav-next" type="button" data-next="s02">Next: Capability matrix →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 02 CAPABILITY MATRIX -->
+<section id="s02" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2 style="margin:0;">Head-to-head capability matrix</h2>
+    <span class="section-tag">~6 min</span>
+  </div>
+
+  <div class="quick-scan">
+    <div class="quick-scan-header">
+      <h3>At-a-glance scan</h3>
+      <p class="quick-scan-sub">Feature presence across both platforms. <strong style="color:#16a34a;">&#10003;</strong> has it today, mature &nbsp;/&nbsp; <strong style="color:#d97706;">&#9686;</strong> partial, roadmap, or via partner &nbsp;/&nbsp; <strong style="color:var(--color-stone-400);">&#10007;</strong> no native capability</p>
+    </div>
+    <table class="quick-scan-table">
+      <thead>
+        <tr>
+          <th class="qs-feature">Feature or capability</th>
+          <th class="qs-platform qs-platform-v">Veeva Vault CRM</th>
+          <th class="qs-platform qs-platform-s">Salesforce LS Cloud</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="qs-feature">Native MLR (Medical, Legal, Regulatory) review module</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-no" aria-label="No">&#10007;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Dedicated MSL (Medical Science Liaison) module</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-partial" aria-label="Partial">&#9686;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Published list pricing</td>
+          <td class="qs-check qs-no" aria-label="No">&#10007;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">AppExchange-style general marketplace</td>
+          <td class="qs-check qs-no" aria-label="No">&#10007;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Migration cost absorption for legacy Veeva-on-Salesforce customers</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-no" aria-label="Not applicable">&#10007;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Sample management depth (PDMA-validated, full lifecycle)</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-partial" aria-label="Partial">&#9686;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Multi-channel cycle planning (MCCP) with 10+ year maturity</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-partial" aria-label="Partial">&#9686;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Call planning and territory management</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-partial" aria-label="Partial">&#9686;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Deep KOL (Key Opinion Leader) data integration</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-partial" aria-label="Partial">&#9686;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">IQVIA OCE strategic partnership</td>
+          <td class="qs-check qs-no" aria-label="No">&#10007;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Direct Data API / bulk extraction (analytics, GenAI substrate)</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-partial" aria-label="Partial">&#9686;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">iPad-first, mobile-first field deployment</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Embedded in-CRM analytics and dashboards</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Launched AI agents (productized, GA)</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Number of named in-app AI agents</td>
+          <td class="qs-check qs-yes" aria-label="Deep: 8+ named agents across products">&#10003;</td>
+          <td class="qs-check qs-partial" aria-label="Horizontal: fewer specific agents, broader platform">&#9686;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Native MCP (Model Context Protocol) server shipped today</td>
+          <td class="qs-check qs-partial" aria-label="Committed for 2026, not yet shipped">&#9686;</td>
+          <td class="qs-check qs-yes" aria-label="Live: Agentforce LS as headless MCP services in Anthropic Claude">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">"Zero hallucination" / accuracy positioning</td>
+          <td class="qs-check qs-yes" aria-label="Ostro acquisition March 2026, zero hallucination positioning">&#10003;</td>
+          <td class="qs-check qs-partial" aria-label="92% accuracy, RAG and data-hygiene framing">&#9686;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">21 CFR Part 11 and PDMA compliance frameworks</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Independent SaaS platform substrate (own stack)</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Curated certified services-partner program</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Top-20 biopharma adoption (named, public)</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+          <td class="qs-check qs-yes" aria-label="Yes">&#10003;</td>
+        </tr>
+        <tr>
+          <td class="qs-feature">Public Forrester Wave or Gartner Magic Quadrant ranking</td>
+          <td class="qs-check qs-no" aria-label="No">&#10007;</td>
+          <td class="qs-check qs-no" aria-label="No">&#10007;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <span class="qs-deep-link">Full head-to-head detail &darr;</span>
+
+  <p>The two platforms, cell by cell, across the fourteen criteria where they actually differ. Neutral column colors (purple for Veeva, teal for Salesforce), and a <em>Comparison note</em> column that reads the row without picking a winner.</p>
+
+  <p>Scroll horizontally on narrow screens.</p>
+
+  <div class="matrix-scroll">
+    <table class="cap-matrix">
+      <thead>
+        <tr>
+          <th>Criterion</th>
+          <th class="col-veeva">Veeva Vault CRM</th>
+          <th class="col-sfdc">Salesforce LS Cloud</th>
+          <th>Comparison note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-label">Platform substrate</td>
+          <td>Vault Platform (Veeva's own). Managed application platform with controlled APIs and per-Vault instance isolation. MDL (Metadata Definition Language) drives configuration; Java SDK runs with allowlisted classes <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F3.2, F3.3, F3.5, F3.7 (see Sources legend at end)">*</span>.</td>
+          <td>Salesforce Platform. Single shared multitenant database; sObjects virtual not physical. Apex enforces hard per-transaction limits: 100 SOQL queries, 150 DML statements, 10-second sync CPU cap. Development paradigm: Lightning Web Components, Flow, and Apex <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F3.1, F3.4, F3.6 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Architecture philosophy split. Vertical-integration substrate vs open-ecosystem substrate. Neither is "better" in the abstract.</td>
+        </tr>
+        <tr>
+          <td class="row-label">Call planning</td>
+          <td>Vault Align (dedicated field planning suite) + Pre-Call Planning with Account Timeline, Next Best Actions, Ratings + Vault CRM Territory Management <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.1, F4.2, F4.3 (see Sources legend at end)">*</span>.</td>
+          <td>Product &amp; Territory Management (GA in customer engagement SKU) + Engagement Planning with Cycle Plans, Pre-call Planning, Next Best Customer <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.4, F4.5 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Veeva mature; Salesforce v1. The depth gap is observable today <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.6 (see Sources legend at end)">*</span>.</td>
+        </tr>
+        <tr>
+          <td class="row-label">MSL (Medical Science Liaison) workflows</td>
+          <td>Dedicated Vault CRM for Medical product, integrated with Veeva Link Key People for deep KOL (Key Opinion Leader) data. MSL-specific AI covers voice notes, audio transcription, and scientific exchange capture <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.7, F4.8, F4.9 (see Sources legend at end)">*</span>.</td>
+          <td>MSL is a named persona, not a dedicated module. Medical Affairs roadmap items: Medical Inquiry Management (GA), Events Management (Oct '26+) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.10, F4.11 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Veeva clear depth advantage today; Salesforce closing gap by 2026 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.12 (see Sources legend at end)">*</span>.</td>
+        </tr>
+        <tr>
+          <td class="row-label">Sample management</td>
+          <td>Vault CRM Call Sampling (mature, deep). 21 CFR Part 11 and PDMA (Prescription Drug Marketing Act) validated. Engage Sign provides eIDAS-compliant remote signature <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.13, F4.14, F4.15 (see Sources legend at end)">*</span>.</td>
+          <td>Sample Management GA but maturing; Sample Inventory Management is Oct 2026+ roadmap; sample features framed as "enabling" not "deep" <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.16, F4.17 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Veeva leads decisively today <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.18 (see Sources legend at end)">*</span>. Sample-heavy customers see the biggest delta here.</td>
+        </tr>
+        <tr>
+          <td class="row-label">MCCP (multi-channel cycle planning)</td>
+          <td>Documented mature Vault CRM module with 10+ year maturity advantage <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.19, F4.21 (see Sources legend at end)">*</span>.</td>
+          <td>Cycle Plans shipping in Engagement Planning <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.20 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Veeva 10+ year maturity advantage <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.21 (see Sources legend at end)">*</span>. Salesforce closing but not closed.</td>
+        </tr>
+        <tr>
+          <td class="row-label">Content / MLR (Medical, Legal, Regulatory) review</td>
+          <td>Veeva PromoMats is the industry-standard MLR review and approval platform. Inherits Vault platform compliance infrastructure. PromoMats AI Quick Check Agent and AI Chat for MLR launched Dec 2025 <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.22, F4.23, F4.34 (see Sources legend at end)">*</span>.</td>
+          <td>No native MLR review module. Depends on Vodori / Box / Veeva integration. LSC does distribute MLR-approved content to field reps but does not create or review it natively <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.24, F4.25, F4.26 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Veeva decisive lead <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.27 (see Sources legend at end)">*</span>. The deepest single-row delta in the matrix.</td>
+        </tr>
+        <tr>
+          <td class="row-label">Sunshine Act reporting</td>
+          <td>Not standalone; integrates with specialist aggregate-spend tools. Structural advantage: built-in transfer-of-value capture at call/event level <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.28, F4.29 (see Sources legend at end)">*</span>.</td>
+          <td>Not standalone; integrates with specialist tools. Framed as compliance-feeding rather than reporting <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.28, F4.30 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Draw. Both feed specialist tools; neither is the system of record <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.31 (see Sources legend at end)">*</span>.</td>
+        </tr>
+        <tr>
+          <td class="row-label">AI agents</td>
+          <td>8+ named in-application agents as of June 2026: Vault CRM Free Text Agent, Voice Agent, Pre-call Agent (Dec 2025 launch); PromoMats Quick Check Agent and Content Agent; Veeva Safety Narrative Agent (26R1); plus Quality agents in the April 2026 wave <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.32, F4.35, F9.1, F9.10 (see Sources legend at end)">*</span>. Falcon agentic-labor platform announced May 2026; early adopter November 2026 for clinical/regulatory/safety standard agents <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.5, F9.6 (see Sources legend at end)">*</span>. Ostro acquired March 2026 (~$100M) for "zero hallucination" patient/HCP conversational AI <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.5 (see Sources legend at end)">*</span>. MCP server committed for 2026 by CEO Peter Gassner but not yet shipped <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.2, F9.3, F9.4 (see Sources legend at end)">*</span>. Phased roadmap holds: CRM/PromoMats Dec '25, Safety/Quality Apr '26, others Aug '26 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.33 (see Sources legend at end)">*</span>. Application-embedded, life-sciences-specific.</td>
+          <td>Agentforce Life Sciences is broader, horizontal platform-level AI <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.36 (see Sources legend at end)">*</span>. GA (generally available) features: Agentforce Conversation, Account Summarization, Next Best Customer, Tableau Next Dashboards <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.37 (see Sources legend at end)">*</span>. Cross-cloud orchestration thesis <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.23 (see Sources legend at end)">*</span>. Customer Zero May 2026: 92% accuracy / 89% task completion / 94% engagement, vendor-disclosed <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.13, F9.16 (see Sources legend at end)">*</span>. MCP shipped today as headless services. Live customer running Agentforce LS workflows inside Anthropic Claude (per Joe Ferraro, Salesforce SVP/GM Life Sciences) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.13, F9.17 (see Sources legend at end)">*</span>. Practitioner sources cite ~77% B2B implementation failure rate (methodology fuzzy, treat as directional) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.12, F9.18 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Divergent strategies still hold <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F4.38 (see Sources legend at end)">*</span>. Today Salesforce leads on MCP openness; Veeva leads on agent count and hallucination positioning. Convergence on MCP likely by end-2026.</td>
+        </tr>
+        <tr>
+          <td class="row-label">Customer base depth (top-20 pharma)</td>
+          <td>10 of top-20 biopharma committed at FY26 close (Veeva framing); 125+ live; 1,000+ pharma/biotech/medtech total <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F7.1, F7.2, F7.9 (see Sources legend at end)">*</span>. Named: BMS, Roche, Novo Nordisk IO, Merck KGaA, GSK, Bayer, Boehringer Ingelheim <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F1.17 (see Sources legend at end)">*</span>.</td>
+          <td>140+ organizations May 2026 (doubled in 9 months) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F2.10, F7.4 (see Sources legend at end)">*</span>. Named: AstraZeneca (global), Novartis (5-year rollout), Pfizer (status ambiguous), Takeda, BI, Fresenius Kabi, Chiesi, Haleon, Viatris <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F2.11, F2.12, F2.13, F8.11 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Bifurcated cohorts. Top-20 + small-biotech vs mid-market specialty/CRO/medtech/dermo-cosmetic. Dual-vendor pattern emerging <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.10 (see Sources legend at end)">*</span>.</td>
+        </tr>
+        <tr>
+          <td class="row-label">Ecosystem / SI partners</td>
+          <td>Veeva Connect partner program: 6 distinct tracks + 3 services-partner tiers + Premier Services Partners featured Apr 2026 <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F5.8, F5.9, F5.10 (see Sources legend at end)">*</span>. Curated bench depth; LS-specific.</td>
+          <td>AppExchange (marketplace scale) + Life Sciences Partner Network launched May 8, 2025 with 20+ SIs and 10+ ISVs (IQVIA, Cognizant, Deloitte, Capgemini, EY, Slalom, Pythian) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F2.16, F5.3, F5.4 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Curated depth vs marketplace breadth. ZS Torrent acquisition (Oct 2025) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F5.7, F5.19 (see Sources legend at end)">*</span> is a dual-credentialing signal.</td>
+        </tr>
+        <tr>
+          <td class="row-label">TCO &amp; pricing transparency</td>
+          <td>Zero public list pricing for any Vault product <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.4 (see Sources legend at end)">*</span>. Vendr median: $211,872/year <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.5 (see Sources legend at end)">*</span>. 3-tier geography licensing <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.7 (see Sources legend at end)">*</span>. Migration cost absorption for legacy customers <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.9 (see Sources legend at end)">*</span>.</td>
+          <td>4 SKUs published with list pricing + Premier Success Plan + 6% list-price increase Aug 1, 2025 <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F6.1, F6.2, F6.3 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Asymmetric transparency is itself a finding. Different procurement-disclosure postures.</td>
+        </tr>
+        <tr>
+          <td class="row-label">Roadmap stability for 5-year horizon</td>
+          <td>Vault CRM trajectory clean: 60 → 80 → 100+ → 115 → ~140 live customers across FY23-FY26 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.7 (see Sources legend at end)">*</span>. Phased AI rollout. Vault Platform Direct Data API; 3 General Releases per year <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F3.13, F3.16 (see Sources legend at end)">*</span>.</td>
+          <td>Post-Veeva playbook dated and measured: IQVIA partnership Apr 2024, MedTech-first, LSC GA Oct 11 2025, Agentforce LS rebrand late 2025 through mid 2026, Partner Network May 2025 <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.10, F8.11, F8.12 (see Sources legend at end)">*</span>. Some customer-engagement SKU pieces unreleased into 2026 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.3 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Both have credible 5-year arcs. Neither is "speculative."</td>
+        </tr>
+        <tr>
+          <td class="row-label">Migration risk (for Veeva-on-SF clients)</td>
+          <td>"Complete re-implementation" of Apex, Visualforce, Lightning, custom UI, and integrations <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F3.15 (see Sources legend at end)">*</span>. Veeva absorbing core migration cost <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.9 (see Sources legend at end)">*</span>. 18 to 36 month timelines <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.10 (see Sources legend at end)">*</span>. Re-skin, not re-architect, on the UI side <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.5 (see Sources legend at end)">*</span>.</td>
+          <td>Alternative path: switch to Salesforce LSC entirely. Customer engagement SKU runs iPad-first; AWS Marketplace later <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.14 (see Sources legend at end)">*</span>. Salesforce-cited 5 to 6 weeks to live for new commercial deployments <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.20 (see Sources legend at end)">*</span>. Marquee switchers: Novartis, Viatris <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F7.11, F7.12 (see Sources legend at end)">*</span>.</td>
+          <td class="read">Both paths are real re-implementations. Asymmetric on terms (migration-cost absorption, timeline cited), not on whether it's "real work."</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top: 16px; font-size: 14px;">Every cell traces back to a finding ID; hedge language is symmetric ("announced" not "will," "on track per X" not "X is confirmed"); the comparison note reads the row without declaring a winner.</p>
+
+  <div class="sme-prompt" data-section="capability-matrix">
+    <label class="sme-prompt-label" for="sme-02">Which rows would you score differently? What's under-detailed for how you'd use this with a client?</label>
+    <textarea class="sme-prompt-input" id="sme-02" rows="4" placeholder="Row-by-row notes."></textarea>
+  </div>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s01">← Previous</button>
+    <button class="page-nav-next" type="button" data-next="s03">Next: Customer-base divergence →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 03 CUSTOMER-BASE DIVERGENCE -->
+<section id="s03" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2 style="margin:0;">Customer-base divergence: bifurcated cohorts, migrations both ways</h2>
+    <span class="section-tag">~4 min</span>
+  </div>
+
+  <p>The customer base is the single cleanest area where the two platforms diverge in 2026. Top-20 biopharma depth on one side; mid-market specialty, medtech, dermo-cosmetic, and CRO on the other. Marquee migrations are flowing both directions in 2025 and 2026. A dual-vendor pattern (Veeva CRM plus Salesforce for patient services and non-CRM commercial) is emerging as its own cohort rather than as an exotic edge case.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-cell"><div class="v">125+</div><div class="l">Vault CRM live customers (Veeva FY26)</div></div>
+    <div class="kpi-cell"><div class="v">10 of 20</div><div class="l">Top-20 biopharma committed (Veeva)</div></div>
+    <div class="kpi-cell"><div class="v">14 of 20</div><div class="l">Top-20 per 247WallSt Q3 FY26</div></div>
+    <div class="kpi-cell"><div class="v">140+</div><div class="l">LSC organizations (May 2026)</div></div>
+    <div class="kpi-cell"><div class="v">70+ to 140+</div><div class="l">LSC growth in 9 months (Aug '25 to May '26)</div></div>
+    <div class="kpi-cell"><div class="v">1,552</div><div class="l">Total Veeva customers, all clouds (FY26)</div></div>
+  </div>
+
+  <h3>The top-20 count: two numbers, likely a metric-definition difference</h3>
+
+  <p>Veeva's own FY26-close framing puts Vault CRM at <strong>10 of top-20 biopharma committed</strong>, with 125+ live customers on the new platform and 1,000+ total Veeva pharma/biotech/medtech customers across all clouds <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F1.16, F7.1, F7.2, F7.9 (see Sources legend at end)">*</span>. A separate 247WallSt analyst tracker puts top-20 commitments at <strong>14</strong> in Q3 FY26 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.8 (see Sources legend at end)">*</span>. The cleanest read is a metric-definition difference: Veeva's "committed" framing versus the tracker's broader count of public commitments. Not a contradiction. Both numbers belong on the page; either alone misrepresents the picture. <span class="tier tier-1">T1</span> <span class="tier tier-2">T2</span></p>
+
+  <h3>Salesforce LSC trajectory: doubled in nine months</h3>
+
+  <p>Salesforce LSC organizations went from <strong>70+ in Aug 2025</strong> to <strong>140+ by May 2026</strong>. That's doubled in nine months <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F2.10, F7.4 (see Sources legend at end)">*</span>. <strong>Important qualifier:</strong> per Joe Ferraro (Salesforce SVP/GM Life Sciences), the 140 figure counts organizations across the entire Salesforce LS portfolio (patient services, clinical, medical affairs, and commercial), not 140 organizations replacing Veeva CRM with Salesforce LS Customer Engagement specifically <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.19 (see Sources legend at end)">*</span>. The named base skews CRO, medtech, specialty pharma, and dermo-cosmetic, with marquee enterprise wins layered on top <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.7 (see Sources legend at end)">*</span>. The growth rate is observable; whether it sustains is one of the open scenarios in §06. <span class="tier tier-1">T1</span></p>
+
+  <h3>Marquee migrations both directions in 2025-2026</h3>
+
+  <div class="compare-grid">
+    <div class="compare-cell veeva">
+      <div class="ph-label">Veeva-to-Veeva committed (top-20)</div>
+      <h4>Named in public sources</h4>
+      <ul>
+        <li>BMS commitment Sep 22, 2025 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F1.17 (see Sources legend at end)">*</span></li>
+        <li>Roche partnership expansion Nov 24, 2025 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F1.17 (see Sources legend at end)">*</span></li>
+        <li>Novo Nordisk IO commitment Jan 2026 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F1.17 (see Sources legend at end)">*</span></li>
+        <li>Merck KGaA worldwide selection <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F1.17 (see Sources legend at end)">*</span></li>
+        <li>GSK, Bayer named in Veeva customer disclosures <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F1.17 (see Sources legend at end)">*</span></li>
+        <li>Boehringer Ingelheim (dual-vendor; see below) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.10 (see Sources legend at end)">*</span></li>
+      </ul>
+    </div>
+    <div class="compare-cell sfdc">
+      <div class="ph-label">Veeva-to-Salesforce defections (named)</div>
+      <h4>Named in public sources</h4>
+      <ul>
+        <li>Pfizer (Feb-Mar 2025; framing-setter) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.11 (see Sources legend at end)">*</span></li>
+        <li>Novartis Dec 17, 2025 (5-year rollout) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F7.12, F2.12 (see Sources legend at end)">*</span></li>
+        <li>Viatris June 2, 2026 (global commercial transformation) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.13 (see Sources legend at end)">*</span></li>
+        <li>AstraZeneca March 2026 (global) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.11 (see Sources legend at end)">*</span></li>
+        <li>Takeda, Fresenius Kabi, Chiesi, Haleon, BI <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F2.13, F8.11 (see Sources legend at end)">*</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Dual-vendor pattern: emerging cohort, not exotic</h3>
+
+  <p>Boehringer Ingelheim is the named public reference for the dual-vendor pattern: <strong>Veeva for CRM, Salesforce for patient services and non-CRM commercial</strong> <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.10 (see Sources legend at end)">*</span>. The pattern shows up in the public record as a real architectural choice, not an exotic edge case. Whether it becomes the dominant mid-market pattern by 2028 to 2030 is one of the open scenarios in §06.</p>
+
+  <p>Pfizer is a separate, more ambiguous case. Publicly framed as a Salesforce defection (Feb-Mar 2025), but the actual platform end-state is genuinely open. The "full migration vs co-existence" question is not resolved in the sources reviewed <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.11 (see Sources legend at end)">*</span>. Flagged, not attributed.</p>
+
+  <h3>Mid-market split</h3>
+
+  <p>The mid-market reads differently from the top-20. Veeva is positioned as a small-biotech commercial stack with services entry <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.8 (see Sources legend at end)">*</span>. Salesforce LSC skews mid-market specialty pharma, CRO, medtech, and dermo-cosmetic <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F7.7 (see Sources legend at end)">*</span>. Top-20-pharma evidence does not generalize down to mid-market; mid-market evidence does not generalize up.</p>
+
+  <div class="sme-prompt" data-section="customer-base-divergence">
+    <label class="sme-prompt-label" for="sme-03">Is the bifurcated-cohort framing right? Anything off about the named-defection list or the dual-vendor pattern vs what you're seeing in the field?</label>
+    <textarea class="sme-prompt-input" id="sme-03" rows="4" placeholder="Customer-base notes."></textarea>
+  </div>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s02">← Previous</button>
+    <button class="page-nav-next" type="button" data-next="s04">Next: TCO asymmetry →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 04 TCO ASYMMETRY -->
+<section id="s04" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2 style="margin:0;">TCO asymmetry: pricing-disclosure posture as a finding</h2>
+    <span class="section-tag">~3 min</span>
+  </div>
+
+  <p>On TCO, the pricing-transparency posture is itself the finding. Salesforce publishes list pricing across four SKUs; Veeva publishes zero list pricing for any Vault product. Neither posture is critiqued here. The asymmetry is described, sources cited, and the procurement-experience implications left to the reader.</p>
+
+  <div class="compare-grid">
+    <div class="compare-cell sfdc">
+      <div class="ph-label">Salesforce LSC pricing</div>
+      <h4>Published, four SKUs</h4>
+      <ul>
+        <li><strong>4 SKUs</strong> with list pricing on the published Life Sciences Cloud pricing page <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.1 (see Sources legend at end)">*</span></li>
+        <li><strong>Premier Success Plan</strong> signature support pricing also published <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.2 (see Sources legend at end)">*</span></li>
+        <li><strong>6% average list-price increase</strong> announced Aug 1, 2025 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.3 (see Sources legend at end)">*</span></li>
+        <li>Procurement consequence: desk-research pricing comparison is possible without vendor engagement</li>
+      </ul>
+    </div>
+    <div class="compare-cell veeva">
+      <div class="ph-label">Veeva Vault CRM pricing</div>
+      <h4>Zero public list pricing</h4>
+      <ul>
+        <li><strong>Zero list pricing</strong> for any Vault product including Vault CRM <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.4 (see Sources legend at end)">*</span></li>
+        <li><strong>Vendr procurement benchmark</strong>: $211,872/year median for Veeva Systems contracts <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.5 (see Sources legend at end)">*</span></li>
+        <li><strong>3-tier geography licensing</strong> structure documented for Vault CRM <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.7 (see Sources legend at end)">*</span></li>
+        <li>Procurement consequence: mandatory vendor engagement to get a number</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Migration cost: bounded vendor subsidy</h3>
+
+  <p>Veeva is <strong>absorbing core migration cost</strong> for existing Veeva-on-Salesforce customers moving to Vault CRM <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.9 (see Sources legend at end)">*</span>. The subsidy is real but bounded: implementation services on top of the core migration remain customer cost. Migration program timelines: <strong>18 to 36 months minimum</strong> <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.10 (see Sources legend at end)">*</span>. This is an observation of the public terms, not a take on which path is cheaper in net 5-year TCO. <span class="tier tier-1">T1</span></p>
+
+  <h3>Third-party model in the public record</h3>
+
+  <p>Exeevo published a 3-year TCO competitor model in Sep 2024 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.11 (see Sources legend at end)">*</span>. Exeevo is itself a CRM alternative, so the model is flagged <span class="tier tier-3">T3</span>: directional, not authoritative. The cleanest TCO signals in the public record remain Salesforce's own list pricing (T1), Vendr's procurement benchmark median (T2), and Veeva's announced migration-cost-absorption posture (T1).</p>
+
+  <p style="font-size: 13px; color: var(--text-secondary);">Salesforce's "5x faster ROI" self-claim <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.18 (see Sources legend at end)">*</span> is reproduced as a flagged vendor-self-claim data point, not as an independent TCO read.</p>
+
+  <div class="sme-prompt" data-section="tco-asymmetry">
+    <label class="sme-prompt-label" for="sme-04">Does the Vendr median match what you're hearing? Anything to add on how clients actually experience the procurement-disclosure asymmetry?</label>
+    <textarea class="sme-prompt-input" id="sme-04" rows="4" placeholder="TCO notes."></textarea>
+  </div>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s03">← Previous</button>
+    <button class="page-nav-next" type="button" data-next="s05">Next: AI capabilities →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 05 AI CAPABILITIES -->
+<section id="s05" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2 style="margin:0;">AI capabilities: what each platform actually ships, and what the reviews say</h2>
+    <span class="section-tag">~6 min</span>
+  </div>
+
+  <p>AI is the most-watched battlefield between the two platforms in 2026 and the one most prone to vendor spin. This section breaks the picture into three parts: what Veeva has actually shipped, what Salesforce has actually shipped, and what the practitioner record (reviews, news, vendor admissions) says about how it is performing. MCP (Model Context Protocol) and GenAI (generative AI) are expanded on first use. Citations point to thread 9 findings (F9.x) where the evidence lives.</p>
+
+  <h3>Block A: Veeva AI: what is shipped</h3>
+
+  <p>Veeva has eight publicly-named application agents across its Vault products as of June 2026, with more on a phased roadmap. The Dec 2025 dossier framing of "3 named agents" is six months stale. The current roster <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.1, F9.4, F9.10 (see Sources legend at end)">*</span>:</p>
+
+  <ul>
+    <li><strong>Vault CRM (live Dec 2025):</strong> Free Text Agent (detects and flags issues in call notes), Voice Agent (voice input plus transcription for call reports), Pre-call Agent (insights and recommended actions for call prep).</li>
+    <li><strong>PromoMats (live Sept 2025):</strong> Quick Check Agent (automated MLR (Medical, Legal, Regulatory) pre-checks on promotional content), Content Agent (context-aware agentic AI for content creation and MLR review).</li>
+    <li><strong>Vault Safety (26R1 release, Feb-Apr 2026):</strong> Narrative Agent (generates case narratives).</li>
+    <li><strong>Vault Quality (April 2026 wave):</strong> Quality agents shipped per Veeva roadmap and confirmed in Clarkston Consulting and partner posts. Specific agent names not yet itemized in public release notes.</li>
+    <li><strong>Vault AI Chat (live April 15, 2026) and Vault AI Tab (Aug 2026 preview):</strong> conversational layer across Vault applications.</li>
+  </ul>
+
+  <p><strong>Veeva Falcon, announced May 27, 2026.</strong> Veeva's "first offering in agentic labor," positioned a tier above the per-application agents. Falcon delivers standard agents for clinical, regulatory, and safety: trial master file document intake and QC, health authority correspondence, and safety case triage and intake. Early adopter program November 2026; broader availability later <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.5 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <p><strong>Ostro acquisition, March 2026, approximately $100M.</strong> Veeva acquired Ostro for conversational AI explicitly marketed as "zero hallucination" for patient and HCP (Healthcare Professional) brand engagement. Answers are drawn from MLR-approved content only. This is a deliberate positioning move against probabilistic-agent risk in regulated environments <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.6, F9.22 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <p><strong>MCP commitment, not yet shipped.</strong> Veeva CEO Peter Gassner stated on LinkedIn September 4, 2025: <em>"Vault next year will become an MCP server and that's what enables agents talking to agents. And that's going to enable a lot of things."</em> As of June 2026 the native Vault MCP server has not shipped publicly. Third-party CData has a read-only Veeva MCP server wrapper available today <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.2, F9.3 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <p>Veeva's posture across all of the above: standard agents run in-context inside Vault applications, with model layer fixed to Anthropic and Amazon models hosted on Amazon Bedrock. Customers can bring their own models on AWS Bedrock or Microsoft Azure AI Foundry for custom agents only. This is a deliberate single-model-layer architectural choice for compliance reliability <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.7, F9.8 (see Sources legend at end)">*</span>.</p>
+
+  <h3>Block B: Salesforce Agentforce LS: what is shipped</h3>
+
+  <p><strong>GA (general availability) features today.</strong> Agentforce Conversation, Account Summarization, Next Best Customer, and Tableau Next Dashboards are live <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F4.37, F9.11 (see Sources legend at end)">*</span>. Salesforce's Q1 FY27 earnings disclosed 28.6 trillion AI tokens processed (up 152% quarter-over-quarter) and $1.2B Agentforce ARR. These are vendor-published metrics; no independent third-party validation exists for the isolation of $1.2B to Agentforce specifically vs broader Data Cloud <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.11 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <p><strong>MCP shipped today: the load-bearing finding.</strong> Joe Ferraro (Salesforce SVP/GM Life Sciences) describes Salesforce's strategy as <em>"popping the top off the platform, exposing all the APIs, and exposing all the data models and workflows as MCP tools."</em> Ferraro cites a live customer: <em>"I was with a customer yesterday who has made a significant investment in Anthropic, and they are going to use our MCP service for Agentforce Life Sciences to bring all of those compliant workflows directly inside Claude."</em> Salesforce currently leads Veeva on MCP openness <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.17 (see Sources legend at end)">*</span>. <span class="tier tier-2">T2</span></p>
+
+  <p><strong>IQVIA OCE substrate partnership (April 2024).</strong> Salesforce licensed IQVIA's Orchestrated Customer Engagement CRM software to accelerate Life Sciences Cloud development. This is the partnership substrate that put the pharma-specific workflows on the platform <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F2.9 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <p><strong>Customer Zero May 2026: Salesforce's own admission.</strong> Salesforce's May 12, 2026 blog reported its own Agentforce deployment trending at 92% accuracy, 89% task completion, and 94% engagement. The honest read: 8% inaccuracy is material in pharma compliance contexts (sample disbursement, MLR-approved content delivery, PDMA-validated workflows, sunshine reporting). Salesforce attributes residual gaps to "customer data hygiene" rather than LLM (Large Language Model) capability <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.13, F9.14 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <p><strong>Architecture thesis: broader, horizontal, headless.</strong> Salesforce's Agentforce LS is platform-level: model choice across Anthropic and others, agent-builder breadth, and MCP-tool exposure that lets the same workflows run inside any AI assistant. Salesforce uses Agent Script (a deterministic overlay) to weave compliance checks, approved templates, and consent status into the probabilistic LLM layer: <em>"The model can synthesize and surface, but the regulated action runs through a fixed set of tools backed by deterministic workflows and confined actions."</em> This is Salesforce's structural answer to the compliance-in-regulated-industries question <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F2.23, F3.19, F4.36, F9.18 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <h3>Block C: Reality check: reviews, stats, news</h3>
+
+  <p>This is where the marketing layer meets the deployment layer. The signals below are partial and the methodology is uneven, but the direction is consistent enough to surface honestly.</p>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ Practitioner voice</div>
+    <p>Reddit r/salesforce threads document sustained skepticism on Agentforce deployments. Direct quotes <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.15 (see Sources legend at end)">*</span>:</p>
+    <ul>
+      <li><em>"How are y'all's agent force deployments going? Ours has sucked majorly so I'm curious how other's deployments are going!"</em></li>
+      <li><em>"Agentforce: How is there still any hype? It constantly seems outdated, and is just Salesforce just trying to SaaS-ify..."</em></li>
+      <li><em>"Is anyone having success with Agentforce? It's good sometimes but a lot of the time it just makes things [up]..."</em></li>
+    </ul>
+    <p style="margin-top: 8px;">This is T4 weight (Reddit is signal-of-frustration, not statistically representative), but the consistency across threads matters. Tellius, a pharma-specialist analytics vendor, published a separate February 2026 comparison stating Agentforce LS agents are <em>"general-purpose; pharma intelligence depends on extensive configuration"</em> <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.16 (see Sources legend at end)">*</span>. <span class="tier tier-3">T3</span> <span class="tier tier-4">T4</span></p>
+  </div>
+
+  <h4 style="margin-top: 18px;">The 77% failure-rate statistic</h4>
+
+  <p>Three industry sources (Solutions4SF, Oliv.ai, Bluprintx) cite an approximately 77% B2B Agentforce implementation failure rate, with failure causes broken down as 32% data quality, 18% hidden TCO surprise, 12% scope creep, 8% hallucination per Solutions4SF. <strong>Methodology caveat:</strong> the primary source of the 77% number is not perfectly traceable; treat as a widely-repeated industry directional statistic rather than peer-reviewed finding. The 77% figure is also directionally consistent with Salesforce CMO Ariel Kelman's own public admission that <em>"95% of generative AI pilots fail"</em>, which frames a broader industry reality, not a Salesforce-specific defect <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.12, F9.14 (see Sources legend at end)">*</span>. <span class="tier tier-2">T2</span> <span class="tier tier-3">T3</span></p>
+
+  <h4>140-orgs Ferraro clarification</h4>
+
+  <p>The 140+ Agentforce LS organizations cited by Salesforce in May 2026 are not 140 organizations replacing Veeva CRM. Per Ferraro: <em>"The 140 represents customers across our entire portfolio, regardless of whether they are using it for patient engagement, clinical engagement, commercial engagement or medical engagement."</em> The headline number is real; the apples-to-apples read against Vault CRM commitments is narrower <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.19 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <h4>Hallucination concerns and the pharma-compliance frame</h4>
+
+  <p>Hallucinations are documented across Agentforce deployments (Salesforce Ben, Astrea IT, Gearset's Mehmet Orun, LinkedIn practitioner posts). Salesforce's framing positions the cause as customer data hygiene, not LLM capability. In a regulated environment, 8% inaccuracy intersects directly with GxP, 21 CFR Part 11, sunshine reporting, and MLR review obligations. The structural concern is not dramatic, it is procedural: the regulated action needs a deterministic envelope around the probabilistic synthesis layer. Both vendors have arrived at this principle. Implementation philosophy is where they diverge <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.14, F9.20, F9.22 (see Sources legend at end)">*</span>. <span class="tier tier-2">T2</span></p>
+
+  <h4>The honest boundary: no public head-to-head benchmark</h4>
+
+  <p><strong>No public head-to-head accuracy benchmark exists comparing Veeva AI Agents and Salesforce Agentforce LS in life sciences as of June 2026.</strong> Stating this is itself a finding. Anyone claiming "Veeva AI is X% more accurate" or "Agentforce is materially weaker" is making it up. The defensible read is the divergence in posture and shipped capability, not a head-to-head accuracy number <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.22 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <h3>Closing read</h3>
+
+  <p>AI is real on both platforms. The honest read in 2026: Veeva ships more named agents and has acquired hallucination-positioning intellectual property; Salesforce currently leads on MCP-style openness with live Anthropic Claude integration. Both face the broader industry reality that most GenAI pilots fail and that compliance-grade accuracy is still being engineered. No public head-to-head benchmark in life sciences exists, so direct accuracy comparisons remain speculation. Convergence on MCP architecture is likely by end-2026.</p>
+
+  <div class="sme-prompt" data-section="ai-capabilities">
+    <label class="sme-prompt-label" for="sme-ai">What's missing here? Any AI deployment signals from your client base, named agents not in the public roster, or hallucination patterns you're seeing in the field?</label>
+    <textarea class="sme-prompt-input" id="sme-ai" rows="4" placeholder="AI capability notes."></textarea>
+  </div>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s04">← Previous</button>
+    <button class="page-nav-next" type="button" data-next="s06">Next: Transition arc →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 06 TRANSITION ARC -->
+<section id="s06" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2 style="margin:0;">Transition arc: bounded facts vs open scenarios</h2>
+    <span class="section-tag">~6 min</span>
+  </div>
+
+  <p>The transition arc is where the line between evidence and interpretation matters most. Some facts are bounded: dates, customer trajectories, announced product milestones. Some scenarios are open: adoption curves, dominant patterns, end-states. The two get visually separated below rather than blended into a single narrative.</p>
+
+  <h3>The two-date distinction</h3>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ Two dates, two documents</div>
+    <p><strong>September 2030:</strong> the contractual 5-year wind-down clause in the original Veeva-Salesforce agreement. Hard customer-facing forcing function for the platform decision <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.3, F7.14 (see Sources legend at end)">*</span>.</p>
+    <p><strong>December 2029:</strong> Veeva's separately-announced product-support extension on legacy Veeva-on-Salesforce CRM <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F1.8, F8.3 (see Sources legend at end)">*</span>. Announced separately, in a different document, after the original agreement. It is the support-runway, not the contractual deadline.</p>
+    <p>Conflating them collapses two facts into one. The discipline is to keep both visible.</p>
+  </div>
+
+  <h3>Vault CRM trajectory: clean across quarters</h3>
+
+  <p>Vault CRM live-customer count across FY23 to FY26: <strong>60, 80, 100+, 115, ~140</strong> live customers <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.7, F8.8 (see Sources legend at end)">*</span>. The original Vault CRM migration announcement was embedded in Veeva's <strong>Q3 FY2023 earnings call on Dec 1, 2022</strong>, not a standalone press release <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.1 (see Sources legend at end)">*</span>. As of FY26 close (Jan 31, 2026): <strong>125+ live customers, 10 of top-20 biopharma committed</strong> per Veeva's own framing <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F1.16, F7.1 (see Sources legend at end)">*</span>. <span class="tier tier-1">T1</span></p>
+
+  <h3>Salesforce post-Veeva playbook: dated and measured</h3>
+
+  <ul>
+    <li><strong>April 2024:</strong> IQVIA partnership announced. Salesforce licensed IQVIA OCE (Orchestrated Customer Engagement) CRM software to accelerate LSC development <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.10, F2.9 (see Sources legend at end)">*</span></li>
+    <li><strong>MedTech-first</strong> positioning early in the transition</li>
+    <li><strong>October 11, 2025:</strong> Life Sciences Cloud for Customer Engagement reaches GA <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.11, F2.2 (see Sources legend at end)">*</span></li>
+    <li><strong>Late 2025 to mid 2026:</strong> product rebranded to "Agentforce Life Sciences" <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.11, F2.4 (see Sources legend at end)">*</span></li>
+    <li><strong>May 8, 2025:</strong> Life Sciences Partner Network launched with 20+ system integrators (SIs) and 10+ independent software vendors (ISVs) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.12, F2.16, F5.3 (see Sources legend at end)">*</span></li>
+    <li><strong>2026 rollout pieces</strong> still in flight: Medical Inquiry Mgmt (GA), Sample Inventory Mgmt (Oct 2026+), Events Management (Oct 2026+), Engagement Planning Cycle Plans <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F2.3, F4.11, F4.16, F4.20 (see Sources legend at end)">*</span></li>
+  </ul>
+
+  <h3>Analyst floor: Everest "wash" plus RBC Jaluria. No Forrester or Gartner.</h3>
+
+  <div class="callout critical">
+    <div class="callout-label">▸ F8.17: fabrication discipline</div>
+    <p><strong>NO public Forrester Wave or Gartner Magic Quadrant for Life Sciences CRM exists in 2024 or 2025.</strong> KLAS Research LS-CRM ranking also does not appear to exist publicly <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.17, C4 (see Sources legend at end)">*</span>. Any briefing citing "Forrester/Gartner says..." without a specific URL is making it up.</p>
+    <p>The defensible analyst-layer floor in the public record:</p>
+    <ul>
+      <li><strong>Everest Group's "wash" position</strong> on the Veeva-Salesforce separation. Bounded, non-vendor-loaded, dated (Feb 15 2023; Oct 26 2023 update) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.13 (see Sources legend at end)">*</span></li>
+      <li><strong>RBC's Rishi Jaluria</strong> as the most consistent sell-side voice on the transition across 2023-2026 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.14 (see Sources legend at end)">*</span></li>
+    </ul>
+  </div>
+
+  <h3>Bounded facts vs open scenarios: the discipline split</h3>
+
+  <div class="split-col">
+    <div class="split-cell bounded">
+      <div class="pc-label">Bounded facts (in the public record)</div>
+      <ul>
+        <li>Dec 1, 2022 announcement (embedded in Q3 FY23 earnings)</li>
+        <li>Sept 2030 contractual wind-down plus Dec 2029 product-support extension. Distinct dates.</li>
+        <li>Vault CRM trajectory: 60 to ~140 across FY23-FY26</li>
+        <li>10 of top-20 committed per Veeva FY26; 14 of top-20 per 247WallSt Q3 FY26 (metric-definition difference)</li>
+        <li>Named marquee wins both directions</li>
+        <li>Salesforce LSC GA Oct 11, 2025; Agentforce LS rebrand late 2025-mid 2026</li>
+        <li>Salesforce post-Veeva playbook dated and measured: Apr 2024 IQVIA, May 2025 Partner Network, Oct 2025 GA</li>
+        <li>Everest "wash" plus RBC Jaluria as analyst-layer floor. No Forrester or Gartner LS CRM ranking publicly.</li>
+      </ul>
+    </div>
+    <div class="split-cell open">
+      <div class="pc-label">Open scenarios (must be marked as such)</div>
+      <ul>
+        <li>Will Vault CRM hit 18+ of top-20 committed by 2030?</li>
+        <li>Will Salesforce LSC's 140-in-9-months adoption velocity sustain or decelerate?</li>
+        <li>Will dual-vendor (Veeva CRM + Salesforce non-CRM) become the dominant mid-market pattern?</li>
+        <li>Will the AI-architecture philosophy split (application-embedded vs horizontal-platform) drive lock-in either direction?</li>
+        <li>Will mid-market biotech adoption diverge from top-20 patterns?</li>
+        <li>Will Pfizer's actual platform end-state resolve as Veeva, Salesforce, or both?</li>
+        <li>Will the substantial portions of the Salesforce customer-engagement SKU still rolling out hit their announced 2026 dates?</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>One Bloomberg flag</h3>
+
+  <p>Bloomberg ran a "top-3 global pharma defection" story on <strong>Dec 24, 2024</strong>, but the defecting pharma was <strong>unnamed at the time</strong>. Three named defections (Pfizer, Novartis, AstraZeneca) emerged later in 2025 and 2026, but none independently confirm Bloomberg's specific Dec 24 reference. The Bloomberg piece should not be attributed to a specific named pharma without independent confirmation. <span class="tier tier-2">T2</span></p>
+
+  <div class="sme-prompt" data-section="transition-arc">
+    <label class="sme-prompt-label" for="sme-05">Is the bounded-vs-open split right? Anything you'd move column to column, or that's missing from either side?</label>
+    <textarea class="sme-prompt-input" id="sme-05" rows="4" placeholder="Transition-arc notes."></textarea>
+  </div>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s05">← Previous</button>
+    <button class="page-nav-next" type="button" data-next="s07">Next: What we couldn't find →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 07 WHAT WE COULDN'T FIND -->
+<section id="s07" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2 style="margin:0;">What we couldn't find</h2>
+    <span class="section-tag">~2 min</span>
+  </div>
+
+  <p>The places where the public record ran out: paywalls, missing rankings, ambiguous attributions, customer-portal docs not publicly indexed. Each is named here rather than papered over. If you have access to any of them, that's a place to push deeper.</p>
+
+  <ul>
+    <li><strong>Salesforce 10-K life-sciences-vertical revenue disclosures.</strong> Visible behind paywalls and in non-public investor materials, but specific LS-vertical revenue breakouts are not consistently disclosed in the public 10-K segments reviewed. The "doubled in 9 months" growth claim is from Salesforce's own framing of customer count, not from revenue disclosure.</li>
+    <li><strong>Veeva customer-portal migration tooling documentation.</strong> Veeva's MyVeeva customer portal contains migration tooling docs, training, and accelerator references that aren't surfaced in the public web index. Anything specific about the actual migration toolset depth is constrained by what's published outside the portal.</li>
+    <li><strong>Forrester Wave / Gartner Magic Quadrant for Life Sciences CRM.</strong> As surfaced repeatedly above, none exists publicly in 2024 or 2025 <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.17 (see Sources legend at end)">*</span>. KLAS LS-CRM ranking also does not appear to exist publicly <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: C4 (see Sources legend at end)">*</span>. The absence is itself the finding. The question of <em>whether any of these analyst houses are working on one</em> for 2026-2027 publication isn't resolvable from public sources.</li>
+    <li><strong>Bloomberg Dec 24, 2024 full article text.</strong> Headline and lede summarized in secondary sources; full article behind paywall. Specific attribution of the "top-3 global pharma" reference remains ambiguous in the public record reviewed.</li>
+    <li><strong>Pfizer's actual platform end-state.</strong> Framed publicly as a Salesforce defection (Feb-Mar 2025), but the actual configuration (full migration vs co-existence vs phased) is genuinely open in the public sources <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.11 (see Sources legend at end)">*</span>. Flagged, not attributed.</li>
+    <li><strong>Per-implementation TCO numbers from named SIs.</strong> Capgemini, Deloitte, IQVIA, Indegene, Acquis, Citrin Cooperman, Customertimes, and others have published positioning content; none publish per-implementation TCO numbers at the level of a defensible comparison.</li>
+    <li><strong>Veeva Q&amp;A / commentary from analyst-day events not in the IR public record.</strong> Earnings transcripts and prepared remarks are public; analyst-day Q&amp;A sessions referenced in sell-side notes (RBC, others) are partially summarized but not always quotable directly.</li>
+  </ul>
+
+  <div class="sme-prompt" data-section="what-we-couldnt-find">
+    <label class="sme-prompt-label" for="sme-06">Anywhere worth digging deeper? Sources you have access to that the public web doesn't, or gaps missing from this list?</label>
+    <textarea class="sme-prompt-input" id="sme-06" rows="4" placeholder="Gaps to close or open."></textarea>
+  </div>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s06">← Previous</button>
+    <button class="page-nav-next" type="button" data-next="s08">Next: Compile your notes →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 08 COMPILE YOUR NOTES -->
+<section id="s08" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <h2 style="margin:0;">Compile your notes</h2>
+    <span class="section-tag">Wrap-up</span>
+  </div>
+
+  <p>One last box for anything that didn't fit above, then the Compile button. Hit it and every textarea on the page gets gathered into a single markdown block copied to your clipboard. Paste it back to Sean however works: email, Slack, wherever.</p>
+
+  <div class="sme-compile-zone">
+    <h3>Anything else?</h3>
+    <p style="font-size: 14px; margin-bottom: 8px;">Reactions that didn't fit in the boxes above. Things to know, dig into, or correct.</p>
+    <textarea id="sme-global-notes" class="sme-prompt-input" rows="5" placeholder="Anything you want to add that didn't fit above."></textarea>
+    <button id="sme-compile-btn" class="sme-compile-btn" type="button">Compile my notes</button>
+    <div id="sme-compile-confirmation" class="sme-compile-confirmation" hidden>
+      Notes copied to clipboard. Paste them back to Sean.
+    </div>
+  </div>
+
+  <p style="font-size: 12px; color: var(--text-muted); margin-top: 16px;">No backend, no form service, no tracking. Compile builds the markdown block locally and writes it to your clipboard. If clipboard access fails (some browsers block it without HTTPS), the notes show up in an alert dialog you can copy from manually.</p>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s07">← Previous</button>
+    <button class="page-nav-next" type="button" data-next="s99">Next: Sources legend →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 99 SOURCES LEGEND -->
+<section id="s99" class="section dossier-page">
+  <div class="section-header">
+    <span class="section-number">99</span>
+    <h2 style="margin:0;">Sources legend</h2>
+    <span class="section-tag">Reference</span>
+  </div>
+
+  <p>Evidence cut-off: <strong>2026-06-11</strong>. Document built <strong>2026-06-11</strong>. Every claim above carries an inline finding ID (<span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F1.x (see Sources legend at end)">*</span> through <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.x (see Sources legend at end)">*</span>) and a source-tier badge (<span class="tier tier-1">T1</span> through <span class="tier tier-5">T5</span>). Verification path: locate the finding ID, open the matching source file, follow the URL.</p>
+
+  <table>
+    <thead>
+      <tr><th>Section</th><th>Title</th><th>Findings</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>T1</td><td>Veeva Vault CRM substrate</td><td>22</td></tr>
+      <tr><td>T2</td><td>Salesforce Life Sciences CRM substrate</td><td>24</td></tr>
+      <tr><td>T3</td><td>Architecture &amp; data model comparison</td><td>19</td></tr>
+      <tr><td>T4</td><td>Feature coverage side-by-side</td><td>38</td></tr>
+      <tr><td>T5</td><td>Ecosystem &amp; extensibility</td><td>24</td></tr>
+      <tr><td>T6</td><td>TCO &amp; contracting posture</td><td>16</td></tr>
+      <tr><td>T7</td><td>Customer reference patterns</td><td>25</td></tr>
+      <tr><td>T8</td><td>Transition arc 2025-2030</td><td>19</td></tr>
+      <tr><td>T9</td><td>AI capabilities reality check (added 2026-06-11)</td><td>22</td></tr>
+      <tr><td colspan="2"><strong>Total</strong></td><td><strong>209</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="src-block">
+    <h4>Tier 1: Veeva primary sources</h4>
+    <ul>
+      <li>veeva.com/products/crm-suite/. Vault CRM Suite product page</li>
+      <li>veeva.com/products/vault-platform/. Vault Platform substrate, Java SDK, Direct Data API</li>
+      <li>ir.veeva.com/news/news-details/2026/Veeva-Announces-Fourth-Quarter-and-Fiscal-Year-2026-Results/. FY26 Q4 results; 1,552 total, 125+ live, 10/20 top biopharma</li>
+      <li>ir.veeva.com/news/news-details/2025/Bristol-Myers-Squibb-Commits-to-Veeva-Vault-CRM/. BMS commitment Sep 22, 2025</li>
+      <li>ir.veeva.com/news/news-details/2025/Veeva-Announces-Expanded-Partnership-with-Roche/. Roche expansion Nov 24, 2025</li>
+      <li>veeva.com/resources/novo-nordisk-international-operations-commits-to-veeva-vault-crm/. Novo Nordisk IO Jan 2026</li>
+      <li>veeva.com/resources/merck-kgaa-darmstadt-germany-selects-veeva-vault-crm-worldwide/. Merck KGaA worldwide</li>
+      <li>veeva.com/resources/veeva-announces-first-customer-win-and-april-2024-availability-for-vault-crm-the-next-generation-of-crm-for-life-sciences/. original GA + March-2026-updated EOL footnote pushing legacy CRM support to Dec 2029</li>
+      <li>crmhelp.veeva.com/doc/Content/CRM_topics/MyInsightsStudio/StudioOverview.htm. MyInsights Studio</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 1: Salesforce primary sources</h4>
+    <ul>
+      <li>salesforce.com/news/stories/life-sciences-cloud-for-customer-engagement-availability/. LSC GA Sept 25, 2025 (Oct 11 ship)</li>
+      <li>salesforce.com/news/stories/industry-leaders-choose-life-sciences-cloud/. "70-plus organizations"</li>
+      <li>salesforce.com/news/press-releases/2025/05/08/partner-network-for-life-sciences-announcement/. Partner Network May 8, 2025</li>
+      <li>investor.salesforce.com/news/news-details/2025/Salesforces-Agentforce-Life-Sciences-Selected-by-AstraZeneca-as-Its-Unified-Global-Platform-to-Help-Transform-Customer-Engagement/. AstraZeneca March 2026</li>
+      <li>salesforce.com/news/press-releases/2025/12/17/novartis-agentforce-life-sciences-customer-engagement/. Novartis Dec 17, 2025</li>
+      <li>salesforce.com/uk/news/press-releases/2026/04/20/chiesi-group-agentforce-life-sciences-transforms-customer-engagement/. Chiesi April 20, 2026</li>
+      <li>salesforce.com/news/stories/viatris-agentforce-life-sciences-global-commercial-transformation/. Viatris June 2, 2026</li>
+      <li>iqvia.com/newsroom/2024/04/iqvia-and-salesforce-expand-global-partnership-to-accelerate-the-development-of-life-sciences-cloud. IQVIA-Salesforce April 2024</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 2: Reputable secondary (analyst + sell-side + trade)</h4>
+    <ul>
+      <li>everestgrp.com/life-sciences-industry/will-it-be-happily-ever-after-post-veeva-salesforce-divorce.html. Everest Group Feb 15, 2023</li>
+      <li>everestgrp.com/market-insights/it-services/veeva-salesforce-relationship-highlights.html. Everest Oct 26, 2023 update</li>
+      <li>cnbc.com/2023/03/04/salesforce-faces-prospect-of-platform-customers-leaving-after-veeva.html. Rishi Jaluria RBC commentary</li>
+      <li>theglobeandmail.com/investing/markets/markets-news/motley/571935/veeva-veev-q4-2026-earnings-call-transcript/. Veeva Q4 FY26 transcript, 140 customers live</li>
+      <li>theglobeandmail.com/investing/markets/stocks/VEEV/pressreleases/2051732/rbc-capital-reaffirms-their-buy-rating-on-veeva-systems-veev/. RBC May 20, 2026 reaffirm</li>
+      <li>bloomberg.com/news/articles/2024-12-24/salesforce-stokes-fight-with-veeva-by-snagging-drug-customers. Bloomberg Dec 24, 2024 (top-3 defection unnamed at time)</li>
+      <li>pharmavoice.com/news/veeva-salesforce-split-pharma-biotech-navigate-divorce/739985/. PharmaVoice Feb 13 2025</li>
+      <li>diginomica.com/veeva-vs-salesforce-services-questions-life-sciences-organizations-need-be-asking-and-time-running. Deloitte's Erica Adams Jan 2026</li>
+      <li>contractpharma.com/breaking-news/novo-nordisks-international-operations-adopt-veeva-vault-crm/. Novo Nordisk IO Jan 2026 confirmation</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 2-3: SI positioning, third-party trackers, analyst syntheses</h4>
+    <ul>
+      <li>intuitionlabs.ai/articles/veeva-salesforce-split-pharma-crm-shake-up. April 2026 independent synthesis</li>
+      <li>247wallst.com/investing/2026/03/04/live-will-veeva-systems-rally-after-q4-earnings-tonight/. Q3 FY26 milestone (115 customers, 14 top-20 committed)</li>
+      <li>capgemini.com/wp-content/uploads/2025/07/CRM-health-check-in-Life-Sciences.pdf. Capgemini neutral diagnostic July 2025</li>
+      <li>resources.indegene.com/indegene/pdf/articles/navigating-veeva-vault-and-salesforce-life-sciences-cloud.pdf. Indegene SI guide</li>
+      <li>customertimes.com/blogs/the-veeva-salesforce-split-a-field-guide-for-life-sciences-leaders. Customertimes (SF-tilted)</li>
+      <li>citrincooperman.com/In-Focus-Resource-Center/Why-Life-Sciences-Companies-Should-Stay-with-Salesforce-HLS-Post-Veeva-Split. Citrin Cooperman pro-Salesforce Sep 16 2025</li>
+      <li>acquisconsulting.com/our-thinking/salesforce-life-sciences-cloud-veeva-crm/. Acquis Consulting neutral</li>
+      <li>gartner.com/reviews/product/veeva-crm. Gartner Peer Insights (explicitly NOT a Magic Quadrant)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 1: TCO / pricing</h4>
+    <ul>
+      <li>Salesforce LSC published pricing page (4 SKUs) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.1 (see Sources legend at end)">*</span></li>
+      <li>Salesforce Premier Success Plan pricing <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.2 (see Sources legend at end)">*</span></li>
+      <li>Salesforce Aug 1, 2025 6% list-price-increase announcement <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.3 (see Sources legend at end)">*</span></li>
+      <li>Vendr procurement benchmark for Veeva Systems contracts ($211,872/year median) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.5 (see Sources legend at end)">*</span></li>
+      <li>Exeevo published 3-year TCO competitor model (Sep 2024) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F6.11 (see Sources legend at end)">*</span>. vendor-adjacent, flagged T3</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 1-2: F9 AI capabilities reality check (added 2026-06-11)</h4>
+    <p style="margin: 0 0 8px 0; color: var(--text-secondary); font-size: 13px;">22 findings (F9.1 through F9.22) added to refresh the AI treatment: agent count, MCP architecture, hallucination/accuracy posture, and the 140-orgs portfolio qualifier. Full thread at <code>research/thread-9-ai-reality-check.md</code>.</p>
+    <ul>
+      <li>veeva.com/resources/veeva-ai-agents-now-available-to-increase-productivity-and-customer-centricity/. Veeva 3 Vault CRM agents Dec 2025 launch <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.1 (see Sources legend at end)">*</span></li>
+      <li>veeva.com/resources/veeva-ai-for-promomats-quick-check-agent-and-content-agent/. PromoMats Quick Check + Content Agent (Sept 2025) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.1 (see Sources legend at end)">*</span></li>
+      <li>rn.veevavault.help/en/lr/new-in-26r1/. Veeva Safety Narrative Agent (26R1 release notes) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.10 (see Sources legend at end)">*</span></li>
+      <li>veeva.com/resources/veeva-announces-falcon-an-agentic-platform-and-standard-agents-to-deliver-agentic-labor-in-drug-development/. Falcon platform announcement (May 27, 2026) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.5 (see Sources legend at end)">*</span></li>
+      <li>veeva.com/resources/veeva-acquires-ostro/. Ostro acquisition (Mar 10, 2026, ~$100M) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.6 (see Sources legend at end)">*</span></li>
+      <li>linkedin.com/posts/pgassner_veevaai-activity-7370815847675674624-3IzL. Peter Gassner MCP commitment (Sept 4, 2025): "Vault next year will become an MCP server" <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.2 (see Sources legend at end)">*</span></li>
+      <li>cdata.com/drivers/veeva/mcp/. Third-party CData Veeva MCP wrapper (read-only) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.3 (see Sources legend at end)">*</span></li>
+      <li>drugdiscoverytrends.com/salesforce-lands-140-life-sciences-clients-pitches-headless-ai-to-pharma/. Drug Discovery Trends (June 1, 2026): Joe Ferraro on Salesforce headless MCP strategy + 140-orgs portfolio qualifier <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.14, F9.17 (see Sources legend at end)">*</span></li>
+      <li>salesforce.com/blog/measure-ai-agent-success/. Salesforce Customer Zero 92% accuracy / 89% task completion (May 12, 2026) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.13, F9.16 (see Sources legend at end)">*</span></li>
+      <li>salesforce.com/news/stories/agentforce-life-sciences-140-organizations/. Salesforce 140-orgs announcement (May 19, 2026) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.19 (see Sources legend at end)">*</span></li>
+      <li>salesforceben.com/are-agentforce-hallucinations-a-problem-or-is-it-just-your-bad-data/. Salesforce Ben hallucination postmortem (T2) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.19 (see Sources legend at end)">*</span></li>
+      <li>solutions4sf.com/blog/agentforce-b2b-reality-check/. 77% B2B implementation failure rate breakdown (T3, methodology fuzzy) <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F9.12, F9.18 (see Sources legend at end)">*</span></li>
+      <li>tellius.com/resources/blog/best-ai-platforms-for-pharma-field-force-effectiveness-in-2026-10-platforms-compared. Tellius Feb 2026: "Agentforce LS is general-purpose, pharma-thin" (T2) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.16 (see Sources legend at end)">*</span></li>
+      <li>fiercepharma.com/marketing/veeva-shells-out-100m-ostro-and-its-ai-chat-tool-pharma-brand-engagement. FiercePharma Ostro coverage <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.5 (see Sources legend at end)">*</span></li>
+      <li>intuitionlabs.ai/articles/veeva-ai-roadmap-crm-bot-agents-2026. IntuitionLabs Veeva AI roadmap deep-dive (June 2026, T2) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.8 (see Sources legend at end)">*</span></li>
+      <li>reddit.com/r/salesforce (multiple threads): direct user skepticism on Agentforce deployments (T4) <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F9.15 (see Sources legend at end)">*</span></li>
+    </ul>
+  </div>
+
+  <h3>Explicitly NOT cited</h3>
+  <ul>
+    <li>No Forrester Wave for Life Sciences CRM. none found in 2024 or 2025 public record <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.17 (see Sources legend at end)">*</span></li>
+    <li>No Gartner Magic Quadrant for Life Sciences CRM. none found <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: F8.17 (see Sources legend at end)">*</span></li>
+    <li>No KLAS Research LS-CRM ranking. does not appear to exist publicly <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: C4 (see Sources legend at end)">*</span></li>
+    <li>No Bloomberg Dec 24 2024 attribution to a specific named pharma <span class="fid" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Source: T8.2 (see Sources legend at end)">*</span></li>
+    <li>No post-2030 outcome claims as fact. marked as open scenarios <span class="fid fid-cluster" tabindex="0" role="button" aria-label="Source citation" data-tooltip="Sources: F8.18, F8.19 (see Sources legend at end)">*</span></li>
+  </ul>
+
+  <p style="margin-top: 18px; color: var(--text-secondary); font-size: 13px; font-style: italic;">If a claim above is wrong, it's because a source was stale or misread. Finding-ID-traceable citation, tier discipline, and surfaced contradictions are what let a reader find and correct any single error without invalidating the whole.</p>
+
+  <div class="page-nav">
+    <button class="page-nav-prev" type="button" data-prev="s08">← Previous</button>
+    <span class="page-nav-spacer"></span>
+  </div>
+</section>
+
+<footer style="margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+  <p><strong>Veeva Vault CRM vs Salesforce LS CRM</strong></p>
+  <p>Built 2026-06-11. Evidence cut-off 2026-06-11. 209 cited findings across 9 dimensions. Single-file HTML.</p>
+</footer>
+
+</main>
+
+<script>
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (sb) sb.classList.toggle('open');
+}
+
+/* ─── Pagination: one section visible at a time ─── */
+const pages = document.querySelectorAll('.dossier-page');
+const navLinks = document.querySelectorAll('.nav-item');
+
+function setActivePage(id, options) {
+  const opts = options || {};
+  if (!id || !document.getElementById(id)) id = 's00';
+  pages.forEach(p => {
+    p.classList.toggle('active', p.id === id);
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+  });
+  if (opts.updateHash !== false) {
+    history.replaceState(null, '', '#' + id);
+  }
+  if (opts.scroll !== false) {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+}
+
+/* Sidebar nav clicks */
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const href = link.getAttribute('href') || '';
+    const id = href.replace(/^#/, '');
+    setActivePage(id);
+    if (window.innerWidth <= 768) {
+      const sb = document.getElementById('sidebar');
+      if (sb) sb.classList.remove('open');
+    }
+  });
+});
+
+/* Next / Previous buttons inside each section */
+document.querySelectorAll('.page-nav-next').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const next = btn.getAttribute('data-next');
+    if (next) setActivePage(next);
+  });
+});
+document.querySelectorAll('.page-nav-prev').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const prev = btn.getAttribute('data-prev');
+    if (prev) setActivePage(prev);
+  });
+});
+
+/* Honor URL hash on load + browser back/forward */
+const initialId = (window.location.hash || '#s00').replace(/^#/, '');
+setActivePage(initialId, { updateHash: false, scroll: false });
+
+window.addEventListener('hashchange', () => {
+  const id = (window.location.hash || '#s00').replace(/^#/, '');
+  setActivePage(id, { updateHash: false });
+});
+
+/* ─── Notes rail: live mirror of every textarea ─── */
+function toggleNotesRail() {
+  const rail = document.getElementById('notes-rail');
+  if (rail) rail.classList.toggle('open');
+}
+
+/* Section ID → human-readable name (for the right-rail cards) */
+const SECTION_NAMES = {
+  's01': 'What stands out',
+  's02': 'Capability matrix',
+  's03': 'Customer-base divergence',
+  's04': 'TCO asymmetry',
+  's05': 'AI capabilities',
+  's06': 'Transition arc',
+  's07': "What we couldn't find",
+  's08': 'Other notes'
+};
+
+/* Define the canonical render order (s01 → s08) */
+const NOTE_ORDER = ['s01', 's02', 's03', 's04', 's05', 's06', 's07', 's08'];
+
+function getNoteEntries() {
+  const entries = [];
+  /* Section-level SME prompts */
+  document.querySelectorAll('.sme-prompt').forEach(p => {
+    const input = p.querySelector('.sme-prompt-input');
+    if (!input) return;
+    const value = input.value.trim();
+    if (!value) return;
+    /* Find which dossier-page this prompt sits inside */
+    const page = p.closest('.dossier-page');
+    const sectionId = page ? page.id : null;
+    if (!sectionId) return;
+    entries.push({
+      sectionId,
+      sectionName: SECTION_NAMES[sectionId] || sectionId,
+      snippet: value.length > 80 ? value.slice(0, 80) + '…' : value,
+      fullText: value
+    });
+  });
+  /* Global notes at s08 */
+  const globalEl = document.getElementById('sme-global-notes');
+  if (globalEl && globalEl.value.trim()) {
+    const value = globalEl.value.trim();
+    entries.push({
+      sectionId: 's08',
+      sectionName: 'Other notes',
+      snippet: value.length > 80 ? value.slice(0, 80) + '…' : value,
+      fullText: value
+    });
+  }
+  /* Sort by canonical section order */
+  entries.sort((a, b) => {
+    return NOTE_ORDER.indexOf(a.sectionId) - NOTE_ORDER.indexOf(b.sectionId);
+  });
+  return entries;
+}
+
+function renderNotes() {
+  const list = document.getElementById('notes-rail-list');
+  const empty = document.getElementById('notes-empty');
+  const badge = document.getElementById('notes-rail-badge');
+  if (!list) return;
+  const entries = getNoteEntries();
+
+  /* Clear all but the empty-state node */
+  Array.from(list.querySelectorAll('.note-card')).forEach(n => n.remove());
+
+  if (entries.length === 0) {
+    if (empty) empty.style.display = '';
+    if (badge) { badge.hidden = true; badge.textContent = '0'; }
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  if (badge) { badge.hidden = false; badge.textContent = String(entries.length); }
+
+  entries.forEach(entry => {
+    const card = document.createElement('div');
+    card.className = 'note-card';
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.dataset.targetSection = entry.sectionId;
+
+    const name = document.createElement('div');
+    name.className = 'note-card-section';
+    name.textContent = entry.sectionName;
+    card.appendChild(name);
+
+    const snip = document.createElement('div');
+    snip.className = 'note-card-snippet';
+    snip.textContent = entry.snippet;
+    card.appendChild(snip);
+
+    const jump = () => {
+      setActivePage(entry.sectionId);
+      if (window.innerWidth <= 1280) {
+        const rail = document.getElementById('notes-rail');
+        if (rail) rail.classList.remove('open');
+      }
+    };
+    card.addEventListener('click', jump);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); jump(); }
+    });
+    list.appendChild(card);
+  });
+}
+
+/* Wire input listeners on every SME textarea + the global notes box */
+document.querySelectorAll('.sme-prompt-input, #sme-global-notes').forEach(el => {
+  el.addEventListener('input', renderNotes);
+});
+
+/* Initial render */
+renderNotes();
+
+/* ─── SME response-capture: Compile button ─── */
+document.getElementById('sme-compile-btn').addEventListener('click', () => {
+  const prompts = document.querySelectorAll('.sme-prompt');
+  const globalNotes = document.getElementById('sme-global-notes').value.trim();
+  const lines = ['# My notes on the Veeva vs Salesforce comparison', ''];
+  lines.push('_Captured ' + new Date().toISOString().split('T')[0] + ' from the SME review surface._');
+  lines.push('');
+  prompts.forEach(p => {
+    const section = p.dataset.section || 'unspecified-section';
+    const labelEl = p.querySelector('.sme-prompt-label');
+    const inputEl = p.querySelector('.sme-prompt-input');
+    const label = labelEl ? labelEl.innerText.trim() : '';
+    const value = inputEl ? inputEl.value.trim() : '';
+    if (value) {
+      lines.push('## Re: ' + section);
+      if (label) lines.push('> ' + label);
+      lines.push('');
+      lines.push(value);
+      lines.push('');
+    }
+  });
+  if (globalNotes) {
+    lines.push('## Other notes');
+    lines.push('');
+    lines.push(globalNotes);
+    lines.push('');
+  }
+  if (lines.length === 4) {
+    lines.push('_(No reactions captured)_');
+  }
+  const compiled = lines.join('\n');
+  const showConfirmation = () => {
+    const conf = document.getElementById('sme-compile-confirmation');
+    if (!conf) return;
+    conf.hidden = false;
+    setTimeout(() => { conf.hidden = true; }, 4000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(compiled).then(showConfirmation).catch(() => {
+      alert('Clipboard copy failed. Here are your notes. Copy them manually:\n\n' + compiled);
+    });
+  } else {
+    alert('Clipboard not available in this browser. Here are your notes. Copy them manually:\n\n' + compiled);
+  }
+});
+</script>
+
+</body>
+</html>
