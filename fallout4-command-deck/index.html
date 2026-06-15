@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carl — Endgame Command Deck</title>
+<style>
+/* ─── Design tokens (Hub 360 lineage) ─── */
+:root{
+  --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+  --font-mono:"SF Mono",SFMono-Regular,ui-monospace,Menlo,Consolas,monospace;
+  --bg:#fafaf9;--surface:#f5f5f4;--card:#ffffff;--code-bg:#e7e5e4;
+  --border:#e7e5e4;--border-strong:#d6d3d1;
+  --text-muted:#a8a29e;--text-secondary:#78716c;--text-body:#44403c;--text-heading:#292524;--text-strong:#1c1917;
+  --blue:#2563eb;--blue-bg:#eff6ff;--blue-line:#3b82f6;
+  --red:#dc2626;--red-bg:#fef2f2;--red-line:#ef4444;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-line:#f59e0b;
+  --green:#16a34a;--green-bg:#f0fdf4;--green-line:#22c55e;
+  --purple:#9333ea;--purple-bg:#faf5ff;--purple-line:#a855f7;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.05);
+}
+[data-theme="dark"]{
+  --bg:#161513;--surface:#1f1d1a;--card:#211f1c;--code-bg:#2d2a26;
+  --border:#34302b;--border-strong:#403a33;
+  --text-muted:#6b645c;--text-secondary:#a39a8f;--text-body:#d8d1c7;--text-heading:#ece6dd;--text-strong:#f7f3ec;
+  --blue:#60a5fa;--blue-bg:#15233a;--blue-line:#3b82f6;
+  --red:#f87171;--red-bg:#3a1717;--red-line:#ef4444;
+  --amber:#fbbf24;--amber-bg:#3a2c10;--amber-line:#f59e0b;
+  --green:#4ade80;--green-bg:#13301d;--green-line:#22c55e;
+  --purple:#c084fc;--purple-bg:#2a1838;--purple-line:#a855f7;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+body{font-family:var(--font-body);font-size:16px;line-height:1.65;color:var(--text-body);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+strong{color:var(--text-heading)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--code-bg);padding:1px 6px;border-radius:4px;color:var(--text-body)}
+:focus-visible{outline:2px solid var(--blue-line);outline-offset:2px}
+
+/* ─── Layout ─── */
+.sidebar{width:288px;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:20px 0;z-index:100;display:flex;flex-direction:column}
+.sb-head{display:flex;align-items:center;justify-content:space-between;padding:0 20px 14px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.sb-title{font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--text-heading);text-transform:uppercase}
+.iconbtn{width:34px;height:34px;background:transparent;border:1px solid var(--border-strong);border-radius:8px;cursor:pointer;color:var(--text-body);font-size:15px;display:flex;align-items:center;justify-content:center}
+.iconbtn:hover{background:var(--code-bg)}
+.nav-group{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:12px 20px 4px}
+.nav-group small{display:block;font-weight:500;letter-spacing:.02em;text-transform:none;color:var(--text-muted);font-size:10px;margin-top:1px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:5px 20px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;border-left:3px solid transparent}
+.nav-item:hover{background:var(--code-bg);color:var(--text-heading);text-decoration:none}
+.nav-item.active{background:var(--blue-bg);color:var(--blue);border-left-color:var(--blue-line);font-weight:700}
+.nav-dot{width:6px;height:6px;min-width:6px;border-radius:50%;background:var(--border-strong)}
+.nav-item.active .nav-dot{background:var(--blue-line)}
+.sb-progress{margin-top:auto;padding:16px 20px 6px;border-top:1px solid var(--border)}
+.sb-progress .lab{font-size:11px;color:var(--text-muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.bar{height:5px;background:var(--border-strong);border-radius:3px;overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--green-line);border-radius:3px;width:0;transition:width .4s ease}
+
+.main{margin-left:288px;max-width:840px;padding:40px 44px 160px}
+.hamburger{display:none;position:fixed;top:12px;left:12px;z-index:200;width:42px;height:42px;background:var(--card);border:1px solid var(--border-strong);border-radius:9px;cursor:pointer;font-size:18px;align-items:center;justify-content:center;color:var(--text-body)}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99}
+
+/* ─── Hero ─── */
+.hero{border:1px solid var(--border);background:var(--card);border-radius:16px;padding:26px 28px;box-shadow:var(--shadow);margin-bottom:26px}
+.hero .kicker{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.hero h1{font-size:30px;font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text-strong);margin-bottom:6px}
+.hero .sub{color:var(--text-secondary);font-size:14px;margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
+.chip{font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px;background:var(--code-bg);color:var(--text-body);border:1px solid var(--border)}
+.chip.mono{font-family:var(--font-mono);font-size:11px}
+.lockrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:16px;border-top:1px dashed var(--border-strong)}
+.lock{font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:9px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-line);display:flex;align-items:center;gap:6px}
+
+/* ─── Typography blocks ─── */
+h2{font-size:23px;font-weight:800;letter-spacing:-.01em;color:var(--text-heading);margin:8px 0 4px}
+h3{font-size:17px;font-weight:700;color:var(--text-heading);margin:22px 0 8px}
+h4{font-size:14px;font-weight:700;color:var(--text-heading);margin:16px 0 6px;letter-spacing:.01em}
+p{margin:10px 0}ul,ol{margin:10px 0;padding-left:22px}li{margin:4px 0}
+hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+.section{scroll-margin-top:20px;padding-top:16px}
+.sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--border);padding-bottom:10px;margin-bottom:6px}
+.sec-tag{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);white-space:nowrap}
+.lede{color:var(--text-secondary);font-size:15px;font-style:italic;margin:4px 0 8px}
+
+/* ─── Callouts ─── */
+.callout{border:1px solid var(--border);border-left-width:4px;border-radius:10px;padding:13px 16px;margin:14px 0;background:var(--card);font-size:14.5px}
+.callout .clab{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px}
+.callout p{margin:6px 0}.callout p:first-of-type{margin-top:2px}
+.c-crit{background:var(--red-bg);border-left-color:var(--red-line)}.c-crit .clab{color:var(--red)}
+.c-warn{background:var(--amber-bg);border-left-color:var(--amber-line)}.c-warn .clab{color:var(--amber)}
+.c-tip{background:var(--green-bg);border-left-color:var(--green-line)}.c-tip .clab{color:var(--green)}
+.c-info{background:var(--blue-bg);border-left-color:var(--blue-line)}.c-info .clab{color:var(--blue)}
+.c-what{background:var(--amber-bg);border-left-color:var(--amber-line)}.c-what .clab{color:var(--amber)}
+.c-pick{background:var(--green-bg);border-left-color:var(--green-line)}.c-pick .clab{color:var(--green)}
+.c-pending{background:var(--purple-bg);border-left:4px dashed var(--purple-line);border-top:1px dashed var(--purple-line);border-right:1px dashed var(--purple-line);border-bottom:1px dashed var(--purple-line)}.c-pending .clab{color:var(--purple)}
+
+/* ─── Board "what it is" structure ─── */
+.q{font-weight:700;color:var(--text-heading);font-size:15.5px}
+
+/* ─── Archive (revert point) ─── */
+details.archive{border:1px solid var(--border-strong);border-radius:14px;background:var(--surface);margin:16px 0;box-shadow:var(--shadow);overflow:hidden}
+details.archive > summary{cursor:pointer;list-style:none;padding:16px 20px;font-size:15px;font-weight:800;color:var(--text-secondary);background:var(--code-bg);user-select:none}
+details.archive > summary::-webkit-details-marker{display:none}
+details.archive > summary::before{content:"▸ ";color:var(--text-muted)}
+details.archive[open] > summary::before{content:"▾ "}
+details.archive[open] > summary{border-bottom:1px solid var(--border)}
+.archive-body{padding:8px 20px 16px;opacity:.93}
+.archive-note{font-size:13px;color:var(--text-secondary);font-style:italic;background:var(--amber-bg);border-left:3px solid var(--amber-line);padding:8px 12px;border-radius:6px;margin:12px 0}
+
+/* ─── Tables ─── */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--surface);font-weight:700;color:var(--text-heading);font-size:12.5px;letter-spacing:.02em}
+td.yes{color:var(--green)}td.no{color:var(--red)}
+
+/* ─── Order-of-ops checklist ─── */
+.phase{border:1px solid var(--border);background:var(--card);border-radius:14px;padding:6px 20px 16px;margin:16px 0;box-shadow:var(--shadow)}
+.phase-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.phase-name{font-size:16px;font-weight:800;color:var(--text-heading)}
+.phase-count{font-size:12px;font-family:var(--font-mono);color:var(--text-secondary);background:var(--code-bg);padding:3px 9px;border-radius:7px}
+.checklist{margin:8px 0}
+.step{display:flex;align-items:flex-start;gap:11px;padding:6px 0;border-bottom:1px solid var(--border)}
+.step:last-child{border-bottom:none}
+.step input[type=checkbox]{appearance:none;width:20px;height:20px;min-width:20px;border:2px solid var(--border-strong);border-radius:5px;background:var(--card);cursor:pointer;margin-top:2px;position:relative}
+.step input:checked{background:var(--green-line);border-color:var(--green-line)}
+.step input:checked::after{content:"";position:absolute;left:5px;top:1px;width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.step label{font-size:14.5px;line-height:1.5;cursor:pointer;color:var(--text-body)}
+.step input:checked + label{color:var(--text-muted);text-decoration:line-through;text-decoration-color:var(--border-strong)}
+.step label b{color:var(--text-heading)}
+.step input:checked + label b{color:var(--text-muted)}
+
+/* ─── Answers panel ─── */
+.answers{border:1px solid var(--blue-line);background:var(--card);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+.answers .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:6px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field.full{grid-column:1 / -1}
+.field label{font-size:12.5px;font-weight:700;color:var(--text-heading)}
+.field .hint{font-size:11.5px;color:var(--text-muted);font-weight:400}
+.field input,.field select,.field textarea{font-family:inherit;font-size:14px;color:var(--text-body);background:var(--bg);border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;width:100%;resize:vertical}
+.field textarea{min-height:52px;line-height:1.5}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue-line);outline:none}
+.note-field{margin-top:12px}
+.note-field label{font-size:12px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:4px}
+.note-field textarea{width:100%;min-height:44px;font-family:inherit;font-size:13.5px;color:var(--text-body);background:var(--bg);border:1px dashed var(--border-strong);border-radius:8px;padding:8px 10px;resize:vertical;line-height:1.5}
+
+/* ─── Floating export ─── */
+.fab{position:fixed;right:26px;bottom:26px;z-index:150;display:flex;gap:10px;align-items:center}
+.fab button{font-family:inherit;font-weight:700;font-size:14px;border:none;border-radius:12px;padding:13px 18px;cursor:pointer;box-shadow:var(--shadow)}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{filter:brightness(1.07)}
+.btn-ghost{background:var(--card);color:var(--text-secondary);border:1px solid var(--border-strong)!important;font-weight:600;font-size:13px;padding:11px 14px}
+.btn-ghost:hover{color:var(--red);border-color:var(--red-line)!important}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--text-strong);color:var(--bg);padding:12px 22px;border-radius:11px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s ease;z-index:300}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:880px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s ease;width:280px}
+  .sidebar.open{transform:translateX(0)}
+  .backdrop.open{display:block}
+  .hamburger{display:flex}
+  .main{margin-left:0;padding:64px 18px 160px}
+  .answers .grid{grid-template-columns:1fr}
+  .fab{right:14px;bottom:14px}
+}
+</style>
+</head>
+<body>
+
+<button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+<div class="backdrop" id="backdrop"></div>
+
+<!-- ─────────── SIDEBAR ─────────── -->
+<nav class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <span class="sb-title">⚙ Command Deck</span>
+    <button class="iconbtn" id="theme" aria-label="Toggle theme">🌙</button>
+  </div>
+
+  <div class="nav-group">Live State</div>
+  <a class="nav-item" href="#answers"><span class="nav-dot"></span>Answers &amp; Verification</a>
+
+  <div class="nav-group">⚔ Warlord Plan <small>do in sequence</small></div>
+  <a class="nav-item" href="#w1"><span class="nav-dot"></span>1 · Close open work</a>
+  <a class="nav-item" href="#w2"><span class="nav-dot"></span>2 · Institute via Minutemen</a>
+  <a class="nav-item" href="#w3"><span class="nav-dot"></span>3 · Prydwen Assault</a>
+  <a class="nav-item" href="#w4"><span class="nav-dot"></span>4 · Powers Combined (cut)</a>
+  <a class="nav-item" href="#w5"><span class="nav-dot"></span>5 · Settlement Prep</a>
+  <a class="nav-item" href="#w6"><span class="nav-dot"></span>6 · Nuka-World / Overboss</a>
+  <a class="nav-item" href="#w7"><span class="nav-dot"></span>7 · The Minutemen-killer</a>
+  <a class="nav-item" href="#w8"><span class="nav-dot"></span>8 · Endstate: Warlord</a>
+  <a class="nav-item" href="#watch"><span class="nav-dot"></span>👀 Things to Watch</a>
+
+  <div class="nav-group">The Board <small>quest explainers — reference</small></div>
+  <a class="nav-item" href="#board-a"><span class="nav-dot"></span>A · Faction Sequence</a>
+  <a class="nav-item" href="#board-b"><span class="nav-dot"></span>B · Prydwen Rampage</a>
+  <a class="nav-item" href="#board-c"><span class="nav-dot"></span>C · Synth Shaun</a>
+  <a class="nav-item" href="#board-d"><span class="nav-dot"></span>D · L56 Perk</a>
+  <a class="nav-item" href="#board-e"><span class="nav-dot"></span>E · Verification Items</a>
+
+  <div class="nav-group">Mechanic Sidebars <small>how-to</small></div>
+  <a class="nav-item" href="#m-grenade"><span class="nav-dot"></span>Vertibird signal grenade</a>
+  <a class="nav-item" href="#m-elevator"><span class="nav-dot"></span>Airport elevator</a>
+  <a class="nav-item" href="#m-minigun"><span class="nav-dot"></span>Mounted minigun</a>
+  <a class="nav-item" href="#m-captured"><span class="nav-dot"></span>Captured vertibirds</a>
+
+  <div class="nav-group">Archived</div>
+  <a class="nav-item" href="#revert"><span class="nav-dot"></span>🛡️ Revert Point (MM-sovereign)</a>
+
+  <div class="sb-progress">
+    <div class="lab"><span>War-plan progress</span><span id="pct">0%</span></div>
+    <div class="bar"><i id="progfill"></i></div>
+  </div>
+</nav>
+
+<!-- ─────────── MAIN ─────────── -->
+<main class="main">
+
+  <div class="hero">
+    <div class="kicker">Fallout 4 · Carl · 🔥 Raider Warlord Apocalypse</div>
+    <h1>Endgame Command Deck</h1>
+    <div class="sub">Keep this open while you play. Check things off, drop your answers, then hit <strong>Copy briefing</strong> and paste it back to the agent. Everything you type is saved in your browser automatically.</div>
+    <div class="chips">
+      <span class="chip mono">L55 · L56 pending</span>
+      <span class="chip mono">Xbox · Normal</span>
+      <span class="chip mono">Nuka-World DLC required</span>
+      <span class="chip mono">T-60 Model F + Tesla arms</span>
+      <span class="chip mono">Kiloton Radium Rifle</span>
+      <span class="chip mono">Overseer's Guardian</span>
+      <span class="chip mono">Crippling Missile Launcher</span>
+      <span class="chip mono">Mk V Ballistic Weave</span>
+      <span class="chip mono">INT 9 · CHA 7</span>
+    </div>
+    <div class="lockrow">
+      <span class="lock">✓ Warlord path (operational)</span>
+      <span class="lock">✓ Institute via Minutemen FIRST</span>
+      <span class="lock">✓ Manual Prydwen (Path A only)</span>
+      <span class="lock">✓ Take synth Shaun</span>
+    </div>
+    <div class="callout c-crit" style="margin-bottom:0"><span class="clab">🔥 Active Plan — Raider Warlord Apocalypse</span>
+      <p>Carl turns on and destroys <strong>every organized faction the developers built</strong> — including the Minutemen, the base game's un-killable fail-safe — by exploiting the Nuka-World DLC seam. <strong>Operationally committed; Layer 1 doctrine snapshotted but not yet rewritten</strong> (ratify in-game). The old Minutemen-sovereign ending is preserved as a <a href="#revert">🛡️ Revert Point</a> at the bottom.</p>
+    </div>
+  </div>
+
+  <!-- ─── ANSWERS / VERIFICATION ─── -->
+  <section class="section" id="answers">
+    <div class="sec-head"><span class="sec-tag">Live State</span><h2>Answers &amp; Verification</h2></div>
+    <p class="lede">Fill these in as you check the Pip-Boy. The four at top are the agent's open questions; the rest are the state-update template. Blank fields export as <code>(blank)</code> so the agent sees what's still open.</p>
+    <div class="answers">
+      <div class="grid">
+        <div class="field">
+          <label>L56 perk preference <span class="hint">utility pick — ceiling already reached</span></label>
+          <select id="a-l56">
+            <option value="">— not decided —</option>
+            <option>Nuclear Physicist 1 (agent's pick)</option>
+            <option>Locksmith 1</option>
+            <option>Hacker 1</option>
+            <option>Adamantium Skeleton 2</option>
+            <option>Other / let agent decide</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Settlement count <span class="hint">need ≥ 8 for Nuclear Option</span></label>
+          <input id="a-settlements" type="text" placeholder="e.g. 9 — or 'haven't checked'">
+        </div>
+        <div class="field">
+          <label>X-cell in inventory <span class="hint">+2 ALL SPECIAL pre-Prydwen buff</span></label>
+          <select id="a-xcell">
+            <option value="">— not checked —</option>
+            <option>Yes — in inventory</option>
+            <option>No — never grabbed</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Lone Wanderer 4 confirmed <span class="hint">state shows LW3 in table, LW4 only "assumed"</span></label>
+          <select id="a-lw4">
+            <option value="">— not checked —</option>
+            <option>Yes — 4 ranks filled</option>
+            <option>No — fewer than 4</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Cabot House status <span class="hint">⚠ Artifact Gun has a hard timer — grabbed it yet?</span></label>
+          <textarea id="a-cabot" placeholder="Did you return to Parsons State Asylum and claim the Artifact Gun? Hard-saved after?"></textarea>
+        </div>
+        <div class="field full">
+          <label>Other quests completed since last sync</label>
+          <textarea id="a-quests" placeholder="Anything closed out the agent should log…"></textarea>
+        </div>
+        <div class="field full">
+          <label>Fun stuff to do / things missed</label>
+          <textarea id="a-fun" placeholder="Atom Cats? Cambridge Polymer Labs? Pickman's Gallery? Vault 81 deeper quest? Anything you've been side-eyeing…"></textarea>
+        </div>
+        <div class="field">
+          <label>Caps balance <span class="hint">rough</span></label>
+          <input id="a-caps" type="text" placeholder="e.g. ~4,000">
+        </div>
+        <div class="field">
+          <label>Mini-nuke count <span class="hint">for the Fat Man drop</span></label>
+          <input id="a-nukes" type="text" placeholder="check Aid / Misc">
+        </div>
+        <div class="field full">
+          <label>Anything weird in the quest log you don't understand</label>
+          <textarea id="a-weird" placeholder="Dump it here and the agent will explain it…"></textarea>
+        </div>
+        <div class="field full">
+          <label>Hot takes / questions / things to riff on</label>
+          <textarea id="a-hottakes" placeholder="Whatever's on your mind…"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═════════ WARLORD ORDER OF OPERATIONS ═════════ -->
+  <h2 style="margin-top:8px">⚔ Warlord Order of Operations</h2>
+  <p class="lede">The active plan. Order is load-bearing — read <a href="#watch">Things to Watch</a> before you commit anything irreversible. Checking boxes feeds the war-plan progress bar and the auto-progress block in your copied briefing.</p>
+
+  <div class="callout c-crit"><span class="clab">🔁 The one ordering rule that governs everything</span>
+    <p>Kill the <strong>Institute via the Minutemen, and decapitate the Brotherhood, FIRST</strong> (Phases 2–3) — while still Minutemen-allied, for staging and supply — <em>then</em> pivot raider and turn on the Minutemen (Phases 5–7). The Nuclear Option <em>needs</em> the Minutemen as its delivery vehicle — betray them before the Institute is dead and you can lose the ability to destroy it. This sequence never gambles on that shaky mechanic.</p>
+  </div>
+
+  <section class="section" id="w1">
+    <div class="phase" data-phase="W1 — Close open work (pre-Nuka-World)">
+      <div class="phase-bar"><span class="phase-name">Phase 1 · Close current open work <span style="font-weight:500;color:var(--text-muted)">(before Nuka-World)</span></span><span class="phase-count" data-count></span></div>
+      <div class="callout c-crit"><span class="clab">⏱ Hard timer — do this first</span>
+        <p><strong>Cabot House / Artifact Gun.</strong> Lorenzo's Artifact Gun is delivered ~1 in-game week after the quest. The danger isn't killing Jack early — it's <strong>dawdling on the pickup</strong>: if you wait too long, Jack ages out and disappears, and the gun becomes <strong>permanently unobtainable on Xbox</strong> (no console workaround). Return to Parsons State Asylum on the <em>early</em> side of the window, claim it, hard save.</p>
+      </div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="w1-cabot"><label for="w1-cabot"><b>Cabot:</b> return to Parsons State Asylum early, claim Lorenzo's Artifact Gun, hard save</label></div>
+        <div class="step"><input type="checkbox" id="w1-l56"><label for="w1-l56"><b>L56 perk pick</b> (Nuclear Physicist 1 recommended — set it in the Answers panel)</label></div>
+        <div class="step"><input type="checkbox" id="w1-settlements"><label for="w1-settlements"><b>Confirm ≥ 8 settlements</b> (Nuclear Option gate — see the double-bind in Things to Watch)</label></div>
+        <div class="step"><input type="checkbox" id="w1-xcell"><label for="w1-xcell"><b>Confirm X-cell</b> in Aid items (+2 ALL SPECIAL pre-Prydwen buff)</label></div>
+        <div class="step"><input type="checkbox" id="w1-fatman"><label for="w1-fatman"><b>Confirm Fat Man + mini nuke(s)</b> for the Prydwen exit drop</label></div>
+        <div class="step"><input type="checkbox" id="w1-pa"><label for="w1-pa"><b>PA repaired</b>, fusion cores topped, Kiloton/missile ammo + stims stocked</label></div>
+      </div>
+      <div class="note-field"><label>Phase 1 notes</label><textarea id="note-w1" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="w2">
+    <div class="phase" data-phase="W2 — Destroy Institute via Minutemen">
+      <div class="phase-bar"><span class="phase-name">Phase 2 · Destroy the Institute via Minutemen <span style="font-weight:500;color:var(--text-muted)">(order critical)</span></span><span class="phase-count" data-count></span></div>
+      <p>Do this <strong>while still Minutemen-allied.</strong> This is the whole reason the pivot comes later.</p>
+      <div class="callout c-crit"><span class="clab">⚠ Banished trigger — use a REAL trigger, and KEEP Father alive</span>
+        <p>"Refuse Mass Fusion" is <strong>not</strong> a real Banished trigger — don't assume a polite dialogue "no" works. Trigger it by <strong>killing a NAMED Institute scientist</strong> (Allie Filmore / Dr. Watson / Justin Ayo), then relay out. <strong>Do NOT kill Father</strong> — he must live for the deathbed scene + the Wazer Wifle.</p>
+      </div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="w2-banished"><label for="w2-banished"><b>Trigger Banished</b> — kill a named scientist (Filmore / Watson / Ayo), NOT Father; relay out</label></div>
+        <div class="step"><input type="checkbox" id="w2-castle"><label for="w2-castle"><b>Defend the Castle</b> — Institute counter-attacks (Minutemen still allied)</label></div>
+        <div class="step"><input type="checkbox" id="w2-no"><label for="w2-no"><b>Nuclear Option:</b> needs ≥ 8 settlements or Form Ranks gates you — Sturges holotape → tunnel → reactor</label></div>
+        <div class="step"><input type="checkbox" id="w2-father"><label for="w2-father"><b>Father's deathbed</b> — CHA persuasion (CHA 7 opens it)</label></div>
+        <div class="step"><input type="checkbox" id="w2-shaun"><label for="w2-shaun"><b>TAKE synth Shaun</b> in the relay room → Wazer Wifle + Father's holotape (locked decision)</label></div>
+        <div class="step"><input type="checkbox" id="w2-detonate"><label for="w2-detonate"><b>Detonate</b> — Institute DEAD</label></div>
+      </div>
+      <div class="callout c-pending"><span class="clab">⏳ Pending — agent will write the full walk</span><p>When you reach this phase, your answers trigger the dcc:fallout4 agent to produce the detailed Nuclear Option walkthrough (exact route, fights, the Father conversation options, the rooftop sequence). Paste its reply back here and it gets dropped into this phase.</p></div>
+      <div class="note-field"><label>Phase 2 notes</label><textarea id="note-w2" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="w3">
+    <div class="phase" data-phase="W3 — Prydwen Rampage (decapitate)">
+      <div class="phase-bar"><span class="phase-name">Phase 3 · Prydwen Rampage <span style="font-weight:500;color:var(--text-muted)">(decapitate the Brotherhood; leave the airship floating)</span></span><span class="phase-count" data-count></span></div>
+      <div class="callout c-info"><span class="clab">You can board RIGHT NOW — no provocation needed</span>
+        <p>The Brotherhood is <strong>non-hostile</strong> to Carl, so he boards freely — fast-travel + vertibird signal grenade OR the Boston Airport elevator. There is <strong>no "provoke them first" step</strong>; hostility triggers the instant Carl opens fire on the deck. Do it <strong>now</strong>, while you still have the Castle + Minutemen supply lines for staging — once you go raider, the Castle is hostile. See the <a href="#m-grenade">mechanic sidebars</a> for boarding.</p>
+      </div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="w3-board"><label for="w3-board"><b>Board the Prydwen</b> — Boston Airport elevator OR vertibird signal grenade (you walk right on; they're not hostile yet)</label></div>
+        <div class="step"><input type="checkbox" id="w3-xcell"><label for="w3-xcell"><b>Pop the X-cell</b> (if owned) — +2 ALL SPECIAL ~5 min</label></div>
+        <div class="step"><input type="checkbox" id="w3-open"><label for="w3-open"><b>Open fire</b> — this makes the deck crew hostile on the spot. Kiloton + Tesla arms clear the deck; Crippling MM for any PA knights</label></div>
+        <div class="step"><input type="checkbox" id="w3-maxson"><label for="w3-maxson"><b>Kill Maxson</b> on the command deck → loot Final Judgment (unique Gatling Laser) + Maxson's Battlecoat</label></div>
+        <div class="step"><input type="checkbox" id="w3-fatman"><label for="w3-fatman"><b>Optional:</b> drop a Fat Man on the way out for the cinematic — <strong>roleplay only; it does NOT destroy the airship</strong></label></div>
+        <div class="step"><input type="checkbox" id="w3-leave"><label for="w3-leave"><b>Leave</b> — the Prydwen stays floating as a hollow monument, its leadership dead. Intentional: Carl decapitates, he doesn't orchestrate a demolition</label></div>
+      </div>
+      <div class="callout c-pick"><span class="clab">Result — Brotherhood DECAPITATED, by design</span><p>Maxson dead, leadership looted — <strong>not</strong> scripted-destroyed. Only <em>With Our Powers Combined</em> scripts the airship down, and that's cut from this path. The floating wreck-with-no-leaders is the warlord outcome on purpose.</p></div>
+      <div class="callout c-pending"><span class="clab">⏳ Pending — agent will expand</span><p><strong>World-state aftermath of the floating-Prydwen rampage.</strong> Open question for the game-brain: after manually clearing the deck and leaving the airship intact, are there dangling main-quest entries, surviving-Brotherhood consequences (patrols, hunters), or Danse reactions worth knowing? Low-stakes, nice-to-have — not a blocker.</p></div>
+      <div class="note-field"><label>Phase 3 notes</label><textarea id="note-w3" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="w4">
+    <div class="phase" data-phase="W4 — With Our Powers Combined (cut)">
+      <div class="phase-bar"><span class="phase-name">Phase 4 · <em>With Our Powers Combined</em> — CUT <span style="font-weight:500;color:var(--text-muted)">(deliberate, not a forfeit)</span></span><span class="phase-count" data-count></span></div>
+      <div class="callout c-info"><span class="clab">Cut from this path — by design</span>
+        <p><em>With Our Powers Combined</em> is <strong>CUT</strong> from the warlord path — it needs Minutemen artillery, it's the only thing that actually scripts the airship's destruction, and Sean wants the personal-rampage outcome instead (decapitate Maxson, leave the Prydwen floating). <strong>Not a forfeit — a deliberate design choice.</strong> The Brotherhood is already handled in Phase 3.</p>
+      </div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="w4-skip"><label for="w4-skip"><b>Confirm cut:</b> don't build the 5-settlement artillery, don't talk to Preston to start it — the rampage in Phase 3 already settled the Brotherhood</label></div>
+      </div>
+      <div class="note-field"><label>Phase 4 notes</label><textarea id="note-w4" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="w5">
+    <div class="phase" data-phase="W5 — Settlement Prep (one-way gate)">
+      <div class="phase-bar"><span class="phase-name">Phase 5 · 🏚️ Settlement Prep <span style="font-weight:500;color:var(--text-muted)">(the one-way gate)</span></span><span class="phase-count" data-count></span></div>
+      <div class="callout c-crit"><span class="clab">This is the point of no return for your settlements</span>
+        <p>The raider pivot strips your Minutemen settlements. Stage everything <strong>before</strong> Phase 7 — once Preston turns, Castle / Sanctuary / Starlight are gone as friendly bases and recovering stored material is awkward-to-impossible.</p>
+      </div>
+      <div class="callout c-tip"><span class="clab">🏰 Vault 88 is your permanent fortress</span>
+        <p><strong>Vault 88 can NEVER become a raider outpost or vassal</strong> — it's permanently immune. It stays Carl's safe crafting / repair / stockpile hub through the entire apocalypse. Make it the hub now.</p>
+      </div>
+      <h4>Before the pivot</h4>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="w5-move"><label for="w5-move"><b>Move every named settler / vendor / companion</b> you care about to Vault 88 (they get forced out of converted settlements)</label></div>
+        <div class="step"><input type="checkbox" id="w5-strip"><label for="w5-strip"><b>Strip the workshops you'll lose</b> (Castle, Sanctuary, Starlight…) — pull aluminum, adhesive, ammo, shipments, all stockpiles into Vault 88</label></div>
+        <div class="step"><input type="checkbox" id="w5-vassal"><label for="w5-vassal"><b>Pre-build a tribute vassal</b> — build up a high-food settlement, then vassalize it later so it keeps producing for your raider economy</label></div>
+      </div>
+      <h4>Three fates per settlement (you choose)</h4>
+      <table>
+        <thead><tr><th>Fate</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><b>Outpost</b></td><td>Fully converted raider base; settlers forced out; you build raider stuff. (Need 3 in the Commonwealth.)</td></tr>
+          <tr><td><b>Vassal</b></td><td>Intimidated, not converted; stays populated; you can't build but CAN use their shops; feeds tribute/supplies to outposts via supply line.</td></tr>
+          <tr><td><b>Lost / hostile</b></td><td>Anything MM-aligned you don't convert or vassalize once Preston turns.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout c-info"><span class="clab">Keep it less bloody if you want</span>
+        <p>You can conquer <strong>hostile-occupied locations</strong> (ferals, mirelurks, raiders, Children of the Atom) for the 3 required outposts instead of settler towns — the Preston-hostility triggers on the <em>flag you plant</em>, not on the victims.</p>
+      </div>
+      <div class="callout c-pending"><span class="clab">⏳ Pending — agent will expand</span><p>Optimal settlement-to-outpost/vassal assignment map. Once you decide which settlements you're keeping vs converting, tell the agent and it builds the map here.</p></div>
+      <div class="note-field"><label>Phase 5 notes</label><textarea id="note-w5" placeholder="Which settlements → outpost / vassal / lost?"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="w6">
+    <div class="phase" data-phase="W6 — Nuka-World / become Overboss">
+      <div class="phase-bar"><span class="phase-name">Phase 6 · Buy &amp; enter Nuka-World, become Overboss</span><span class="phase-count" data-count></span></div>
+      <div class="callout c-crit"><span class="clab">🚨 DO NOT TRIGGER OPEN SEASON</span>
+        <p>Open Season is the raider-killing quest — triggering it makes <strong>all of Nuka-World hostile and breaks the apocalypse path.</strong> Do NOT talk friendly-for-help to <strong>Mackenzie Bridgeman</strong>; do NOT openly murder gang members. Either one triggers it.</p>
+      </div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="w6-buy"><label for="w6-buy"><b>Buy Nuka-World</b> (~$15 Xbox; check Game Pass first)</label></div>
+        <div class="step"><input type="checkbox" id="w6-travel"><label for="w6-travel"><b>Travel to the Nuka-World transit center</b> (skip the L30 radio wait — you're L55)</label></div>
+        <div class="step"><input type="checkbox" id="w6-gauntlet"><label for="w6-gauntlet"><b>Taken for a Ride</b> — survive the Gauntlet, kill Overboss Colter</label></div>
+        <div class="step"><input type="checkbox" id="w6-noopen"><label for="w6-noopen"><b>Do NOT trigger Open Season</b> (no friendly-help to Bridgeman; no open gang murder)</label></div>
+        <div class="step"><input type="checkbox" id="w6-ambitious"><label for="w6-ambitious"><b>An Ambitious Plan</b> — meet the 3 gangs</label></div>
+        <div class="step"><input type="checkbox" id="w6-tour"><label for="w6-tour"><b>The Grand Tour</b> — claim the 5 parks for the gangs</label></div>
+      </div>
+      <div class="callout c-pending"><span class="clab">⏳ Pending — agent will expand</span><p>Detailed Gauntlet / Taken for a Ride combat walk. The agent writes it when you reach Nuka-World.</p></div>
+      <div class="note-field"><label>Phase 6 notes</label><textarea id="note-w6" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="w7">
+    <div class="phase" data-phase="W7 — The Minutemen-killer">
+      <div class="phase-bar"><span class="phase-name">Phase 7 · The Minutemen-killer</span><span class="phase-count" data-count></span></div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="w7-home"><label for="w7-home"><b>Home Sweet Home:</b> claim your FIRST Commonwealth raider outpost → drops Preston to lowest affinity instantly</label></div>
+        <div class="step"><input type="checkbox" id="w7-refuse"><label for="w7-refuse"><b>REFUSE / ignore Preston</b> when he asks you to repent → Minutemen faction turns hostile; Castle + Sanctuary attack; Preston leaves permanently</label></div>
+        <div class="step"><input type="checkbox" id="w7-outposts"><label for="w7-outposts"><b>Claim 2 more outposts</b> (3 total)</label></div>
+        <div class="step"><input type="checkbox" id="w7-powerplay"><label for="w7-powerplay"><b>Power Play</b> — gang civil war triggers; pick a side, kill the rebel leader (final Nuka-World quest)</label></div>
+      </div>
+      <div class="callout c-warn"><span class="clab">Power Play forces a gang loss</span><p>The 3rd outpost triggers Power Play and you lose one of the three gangs permanently. Normal flow, not a soft-lock — just know it's coming.</p></div>
+      <div class="note-field"><label>Phase 7 notes</label><textarea id="note-w7" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="w8">
+    <div class="phase" data-phase="W8 — Endstate: Raider Warlord">
+      <div class="phase-bar"><span class="phase-name">Phase 8 · Endstate — Carl the Raider Warlord</span><span class="phase-count" data-count></span></div>
+      <div class="callout c-pick"><span class="clab">The maximal-destruction endstate</span>
+        <p><strong>Hostile / destroyed:</strong> Railroad (dead earlier), Institute (dead), Brotherhood (decapitated — Maxson dead, airship left floating), Minutemen (hostile). <strong>Allied:</strong> only your Nuka-World raider gangs. <strong>Loadout:</strong> Kiloton + Final Judgment + Wazer Wifle + Lorenzo's Artifact Gun. No soft-lock documented. The "break the dungeon" DCC arc, fulfilled.</p>
+      </div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="w8-confirm"><label for="w8-confirm"><b>Confirm the four-way hostile endstate</b> holds (hard-save first — you're in rare territory; see Things to Watch)</label></div>
+        <div class="step"><input type="checkbox" id="w8-vault88"><label for="w8-vault88"><b>Vault 88 stands</b> as Carl's permanent fortress + raider economy hub</label></div>
+        <div class="step"><input type="checkbox" id="w8-doctrine"><label for="w8-doctrine"><b>Doctrine call:</b> if you're keeping this ending, tell the agent to ratify the Layer 1 rewrite (snapshot already saved)</label></div>
+      </div>
+      <div class="callout c-info"><span class="clab">Emergency undo exists</span><p>After milking the raider rewards, completing <strong>Open Season</strong> wipes the raiders and frees your settlements → reverts to Minutemen-friendly (the archived <a href="#revert">Revert Point</a>). This is the documented exit if you regret the pivot.</p></div>
+      <div class="note-field"><label>Phase 8 notes</label><textarea id="note-w8" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═════════ THINGS TO WATCH ═════════ -->
+  <section class="section" id="watch">
+    <div class="sec-head"><span class="sec-tag">👀 Read First</span><h2>Things to Watch — soft-lock &amp; fragility warnings</h2></div>
+    <p class="lede">The warlord path runs through a DLC seam. These are the failure modes that break it. Hard-save frequently through Phases 6–8.</p>
+    <div class="callout c-crit"><span class="clab">🚨 Open Season = path death</span><p>Don't talk friendly-for-help to Mackenzie Bridgeman; don't murder gang members pre-Overboss; don't accept Preston's repent. Any of these reverts the raider pivot and breaks the apocalypse.</p></div>
+    <div class="callout c-crit"><span class="clab">🚨 Do Nuclear Option BEFORE the raider pivot</span><p>Pivoting first <em>can</em> work (Preston temporarily re-allies during MM main quests — tagged <strong>LIKELY</strong>, not verified) but it's fragile. The recommended order never tests that shaky mechanic. Don't gamble the Institute kill on it.</p></div>
+    <div class="callout c-crit"><span class="clab">🚨 Manual Prydwen AFTER Nuclear Option, BEFORE the pivot</span><p>BoS must be hostile (from the Institute's destruction) and you still want the Castle for staging. Order matters.</p></div>
+    <div class="callout c-crit"><span class="clab">🚨 The pivot is one-way for your settlements</span><p>Once Preston turns, Castle / Sanctuary / etc. are gone as friendly bases. Do ALL of Phase 5 (Settlement Prep) first.</p></div>
+    <div class="callout c-crit"><span class="clab">🚨 Settlement-count double-bind</span><p>Nuclear Option needs ≥ 8 settlements; going raider converts settlements away from MM control. So hit the ≥ 8 floor and <strong>finish Nuclear Option before converting anything.</strong> If you're hovering at exactly 8, this ordering is mandatory, not preferred.</p></div>
+    <div class="callout c-warn"><span class="clab">🚨 Power Play forces a gang loss</span><p>The 3rd outpost triggers it; you lose one of the three gangs permanently. Normal flow, not a soft-lock — just know it's coming.</p></div>
+    <div class="callout c-tip"><span class="clab">🚨 Emergency undo exists</span><p>After milking raider rewards, completing Open Season wipes the raiders and frees your settlements → reverts to Minutemen-friendly. The documented exit if you regret the pivot (= back to the archived MM-sovereign path).</p></div>
+    <div class="callout c-warn"><span class="clab">⚠ Residual LIKELY tags</span><p>The full "all four hostile" endstate not soft-locking is community-confirmed but <strong>not</strong> Nukapedia-bug-documented (tagged LIKELY). Hard-save frequently through Phases 6–8 — you're in rare territory.</p></div>
+  </section>
+
+  <hr>
+
+  <!-- ═════════ THE BOARD ═════════ -->
+
+  <section class="section" id="board-a">
+    <div class="sec-head"><span class="sec-tag">The Board · A</span><h2>The Faction Sequence — "Minutemen-First"</h2></div>
+    <p class="lede">You're the player; the agent's the friend with the whole game memorized. Read to get smart, then drive.</p>
+
+    <p class="q">The plain question</p>
+    <p>Whose endgame ending are you taking? The game won't let you keep all four factions alive — whichever path you pick <strong>kills the others</strong>. We've been calling it "Minutemen-first." What does that actually mean?</p>
+
+    <div class="callout c-what"><span class="clab">What it IS (from zero)</span>
+      <p>Fallout 4 has four factions: <strong>Minutemen</strong> (the people's militia you've been building), <strong>Brotherhood of Steel</strong> (Maxson's flying-fortress crew), <strong>Railroad</strong> (synth liberation — you wiped them), and <strong>Institute</strong> (underground tech overlords, where your "son" Father runs the show).</p>
+      <p>Each faction has its own version of an endgame quest called <strong>The Nuclear Option</strong>. Whichever version you do, that's "your" ending. The others die or become irrelevant.</p>
+      <p><strong>The Nuclear Option (Minutemen version)</strong>, in plain terms: Sturges figures out how to sneak into the Institute through an old cooling-water pipe. You go in with Preston + a Minutemen squad, fight through synth soldiers, gorillas (they have a bio lab), and elite Courser synths, reach the reactor at the bottom, plant a fusion pulse charge, teleport out via their relay, and press the detonator. The whole underground city goes up like a small nuke. The Minutemen become the unchallenged power in the Commonwealth.</p>
+      <p>It's literally the "blow up the bad guys' base" ending. ~30–45 min of gameplay, big cinematic. The Institute becomes a crater on your world map for the rest of the game.</p>
+    </div>
+
+    <h4>Why this matters for Carl</h4>
+    <ul>
+      <li><strong>DCC parallel:</strong> Institute = Borant Corporation — the system that treats people as test subjects. Carl burns it down. Ideological keystone of the run.</li>
+      <li><strong>The Minutemen win:</strong> Preston, Sturges, Ronnie Shaw, the settlers get to be the heroes. The people's army — not Maxson, not aristocrats.</li>
+      <li><strong>Father dies on screen.</strong> You confront him in his quarters as he's dying of cancer (CHA 7 opens dialogue easily). The closest the game gets to a quiet moment with the "son" it's been jerking you around about for 50 hours.</li>
+    </ul>
+
+    <h4>What the world looks like after</h4>
+    <ul>
+      <li>☠️ Institute reduced to rubble — visible crater, all named Institute NPCs dead</li>
+      <li>🛡️ Brotherhood stays <em>non-hostile</em> — destroying the Institute fails their active quests but does NOT auto-aggro them; you provoke them yourself by boarding the Prydwen and opening fire (Warlord Phase 3)</li>
+      <li>🤝 Minutemen own the Commonwealth — Preston's speech, Radio Freedom broadcasts your victory</li>
+      <li>❤️ Sanctuary settlers and Castle defenders cheer you on</li>
+    </ul>
+
+    <h4>Why this order (not Brotherhood-first)</h4>
+    <ol>
+      <li><strong>Doctrine:</strong> the Institute is the ideological enemy. Killing them via the people's army is the thematically right answer. Brotherhood-first means handing the Commonwealth to the fascist airship captain, then wiping him too — the messy way.</li>
+      <li><strong>Locks:</strong> the Brotherhood path requires advancing "Spoils of War," which boards a BoS vertibird to Mass Fusion and <strong>auto-locks the Minutemen ending</strong>. There's no Brotherhood-first path that keeps Minutemen options. So if Minutemen is the goal, they go first.</li>
+    </ol>
+
+    <div class="callout c-warn"><span class="clab">Point of no return</span>
+      <p>Once you trigger <strong>Banished from the Institute</strong>: Institute turns permanently hostile (no more apartment/vendors), the "Airship Down" quest becomes unavailable (fine — you don't want it), and X6-88 turns hostile. Once you press the <strong>Nuclear Option detonator</strong>, the Institute is gone forever.</p>
+    </div>
+
+    <div class="callout c-pick"><span class="clab">Agent's honest pick</span>
+      <p>Minutemen-first is the right call — fits Carl's doctrine, gives the cleanest Brotherhood follow-up, and the Minutemen Nuclear Option is genuinely one of the best quests in the game.</p>
+    </div>
+    <div class="callout c-warn"><span class="clab">⚠ Plan evolved — this is now a STEP, not the ending</span>
+      <p>The plan has moved to the <a href="#w1">Raider Warlord Apocalypse</a>. The Nuclear Option (Minutemen) described here is <strong>still used</strong> — it's Warlord Phase 2, the way Carl kills the Institute <em>before</em> turning on the Minutemen themselves. The Minutemen-sovereign <em>ending</em> is archived as the <a href="#revert">🛡️ Revert Point</a>.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="section" id="board-b">
+    <div class="sec-head"><span class="sec-tag">The Board · B</span><h2>The Prydwen Rampage — Your Fantasy Lives Here</h2></div>
+
+    <p class="q">The plain question</p>
+    <p>You said: <em>"In my brain ideally I fuckin at some point walk through Prydwen and shoot everyone to fucking death."</em> Right play, or talk you out of it?</p>
+
+    <div class="callout c-pick"><span class="clab">Answer up front</span>
+      <p>Go do the fucking thing. It's feasible, it's optimal-or-tied, and the rampage IS the clean route for Carl — loot AND catharsis. The manual assault (Path A) below is exactly what the warlord plan uses.</p>
+    </div>
+    <div class="callout c-warn"><span class="clab">⚠ Plan evolved — Path A only now (skip Path B/AB)</span>
+      <p>Under the <a href="#w3">Raider Warlord</a> plan you do the <strong>manual Prydwen rampage (Path A)</strong> in Warlord Phase 3 and <strong>leave the airship floating</strong> — you decapitate Maxson, you don't demolish the ship. <em>With Our Powers Combined</em> (Path B) is <strong>CUT</strong> (it needs Minutemen artillery and is the only thing that scripts the airship's destruction). The Path-B / Path-AB framing below is the archived Minutemen-sovereign approach, kept for reference.</p>
+    </div>
+
+    <div class="callout c-what"><span class="clab">What it IS (from zero)</span>
+      <p>The <strong>Prydwen</strong> is the Brotherhood's flagship — a massive zeppelin tethered over Boston Airport. Maxson stands on the command deck like the bridge of the Enterprise. Below decks: barracks full of power-armored troops and the named officers (Kells the XO, Cade the doctor, Ingram the chief engineer, Quinlan the librarian, Teagan the armorer).</p>
+    </div>
+
+    <h3>🅰️ Path A — Manual Prydwen Assault (your fantasy)</h3>
+    <p>Board the Prydwen — throw a vertibird signal grenade for a pickup, OR take the Boston Airport elevator up. On the deck: total firefight. Walk bow → command deck, killing every named officer. Shoot Maxson in the face. Loot his <strong>Battlecoat</strong> off the corpse. Walk out with <strong>Final Judgment</strong> — his unique Gatling Laser with a Tesla prefix that arc-electrifies between enemies.</p>
+    <p>Optional cinematic: drop a <strong>Fat Man</strong> on the way out for the spectacle. <strong>Correction (verified):</strong> ordinary weapon damage — including a mini-nuke — does <em>not</em> script-destroy the Prydwen; only <em>With Our Powers Combined</em> brings it down. So the Fat Man is pure flavor, and under the warlord plan you <strong>leave the airship floating</strong> with its leadership dead (see <a href="#w3">Warlord Phase 3</a>).</p>
+
+    <h3>🅱️ Path B — With Our Powers Combined (watch from the Castle)</h3>
+    <p>Skip boarding. Build artillery at 5 settlements, order the strike from the Castle radio operator, and watch the Prydwen fall to coordinated cannon fire. Doctrine-pure — <em>but</em> Maxson dies in the wreckage, not by your hand, the named officers don't spawn for the follow-up Castle battle, and you forfeit Final Judgment + the Battlecoat + the personal moment.</p>
+
+    <h3>🅰️🅱️ Path AB — Have Both (recommended, and what you picked)</h3>
+    <ol>
+      <li><strong>Manual assault (Path A):</strong> board, kill everyone, loot Maxson, drop the Fat Man on exit.</li>
+      <li><strong>Cambridge Police Station:</strong> kill any remaining named BoS (Knight Rhys, Scribe Haylen, Danse if he was there) to confirm BoS-hostile state.</li>
+      <li><strong>Talk to Preston</strong> → <em>With Our Powers Combined</em> unlocks.</li>
+      <li><strong>Build artillery at 5 settlements</strong> (you have the Castle; 4 more).</li>
+      <li><strong>Order the strike</strong> → Brotherhood counter-attacks the Castle → defend → the people's-army cinematic plays.</li>
+    </ol>
+    <p>What it gives you: the rampage, the unique loot, the Fat Man drop, AND the artillery cinematic + the captured-vertibird unlock (~2 days after, summon Minutemen-flown vertibirds).</p>
+
+    <div class="callout c-tip"><span class="clab">Is it feasible at L55? Yes — easily</span>
+      <p><strong>You:</strong> T-60 Model F + Tesla arms (energy AOE chains in tight corridors), Kiloton (explosive splash wrecks clusters), Overseer's Guardian as cleaner secondary, Crippling Missile Launcher to limp Maxson, Mk V Ballistic Weave, LW4 (+25 AP for VATS), Life Giver 3 + Adamantium Skeleton, INT 9 / CHA 7.</p>
+      <p><strong>Them:</strong> Knights/Paladins ~L25–40. Maxson is a story NPC, not a bullet sponge; the named officers are basic-tier. <strong>The space:</strong> Prydwen corridors are tight — Tesla arms + Kiloton splash shine. You'll walk through it like a wood chipper. The only "challenge" is staying organized — don't aggro every room at once before you're ready.</p>
+    </div>
+
+    <h4>What the world looks like after</h4>
+    <ul>
+      <li>💥 Prydwen wreckage at Boston Airport, smoke column for miles</li>
+      <li>🤖 Liberty Prime still wandering the airport</li>
+      <li>🗡️ <strong>Final Judgment</strong> (Gatling Laser, Tesla arc-chain) in inventory</li>
+      <li>🧥 <strong>Maxson's Battlecoat</strong> (+1 CHA + Energy Resist — actually wearable)</li>
+      <li>🚁 ~2 days after Path B: summonable Minutemen-flown vertibirds</li>
+      <li>🎖️ Brotherhood threat over — the whole Commonwealth is yours and the Minutemen's</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <section class="section" id="board-c">
+    <div class="sec-head"><span class="sec-tag">The Board · C</span><h2>The Synth Shaun Fork</h2></div>
+
+    <p class="q">The plain question</p>
+    <p>At the end of Nuclear Option you meet a synth child version of your son. Take him with you, or leave him to die in the explosion?</p>
+
+    <div class="callout c-what"><span class="clab">What it IS (from zero)</span>
+      <p>You woke from Vault 111 to find your son Shaun kidnapped. You chased him the whole game. Turns out he's the <strong>Director of the Institute</strong> — an old man dying of cancer who's been pulling your strings. The Shaun in your memory was the baby, taken 60 years ago.</p>
+      <p>Father built a <strong>synth child</strong> that looks like 10-year-old Shaun and offers him to you as "your son" before he dies — a literal replacement. At the end of Nuclear Option, the synth child is in the relay room. You can take him, or leave him.</p>
+    </div>
+
+    <table>
+      <thead><tr><th>Take him</th><th>Leave him</th></tr></thead>
+      <tbody>
+        <tr><td class="yes">✅ Wazer Wifle (unique Institute laser rifle)</td><td class="no">❌ No Wazer Wifle</td></tr>
+        <tr><td class="yes">✅ Father's holotape (emotional closure)</td><td class="no">❌ No holotape</td></tr>
+        <tr><td class="yes">✅ Shaun-synth as a Sanctuary settler (unmarked quests over time)</td><td class="no">❌ All forfeit</td></tr>
+        <tr><td>🟡 Roleplay: you raise a synth child</td><td>🟡 Roleplay: you let the Institute's last manipulation die</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout c-pick"><span class="clab">Your call — locked: TAKE</span>
+      <p>Loot-wise, take him every time. Roleplay-wise, this is the Anti-Borant doctrine made personal: Borant made monsters and ruled people through them. Synth-Shaun is the monster <em>made</em> — but he's not the system. Carl burns the system, then carries the boy home. <strong>And you said it plainly: Carl saves NPCs when he can. Locked. ✓</strong></p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="section" id="board-d">
+    <div class="sec-head"><span class="sec-tag">The Board · D</span><h2>The L56 Perk — What Each Pick Actually Does</h2></div>
+    <p class="lede">Combat ceiling is reached; this is a utility pick. Set your choice in the <a href="#answers">Answers panel</a>.</p>
+
+    <h3>🛢️ Nuclear Physicist <span style="color:var(--text-muted);font-weight:400;font-size:14px">(INT 9 — unlocked)</span></h3>
+    <ul>
+      <li><strong>Rank 1:</strong> Radiation damage you deal +50%; fusion cores last 25% longer.</li>
+      <li><strong>Rank 2:</strong> +100% radiation; cores last 50% longer.</li>
+      <li><strong>Rank 3:</strong> +100% radiation; cores last 100% longer, AND you can <strong>eject fusion cores from your PA as weapons</strong> — they detonate like mini-nukes.</li>
+    </ul>
+    <p><strong>Why it's Carl-coded:</strong> Kiloton has a built-in radiation component; NP scales it. Fusion-core eject = literally throwing nuke grenades out of your power armor. Doubles PA core duration, which matters since PA is the primary platform.</p>
+    <div class="callout c-warn"><span class="clab">Caveat — verify before relying on it</span><p>The radiation buff <em>should</em> stack with Kiloton's radiation portion, but that interaction needs a Nukapedia check before it's promised as a damage multiplier. The fusion-core eject and PA duration are verified.</p></div>
+
+    <h3>🔓 Locksmith <span style="color:var(--text-muted);font-weight:400;font-size:14px">(PER 4 — easy)</span></h3>
+    <p>Ranks open Advanced → Expert → Master locks (+30% sweet spot at 3). Opens loot you currently can't reach (hidden stashes, unique weapons behind locks). <strong>Cost-benefit:</strong> you're L55 in a post-loot world — useful for completionism, not transformative.</p>
+
+    <h3>💻 Hacker <span style="color:var(--text-muted);font-weight:400;font-size:14px">(INT 4 — already met)</span></h3>
+    <p>Ranks open Advanced → Expert → Master terminals (never locked out at 3; auto-hack at 4). Unlocks terminal entries, turns turrets against enemies, opens locked doors via terminal. Pure engineer flavor.</p>
+
+    <div class="callout c-pick"><span class="clab">Agent's pick — Nuclear Physicist 1</span>
+      <p>Most Carl-coded on the board, directly useful for PA-heavy endgame (longer core duration through the reactor room + Prydwen), and the fusion-core eject is a <em>new weapon capability</em> — a bigger change than "open more locks." Grab NP2/NP3 later if you like the lane. Honorable mention: Locksmith 1 for immediate world-loot QoL. Skip Hacker for now.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="section" id="board-e">
+    <div class="sec-head"><span class="sec-tag">The Board · E</span><h2>The Verification Items — What's At Risk</h2></div>
+    <p class="lede">Three things to confirm on the Pip-Boy. Record the answers up in the <a href="#answers">Answers panel</a>; the action steps live in Phase 2.</p>
+
+    <h4>Settlement count (must be ≥ 8)</h4>
+    <p>Nuclear Option needs 8+ Minutemen settlements. Fewer, and Preston gives you "Form Ranks" first — a radiant recruit-more quest before he'll greenlight the Institute attack. Annoying, not fatal. Likely yours: Sanctuary, Starlight, Castle, Graygarden, Abernathy, Dalton Farm, Longfellow's Cabin, Mechanist's Lair, Vault 88 — ~9. Probably safe. Verify anyway.</p>
+
+    <h4>X-cell in inventory (+2 ALL SPECIAL, ~5 min)</h4>
+    <p>The most powerful single buff in the base game — pop it before boarding the Prydwen for +2 STR/PER/END/CHA/INT/AGI/LCK. It sat in Vault 88's NE sector behind a statue of a head in a sea-captain's hat. If you skipped it, the assault still works (you're overpowered) — it just lacks the SPECIAL layer. You could fast-travel back and grab it; it's still there.</p>
+    <div class="callout c-warn"><span class="clab">State note</span><p><code>05-live-state.md</code> lists the X-cell status as <strong>UNKNOWN — may have grabbed, may not</strong>. Don't carry it as a load-bearing assumption until confirmed. Check Aid items.</p></div>
+
+    <h4>Lone Wanderer 4 actually taken at L51</h4>
+    <p>Capstone of the perk giving damage resist + carry weight + AP regen while Dogmeat is your only companion (Dogmeat doesn't count — that's the trick). Rank 4 adds <strong>+25 AP</strong> — roughly one more Crippling MM shot per fight. Pip-Boy → SPECIAL → Charisma → look at Lone Wanderer ranks (should be 4 dots).</p>
+    <div class="callout c-warn"><span class="clab">State note</span><p>The state file's perk table shows <strong>Lone Wanderer 3</strong>, while the progression log lists LW4 at L51 as <em>"assumed, pending confirmation."</em> The file disagrees with itself — that's exactly why this one needs your eyes. If it's only LW3, circle back to LW4 at L57.</p></div>
+  </section>
+
+  <hr>
+
+  <!-- ═════════ REVERT POINT — ARCHIVED MM-SOVEREIGN ENDING ═════════ -->
+  <details id="revert" class="archive">
+    <summary>🛡️ REVERT POINT — Minutemen Sovereign Ending (archived 2026-06-15)</summary>
+    <div class="archive-body">
+    <p class="archive-note">This was the planned ending before the Warlord pivot. Preserved as a revert path — if Sean completes Open Season after going raider, or never pivots, this is the fallback. These phases are NOT counted in the active war-plan progress.</p>
+    <h2 style="margin-top:8px">⚔ Order of Operations — Minutemen Sovereign <span style="font-weight:500;color:var(--text-muted)">(archived)</span></h2>
+    <p class="lede">Do these in sequence. Checking boxes feeds the war-plan progress bar and the auto-progress block in your copied briefing.</p>
+
+  <section class="section" id="p1">
+    <div class="phase" data-phase="Phase 1 — Cleanup & Fun">
+      <div class="phase-bar"><span class="phase-name">Phase 1 · Cleanup &amp; Fun</span><span class="phase-count" data-count></span></div>
+      <div class="callout c-crit"><span class="clab">⏱ Hard timer — do this first</span>
+        <p><strong>Cabot House / Artifact Gun.</strong> Lorenzo's Artifact Gun is delivered ~1 in-game week after the quest. The danger isn't killing Jack early — it's <strong>dawdling on the pickup</strong>: if you wait too long, Jack ages out and disappears, and the gun becomes <strong>permanently unobtainable on Xbox</strong> (no console workaround). Return to Parsons State Asylum on the <em>early</em> side of the window, claim it, hard save, then do whatever with Jack.</p>
+      </div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="s1-cabot"><label for="s1-cabot"><b>Cabot:</b> return to Parsons State Asylum early, claim the Artifact Gun, hard save</label></div>
+        <div class="step"><input type="checkbox" id="s1-raider"><label for="s1-raider"><b>Raider Troubles</b> at Sanctuary (open radiant — close it out)</label></div>
+        <div class="step"><input type="checkbox" id="s1-rogue"><label for="s1-rogue"><b>Rogue Robot / Out of the Fire</b> — finish the active quest-log stragglers</label></div>
+        <div class="step"><input type="checkbox" id="s1-l56"><label for="s1-l56"><b>L56 perk pick</b> (set your choice in the Answers panel — agent's pick: Nuclear Physicist 1)</label></div>
+        <div class="step"><input type="checkbox" id="s1-fun"><label for="s1-fun"><b>Fun run</b> — anything you've been meaning to do (see Phase 5 note; tell the agent in Answers)</label></div>
+        <div class="step"><input type="checkbox" id="s1-loop"><label for="s1-loop"><b>Pre-trigger loop:</b> top off Kiloton/missile ammo, fusion cores, stims; repair PA</label></div>
+      </div>
+      <div class="callout c-pending"><span class="clab">⏳ Pending — agent will expand</span><p>The "fun stuff missed" list is personalized to your answers (Atom Cats, Cambridge Polymer Labs, Pickman's, Vault 81 deeper quest, etc.). Fill the <em>Fun stuff</em> field in Answers, send it over, and the agent's reply gets dropped in here.</p></div>
+      <div class="note-field"><label>Phase 1 notes</label><textarea id="note-p1" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="p2">
+    <div class="phase" data-phase="Phase 2 — Pre-Trigger Checklist">
+      <div class="phase-bar"><span class="phase-name">Phase 2 · Pre-Trigger Checklist</span><span class="phase-count" data-count></span></div>
+      <p>Gate the point of no return. Confirm the three verification items before you trigger anything.</p>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="s2-settle"><label for="s2-settle"><b>Settlement count ≥ 8</b> (Pip-Boy → Data → Workshops) — record in Answers</label></div>
+        <div class="step"><input type="checkbox" id="s2-xcell"><label for="s2-xcell"><b>X-cell confirmed</b> in Aid items — if missing, fast-travel to Vault 88 (NE sector, sea-captain statue) and grab it</label></div>
+        <div class="step"><input type="checkbox" id="s2-lw4"><label for="s2-lw4"><b>Lone Wanderer 4 confirmed</b> (CHA column, 4 dots) — record in Answers</label></div>
+        <div class="step"><input type="checkbox" id="s2-save"><label for="s2-save"><b>Hard save</b> on a fresh slot — the next phase starts locking doors</label></div>
+      </div>
+      <div class="note-field"><label>Phase 2 notes</label><textarea id="note-p2" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="p3">
+    <div class="phase" data-phase="Phase 3 — Banished Trigger">
+      <div class="phase-bar"><span class="phase-name">Phase 3 · Banished Trigger</span><span class="phase-count" data-count></span></div>
+      <div class="callout c-crit"><span class="clab">⚠ Correction — use a REAL trigger</span>
+        <p>An earlier brief said "refuse Mass Fusion when Father presents it" triggers Banished. <strong>That is not on the actual trigger list.</strong> A polite dialogue "no" does <em>not</em> banish you — don't assume it does and get stuck. Confirmed Carl-aligned trigger: <strong>shoot a named Institute scientist</strong> (or the Bunker Hill / support-Minutemen-during-<em>Pinned</em> route), then relay out. Trigger Banished <strong>before</strong> the Mass Fusion breaking point.</p>
+      </div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="s3-trigger"><label for="s3-trigger"><b>Trigger Banished</b> — shoot a named Institute scientist, then relay out</label></div>
+        <div class="step"><input type="checkbox" id="s3-confirm"><label for="s3-confirm"><b>Confirm hostile state</b> — Institute red, apartment/vendors gone, X6-88 hostile</label></div>
+      </div>
+      <div class="callout c-info"><span class="clab">What locks now</span><p>Institute permanently hostile; "Airship Down" unavailable (fine); Railroad-route triggers already irrelevant (Railroad wiped). Underground Undercover N/A — Railroad's dead.</p></div>
+      <div class="note-field"><label>Phase 3 notes</label><textarea id="note-p3" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="p4">
+    <div class="phase" data-phase="Phase 4 — Defend the Castle">
+      <div class="phase-bar"><span class="phase-name">Phase 4 · Defend the Castle</span><span class="phase-count" data-count></span></div>
+      <p>The Institute counter-attacks. Standard defense fight — your loadout eats it. Then Preston greenlights the Nuclear Option (assuming the settlement gate passed).</p>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="s4-defend"><label for="s4-defend"><b>Defend the Castle</b> against the Institute assault</label></div>
+        <div class="step"><input type="checkbox" id="s4-preston"><label for="s4-preston"><b>Talk to Preston</b> → Nuclear Option (Minutemen) begins (if he says "build more settlements," knock out Form Ranks first)</label></div>
+      </div>
+      <div class="note-field"><label>Phase 4 notes</label><textarea id="note-p4" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="p5">
+    <div class="phase" data-phase="Phase 5 — Nuclear Option">
+      <div class="phase-bar"><span class="phase-name">Phase 5 · Nuclear Option (Minutemen)</span><span class="phase-count" data-count></span></div>
+      <p>The Institute dies. Known shell below; the full step-by-step is the agent's to write once you're here.</p>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="s5-sturges"><label for="s5-sturges"><b>Sturges briefing</b> — "I figured out a way in" (the cooling-water pipe)</label></div>
+        <div class="step"><input type="checkbox" id="s5-infil"><label for="s5-infil"><b>Infiltrate</b> with Preston + Minutemen squad — fight to the reactor (synths, gorillas, Coursers)</label></div>
+        <div class="step"><input type="checkbox" id="s5-father"><label for="s5-father"><b>Father's deathbed</b> — the quiet moment (CHA 7 opens the dialogue)</label></div>
+        <div class="step"><input type="checkbox" id="s5-shaun"><label for="s5-shaun"><b>TAKE synth Shaun</b> in the relay room → Wazer Wifle + Father's holotape (locked decision)</label></div>
+        <div class="step"><input type="checkbox" id="s5-charge"><label for="s5-charge"><b>Plant the fusion pulse charge</b> on the reactor, relay out</label></div>
+        <div class="step"><input type="checkbox" id="s5-detonate"><label for="s5-detonate"><b>Press the detonator</b> — Institute gone forever. Rooftop cinematic.</label></div>
+      </div>
+      <div class="callout c-pending"><span class="clab">⏳ Pending — agent will write the full walk</span><p>When you reach this phase, your answers trigger the dcc:fallout4 agent to produce the detailed Nuclear Option walkthrough (exact route, fights, the Father conversation options, the rooftop sequence). Paste its reply back here and it gets dropped into this phase.</p></div>
+      <div class="note-field"><label>Phase 5 notes</label><textarea id="note-p5" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="p6">
+    <div class="phase" data-phase="Phase 6 — Prydwen Assault">
+      <div class="phase-bar"><span class="phase-name">Phase 6 · Manual Prydwen Assault</span><span class="phase-count" data-count></span></div>
+      <p>Your fantasy. After Nuclear Option the Brotherhood is hostile — go take the airship. See the <a href="#m-grenade">mechanic sidebars</a> for boarding and the minigun.</p>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="s6-xcell"><label for="s6-xcell"><b>Pop the X-cell</b> (if you have it) right before boarding — +2 ALL SPECIAL for ~5 min</label></div>
+        <div class="step"><input type="checkbox" id="s6-board"><label for="s6-board"><b>Board</b> — vertibird signal grenade OR Boston Airport elevator (see sidebars)</label></div>
+        <div class="step"><input type="checkbox" id="s6-deck"><label for="s6-deck"><b>Clear bow → command deck</b> — named officers (Kells, Cade, Ingram, Quinlan, Teagan). Don't aggro every room at once.</label></div>
+        <div class="step"><input type="checkbox" id="s6-maxson"><label for="s6-maxson"><b>Kill Maxson</b> on the command deck (Crippling MM to limp him if you want the moment)</label></div>
+        <div class="step"><input type="checkbox" id="s6-loot"><label for="s6-loot"><b>Loot</b> — Final Judgment (Gatling Laser, Tesla arc) + Maxson's Battlecoat (+1 CHA / Energy Resist)</label></div>
+        <div class="step"><input type="checkbox" id="s6-fatman"><label for="s6-fatman"><b>Fat Man drop</b> on exit — nuke the gas bags, watch it fall</label></div>
+      </div>
+      <div class="note-field"><label>Phase 6 notes</label><textarea id="note-p6" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="p7">
+    <div class="phase" data-phase="Phase 7 — Powers Combined">
+      <div class="phase-bar"><span class="phase-name">Phase 7 · With Our Powers Combined</span><span class="phase-count" data-count></span></div>
+      <p>The Path-AB second half — the artillery cinematic + the captured-vertibird unlock.</p>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="s7-cambridge"><label for="s7-cambridge"><b>Cambridge Police Station mop-up</b> — kill remaining named BoS (Rhys, Haylen, Danse if present) to confirm hostility</label></div>
+        <div class="step"><input type="checkbox" id="s7-preston"><label for="s7-preston"><b>Talk to Preston</b> → With Our Powers Combined unlocks</label></div>
+        <div class="step"><input type="checkbox" id="s7-artillery"><label for="s7-artillery"><b>Build artillery at 5 settlements</b> (Castle already counts; 4 more)</label></div>
+        <div class="step"><input type="checkbox" id="s7-strike"><label for="s7-strike"><b>Order the strike</b> at the Castle radio operator → watch the Prydwen fall</label></div>
+        <div class="step"><input type="checkbox" id="s7-defend"><label for="s7-defend"><b>Defend the Castle</b> against the Brotherhood counter-attack</label></div>
+      </div>
+      <div class="callout c-info"><span class="clab">Bonus, ~2 days after</span><p>Captured Minutemen-flown vertibirds become summonable via signal grenade — see the <a href="#m-captured">sidebar</a>.</p></div>
+      <div class="note-field"><label>Phase 7 notes</label><textarea id="note-p7" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+
+  <section class="section" id="p8">
+    <div class="phase" data-phase="Phase 8 — Aftermath">
+      <div class="phase-bar"><span class="phase-name">Phase 8 · Aftermath</span><span class="phase-count" data-count></span></div>
+      <div class="checklist">
+        <div class="step"><input type="checkbox" id="s8-reorg"><label for="s8-reorg"><b>Settlement reorg</b> — consolidate the war economy now the factions are settled</label></div>
+        <div class="step"><input type="checkbox" id="s8-shaun"><label for="s8-shaun"><b>Check on synth Shaun</b> at Sanctuary — unmarked quests trickle in</label></div>
+        <div class="step"><input type="checkbox" id="s8-postgame"><label for="s8-postgame"><b>Post-game content</b> — anything left worth touching (ask the agent)</label></div>
+      </div>
+      <div class="callout c-pending"><span class="clab">⏳ Pending — agent will expand</span><p>"What endgame Carl looks like" + any remaining post-game content is the agent's to detail once the war's done.</p></div>
+      <div class="note-field"><label>Phase 8 notes</label><textarea id="note-p8" placeholder="Your notes for this phase…"></textarea></div>
+    </div>
+  </section>
+    </div>
+  </details>
+
+  <hr>
+
+  <!-- ═════════ MECHANIC SIDEBARS ═════════ -->
+  <h2 style="margin-top:8px">🔧 Mechanic Sidebars</h2>
+  <p class="lede">The "wait, how do I actually do that?" answers. The agent gave previews; deeper detail gets dropped in as you ask.</p>
+
+  <section class="section" id="m-grenade">
+    <div class="callout c-info"><span class="clab">Vertibird signal grenade</span>
+      <p>A throwable that summons a Brotherhood vertibird (1 grenade per ride). You get them from BoS quartermaster <strong>Teagan</strong> on the Prydwen (sold to you while friendly). Throw it <strong>open-sky outdoors</strong> → vertibird arrives in 30–60s → walk to the pilot side door to mount. The side-mounted minigun is usable while flying. The pilot delivers you to a fast-travel destination, or you can jump out mid-flight.</p>
+    </div>
+  </section>
+  <section class="section" id="m-elevator">
+    <div class="callout c-info"><span class="clab">Boston Airport elevator</span>
+      <p>Alternate Prydwen boarding. Walk to Boston Airport on foot, find the BoS-controlled area, take the elevator up to the Prydwen deck. No grenade needed — slower, but zero resources spent.</p>
+    </div>
+  </section>
+  <section class="section" id="m-minigun">
+    <div class="callout c-info"><span class="clab">Vertibird mounted minigun</span>
+      <p>The side-door minigun you fire while seated. Solid for clearing ground targets en route. A vertibird you summon = your minigun, your fight.</p>
+    </div>
+  </section>
+  <section class="section" id="m-captured">
+    <div class="callout c-info"><span class="clab">Captured Minutemen vertibirds</span>
+      <p>After <em>With Our Powers Combined</em> closes (~2 in-game days), signal grenades summon <strong>Minutemen-flown</strong> vertibirds with their own gunners — and you can fire from the side door. Flavor on top of the win.</p>
+    </div>
+    <div class="callout c-pending"><span class="clab">⏳ Pending — agent can expand</span><p>Want the exact mechanic for combat-controlling a vertibird (steering, when the pilot auto-engages, jump-out timing)? Ask the agent and its answer drops in here.</p></div>
+  </section>
+
+</main>
+
+<!-- ─── Floating export ─── -->
+<div class="fab">
+  <button class="btn-ghost" id="clear">Clear all</button>
+  <button class="btn-primary" id="copy">📋 Copy briefing for the agent</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PREFIX="carl-deck:";
+const fields=()=>document.querySelectorAll("input,select,textarea");
+
+/* ── Persistence ── */
+function save(el){
+  const key=PREFIX+el.id;
+  if(el.type==="checkbox") localStorage.setItem(key,el.checked?"1":"0");
+  else localStorage.setItem(key,el.value);
+}
+function restore(){
+  fields().forEach(el=>{
+    if(!el.id) return;
+    const v=localStorage.getItem(PREFIX+el.id);
+    if(v===null) return;
+    if(el.type==="checkbox") el.checked=(v==="1");
+    else el.value=v;
+  });
+}
+fields().forEach(el=>{
+  if(!el.id) return;
+  el.addEventListener("change",()=>{save(el);updateProgress();});
+  if(el.tagName==="TEXTAREA"||el.type==="text") el.addEventListener("input",()=>save(el));
+});
+
+/* ── Progress ── */
+function phaseStats(){
+  const out=[];
+  document.querySelectorAll("[data-phase]").forEach(p=>{
+    if(p.closest("#revert")) return; // archived MM-sovereign phases are not counted
+    const boxes=[...p.querySelectorAll(".step input[type=checkbox]")];
+    const done=boxes.filter(b=>b.checked).length;
+    out.push({name:p.dataset.phase,done,total:boxes.length,
+      items:boxes.map(b=>({on:b.checked,text:b.nextElementSibling.textContent.trim()}))});
+  });
+  return out;
+}
+function updateProgress(){
+  const stats=phaseStats();
+  let done=0,total=0;
+  stats.forEach(s=>{done+=s.done;total+=s.total;
+    const el=document.querySelector(`[data-phase="${s.name}"] [data-count]`);
+    if(el) el.textContent=`${s.done}/${s.total}`;
+  });
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById("pct").textContent=pct+"%";
+  document.getElementById("progfill").style.width=pct+"%";
+}
+
+/* ── Build briefing ── */
+function val(id){const e=document.getElementById(id);const v=e?e.value.trim():"";return v||"(blank)";}
+function buildBriefing(){
+  const now=new Date();
+  const ts=now.toLocaleString();
+  let L=[];
+  L.push("=== CARL — ENDGAME COMMAND DECK · BRIEFING ===");
+  L.push("Generated: "+ts);
+  L.push("");
+  L.push("== DECISIONS (locked) ==");
+  L.push("- ACTIVE PLAN: Raider Warlord Apocalypse (turn on and destroy all four factions incl. Minutemen via the Nuka-World seam)");
+  L.push("- Ordering: kill Institute + Brotherhood via Minutemen FIRST, THEN pivot raider and turn on the Minutemen");
+  L.push("- Institute: Nuclear Option (Minutemen) — TAKE synth Shaun (Carl saves NPCs when he can)");
+  L.push("- Brotherhood: manual Prydwen rampage — decapitate Maxson, leave the airship FLOATING (Fat Man is cinematic only, does NOT destroy it). With Our Powers Combined is CUT.");
+  L.push("- Doctrine: operationally committed; Layer 1 snapshotted but NOT yet rewritten (ratify in-game)");
+  L.push("- Revert path: MM-sovereign ending archived in the deck; emergency undo = complete Open Season");
+  L.push("");
+  L.push("== ANSWERS TO YOUR QUESTIONS ==");
+  L.push("L56 perk preference: "+val("a-l56"));
+  L.push("Settlement count (need >=8): "+val("a-settlements"));
+  L.push("X-cell in inventory: "+val("a-xcell"));
+  L.push("Lone Wanderer 4 confirmed (4 ranks): "+val("a-lw4"));
+  L.push("");
+  L.push("== QUEST / STATE UPDATES ==");
+  L.push("Cabot House status (Artifact Gun grabbed?): "+val("a-cabot"));
+  L.push("Other quests completed: "+val("a-quests"));
+  L.push("Fun stuff to do / missed: "+val("a-fun"));
+  L.push("Caps balance: "+val("a-caps"));
+  L.push("Mini-nuke count: "+val("a-nukes"));
+  L.push("Quest log weirdness: "+val("a-weird"));
+  L.push("");
+  L.push("== HOT TAKES ==");
+  L.push(val("a-hottakes"));
+  L.push("");
+  L.push("== PROGRESS (auto from checklist) ==");
+  phaseStats().forEach(s=>{
+    L.push(`${s.name}: ${s.done}/${s.total}`);
+    s.items.forEach(it=>L.push(`  [${it.on?"x":" "}] ${it.text}`));
+  });
+  L.push("");
+  L.push("== SECTION NOTES ==");
+  let anyNote=false;
+  document.querySelectorAll(".note-field textarea").forEach(t=>{
+    if(t.closest("#revert")) return; // skip archived MM-sovereign notes
+    if(t.value.trim()){anyNote=true;
+      const lab=t.closest(".note-field").querySelector("label").textContent;
+      L.push(`[${lab}] ${t.value.trim()}`);
+    }
+  });
+  if(!anyNote) L.push("(none)");
+  L.push("");
+  L.push("=== END BRIEFING ===");
+  return L.join("\n");
+}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200);}
+document.getElementById("copy").addEventListener("click",async()=>{
+  const text=buildBriefing();
+  try{await navigator.clipboard.writeText(text);toast("Copied ✓  — paste into the agent");}
+  catch(e){
+    const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");toast("Copied ✓  — paste into the agent");}
+    catch(_){toast("Copy failed — select-all in the box");}
+    document.body.removeChild(ta);
+  }
+});
+document.getElementById("clear").addEventListener("click",()=>{
+  if(!confirm("Clear all checkboxes and answers? This can't be undone.")) return;
+  Object.keys(localStorage).filter(k=>k.startsWith(PREFIX)).forEach(k=>localStorage.removeItem(k));
+  location.reload();
+});
+
+/* ── Theme ── */
+const themeBtn=document.getElementById("theme");
+function applyTheme(t){
+  if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");themeBtn.textContent="☀️";}
+  else{document.documentElement.removeAttribute("data-theme");themeBtn.textContent="🌙";}
+}
+applyTheme(localStorage.getItem(PREFIX+"theme")||"light");
+themeBtn.addEventListener("click",()=>{
+  const dark=document.documentElement.getAttribute("data-theme")==="dark";
+  const next=dark?"light":"dark";localStorage.setItem(PREFIX+"theme",next);applyTheme(next);
+});
+
+/* ── Mobile nav ── */
+const sb=document.getElementById("sidebar"),bd=document.getElementById("backdrop");
+document.getElementById("hamburger").addEventListener("click",()=>{sb.classList.toggle("open");bd.classList.toggle("open");});
+bd.addEventListener("click",()=>{sb.classList.remove("open");bd.classList.remove("open");});
+document.querySelectorAll(".nav-item").forEach(a=>a.addEventListener("click",()=>{sb.classList.remove("open");bd.classList.remove("open");}));
+
+/* ── Scrollspy ── */
+const navItems=[...document.querySelectorAll(".nav-item")];
+const spy=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){
+    const id=e.target.id;
+    navItems.forEach(n=>n.classList.toggle("active",n.getAttribute("href")==="#"+id));
+  }});
+},{rootMargin:"-15% 0px -75% 0px"});
+document.querySelectorAll("section.section").forEach(s=>spy.observe(s));
+
+/* ── Init ── */
+restore();updateProgress();
+</script>
+</body>
+</html>
