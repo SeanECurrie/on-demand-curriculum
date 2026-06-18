@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresha — Briefing Deck</title>
+<style>
+  :root{
+    --bg:#141414; --surface:#1e1e1e; --border:#333; --text:#f5f5f5; --muted:#a3a3a3;
+    --accent:#ff5a80; --accent-soft:#3a1622; --good:#4ade80;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --mono:"SF Mono",SFMono-Regular,ui-monospace,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);
+    scroll-snap-type:y mandatory;overflow-y:scroll;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+  .slide{height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;
+    padding:8vh 9vw;position:relative;border-bottom:1px solid var(--border)}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  h1{font-size:clamp(34px,6vw,68px);line-height:1.05;letter-spacing:-.02em;font-weight:800;margin-bottom:20px}
+  h2{font-size:clamp(26px,4vw,44px);line-height:1.1;letter-spacing:-.015em;font-weight:750;margin-bottom:24px}
+  p{font-size:clamp(16px,2vw,22px);color:var(--muted);max-width:880px;line-height:1.6;margin-bottom:14px}
+  p strong{color:var(--text)}
+  .num{font-size:clamp(13px,1.4vw,15px);font-family:var(--mono);color:var(--muted);position:absolute;top:5vh;right:9vw}
+  .stat-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 24px;min-width:150px}
+  .stat .n{font-size:30px;font-weight:800} .stat .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+  ul{list-style:none;margin-top:10px} li{font-size:clamp(16px,2vw,21px);color:var(--text);margin-bottom:14px;padding-left:26px;position:relative;max-width:880px;line-height:1.5}
+  li::before{content:"";position:absolute;left:0;top:11px;width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  li span{color:var(--muted)}
+  .battle{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+  .battle .b{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:12px;padding:18px 20px}
+  .battle .b h3{font-size:17px;margin-bottom:8px;color:var(--text)} .battle .b p{font-size:14px;margin:0}
+  .big{font-size:clamp(40px,7vw,84px);font-weight:800;color:var(--accent);letter-spacing:-.02em;line-height:1}
+  .meta-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px 28px;max-width:880px;margin-top:14px}
+  .meta-card code{font-family:var(--mono);color:var(--accent);font-size:.92em}
+  .progress{position:fixed;bottom:0;left:0;height:3px;background:var(--accent);width:0;z-index:10;transition:width .15s}
+  .hint{position:fixed;bottom:14px;right:18px;font-size:12px;color:var(--muted);font-family:var(--mono);z-index:10}
+  @media(max-width:720px){.battle{grid-template-columns:1fr}.slide{padding:7vh 7vw}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="hint">scroll / arrow keys</div>
+
+<section class="slide"><span class="num">01</span>
+  <div class="eyebrow">For a sales hire evaluating Fresha &middot; 2026-05-29</div>
+  <h1>Fresha<br>A Walking-In Briefing</h1>
+  <p>Eight days ago Fresha became a unicorn. Here is what you need to know walking in, calibrated honestly, not flattered. One source, three formats: this deck, an interactive page, and a PDF, all from one prompt.</p>
+</section>
+
+<section class="slide"><span class="num">02</span>
+  <div class="eyebrow">The unicorn moment</div>
+  <h2>The scale, in eight numbers</h2>
+  <div class="stat-row">
+    <div class="stat"><div class="n">$1B+</div><div class="l">Valuation, May 2026</div></div>
+    <div class="stat"><div class="n">$80M</div><div class="l">KKR growth round</div></div>
+    <div class="stat"><div class="n">140K+</div><div class="l">Businesses</div></div>
+    <div class="stat"><div class="n">$15B</div><div class="l">Annual GMV</div></div>
+    <div class="stat"><div class="n">35M</div><div class="l">Monthly bookings</div></div>
+  </div>
+</section>
+
+<section class="slide"><span class="num">03</span>
+  <div class="eyebrow">The model</div>
+  <h2>Free software, paid on the transaction</h2>
+  <p>Fresha gives the booking software away and earns on payments and a marketplace commission. The blended take rate is thin (under one percent on GMV), so the model only works at enormous volume, which is exactly the scale on the prior slide.</p>
+  <p><strong>The pricing reveal:</strong> a $24 sticker becomes roughly $487 a month for a three-person operation once Forms, Branded App, Payroll, and Multi-location stack on.</p>
+</section>
+
+<section class="slide"><span class="num">04</span>
+  <div class="eyebrow">The fight</div>
+  <h2>Three different battles, by deal shape</h2>
+  <div class="battle">
+    <div class="b"><h3>vs Booksy</h3><p>Head-to-head SMB. Fresha's 20% marketplace fee beats Booksy's 30%.</p></div>
+    <div class="b"><h3>vs Vagaro</h3><p>US multi-vertical. Fresha's pricing reveal is cleaner; Vagaro's a-la-carte balloons.</p></div>
+    <div class="b"><h3>vs Boulevard / Mindbody</h3><p>Upmarket, where Fresha is weaker today. Match the premium or qualify out gracefully.</p></div>
+  </div>
+</section>
+
+<section class="slide"><span class="num">05</span>
+  <div class="eyebrow">The floor, honestly</div>
+  <h2>Take the OTE, then divide it by two</h2>
+  <div class="big">OTE &divide; 2</div>
+  <p style="margin-top:18px">Sales-side reports show roughly 45% of reps hitting quota, but front-line new-business attainment runs materially lower than the org average suggests. Plan finances around base plus 50% of variable, not 100% of on-target earnings.</p>
+</section>
+
+<section class="slide"><span class="num">06</span>
+  <div class="eyebrow">First 90 days</div>
+  <h2>What to ask before you sign</h2>
+  <ul>
+    <li>What is real new-business quota attainment on this team, <span>not the blended org number?</span></li>
+    <li>How is the territory defined, <span>and is the marketplace inbound or pure outbound?</span></li>
+    <li>What does ramp look like, <span>and what is the floor if the marketplace does not convert?</span></li>
+  </ul>
+</section>
+
+<section class="slide"><span class="num">07</span>
+  <div class="eyebrow">Meta</div>
+  <h2>How this was built</h2>
+  <div class="meta-card">
+    <p style="margin:0">This briefing started as one natural-language prompt and was carried end to end by EngineOS: research across tiered public sources, synthesis, an interactive single-file page, this deck, and a PDF. Assembled on the shared design-system tokens and verified through the <code>render-validate</code> loop. The build method is the point: a system that turns a prompt into a hosted, multi-format deliverable.</p>
+  </div>
+</section>
+
+<section class="slide"><span class="num">08</span>
+  <div class="eyebrow">Close</div>
+  <h2>One prompt in. A briefing, a page, a deck, and a PDF out.</h2>
+  <p>Real public-source analysis, calibrated honestly. The interactive page and the PDF carry the full detail and the credibility tiers; this deck is the same content, in the format the room needs.</p>
+</section>
+
+<script>
+  var slides=document.querySelectorAll('.slide'), bar=document.getElementById('progress');
+  function upd(){var max=document.body.scrollHeight-window.innerHeight;bar.style.width=(max>0?(window.scrollY/max*100):0)+'%';}
+  window.addEventListener('scroll',upd,{passive:true}); upd();
+  var i=0;
+  function go(n){i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+  window.addEventListener('keydown',function(e){
+    if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);}
+    if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();go(i-1);}
+  });
+  // track current slide on scroll for keyboard sync
+  window.addEventListener('scroll',function(){var c=Math.round(window.scrollY/window.innerHeight);if(c>=0&&c<slides.length)i=c;},{passive:true});
+</script>
+</body>
+</html>

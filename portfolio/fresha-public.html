@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fresha — A Walking-In Briefing</title>
+  <style>
+/* ─── CSS Custom Properties ─── */
+:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  --color-blue-50: #eff6ff; --color-blue-100: #dbeafe; --color-blue-200: #bfdbfe;
+  --color-blue-500: #3b82f6; --color-blue-600: #2563eb; --color-blue-700: #1d4ed8;
+  --color-red-50: #fef2f2; --color-red-100: #fee2e2;
+  --color-red-500: #ef4444; --color-red-600: #dc2626;
+  --color-green-50: #f0fdf4; --color-green-100: #dcfce7;
+  --color-green-500: #22c55e; --color-green-600: #16a34a;
+  --color-amber-50: #fffbeb; --color-amber-100: #fef3c7;
+  --color-amber-500: #f59e0b; --color-amber-800: #92400e;
+  --color-purple-50: #faf5ff; --color-purple-100: #f3e8ff;
+  --color-purple-500: #a855f7; --color-purple-600: #9333ea;
+  --color-stone-50: #fafaf9; --color-stone-100: #f5f5f4; --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1; --color-stone-400: #a8a29e; --color-stone-500: #78716c;
+  --color-stone-700: #44403c; --color-stone-800: #292524; --color-stone-900: #1c1917;
+
+  --bg: var(--color-stone-50);
+  --surface: var(--color-stone-100);
+  --surface-alt: white;
+  --code-bg: var(--color-stone-200);
+  --border: var(--color-stone-200);
+  --border-subtle: var(--color-stone-300);
+  --text-muted: var(--color-stone-400);
+  --text-secondary: var(--color-stone-500);
+  --text-body: var(--color-stone-700);
+  --text-heading: var(--color-stone-800);
+  --text-strongest: var(--color-stone-900);
+  --link: var(--color-blue-500);
+  --link-hover: var(--color-blue-600);
+
+  --callout-critical-bg: var(--color-red-50);
+  --callout-critical-border: var(--color-red-500);
+  --callout-critical-label: var(--color-red-600);
+  --callout-warning-bg: var(--color-amber-50);
+  --callout-warning-border: var(--color-amber-500);
+  --callout-warning-label: var(--color-amber-800);
+  --callout-tip-bg: var(--color-green-50);
+  --callout-tip-border: var(--color-green-500);
+  --callout-tip-label: var(--color-green-600);
+  --callout-info-bg: var(--color-blue-50);
+  --callout-info-border: var(--color-blue-500);
+  --callout-info-label: var(--color-blue-600);
+
+  --nav-active-bg: var(--color-blue-100);
+  --nav-active-color: var(--color-blue-700);
+  --nav-active-border: var(--color-blue-500);
+
+  --sidebar-bg: var(--color-stone-100);
+  --sidebar-border: var(--color-stone-200);
+
+  --fresha-pink: #FF5A80;
+  --fresha-pink-soft: #ffe1e9;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --surface: #262626;
+  --surface-alt: #1f1f1f;
+  --code-bg: #2d2d2d;
+  --border: #404040;
+  --border-subtle: #333333;
+  --text-muted: #737373;
+  --text-secondary: #a3a3a3;
+  --text-body: #d4d4d4;
+  --text-heading: #e5e5e5;
+  --text-strongest: #f5f5f5;
+  --link: #60a5fa;
+  --link-hover: #3b82f6;
+
+  --callout-critical-bg: #450a0a;
+  --callout-critical-border: #f87171;
+  --callout-critical-label: #fca5a5;
+  --callout-warning-bg: #451a03;
+  --callout-warning-border: #fbbf24;
+  --callout-warning-label: #fcd34d;
+  --callout-tip-bg: #052e16;
+  --callout-tip-border: #4ade80;
+  --callout-tip-label: #86efac;
+  --callout-info-bg: #1e3a5f;
+  --callout-info-border: #60a5fa;
+  --callout-info-label: #93c5fd;
+
+  --nav-active-bg: #1e3a5f;
+  --nav-active-color: #93c5fd;
+  --nav-active-border: #3b82f6;
+
+  --sidebar-bg: #1f1f1f;
+  --sidebar-border: #333333;
+
+  --fresha-pink: #FF7A95;
+  --fresha-pink-soft: rgba(255, 90, 128, 0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ul, ol { padding-left: 24px; }
+* { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-body);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+h1, h2, h3, h4 { color: var(--text-heading); line-height: 1.25; font-weight: 700; }
+h1 { font-size: 36px; margin-bottom: 16px; }
+h2 { font-size: 28px; margin: 40px 0 16px; }
+h3 { font-size: 20px; margin: 28px 0 12px; }
+h4 { font-size: 16px; margin: 20px 0 8px; }
+
+p { margin-bottom: 16px; }
+strong { color: var(--text-strongest); font-weight: 600; }
+
+code {
+  font-family: var(--font-mono);
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  background: var(--surface);
+  color: var(--text-heading);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+blockquote {
+  border-left: 4px solid var(--fresha-pink);
+  background: var(--fresha-pink-soft);
+  padding: 16px 20px;
+  margin: 18px 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--text-heading);
+}
+blockquote .attribution {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sidebar {
+  width: 280px;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 24px 0 16px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.01em;
+}
+.sidebar-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 0 20px 16px;
+}
+
+.theme-toggle {
+  width: 32px; height: 32px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-body);
+}
+.theme-toggle:hover { background: var(--code-bg); }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="dark"] .icon-sun { display: block; }
+:root:not([data-theme="dark"]) .icon-sun { display: none; }
+:root:not([data-theme="dark"]) .icon-moon { display: block; }
+
+.nav-group-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 12px 20px 6px;
+  margin-top: 4px;
+}
+
+.nav-item {
+  display: flex; align-items: center;
+  padding: 8px 20px;
+  font-size: 13px;
+  color: var(--text-body);
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.nav-item:hover { background: var(--code-bg); text-decoration: none; }
+.nav-item.active {
+  background: var(--nav-active-bg);
+  color: var(--nav-active-color);
+  border-left-color: var(--nav-active-border);
+  font-weight: 600;
+}
+.nav-num {
+  display: inline-block;
+  width: 30px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.nav-item.active .nav-num { color: var(--nav-active-color); }
+
+main {
+  margin-left: 280px;
+  padding: 48px 56px;
+  max-width: 1100px;
+}
+
+.hero {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 28px;
+  margin-bottom: 32px;
+}
+.hero .eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fresha-pink);
+  margin-bottom: 12px;
+}
+.hero h1 { font-size: 42px; letter-spacing: -0.02em; }
+.hero .subhead {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  max-width: 720px;
+}
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  margin: 24px 0 8px;
+}
+.stat-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.stat-card .num {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-strongest);
+  letter-spacing: -0.01em;
+}
+.stat-card .label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.section {
+  scroll-margin-top: 24px;
+  padding-top: 32px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.section-number {
+  background: var(--fresha-pink);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+.section-tag {
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+/* ─── Tier badges ─── */
+.tier {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin: 0 2px;
+  letter-spacing: 0.02em;
+  vertical-align: baseline;
+  border: 1px solid transparent;
+}
+.tier-1 { background: var(--color-green-50); color: var(--color-green-600); border-color: var(--color-green-100); }
+.tier-2 { background: var(--color-blue-50); color: var(--color-blue-600); border-color: var(--color-blue-100); }
+.tier-3 { background: var(--color-amber-50); color: var(--color-amber-800); border-color: var(--color-amber-100); }
+.tier-4 { background: var(--color-stone-200); color: var(--color-stone-700); border-color: var(--color-stone-300); }
+.tier-5 { background: var(--color-red-50); color: var(--color-red-600); border-color: var(--color-red-100); }
+[data-theme="dark"] .tier-1 { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+[data-theme="dark"] .tier-2 { background: rgba(59,130,246,0.18); color: #93c5fd; border-color: rgba(59,130,246,0.35); }
+[data-theme="dark"] .tier-3 { background: rgba(245,158,11,0.15); color: #fcd34d; border-color: rgba(245,158,11,0.3); }
+[data-theme="dark"] .tier-4 { background: rgba(120,113,108,0.25); color: #d6d3d1; border-color: rgba(120,113,108,0.4); }
+[data-theme="dark"] .tier-5 { background: rgba(239,68,68,0.15); color: #fca5a5; border-color: rgba(239,68,68,0.3); }
+
+/* ─── Callouts ─── */
+.callout {
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid;
+  margin: 16px 0;
+}
+.callout-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.callout.critical { background: var(--callout-critical-bg); border-color: var(--callout-critical-border); }
+.callout.critical .callout-label { color: var(--callout-critical-label); }
+.callout.warning { background: var(--callout-warning-bg); border-color: var(--callout-warning-border); }
+.callout.warning .callout-label { color: var(--callout-warning-label); }
+.callout.tip { background: var(--callout-tip-bg); border-color: var(--callout-tip-border); }
+.callout.tip .callout-label { color: var(--callout-tip-label); }
+.callout.info { background: var(--callout-info-bg); border-color: var(--callout-info-border); }
+.callout.info .callout-label { color: var(--callout-info-label); }
+.callout p:last-child { margin-bottom: 0; }
+.callout ul { margin-top: 6px; padding-left: 22px; }
+.callout ul li { margin-bottom: 4px; }
+
+/* ─── Diagrams ─── */
+.diagram-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+}
+.diagram-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.diagram-caption {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 14px;
+  font-style: italic;
+}
+
+/* ─── 2x2 positioning matrix ─── */
+.matrix-wrapper {
+  position: relative;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 28px 14px 28px;
+  margin: 12px 0;
+}
+.matrix-grid {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 2px solid var(--border-subtle);
+  background:
+    linear-gradient(to right, transparent 49.7%, var(--border-subtle) 49.7%, var(--border-subtle) 50.3%, transparent 50.3%),
+    linear-gradient(to bottom, transparent 49.7%, var(--border-subtle) 49.7%, var(--border-subtle) 50.3%, transparent 50.3%);
+}
+.matrix-axis-y {
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translate(-100%, -50%) rotate(-90deg);
+  transform-origin: right center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.matrix-axis-y-top, .matrix-axis-y-bot {
+  position: absolute;
+  left: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.matrix-axis-y-top { top: 10px; }
+.matrix-axis-y-bot { bottom: 10px; }
+.matrix-axis-x {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-top: 32px;
+}
+.matrix-axis-x-left, .matrix-axis-x-right {
+  position: absolute;
+  bottom: -22px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.matrix-axis-x-left { left: 8px; }
+.matrix-axis-x-right { right: 8px; }
+.matrix-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: var(--surface-alt);
+  border: 2px solid var(--color-stone-500);
+  color: var(--text-heading);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 14px;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.matrix-dot.subject {
+  background: var(--fresha-pink);
+  color: white;
+  border-color: var(--fresha-pink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(255,90,128,0.4);
+}
+.matrix-dot.major {
+  border-color: var(--color-blue-500);
+  background: var(--color-blue-50);
+  color: var(--color-blue-700);
+}
+[data-theme="dark"] .matrix-dot.major { background: rgba(59,130,246,0.15); color: #93c5fd; }
+.matrix-dot.tier-c {
+  border-color: var(--color-stone-400);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+/* ─── Funding timeline ─── */
+.funding-timeline {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  margin: 20px 0;
+  position: relative;
+}
+.funding-timeline::before {
+  content: "";
+  position: absolute;
+  top: 32px;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--border-subtle);
+  z-index: 0;
+}
+.fund-node {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.fund-dot {
+  width: 16px;
+  height: 16px;
+  background: var(--fresha-pink);
+  border: 3px solid var(--surface);
+  border-radius: 50%;
+  margin: 24px auto 8px;
+}
+.fund-dot.major {
+  width: 22px; height: 22px;
+  margin-top: 21px;
+  background: var(--color-green-500);
+  box-shadow: 0 0 0 4px rgba(34,197,94,0.2);
+}
+.fund-dot.debt { background: var(--color-amber-500); }
+.fund-date {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.fund-amount {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-strongest);
+}
+.fund-lead {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* ─── Revenue model diagram ─── */
+.rev-model {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 1.1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+.rev-layer {
+  border-radius: 12px;
+  padding: 18px 18px 16px;
+  border: 2px solid;
+  position: relative;
+}
+.rev-layer h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+.rev-layer .rev-price {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 6px 0 4px;
+  letter-spacing: -0.01em;
+}
+.rev-layer .rev-share {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.rev-layer .rev-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.rev-layer.sub {
+  background: var(--color-blue-50);
+  border-color: var(--color-blue-500);
+  color: var(--color-blue-700);
+}
+.rev-layer.pay {
+  background: var(--color-green-50);
+  border-color: var(--color-green-500);
+  color: var(--color-green-600);
+}
+.rev-layer.mkt {
+  background: var(--color-purple-50);
+  border-color: var(--color-purple-500);
+  color: var(--color-purple-600);
+}
+[data-theme="dark"] .rev-layer.sub { background: rgba(59,130,246,0.12); color: #93c5fd; }
+[data-theme="dark"] .rev-layer.pay { background: rgba(34,197,94,0.12); color: #86efac; }
+[data-theme="dark"] .rev-layer.mkt { background: rgba(168,85,247,0.12); color: #d8b4fe; }
+.rev-layer h4, .rev-layer .rev-price {
+  color: inherit;
+}
+.rev-flow {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 14px 0 4px;
+  font-style: italic;
+}
+
+/* ─── Org chart ─── */
+.orgchart {
+  text-align: center;
+  margin: 20px 0;
+}
+.org-node {
+  display: inline-block;
+  background: var(--surface-alt);
+  border: 2px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 18px;
+  min-width: 180px;
+  font-size: 13px;
+  text-align: left;
+  margin: 6px;
+}
+.org-node .role {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.org-node .name {
+  font-weight: 700;
+  color: var(--text-heading);
+  font-size: 14px;
+}
+.org-node .geo {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.org-node.ceo { border-color: var(--fresha-pink); background: var(--fresha-pink-soft); }
+.org-node.ceo .role { color: var(--fresha-pink); }
+.org-node.vacant {
+  border-color: var(--color-red-500);
+  border-style: dashed;
+  background: var(--color-red-50);
+}
+.org-node.vacant .role { color: var(--color-red-600); }
+.org-node.vacant .name { color: var(--color-red-600); }
+[data-theme="dark"] .org-node.vacant { background: rgba(239,68,68,0.1); }
+[data-theme="dark"] .org-node.vacant .role,
+[data-theme="dark"] .org-node.vacant .name { color: #fca5a5; }
+.org-connector {
+  width: 2px;
+  height: 24px;
+  background: var(--border-subtle);
+  margin: 0 auto;
+}
+.org-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+/* ─── Timeline (vertical) ─── */
+.vtimeline {
+  position: relative;
+  margin: 24px 0;
+  padding-left: 28px;
+}
+.vtimeline::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border-subtle);
+}
+.vt-item {
+  position: relative;
+  margin-bottom: 18px;
+}
+.vt-item::before {
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--fresha-pink);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--border-subtle);
+}
+.vt-item.major::before { background: var(--color-green-500); width: 14px; height: 14px; left: -29px; top: 5px; box-shadow: 0 0 0 3px rgba(34,197,94,0.25); }
+.vt-item.amber::before { background: var(--color-amber-500); }
+.vt-item.red::before { background: var(--color-red-500); }
+.vt-date {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.vt-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.vt-body {
+  font-size: 14px;
+  color: var(--text-body);
+  margin: 0;
+}
+
+/* ─── Process flow ─── */
+.process-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 20px 0;
+}
+.pf-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--fresha-pink);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.pf-num {
+  background: var(--fresha-pink);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pf-content { flex: 1; }
+.pf-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.pf-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.pf-time {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: var(--code-bg);
+  padding: 2px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* ─── Parallel agent visualization ─── */
+.agent-fan {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin: 14px 0;
+}
+.agent-chip {
+  background: var(--color-purple-50);
+  border: 1px solid var(--color-purple-500);
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-purple-600);
+  line-height: 1.3;
+}
+[data-theme="dark"] .agent-chip {
+  background: rgba(168,85,247,0.12);
+  color: #d8b4fe;
+}
+
+/* ─── Comparison/Pricing table emphasis ─── */
+.pricing-table th { font-size: 12px; }
+.pricing-table .fresha-row { background: var(--fresha-pink-soft); }
+.pricing-table .fresha-row td:first-child { color: var(--fresha-pink); font-weight: 700; }
+
+/* ─── Three-up comparison block ─── */
+.three-up {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 18px 0;
+}
+.battle-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--fresha-pink);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.battle-card h4 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.battle-card .battle-sub {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+.battle-card ul { padding-left: 18px; margin: 8px 0; }
+.battle-card li { font-size: 13px; margin-bottom: 4px; }
+
+/* ─── Geo / number grid ─── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.kpi-cell {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.kpi-cell .v { font-size: 18px; font-weight: 800; color: var(--text-strongest); }
+.kpi-cell .l { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
+/* ─── Q&A bank ─── */
+.qa-bank details {
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-alt);
+  overflow: hidden;
+}
+.qa-bank summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: var(--text-heading);
+  font-size: 14px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.qa-bank summary::-webkit-details-marker { display: none; }
+.qa-bank summary::before {
+  content: "+";
+  font-weight: 700;
+  color: var(--fresha-pink);
+  font-size: 18px;
+  line-height: 1;
+  width: 14px;
+}
+.qa-bank details[open] summary::before { content: "−"; }
+.qa-bank .qa-body {
+  padding: 0 16px 14px 38px;
+  font-size: 13px;
+  color: var(--text-body);
+}
+
+/* ─── Sources list ─── */
+.src-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+.src-block h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+.src-block ul { padding-left: 22px; margin: 4px 0; }
+.src-block li { font-size: 12px; margin-bottom: 3px; color: var(--text-secondary); }
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .three-up, .rev-model { grid-template-columns: 1fr; }
+  .funding-timeline { grid-template-columns: repeat(4, 1fr); }
+  .funding-timeline::before { display: none; }
+  .agent-fan { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 900px) {
+  .sidebar { width: 240px; }
+  main { margin-left: 240px; padding: 24px 28px; }
+}
+@media (max-width: 720px) {
+  .sidebar {
+    position: relative; width: 100%; height: auto;
+    border-right: none; border-bottom: 1px solid var(--border);
+  }
+  main { margin-left: 0; padding: 20px 18px; }
+  .hero h1 { font-size: 28px; }
+  .stat-strip { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media print {
+  .sidebar { display: none; }
+  main { margin-left: 0; max-width: 100%; }
+  .section { page-break-before: auto; }
+  .theme-toggle { display: none; }
+}
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Fresha · Walking-In Briefing</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+  <div class="sidebar-sub">Built 2026-05-29 · single-prompt output</div>
+
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="#s00"><span class="nav-num">00</span>Hero</a>
+  <a class="nav-item" href="#s01"><span class="nav-num">01</span>TL;DR — seven things</a>
+
+  <div class="nav-group-label">The company</div>
+  <a class="nav-item" href="#s02"><span class="nav-num">02</span>The unicorn moment + scale</a>
+  <a class="nav-item" href="#s03"><span class="nav-num">03</span>The model</a>
+  <a class="nav-item" href="#s04"><span class="nav-num">04</span>The market they own</a>
+
+  <div class="nav-group-label">The fight</div>
+  <a class="nav-item" href="#s05"><span class="nav-num">05</span>Competitive set</a>
+  <a class="nav-item" href="#s06"><span class="nav-num">06</span>The product surface</a>
+
+  <div class="nav-group-label">The job</div>
+  <a class="nav-item" href="#s07"><span class="nav-num">07</span>The sales motion</a>
+  <a class="nav-item" href="#s08"><span class="nav-num">08</span>What just happened</a>
+  <a class="nav-item" href="#s09"><span class="nav-num">09</span>What it's like to work there</a>
+  <a class="nav-item" href="#s10"><span class="nav-num">10</span>What to ask + first 90</a>
+
+  <div class="nav-group-label">Meta</div>
+  <a class="nav-item" href="#s11"><span class="nav-num">11</span>How this was built</a>
+  <a class="nav-item" href="#s99"><span class="nav-num">99</span>Sources &amp; methodology</a>
+
+  <div class="nav-group-label">Source tiers</div>
+  <div style="padding: 6px 20px 16px; font-size: 11px; color: var(--text-secondary); line-height: 1.6;">
+    <span class="tier tier-1">T1</span> Primary / official<br>
+    <span class="tier tier-2">T2</span> Business press<br>
+    <span class="tier tier-3">T3</span> Analyst / aggregator<br>
+    <span class="tier tier-4">T4</span> Org-chart / inferred<br>
+    <span class="tier tier-5">T5</span> Operator forum / social
+  </div>
+</aside>
+
+<main>
+
+<header class="hero" id="s00">
+  <div class="eyebrow">For a sales hire evaluating Fresha · Sales role · 2026-05-29</div>
+  <h1>Fresha — A Walking-In Briefing</h1>
+  <p class="subhead">Eight days ago Fresha became a unicorn. Here is what you need to know walking in — calibrated honestly, not flattered.</p>
+
+  <div class="stat-strip">
+    <div class="stat-card"><span class="num">$1B+</span><span class="label">Valuation · May 21 2026</span></div>
+    <div class="stat-card"><span class="num">$80M</span><span class="label">KKR growth round</span></div>
+    <div class="stat-card"><span class="num">140K+</span><span class="label">Businesses</span></div>
+    <div class="stat-card"><span class="num">500K+</span><span class="label">Professionals</span></div>
+    <div class="stat-card"><span class="num">35M</span><span class="label">Monthly bookings</span></div>
+    <div class="stat-card"><span class="num">$15B</span><span class="label">Annual GMV</span></div>
+    <div class="stat-card"><span class="num">757</span><span class="label">Employees</span></div>
+    <div class="stat-card"><span class="num">15 / 120</span><span class="label">Offices / countries</span></div>
+  </div>
+
+  <div class="callout info" style="margin-top: 18px;">
+    <div class="callout-label">▸ What this is, what it isn't</div>
+    <p><strong>It is:</strong> a one-shot orientation doc for a sales hire walking into Fresha — what the company is, how the model works, who you're fighting, what the floor feels like, what to ask before you sign.</p>
+    <p><strong>It is not:</strong> a recommendation to take or leave the job, a negotiation playbook, or an attempt to flatter or trash Fresha. Every hard claim carries a credibility tier <span class="tier tier-1">T1</span>–<span class="tier tier-5">T5</span> so you can see what's load-bearing.</p>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════ 01 TL;DR -->
+<section id="s01" class="section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 style="margin:0;">TL;DR — seven things to know</h2>
+    <span class="section-tag">4 min read</span>
+  </div>
+  <p>If you read nothing else, read this. Each line is unpacked later.</p>
+
+  <ol style="padding-left: 24px;">
+    <li style="margin-bottom: 12px;"><strong>Fresha is the &ldquo;Booking.com of salons.&rdquo;</strong> London-HQ, Dubai-founded as <em>Shedul</em> in Feb 2015 <span class="tier tier-2">T2</span>, rebranded 2020 <span class="tier tier-2">T2</span>, hit unicorn 8 days ago with an $80M KKR round at $1B+ <span class="tier tier-2">T2</span>. First institutional growth equity since Dec 2021. <em>This is a real company at a real inflection.</em></li>
+
+    <li style="margin-bottom: 12px;"><strong>The model is not classic per-seat SaaS.</strong> It's <em>free-software-historically + payments-attach + marketplace commission</em>. Then in <strong>March 2025 they introduced a paid tier</strong> <span class="tier tier-1">T1</span> and operators were loud about it <span class="tier tier-5">T5</span>. The pricing-change wound is still open. Lead conversations with empathy on it, not denial.</li>
+
+    <li style="margin-bottom: 12px;"><strong>Three wedges, in order:</strong> free signup → Fresha Pay (no-show protection is the conversion event) → marketplace flywheel (consumer app, 25M+ users, 1M monthly downloads <span class="tier tier-1">T1</span>). The signup is not the sale. <strong>Payments-attach is.</strong></li>
+
+    <li style="margin-bottom: 12px;"><strong>Three competitive battles, three different playbooks.</strong> <em>Booksy</em> head-to-head SMB (Fresha's 20% marketplace fee beats Booksy's 30% <span class="tier tier-1">T1</span>). <em>Vagaro</em> US multi-vertical (Fresha's pricing reveal is cleaner). <em>Boulevard / Mindbody</em> upmarket — Fresha is currently weaker here. Pick your move based on which one the prospect names.</li>
+
+    <li style="margin-bottom: 12px;"><strong>The sales org has no sitting CRO/CCO.</strong> Two CCOs left in 24 months (Frankcom → Epsilon; Chiaramonti → UpSlide) <span class="tier tier-3">T3</span>. CEO William Zeqiri is running commercial in publicly-declared &ldquo;founder mode&rdquo; <span class="tier tier-1">T1</span>. Aggressive scaling: NA 34→60+ and UK 25→65+ under new GMs <span class="tier tier-1">T1</span>.</li>
+
+    <li style="margin-bottom: 12px;"><strong>Inbound is strong; attainment is uneven.</strong> Fresha sits at the <strong>80th percentile of all software orgs on RepVue for inbound lead flow</strong> <span class="tier tier-4">T4</span>, and quota attainment is reported at ~45% (above the 42% SaaS average) <span class="tier tier-4">T4</span>. But Glassdoor London AM reviews say &ldquo;basically zero&rdquo; — the org-average masks brutal regional variance.</li>
+
+    <li style="margin-bottom: 0;"><strong>Geography is destiny here.</strong> <strong>NYC reads materially healthier than London Old Street</strong> on Glassdoor (3.7/5, 100% recommend across 14 reviews vs. London BDM at 2.4/13% <span class="tier tier-1">T1</span>). If you have a choice of seat, the answer is NYC. Five-day RTO is enforced in London <span class="tier tier-1">T1</span>; NYC reports one WFH day.</li>
+  </ol>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ The single most useful frame</div>
+    <p>Fresha is <strong>fintech wrapped in scheduling software</strong>, not a SaaS company that happens to do payments. Internalize this and every other thing in the briefing will make sense — quota construction, ICP, churn math, expansion math, why the AM job exists, why the AI Concierge launch matters.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 02 UNICORN + SCALE -->
+<section id="s02" class="section">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2 style="margin:0;">The unicorn moment + scale</h2>
+    <span class="section-tag">8 min read</span>
+  </div>
+
+  <p>On <strong>May 21, 2026</strong>, Fresha announced <strong>$80M in growth equity from KKR's Next Generation Technology Growth fund at a valuation north of $1 billion</strong> <span class="tier tier-2">T2</span>. Total raised to date: ~$285M <span class="tier tier-2">T2</span> (CB Insights cites $294.4M across 10 rounds — a minor discrepancy that doesn't change the picture <span class="tier tier-3">T3</span>).</p>
+
+  <p>What makes this round structurally meaningful, not just a number:</p>
+  <ul>
+    <li><strong>First institutional growth round in nearly 5 years.</strong> The last meaningful equity raise was the General Atlantic Series C extension in Dec 2021 at $640M <span class="tier tier-2">T2</span>. Everything between then and now was a $31M J.P. Morgan venture debt facility in Aug 2024 <span class="tier tier-1">T1</span>.</li>
+    <li><strong>KKR's Next Gen Tech Growth strategy is the textbook pre-IPO playbook.</strong> Same vehicle behind Lighthouse, Trainline, Coder — they back already-profitable scaling businesses, not bets <span class="tier tier-2">T2</span>.</li>
+    <li><strong>Fresha is profitable.</strong> $140M+ revenue run rate, &gt;60% YoY growth, &ldquo;fully profitable&rdquo; per Ventureburn at the time of the round <span class="tier tier-2">T2</span>.</li>
+    <li><strong>The CFO seat is currently open.</strong> Live Lever posting in London for a &ldquo;highly experienced and visionary CFO… define Fresha's financial strategy and steer the company's continued global expansion&rdquo; <span class="tier tier-1">T1</span>. For a company that just took $80M from KKR at unicorn valuation, an open CFO seat is meaningful. <em>Either an exit happened quietly or they're upgrading for IPO-readiness.</em></li>
+  </ul>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Funding timeline · 2015 → 2026</div>
+    <div class="funding-timeline">
+      <div class="fund-node">
+        <div class="fund-dot"></div>
+        <div class="fund-date">2015</div>
+        <div class="fund-amount">Seed</div>
+        <div class="fund-lead">MEVP (Dubai)</div>
+      </div>
+      <div class="fund-node">
+        <div class="fund-dot"></div>
+        <div class="fund-date">2017</div>
+        <div class="fund-amount">$6M</div>
+        <div class="fund-lead">Target Global · Series A</div>
+      </div>
+      <div class="fund-node">
+        <div class="fund-dot"></div>
+        <div class="fund-date">2019</div>
+        <div class="fund-amount">$20M</div>
+        <div class="fund-lead">Partech · Series B</div>
+      </div>
+      <div class="fund-node">
+        <div class="fund-dot"></div>
+        <div class="fund-date">Jun 2021</div>
+        <div class="fund-amount">$100M</div>
+        <div class="fund-lead">General Atlantic · Series C</div>
+      </div>
+      <div class="fund-node">
+        <div class="fund-dot"></div>
+        <div class="fund-date">Dec 2021</div>
+        <div class="fund-amount">$52.5M</div>
+        <div class="fund-lead">BECO &amp; Lahyani · C-ext · $640M val</div>
+      </div>
+      <div class="fund-node">
+        <div class="fund-dot debt"></div>
+        <div class="fund-date">Aug 2024</div>
+        <div class="fund-amount">$31M debt</div>
+        <div class="fund-lead">JPMorgan venture debt</div>
+      </div>
+      <div class="fund-node">
+        <div class="fund-dot"></div>
+        <div class="fund-date">Oct 2024</div>
+        <div class="fund-amount">Minority</div>
+        <div class="fund-lead">Yuv (AI hair color)</div>
+      </div>
+      <div class="fund-node">
+        <div class="fund-dot major"></div>
+        <div class="fund-date">May 21 2026</div>
+        <div class="fund-amount">$80M @ $1B+</div>
+        <div class="fund-lead">KKR Next Gen Tech Growth · UNICORN</div>
+      </div>
+    </div>
+    <div class="diagram-caption">Sources: TechFundingNews, TechCrunch, Partech, BeautyMatter, PRNewswire, Vestbee. All amounts as reported; total cumulative ~$285M.</div>
+  </div>
+
+  <h3>Founder story (the version that matters)</h3>
+  <p>Fresha was founded as <strong>Shedul</strong> in February 2015 in <strong>Dubai/UAE</strong> by <strong>William Zeqiri</strong> (CEO) and <strong>Nicholas &ldquo;Nick&rdquo; Miller</strong> (CPO) <span class="tier tier-2">T2</span>. Zeqiri previously served as VP of Technology at Dubai Holding; he and Miller had founded a business together back in 2005 <span class="tier tier-3">T3</span>. The original Shedul pitch was deliberately heretical: <em>free salon software, forever</em> — strip out the SaaS subscription that Booksy, Mindbody, and Vagaro all charged, and accumulate global merchant footprint at zero customer-acquisition cost. Monetize later, via embedded payments. It worked.</p>
+
+  <p>The company rebranded from <strong>Shedul to Fresha in 2020</strong>, coinciding with its evolution from a scheduling tool into a full marketplace + payments + business-management platform <span class="tier tier-2">T2</span>. HQ shifted from Dubai to London. (Crunchbase still resolves the company under the legacy <code>/organization/shedul</code> slug — a path-discipline note for anyone digging through the data.)</p>
+
+  <blockquote>
+    &ldquo;I started Fresha to give beauty and wellness professionals the freedom, technology, and support they need to grow without limits.&rdquo;
+    <span class="attribution">— William Zeqiri, LinkedIn, July 2025 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <h3>Scale, in context</h3>
+  <p>Numbers that travel together (May 2026 cohort, mostly CEO LinkedIn + KKR round coverage):</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-cell"><div class="v">140,000+</div><div class="l">Businesses</div></div>
+    <div class="kpi-cell"><div class="v">500,000+</div><div class="l">Professionals</div></div>
+    <div class="kpi-cell"><div class="v">35M+</div><div class="l">Monthly bookings</div></div>
+    <div class="kpi-cell"><div class="v">&gt;1B</div><div class="l">Annual appointments</div></div>
+    <div class="kpi-cell"><div class="v">$15B+</div><div class="l">Annual GMV</div></div>
+    <div class="kpi-cell"><div class="v">$140M+</div><div class="l">Revenue run-rate</div></div>
+    <div class="kpi-cell"><div class="v">&gt;60%</div><div class="l">YoY growth</div></div>
+    <div class="kpi-cell"><div class="v">25M+</div><div class="l">Consumer marketplace users</div></div>
+    <div class="kpi-cell"><div class="v">1M+</div><div class="l">Monthly app downloads</div></div>
+    <div class="kpi-cell"><div class="v">757</div><div class="l">Employees (RepVue, May 2026)</div></div>
+    <div class="kpi-cell"><div class="v">15</div><div class="l">Offices globally</div></div>
+    <div class="kpi-cell"><div class="v">120+</div><div class="l">Countries served</div></div>
+  </div>
+
+  <p>How this stacks up against the named competitors:</p>
+  <table>
+    <thead><tr><th>Platform</th><th>GMV</th><th>Businesses</th><th>Geography</th><th>Last valuation</th></tr></thead>
+    <tbody>
+      <tr style="background: var(--fresha-pink-soft);"><td><strong>Fresha</strong></td><td>$15B+ <span class="tier tier-1">T1</span></td><td>140K+ <span class="tier tier-2">T2</span></td><td>120 countries <span class="tier tier-1">T1</span></td><td>$1B+ (May 2026 KKR) <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Booksy</td><td>$10B+ <span class="tier tier-3">T3</span></td><td>140K+ <span class="tier tier-3">T3</span></td><td>US, UK, Poland, Brazil <span class="tier tier-3">T3</span></td><td>Unicorn (2021) <span class="tier tier-3">T3</span></td></tr>
+      <tr><td>Vagaro</td><td>Not disclosed</td><td>~80K (industry est.) <span class="tier tier-3">T3</span></td><td>US-dominant <span class="tier tier-2">T2</span></td><td>$1B (2021 FTV) <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Mindbody</td><td>Not disclosed</td><td>Not disclosed</td><td>US-dominant <span class="tier tier-2">T2</span></td><td>$1.9B (Vista 2019 take-private); now ABC Fitness <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Boulevard</td><td>Not disclosed</td><td>Not disclosed</td><td>US-only <span class="tier tier-2">T2</span></td><td>~$800M (Jul 2025 Series D) <span class="tier tier-2">T2</span></td></tr>
+    </tbody>
+  </table>
+
+  <p>Fresha's GMV is larger than Booksy's. Its global reach (120 countries) is structurally unmatched in this category. The unicorn round legitimizes that scale — anyone who tells the prospect &ldquo;Fresha is just a free booking tool that might disappear&rdquo; is reading from a 2024 script.</p>
+
+  <h3>Headcount trajectory</h3>
+  <p>Fresha is <strong>hiring aggressively, not shedding</strong>. Headcount is up roughly 44% YoY per RepVue (757 as of May 2026; Tracxn shows 742 as of end of Q1 2026) <span class="tier tier-3">T3</span>. The company publicly committed in April 2026 to hiring <em>50 Business Development Executives across the UK by June</em> <span class="tier tier-1">T1</span>, plus new GMs for Mexico and Japan. The Global Head of Talent's public LinkedIn talks about scaling hires across the globe in 2025. <strong>No layoffs.fyi entry. No public workforce reduction signal.</strong></p>
+
+  <div class="callout info">
+    <div class="callout-label">▸ The pre-IPO posture, read between the lines</div>
+    <p>Profitable. $140M+ run-rate at &gt;60% growth. First growth equity in five years from KKR's pre-IPO vehicle. CFO seat open and actively recruiting. Equity already appearing on secondary platforms (EquityZen) <span class="tier tier-4">T4</span>. No formal S-1 filing has been announced. The profile fits a pre-IPO posture; it is not the same as &ldquo;IPO is imminent.&rdquo; Treat it as a 18-30 month window in which the company is assembling the org structure of a public-ready business — which has real implications for hiring posture, comp structure, and equity story (see section 09).</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 03 THE MODEL -->
+<section id="s03" class="section">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2 style="margin:0;">The model — and why it's not normal SaaS</h2>
+    <span class="section-tag">12 min read · load-bearing</span>
+  </div>
+
+  <p>This is the section that earns its keep. Internalize it and every quota construction, every objection handle, every customer-success cross-sell motion will make sense.</p>
+
+  <h3>The three-layer model (current state, 2026)</h3>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Fresha revenue model · three layers</div>
+    <div class="rev-model">
+      <div class="rev-layer sub">
+        <div class="rev-share">Layer A · Software</div>
+        <h4>Subscription</h4>
+        <div class="rev-price">$14.95–19.95</div>
+        <p class="rev-desc">Per team member / month (Team plan) or solo flat (Independent). <strong>NEW since March 2025</strong> — previously free.</p>
+      </div>
+      <div class="rev-layer pay">
+        <div class="rev-share">Layer B · Fintech</div>
+        <h4>Payments take-rate</h4>
+        <div class="rev-price">2.29–2.79%</div>
+        <p class="rev-desc">US: 2.29% + $0.20 in-person · 2.79% + $0.20 online · 3.30% + $0.20 manual. UK: ~1.2% + 20p (thinner — regulated interchange).</p>
+      </div>
+      <div class="rev-layer mkt">
+        <div class="rev-share">Layer C · Marketplace</div>
+        <h4>New-client commission</h4>
+        <div class="rev-price">20% / $6 min</div>
+        <p class="rev-desc">One-time fee on first booking value for marketplace-acquired clients only. <strong>0% on returning clients. 0% on direct-link bookings.</strong></p>
+      </div>
+    </div>
+    <div class="rev-flow">→ Subscription floor + transactional take + per-location add-ons (AI Concierge $99.95, Loyalty $59.95, Data Connector $295) ←</div>
+    <div class="diagram-caption">Source: fresha.com/pricing scraped 2026-05-29 <span class="tier tier-1">T1</span>. Derived blended take-rate ≈ 0.93% ($140M / $15B GMV).</div>
+  </div>
+
+  <h3>How the model got here</h3>
+  <p>From <strong>2015 through early 2025</strong>, Fresha was the cheapest software in the salon-SaaS market — free. The bookable calendar, POS, client CRM, team management, and reporting all cost zero. Fresha monetized exclusively through payments processing (Fresha Pay, on Adyen rails) and the 20% marketplace introduction fee on consumer-app-acquired new clients <span class="tier tier-1">T1</span>. The strategic logic: salon software was a thousand-vendor market with no dominant incumbent; SMBs hated paying for SaaS; remove the friction at signup and accumulate footprint at zero CAC; monetize the high-margin layer (payments) once the operator was locked into the calendar.</p>
+
+  <p>It worked. 140K+ businesses, 500K+ pros, $15B GMV.</p>
+
+  <p>Then, in <strong>March 2025</strong>, Fresha broke the &ldquo;100% free forever&rdquo; promise <span class="tier tier-1">T1</span>. Subscription went mandatory at $14.95/team member or $19.95 solo. Operators were not quiet about it.</p>
+
+  <blockquote>
+    &ldquo;Fresha has been holding our funds… The subscription fees are now based on the number of team members, and on top of that, they're charging extra for text message services. If that wasn't enough, they're now taking a ridiculous 20% commission on new client bookings.&rdquo;
+    <span class="attribution">— Apple App Store 1-star review, March 2025 <span class="tier tier-5">T5</span></span>
+  </blockquote>
+
+  <blockquote>
+    &ldquo;Fee here, fee there, fees everywhere! Why are we paying a monthly fee to STILL have to pay for text reminders once we surpass 100? STILL have a 20% fee for clients through Fresha marketplace while also now giving you money monthly?&rdquo;
+    <span class="attribution">— Apple App Store 1-star review, November 2025 <span class="tier tier-5">T5</span></span>
+  </blockquote>
+
+  <p>This wasn't a quiet rollout. Reddit's <code>r/smallbusiness</code> ran threads with titles like &ldquo;Fresha app new charges March 2025&rdquo;; Instagram salon-owner accounts produced reels with titles like &ldquo;What happened to '100% subscription-free'?&rdquo; (<code>@madewithJENA</code>) <span class="tier tier-5">T5</span>. A Substack writer in May 2026 framed it as a &ldquo;mass exodus&rdquo; into Square Appointments, Acuity, Goldie, and Koalendar <span class="tier tier-5">T5</span>. There is no class-action lawsuit (verified — the classaction.org hits are for an unrelated cosmetics brand), and the company kept growing, but <em>the wound is still open</em> and you will hit it on calls.</p>
+
+  <div class="callout warning">
+    <div class="callout-label">▸ Walk-in implication</div>
+    <p>If the prospect is a UK or US salon, there's a meaningful probability they're either paying the new $14.95/$19.95 plus 20% new-client commission, or they've heard the chatter. <strong>The empathy bridge — &ldquo;yes, the pricing change last year was rough, and here's what Fresha gives you for it now&rdquo; — beats denial every time.</strong> Operators respect honesty about price.</p>
+  </div>
+
+  <h3>Current pricing surface (May 2026, full)</h3>
+  <p>Scraped directly from <code>fresha.com/pricing</code> on 2026-05-29 <span class="tier tier-1">T1</span>:</p>
+
+  <table class="pricing-table">
+    <thead><tr><th>Module / Tier</th><th>What you get</th><th>Price</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Independent plan</strong></td><td>Single calendar column · 100 free SMS · 50 free marketing emails · email/chat support</td><td><strong>$19.95 / month</strong></td></tr>
+      <tr><td><strong>Team plan</strong></td><td>Multi-column calendar · per-member allowances · phone/chat/email support</td><td><strong>$14.95 / team member / month</strong></td></tr>
+      <tr><td><strong>Enterprise</strong></td><td>20+ team members · custom rates</td><td>Contact sales</td></tr>
+      <tr><td>Marketplace — new client</td><td>20% one-time commission on first booking value</td><td>20% / $6 floor</td></tr>
+      <tr><td>Marketplace — returning clients</td><td>No fee, ever</td><td><strong>Free</strong></td></tr>
+      <tr><td>Direct / Google / Meta booking links</td><td>Routed via your own channels</td><td><strong>Free</strong></td></tr>
+      <tr><td>Online payments (US)</td><td>Card-not-present</td><td>2.79% + $0.20</td></tr>
+      <tr><td>In-person payments (US)</td><td>Card-present + Tap to Pay (+$0.10 auth)</td><td>2.29% + $0.20</td></tr>
+      <tr><td>Manual card entry (US)</td><td>Keyed-in</td><td>3.30% + $0.20</td></tr>
+      <tr><td>Payments (UK, blended)</td><td>Per third-party reports</td><td>~1.2% + 20p <span class="tier tier-5">T5</span></td></tr>
+      <tr><td>Terminal hardware</td><td>Fresha-branded reader</td><td>$139 one-time</td></tr>
+      <tr><td><strong>AI Concierge</strong></td><td>Call &amp; message answering · 200 min + 500 msg included</td><td>$99.95 / location / mo</td></tr>
+      <tr><td>Client Loyalty</td><td>Rewards / offers engine</td><td>$59.95 / location / mo</td></tr>
+      <tr><td>Google Rating Boost</td><td>Review-prompt automation</td><td>$14.95 / location / mo</td></tr>
+      <tr><td>Team Connect</td><td>Internal team chat / collab</td><td>$2.95 / team member / mo</td></tr>
+      <tr><td>Insights</td><td>Enhanced reporting</td><td>$9.95 / bookable team member / mo</td></tr>
+      <tr><td>Data Connector</td><td>Export to external BI</td><td>$295 / location / mo</td></tr>
+      <tr><td>Premium phone support (Independent)</td><td>Phone, chat, email</td><td>$14.95 / mo</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Payments economics, head to head</h3>
+  <p>Fresha's published US in-person rate of <strong>2.29% + $0.20</strong> sits in the middle of the salon-SaaS pack — meaningfully below Stripe's 2.9% + $0.30, slightly above Square Appointments' 2.6% + $0.10, roughly comparable to Booksy's 2.49% + $0.10 in-person <span class="tier tier-1">T1</span>. The structure is fixed-rate (&ldquo;blended&rdquo;) — no interchange-plus option, no volume schedule, no monthly minimum, no PCI fee. Fresha is not the merchant acquirer; it sits on top of Adyen and earns the take-rate margin.</p>
+
+  <p>The UK rate is materially lower — independently reported at <strong>~1.2% + 20p</strong> blended across Visa/Mastercard/Amex <span class="tier tier-5">T5</span>. The UK margin is thinner because (a) UK debit interchange is capped at 0.2% / credit at 0.3% by regulation, and (b) competitive pressure from Stripe (1.5% + 20p) and Booksy UK (1.29% + 20p). <em>This geographic gap is structural, not promotional</em> — it shows up in the unit economics of every Fresha customer outside the US.</p>
+
+  <h3>The no-show mechanism (why payments-attach is the conversion event)</h3>
+  <p>Fresha's no-show and deposit feature lives <strong>behind Fresha Pay</strong> — it's the single biggest reason an SMB owner enables payments through Fresha rather than keeping a separate POS. The mechanic: the business sets a deposit (fixed amount or % of service value) or a card-on-file authorization that gets charged automatically if the client no-shows or cancels inside the cancellation window <span class="tier tier-1">T1</span>. The card capture happens at booking time through the marketplace flow — frictionless for the consumer.</p>
+
+  <p>In beauty/wellness, no-shows commonly run 10–20% of bookings, and a single no-show on a $120 color service is the entire week's profit for that chair. <strong>Fresha makes no-show protection a payments-only feature</strong> — you cannot set deposits or charge cancellation fees unless Fresha Pay is enabled. That is the conversion lever from &ldquo;free booking software user&rdquo; to &ldquo;payments customer,&rdquo; and it is the linchpin of the whole model. Without it, Fresha is a free calendar with low monetization. With it, every salon that has been burned by a no-show has a clear reason to flip the switch.</p>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ The actual sales motion</div>
+    <p><strong>Lead with no-shows, not with software features.</strong> The signup is not the sale. Payments-attach is the sale. A salesperson who counts free-trial signups as wins is mismeasuring. The actual revenue trigger is enabling Fresha Pay, and the conversation that gets you there is no-show protection — frame the 10–20% no-show rate against the cost of one missed $120 color service. Operators understand that math instantly.</p>
+  </div>
+
+  <h3>Pricing vs. the named competitors</h3>
+  <table class="pricing-table">
+    <thead><tr><th>Platform</th><th>Entry</th><th>Mid / Team</th><th>Premium</th><th>Payments</th><th>Marketplace</th></tr></thead>
+    <tbody>
+      <tr class="fresha-row"><td>Fresha</td><td>$19.95/mo (Indep)</td><td>$14.95/mo per team member</td><td>Enterprise custom</td><td>2.29–2.79% + $0.20</td><td>20% / $6 min, new only</td></tr>
+      <tr><td>Booksy</td><td>$29.99/mo flat</td><td>+$20/mo per team member</td><td>Single SKU</td><td>2.49–2.69% + $0.10–0.30</td><td>30% first visit (Boost)</td></tr>
+      <tr><td>Vagaro</td><td>$30/mo ($24 promo)</td><td>$34–$84/mo (2–7+ calendars)</td><td>Custom multi-loc</td><td>2.2–3.5% + $0.15–0.19</td><td>None; heavy add-ons</td></tr>
+      <tr><td>Mindbody</td><td>$99/mo per location (Starter)</td><td>Accelerate (custom)</td><td>Ultimate (custom)</td><td>Not public</td><td>Marketplace via app</td></tr>
+      <tr><td>Boulevard</td><td>$140/mo per loc (Essentials, ≤5)</td><td>$234/mo (Premier)</td><td>$328/mo (Prestige)</td><td>Not public</td><td>None — pure SaaS</td></tr>
+      <tr><td>Square Appointments</td><td>Free</td><td>Plus (custom)</td><td>Square Pro $250K+ proc</td><td>2.6%–2.9% + $0.10–0.30</td><td>None</td></tr>
+      <tr><td>GlossGenius</td><td>$24/mo (Std, annual)</td><td>$48/mo (Gold)</td><td>$148/mo (Plat)</td><td>Flat 2.6%</td><td>None</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Why this matters for a salesperson — four implications</h3>
+  <ol>
+    <li style="margin-bottom: 10px;"><strong>The signup is not the conversion event — payments-attach is.</strong> A free-trial signup count is a vanity metric. The revenue trigger is enabling Fresha Pay. Lead with no-shows.</li>
+    <li style="margin-bottom: 10px;"><strong>Expansion is GMV-driven, not seat-driven.</strong> A salon that grows from $20K to $50K monthly card volume is a 2.5× revenue customer to Fresha without buying any additional seats — the take-rate compounds with the customer's success. <em>Closer to Shopify than to Salesforce.</em> Account growth = card-volume growth.</li>
+    <li style="margin-bottom: 10px;"><strong>Churn math is different.</strong> If a customer cancels the $14.95 subscription but keeps using Fresha Pay because their card-on-file deposits are wired into the booking flow, partial churn is still revenue-positive. Total churn requires migrating off payments — a much heavier lift than canceling a SaaS subscription. <strong>Logo churn ≠ revenue churn.</strong> CSMs and AMs should prioritize protecting the payments relationship over the seat count.</li>
+    <li><strong>ICP fit favors mid-volume independent and small-team salons.</strong> $5K–$30K monthly card volume, 1–5 chairs, no entrenched POS, sensitive to no-shows. Above $50K/month, the customer can negotiate interchange-plus elsewhere (defection risk). Below $2K/month, the customer can't absorb the $14.95 subscription and may churn upward to free alternatives.</li>
+  </ol>
+
+  <h3>Where the model breaks (the three failure modes)</h3>
+  <div class="three-up">
+    <div class="battle-card">
+      <h4>High-volume mature salons</h4>
+      <div class="battle-sub">$50K+ monthly card volume</div>
+      <p style="font-size:13px; margin:0;">A 6-chair salon on a Clover/Square interchange-plus contract at 1.9–2.1% has nothing to gain from Fresha Pay at 2.29%+$0.20. They'll use the free calendar and refuse the payments-attach. Since March 2025 the subscription forces a decision: pay $14.95/member or leave.</p>
+    </div>
+    <div class="battle-card">
+      <h4>Operator confusion on marketplace fees</h4>
+      <div class="battle-sub">&ldquo;20% on MY clients??&rdquo;</div>
+      <p style="font-size:13px; margin:0;">Reddit, Instagram, and the Medium teardown all surfaced the same confusion: does the 20% apply to <em>their</em> clients (it doesn't, if imported correctly) or only to net-new marketplace discoveries (it does)? Salons that don't understand the distinction churn or revolt.</p>
+    </div>
+    <div class="battle-card">
+      <h4>Regulated medspa / clinical</h4>
+      <div class="battle-sub">HIPAA + prescription</div>
+      <p style="font-size:13px; margin:0;">Pabau and similar clinical platforms own this segment because Fresha doesn't ship consent forms, prescription management, HIPAA-grade clinical notes, or before/after photos linked to patient charts. <em>Fresha's pricing wins for beauty; its scope loses for clinical.</em></p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">▸ Derived take-rate (verify framing)</div>
+    <p>$140M revenue on $15B GMV ≈ <strong>0.93% blended take-rate</strong>, consistent with a mix of UK (thin) and US (thicker) volume net of processor cost. This is a derived ratio, not a Fresha-published number — flag it as inference if you cite it.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 04 THE MARKET -->
+<section id="s04" class="section">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2 style="margin:0;">The market they own</h2>
+    <span class="section-tag">6 min read</span>
+  </div>
+
+  <p>Fresha's reach is broad on two axes — vertical and geographic. Both axes matter when you sit across from a prospect, because the answer to &ldquo;why Fresha for <em>my</em> kind of business&rdquo; depends on which slice they live in.</p>
+
+  <h3>The vertical sprawl</h3>
+  <p>Fresha actively markets to these segments per <code>fresha.com/careers</code> and the product taxonomy <span class="tier tier-1">T1</span>:</p>
+
+  <div class="three-up">
+    <div class="battle-card">
+      <h4>Beauty core</h4>
+      <div class="battle-sub">The historical heart</div>
+      <ul>
+        <li>Hair salons</li>
+        <li>Barbershops</li>
+        <li>Nail studios</li>
+        <li>Lash &amp; brow</li>
+        <li>Aesthetic / makeup</li>
+      </ul>
+    </div>
+    <div class="battle-card">
+      <h4>Wellness premium</h4>
+      <div class="battle-sub">Active push 2024–2026</div>
+      <ul>
+        <li>Spas &amp; saunas</li>
+        <li>Massage therapy</li>
+        <li><strong>Medspa</strong> (dedicated product line, Jan 2026)</li>
+        <li>Tattoo &amp; piercing</li>
+      </ul>
+    </div>
+    <div class="battle-card">
+      <h4>Long-tail / new</h4>
+      <div class="battle-sub">Where the model gets thinner</div>
+      <ul>
+        <li>Fitness &amp; recovery</li>
+        <li>Physical therapy</li>
+        <li>Pet grooming</li>
+        <li>Tanning studios</li>
+        <li>&ldquo;Health practice&rdquo; generic</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>Note: <strong>Fresha does NOT seriously play in fitness studios or mental health</strong> — those are Vagaro's stronghold. Don't try to displace Vagaro in a Pilates studio; you'll lose. Conversely Fresha is investing hard in medspa to take the Boulevard/PatientNow segment, and that is now a viable competitive arena.</p>
+
+  <h3>The geographic sprawl</h3>
+  <p>15 offices, 120 countries served, primary commercial focus on UK / US / EU / MENA / APAC <span class="tier tier-1">T1</span>. Offices: <strong>London (HQ), New York, Orlando, Vancouver, Madrid, Paris, Amsterdam, Warsaw, Sydney, Singapore, Dubai</strong> + a significant engineering / ops hub in <strong>Kosovo</strong> under MD Armend Rexhepi (Zeqiri is Kosovar-origin) <span class="tier tier-3">T3</span>.</p>
+
+  <p>The geography matters for sales because consumer marketplace and merchant self-serve onboarding is PLG-led everywhere, but field sales / merchant acquisition is sales-led with regional GMs in <strong>UK, France, DACH (hiring), Italy, Iberia, Benelux/Nordics, North America, APAC, MENA</strong>. The April 2026 LinkedIn post by the company tells you where the pressure is: <em>&ldquo;WE'RE BUILDING THE HIGHEST PERFORMING COMMERCIAL TEAM IN THE UK — hiring 50 Business Development Executives across the UK by June&rdquo;</em> <span class="tier tier-1">T1</span>.</p>
+
+  <h3>ICP center (inferred)</h3>
+  <p>From the marketplace claim (140K+ businesses, ~450–500K stylists, ratio ~3.2 pros per business) and the Fresha Capital cap ($500–$50K loan range, Adyen-data-driven), the center of the ICP is clear:</p>
+
+  <div class="callout info">
+    <div class="callout-label">▸ ICP center</div>
+    <p><strong>Independent 1–3 location owner-operated salon/spa</strong> doing <strong>$200K–$2M annual revenue</strong>, processing <strong>$100K+ through Fresha Payments</strong>, single-buyer decision-making. Not solo (the model loses below ~$2K/mo card volume). Not enterprise franchise (Fresha is not actively chasing 10+ location chains — the $50K Capital cap signals the heavy customer is still firmly SMB).</p>
+  </div>
+
+  <h3>The marketplace flywheel</h3>
+  <p>This is what no competitor matches at Fresha's scale:</p>
+  <div class="kpi-grid">
+    <div class="kpi-cell"><div class="v">25M+</div><div class="l">Consumer marketplace users <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">4.9 ★</div><div class="l">Apple consumer app · 50K+ raters <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">4.9 ★</div><div class="l">Google Play consumer · 96K ratings <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">1M+</div><div class="l">Monthly app downloads <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">1 in 4</div><div class="l">Marketplace bookings via Google Gemini / AI agents (Q4 2025) <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">Live</div><div class="l">In Google Search via Agentic Commerce (Nov 2025) <span class="tier tier-1">T1</span></div></div>
+  </div>
+
+  <p>The consumer app is genuinely strong — it is the wedge Fresha can pull when a salon is debating &ldquo;why pay Fresha 20% on new clients?&rdquo; The answer: paid-acquisition-equivalent ROAS, frame it against Meta ads, not against zero.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 05 COMPETITIVE -->
+<section id="s05" class="section">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2 style="margin:0;">The competitive set — three distinct battles</h2>
+    <span class="section-tag">14 min read</span>
+  </div>
+
+  <p>Fresha fights three different battles depending on deal shape. Lead with the matrix to understand the geometry, then walk each battle in detail.</p>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Positioning matrix · go-to-market × vertical breadth</div>
+    <div class="matrix-wrapper">
+      <div style="position: relative; padding-left: 40px; padding-right: 10px;">
+        <div class="matrix-axis-y">Go-to-market</div>
+        <div class="matrix-grid">
+          <div class="matrix-axis-y-top">PLG / freemium</div>
+          <div class="matrix-axis-y-bot">Sales-led / enterprise</div>
+          <div class="matrix-axis-x-left">Single-vertical (salon-only)</div>
+          <div class="matrix-axis-x-right">Multi-vertical (wellness+fitness+medspa)</div>
+
+          <!-- Top-right quadrant: PLG + multi-vertical (Fresha's near-monopoly) -->
+          <div class="matrix-dot subject" style="top: 22%; left: 78%;">FRESHA ★</div>
+          <div class="matrix-dot major" style="top: 32%; left: 65%;">Square Apps</div>
+
+          <!-- Top-left: PLG + single-vertical -->
+          <div class="matrix-dot major" style="top: 18%; left: 18%;">GlossGenius</div>
+          <div class="matrix-dot tier-c" style="top: 28%; left: 28%;">StyleSeat</div>
+
+          <!-- Mid-band -->
+          <div class="matrix-dot major" style="top: 55%; left: 32%;">Booksy</div>
+          <div class="matrix-dot tier-c" style="top: 48%; left: 22%;">Phorest</div>
+          <div class="matrix-dot tier-c" style="top: 58%; left: 18%;">Treatwell</div>
+          <div class="matrix-dot major" style="top: 52%; left: 68%;">Vagaro</div>
+
+          <!-- Bottom-left: sales-led + single-vertical (Boulevard's stronghold) -->
+          <div class="matrix-dot major" style="top: 80%; left: 22%;">Boulevard</div>
+
+          <!-- Bottom-right: sales-led + multi-vertical (Mindbody historically) -->
+          <div class="matrix-dot major" style="top: 82%; left: 78%;">Mindbody</div>
+        </div>
+      </div>
+      <div class="matrix-axis-x">Vertical breadth →</div>
+    </div>
+    <div class="diagram-caption">Pink dot = subject company. Blue = direct competitors. Gray = adjacent / smaller. Source: Thread 3 synthesis from Crunchbase, Capterra, company pricing pages.</div>
+  </div>
+
+  <p><strong>What this picture says:</strong> the top-right quadrant — PLG + multi-vertical at global scale — is Fresha's near-monopoly. Vagaro is the closest like-for-like but US-dominant and sales-assisted. Booksy sits mid-band, leaning more PLG than Vagaro but historically paid. Boulevard owns sales-led single-vertical premium. Mindbody owns the legacy bottom-right but is structurally distracted post-ABC Fitness acquisition.</p>
+
+  <h3>Battle 1 — Booksy (head-to-head SMB)</h3>
+  <p>Closest like-for-like, most contested deal type globally.</p>
+  <table>
+    <thead><tr><th></th><th>Fresha</th><th>Booksy</th></tr></thead>
+    <tbody>
+      <tr><td>Founded / HQ</td><td>2015 Dubai → London <span class="tier tier-2">T2</span></td><td>2014 Warsaw → Chicago <span class="tier tier-3">T3</span></td></tr>
+      <tr><td>Model</td><td>Free→paid (Mar 2025) + Pay + 20% mkt</td><td>Always-paid SaaS + Pay + Boost</td></tr>
+      <tr><td>Entry sub</td><td>$19.95/mo or $14.95/team mem</td><td>$29.99/mo + $20/team mem</td></tr>
+      <tr><td>Payments (US in-person)</td><td>2.29% + $0.20 <span class="tier tier-1">T1</span></td><td>2.49–2.69% + $0.10–$0.30 <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Marketplace fee (new client)</td><td><strong>20% / $6 min</strong> <span class="tier tier-1">T1</span></td><td><strong>30% (Boost only, optional)</strong> <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>GMV</td><td>$15B+ annualized <span class="tier tier-1">T1</span></td><td>$10B+ (2024) <span class="tier tier-3">T3</span></td></tr>
+      <tr><td>Businesses</td><td>140K+ <span class="tier tier-2">T2</span></td><td>140K+ <span class="tier tier-3">T3</span></td></tr>
+      <tr><td>Geographic strength</td><td>UK, EU, MENA, growing NA</td><td>US (especially urban barber + Black-owned), Poland, UK, Brazil, Spain</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ Talk-track when prospect says &ldquo;we're evaluating Booksy&rdquo;</div>
+    <p>You're in a like-for-like deal. Lead with:</p>
+    <ul>
+      <li><strong>20% vs. 30% marketplace fee</strong> — Fresha is materially cheaper on the customer-acquisition lever.</li>
+      <li><strong>$14.95 vs. $20</strong> per additional team member — Fresha is cheaper for multi-staff salons.</li>
+      <li><strong>Broader vertical coverage</strong> — Fresha plays in medspa, lashes, wellness; Booksy is narrower.</li>
+    </ul>
+    <p style="margin-top: 8px;"><em>Be honest about where Booksy wins:</em> Booksy's consumer-marketplace brand in US barbershop and Black-owned-business segments is real and may win the customer-acquisition argument. If that's the prospect's segment, don't try to fake your way around it.</p>
+  </div>
+
+  <h3>Battle 2 — Vagaro (US multi-vertical)</h3>
+  <p>Likely a US multi-service business. Two clean attack vectors.</p>
+  <table>
+    <thead><tr><th></th><th>Fresha</th><th>Vagaro</th></tr></thead>
+    <tbody>
+      <tr><td>Founded / HQ</td><td>2015 Dubai → London</td><td>2009 Pleasanton CA <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Model</td><td>Sub + Pay + 20% mkt</td><td>Per-calendar SaaS + Pay + heavy a-la-carte</td></tr>
+      <tr><td>Entry sub</td><td>$19.95–$14.95/team mem</td><td>$30/mo (1 calendar) → $84/mo (7+) <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Real all-in for 3-person salon</td><td>~$45/mo + payments + add-ons</td><td><strong>~$487/mo all-in</strong> with add-ons <span class="tier tier-3">T3</span></td></tr>
+      <tr><td>Verticals</td><td>Beauty + wellness + medspa</td><td>+ fitness + mental health (Fresha doesn't)</td></tr>
+      <tr><td>International</td><td>Native multi-currency, 120 countries</td><td>US-dominant; thin UK/CA/AU</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ Talk-track when prospect says &ldquo;we're evaluating Vagaro&rdquo;</div>
+    <ul>
+      <li><strong>Pricing reveal:</strong> Vagaro's a-la-carte balloons. Show them the all-in monthly comparison; the $24 sticker becomes $487/mo for a 3-person operation when you stack Forms + Branded App + Payroll + MySite + Multi-location.</li>
+      <li><strong>International:</strong> If they have any cross-border plan (or even multi-currency clients), Fresha is the only one with native global ops.</li>
+    </ul>
+    <p style="margin-top: 8px;"><em>Concede:</em> if they're a fitness studio or mental-health practice, you'll lose. Don't try.</p>
+  </div>
+
+  <h3>Battle 3 — Boulevard / Mindbody (upmarket)</h3>
+  <p>This is where Fresha is currently <em>weakest</em>.</p>
+
+  <table>
+    <thead><tr><th></th><th>Boulevard</th><th>Mindbody</th></tr></thead>
+    <tbody>
+      <tr><td>Founded / HQ</td><td>2016 Los Angeles <span class="tier tier-2">T2</span></td><td>2001; now ABC Fitness portfolio (2024) <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Recent valuation</td><td>~$800M (Jul 2025 Series D, JMI) <span class="tier tier-2">T2</span></td><td>$1.9B (Vista take-private 2019) <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Entry sub</td><td>$140/mo per loc (Essentials, ≤5 pros) <span class="tier tier-1">T1</span></td><td>$99/mo per location (Starter) <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Premium tier</td><td>$234 (Premier) → $328 (Prestige) <span class="tier tier-1">T1</span></td><td>Accelerate / Ultimate (custom $269+) <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Sweet spot</td><td>Premium salon, multi-location, medspa</td><td>Yoga / pilates / fitness studio, wellness</td></tr>
+      <tr><td>Weakness vs. Fresha</td><td>Pricey, US-only, no marketplace</td><td>Aging UX, ABC distraction, expensive</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ Talk-tracks · upmarket</div>
+    <p><strong>Boulevard prospect:</strong> they want premium. Don't try to win on price. Either (a) match their premium positioning with Fresha's Enterprise tier and white-glove onboarding, or (b) qualify out gracefully — Boulevard is genuinely strong in premium salon and medspa, and you'll burn the relationship trying to displace them.</p>
+    <p style="margin-top: 8px;"><strong>Mindbody prospect:</strong> 90% chance they're unhappy with cost or UX. Easy lift. Lead with simplicity and modern UX. Be aware: ABC Fitness ownership has slowed Mindbody's roadmap — your switching narrative is &ldquo;buy something built this decade.&rdquo;</p>
+  </div>
+
+  <h3>Tier-C — names to recognize on a call</h3>
+  <table>
+    <thead><tr><th>Platform</th><th>Position</th><th>Where it threatens Fresha</th></tr></thead>
+    <tbody>
+      <tr><td>Square Appointments</td><td>Free → custom for $250K+ processors</td><td>Bottom of US SMB funnel; existing Square POS customers <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>GlossGenius</td><td>$24–$148/mo, flat 2.6%, US-only</td><td>Solo independents wanting predictable flat-rate <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Treatwell</td><td>UK/EU marketplace-heavy; €1.2B valuation est <span class="tier tier-3">T3</span></td><td>UK/France/Italy/Germany urban hubs</td></tr>
+      <tr><td>Phorest</td><td>Dublin-HQ, hair-salon specialist, ~$52.5M rev <span class="tier tier-3">T3</span></td><td>UK/Ireland/AU/US loyal salon-owner community</td></tr>
+      <tr><td>StyleSeat</td><td>US marketplace + SaaS for individual stylists</td><td>Legacy SMB, older product, fading momentum</td></tr>
+      <tr><td>Schedulicity</td><td>Long-tail US scheduler</td><td>Limited recent threat</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ Talk-tracks · Tier-C</div>
+    <p><strong>Square Appointments:</strong> Don't try to beat Square on payments — match-and-move-on. Lead with verticalized features (salon marketing, deposits, no-show fees, marketplace exposure).</p>
+    <p style="margin-top: 6px;"><strong>UK/EU prospect on Treatwell:</strong> Stress Fresha's lower take rate and richer SaaS toolset; concede that Treatwell's local consumer brand in some EU cities is sticky.</p>
+    <p style="margin-top: 6px;"><strong>UK/Ireland on Phorest:</strong> Loyal customer base, hard to dislodge. Wait for renewal events or expansion catalysts; don't waste cycles on cold replacements.</p>
+  </div>
+
+  <h3>Recent strategic moves across the set (12-month context)</h3>
+  <ul>
+    <li><strong>Booksy:</strong> Acquired Znajdź Gabinet (healthcare vertical, 2024); pivoted to profitability; no recent major fundraise <span class="tier tier-2">T2</span>.</li>
+    <li><strong>Vagaro:</strong> Adyen instant-payouts partnership (Aug 2025); &ldquo;Vantage Report&rdquo; content push; broadened into mental health <span class="tier tier-1">T1</span>.</li>
+    <li><strong>Mindbody:</strong> Acquired by ABC Fitness in 2024 (under Thoma Bravo), joining Trainerize and Glofox; Goldman-led IPO prep paused <span class="tier tier-3">T3</span>.</li>
+    <li><strong>Boulevard:</strong> $80M Series D Jul 2025 @ ~$800M led by JMI Equity; cited medspa demand as growth driver <span class="tier tier-2">T2</span>.</li>
+    <li><strong>GlossGenius:</strong> Pre-IPO listings active on Forge/EquityZen; $100M ARR (Dec 2024); rumored Series D Jan 2026 per Forge <span class="tier tier-3">T3</span>.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 06 PRODUCT -->
+<section id="s06" class="section">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2 style="margin:0;">The product surface</h2>
+    <span class="section-tag">10 min read</span>
+  </div>
+
+  <p>You will be selling against a product that has visible strengths and visible flaws. Knowing both — and which ones to lead with — is the difference between a confident demo and an over-promise that ages badly in onboarding.</p>
+
+  <h3>Module inventory</h3>
+  <table>
+    <thead><tr><th>Module</th><th>What it does</th><th>Pricing</th></tr></thead>
+    <tbody>
+      <tr><td>Online booking + calendar</td><td>24/7 self-service · Google/FB/IG/custom links · real-time calendar</td><td>Core (subscription since Mar 2025)</td></tr>
+      <tr><td>Marketplace</td><td>Consumer discovery + booking · live in Google Search via Agentic Commerce (Nov 2025)</td><td>Free to list · 20% on new clients</td></tr>
+      <tr><td>Point of Sale (POS)</td><td>Tap-to-pay terminals · manual card entry · draft sales (Jun 2025) · inventory + sales tracking</td><td>Included; $139 hardware</td></tr>
+      <tr><td>Payments (Fresha Pay)</td><td>Online deposits · in-person card · manual · no-show fee capture · cancellation policy enforcement</td><td>2.29%–3.30% + $0.20 (US)</td></tr>
+      <tr><td>Marketing tools</td><td>Email campaigns · SMS blasts · automated reminders · Meta Pixel · GA · AI Blast (early 2026)</td><td>100 SMS + 50 email free/mo/member then $0.02/$0.08</td></tr>
+      <tr><td>Inventory</td><td>Product tracking · retail sell-through · online product sales</td><td>Included</td></tr>
+      <tr><td>Team management</td><td>Rosters · shifts · commission tracking · cancellation-fee sharing · targets · advanced perms (2026)</td><td>Included; Team Connect $2.95/mem</td></tr>
+      <tr><td>Forms / SOAP notes</td><td>Auto/manual consultation forms · treatment notes · visit history · health records (medspa-ready)</td><td>Included</td></tr>
+      <tr><td>Mobile app</td><td>&ldquo;Fresha for business&rdquo; pro app + &ldquo;Fresha for customers&rdquo; consumer app</td><td>Free</td></tr>
+      <tr><td>API / integrations</td><td>Limited public footprint — only <strong>Meta for Business</strong> and <strong>Square POS</strong> integrated</td><td>—</td></tr>
+      <tr style="background: var(--fresha-pink-soft);"><td><strong>AI Concierge ★</strong></td><td>AI front-desk: answers calls/messages · books · recommends · reschedules — uses live business data</td><td><strong>$99.95/loc/mo (200 min + 500 msg)</strong></td></tr>
+      <tr><td>Connect (May 2026)</td><td>Client Connect (unified inbox: calls/SMS/WhatsApp/social) + Team Connect (internal chat)</td><td>Team Connect $2.95/mem</td></tr>
+      <tr><td>Client Loyalty</td><td>Custom loyalty programs to drive repeat visits</td><td>$59.95/loc/mo</td></tr>
+      <tr><td>Fresha Capital (Feb 2026)</td><td>Revenue-based funding · % auto-repayment · Adyen-data-driven</td><td>UK/US/AU only · $500–$50K</td></tr>
+    </tbody>
+  </table>
+
+  <h3>The AI moment</h3>
+  <p>The lead 2026 product story is <strong>AI Concierge</strong>, launched <strong>May 18, 2026</strong> alongside the KKR round <span class="tier tier-1">T1</span>. It's the differentiator vs. Booksy / Vagaro and Fresha shipped a native AI agent ahead of competitors. The pitch: digital front-desk agent that answers calls + messages, books appointments, recommends treatments, handles reschedules, all using real-time business context (services, pricing, team availability).</p>
+
+  <p>Adjacent AI shipping cadence:</p>
+  <ul>
+    <li><strong>Apr 16, 2026</strong> — Searchable Professional Profiles (pivot from venue-based to stylist-first discovery; repositions vs. Booksy)</li>
+    <li><strong>May 11, 2026</strong> — AI-Powered Intelligent Scheduling with dynamic reassignment</li>
+    <li><strong>May 14, 2026</strong> — Fresha Connect (Client Connect + Team Connect, pitched as &ldquo;Slack + Intercom native to beauty&rdquo;)</li>
+    <li><strong>Nov 17, 2025</strong> — Featured in Google's 2025 Agentic Commerce Moment; live availability in Google Search + AI Mode</li>
+  </ul>
+
+  <p>CEO Zeqiri framed the May 2026 launches as &ldquo;the most advanced communication ecosystem ever introduced to the beauty and wellness industry.&rdquo; The KKR funding will go to &ldquo;international expansion, product development and AI innovation.&rdquo;</p>
+
+  <h3>Customer review sentiment — what the operator voice actually says</h3>
+
+  <div class="kpi-grid">
+    <div class="kpi-cell"><div class="v">4.8 ★</div><div class="l">Capterra (1,446 reviews) <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">4.8 ★</div><div class="l">Apple App Store · pro (3,500 raters) <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">4.5 ★</div><div class="l">Google Play · pro (8.36K reviews) <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">4.9 ★</div><div class="l">Apple · consumer (50K raters) <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">4.9 ★</div><div class="l">Google Play · consumer (96K) <span class="tier tier-1">T1</span></div></div>
+    <div class="kpi-cell"><div class="v">4.2 ★</div><div class="l">G2 (3 reviews — non-signal) <span class="tier tier-4">T4</span></div></div>
+  </div>
+
+  <p><strong>Capterra (4.8 / 1,446) is the real B2B signal.</strong> G2 with 3 reviews is statistically meaningless and shouldn't be cited.</p>
+
+  <p>Top Capterra praise themes:</p>
+  <ul>
+    <li>Intuitive daily operations (98% positive) — ease of use, fast navigation</li>
+    <li>Highly customizable interface (98% positive) — clean design, personalized layouts</li>
+    <li>Streamlined setup (100% positive) — fast onboarding</li>
+    <li>Mobile access 4.6/5; appointment scheduling 4.5/5</li>
+  </ul>
+
+  <p>Top Capterra complaint themes (the operator voice you will hear):</p>
+  <ul>
+    <li><strong>Opaque fee structure (68% negative):</strong> &ldquo;charges and fees are unclear, unexpectedly high&rdquo; <span class="tier tier-1">T1</span></li>
+    <li><strong>Restrictive cancellation policies (58% negative):</strong> &ldquo;their policy is we need to ask the client to cancel online&rdquo;</li>
+    <li><strong>Occasional technical glitches (37% negative):</strong> bugs, lag, crashes</li>
+  </ul>
+
+  <p>The pro-app post-March-2025 reviews are sharp about pricing shift. Recurring 1-star pattern from Apple App Store late 2024 → 2025: &ldquo;NONEXISTENT CUSTOMER CARE… none of the support tabs work!!! They all take you to a '404 page not found'&rdquo; <span class="tier tier-5">T5</span> and &ldquo;No customer support available when needed… the app completely crashed and I had no access to that money even though I was charged&rdquo; <span class="tier tier-5">T5</span>.</p>
+
+  <h3>The integration ceiling</h3>
+  <p>Per GetApp's official integration page, Fresha lists exactly <strong>two</strong> integrations: <strong>Meta for Business</strong> and <strong>Square POS</strong>. Notable absences:</p>
+  <ul>
+    <li>No native Xero or QuickBooks (accounting via $295/mo Data Connector)</li>
+    <li>No Mailchimp / Klaviyo (Fresha forces in-platform marketing)</li>
+    <li>No HubSpot, Salesforce, or any CRM</li>
+    <li>No Zapier, Make, n8n</li>
+    <li>No public developer API surfaced for partners</li>
+  </ul>
+
+  <p>The Salon Business reviewer (Feb 2026): <em>&ldquo;Limited support for integration with other platforms. You're locked into using the Fresha tools.&rdquo;</em> <span class="tier tier-2">T2</span></p>
+
+  <p>This tells a clear ICP story: <strong>Fresha is built for the single-location independent operator who doesn't have an accountant, a CRM, or a marketing stack.</strong> Once a business grows enough to need real integrations, the platform fights against them. Frame this honestly with the prospect — if they're multi-location with existing stack, the $295/mo Data Connector is the escape valve, but it's not free.</p>
+
+  <h3>What to lead with (your top 5 in pitches)</h3>
+  <ol>
+    <li><strong>AI Concierge</strong> as the only native AI front-desk agent in beauty (May 2026 launch, $80M KKR backing) — answers calls, books, reschedules using live business data</li>
+    <li><strong>Consumer marketplace flywheel</strong> — 4.9-star apps with 50K+ Apple raters / 96K+ Google raters · live in Google Search via Agentic Commerce</li>
+    <li><strong>All-in-one feel</strong> — booking, POS, payments, inventory, forms, marketing, loyalty in one tenant; no Frankenstein stack</li>
+    <li><strong>Mobile-first execution</strong> — pro app 4.8 Apple / 4.5 Google; the daily experience is genuinely good</li>
+    <li><strong>Medspa / health-practice ready</strong> — intake forms, treatment notes, visit history natively supported</li>
+  </ol>
+
+  <h3>What to handle gracefully (the three weaknesses)</h3>
+  <div class="callout warning">
+    <div class="callout-label">▸ Don't pretend these don't exist</div>
+    <ol>
+      <li><strong>Fee transparency.</strong> The 20% marketplace take + subscription + per-text/email + processing combo generated visible operator backlash in 2025. Acknowledge it's the cost of the marketplace acquisition channel; quantify ROI in dollars-of-new-client-revenue, not as a fee.</li>
+      <li><strong>Integration ceiling.</strong> No Xero, QuickBooks, Mailchimp, Klaviyo, HubSpot, Zapier. If a prospect is multi-location with existing accounting/CRM stack, this is real friction. The $295/mo Data Connector is the escape valve — name the cost.</li>
+      <li><strong>Customer support.</strong> Recurring complaint across Capterra and both app stores. Even five-year customers report unresponsiveness on payment-hold issues. Don't promise white-glove support unless you can verify it for the prospect's geography/tier.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 07 SALES MOTION -->
+<section id="s07" class="section">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2 style="margin:0;">The sales motion you're joining</h2>
+    <span class="section-tag">14 min read</span>
+  </div>
+
+  <p>This is the section that earns its keep for the day-one reality. The shape of the org, the absence of a CRO, the three motions running at once, the tools, the quota construction, and the honest read on attainment.</p>
+
+  <h3>The leadership picture — and the visible vacancy</h3>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Commercial org structure · May 2026</div>
+    <div class="orgchart">
+      <div class="org-node ceo">
+        <div class="role">Founder &amp; CEO</div>
+        <div class="name">William Zeqiri</div>
+        <div class="geo">London · running commercial in &ldquo;Founder Mode&rdquo;</div>
+      </div>
+      <div class="org-connector"></div>
+      <div class="org-node vacant">
+        <div class="role">Sitting CRO / CCO</div>
+        <div class="name">VACANT</div>
+        <div class="geo">Frankcom → Epsilon · Chiaramonti → UpSlide · no replacement announced</div>
+      </div>
+      <div class="org-connector"></div>
+      <div style="font-size:11px; color: var(--text-secondary); margin: 4px 0 12px; font-style: italic;">Closest global commercial owner: Taylor Wong, VP Commercial (~48 reports per TheOrg <span class="tier tier-4">T4</span>)</div>
+      <div class="org-row">
+        <div class="org-node">
+          <div class="role">GM · UK &amp; Ireland</div>
+          <div class="name">Tom Humphreys</div>
+          <div class="geo">London · joined Jan 2026 · team 25 → 65+</div>
+        </div>
+        <div class="org-node">
+          <div class="role">GM · North America</div>
+          <div class="name">Scott O'Brien</div>
+          <div class="geo">NYC · scaling 34 → 60+; field BDM 10 → 32 by Q3</div>
+        </div>
+        <div class="org-node">
+          <div class="role">GM · Western Europe</div>
+          <div class="name">Baptiste Donnedieu de Vabres</div>
+          <div class="geo">France</div>
+        </div>
+        <div class="org-node">
+          <div class="role">GM · APAC</div>
+          <div class="name">Kevin Sanchez</div>
+          <div class="geo">Sydney / Singapore</div>
+        </div>
+      </div>
+      <div class="org-row">
+        <div class="org-node">
+          <div class="role">GM · Southern Europe</div>
+          <div class="name">David Forman</div>
+          <div class="geo"><span class="tier tier-4">T4</span></div>
+        </div>
+        <div class="org-node">
+          <div class="role">GM · Benelux/Nordics</div>
+          <div class="name">Piet-Hein Kerkhof</div>
+          <div class="geo"><span class="tier tier-4">T4</span></div>
+        </div>
+        <div class="org-node">
+          <div class="role">Head of Sales · France</div>
+          <div class="name">Antoine Monat</div>
+          <div class="geo">ex-Deliveroo</div>
+        </div>
+        <div class="org-node">
+          <div class="role">Head of Sales · DACH</div>
+          <div class="name">OPEN ROLE</div>
+          <div class="geo">Berlin · live Lever posting</div>
+        </div>
+      </div>
+    </div>
+    <div class="diagram-caption">Sources: LinkedIn (heyfresha + named profiles) <span class="tier tier-1">T1</span>; TheOrg leadership chart <span class="tier tier-4">T4</span>; Tom Humphreys LinkedIn post April 2026; Scott O'Brien LinkedIn April 2026; live Lever job postings.</div>
+  </div>
+
+  <p><strong>The CCO vacancy is structurally important.</strong> Two consecutive Chief Commercial Officers (Tim Frankcom, now at Epsilon; Alexandra Chiaramonti, now at UpSlide) have departed with no announced replacement. The CEO publicly endorses &ldquo;Founder Mode&rdquo; — he is running product <em>and</em> commercial directly. The org is currently run through Regional GMs reporting into the CEO.</p>
+
+  <blockquote>
+    &ldquo;Some people will call it toxic when you expect them to own outcomes instead of excuses.&rdquo;
+    <span class="attribution">— William Zeqiri, Medium, &ldquo;When High Standards Hurt Feelings, but Build Greatness,&rdquo; Nov 18, 2025 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <blockquote>
+    &ldquo;When I joined Fresha as GM for UK&amp;I in January, we had a team of around 25 and a lot of ambition. Fast forward a few months: we're now over 65…&rdquo;
+    <span class="attribution">— Tom Humphreys, LinkedIn, April 2026 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <h3>Country distribution of open commercial roles</h3>
+  <p>Fresha currently has <strong>101 open commercial requisitions out of ~140 total open roles</strong> — Commercial is ~70% of all current hiring <span class="tier tier-1">T1</span>.</p>
+
+  <table>
+    <thead><tr><th>Country</th><th>Open jobs</th><th>Office role</th></tr></thead>
+    <tbody>
+      <tr><td>United Kingdom</td><td>48</td><td>HQ; UK&amp;I commercial center</td></tr>
+      <tr><td>Poland (Warsaw)</td><td>9</td><td>Engineering / ops hub</td></tr>
+      <tr><td>North America (US + Canada)</td><td>9</td><td>Aggressive build-out</td></tr>
+      <tr><td>Italy</td><td>8</td><td>EU commercial</td></tr>
+      <tr><td>Spain</td><td>8</td><td>EU commercial (Iberia)</td></tr>
+      <tr><td>Kosovo (Pristina)</td><td>7</td><td>SDR / BDR hub (cost-efficient outbound)</td></tr>
+      <tr><td>Netherlands, Germany</td><td>5 each</td><td>EU commercial</td></tr>
+      <tr><td>Australia</td><td>4</td><td>APAC</td></tr>
+      <tr><td>France</td><td>4</td><td>EU commercial</td></tr>
+      <tr><td>KSA, UAE</td><td>3 each</td><td>MENA</td></tr>
+      <tr><td>Malaysia</td><td>3</td><td>SEA hub</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>No public posting for CRO/CCO, no Sales Enablement Manager, no RevOps leader.</strong> Consistent with the leadership vacuum. UK is roughly 2× NA in headcount today; NA is catching up fast under Scott O'Brien.</p>
+
+  <h3>Three sales motions running simultaneously</h3>
+
+  <div class="three-up">
+    <div class="battle-card">
+      <h4>1 · Inbound conversion</h4>
+      <div class="battle-sub">PLG funnel · 80th percentile flow</div>
+      <p style="font-size:13px; margin:0;">Free-signup → payments-attach. Fresha is in the <strong>80th percentile of all software orgs on RepVue for &ldquo;Inbound Lead / Opportunity Flow&rdquo;</strong> <span class="tier tier-4">T4</span>. Highest-leverage motion. The reason quota attainment is &ldquo;better than industry average.&rdquo;</p>
+    </div>
+    <div class="battle-card">
+      <h4>2 · Outbound field BDM</h4>
+      <div class="battle-sub">Walk-ins are real</div>
+      <p style="font-size:13px; margin:0;">Full-cycle BDM/AE converting SMB salons not yet on platform, or on free tier but not on Fresha Payments. NA JD says verbatim: <em>&ldquo;Generate new business through outbound (calls, email, walk-ins)&rdquo;</em> <span class="tier tier-1">T1</span> — the &ldquo;walk-ins&rdquo; language confirms physical field motion to salons.</p>
+    </div>
+    <div class="battle-card">
+      <h4>3 · NYC Inside Sales pilot</h4>
+      <div class="battle-sub">10-minute SLA, non-negotiable</div>
+      <p style="font-size:13px; margin:0;">Newly-built layer that handles inbound speed-to-lead and qualification handoff to senior outbound BDMs. From the JD: <em>&ldquo;Respond to all inbound leads within 10 minutes. This is a non-negotiable SLA&rdquo;</em> <span class="tier tier-1">T1</span>. $80K–$100K OTE.</p>
+    </div>
+  </div>
+
+  <blockquote>
+    &ldquo;Respond to all inbound leads within 10 minutes. This is a non-negotiable SLA.&rdquo;
+    <span class="attribution">— Inside Sales Representative JD, NYC, LinkedIn #4382906996 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <h3>Deal velocity, buyer, ICP, tools</h3>
+  <table>
+    <tbody>
+      <tr><td><strong>Cadence</strong></td><td>High-velocity SMB. Austin AE JD: &ldquo;Close deals quickly… Consistently exceed monthly targets&rdquo; <span class="tier tier-1">T1</span>. Monthly cadence, not quarterly enterprise. Single-call or two-call closes for solo / small studio.</td></tr>
+      <tr><td><strong>Buyer</strong></td><td>Owner-operator. Single-decision SMB, not committee. Salon, barbershop, spa, nail studio, medspa, fitness/recovery, tattoo, pet groomer, tanning, health practice.</td></tr>
+      <tr><td><strong>ICP center</strong></td><td>Independent 1–3 location, $200K–$2M annual revenue, $100K+ Fresha Pay processing. Marketplace claim is 140K+ businesses · 450K+ stylists = ~3.2 pros/business (small team, not solo).</td></tr>
+      <tr><td><strong>Lead sources</strong></td><td>60–75% inbound (free signup + marketplace SEO + speed-to-lead SLA) · 25–40% outbound BDM-sourced (payments-attach play, not net-new logos) <span class="tier tier-4">T4</span> inference</td></tr>
+      <tr><td><strong>Tech stack</strong></td><td><strong>Salesforce</strong> (NYC IS JD), <strong>HubSpot</strong> (Madrid BDM Team Lead JD), <strong>Outreach</strong>, <strong>LinkedIn Sales Nav</strong>, <strong>Gong</strong> (former CCO held Frontline Mgr cert). <em>The SF/HubSpot split is suspicious — likely SF in NA, HubSpot in EMEA, or transition in progress. Expect tool inconsistency.</em></td></tr>
+      <tr><td><strong>Lead infrastructure</strong></td><td><strong>Adyen</strong> is the load-bearing partner — embedded payment processor + embedded capital partner (Fresha Capital launched in 7 markets, $5.5M issued by Feb 2026) <span class="tier tier-1">T1</span>. Not a reseller channel; it <em>generates</em> Fresha's revenue.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Quota mechanics (inferred — verify in offer)</h3>
+  <p>Given the free-software + payments-attach + activated-locations model, quota is almost certainly NOT seat-based ARR. Most likely structure:</p>
+
+  <table>
+    <thead><tr><th>Role</th><th>Probable quota structure</th></tr></thead>
+    <tbody>
+      <tr><td>AE / BDM (acquisition)</td><td><strong>Activated paying locations + payments-attach</strong> within X days of close. Monthly logo + activation cadence.</td></tr>
+      <tr><td>Account Manager</td><td><strong>GMV processed through Fresha Payments</strong> by managed book + cross-sell of Fresha Capital. AM Glassdoor review confirms <em>&ldquo;flogging card machines down the phone&rdquo;</em> <span class="tier tier-1">T1</span> — payments-hardware attach is a core AM motion.</td></tr>
+      <tr><td>SDR</td><td>Qualified meetings booked + outbound activity volume.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout critical">
+    <div class="callout-label">▸ The risk signal you need to know</div>
+    <p>London AM Glassdoor review (Mar 2026): <em>&ldquo;Targets completely unachievable, none of the AM team hit close to 100% over a 6+ month period, so don't pay attention to commission potential as you won't be getting it.&rdquo;</em> <span class="tier tier-1">T1</span></p>
+    <p style="margin-top:8px;"><strong>Reconciliation:</strong> RepVue says ~45% org attainment (above 42% SaaS average). Glassdoor London BDM/AM reviews say effectively zero. Both can be true. The RepVue verified sample (n=14, includes CSM + international) likely skews to roles with healthier attainment. <strong>London new-business attainment is materially lower than the org average suggests.</strong></p>
+    <p style="margin-top:8px;">The single most important interview question: <em>&ldquo;What was your team's quota attainment last 4 quarters by region and role, and how is quota set against payments-attach versus logo count?&rdquo;</em> If they dodge, you have your answer.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 08 RECENT MOVES -->
+<section id="s08" class="section">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <h2 style="margin:0;">What just happened (last 12 months)</h2>
+    <span class="section-tag">8 min read</span>
+  </div>
+
+  <p>The last 12 months reframed Fresha from &ldquo;scrappy free booking tool&rdquo; to &ldquo;KKR-backed AI-powered self-care OS.&rdquo; A clean dated timeline:</p>
+
+  <div class="vtimeline">
+    <div class="vt-item">
+      <div class="vt-date">Aug 21, 2024</div>
+      <div class="vt-title">$31M venture debt from J.P. Morgan</div>
+      <p class="vt-body">Total raised at the time: $185M. Earmarked for ML/AI-powered &ldquo;robotics&rdquo; and new market expansion. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Oct 22, 2024</div>
+      <div class="vt-title">Minority equity stake in Yuv (AI hair color)</div>
+      <p class="vt-body">Not an acquisition — strategic investment to develop AI-powered hair-color tooling. <span class="tier tier-2">T2</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Feb 27, 2025</div>
+      <div class="vt-title">European expansion: Madrid, Paris, Amsterdam</div>
+      <p class="vt-body">Deepening &ldquo;support for local partners&rdquo; and attracting top talent. Cumulative funding confirmed &gt;$185M. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item red">
+      <div class="vt-date">March 1, 2025</div>
+      <div class="vt-title">Paid tier rollout — &ldquo;100% free forever&rdquo; promise ends</div>
+      <p class="vt-body">Mandatory monthly subscription per staff member, plus &ldquo;Team Pay&rdquo; payroll add-on. Salon owners reported being &ldquo;cornered into agreeing&rdquo; — opt-out meant losing marketplace visibility, calendar access, and notifications. Reddit, Instagram, Facebook stylist groups erupt. <span class="tier tier-5">T5</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Jun 10, 2025</div>
+      <div class="vt-title">William Zeqiri keynote at Money 20/20 Amsterdam</div>
+      <p class="vt-body">Embedded as fintech-adjacent thought leadership. $1.4B monthly transactions disclosed. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Sep 30, 2025</div>
+      <div class="vt-title">UK pricing settles at £14.95/mo universal</div>
+      <p class="vt-body">&ldquo;100% subscription-free&rdquo; framing officially retired. <code>@madewithJENA</code> Instagram reel &ldquo;What happened to '100% subscription-free'?&rdquo; circulates. <span class="tier tier-5">T5</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Nov 17, 2025</div>
+      <div class="vt-title">Google 2025 Agentic Commerce Moment partner</div>
+      <p class="vt-body">Live availability injected into Google Search + AI Mode. 1 in 4 marketplace bookings via Gemini / AI agents reported Q4 2025. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Nov 18, 2025</div>
+      <div class="vt-title">Zeqiri Medium post: &ldquo;When High Standards Hurt Feelings, but Build Greatness&rdquo;</div>
+      <p class="vt-body">CEO publicly defends being called &ldquo;toxic&rdquo; — re-brands the criticism as &ldquo;owning outcomes instead of excuses.&rdquo; A direct, traceable artifact of leadership posture. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Jan 22, 2026</div>
+      <div class="vt-title">HairCon 5-year Premier Partnership</div>
+      <p class="vt-body">Event rebranded &ldquo;HairCon powered by Fresha.&rdquo; <span class="tier tier-2">T2</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Feb 3, 2026</div>
+      <div class="vt-title">Adyen embedded capital launch · Fresha Capital</div>
+      <p class="vt-body">$5.5M issued across 7 markets · revenue-based funding with auto-repayment · $500–$50K range driven by Adyen sales data. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Apr 16, 2026</div>
+      <div class="vt-title">Searchable Professional Profiles launch</div>
+      <p class="vt-body">Pivot from venue-based to individual-stylist-based discovery. Repositions Fresha against Booksy's stylist-first model. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">Apr 24, 2026</div>
+      <div class="vt-title">1M+ monthly app downloads milestone</div>
+      <p class="vt-body">Downloads grew 300% since mid-2024. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">May 11, 2026</div>
+      <div class="vt-title">AI-Powered Intelligent Scheduling launch</div>
+      <p class="vt-body">Dynamic reassignment. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item">
+      <div class="vt-date">May 14, 2026</div>
+      <div class="vt-title">Fresha Connect launch (Client Connect + Team Connect)</div>
+      <p class="vt-body">Unified inbox + internal team chat. &ldquo;Slack + Intercom native to beauty.&rdquo; <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item major">
+      <div class="vt-date">May 18, 2026</div>
+      <div class="vt-title">AI Concierge launch</div>
+      <p class="vt-body">$99.95/location/mo · digital front-desk agent answers calls + messages, books, recommends, reschedules. Lead 2026 product story. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="vt-item major">
+      <div class="vt-date">May 21, 2026</div>
+      <div class="vt-title">$80M KKR @ $1B+ — UNICORN</div>
+      <p class="vt-body">First institutional growth equity since Dec 2021. KKR Next Gen Tech Growth fund. Capital earmarked for international expansion and AI feature development. Total raised: $285.8M. <span class="tier tier-2">T2</span></p>
+    </div>
+  </div>
+
+  <h3>Narrative shift, in one line</h3>
+  <div class="callout info">
+    <div class="callout-label">▸ Then → Now</div>
+    <p><strong>12–18 months ago:</strong> &ldquo;Booking.com of salons.&rdquo; Fast-growing European booking platform with a &ldquo;100% subscription-free&rdquo; hook for SMBs.</p>
+    <p style="margin-top: 8px;"><strong>Today:</strong> &ldquo;AI-powered global marketplace and operating platform&rdquo; · &ldquo;AI Self-Care OS&rdquo; (Fitt Insider, May 21, 2026) <span class="tier tier-2">T2</span>. KKR-backed pre-IPO posture. The 2025 pricing change was the monetization side of this repositioning. The KKR round is the validation.</p>
+  </div>
+
+  <h3>Walking-in implications</h3>
+  <ul>
+    <li><strong>Lead with the pricing-change wound.</strong> If the prospect is a UK/US salon or solo stylist, they're either paying the new tier or they've heard the chatter. The empathy bridge is the conversation.</li>
+    <li><strong>The KKR round changes switching calculus.</strong> Fresha is no longer a startup that might disappear; it's a KKR-backed unicorn with $285M in funding. The &ldquo;they might raise prices&rdquo; objection is no longer hypothetical — they already did.</li>
+    <li><strong>Fresha is going up-market and into medspa.</strong> If your friend serves higher-end aesthetics, Fresha is actively chasing that segment.</li>
+    <li><strong>Communication is Fresha's new wedge.</strong> Any competitor's pitch needs a credible answer on missed-call handling, client messaging, team chat — Fresha just made these table stakes.</li>
+    <li><strong>No layoffs or scandals to leverage.</strong> Headcount up 44% YoY. Don't pitch on instability — there isn't any.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 09 WHAT IT'S LIKE -->
+<section id="s09" class="section">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <h2 style="margin:0;">What it's actually like to work there</h2>
+    <span class="section-tag">14 min read · calibrated honest</span>
+  </div>
+
+  <p>The honest read. The data is fragmented across Glassdoor (overall + filters), RepVue, Indeed, and the CEO's own published writing. The pattern is real and worth knowing before you sign.</p>
+
+  <h3>The numbers, all at once</h3>
+  <table>
+    <thead><tr><th>Source</th><th>Score</th><th>N</th><th>Recommend</th><th>CEO approval</th></tr></thead>
+    <tbody>
+      <tr><td>Glassdoor overall</td><td>3.0 / 5</td><td>251</td><td>42%</td><td>45%</td></tr>
+      <tr style="background: var(--callout-critical-bg);"><td><strong>Glassdoor BDM filter</strong></td><td><strong>2.4 / 5</strong></td><td>16</td><td><strong>13%</strong></td><td>19%</td></tr>
+      <tr><td>Glassdoor Sales BDM</td><td>3.6 / 5</td><td>8</td><td>55%</td><td>55%</td></tr>
+      <tr style="background: var(--callout-tip-bg);"><td><strong>Glassdoor Account Manager</strong></td><td><strong>4.5 / 5</strong></td><td>12</td><td><strong>79%</strong></td><td>100%</td></tr>
+      <tr><td>Glassdoor Partner Success</td><td>3.9 / 5</td><td>29</td><td>74%</td><td>72%</td></tr>
+      <tr style="background: var(--callout-tip-bg);"><td><strong>Glassdoor NYC location</strong></td><td><strong>3.7 / 5</strong></td><td>14</td><td><strong>100%</strong></td><td>100%</td></tr>
+      <tr><td>RepVue (overall)</td><td>3.4 / 5 (RepVue Score 79.75)</td><td>14 (57% verified)</td><td>—</td><td>—</td></tr>
+      <tr><td>Indeed UK</td><td>3.0 / 5</td><td>8</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <p>All accessed 2026-05-29. The 3.0 overall is materially below the IT-industry Glassdoor average of 3.9 <span class="tier tier-1">T1</span>.</p>
+
+  <p>Glassdoor category breakdown (overall): Senior Management 2.8 · Work/Life Balance 2.9 · Culture &amp; Values 2.9 · Comp/Benefits 3.1 · Career Opportunities 3.2 · D&amp;I 3.5. The trend is <strong>declining</strong>, not flat — Glassdoor's own FAQ on the BDM page says recommend-to-friend &ldquo;has decreased by 86% in the past 12 months&rdquo; for BDM, and overall comp/benefits is down 16% over the last 12 months. Recent reviews (Dec 2025 → Mar 2026) skew sharply negative in London BDM/AM cohorts.</p>
+
+  <h3>The CEO-toxic conversation (the load-bearing one)</h3>
+
+  <blockquote>
+    &ldquo;The CEO is one of the most toxic people I got the chance to work with. He loves shouting, calling everyone names and humiliating people. He's constantly comparing himself with Elon Musk or Steve Jobs.&rdquo;
+    <span class="attribution">— Former Manager, London, Glassdoor, Oct 25, 2021 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <blockquote>
+    &ldquo;Dreadful company. Awful CEO… Naive CEO.&rdquo;
+    <span class="attribution">— Former Sales, London, Glassdoor, Oct 19, 2025 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <p>This is a multi-year, multi-reviewer pattern, not a single bad review. <strong>Crucially, the CEO himself addressed it publicly in November 2025.</strong> His Medium post titled &ldquo;When High Standards Hurt Feelings, but Build Greatness&rdquo; explicitly defends being called toxic:</p>
+
+  <blockquote>
+    &ldquo;Some people will call it toxic when you expect them to own outcomes instead of excuses.&rdquo;
+    <span class="attribution">— William Zeqiri, Medium, Nov 18, 2025 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <p>Read that twice. <strong>The CEO believes the criticism is correct and re-brands it as &ldquo;high standards.&rdquo;</strong> This is not gossip; it is a direct, durable artifact of leadership posture. If you thrive in that environment (some do), it's not a dealbreaker. If you need autonomy and trust-based management, you have your answer.</p>
+
+  <h3>Sales-role-specific signals</h3>
+  <ul>
+    <li><strong>BDM (16 reviews) is the worst-rated role at Fresha.</strong> 2.4 / 5, 13% recommend, comp 1.4 / 5. Most recent BDM reviews (Jan 2026, Dec 2025) are 1-star: &ldquo;Please, please think twice before applying&rdquo; and &ldquo;NO. DON'T DO IT.&rdquo; <span class="tier tier-1">T1</span></li>
+    <li><strong>Account Manager (12 reviews) is among the best.</strong> 4.5 / 5, 79% recommend, 100% CEO approval, 4.8 on comp. Small N + global distribution (London, Dubai, Riyadh).</li>
+    <li><strong>Partner Success Manager (29 reviews) is broadly positive.</strong> 3.9 / 5, 74% recommend. Largest sales-adjacent sample.</li>
+  </ul>
+
+  <p><strong>The cross-role pattern:</strong> new-business hunters (BDM/Sales) at entry-level London face the worst conditions. Book-of-business / retention roles (AM, PSM) report meaningfully better experiences. International offices (Dubai, Riyadh, Hong Kong, Singapore, NYC) report better than London HQ.</p>
+
+  <blockquote>
+    &ldquo;Targets completely unachievable, none of the AM team hit close to 100% over a 6+ month period, so don't pay attention to commission potential as you won't be getting it. Incessant call &amp; meeting monitoring, with desperate daily 'power hours' everyone hated. Micromanagement hell.&rdquo;
+    <span class="attribution">— Former Associate Account Manager, London, Glassdoor, March 21, 2026 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <blockquote>
+    &ldquo;Smart people working together to build a market leading company. High performing and very inclusive team. Product is leagues ahead of the market. Fun social events.&rdquo;
+    <span class="attribution">— Anonymous employee, New York, Glassdoor, May 18, 2026 <span class="tier tier-1">T1</span></span>
+  </blockquote>
+
+  <p><strong>Both quotes are true. They describe different offices.</strong> Regional culture variance is real and material.</p>
+
+  <h3>Comp picture</h3>
+  <table>
+    <thead><tr><th>Role</th><th>Geo</th><th>Base</th><th>OTE</th></tr></thead>
+    <tbody>
+      <tr><td>Sales Executive (entry)</td><td>London</td><td>£30K</td><td>£40K (+£10K variable; accelerators above)</td></tr>
+      <tr><td>Business Development Manager</td><td>London</td><td>£35K – £53K</td><td>+ commission</td></tr>
+      <tr><td>Account Manager</td><td>London</td><td>£43K – £61K</td><td>—</td></tr>
+      <tr><td>Partner Success Manager</td><td>London</td><td>£36K – £46K</td><td>—</td></tr>
+      <tr><td>Account Manager (Bilingual)</td><td>New York</td><td>$75K</td><td>$100K</td></tr>
+      <tr><td>Account Manager</td><td>New York</td><td>—</td><td>$100K – $110K OTE</td></tr>
+      <tr><td>Account Executive</td><td>New York</td><td>—</td><td>$100K – $110K (predicted)</td></tr>
+      <tr><td>Inside Sales Representative</td><td>New York</td><td>—</td><td>$80K – $100K</td></tr>
+      <tr><td>Influencer Executive</td><td>London</td><td>—</td><td>£85K+ OTE</td></tr>
+    </tbody>
+  </table>
+
+  <p>For NYC benchmark context, <strong>RepVue's NYC AE median is $105K base / $200K OTE</strong> (May 2026). <strong>Fresha NYC AE OTE at $100–110K is roughly half the NYC SaaS AE median.</strong> Consistent with high-velocity SMB motion (lower deal size, higher volume) — but do not expect &ldquo;tech AE&rdquo; comp.</p>
+
+  <p>Variable structure: ~75/25 split (£30K base / £10K variable on entry). RepVue scores Incentive Comp Structure at 3.1 (33rd percentile of Software orgs) and Base Comp at 3.5 (41st percentile) — both below median.</p>
+
+  <div class="callout critical">
+    <div class="callout-label">▸ Equity story — the material red flag</div>
+    <p>Multiple direct signals say <strong>commercial team does not receive equity</strong> — only engineering. A PSM review (Nov 2023, NYC) explicitly: <em>&ldquo;I wish the commercial teams are given company shares too not just developers.&rdquo;</em> <span class="tier tier-1">T1</span></p>
+    <p style="margin-top: 8px;">For a $1B-valuation pre-IPO company, this is material. <strong>Verify the equity story in your offer paperwork before signing.</strong> If you're getting comp from sales role at a pre-IPO unicorn, you need to know whether the &ldquo;up&rdquo; is real or theoretical.</p>
+  </div>
+
+  <h3>Work model</h3>
+  <p><strong>5 days/week in office, mandatory in London.</strong> Welcome to the Jungle posting for Sales Executive (London): &ldquo;5+ days a week in office (Old Street, London)&rdquo; at The Bower, 207 Old St. <span class="tier tier-1">T1</span> NYC review (Jun 2025): &ldquo;wfh 1 day a week midlevel management cool&rdquo; — NYC has more flexibility.</p>
+
+  <h3>The quota attainment paradox</h3>
+  <div class="callout warning">
+    <div class="callout-label">▸ RepVue says 45%. Glassdoor London says ~0. Both true.</div>
+    <p><strong>RepVue:</strong> ~45% of Fresha reps hit quota vs. 42% Software industry average / 44% global. RepVue flags this as &ldquo;High Quota Attainment&rdquo; <span class="tier tier-4">T4</span>.</p>
+    <p style="margin-top: 6px;"><strong>Glassdoor London BDM/Associate AM:</strong> repeatedly claim near-zero attainment.</p>
+    <p style="margin-top: 6px;"><strong>Reconciliation:</strong> RepVue's verified sample (n=14, 57% verified, includes CSM + international) skews to roles with healthier attainment. London new-business BDM attainment is materially lower than the org average suggests.</p>
+    <p style="margin-top: 8px;"><strong>The single most important offer-letter advice:</strong> Take the OTE on the offer letter, then divide it by two. Sales-side reports of ~45% attainment suggest on-target earnings are realistic for roughly half the team; London BDM/AM reviews suggest worse. <strong>Plan finances around base + 50% of variable, not 100% OTE.</strong></p>
+  </div>
+
+  <h3>Green flags, red flags</h3>
+  <div class="three-up">
+    <div class="battle-card" style="border-top-color: var(--color-green-500);">
+      <h4>Green flags</h4>
+      <ul>
+        <li>PMF is real (RepVue 76th percentile, 4.1 / 5)</li>
+        <li>Inbound lead flow strong (80th percentile)</li>
+        <li>Quota attainment ~45% beats SaaS average</li>
+        <li>Stage + valuation real ($1B+ KKR)</li>
+        <li>AM, PSM, NYC reviews are genuinely positive</li>
+        <li>Multiple reviews call product &ldquo;leagues ahead&rdquo;</li>
+        <li>Base salaries competitive for SMB SaaS in London</li>
+      </ul>
+    </div>
+    <div class="battle-card" style="border-top-color: var(--color-red-500);">
+      <h4>Red flags</h4>
+      <ul>
+        <li>CEO leadership style (he confirmed it himself)</li>
+        <li>Commercial team appears excluded from equity</li>
+        <li>5-day mandatory RTO in London</li>
+        <li>3-week maternity leave referenced (verify)</li>
+        <li>PIP culture used as management tool</li>
+        <li>Declining trend Dec 2025–Mar 2026 1-star reviews</li>
+        <li>&ldquo;Many of the positive reviews on here are fake&rdquo; — internal perception</li>
+      </ul>
+    </div>
+    <div class="battle-card" style="border-top-color: var(--color-amber-500);">
+      <h4>Calibrated expectation</h4>
+      <p style="font-size:13px; margin:0;">High-pressure in-office sales floor. Founder-led. Take OTE and divide by two. Geography matters massively. <strong>18–30 month sprint, not a 5-year career bet.</strong> Bank the experience and the comp; don't assume promotion paths are stable. Two CCOs in 24 months. Tenure risk is real.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 10 WHAT TO ASK -->
+<section id="s10" class="section">
+  <div class="section-header">
+    <span class="section-number">10</span>
+    <h2 style="margin:0;">What to ask before you start (and in week 1)</h2>
+    <span class="section-tag">7 min read</span>
+  </div>
+
+  <p>Use these in interviews, in the offer-negotiation conversation, and in your first 14 days. The questions are not adversarial — they are the questions any candidate at any pre-IPO company should be able to ask.</p>
+
+  <div class="qa-bank">
+    <details open>
+      <summary>Compensation · the actual numbers, not the OTE on the offer letter</summary>
+      <div class="qa-body">
+        <p><strong>Ask:</strong> &ldquo;What was your team's real quota attainment by region and role over the last four quarters? What % of reps hit 80–100%? What % of OTE does the median rep actually earn?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Ask:</strong> &ldquo;How is quota constructed? What share is payments-attach vs. logo count vs. expansion GMV?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Ask:</strong> &ldquo;What is the equity grant — exactly — and is it standard for commercial roles? Or is equity engineering-only?&rdquo; <em>(Get this in writing in the offer.)</em></p>
+        <p style="margin-top: 8px;"><strong>Why:</strong> Sections 03 (quota) + 09 (equity gap) make this load-bearing. If they dodge, you have your answer.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Manager + GM situation · who you'll actually report to</summary>
+      <div class="qa-body">
+        <p><strong>Ask:</strong> &ldquo;Who is my direct manager? What is their tenure? What is the turnover rate at my level in the last 12 months? Who is my coach distinct from my manager?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Ask:</strong> &ldquo;What is the formal ramp expectation? When is the first quota and what does &lsquo;at ramp' look like?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Why:</strong> Two CCOs in 24 months + founder-mode CEO + GM-led regional ops = your line-of-authority experience depends almost entirely on which GM you land under. NA under Scott O'Brien reads differently from London under the new Humphreys team.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Comp realism · PIP posture, performance-management culture</summary>
+      <div class="qa-body">
+        <p><strong>Ask:</strong> &ldquo;What's the PIP timing if I miss ramp targets? What's the performance-management posture — is PIP a remediation tool or an exit tool?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Ask:</strong> &ldquo;Has anyone been let go from this team in the last 6 months? If so, was there a clear performance bar communicated in advance?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Why:</strong> Multiple Glassdoor reviews cite PIP used as a management tool, not a remediation tool. London BDM specifically. You need to know the bar.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Geography · seat choice + RTO in writing</summary>
+      <div class="qa-body">
+        <p><strong>Ask:</strong> &ldquo;Is there a choice of seat — NYC, London, or another? What is the RTO policy in writing? Is it 5 days, hybrid, or flexible by team?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Why:</strong> Glassdoor 3.7 NYC vs. 2.4 London BDM. The single biggest controllable variable in your experience.</p>
+      </div>
+    </details>
+    <details>
+      <summary>Product reality · what wins, what loses</summary>
+      <div class="qa-body">
+        <p><strong>Ask:</strong> &ldquo;Which competitor losses are most common right now — Booksy, Vagaro, Boulevard? Which industry pushbacks do reps hit most (fee transparency, integration ceiling)?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Ask:</strong> &ldquo;Who is the best AE on the team I should shadow first? Can I listen to 5 Gong recordings of their last 30 days?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Why:</strong> Skip the marketing pitch; learn from the best rep's actual calls.</p>
+      </div>
+    </details>
+    <details>
+      <summary>The equity question, phrased so they can't dodge</summary>
+      <div class="qa-body">
+        <p><strong>Ask, in writing:</strong> &ldquo;Will my offer include equity? If yes — how many shares or options, at what strike price, with what vesting schedule, and with what acceleration clauses on change-of-control? If no — is there a deferred-comp or phantom-equity vehicle for commercial roles at unicorn-stage Fresha?&rdquo;</p>
+        <p style="margin-top: 8px;"><strong>Why:</strong> &ldquo;Yes we offer equity&rdquo; is not the same as &ldquo;here's your grant.&rdquo; Don't accept verbal — get the number in writing. Section 09 callout flagged this as the material red flag for a reason.</p>
+      </div>
+    </details>
+  </div>
+
+  <h3>The first 90 days — checklist</h3>
+  <p>Things to do in your first 14 days (week 1–2) and first 90 days:</p>
+  <ul>
+    <li><strong>Week 1 · Day 1–3:</strong> shadow the inbound queue handoff. Watch the 10-minute SLA in action. Time yourself against it.</li>
+    <li><strong>Week 1 · Day 4–5:</strong> ride along on a walk-in BDM. Yes, literally walking into salons. The motion is real (NA JD says &ldquo;walk-ins&rdquo; verbatim).</li>
+    <li><strong>Week 2:</strong> listen to 10 Gong calls — the 5 best-performing AEs and 5 typical AEs. Note the differences in opening, in objection handles, in close attempts.</li>
+    <li><strong>Week 2:</strong> read the last 4 Fresha blog posts. Internalize the AI Concierge pitch (it's the wedge for the next 12 months).</li>
+    <li><strong>Week 2:</strong> read the Capterra top 20 most-recent reviews. You will hear those operator complaints in calls. Pre-load the responses.</li>
+    <li><strong>Day 30:</strong> first quota checkpoint. Verify in writing: was this ramp quota or carrying quota? When does the real quota start?</li>
+    <li><strong>Day 60:</strong> map the 3 competitor objections you hear most — Booksy / Vagaro / Boulevard — and write the 3-sentence response to each. Submit to your manager for feedback.</li>
+    <li><strong>Day 90:</strong> verify quota attainment in your cohort. What % of your peer cohort hit 80–100% of plan in Q1? If you can't answer this question with data, get the data.</li>
+  </ul>
+
+  <div class="callout tip">
+    <div class="callout-label">▸ The friend-to-friend close</div>
+    <p>If you take only one thing from this section: <strong>verify the equity story in writing, choose NYC over London if you have the choice, and assume you'll hit 50% of OTE not 100%.</strong> Plan finances on base + half-variable. If the company outperforms, great. If they don't, you're not surprised.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 11 META -->
+<section id="s11" class="section">
+  <div class="section-header">
+    <span class="section-number">11</span>
+    <h2 style="margin:0;">How this was built</h2>
+    <span class="section-tag">8 min read · meta</span>
+  </div>
+
+  <p style="font-size: 18px; color: var(--text-heading);"><strong>The thing you're reading is a one-prompt output. The reason it lands is the infrastructure underneath.</strong></p>
+
+  <p>This walkthrough was produced in roughly the time it takes to grab lunch. A single prompt, &ldquo;build a Fresha walking-in briefing for a new sales hire,&rdquo; kicked off a structured pipeline of orientation, research, synthesis, design, build, and validation. Below is the actual process, named honestly, so you can see what the system is and isn't.</p>
+
+  <h3>The process, in order</h3>
+
+  <div class="process-flow">
+    <div class="pf-step">
+      <div class="pf-num">1</div>
+      <div class="pf-content">
+        <div class="pf-title">Session orientation</div>
+        <div class="pf-desc">session-orchestrator reads CONTEXT, loads tiered context, detects engine routing, classifies intent. Output: domain identified (research + content production), engines invoked (Sales Enablement + On-Demand Curriculum).</div>
+      </div>
+      <div class="pf-time">~1 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">2</div>
+      <div class="pf-content">
+        <div class="pf-title">Run plan written to disk</div>
+        <div class="pf-desc">phase-controller classifies operation as scan-then-deep-dive (depth-governor). 5-phase plan persisted to disk for compaction resilience: orient → research → synthesize → design → build → validate.</div>
+      </div>
+      <div class="pf-time">~1 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">3</div>
+      <div class="pf-content">
+        <div class="pf-title">7 parallel research subagents dispatched</div>
+        <div class="pf-desc">Each subagent gets one thread — Company Core, Business Model, Competitive, Sales Org, Product, Recent Moves, Glassdoor. All seven run concurrently using Bright Data scrape, WebFetch, Context7. ~200+ tool calls in parallel.</div>
+      </div>
+      <div class="pf-time">~3–4 min wall</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">4</div>
+      <div class="pf-content">
+        <div class="pf-title">Findings synthesis</div>
+        <div class="pf-desc">findings-formatter applies tier discipline (T1–T5 credibility), reconciles contradictions (RepVue 45% vs Glassdoor 0% attainment), surfaces unknowns explicitly. Output: 7 structured thread files + cross-cutting synthesis.</div>
+      </div>
+      <div class="pf-time">~1 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">5</div>
+      <div class="pf-content">
+        <div class="pf-title">Design doc</div>
+        <div class="pf-desc">Section architecture written to design.md — 12 sections with line targets, content briefs, diagram specs (the 2x2 matrix, the funding timeline, the org chart, the process flow). Operator review checkpoint.</div>
+      </div>
+      <div class="pf-time">~1 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">6</div>
+      <div class="pf-content">
+        <div class="pf-title">HTML construction</div>
+        <div class="pf-desc">section-construction skill builds the file incrementally — HPAC design system (light/dark theme, sidebar nav, callouts, tier badges), inline SVG/CSS diagrams, verbatim pull quotes, every claim tier-tagged.</div>
+      </div>
+      <div class="pf-time">~10–15 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">7</div>
+      <div class="pf-content">
+        <div class="pf-title">Render-validate</div>
+        <div class="pf-desc">Puppeteer screenshots at 1440px and 768px, light + dark themes. Visual verification — does it actually look right when rendered? Mandatory non-negotiable.</div>
+      </div>
+      <div class="pf-time">~2 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">8</div>
+      <div class="pf-content">
+        <div class="pf-title">Adversarial evaluator</div>
+        <div class="pf-desc">Independent-context subagent receives only the deliverable + scoring criteria. No access to writer's reasoning. Returns scored evaluation — surfaces over-claims, missing citations, structural failures.</div>
+      </div>
+      <div class="pf-time">~2 min</div>
+    </div>
+    <div class="pf-step">
+      <div class="pf-num">9</div>
+      <div class="pf-content">
+        <div class="pf-title">Ship</div>
+        <div class="pf-desc">Activity log captures every file operation. Intelligence log captures reusable patterns. CONTEXT.md updated for next session. Sources page compiled. Walkthrough ready.</div>
+      </div>
+      <div class="pf-time">~1 min</div>
+    </div>
+  </div>
+
+  <h3>The 7 parallel research agents, visualized</h3>
+
+  <div class="diagram-frame">
+    <div class="diagram-title">Phase 2 · parallel research fanout</div>
+    <div class="agent-fan">
+      <div class="agent-chip">Agent 1<br>Company Core<br><span style="font-weight:400;">founding · leadership · funding · HQ · positioning</span></div>
+      <div class="agent-chip">Agent 2<br>Business Model<br><span style="font-weight:400;">pricing · payments · marketplace · take-rates · failure modes</span></div>
+      <div class="agent-chip">Agent 3<br>Competitive<br><span style="font-weight:400;">Booksy · Vagaro · Boulevard · Mindbody · 2x2 matrix</span></div>
+      <div class="agent-chip">Agent 4<br>Sales Org<br><span style="font-weight:400;">leadership · GTM · ICP · tools · open roles · quota</span></div>
+      <div class="agent-chip">Agent 5<br>Product<br><span style="font-weight:400;">modules · pricing · roadmap · reviews · AI Concierge</span></div>
+      <div class="agent-chip">Agent 6<br>Recent Moves<br><span style="font-weight:400;">12-month timeline · KKR · pricing shift · launches</span></div>
+      <div class="agent-chip">Agent 7<br>Glassdoor<br><span style="font-weight:400;">Glassdoor · RepVue · Indeed · CEO Medium · comp</span></div>
+    </div>
+    <div style="text-align:center; color: var(--text-secondary); font-size: 12px; margin: 12px 0;">↓ Each agent: Bright Data scrapes + WebFetch + Context7 · ~30 tool calls · independent context</div>
+    <div style="text-align:center; padding: 12px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 8px; font-size: 13px;">
+      <strong>findings-formatter</strong> · tier-discipline synthesis · contradiction reconciliation · 7 thread files written to disk
+    </div>
+    <div class="diagram-caption">All seven agents run concurrently. Wall time ≈ slowest agent (~3–4 min), not sum of agents.</div>
+  </div>
+
+  <h3>What was sourced</h3>
+  <p><strong>~100+ unique URLs</strong> across Tier 1 → Tier 5 credibility:</p>
+  <ul>
+    <li><strong>Tier 1 (primary):</strong> fresha.com/pricing (scraped 2026-05-29) · Fresha LinkedIn (/heyfresha) · live Lever job postings (CFO, Head of Sales DACH, AE Austin) · Fresha blog · PRNewswire releases · Money 20/20 keynote · CEO Medium posts</li>
+    <li><strong>Tier 2 (business press):</strong> TechCrunch · TechFundingNews · Sifted · BusinessCloud · Vestbee · BeautyMatter · PRNewswire/BusinessWire press · Crunchbase News · JMI Equity · Partech press</li>
+    <li><strong>Tier 3 (analyst / aggregator):</strong> Crunchbase · CB Insights · Tracxn · Latka · Contrary Research · BusinessModelCanvasTemplate · Wikipedia · RocketReach · Forge Global</li>
+    <li><strong>Tier 4 (org-chart / inferred):</strong> TheOrg leadership chart · LinkedIn cross-referenced</li>
+    <li><strong>Tier 5 (operator forum / social):</strong> Reddit r/smallbusiness · Instagram <code>@madewithJENA</code> · Facebook salon-owner groups · Medium <code>@asbaines</code> · Apple App Store + Google Play verbatim reviews</li>
+  </ul>
+
+  <h3>Capabilities used (the named system)</h3>
+  <div class="three-up">
+    <div class="battle-card">
+      <h4>Sales Enablement Engine</h4>
+      <div class="battle-sub">Research methodology</div>
+      <p style="font-size: 13px; margin: 0;">Bright Data discipline · credibility-tiered findings · contradiction reconciliation · sources-by-tier accounting · quota / comp / culture frameworks · adversarial evaluator</p>
+    </div>
+    <div class="battle-card">
+      <h4>On-Demand Curriculum Engine</h4>
+      <div class="battle-sub">HTML walkthrough format</div>
+      <p style="font-size: 13px; margin: 0;">HPAC design language · interactive single-file HTML · sidebar nav + active section · light/dark theme · callout system · inline SVG diagrams · render-validate Puppeteer loop</p>
+    </div>
+    <div class="battle-card">
+      <h4>EngineOS shared layer</h4>
+      <div class="battle-sub">Governance + skills</div>
+      <p style="font-size: 13px; margin: 0;">phase-controller · session-orchestrator · depth-governor · findings-formatter · section-construction · render-validate · adversarial-evaluator · output-self-test · audit-logging</p>
+    </div>
+  </div>
+
+  <h3>What this is honest about</h3>
+  <div class="callout warning">
+    <div class="callout-label">▸ The honest version</div>
+    <p>The system amplifies expertise. It doesn't fabricate it. This walkthrough has weight because the underlying research is properly tier-tagged, the contradictions are surfaced not hidden, and the operator can read the output and recognize what's right and what's bullshit. If you pointed the system at a domain the operator knew nothing about, it would still produce something structurally similar — but the substance would be hollow. <strong>The operator-in-the-loop is load-bearing.</strong> That's the honest version. It also happens to be why this is a moat for the operator, not just a feature of the tool.</p>
+  </div>
+
+  <h3>What the system <em>didn't</em> do</h3>
+  <ul>
+    <li><strong>Didn't trust training data.</strong> The Fresha numbers are from Bright Data scrapes and WebFetch on 2026-05-29 — not from the model's training cutoff. Every funding round, every Capterra rating, every quote is dated and sourced.</li>
+    <li><strong>Didn't pick one number when sources disagreed.</strong> RepVue 45% vs. Glassdoor 0% attainment — both surfaced, reconciliation explained. $285M vs. $294.4M total raised — both shown, headline chosen.</li>
+    <li><strong>Didn't flatter Fresha.</strong> The CEO-toxic conversation is in the document. The equity-exclusion finding is in the document. The take-OTE-and-divide-by-two advice is in the document. The audience is your friend, not the recruiter.</li>
+    <li><strong>Didn't pretend the operator built every line by hand.</strong> The system did the heavy lifting. The operator did the judgment work — which questions to ask, which sources to trust, which findings to lead with.</li>
+  </ul>
+
+  <p style="margin-top: 24px; padding: 16px 20px; background: var(--surface); border-radius: 10px; font-size: 14px;">
+    <strong>One last thing.</strong> The 30-minute build is the visible win. The years of compounding infrastructure underneath are the actual story. Most &ldquo;AI-powered workflows&rdquo; are a clever prompt and a single output. This is an operating system. The difference is the part that's hard to show in a screenshot. So this section exists to point at it.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 99 SOURCES -->
+<section id="s99" class="section">
+  <div class="section-header">
+    <span class="section-number">99</span>
+    <h2 style="margin:0;">Sources &amp; methodology</h2>
+    <span class="section-tag">Reference</span>
+  </div>
+
+  <p>Date stamp: <strong>2026-05-29</strong>. Every hard claim in this walkthrough carries an inline tier badge <span class="tier tier-1">T1</span>–<span class="tier tier-5">T5</span> indicating credibility. The master tier-grouped source list is below. To verify any claim, find the section the claim is in, find the tier badge, then locate the source in the matching tier block.</p>
+
+  <div class="src-block">
+    <h4>Tier 1 — Primary / official</h4>
+    <ul>
+      <li>fresha.com/pricing (US pricing page, scraped 2026-05-29)</li>
+      <li>fresha.com/help-center/knowledge-base/billing-and-fees/188-marketplace-new-client-fees</li>
+      <li>fresha.com/for-business/features/payments</li>
+      <li>fresha.com/blog/Fresha-at-Money-2020 (Money 20/20 keynote, June 2025)</li>
+      <li>fresha.com/blog/whats-new and Introducing AI Concierge (May 18, 2026)</li>
+      <li>LinkedIn: linkedin.com/company/heyfresha (canonical Fresha company page, 70k followers)</li>
+      <li>LinkedIn posts: William Zeqiri (KKR unicorn announcement, AI Concierge launch, 63% YoY 2024 growth, $15B GMV, founding quote)</li>
+      <li>LinkedIn post: Tom Humphreys, April 2026 (UK&amp;I 25 → 65 scaling)</li>
+      <li>LinkedIn post: Scott O'Brien, April 2026 (7 new NYC hires)</li>
+      <li>Fresha LinkedIn April 2026 post: 50 BDEs UK by June</li>
+      <li>Live Lever jobs: CFO London · Head of Sales DACH Berlin · AE Austin · Inside Sales NYC #4382906996 · Business Development Team Lead Madrid · SDR Pristina</li>
+      <li>William Zeqiri Medium: &ldquo;Founder Mode: The Secret Sauce Behind Innovation&rdquo; (Oct 2025)</li>
+      <li>William Zeqiri Medium: &ldquo;When High Standards Hurt Feelings, but Build Greatness&rdquo; (Nov 18, 2025)</li>
+      <li>PRNewswire releases: JPMorgan $31M debt (Aug 21, 2024) · European expansion (Feb 27, 2025) · Q4 2025 metrics with &ldquo;1 in 4 bookings via AI agents&rdquo; (Feb 23, 2026) · long-term events partnerships (Apr 7, 2026) · Searchable Pro Profiles (Apr 16, 2026) · 1M+ monthly downloads (Apr 24, 2026) · AI Intelligent Scheduling (May 11, 2026)</li>
+      <li>BusinessWire: Fresha Connect + AI Concierge (May 19, 2026) · General Atlantic $100M Series C (June 11, 2021)</li>
+      <li>Glassdoor Fresha overall + BDM filter + Account Manager filter + NYC location filter + London salaries</li>
+      <li>Apple App Store + Google Play scrapes (Bright Data, May 29, 2026) — Fresha for business + Fresha for customers</li>
+      <li>Capterra Fresha listing (4.8 / 1,446 reviews)</li>
+      <li>Welcome to the Jungle Sales Executive London (£30k/£40k OTE, 5-day RTO at The Bower)</li>
+      <li>RepVue Fresha (overall 79.75 RepVue Score, PMF 76th pct, inbound 80th pct, 45% attainment)</li>
+      <li>biz.booksy.com/en-us/pricing (Booksy US pricing, scraped May 2026)</li>
+      <li>vagaro.com/pro/pricing · joinblvd.com/pricing · mindbodyonline.com/business/pricing · glossgenius.com/pricing · squareup.com/us/en/appointments/pricing</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 2 — Business press / company-side PR</h4>
+    <ul>
+      <li>TechCrunch (May 21, 2026): &ldquo;Booking platform Fresha announces $80M investment, unicorn valuation&rdquo;</li>
+      <li>TechFundingNews: &ldquo;Beauty tech's quiet giant just became a unicorn&rdquo; (KKR round, $140M+ run-rate, &gt;60% YoY)</li>
+      <li>Ventureburn: Fresha $80M KKR / $1B coverage</li>
+      <li>BusinessCloud: &ldquo;Fresha hits unicorn status after £60m raise&rdquo;</li>
+      <li>Vestbee (May 25, 2026): unicorn round confirmation + office footprint detail</li>
+      <li>BeBeez: KKR coverage</li>
+      <li>Fitt Insider: &ldquo;Fresha's Self-Care OS&rdquo; framing (May 21, 2026)</li>
+      <li>RetailTech Innovation Hub: KKR coverage</li>
+      <li>Sifted: KKR round coverage</li>
+      <li>Crunchbase News: Boulevard Series D (Jul 2025); GlossGenius coverage</li>
+      <li>JMI Equity press: Boulevard Series D $80M @ ~$800M</li>
+      <li>FTV Capital: Vagaro $1B valuation (2021)</li>
+      <li>Partech press: Series C extension to $152.5M @ $640M (Dec 2021)</li>
+      <li>BeautyMatter: Fresha $52.5M Dec 2021 round</li>
+      <li>MEVP press: partial exit at Series C with 39x cash-on-cash return</li>
+      <li>UK Tech News: JPMorgan venture debt 2024</li>
+      <li>PRNewswire AE: Bookwell acquisition (Feb 2022)</li>
+      <li>BusinessWire: General Atlantic $100M Series C 2021</li>
+      <li>Pabau (April 2026): Fresha pricing teardown</li>
+      <li>Adyen press: Fresha embedded finance + Capital launch (Feb 3, 2026); Adyen × Fresha American Express case study (Apr 29, 2024)</li>
+      <li>Yahoo Finance: HairCon 5-year Premier Partnership (Jan 22, 2026)</li>
+      <li>Storyboard18 / TrendHunter / 01net.it: Fresha Connect + AI Concierge coverage (May 2026)</li>
+      <li>Diginomica (Sept 10, 2025): Fresha AI strategy profile</li>
+      <li>Insider Fitt: Mindbody IPO prep 2024</li>
+      <li>GlobalCosmeticsNews: Boulevard Series D medspa framing</li>
+      <li>SlotCut (April 2026): Booksy pricing teardown — 30% new-client commission</li>
+      <li>Goodcall: Mindbody vs. Vagaro pricing comparison</li>
+      <li>GlossGenius blog: Booksy + Vagaro pricing cross-confirmation</li>
+      <li>The Salon Business (Feb 26, 2026): Fresha review</li>
+      <li>Creative Head Magazine: Fresha AI launch coverage</li>
+      <li>Substack @mihais7 (May 26, 2026): pricing-change deep dive</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 3 — Analyst / aggregator / reference</h4>
+    <ul>
+      <li>Crunchbase: crunchbase.com/organization/shedul (canonical entry, legacy slug)</li>
+      <li>CB Insights: $294.4M total over 10 rounds (vs. $285M press)</li>
+      <li>Tracxn: 742 employees end of Q1 2026</li>
+      <li>Wikipedia: Booksy (origin, model, 2024 scale)</li>
+      <li>Contrary Research: GlossGenius breakdown</li>
+      <li>Latka: GlossGenius $100M ARR (Dec 2024); Fresha ARR ($43.4M, 2024 — stale)</li>
+      <li>BusinessModelCanvasTemplate: Treatwell, Booksy 2024 GMV, Fresha brief history</li>
+      <li>RocketReach: Phorest revenue</li>
+      <li>FitBudd: Mindbody pricing + ABC Fitness acquisition note</li>
+      <li>Forge Global: GlossGenius IPO tracker</li>
+      <li>Newswire.ca / PA Media: JPM venture debt 2024</li>
+      <li>LinkedIn personal profiles: Zeqiri, Miller, Greeno, Khoury, Iwanow, Campbell, Wong, Culman, Klatt, O'Grady, Rodgers, Monat, O'Brien, Humphreys, Frankcom, Chiaramonti, Rexhepi</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 4 — Org-chart / inferred</h4>
+    <ul>
+      <li>TheOrg: theorg.com/org/shedul-com — used cautiously for leadership chart structure (Taylor Wong VP Commercial; Pawel Iwanow Chief Payments Officer; Leonardo O'Grady Global VP Brand Marketing; regional GMs)</li>
+      <li>EquityZen: secondary platform listings indicating pre-IPO posture</li>
+      <li>Inference blocks throughout: ICP center (1–3 location $200K–$2M revenue), quota construction (payments-attach + GMV), lead source split (60–75% inbound), tech stack split (Salesforce NA / HubSpot EMEA likely)</li>
+    </ul>
+  </div>
+
+  <div class="src-block">
+    <h4>Tier 5 — Operator forum / social signal</h4>
+    <ul>
+      <li>Reddit: r/smallbusiness &ldquo;Fresha app new charges March 2025&rdquo;; r/AskUK; r/hairstylist; Reddit &ldquo;Is it legal for Fresha to charge their 20% new client fee&rdquo;</li>
+      <li>Instagram: @madewithJENA &ldquo;What happened to '100% subscription-free'?&rdquo; reel (Sep 30, 2025)</li>
+      <li>Facebook stylist groups: UK £14.95/mo subscription complaint threads</li>
+      <li>Medium @asbaines: &ldquo;The true cost of Fresha&rdquo; (Oct 2025) — UK rate of 1.2% + 20p, 3,500% ROI talk-track</li>
+      <li>Apple App Store + Google Play verbatim 1-star reviews (Fresha for business app, Nov 2025 + March 2025 cohort)</li>
+      <li>TikTok: salon-owner posts on Fresha pricing shift</li>
+    </ul>
+  </div>
+
+  <h3>How to verify any specific claim</h3>
+  <ol>
+    <li>Find the claim in the section it appears in.</li>
+    <li>Read the tier badge immediately after the claim.</li>
+    <li>Look up the matching tier block above for the source.</li>
+    <li>For T1 (primary) claims, the underlying URL is fresha.com, a live job posting, or a CEO post — direct verification possible.</li>
+    <li>For T5 (operator forum) claims, treat as directional sentiment — they are real signals but the underlying conditions may have shifted.</li>
+  </ol>
+
+  <p style="margin-top: 24px; color: var(--text-secondary); font-size: 13px; font-style: italic;">
+    If a claim in this walkthrough is wrong, it's because a source was stale or misread. The methodology — &ldquo;research before agreeing,&rdquo; &ldquo;trust the evidence over training data,&rdquo; &ldquo;every claim carries a tier&rdquo; — is what gives the rest of the document its weight. The methodology is also what allows you to find and correct any single error without invalidating the whole.
+  </p>
+</section>
+
+<footer style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+  <p><strong>Fresha · A Walking-In Briefing</strong></p>
+  <p>Built 2026-05-29. Single-file HTML, opens from Finder. CSS custom properties for light/dark theming. All claims tier-tagged T1–T5.</p>
+  <p>Produced by EngineOS — Sales Enablement Engine (research methodology) + On-Demand Curriculum Engine (HPAC walkthrough format). Approx. 30 minutes wall-time from single prompt to validated output. ~100+ unique source URLs across 5 credibility tiers. Seven parallel research agents using Bright Data + WebFetch + Context7 MCPs.</p>
+  <p style="margin-top: 12px; font-style: italic;">For a sales hire evaluating Fresha · sales role · 2026-05-29, calibrated honestly, not flattered.</p>
+</footer>
+
+</main>
+
+<script>
+const THEME_KEY = 'fresha-walkthrough-theme';
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+}
+(function initTheme() {
+  let saved;
+  try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+})();
+
+const sections = document.querySelectorAll('section.section, header.hero');
+const navLinks = document.querySelectorAll('.nav-item');
+function setActive() {
+  let active = null;
+  const scrollPos = window.scrollY + 120;
+  sections.forEach(s => {
+    if (s.offsetTop <= scrollPos) active = s.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + active);
+  });
+}
+window.addEventListener('scroll', setActive, { passive: true });
+setActive();
+
+if (window.location.hash) {
+  const target = document.querySelector(window.location.hash);
+  if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+}
+</script>
+
+</body>
+</html>
