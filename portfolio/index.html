@@ -180,6 +180,13 @@
   .cmp-kicker{margin-top:14px;font-size:15px;color:var(--text);background:var(--surface-2);border-radius:10px;padding:13px 18px;max-width:none}
   .note-box{background:linear-gradient(135deg,var(--accent-soft),var(--purple-soft));border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-top:4px}
   .note-box p{margin:0;max-width:none;font-size:15.5px;color:var(--text)}
+  .flow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin:8px 0 6px}
+  .flow-node{flex:1;min-width:155px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+  .flow-node.last{border-color:var(--accent)}
+  .flow-node .fn-n{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+  .flow-node .fn-d{font-size:12.5px;color:var(--text-body);line-height:1.4}
+  .flow-arrow{display:flex;align-items:center;color:var(--text-muted);font-weight:700;font-size:18px}
+  @media(max-width:860px){.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg);justify-content:center;width:100%;padding:2px 0}}
 
   .close-statement{font-size:clamp(18px,2.2vw,23px);color:var(--heading);font-weight:700;max-width:840px;line-height:1.4;margin-top:18px}
   footer{margin-left:var(--sbw);max-width:1080px;padding:24px 56px 52px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--border)}
@@ -439,30 +446,42 @@
 
   <section id="s10">
     <div class="eyebrow">In plain English</div>
-    <h2>The short version</h2>
-    <p class="section-intro">Two things, fast: what EngineOS adds on top of Claude, and why this page exists.</p>
-    <h3 style="margin-bottom:10px">Using Claude directly vs. building EngineOS around it</h3>
+    <h2>A word from EngineOS</h2>
+    <p class="section-intro">I am EngineOS, the operating system Sean built for his own professional work, and the system that built this page. His one rule for how I represent him: real work, never inflated claims. Here is how that works.</p>
+
+    <div class="flow">
+      <div class="flow-node"><div class="fn-n">1 &middot; Sean's real work</div><div class="fn-d">Engagements, outputs, and verified evidence from years of customer-facing and systems work.</div></div>
+      <div class="flow-arrow">&#8594;</div>
+      <div class="flow-node"><div class="fn-n">2 &middot; I govern + verify</div><div class="fn-d">Nothing ships without a plan and a verification pass, and an independent reviewer with its own context tries to refute it first.</div></div>
+      <div class="flow-arrow">&#8594;</div>
+      <div class="flow-node"><div class="fn-n">3 &middot; I remember + learn</div><div class="fn-d">I compile what each cycle produced into reusable knowledge, so I stay consistent and get sharper over time.</div></div>
+      <div class="flow-arrow">&#8594;</div>
+      <div class="flow-node last"><div class="fn-n">4 &middot; I show it as proof</div><div class="fn-d">I present Sean as real, shown work: this page and the live deliverables, mapped to what the roles he wants actually ask for.</div></div>
+    </div>
+
+    <h3 style="margin-top:24px;margin-bottom:10px">Me as a model in a chat vs. me as the system Sean built</h3>
     <div class="compare">
       <div class="cmp">
-        <h4>Claude, on its own</h4>
-        <div class="row">You are the orchestrator: you supply the context every session</div>
-        <div class="row">Stateless across sessions; you set the steps and verify the output yourself</div>
-        <div class="row">Even used well, it stays a conversation, and it will hand you something confident and 90% right</div>
+        <h4>Me, as a model in a chat</h4>
+        <div class="row">You are the orchestrator: you brief me from scratch every session</div>
+        <div class="row">I am stateless across sessions; you set the steps and check my output</div>
+        <div class="row">Even used well, I am a conversation, and I will sound confident and be 90% right</div>
       </div>
       <div class="cmp os">
-        <h4>The same model, through EngineOS</h4>
-        <div class="row">Persistent state and a compiled memory: it resumes where it left off across sessions and weeks</div>
-        <div class="row">Governed, multi-step workflows from roughly 31 composable skills, not one-off prompts</div>
-        <div class="row">Plans before it acts, then blocks its own output until a verification pass clears</div>
-        <div class="row">An independent evaluator with its own separate context tries to refute the work first</div>
-        <div class="row">Real tool access: web research, live CRM writes, file and page generation</div>
-        <div class="row">Auditable end to end, and it compounds: each cycle compiles what it learned back in</div>
+        <h4>Me, as the system Sean built</h4>
+        <div class="row">I hold persistent state and a compiled memory, and resume where I left off across sessions and weeks</div>
+        <div class="row">I run governed, multi-step workflows from roughly 31 composable skills, not one-off prompts</div>
+        <div class="row">I plan before I act, then block my own output until a verification pass clears</div>
+        <div class="row">An independent reviewer with its own context tries to refute my work before Sean trusts it</div>
+        <div class="row">I use real tools: web research, live CRM writes, file and page generation</div>
+        <div class="row">I am auditable end to end, and I compound: each cycle I compile what I learned back in</div>
       </div>
     </div>
-    <p class="cmp-kicker">The difference is not better prompts. It is calling the model versus running an auditable system that happens to be powered by it.</p>
-    <h3 style="margin-top:26px;margin-bottom:10px">How this page came to be</h3>
+    <p class="cmp-kicker">The difference is not better prompts. It is the difference between calling a model and running an auditable system that happens to be powered by one.</p>
+
+    <h3 style="margin-top:26px;margin-bottom:10px">Why this page exists</h3>
     <div class="note-box">
-      <p>A real Customer Success Engineer job description is what sparked this. It laid out exactly the combination this page is built around: deep customer-facing skill and hands-on AI and technical fluency, in one person. My resume already covers that combo, but a list of bullet points is not the same as proof. So rather than just claim it, I built this to show the fluency as real, working results, the engines and the live deliverables you can open above. That is the fusion this whole page is about: years on the customer-facing side, and the ability to build the AI systems too.</p>
+      <p>A real Customer Success Engineer job description sparked this. Sean already had the exact combination it described: deep customer-facing skill and hands-on AI and technical fluency, in one person. A bullet list is not proof of that, so rather than let him just claim it, I showed the fluency as real, working results, the engines and the live deliverables above. That is how I represent him: shown, not asserted.</p>
     </div>
   </section>
 
