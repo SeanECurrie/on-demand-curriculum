@@ -169,6 +169,18 @@
   .contact-block h2{margin-bottom:8px}
   .contact-block p{color:var(--text);font-size:16px;max-width:680px}
 
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+  .cmp{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+  .cmp.os{border-color:var(--accent)}
+  .cmp h4{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}
+  .cmp.os h4{color:var(--accent-text)}
+  .cmp .row{font-size:13.5px;color:var(--text-body);padding:5px 0 5px 18px;position:relative;line-height:1.45}
+  .cmp .row::before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--text-muted)}
+  .cmp.os .row::before{background:var(--accent)}
+  .cmp-kicker{margin-top:14px;font-size:15px;color:var(--text);background:var(--surface-2);border-radius:10px;padding:13px 18px;max-width:none}
+  .note-box{background:linear-gradient(135deg,var(--accent-soft),var(--purple-soft));border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-top:4px}
+  .note-box p{margin:0;max-width:none;font-size:15.5px;color:var(--text)}
+
   .close-statement{font-size:clamp(18px,2.2vw,23px);color:var(--heading);font-weight:700;max-width:840px;line-height:1.4;margin-top:18px}
   footer{margin-left:var(--sbw);max-width:1080px;padding:24px 56px 52px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--border)}
   footer a{font-weight:600}
@@ -180,7 +192,7 @@
     .sidebar.open{transform:translateX(0)}
     main,footer{margin-left:0}
     main{padding:60px 18px 0} footer{padding:24px 18px 48px}
-    .layers,.grid,.ops,.formats{grid-template-columns:1fr}
+    .layers,.grid,.ops,.formats,.compare{grid-template-columns:1fr}
     .map-row{grid-template-columns:1fr} .map-ask{border-right:none;border-bottom:1px solid var(--border)} .map-row.head{display:none}
     section{padding:38px 0}
   }
@@ -428,10 +440,30 @@
   <section id="s10">
     <div class="eyebrow">In plain English</div>
     <h2>The short version</h2>
-    <h3 style="margin-top:6px">Using Claude on its own vs. using it through EngineOS</h3>
-    <p>Using Claude in a chat, even using it really well, you are still the orchestrator: you supply the context each session, you decide the steps, and you verify the output, because the model is stateless across sessions and will hand you something confident and 90% right. EngineOS is the layer I built around that. It holds persistent state and a compiled memory, so it resumes exactly where it left off across sessions and weeks. It runs governed, multi-step workflows from a library of roughly 31 composable skills instead of one-off prompts. It plans before it acts, blocks its own output until a verification pass clears, and runs an independent evaluator with its own separate context whose job is to refute the work before I trust it. And it has real tool access: web research, CRM writes, file generation, the hosted artifacts you are reading right now. So it is the difference between calling the model and running an auditable system that happens to be powered by it, with memory, governance, and tooling built in, and it compounds, because each cycle compiles what it learned back into itself.</p>
-    <h3 style="margin-top:14px">How this page came to be</h3>
-    <p>A real Customer Success Engineer job description is what sparked this. It laid out exactly the combination this page is built around: deep customer-facing skill and hands-on AI and technical fluency, wanted in one person. My resume already covers that combo, but a list of bullet points is not the same as proof. So rather than just claim it, I built this to show the fluency as real, working results: the engines, the outputs, and the live deliverables you can open above. EngineOS is the operating system that turns the claim into shown work, a shared layer of methodology, governance, and roughly 31 composable skills, plus engines that inherit all of it and do real work in a domain. That is the fusion this whole page is about: years on the customer-facing side, and the ability to build the AI systems too.</p>
+    <p class="section-intro">Two things, fast: what EngineOS adds on top of Claude, and why this page exists.</p>
+    <h3 style="margin-bottom:10px">Using Claude directly vs. building EngineOS around it</h3>
+    <div class="compare">
+      <div class="cmp">
+        <h4>Claude, on its own</h4>
+        <div class="row">You are the orchestrator: you supply the context every session</div>
+        <div class="row">Stateless across sessions; you set the steps and verify the output yourself</div>
+        <div class="row">Even used well, it stays a conversation, and it will hand you something confident and 90% right</div>
+      </div>
+      <div class="cmp os">
+        <h4>The same model, through EngineOS</h4>
+        <div class="row">Persistent state and a compiled memory: it resumes where it left off across sessions and weeks</div>
+        <div class="row">Governed, multi-step workflows from roughly 31 composable skills, not one-off prompts</div>
+        <div class="row">Plans before it acts, then blocks its own output until a verification pass clears</div>
+        <div class="row">An independent evaluator with its own separate context tries to refute the work first</div>
+        <div class="row">Real tool access: web research, live CRM writes, file and page generation</div>
+        <div class="row">Auditable end to end, and it compounds: each cycle compiles what it learned back in</div>
+      </div>
+    </div>
+    <p class="cmp-kicker">The difference is not better prompts. It is calling the model versus running an auditable system that happens to be powered by it.</p>
+    <h3 style="margin-top:26px;margin-bottom:10px">How this page came to be</h3>
+    <div class="note-box">
+      <p>A real Customer Success Engineer job description is what sparked this. It laid out exactly the combination this page is built around: deep customer-facing skill and hands-on AI and technical fluency, in one person. My resume already covers that combo, but a list of bullet points is not the same as proof. So rather than just claim it, I built this to show the fluency as real, working results, the engines and the live deliverables you can open above. That is the fusion this whole page is about: years on the customer-facing side, and the ability to build the AI systems too.</p>
+    </div>
   </section>
 
   <section id="s11">
