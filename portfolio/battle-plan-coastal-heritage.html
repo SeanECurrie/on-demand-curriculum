@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coastal Heritage Bank, A Fraud-Prevention Battle Plan</title>
+  <style>
+/* ─── CSS Custom Properties ─── */
+:root {
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  --color-blue-50: #eff6ff; --color-blue-100: #dbeafe; --color-blue-200: #bfdbfe;
+  --color-blue-500: #3b82f6; --color-blue-600: #2563eb; --color-blue-700: #1d4ed8;
+  --color-red-50: #fef2f2; --color-red-100: #fee2e2;
+  --color-red-500: #ef4444; --color-red-600: #dc2626;
+  --color-green-50: #f0fdf4; --color-green-100: #dcfce7;
+  --color-green-500: #22c55e; --color-green-600: #16a34a;
+  --color-amber-50: #fffbeb; --color-amber-100: #fef3c7;
+  --color-amber-500: #f59e0b; --color-amber-800: #92400e;
+  --color-purple-50: #faf5ff; --color-purple-100: #f3e8ff;
+  --color-purple-500: #a855f7; --color-purple-600: #9333ea;
+  --color-stone-50: #fafaf9; --color-stone-100: #f5f5f4; --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1; --color-stone-400: #a8a29e; --color-stone-500: #78716c;
+  --color-stone-700: #44403c; --color-stone-800: #292524; --color-stone-900: #1c1917;
+
+  --bg: var(--color-stone-50);
+  --surface: var(--color-stone-100);
+  --surface-alt: white;
+  --code-bg: var(--color-stone-200);
+  --border: var(--color-stone-200);
+  --border-subtle: var(--color-stone-300);
+  --text-muted: var(--color-stone-400);
+  --text-secondary: var(--color-stone-500);
+  --text-body: var(--color-stone-700);
+  --text-heading: var(--color-stone-800);
+  --text-strongest: var(--color-stone-900);
+  --link: var(--color-blue-500);
+  --link-hover: var(--color-blue-600);
+
+  --callout-critical-bg: var(--color-red-50);
+  --callout-critical-border: var(--color-red-500);
+  --callout-critical-label: var(--color-red-600);
+  --callout-warning-bg: var(--color-amber-50);
+  --callout-warning-border: var(--color-amber-500);
+  --callout-warning-label: var(--color-amber-800);
+  --callout-tip-bg: var(--color-green-50);
+  --callout-tip-border: var(--color-green-500);
+  --callout-tip-label: var(--color-green-600);
+  --callout-info-bg: var(--color-blue-50);
+  --callout-info-border: var(--color-blue-500);
+  --callout-info-label: var(--color-blue-600);
+
+  --nav-active-bg: var(--color-blue-100);
+  --nav-active-color: var(--color-blue-700);
+  --nav-active-border: var(--color-blue-500);
+
+  --sidebar-bg: var(--color-stone-100);
+  --sidebar-border: var(--color-stone-200);
+
+  --fresha-pink: #FF5A80;
+  --fresha-pink-soft: #ffe1e9;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --surface: #262626;
+  --surface-alt: #1f1f1f;
+  --code-bg: #2d2d2d;
+  --border: #404040;
+  --border-subtle: #333333;
+  --text-muted: #737373;
+  --text-secondary: #a3a3a3;
+  --text-body: #d4d4d4;
+  --text-heading: #e5e5e5;
+  --text-strongest: #f5f5f5;
+  --link: #60a5fa;
+  --link-hover: #3b82f6;
+
+  --callout-critical-bg: #450a0a;
+  --callout-critical-border: #f87171;
+  --callout-critical-label: #fca5a5;
+  --callout-warning-bg: #451a03;
+  --callout-warning-border: #fbbf24;
+  --callout-warning-label: #fcd34d;
+  --callout-tip-bg: #052e16;
+  --callout-tip-border: #4ade80;
+  --callout-tip-label: #86efac;
+  --callout-info-bg: #1e3a5f;
+  --callout-info-border: #60a5fa;
+  --callout-info-label: #93c5fd;
+
+  --nav-active-bg: #1e3a5f;
+  --nav-active-color: #93c5fd;
+  --nav-active-border: #3b82f6;
+
+  --sidebar-bg: #1f1f1f;
+  --sidebar-border: #333333;
+
+  --fresha-pink: #FF7A95;
+  --fresha-pink-soft: rgba(255, 90, 128, 0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ul, ol { padding-left: 24px; }
+* { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-body);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+h1, h2, h3, h4 { color: var(--text-heading); line-height: 1.25; font-weight: 700; }
+h1 { font-size: 36px; margin-bottom: 16px; }
+h2 { font-size: 28px; margin: 40px 0 16px; }
+h3 { font-size: 20px; margin: 28px 0 12px; }
+h4 { font-size: 16px; margin: 20px 0 8px; }
+
+p { margin-bottom: 16px; }
+strong { color: var(--text-strongest); font-weight: 600; }
+
+code {
+  font-family: var(--font-mono);
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  background: var(--surface);
+  color: var(--text-heading);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+blockquote {
+  border-left: 4px solid var(--fresha-pink);
+  background: var(--fresha-pink-soft);
+  padding: 16px 20px;
+  margin: 18px 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--text-heading);
+}
+blockquote .attribution {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sidebar {
+  width: 280px;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 24px 0 16px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.01em;
+}
+.sidebar-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 0 20px 16px;
+}
+
+.theme-toggle {
+  width: 32px; height: 32px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-body);
+}
+.theme-toggle:hover { background: var(--code-bg); }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="dark"] .icon-sun { display: block; }
+:root:not([data-theme="dark"]) .icon-sun { display: none; }
+:root:not([data-theme="dark"]) .icon-moon { display: block; }
+
+.nav-group-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 12px 20px 6px;
+  margin-top: 4px;
+}
+
+.nav-item {
+  display: flex; align-items: center;
+  padding: 8px 20px;
+  font-size: 13px;
+  color: var(--text-body);
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.nav-item:hover { background: var(--code-bg); text-decoration: none; }
+.nav-item.active {
+  background: var(--nav-active-bg);
+  color: var(--nav-active-color);
+  border-left-color: var(--nav-active-border);
+  font-weight: 600;
+}
+.nav-num {
+  display: inline-block;
+  width: 30px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.nav-item.active .nav-num { color: var(--nav-active-color); }
+
+main {
+  margin-left: 280px;
+  padding: 48px 56px;
+  max-width: 1100px;
+}
+
+.hero {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 28px;
+  margin-bottom: 32px;
+}
+.hero .eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fresha-pink);
+  margin-bottom: 12px;
+}
+.hero h1 { font-size: 42px; letter-spacing: -0.02em; }
+.hero .subhead {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  max-width: 720px;
+}
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  margin: 24px 0 8px;
+}
+.stat-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.stat-card .num {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-strongest);
+  letter-spacing: -0.01em;
+}
+.stat-card .label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.section {
+  scroll-margin-top: 24px;
+  padding-top: 32px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.section-number {
+  background: var(--fresha-pink);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+.section-tag {
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+/* ─── Tier badges ─── */
+.tier {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin: 0 2px;
+  letter-spacing: 0.02em;
+  vertical-align: baseline;
+  border: 1px solid transparent;
+}
+.tier-1 { background: var(--color-green-50); color: var(--color-green-600); border-color: var(--color-green-100); }
+.tier-2 { background: var(--color-blue-50); color: var(--color-blue-600); border-color: var(--color-blue-100); }
+.tier-3 { background: var(--color-amber-50); color: var(--color-amber-800); border-color: var(--color-amber-100); }
+.tier-4 { background: var(--color-stone-200); color: var(--color-stone-700); border-color: var(--color-stone-300); }
+.tier-5 { background: var(--color-red-50); color: var(--color-red-600); border-color: var(--color-red-100); }
+[data-theme="dark"] .tier-1 { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+[data-theme="dark"] .tier-2 { background: rgba(59,130,246,0.18); color: #93c5fd; border-color: rgba(59,130,246,0.35); }
+[data-theme="dark"] .tier-3 { background: rgba(245,158,11,0.15); color: #fcd34d; border-color: rgba(245,158,11,0.3); }
+[data-theme="dark"] .tier-4 { background: rgba(120,113,108,0.25); color: #d6d3d1; border-color: rgba(120,113,108,0.4); }
+[data-theme="dark"] .tier-5 { background: rgba(239,68,68,0.15); color: #fca5a5; border-color: rgba(239,68,68,0.3); }
+
+/* ─── Callouts ─── */
+.callout {
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid;
+  margin: 16px 0;
+}
+.callout-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.callout.critical { background: var(--callout-critical-bg); border-color: var(--callout-critical-border); }
+.callout.critical .callout-label { color: var(--callout-critical-label); }
+.callout.warning { background: var(--callout-warning-bg); border-color: var(--callout-warning-border); }
+.callout.warning .callout-label { color: var(--callout-warning-label); }
+.callout.tip { background: var(--callout-tip-bg); border-color: var(--callout-tip-border); }
+.callout.tip .callout-label { color: var(--callout-tip-label); }
+.callout.info { background: var(--callout-info-bg); border-color: var(--callout-info-border); }
+.callout.info .callout-label { color: var(--callout-info-label); }
+.callout p:last-child { margin-bottom: 0; }
+.callout ul { margin-top: 6px; padding-left: 22px; }
+.callout ul li { margin-bottom: 4px; }
+
+/* ─── Diagrams ─── */
+.diagram-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+}
+.diagram-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.diagram-caption {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 14px;
+  font-style: italic;
+}
+
+/* ─── 2x2 positioning matrix ─── */
+.matrix-wrapper {
+  position: relative;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 28px 14px 28px;
+  margin: 12px 0;
+}
+.matrix-grid {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 2px solid var(--border-subtle);
+  background:
+    linear-gradient(to right, transparent 49.7%, var(--border-subtle) 49.7%, var(--border-subtle) 50.3%, transparent 50.3%),
+    linear-gradient(to bottom, transparent 49.7%, var(--border-subtle) 49.7%, var(--border-subtle) 50.3%, transparent 50.3%);
+}
+.matrix-axis-y {
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translate(-100%, -50%) rotate(-90deg);
+  transform-origin: right center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.matrix-axis-y-top, .matrix-axis-y-bot {
+  position: absolute;
+  left: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.matrix-axis-y-top { top: 10px; }
+.matrix-axis-y-bot { bottom: 10px; }
+.matrix-axis-x {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-top: 32px;
+}
+.matrix-axis-x-left, .matrix-axis-x-right {
+  position: absolute;
+  bottom: -22px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.matrix-axis-x-left { left: 8px; }
+.matrix-axis-x-right { right: 8px; }
+.matrix-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: var(--surface-alt);
+  border: 2px solid var(--color-stone-500);
+  color: var(--text-heading);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 14px;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.matrix-dot.subject {
+  background: var(--fresha-pink);
+  color: white;
+  border-color: var(--fresha-pink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(255,90,128,0.4);
+}
+.matrix-dot.major {
+  border-color: var(--color-blue-500);
+  background: var(--color-blue-50);
+  color: var(--color-blue-700);
+}
+[data-theme="dark"] .matrix-dot.major { background: rgba(59,130,246,0.15); color: #93c5fd; }
+.matrix-dot.tier-c {
+  border-color: var(--color-stone-400);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+/* ─── Funding timeline ─── */
+.funding-timeline {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  margin: 20px 0;
+  position: relative;
+}
+.funding-timeline::before {
+  content: "";
+  position: absolute;
+  top: 32px;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--border-subtle);
+  z-index: 0;
+}
+.fund-node {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.fund-dot {
+  width: 16px;
+  height: 16px;
+  background: var(--fresha-pink);
+  border: 3px solid var(--surface);
+  border-radius: 50%;
+  margin: 24px auto 8px;
+}
+.fund-dot.major {
+  width: 22px; height: 22px;
+  margin-top: 21px;
+  background: var(--color-green-500);
+  box-shadow: 0 0 0 4px rgba(34,197,94,0.2);
+}
+.fund-dot.debt { background: var(--color-amber-500); }
+.fund-date {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.fund-amount {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-strongest);
+}
+.fund-lead {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* ─── Revenue model diagram ─── */
+.rev-model {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 1.1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+.rev-layer {
+  border-radius: 12px;
+  padding: 18px 18px 16px;
+  border: 2px solid;
+  position: relative;
+}
+.rev-layer h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+.rev-layer .rev-price {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 6px 0 4px;
+  letter-spacing: -0.01em;
+}
+.rev-layer .rev-share {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.rev-layer .rev-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.rev-layer.sub {
+  background: var(--color-blue-50);
+  border-color: var(--color-blue-500);
+  color: var(--color-blue-700);
+}
+.rev-layer.pay {
+  background: var(--color-green-50);
+  border-color: var(--color-green-500);
+  color: var(--color-green-600);
+}
+.rev-layer.mkt {
+  background: var(--color-purple-50);
+  border-color: var(--color-purple-500);
+  color: var(--color-purple-600);
+}
+[data-theme="dark"] .rev-layer.sub { background: rgba(59,130,246,0.12); color: #93c5fd; }
+[data-theme="dark"] .rev-layer.pay { background: rgba(34,197,94,0.12); color: #86efac; }
+[data-theme="dark"] .rev-layer.mkt { background: rgba(168,85,247,0.12); color: #d8b4fe; }
+.rev-layer h4, .rev-layer .rev-price {
+  color: inherit;
+}
+.rev-flow {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 14px 0 4px;
+  font-style: italic;
+}
+
+/* ─── Org chart ─── */
+.orgchart {
+  text-align: center;
+  margin: 20px 0;
+}
+.org-node {
+  display: inline-block;
+  background: var(--surface-alt);
+  border: 2px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 18px;
+  min-width: 180px;
+  font-size: 13px;
+  text-align: left;
+  margin: 6px;
+}
+.org-node .role {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.org-node .name {
+  font-weight: 700;
+  color: var(--text-heading);
+  font-size: 14px;
+}
+.org-node .geo {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.org-node.ceo { border-color: var(--fresha-pink); background: var(--fresha-pink-soft); }
+.org-node.ceo .role { color: var(--fresha-pink); }
+.org-node.vacant {
+  border-color: var(--color-red-500);
+  border-style: dashed;
+  background: var(--color-red-50);
+}
+.org-node.vacant .role { color: var(--color-red-600); }
+.org-node.vacant .name { color: var(--color-red-600); }
+[data-theme="dark"] .org-node.vacant { background: rgba(239,68,68,0.1); }
+[data-theme="dark"] .org-node.vacant .role,
+[data-theme="dark"] .org-node.vacant .name { color: #fca5a5; }
+.org-connector {
+  width: 2px;
+  height: 24px;
+  background: var(--border-subtle);
+  margin: 0 auto;
+}
+.org-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+/* ─── Timeline (vertical) ─── */
+.vtimeline {
+  position: relative;
+  margin: 24px 0;
+  padding-left: 28px;
+}
+.vtimeline::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border-subtle);
+}
+.vt-item {
+  position: relative;
+  margin-bottom: 18px;
+}
+.vt-item::before {
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--fresha-pink);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--border-subtle);
+}
+.vt-item.major::before { background: var(--color-green-500); width: 14px; height: 14px; left: -29px; top: 5px; box-shadow: 0 0 0 3px rgba(34,197,94,0.25); }
+.vt-item.amber::before { background: var(--color-amber-500); }
+.vt-item.red::before { background: var(--color-red-500); }
+.vt-date {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.vt-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.vt-body {
+  font-size: 14px;
+  color: var(--text-body);
+  margin: 0;
+}
+
+/* ─── Process flow ─── */
+.process-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 20px 0;
+}
+.pf-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--fresha-pink);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.pf-num {
+  background: var(--fresha-pink);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pf-content { flex: 1; }
+.pf-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.pf-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.pf-time {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: var(--code-bg);
+  padding: 2px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* ─── Parallel agent visualization ─── */
+.agent-fan {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin: 14px 0;
+}
+.agent-chip {
+  background: var(--color-purple-50);
+  border: 1px solid var(--color-purple-500);
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-purple-600);
+  line-height: 1.3;
+}
+[data-theme="dark"] .agent-chip {
+  background: rgba(168,85,247,0.12);
+  color: #d8b4fe;
+}
+
+/* ─── Comparison/Pricing table emphasis ─── */
+.pricing-table th { font-size: 12px; }
+.pricing-table .fresha-row { background: var(--fresha-pink-soft); }
+.pricing-table .fresha-row td:first-child { color: var(--fresha-pink); font-weight: 700; }
+
+/* ─── Three-up comparison block ─── */
+.three-up {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 18px 0;
+}
+.battle-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--fresha-pink);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.battle-card h4 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.battle-card .battle-sub {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+.battle-card ul { padding-left: 18px; margin: 8px 0; }
+.battle-card li { font-size: 13px; margin-bottom: 4px; }
+
+/* ─── Geo / number grid ─── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.kpi-cell {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.kpi-cell .v { font-size: 18px; font-weight: 800; color: var(--text-strongest); }
+.kpi-cell .l { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
+/* ─── Q&A bank ─── */
+.qa-bank details {
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-alt);
+  overflow: hidden;
+}
+.qa-bank summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: var(--text-heading);
+  font-size: 14px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.qa-bank summary::-webkit-details-marker { display: none; }
+.qa-bank summary::before {
+  content: "+";
+  font-weight: 700;
+  color: var(--fresha-pink);
+  font-size: 18px;
+  line-height: 1;
+  width: 14px;
+}
+.qa-bank details[open] summary::before { content: "−"; }
+.qa-bank .qa-body {
+  padding: 0 16px 14px 38px;
+  font-size: 13px;
+  color: var(--text-body);
+}
+
+/* ─── Sources list ─── */
+.src-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+.src-block h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+.src-block ul { padding-left: 22px; margin: 4px 0; }
+.src-block li { font-size: 12px; margin-bottom: 3px; color: var(--text-secondary); }
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .three-up, .rev-model { grid-template-columns: 1fr; }
+  .funding-timeline { grid-template-columns: repeat(4, 1fr); }
+  .funding-timeline::before { display: none; }
+  .agent-fan { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 900px) {
+  .sidebar { width: 240px; }
+  main { margin-left: 240px; padding: 24px 28px; }
+}
+@media (max-width: 720px) {
+  .sidebar {
+    position: relative; width: 100%; height: auto;
+    border-right: none; border-bottom: 1px solid var(--border);
+  }
+  main { margin-left: 0; padding: 20px 18px; }
+  .hero h1 { font-size: 28px; }
+  .stat-strip { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media print {
+  .sidebar { display: none; }
+  main { margin-left: 0; max-width: 100%; }
+  .section { page-break-before: auto; }
+  .theme-toggle { display: none; }
+}
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Coastal Heritage Bank · Fraud-Prevention Battle Plan</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+  <div class="sidebar-sub">Built 2026-06-18 · for an Appgate sales engineer · public-source</div>
+
+  <div class="nav-group-label">Open</div>
+  <a class="nav-item" href="#s00"><span class="nav-num">00</span>The walk-in</a>
+  <a class="nav-item" href="#s01"><span class="nav-num">01</span>TL;DR, seven things</a>
+
+  <div class="nav-group-label">The target</div>
+  <a class="nav-item" href="#s02"><span class="nav-num">02</span>Who they are</a>
+  <a class="nav-item" href="#s03"><span class="nav-num">03</span>Their stack, their gap</a>
+
+  <div class="nav-group-label">The fight</div>
+  <a class="nav-item" href="#s04"><span class="nav-num">04</span>Why now</a>
+  <a class="nav-item" href="#s05"><span class="nav-num">05</span>The wedge</a>
+  <a class="nav-item" href="#s06"><span class="nav-num">06</span>The product surface</a>
+  <a class="nav-item" href="#s07"><span class="nav-num">07</span>The competitive set</a>
+
+  <div class="nav-group-label">The motion</div>
+  <a class="nav-item" href="#s08"><span class="nav-num">08</span>The objection to pre-empt</a>
+  <a class="nav-item" href="#s09"><span class="nav-num">09</span>The proof to bring</a>
+  <a class="nav-item" href="#s10"><span class="nav-num">10</span>Discovery + first meeting</a>
+
+  <div class="nav-group-label">Meta</div>
+  <a class="nav-item" href="#s11"><span class="nav-num">11</span>Honest caveats</a>
+  <a class="nav-item" href="#s12"><span class="nav-num">12</span>How this was built</a>
+  <a class="nav-item" href="#s99"><span class="nav-num">99</span>Sources &amp; methodology</a>
+
+  <div class="nav-group-label">Source tiers</div>
+  <div style="padding: 6px 20px 16px; font-size: 11px; color: var(--text-secondary); line-height: 1.6;">
+    <span class="tier tier-1">T1</span> Regulator / official<br>
+    <span class="tier tier-2">T2</span> Press / analyst<br>
+    <span class="tier tier-3">T3</span> Aggregator / directory<br>
+    <span class="tier tier-4">T4</span> Inferred / fingerprint<br>
+    <span class="tier tier-5">T5</span> Forum / social
+  </div>
+</aside>
+
+<main>
+
+<header class="hero" id="s00">
+  <div class="eyebrow">For an Appgate sales engineer · fraud-prevention deal · 2026-06-18</div>
+  <h1>Coastal Heritage Bank, A Fraud-Prevention Battle Plan</h1>
+  <p class="subhead">Everything you need to walk into this account already understanding it: who they are, where they are exposed, where your product wedges in, who else is in the room, and the objection you have to raise before they do. Built from public signals, credibility-tiered, calibrated honestly and not hyped.</p>
+
+  <div class="stat-strip">
+    <div class="stat-card"><span class="num">~$985M</span><span class="label">Total assets</span></div>
+    <div class="stat-card"><span class="num">~$782M</span><span class="label">Deposits</span></div>
+    <div class="stat-card"><span class="num">10</span><span class="label">Branches, South Shore MA</span></div>
+    <div class="stat-card"><span class="num">~84</span><span class="label">Employees</span></div>
+    <div class="stat-card"><span class="num">Mutual</span><span class="label">Depositor-owned</span></div>
+    <div class="stat-card"><span class="num">1889</span><span class="label">Founded</span></div>
+    <div class="stat-card"><span class="num">~92%</span><span class="label">Loan-to-deposit</span></div>
+    <div class="stat-card"><span class="num">No CISO</span><span class="label">Named on the public org</span></div>
+  </div>
+
+  <div class="callout info" style="margin-top: 18px;">
+    <div class="callout-label">&#9656; What this is, what it isn't</div>
+    <p><strong>It is:</strong> a one-shot battle plan for a sales engineer walking into Coastal Heritage Bank to sell fraud-prevention tooling. The target read, the pressure they are under, where Appgate wedges in, who else is competing, the objection to pre-empt, and the questions that open the first meeting.</p>
+    <p><strong>It is not:</strong> insider information, a guarantee, or hype. Every hard claim carries a credibility tier <span class="tier tier-1">T1</span> to <span class="tier tier-5">T5</span> so you can see what is load-bearing. The salesperson is unnamed. The companies are public. The analysis is public-source only.</p>
+  </div>
+</header>
+
+<!-- 01 TL;DR -->
+<section id="s01" class="section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 style="margin:0;">TL;DR, seven things to know walking in</h2>
+    <span class="section-tag">4 min read</span>
+  </div>
+  <p>If you read nothing else, read this. Each line is unpacked later.</p>
+  <ol style="padding-left: 24px;">
+    <li style="margin-bottom: 12px;"><strong>It is a small, conservative, single-market community bank.</strong> Roughly $985M in assets, ~$782M deposits, about 10 branches across the Massachusetts South Shore, mutually owned (no shareholders, depositor-owned), ~84 staff, chartered 1889 <span class="tier tier-1">T1</span>. Decisions are relationship-led and risk-averse. Sell trust and the franchise, not a feature list.</li>
+    <li style="margin-bottom: 12px;"><strong>They run a classic small-bank stack.</strong> COCC core and digital banking, Fiserv bill-pay and P2P, Zelle live, mobile apps with biometric login <span class="tier tier-1">T1</span>. Capable, but there is no public sign of adaptive, risk-based authentication, behavioral analytics, or real-time transaction risk scoring <span class="tier tier-4">T4</span>.</li>
+    <li style="margin-bottom: 12px;"><strong>There is no named CISO.</strong> The public org has a Chief Risk Officer, a CIO, and a real BSA/AML function, but no dedicated security chief <span class="tier tier-1">T1</span>. Fraud and security sit on already-stretched people. That is the opening.</li>
+    <li style="margin-bottom: 12px;"><strong>They had a data-security notice this year.</strong> A 2026 incident was disclosed; the scale and cause are not public, so do not speculate <span class="tier tier-1">T1</span> <span class="tier tier-2">T2</span>. What it means: fraud and security are live, board-level conversations right now.</li>
+    <li style="margin-bottom: 12px;"><strong>The macro forcing function is check fraud.</strong> FinCEN check-fraud reports nearly doubled, from ~350K (2021) to ~680K (2022), and the agency's own data says small and mid-size banks file the majority <span class="tier tier-1">T1</span>. A bank this size is the bullseye.</li>
+    <li style="margin-bottom: 12px;"><strong>The compliance clock is dated.</strong> Nacha's new credit-push-fraud rules put a fraud-monitoring obligation on receiving banks for the first time, phasing in through 2026 <span class="tier tier-1">T1</span>. With Zelle live, that is a requirement, not an option.</li>
+    <li style="margin-bottom: 0;"><strong>Your wedge is consolidation.</strong> One platform across adaptive auth, real-time transaction risk, and external-threat takedown, with a managed SOC. Exactly what a resource-thin bank with no CISO cannot build in-house.</li>
+  </ol>
+  <div class="callout tip">
+    <div class="callout-label">&#9656; The single most useful frame</div>
+    <p>Coastal Heritage Bank does not need another point tool. It needs the fraud-and-security function it cannot afford to staff. Sell the platform-plus-SOC consolidation, not a feature. Internalize that and everything else in this plan lines up behind it.</p>
+  </div>
+</section>
+
+<!-- 02 WHO THEY ARE -->
+<section id="s02" class="section">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2 style="margin:0;">Who Coastal Heritage Bank is</h2>
+    <span class="section-tag">6 min read</span>
+  </div>
+  <p>A conservative, well-run, single-market mutual on the Massachusetts South Shore. It took its current name on April 1, 2019, when Equitable Bank and the legacy Coastal Heritage and South Shore institutions combined under the mutual holding company Equitable Bancorp, MHC; Scituate Federal Savings later folded in <span class="tier tier-2">T2</span>. The charter itself traces to 1889 <span class="tier tier-1">T1</span>.</p>
+  <table>
+    <thead><tr><th>Dimension</th><th>Reality</th></tr></thead>
+    <tbody>
+      <tr><td>Headquarters</td><td>Weymouth, Massachusetts (South Shore) <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Charter</td><td>State-chartered commercial bank, Federal Reserve member; also DIF-insured (MA) <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Ownership</td><td>Mutual holding company (Equitable Bancorp, MHC), depositor-owned, no public stock <span class="tier tier-1">T1</span> <span class="tier tier-2">T2</span></td></tr>
+      <tr><td>Size</td><td>~$985M assets, ~$782M deposits, ~10 branches, ~84 employees <span class="tier tier-1">T1</span> <span class="tier tier-3">T3</span></td></tr>
+      <tr><td>Business mix</td><td>Retail + commercial; SBA Preferred Lender; ~92% loan-to-deposit (an active lender) <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Standing</td><td>Satisfactory CRA rating; Bauer 5-star (June 2026) <span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Footprint</td><td>Weymouth, Scituate, Marshfield, Hingham, Hanover, Norwell, Kingston <span class="tier tier-1">T1</span></td></tr>
+    </tbody>
+  </table>
+  <div class="callout info">
+    <div class="callout-label">&#9656; What the mutual structure means for how you sell</div>
+    <p>No shareholders and no quarterly EPS pressure. Depositor-owned, governed by a board plus a body of corporators. That makes the buying behavior conservative, relationship-driven, and slower, and it makes the decision-makers personally invested in the institution's reputation. The lever that follows: for a mutual, the franchise <em>is</em> the trust of a local depositor base, so a fraud event is not a line item, it is an existential reputation threat. Your urgency argument writes itself.</p>
+  </div>
+</section>
+
+<!-- 03 STACK + GAP -->
+<section id="s03" class="section">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2 style="margin:0;">Their stack, and their gap</h2>
+    <span class="section-tag">7 min read</span>
+  </div>
+  <p>This is the most important section for a seller. The technology fingerprints below were read off the bank's own live URLs and named products, so they are reliable.</p>
+  <table>
+    <thead><tr><th>Layer</th><th>What they run</th><th>Read</th></tr></thead>
+    <tbody>
+      <tr><td>Core + digital banking</td><td>COCC ("MyVirtualBranch" digital platform) <span class="tier tier-4">T4</span></td><td>New England core cooperative; small-bank standard</td></tr>
+      <tr><td>Bill pay + P2P</td><td>Fiserv CheckFree + Popmoney (named verbatim) <span class="tier tier-1">T1</span></td><td>Mainstream payment rails</td></tr>
+      <tr><td>Instant money</td><td>Zelle live, personal + business <span class="tier tier-1">T1</span></td><td>Irreversible rails are live</td></tr>
+      <tr><td>Authentication</td><td>Password + security questions + mobile biometric login <span class="tier tier-1">T1</span></td><td>No adaptive / risk-based step-up</td></tr>
+      <tr><td>Account opening</td><td>"eOpen" digital opening <span class="tier tier-1">T1</span></td><td>Open onboarding surface</td></tr>
+      <tr><td>Fraud awareness</td><td>Manual consumer-alert feed; fraud texts only from a short code; "we never ask for one-time codes" <span class="tier tier-1">T1</span></td><td>By hand, no automated takedown</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warning">
+    <div class="callout-label">&#9656; The gap, stated plainly</div>
+    <p>They have the rails (Zelle today, more instant payments coming) but not the modern fraud controls around them. No public sign of adaptive step-up authentication, behavioral analytics, real-time transaction risk scoring, or automated brand and phishing takedown <span class="tier tier-4">T4</span>. That delta, modern rails without modern fraud controls, paired with no dedicated security chief, is the entire sales thesis. Everything in the wedge maps to it.</p>
+  </div>
+</section>
+
+<!-- 04 WHY NOW -->
+<section id="s04" class="section">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2 style="margin:0;">Why now, the threat landscape and the clock</h2>
+    <span class="section-tag">12 min read</span>
+  </div>
+  <p>Two things create urgency: the threats are rising fast, and the rules now put dated obligations on a bank this size. Use the macro to open, then localize it.</p>
+  <table>
+    <thead><tr><th>Threat</th><th>The number</th><th>Why it hits a community bank</th></tr></thead>
+    <tbody>
+      <tr><td>Overall cybercrime</td><td>$16.6B reported losses in 2024, up 33% year over year (FBI IC3) <span class="tier tier-1">T1</span></td><td>The tide is rising for everyone</td></tr>
+      <tr><td>Check fraud</td><td>FinCEN reports ~350K (2021) to ~680K (2022), nearly doubled; $688M across 15,417 reports in a 6-month follow-up <span class="tier tier-1">T1</span></td><td>Small and mid-size banks file the majority. This is the bullseye.</td></tr>
+      <tr><td>Account takeover</td><td>~$15.6B in US losses in 2024 (Javelin) <span class="tier tier-2">T2</span></td><td>Credential theft hits any bank with online login</td></tr>
+      <tr><td>Authorized push-payment scams</td><td>~$8.3B (2024), projected ~$14.9B by 2028 (Deloitte) <span class="tier tier-2">T2</span></td><td>Reg E covers unauthorized transfers, not ones the customer is tricked into authorizing</td></tr>
+      <tr><td>Synthetic identity</td><td>~$3.1B lender exposure (2023), up 63% since 2020 (TransUnion) <span class="tier tier-2">T2</span></td><td>Hits the account-opening surface</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warning">
+    <div class="callout-label">&#9656; The dated compliance clock (this is the real lever)</div>
+    <p><strong>FFIEC authentication guidance (2021):</strong> expects layered security and treats single-factor authentication as inadequate for digital access <span class="tier tier-1">T1</span>. <strong>Nacha credit-push-fraud rules:</strong> for the first time, receiving banks carry a fraud-monitoring obligation, phasing in through 2026 <span class="tier tier-1">T1</span>. <strong>FinCEN deepfake / GenAI alert (Nov 2024):</strong> synthetic identity documents defeating onboarding checks <span class="tier tier-1">T1</span>. A receiving bank with Zelle live now has a dated, regulator-set requirement, not an option.</p>
+  </div>
+  <p><strong>The liability direction matters more than any single case.</strong> The CFPB sued over Zelle fraud (alleging more than $870M in customer losses), then voluntarily dismissed that suit with prejudice in March 2025 <span class="tier tier-1">T1</span>. Do not cite the $870M as a finding; it was an allegation in a case that did not proceed. The durable signal is the one-way direction of travel: regulators and the courts keep pushing more of the loss toward the institution.</p>
+  <div class="callout tip">
+    <div class="callout-label">&#9656; The trust argument, quantified</div>
+    <p>In a 2025 ABA / Morning Consult survey, consumers ranked banks first for fraud protection by a wide margin over every other industry <span class="tier tier-2">T2</span>. For a single-market mutual, trust is the whole franchise. One local fraud story does damage a megabank could absorb and this bank cannot. That is your emotional close on top of the regulatory one.</p>
+  </div>
+</section>
+
+<!-- 05 THE WEDGE -->
+<section id="s05" class="section">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2 style="margin:0;">The wedge, their gaps mapped to your modules</h2>
+    <span class="section-tag">8 min read</span>
+  </div>
+  <p>This is the core of the deal. Three observable gaps, three Appgate 360 modules that close them, and the proof for each.</p>
+  <div class="diagram-frame">
+    <div class="diagram-title">Gap &#8594; module &#8594; proof</div>
+    <table>
+      <thead><tr><th>Their gap (public signal)</th><th>The 360 module that closes it</th><th>Bring as proof</th></tr></thead>
+      <tbody>
+        <tr><td>Login is password + security questions + mobile biometric. No adaptive, risk-based step-up.</td><td><strong>360 Adaptive Authentication.</strong> Risk-based step-up MFA on the DetectID engine; meets the FFIEC layered-security expectation; friction only when the risk is real.</td><td>Maps directly to the FFIEC 2021 expectation</td></tr>
+        <tr><td>Zelle live and instant rails coming, with no real-time transaction risk scoring.</td><td><strong>360 Risk Control.</strong> Real-time transfer scoring on the DetectTA engine; account-takeover and money-mule detection; hold or step up a transaction before it is irreversible.</td><td>An anonymized FI caught $66K of fraud in month one</td></tr>
+        <tr><td>Scam awareness handled by hand; no automated brand or phishing takedown.</td><td><strong>360 Brand Guardian.</strong> Detects and takes down phishing sites, spoofed apps, and brand impersonation, backed by a 24/7 SOC.</td><td>Trax Credit Union (US) did exactly this</td></tr>
+      </tbody>
+    </table>
+    <div class="diagram-caption">The three gaps are independent; you can land on any one and expand. Brand Guardian is the cleanest opener because almost no community bank has external takedown today.</div>
+  </div>
+  <div class="callout tip">
+    <div class="callout-label">&#9656; The consolidation play</div>
+    <p>For a bank with no CISO, one platform plus a managed SOC across all three beats three point tools plus headcount they do not have. Lead with the operational relief, not the feature matrix: "you get a fraud function, not three more dashboards to staff." And lead friction-right: adaptive auth and risk scoring are designed to add friction only when warranted, so you are not trading away the customer experience for safety.</p>
+  </div>
+</section>
+
+<!-- 06 PRODUCT SURFACE -->
+<section id="s06" class="section">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2 style="margin:0;">The product surface, Appgate 360 Fraud Protection</h2>
+    <span class="section-tag">8 min read</span>
+  </div>
+  <p>Know exactly what you are selling, including where it is strong and where it is not, so the demo is confident and the onboarding does not age badly.</p>
+  <div class="three-up">
+    <div class="battle-card">
+      <h4>360 Adaptive Authentication</h4>
+      <div class="battle-sub">on the DetectID engine</div>
+      <p style="font-size: 13px; margin: 0;">Risk-based and step-up MFA; continuous evaluation of user actions, device characteristics, and session patterns; cross-channel login. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="battle-card">
+      <h4>360 Risk Control</h4>
+      <div class="battle-sub">on the DetectTA engine</div>
+      <p style="font-size: 13px; margin: 0;">Real-time transaction risk scoring; account-takeover, money-mule, and credential-stuffing detection; configurable rules to block or step up. <span class="tier tier-1">T1</span></p>
+    </div>
+    <div class="battle-card">
+      <h4>360 Brand Guardian</h4>
+      <div class="battle-sub">digital threat protection</div>
+      <p style="font-size: 13px; margin: 0;">Phishing-site and spoofed-app detection and takedown; brand-impersonation and dark-web monitoring; 24/7 SOC. <span class="tier tier-1">T1</span></p>
+    </div>
+  </div>
+  <p style="margin-top: 16px;">Underneath the 360 names sit the long-standing engines (DetectTA for transaction risk, DetectID for adaptive authentication, plus a malware analysis service and device risk assessment). Appgate was named a Leader in the 2025 SPARK Matrix for Digital Risk Protection <span class="tier tier-1">T1</span> <span class="tier tier-2">T2</span>.</p>
+  <div class="callout warning">
+    <div class="callout-label">&#9656; Be precise, do not over-claim</div>
+    <p>Two honesty rules that keep you credible with a technical buyer. First, on behavioral biometrics: Appgate <em>orchestrates</em> behavioral signals into its risk engine and returns a combined score; it is not marketed as a first-party behavioral-biometrics product, so say "we ingest and score behavioral signals," not "we have behavioral biometrics" <span class="tier tier-2">T2</span>. Second, Appgate's real strength is breadth across the fraud chain (external takedown + transaction risk + adaptive auth) with a managed SOC, not best-of-breed depth in any single scoring engine. Sell the consolidation, not a head-to-head on a pure-play's home turf.</p>
+  </div>
+</section>
+
+<!-- 07 COMPETITIVE SET -->
+<section id="s07" class="section">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2 style="margin:0;">The competitive set, who else is in the room</h2>
+    <span class="section-tag">10 min read</span>
+  </div>
+  <p>A $985M community bank does not buy the same way a tier-one does. Know the names that actually live in community banks, and the ones to frame as overkill.</p>
+  <h3>Likely already in the building (community-FI incumbents)</h3>
+  <table>
+    <thead><tr><th>Vendor</th><th>Known for</th><th>How to play it</th></tr></thead>
+    <tbody>
+      <tr><td>Jack Henry (Financial Crimes Defender)</td><td>The most community-native incumbent; ICBA preferred provider <span class="tier tier-2">T2</span></td><td>If they run Jack Henry core elsewhere, expect it on the table; position external takedown as the gap</td></tr>
+      <tr><td>Nasdaq Verafin</td><td>Cloud financial-crime management on a large consortium data network; deep community/CU base <span class="tier tier-2">T2</span></td><td>Strong at AML + transaction monitoring; do not fight it there, wedge on auth + brand</td></tr>
+      <tr><td>Abrigo (BAM+)</td><td>BSA/AML/fraud built specifically for community banks and CUs <span class="tier tier-2">T2</span></td><td>Same as Verafin: likely the AML incumbent, not your battlefield</td></tr>
+      <tr><td>NICE Actimize (Xceed)</td><td>Enterprise leader with a purpose-built mid-market product <span class="tier tier-2">T2</span></td><td>The one enterprise player with a real community entry; respect it</td></tr>
+    </tbody>
+  </table>
+  <h3>Frame as overkill for a bank this size</h3>
+  <p>BioCatch (behavioral biometrics, tier-one banks), Feedzai (tier-one "RiskOps"), Featurespace (now inside Visa), Socure and LexisNexis/ThreatMetrix (identity and device, enterprise and fintech). All real, all heavier and costlier than a single-market mutual needs. Name them to show you know the field, then frame them as more platform than this bank can absorb. <span class="tier tier-2">T2</span></p>
+  <div class="callout tip">
+    <div class="callout-label">&#9656; The likely incumbent reality</div>
+    <p>Assume they already run a Verafin or an Abrigo for AML and transaction monitoring. Do not walk in trying to rip and replace it; that is a knife fight you do not need. Position <strong>Brand Guardian</strong> (external phishing and brand takedown, which almost nobody at this size has) plus <strong>Adaptive Authentication</strong> as the clean, additive gap. It is a non-competitive entry that expands later.</p>
+  </div>
+</section>
+
+<!-- 08 OBJECTION -->
+<section id="s08" class="section">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <h2 style="margin:0;">The objection you must pre-empt</h2>
+    <span class="section-tag">5 min read</span>
+  </div>
+  <p>There is one objection that will surface in any bank's vendor-risk review, and it is better coming from you first.</p>
+  <div class="callout warning">
+    <div class="callout-label">&#9656; The fact, stated cleanly</div>
+    <p>Appgate filed a prepackaged Chapter 11 on May 6, 2024, and emerged debt-free and privately held under Magnetar Capital (about $13.4B in assets under management) roughly two months later <span class="tier tier-1">T1</span> <span class="tier tier-2">T2</span>. A community bank's third-party-risk process will find this. Raise it before they do.</p>
+  </div>
+  <p><strong>The defensible narrative, all sourced:</strong></p>
+  <ul>
+    <li>It was a <strong>fast, consensual prepackaged recapitalization</strong> backed by nearly all creditors, not a liquidation and not a fire sale <span class="tier tier-1">T1</span> <span class="tier tier-2">T2</span>.</li>
+    <li>The company <strong>emerged debt-free in under two months</strong>, with customer commitments intact <span class="tier tier-1">T1</span>.</li>
+    <li>It is now backed by a <strong>$13B-plus institutional investor</strong> and has invested through 2025 and 2026 (rebrand, analyst recognition, new board members) <span class="tier tier-1">T1</span>.</li>
+    <li>A <strong>former Discover Financial Services CEO joined the board</strong> in late 2025, a financial-services credibility signal a banker will recognize <span class="tier tier-1">T1</span>.</li>
+  </ul>
+  <p><strong>The honest watch-item:</strong> as a private company it no longer files public financials, so be ready for the "less financial transparency" follow-up. Offer what you can (references, the SOC's track record, the Magnetar backing) rather than dodging it. Stability since mid-2024 is the stronger story than anything before it.</p>
+</section>
+
+<!-- 09 PROOF -->
+<section id="s09" class="section">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <h2 style="margin:0;">The proof to bring</h2>
+    <span class="section-tag">4 min read</span>
+  </div>
+  <table>
+    <thead><tr><th>Proof point</th><th>What it shows</th><th>Tier</th></tr></thead>
+    <tbody>
+      <tr><td>Trax Credit Union (US, Florida) used Brand Guardian to take down phishing sites and counterfeit apps with minimal manual work</td><td>The cleanest US reference, and a credit union, which maps to a community bank</td><td><span class="tier tier-1">T1</span></td></tr>
+      <tr><td>An anonymized financial institution caught $66K of fraud in the first month on the transaction engine</td><td>Quantified, fast time-to-value on Risk Control (Appgate-claimed; frame it as such)</td><td><span class="tier tier-1">T1</span></td></tr>
+      <tr><td>Leader, 2025 SPARK Matrix for Digital Risk Protection</td><td>Third-party analyst recognition</td><td><span class="tier tier-1">T1</span> <span class="tier tier-2">T2</span></td></tr>
+    </tbody>
+  </table>
+  <div class="callout warning">
+    <div class="callout-label">&#9656; The honest framing on references</div>
+    <p>Appgate's deepest fraud install base is Latin American banks, so US community-bank logos are thinner. Lead with the credit-union reference and the quantified transaction-engine result; do not imply a long US-bank roster you cannot name. A technical buyer respects "here is exactly who, and here is what we have not done yet" far more than a vague wall of logos.</p>
+  </div>
+</section>
+
+<!-- 10 DISCOVERY -->
+<section id="s10" class="section">
+  <div class="section-header">
+    <span class="section-number">10</span>
+    <h2 style="margin:0;">Discovery and the first meeting</h2>
+    <span class="section-tag">7 min read</span>
+  </div>
+  <h3>Questions that open the room</h3>
+  <ul>
+    <li><strong>On the recent incident:</strong> after this year's data-security notice, what actually changed in how you authenticate logins and monitor transactions, versus what you told customers?</li>
+    <li><strong>On real-time money:</strong> with Zelle live, how do you score a transfer for risk before it settles, given there is no clawback?</li>
+    <li><strong>On ownership:</strong> with no dedicated security chief, who runs fraud monitoring day to day, and how stretched is that risk-and-BSA team?</li>
+    <li><strong>On the clock:</strong> Nacha's receiving-bank monitoring obligation is phasing in this year; where are you on it?</li>
+    <li><strong>On brand:</strong> if a phishing site spoofs your login page tonight, how fast can you get it taken down today?</li>
+  </ul>
+  <div class="diagram-frame">
+    <div class="diagram-title">A first-meeting arc</div>
+    <div class="process-flow">
+      <div class="pf-step"><div class="pf-num">1</div><div class="pf-content"><div class="pf-title">Open on the macro</div><div class="pf-desc">Check fraud nearly doubled and the Nacha clock is dated. Establish that this is the environment, not a pitch.</div></div><div class="pf-time">~5 min</div></div>
+      <div class="pf-step"><div class="pf-num">2</div><div class="pf-content"><div class="pf-title">Localize to them</div><div class="pf-desc">Their stack has modern rails but not modern fraud controls, and no dedicated security chief. Ask the discovery questions; let them say the gap out loud.</div></div><div class="pf-time">~15 min</div></div>
+      <div class="pf-step"><div class="pf-num">3</div><div class="pf-content"><div class="pf-title">Land the frame</div><div class="pf-desc">A fraud function they do not have to staff: one platform plus a managed SOC across auth, transaction risk, and brand takedown.</div></div><div class="pf-time">~10 min</div></div>
+      <div class="pf-step"><div class="pf-num">4</div><div class="pf-content"><div class="pf-title">Pre-empt the objection</div><div class="pf-desc">Raise the Chapter 11 yourself, frame it as the fast recapitalization it was, and point at the Magnetar backing and the board.</div></div><div class="pf-time">~5 min</div></div>
+      <div class="pf-step"><div class="pf-num">5</div><div class="pf-content"><div class="pf-title">Close to a low-friction next step</div><div class="pf-desc">A brand-takedown scan or a short risk-scoring pilot. Cheap to say yes to, and it proves value before procurement.</div></div><div class="pf-time">~5 min</div></div>
+    </div>
+  </div>
+  <div class="callout tip">
+    <div class="callout-label">&#9656; When to qualify the deal down</div>
+    <p>If they already run Verafin or Abrigo deeply for AML <em>and</em> they have recently overhauled authentication, the wedge narrows to Brand Guardian. That is still a real deal, just a smaller one. Size it as a takedown-and-monitoring engagement and do not force a platform rip; the relationship is worth more than the quota math on a fight you will lose.</p>
+  </div>
+</section>
+
+<!-- 11 CAVEATS -->
+<section id="s11" class="section">
+  <div class="section-header">
+    <span class="section-number">11</span>
+    <h2 style="margin:0;">Honest caveats, what we don't know</h2>
+    <span class="section-tag">3 min read</span>
+  </div>
+  <p>This is public-signal reconnaissance, not insider intelligence. The gaps below are named, not guessed.</p>
+  <ul>
+    <li>The 2026 data-security notice: scale and cause are publicly undisclosed. Do not speculate, and do <strong>not</strong> attribute the unrelated Washington-State "Heritage Bank" breach to this bank; it is a different institution.</li>
+    <li>Employee count (~84) is a single aggregator source, so treat it as directional.</li>
+    <li>The core vendor (COCC) is inferred from a digital-banking URL fingerprint, not named on the bank's site.</li>
+    <li>Appgate's behavioral story is signal orchestration into a risk engine, not a first-party biometrics product. Do not overclaim it.</li>
+    <li>There is no confirmed public US-community-bank logo for Appgate's fraud line; the credit-union reference is the closest.</li>
+    <li>The account-takeover, push-payment, and synthetic-identity dollar figures are analyst models (Javelin, Deloitte, TransUnion), not regulator counts. They are attributed as such.</li>
+  </ul>
+  <div class="callout warning">
+    <div class="callout-label">&#9656; The honest version</div>
+    <p>This plan tells you where to look and what to ask, not what is certain. Verify the load-bearing items live (their current authentication posture, whether an AML incumbent is already in place, the specifics of the 2026 notice) before you build the forecast on them. The value here is that you walk in informed and credible, not that every line is gospel.</p>
+  </div>
+</section>
+
+<!-- 12 HOW BUILT -->
+<section id="s12" class="section">
+  <div class="section-header">
+    <span class="section-number">12</span>
+    <h2 style="margin:0;">How this was built</h2>
+    <span class="section-tag">5 min read · meta</span>
+  </div>
+  <p style="font-size: 18px; color: var(--text-heading);"><strong>This is a one-prompt-class output. The reason it lands is the infrastructure underneath.</strong></p>
+  <p>The same operating system that built the portfolio you are reading this from built this battle plan, reusing the exact design of an earlier briefing so it reads as a sibling. The process, named honestly:</p>
+  <div class="process-flow">
+    <div class="pf-step"><div class="pf-num">1</div><div class="pf-content"><div class="pf-title">Orientation + run plan</div><div class="pf-desc">session-orchestrator loads context; phase-controller classifies the work and persists a plan to disk for compaction resilience.</div></div><div class="pf-time">~1 min</div></div>
+    <div class="pf-step"><div class="pf-num">2</div><div class="pf-content"><div class="pf-title">Parallel research, dual-engine</div><div class="pf-desc">Independent subagents research the bank, the vendor, and the fraud landscape, each verifying load-bearing facts across two engines (Bright Data first, WebSearch as corroborator), with credibility tiers and named gaps.</div></div><div class="pf-time">~5 min</div></div>
+    <div class="pf-step"><div class="pf-num">3</div><div class="pf-content"><div class="pf-title">Findings synthesis</div><div class="pf-desc">findings-formatter applies tier discipline (T1 to T5), reconciles contradictions, and flags traps (a same-name bank's breach, a mis-attributed statistic) so they never reach the page.</div></div><div class="pf-time">~1 min</div></div>
+    <div class="pf-step"><div class="pf-num">4</div><div class="pf-content"><div class="pf-title">Build on the walkthrough template</div><div class="pf-desc">The deliverable is assembled on the On-Demand Curriculum walkthrough design (sidebar, scroll-spy, callouts, tier badges, light/dark), every claim tier-tagged.</div></div><div class="pf-time">~15 min</div></div>
+    <div class="pf-step"><div class="pf-num">5</div><div class="pf-content"><div class="pf-title">Render-validate</div><div class="pf-desc">Puppeteer screenshots at desktop and mobile, light and dark. Visual verification, not source review. Non-negotiable.</div></div><div class="pf-time">~2 min</div></div>
+    <div class="pf-step"><div class="pf-num">6</div><div class="pf-content"><div class="pf-title">Independent adversarial fact-check</div><div class="pf-desc">A subagent with its own context re-verifies the load-bearing claims (the bank's assets, the Chapter 11, the 360 modules, the FinCEN figures) against the live web and confirms the danger-traps were avoided. It tries to refute, not approve.</div></div><div class="pf-time">~2 min</div></div>
+    <div class="pf-step"><div class="pf-num">7</div><div class="pf-content"><div class="pf-title">Ship</div><div class="pf-desc">Activity and intelligence logged, sources compiled, deployed, and linked from the portfolio.</div></div><div class="pf-time">~1 min</div></div>
+  </div>
+  <div class="callout warning">
+    <div class="callout-label">&#9656; The honest version</div>
+    <p>The system amplifies the operator's judgment; it does not fabricate it. This plan has weight because the research is properly tier-tagged, the contradictions and same-name traps are surfaced not hidden, and an independent reviewer tried to break it before it shipped. Point the system at a domain the operator cannot sanity-check and it would produce something structurally similar but hollow. The operator-in-the-loop is load-bearing. That is also why it is a moat, not just a feature.</p>
+  </div>
+</section>
+
+<!-- 99 SOURCES -->
+<section id="s99" class="section">
+  <div class="section-header">
+    <span class="section-number">99</span>
+    <h2 style="margin:0;">Sources &amp; methodology</h2>
+    <span class="section-tag">Reference</span>
+  </div>
+  <p>Date stamp: <strong>2026-06-18</strong>. Every hard claim carries an inline tier badge <span class="tier tier-1">T1</span> to <span class="tier tier-5">T5</span>. Load-bearing facts were verified across two independent engines (Bright Data and WebSearch) and re-checked by an independent adversarial reviewer.</p>
+  <div class="src-block">
+    <h4>Tier 1, regulator / official / primary</h4>
+    <ul>
+      <li>FDIC institution data (Coastal Heritage Bank, Weymouth MA; assets, deposits, charter, mutual status)</li>
+      <li>Coastal Heritage Bank website (about, board/officers, online and mobile banking, business banking, consumer alerts)</li>
+      <li>Massachusetts Division of Banks / Attorney General filings (2019 merger decision; 2026 data-security notice)</li>
+      <li>FinCEN: mail-theft check-fraud alert FIN-2023-Alert003 and the September 2024 check-fraud trend analysis; deepfake/GenAI alert FIN-2024-Alert004</li>
+      <li>FFIEC: "Authentication and Access to Financial Institution Services and Systems" (2021)</li>
+      <li>Nacha: credit-push-fraud risk-management rules (2026 phase-in)</li>
+      <li>FBI IC3: 2024 Internet Crime Report ($16.6B, +33%)</li>
+      <li>CFPB enforcement page: Early Warning / Zelle suit (filed Dec 2024, dismissed with prejudice March 2025)</li>
+      <li>Appgate: 360 Fraud Protection product pages and boilerplate (360 Adaptive Authentication, 360 Risk Control, 360 Brand Guardian); recapitalization press release</li>
+      <li>US Bankruptcy Court, District of Delaware, case 1:24-bk-10956 (Appgate prepackaged Chapter 11)</li>
+    </ul>
+  </div>
+  <div class="src-block">
+    <h4>Tier 2, press / analyst</h4>
+    <ul>
+      <li>Law360, Bloomberg Law, South Florida Business Journal (Appgate Chapter 11 and going-private coverage; Magnetar)</li>
+      <li>Javelin 2025 Identity Fraud Study (account-takeover losses)</li>
+      <li>Deloitte (authorized push-payment and GenAI fraud projections)</li>
+      <li>TransUnion (synthetic-identity lender exposure)</li>
+      <li>ABA Banking Journal / Morning Consult 2025 consumer survey (trust in banks for fraud protection)</li>
+      <li>QKS Group SPARK Matrix 2025, Digital Risk Protection (Appgate named a Leader)</li>
+      <li>Nutter McClennen &amp; Fish release (Equitable Bank / Coastal Heritage merger)</li>
+      <li>Alkami (Appgate DetectTA / DetectID capability descriptions, banking integration)</li>
+    </ul>
+  </div>
+  <div class="src-block">
+    <h4>Tier 3 / Tier 4, aggregator / directory / inferred</h4>
+    <ul>
+      <li>Visbanking (call-report figures), LeadIQ (employee count, single-source)</li>
+      <li>"MyVirtualBranch" URL fingerprint (COCC core inference, not named on the bank's site)</li>
+      <li>Authentication-posture and missing-control reads inferred from the absence of public adaptive-auth / behavioral-analytics signals (stated as inference, not fact)</li>
+    </ul>
+  </div>
+  <h3>How to verify any claim</h3>
+  <ol>
+    <li>Find the claim in its section and read the tier badge after it.</li>
+    <li>Match the badge to the tier block above.</li>
+    <li>T1 claims trace to a regulator, the bank's own site, Appgate's own site, or a court filing, so direct verification is possible.</li>
+    <li>T2 analyst figures are attributed to the analyst; treat them as models, not regulator counts.</li>
+  </ol>
+  <p style="margin-top: 24px; color: var(--text-secondary); font-size: 13px; font-style: italic;">If a claim here is wrong, it is because a source was stale or misread. The methodology, research before agreeing, trust evidence over training data, every claim carries a tier, surface the gaps, is what gives the rest of the document its weight, and what lets you find and correct any single error without invalidating the whole.</p>
+</section>
+
+<footer style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+  <p><strong>Coastal Heritage Bank · A Fraud-Prevention Battle Plan</strong></p>
+  <p>Built 2026-06-18. Single-file HTML. CSS custom properties for light/dark theming. All hard claims tier-tagged T1 to T5.</p>
+  <p>Produced by EngineOS, reusing the On-Demand Curriculum walkthrough design. Research dual-engine (Bright Data + WebSearch), credibility-tiered, and re-verified by an independent adversarial reviewer. Public-source only; the salesperson is unnamed; the companies are public.</p>
+  <p style="margin-top: 12px; font-style: italic;">For an Appgate sales engineer · fraud-prevention deal · 2026-06-18, calibrated honestly, not hyped.</p>
+</footer>
+
+</main>
+<script>
+const THEME_KEY = 'fresha-walkthrough-theme';
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+}
+(function initTheme() {
+  let saved;
+  try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+})();
+
+const sections = document.querySelectorAll('section.section, header.hero');
+const navLinks = document.querySelectorAll('.nav-item');
+function setActive() {
+  let active = null;
+  const scrollPos = window.scrollY + 120;
+  sections.forEach(s => {
+    if (s.offsetTop <= scrollPos) active = s.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + active);
+  });
+}
+window.addEventListener('scroll', setActive, { passive: true });
+setActive();
+
+if (window.location.hash) {
+  const target = document.querySelector(window.location.hash);
+  if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+}
+</script>
+
+</body>
+</html>
