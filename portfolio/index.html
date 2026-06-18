@@ -187,6 +187,9 @@
   .flow-node .fn-d{font-size:12.5px;color:var(--text-body);line-height:1.4}
   .flow-arrow{display:flex;align-items:center;color:var(--text-muted);font-weight:700;font-size:18px}
   @media(max-width:860px){.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg);justify-content:center;width:100%;padding:2px 0}}
+  .srcnote{font-size:12px;color:var(--text-muted);font-style:italic;margin-top:7px;max-width:none}
+  .qrow{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 9px 9px 0;padding:11px 16px;margin-bottom:8px;font-size:14px;color:var(--text-body);max-width:none}
+  .qrow b{color:var(--heading)}
 
   .close-statement{font-size:clamp(18px,2.2vw,23px);color:var(--heading);font-weight:700;max-width:840px;line-height:1.4;margin-top:18px}
   footer{margin-left:var(--sbw);max-width:1080px;padding:24px 56px 52px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--border)}
@@ -241,7 +244,10 @@
   <div class="nav-group">Meta</div>
   <a class="nav-item" href="#s09"><span class="nav-num">09</span>Built by EngineOS</a>
   <a class="nav-item" href="#s10"><span class="nav-num">10</span>In plain English</a>
-  <a class="nav-item" href="#s11"><span class="nav-num">11</span>Get in touch</a>
+  <div class="nav-group">Proof in the wild</div>
+  <a class="nav-item" href="#s11"><span class="nav-num">11</span>Why it beats the rest</a>
+  <a class="nav-item" href="#s12"><span class="nav-num">12</span>A live battle plan</a>
+  <a class="nav-item" href="#s13"><span class="nav-num">13</span>Get in touch</a>
 </aside>
 
 <main>
@@ -486,6 +492,65 @@
   </section>
 
   <section id="s11">
+    <div class="eyebrow">Why this beats the other attempts</div>
+    <h2>Most "AI" on a resume is a wrapper. This is an operating system.</h2>
+    <p class="section-intro">Plenty of people are clever with a chatbot. A few wire up an agent demo that works once. I built the system that actually does the things everyone else puts on a slide, and the way it is built is the real flex.</p>
+    <div class="grid">
+      <div class="card"><h3>It operates, it does not just answer</h3><p>The usual attempt is a prompt with a UI, or an agent that demos once and falls over. Mine writes to live CRMs, runs its own research, and ships hosted pages, PDFs, and decks. Real tools, real output, not a conversation.</p></div>
+      <div class="card"><h3>It is governed, not vibes</h3><p>Nothing ships without a plan on disk and a verification pass, and an independent reviewer with its own context tries to refute it first. That is why I trust it with real client work. Most "agents" have no such brakes.</p></div>
+      <div class="card"><h3>Agile and future-proof on purpose</h3><p>The discipline lives in the system, not in any one model. A sharper model ships next month and EngineOS absorbs it without a rewrite. It builds what it needs now and earns complexity only on a measured trigger, so it scales instead of rotting.</p></div>
+      <div class="card"><h3>It proves I am a builder, not just clever with AI</h3><p>Anyone can prompt well. I architected the OS, the governance, the memory, and the engines on top of it. The model is the engine. I built the car. That is the capability this whole page is evidence of.</p></div>
+    </div>
+  </section>
+
+  <section id="s12">
+    <div class="engine-tag see">A live battle plan</div>
+    <h2>Walking into a fraud-prevention deal, fully armed</h2>
+    <p class="section-intro">A worked example of the briefing engine pointed at a real account: a sales engineer walking into Coastal Heritage Bank to sell fraud-prevention tooling. Everything below is built from public signals and credibility-tiered. This is the prep that turns a cold walk-in into a conversation you already understand.</p>
+
+    <h3 style="margin-bottom:10px">The target, read from public signals</h3>
+    <div class="creds">
+      <div class="cred"><div class="n">~$985M</div><div class="l">total assets, community bank</div></div>
+      <div class="cred"><div class="n">South Shore MA</div><div class="l">single market, ~10 branches</div></div>
+      <div class="cred"><div class="n">Mutual</div><div class="l">depositor-owned, ~84 staff</div></div>
+      <div class="cred"><div class="n">No named CISO</div><div class="l">infosec sits under the CIO and risk</div></div>
+    </div>
+    <p class="srcnote">Sources: FDIC institution data (T1), the bank's own site (T1). A classic small-bank stack: COCC core, Fiserv bill-pay and P2P, Zelle live, mobile with biometric login. Capable, but not a modern adaptive-auth or behavioral-analytics shop, and there is no dedicated security chief. That gap is the opening.</p>
+
+    <h3 style="margin-top:24px;margin-bottom:10px">Why now: the pressure they are under</h3>
+    <div class="grid">
+      <div class="card"><h3>Check fraud nearly doubled</h3><p>FinCEN check-fraud reports went from roughly 350K (2021) to 680K (2022), and the agency's own data says small and mid-size banks file the majority of them. A bank this size is the bullseye, not the exception.</p></div>
+      <div class="card"><h3>A dated compliance clock</h3><p>Nacha's new credit-push-fraud rules put a fraud-monitoring obligation on receiving banks for the first time, phasing in through 2026. With Zelle live and instant payments spreading, that is a requirement, not an option.</p></div>
+      <div class="card"><h3>Irreversible money</h3><p>Zelle and real-time payments settle in seconds with no chargeback. Without real-time scoring before a transfer clears, an account-takeover or a scam payment is simply gone.</p></div>
+      <div class="card"><h3>Trust is the franchise</h3><p>Consumers rank banks first for fraud protection by a wide margin in industry surveys. For a single-market community bank, one local fraud story does damage a megabank could shrug off.</p></div>
+    </div>
+    <p class="srcnote">Sources: FinCEN check-fraud alert and trend analysis (T1), Nacha rules (T1), ABA / Morning Consult 2025 consumer survey (T2). Figures are tiered, and analyst numbers are attributed as such.</p>
+
+    <h3 style="margin-top:24px;margin-bottom:10px">The wedge: their gap, mapped to the offering</h3>
+    <div class="map">
+      <div class="map-row head"><div>The bank's gap, from public signals</div><div>The Appgate 360 module that closes it</div></div>
+      <div class="map-row"><div class="map-ask">Login is a password, security questions, and mobile biometrics. No adaptive, risk-based step-up.</div><div class="map-proof"><b>360 Adaptive Authentication.</b> Risk-based step-up MFA that meets the FFIEC layered-security expectation, with friction only when the risk is real.</div></div>
+      <div class="map-row"><div class="map-ask">Zelle is live and instant rails are coming, with no real-time transaction risk scoring.</div><div class="map-proof"><b>360 Risk Control.</b> Real-time scoring of transfers, account-takeover and money-mule detection, so a transaction is held or stepped up before it is irreversible.</div></div>
+      <div class="map-row"><div class="map-ask">Fraud awareness is handled by hand (consumer alerts, a fraud short code), with no automated brand or phishing takedown.</div><div class="map-proof"><b>360 Brand Guardian.</b> Detects and takes down phishing sites, spoofed apps, and brand impersonation, backed by a 24/7 SOC, so a thin team is not doing it manually.</div></div>
+    </div>
+    <p class="srcnote">For a bank with no dedicated CISO, the play is consolidation: one vendor across adaptive auth, real-time risk, and external-threat takedown with a managed SOC, rather than three point tools and headcount they do not have.</p>
+
+    <h3 style="margin-top:24px;margin-bottom:10px">Questions that open the room</h3>
+    <div class="qrow"><b>On the recent incident:</b> after this year's data-security notice, what actually changed in how you authenticate logins and watch transactions, versus what you told customers?</div>
+    <div class="qrow"><b>On real-time money:</b> with Zelle live, how do you score a transfer for risk before it settles, given there is no clawback?</div>
+    <div class="qrow"><b>On ownership:</b> with no dedicated security chief, who runs fraud monitoring day to day, and how stretched is that risk-and-BSA team?</div>
+    <div class="qrow"><b>On the clock:</b> Nacha's receiving-bank monitoring rule is phasing in this year, where are you on it?</div>
+    <div class="qrow"><b>On brand:</b> if a phishing site spoofs your login page tonight, how fast can you get it taken down today?</div>
+
+    <details class="deeper"><summary>Go deeper: the objection to pre-empt, the proof, and the honest caveats</summary><div class="d-body">
+      <p><b>Pre-empt the buyer-risk objection.</b> Appgate filed a prepackaged Chapter 11 in May 2024 and emerged debt-free and privately held under Magnetar Capital, a 13-billion-dollar firm, about two months later. A community bank's vendor-risk review will flag the bankruptcy, so raise it first: it was a fast, consensual recapitalization backed by nearly all creditors, not a liquidation, the company emerged debt-free with customer commitments intact, and a former Discover Financial Services CEO now sits on the board. The honest watch-item: as a private company it no longer files public financials.</p>
+      <p><b>Proof to bring.</b> A US credit union (Trax CU in Florida) used the brand-protection module to take down phishing sites and counterfeit apps with minimal manual work; an anonymized financial institution caught 66,000 dollars of fraud in the first month on the transaction engine; Appgate was named a Leader in the 2025 SPARK Matrix for Digital Risk Protection.</p>
+      <p><b>Honest caveats, because the brand is do not over-claim.</b> Appgate's deepest fraud install base is Latin American banks, so US community-bank logos are thinner, which means leading with the credit-union reference. Its behavioral-biometrics story is the orchestration of signals into its risk engine, not a first-party biometrics product, so say that precisely. And expect the bank may already run a Verafin or Abrigo for AML and transaction monitoring, so position Brand Guardian and Adaptive Authentication as the gap, not a rip-and-replace. The tier-one names to frame as overkill for a bank this size: BioCatch, Feedzai.</p>
+    </div></details>
+    <p class="srcnote">Built by EngineOS from public sources only, credibility-tiered, with the gaps named rather than guessed. No insider information, and the salesperson is unnamed. This is the engine's account briefing, condensed to a section.</p>
+  </section>
+
+  <section id="s13">
     <div class="contact-block">
       <div class="eyebrow">Get in touch</div>
       <h2>If your role needs both halves in one person, let's talk.</h2>
