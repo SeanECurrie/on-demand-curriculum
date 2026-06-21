@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Agency150 — Investment Briefing</title>
+<style>
+  :root{
+    --bg:#faf9f7; --surface:#ffffff; --surface-alt:#f5f4f1; --surface-sunk:#f0eee9;
+    --text:#1c1917; --text-soft:#44403c; --text-muted:#78716c; --border:#e7e5e4; --border-strong:#d6d3d1;
+    --navy:#1f3a5f; --navy-soft:#2d5180; --gold:#b08423; --gold-soft:#caa450;
+    --verified:#15803d; --verified-bg:#dcfce7; --claim:#b45309; --claim-bg:#fef3c7;
+    --risk:#b91c1c; --risk-bg:#fee2e2; --unverified:#6b7280; --unverified-bg:#f1f0ee;
+    --favor:#15803d; --favor-bg:#ecfdf3; --pause:#b45309; --pause-bg:#fdf6ec;
+    --shadow:0 1px 3px rgba(28,25,23,.06),0 8px 24px rgba(28,25,23,.05);
+    --shadow-sm:0 1px 2px rgba(28,25,23,.06);
+    --maxw:880px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  ul,ol{padding-left:24px}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.65; font-size:16.5px; -webkit-font-smoothing:antialiased;
+  }
+  .layout{display:flex; min-height:100vh}
+  .sidebar{width:288px; flex-shrink:0; background:var(--surface); border-right:1px solid var(--border);
+    position:sticky; top:0; height:100vh; overflow-y:auto; padding:26px 18px 40px;}
+  .brandmark{display:flex; align-items:center; gap:11px; padding:0 8px 18px; border-bottom:1px solid var(--border); margin-bottom:14px}
+  .brandmark .dot{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--navy),var(--navy-soft));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;letter-spacing:.5px;flex-shrink:0}
+  .brandmark .bt{font-size:13.5px;font-weight:700;color:var(--text);line-height:1.25}
+  .brandmark .bs{font-size:11.5px;color:var(--text-muted)}
+  .notehint{font-size:11.5px;color:var(--text-muted);background:var(--surface-alt);border:1px solid var(--border);border-radius:7px;padding:7px 10px;margin:0 4px 12px;line-height:1.45}
+  .notehint b{color:var(--gold)}
+  .toc a{display:block; padding:7px 12px; margin:1px 0; border-radius:7px; color:var(--text-soft);
+    text-decoration:none; font-size:13.7px; line-height:1.4; border-left:2px solid transparent; transition:all .12s;}
+  .toc a .n{color:var(--text-muted); font-variant-numeric:tabular-nums; font-size:12px; margin-right:8px}
+  .toc a:hover{background:var(--surface-alt); color:var(--text)}
+  .toc a.active{background:#eef2f7; color:var(--navy); border-left-color:var(--navy); font-weight:600}
+  .toc a.active .n{color:var(--navy-soft)}
+  .toc a.notes-link{margin-top:8px;background:#fdfaf2;border:1px solid #ecdcb4;color:var(--gold);font-weight:600}
+  .toc a.notes-link:hover{background:#fbf3df}
+  .toc .grp{font-size:10.5px; text-transform:uppercase; letter-spacing:.9px; color:var(--text-muted); padding:14px 12px 5px; font-weight:700}
+  .main{flex:1; min-width:0}
+  .container{max-width:var(--maxw); margin:0 auto; padding:0 36px 120px}
+  header.hero{background:linear-gradient(160deg,#1f3a5f 0%,#274a73 55%,#2d5180 100%); color:#fff; padding:54px 36px 46px; margin-bottom:8px;}
+  header.hero .inner{max-width:var(--maxw); margin:0 auto}
+  .kicker{font-size:12.5px; text-transform:uppercase; letter-spacing:2px; color:#bcd3ef; font-weight:600; margin-bottom:14px}
+  header.hero h1{font-size:38px; line-height:1.12; font-weight:760; letter-spacing:-.5px; margin-bottom:14px}
+  header.hero .sub{font-size:18px; color:#dce7f4; max-width:680px; line-height:1.5}
+  .hero-meta{display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:24px; font-size:13px; color:#cfe0f2}
+  .hero-meta b{color:#fff; font-weight:600}
+  .hero-meta .pill{background:rgba(255,255,255,.12); padding:5px 12px; border-radius:20px; font-size:12.5px}
+  section{padding:42px 0 8px; border-bottom:1px solid var(--border); scroll-margin-top:12px}
+  section:last-of-type{border-bottom:none}
+  .sec-num{font-size:12.5px; font-weight:700; color:var(--gold); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:7px}
+  h2{font-size:27px; line-height:1.2; font-weight:730; letter-spacing:-.3px; margin-bottom:8px; color:var(--text)}
+  h3{font-size:18.5px; font-weight:680; margin:30px 0 10px; color:var(--navy); letter-spacing:-.2px}
+  h4{font-size:15.5px; font-weight:680; margin:20px 0 6px; color:var(--text-soft)}
+  p{margin:12px 0}
+  .lead{font-size:18px; color:var(--text-soft); line-height:1.6}
+  strong{font-weight:680; color:var(--text)}
+  .tier{display:inline-block; font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:4px; vertical-align:middle; letter-spacing:.3px; margin:0 1px; line-height:1.5; white-space:nowrap}
+  .t1{background:#dcfce7;color:#14532d} .t2{background:#dbeafe;color:#1e3a5f} .t3{background:#fef3c7;color:#78350f}
+  .t4{background:#ede9fe;color:#4c1d95} .t5{background:#f1f0ee;color:#57534e}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:20px;letter-spacing:.3px;vertical-align:middle;text-transform:uppercase}
+  .tag.v{background:var(--verified-bg);color:var(--verified)} .tag.c{background:var(--claim-bg);color:var(--claim)}
+  .tag.r{background:var(--risk-bg);color:var(--risk)} .tag.u{background:var(--unverified-bg);color:var(--unverified)}
+  .callout{border:1px solid var(--border); border-left-width:4px; border-radius:10px; padding:16px 20px; margin:20px 0; background:var(--surface); box-shadow:var(--shadow-sm)}
+  .callout .ct{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; display:flex; align-items:center; gap:7px}
+  .callout p:first-of-type{margin-top:0} .callout p:last-child{margin-bottom:0}
+  .co-finding{border-left-color:var(--navy); background:#f7fafd} .co-finding .ct{color:var(--navy)}
+  .co-risk{border-left-color:var(--risk); background:var(--risk-bg)} .co-risk .ct{color:var(--risk)}
+  .co-flag{border-left-color:var(--claim); background:var(--claim-bg)} .co-flag .ct{color:#92400e}
+  .co-confirm{border-left-color:var(--gold); background:#fdfaf2} .co-confirm .ct{color:var(--gold)}
+  .co-context{border-left-color:var(--navy-soft); background:linear-gradient(180deg,#f4f8fc,#fff)} .co-context .ct{color:var(--navy)}
+  .tldr{background:var(--surface); border:1px solid var(--border-strong); border-radius:14px; padding:26px 28px; box-shadow:var(--shadow); margin:6px 0 8px}
+  .tldr h4{margin-top:0;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--gold)}
+  .onesent{font-size:20px; line-height:1.5; color:var(--text); font-weight:560; margin:6px 0 18px}
+  .bullets{list-style:none; padding:0; margin:0}
+  .bullets li{position:relative; padding:9px 0 9px 30px; border-top:1px solid var(--border); font-size:15.5px; line-height:1.55}
+  .bullets li:first-child{border-top:none}
+  .bullets li::before{content:""; position:absolute; left:4px; top:16px; width:8px; height:8px; border-radius:50%; background:var(--navy)}
+  .bullets li.warn::before{background:var(--claim)} .bullets li.good::before{background:var(--verified)} .bullets li.bad::before{background:var(--risk)}
+  .bb{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0}
+  .bb .card{border-radius:12px; padding:18px 20px; border:1px solid var(--border)}
+  .bb .favor{background:var(--favor-bg); border-color:#bbf7d0} .bb .pause{background:var(--pause-bg); border-color:#f3dcb4}
+  .bb .card h4{margin-top:0; display:flex; align-items:center; gap:8px; font-size:14px; text-transform:uppercase; letter-spacing:.6px}
+  .bb .favor h4{color:var(--favor)} .bb .pause h4{color:var(--pause)}
+  .bb ul{margin:6px 0 0; padding-left:18px} .bb li{margin:6px 0; font-size:14px; line-height:1.5}
+  .tw{overflow-x:auto; margin:20px 0; border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow-sm)}
+  table{border-collapse:collapse; width:100%; font-size:14px; background:var(--surface)}
+  th{background:var(--surface-sunk); text-align:left; padding:10px 13px; font-weight:680; font-size:12.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--text-soft); border-bottom:2px solid var(--border-strong); white-space:nowrap}
+  td{padding:10px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--surface-alt)}
+  td.nowrap{white-space:nowrap}
+  .ledger td:nth-child(2){text-align:center;white-space:nowrap}
+  figure{margin:24px 0; text-align:center}
+  figure svg{max-width:100%; height:auto}
+  figcaption{font-size:12.5px; color:var(--text-muted); margin-top:8px; font-style:italic}
+  .meter{display:flex; height:30px; border-radius:8px; overflow:hidden; margin:14px 0 6px; border:1px solid var(--border-strong); font-size:11.5px; font-weight:700; color:#fff}
+  .meter span{display:flex; align-items:center; justify-content:center; white-space:nowrap}
+  .legend{display:flex; flex-wrap:wrap; gap:14px; font-size:12.5px; color:var(--text-muted); margin:8px 0 0}
+  .legend .li{display:flex; align-items:center; gap:6px}
+  .swatch{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .note{font-size:13.5px; color:var(--text-muted); font-style:italic; margin:10px 0}
+  /* ---------- Note system ---------- */
+  .notebox{margin:24px 0 4px; background:#fcfbf8; border:1px solid var(--border-strong); border-radius:11px; padding:14px 16px 12px}
+  .notebox.q{margin:10px 0 0; background:var(--surface); padding:0; border:none}
+  .notebox label{display:flex; align-items:center; gap:8px; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--gold); margin-bottom:7px}
+  .notebox label .ic{font-size:13px}
+  .notebox textarea{width:100%; box-sizing:border-box; background:var(--surface); border:1px solid var(--border-strong); border-radius:8px; padding:10px 12px; font-family:inherit; font-size:14.5px; color:var(--text); resize:vertical; line-height:1.55; min-height:46px}
+  .notebox textarea:focus{outline:none; border-color:var(--gold-soft); box-shadow:0 0 0 3px rgba(176,132,35,.12)}
+  .note-saved{font-size:11px; font-weight:600; color:var(--verified); opacity:0; transition:opacity .25s; margin-left:auto; text-transform:none; letter-spacing:0}
+  .note-saved.show{opacity:1}
+  .qa{margin:14px 0}
+  .qa .qa-q{font-size:15px; color:var(--text); font-weight:600; line-height:1.5; margin-bottom:2px}
+  .qa .qwhy{display:block; font-size:13px; color:var(--text-muted); font-style:italic; margin:3px 0 0}
+  /* collected */
+  .collect-wrap{background:var(--surface); border:1px solid var(--border-strong); border-radius:12px; padding:20px 22px; box-shadow:var(--shadow-sm); margin:18px 0}
+  .collect-item{border-top:1px solid var(--border); padding:12px 0}
+  .collect-item:first-child{border-top:none}
+  .collect-sec{font-size:12px; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px}
+  .collect-note{font-size:14.5px; color:var(--text-soft); white-space:pre-wrap; line-height:1.55}
+  .collect-empty{color:var(--text-muted); font-style:italic}
+  .btnrow{display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 0}
+  .btn{font-family:inherit; font-weight:680; font-size:14.5px; padding:11px 20px; border-radius:9px; cursor:pointer; border:1px solid transparent}
+  .btn-primary{background:var(--navy); color:#fff} .btn-primary:hover{background:var(--navy-soft)}
+  .btn-ghost{background:var(--surface); color:var(--text-soft); border-color:var(--border-strong)} .btn-ghost:hover{background:var(--surface-alt)}
+  /* ---------- Collapsible desktop sidebar ---------- */
+  .nav-collapse{margin-left:auto; background:transparent; border:1px solid var(--border); border-radius:7px; width:28px; height:28px; cursor:pointer; color:var(--text-muted); font-size:16px; line-height:1; flex-shrink:0; display:flex; align-items:center; justify-content:center}
+  .nav-collapse:hover{background:var(--surface-alt); color:var(--text)}
+  .nav-reopen{display:none; position:fixed; top:16px; left:16px; z-index:60; background:var(--navy); color:#fff; border:none; border-radius:9px; padding:9px 15px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:var(--shadow); align-items:center; gap:7px}
+  .nav-reopen:hover{background:var(--navy-soft)}
+  @media (min-width:981px){
+    body.nav-collapsed .sidebar{display:none}
+    body.nav-collapsed .container{max-width:1200px}
+  }
+  /* ---------- Table scroll affordance on small screens ---------- */
+  .tw{position:relative; -webkit-overflow-scrolling:touch}
+  @media (max-width:760px){
+    .tw table{min-width:580px}
+    .tw::after{content:""; position:absolute; top:1px; right:1px; bottom:1px; width:26px; background:linear-gradient(90deg, rgba(255,255,255,0), rgba(31,58,95,.07)); pointer-events:none; border-radius:0 10px 10px 0}
+  }
+  .menu-btn{display:none; position:fixed; top:14px; left:14px; z-index:60; background:var(--navy); color:#fff; border:none; width:44px; height:44px; border-radius:10px; font-size:20px; cursor:pointer; box-shadow:var(--shadow)}
+  .scrim{display:none; position:fixed; inset:0; background:rgba(28,25,23,.45); z-index:40}
+  @media (max-width:980px){
+    .menu-btn{display:block}
+    .sidebar{position:fixed; left:0; top:0; z-index:50; transform:translateX(-100%); transition:transform .22s ease; box-shadow:var(--shadow)}
+    .sidebar.open{transform:translateX(0)}
+    .scrim.open{display:block}
+    .container{padding:0 20px 90px}
+    header.hero{padding:64px 20px 36px}
+    header.hero h1{font-size:29px}
+    header.hero .sub{font-size:16px}
+    .bb{grid-template-columns:1fr}
+  }
+  @media (max-width:520px){ body{font-size:16px} header.hero h1{font-size:25px} .onesent{font-size:17px} h2{font-size:23px} }
+  @media print{ .sidebar,.menu-btn,.scrim{display:none!important} .notebox textarea{border:1px solid #ccc} section{page-break-inside:avoid} }
+</style>
+</head>
+<body>
+<button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+<button class="nav-reopen" id="navReopen" aria-label="Open contents">☰&nbsp; Contents</button>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="brandmark">
+      <div class="dot">A150</div>
+      <div><div class="bt">Agency150</div><div class="bs">Investment Briefing · for Jimmy</div></div>
+      <button class="nav-collapse" id="navCollapse" title="Collapse contents (more room for tables)" aria-label="Collapse contents">«</button>
+    </div>
+    <div class="notehint">📝 <b>This is a working document.</b> Every section has a note field — your reactions save in this file and survive a reload. Your notes drive the sharpened v2.</div>
+    <div class="toc" id="toc">
+      <a href="#s0"><span class="n">—</span>The 90-Second Read</a>
+      <div class="grp">The Company</div>
+      <a href="#s1"><span class="n">01</span>What the Evidence Shows It Is</a>
+      <a href="#s2"><span class="n">02</span>The Product, in Detail</a>
+      <a href="#s3"><span class="n">03</span>Who's Behind It</a>
+      <a href="#s4"><span class="n">04</span>Traction, Funding &amp; Stage</a>
+      <div class="grp">The Landscape</div>
+      <a href="#s5"><span class="n">05</span>The Market</a>
+      <a href="#s6"><span class="n">06</span>The Competition</a>
+      <div class="grp">Weighing It</div>
+      <a href="#s7"><span class="n">07</span>The Case For It</a>
+      <a href="#s8"><span class="n">08</span>The Case Against It</a>
+      <a href="#s9"><span class="n">09</span>Claims vs. Confirmed</a>
+      <a href="#s10"><span class="n">10</span>Questions for the Meeting</a>
+      <a href="#s11"><span class="n">11</span>Weighing It — Both Ways</a>
+      <a href="#s12" class="notes-link"><span class="n">📝</span>Your Notes — Collected</a>
+      <div class="grp">Appendix</div>
+      <a href="#s13"><span class="n">12</span>How This Was Built</a>
+      <a href="#s14"><span class="n">13</span>Sources &amp; Confidence</a>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="hero">
+      <div class="inner">
+        <div class="kicker">Confidential Working Briefing · Prepared for Jimmy</div>
+        <h1>Agency150</h1>
+        <p class="sub">A fact-checked picture of the company, the people, the market, and the open questions — laid out so <em>you</em> can weigh it and decide. Make notes as you go; they’re where your read takes shape.</p>
+        <div class="hero-meta">
+          <span class="pill">Target: <b>Agency150 / "Vega"</b></span>
+          <span class="pill">Founded <b>2025</b> · <b>unfunded</b></span>
+          <span class="pill">Prepared <b>June 20, 2026</b></span>
+          <span class="pill">Identity confidence: <b>High</b></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- ============ S0 ============ -->
+      <section id="s0">
+        <div class="sec-num">Start Here</div>
+        <h2>The 90-Second Read</h2>
+        <p class="lead">The whole picture in one place. Everything here is unpacked, with sources, in the sections that follow — and every section has a note field for your reactions.</p>
+
+        <div class="tldr">
+          <h4>What the public evidence shows it is</h4>
+          <p class="onesent">Agency150 is a <strong>brand-new (Sept 2025), unfunded startup</strong> whose product <strong>“Vega”</strong> uses AI to run psychologically-grounded interviews of a company’s <strong>employees and customers</strong> at scale, turning them into organizational and market insight — sold as a <strong>boutique advisory service</strong>, not a software seat.</p>
+          <ul class="bullets">
+            <li class="warn"><strong>The public product differs from the one-line description.</strong> The brief that reached you framed it as AI that <em>interviews and assesses CEO/executive candidates</em>. What’s public is AI interviewing <em>employees and customers</em> for organizational research. Same kind of engine, different market — <strong>worth confirming which one matches your understanding.</strong> <span class="tag c">to confirm</span></li>
+            <li class="good"><strong>The credibility is real but uneven.</strong> One genuinely top-tier anchor (a chaired professor who edits a leading academic journal) and a roster of brand-name HR advisors — alongside a thin operating/technical core and titles that read a notch above their sourced versions.</li>
+            <li class="bad"><strong>One fact worth raising directly.</strong> A listed advisor was CEO of <strong>Jumpshot</strong>, shut down in 2020 for covertly selling users’ browsing data — relevant given Vega’s business is collecting intimate human-interview data.</li>
+            <li class="warn"><strong>Early, and competing late.</strong> No disclosed funding, no named customers, ~146 LinkedIn followers — entering a hot, crowded, well-funded category (one rival just raised $69M at a $500M valuation).</li>
+            <li><strong>The introduction is hard to map publicly.</strong> No one clearly visible on the public roster fits “multiple exits + real investor track record.” Could simply be someone not listed — a light thing to get a sense of.</li>
+          </ul>
+        </div>
+
+        <h3>The case each way, as the evidence frames it</h3>
+        <div class="bb">
+          <div class="card favor">
+            <h4>▲ Points in favor</h4>
+            <ul>
+              <li>Experienced operators + a real behavioral-science credential, riding a genuine wave (AI compresses qualitative research 80–95%).</li>
+              <li>A boutique-advisory niche the funded SaaS players largely ignore: culture, M&amp;A integration, AI-readiness.</li>
+              <li>If genuinely pre-seed, early-entry optionality.</li>
+            </ul>
+          </div>
+          <div class="card pause">
+            <h4>▼ Points that give pause</h4>
+            <ul>
+              <li>Open question whether it’s more than “GPT + dashboards + consultants” — i.e., whether there’s a moat.</li>
+              <li>Funded AI-research leaders above and Qualtrics/Culture Amp below are both moving on this space.</li>
+              <li>Unfunded, pre-traction, the framing question, the privacy item — several things to get comfortable with.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout co-context">
+          <div class="ct">◆ How to use this briefing</div>
+          <p>This lays out what the evidence confirms, what is the company’s own claim, and what stays open — without deciding for you. The sharpest value is in <strong>§10 (questions for the meeting)</strong> and <strong>§11 (weighing it both ways)</strong>, and in <strong>your notes</strong>: jot reactions in any section, and they collect in <strong>§ Your Notes</strong> at the end, ready to send back so this can re-sharpen around what you actually know and decide.</p>
+        </div>
+
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your first-reaction note <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s0" rows="2" placeholder="Gut reaction, what you already know that this misses, what you most want to pin down…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S1 ============ -->
+      <section id="s1">
+        <div class="sec-num">The Company · 01</div>
+        <h2>What the Evidence Shows It Is</h2>
+        <p class="lead">“Agency150” is a thin name shared by unrelated things, so the first job was confirming the right company — and laying the public product next to the one-line description that reached you, so you can check the two against each other.</p>
+
+        <h3>Pinning the right entity</h3>
+        <p>The company is <strong>Agency150</strong> — domain <strong>agency150.com</strong>, brand “Agency 150,” product <strong>“Vega.”</strong> <span class="tier t1">T1</span> A New York startup, <strong>founded 2025</strong>, listed under “Research Services,” 11–50 employees, privately held. <span class="tier t1">T1</span> HR-industry analyst <strong>Josh Bersin</strong> flagged it in March 2025: <em>“New startup Agency150 is building an AI agent for employee experience.”</em> <span class="tier t2">T2</span></p>
+        <p>We ruled out the name-collisions that make it hard to search: a Virginia veterinary code (“18VAC150”), generic “save 150+ hours” marketing copy, and — most importantly — <strong>other companies whose product is also called “Vega”</strong> (an unrelated security-analytics firm and a wealth-management fintech, both of which have raised tens of millions). <span class="tier t2">T2</span> <strong>None of those are this company.</strong> Any “Vega raised $X million” headline almost certainly refers to a different business — useful to know before the meeting.</p>
+
+        <div class="callout co-confirm">
+          <div class="ct">◆ Worth confirming against your understanding</div>
+          <p><strong>The one-line description that reached you</strong> framed Agency150 as AI in the executive-hiring space — <em>interviewing and assessing CEO / executive candidates</em>.</p>
+          <p><strong>What the public evidence shows</strong> is an AI-native <em>organizational and customer research</em> platform: Vega interviews a company’s <strong>own employees and customers</strong> to surface beliefs, culture, and sentiment — employee experience, customer insight, cultural diagnostics, M&amp;A integration, “AI readiness.” <span class="tier t1">T1</span> We searched the site, every 2026 LinkedIn post, founder commentary, and press for any executive-candidate-assessment or hiring product and didn’t find one. <span class="tier t1">T1</span></p>
+          <p>The <em>underlying engine</em> is the same shape either way (AI conducting psychologically-safe interviews at scale, decoding behavioral signals). You may already know exactly what Vega does — a quick brief and secondhand. This is simply the public picture laid alongside it, so you can confirm the two line up before anything else.</p>
+        </div>
+
+        <p>Where might the framings differ? The closest item on their site is a “<strong>Due Diligence</strong>” use case under <em>People &amp; Change</em> — “uncover cultural, <em>leadership</em>, and operational insights that traditional diligence models miss.” That’s surveying a target company’s workforce during an M&amp;A deal, which is adjacent in vocabulary to “assessing leadership” but different in function from assessing an individual CEO candidate.</p>
+
+        <figure>
+          <svg viewBox="0 0 720 230" role="img" aria-label="The brief's description next to the public evidence">
+            <rect x="12" y="20" width="330" height="190" rx="12" fill="#fef3c7" stroke="#caa450" stroke-width="1.5"/>
+            <rect x="378" y="20" width="330" height="190" rx="12" fill="#dbeafe" stroke="#2d5180" stroke-width="1.5"/>
+            <text x="177" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e" font-family="sans-serif">THE ONE-LINE BRIEF</text>
+            <text x="543" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="#1f3a5f" font-family="sans-serif">THE PUBLIC EVIDENCE</text>
+            <text x="177" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#1c1917" font-family="sans-serif">AI assesses</text>
+            <text x="177" y="106" text-anchor="middle" font-size="15" font-weight="700" fill="#1c1917" font-family="sans-serif">CEO / exec candidates</text>
+            <text x="177" y="134" text-anchor="middle" font-size="12.5" fill="#57534e" font-family="sans-serif">for a hiring / selection</text>
+            <text x="177" y="151" text-anchor="middle" font-size="12.5" fill="#57534e" font-family="sans-serif">decision</text>
+            <text x="177" y="188" text-anchor="middle" font-size="11.5" font-style="italic" fill="#92400e" font-family="sans-serif">market: executive assessment</text>
+            <text x="543" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#1c1917" font-family="sans-serif">AI interviews</text>
+            <text x="543" y="106" text-anchor="middle" font-size="15" font-weight="700" fill="#1c1917" font-family="sans-serif">employees &amp; customers</text>
+            <text x="543" y="134" text-anchor="middle" font-size="12.5" fill="#57534e" font-family="sans-serif">for organizational &amp;</text>
+            <text x="543" y="151" text-anchor="middle" font-size="12.5" fill="#57534e" font-family="sans-serif">market research</text>
+            <text x="543" y="188" text-anchor="middle" font-size="11.5" font-style="italic" fill="#1f3a5f" font-family="sans-serif">market: insights / EX research</text>
+            <text x="360" y="118" text-anchor="middle" font-size="20" font-weight="700" fill="#78716c" font-family="sans-serif">vs</text>
+          </svg>
+          <figcaption>The brief’s description set beside the public product. Same kind of AI engine; the question is which market it’s actually in — the first thing to confirm with the founders.</figcaption>
+        </figure>
+
+        <div class="notebox">
+          <label><span class="ic">📝</span> Does this match what you understood Vega to be? <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s1" rows="2" placeholder="What you were told / what you already know about the product / whether the framing gap is real or just my read…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S2 ============ -->
+      <section id="s2">
+        <div class="sec-num">The Company · 02</div>
+        <h2>The Product, in Detail</h2>
+        <p class="lead">Stripped of the marketing — the product, the model, and the pitch, with every claim tagged so you can see what’s the company’s word versus what’s independently confirmed.</p>
+
+        <h3>The product: Vega</h3>
+        <p>Agency150 describes Vega as <em>“the first AI-native advisory platform.”</em> <span class="tag c">company claim</span> <span class="tier t5">T5</span> In plain terms: an AI agent conducts conversational, “psychologically safe” interviews with a company’s stakeholders — employees, customers, members — at scale, then decodes the transcripts into themes, “behavioural signals, readiness patterns, trust dynamics.” A human team of behavioral scientists and ex-strategy-consultants helps design the studies and interpret results. <span class="tier t5">T5</span></p>
+        <p>The pitch is a “best of three”: deeper than <em>surveys</em> (which give scores, not the “why”), faster than <em>consultants</em> (days, not months), and more rigorous than <em>generic AI</em>. They claim Vega can run <em>“thousands of stakeholder interviews in days, not months.”</em> <span class="tag c">company claim, unverified</span> <span class="tier t5">T5</span></p>
+
+        <h3>What it sells, and to whom</h3>
+        <p>Three stated areas of expertise (this taxonomy is straight off their site): <span class="tier t1">T1</span></p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Expertise area</th><th>Representative use cases</th></tr></thead>
+            <tbody>
+              <tr><td><strong>People &amp; Change</strong></td><td>Employee engagement · cultural diagnostics · transformation health checks · AI readiness · <strong>post-merger integration</strong> · strategy execution · <strong>due diligence</strong> (organizational)</td></tr>
+              <tr><td><strong>Product &amp; Marketing</strong></td><td>Customer insight · customer experience · go-to-market readiness · innovation readiness</td></tr>
+              <tr><td><strong>Public Sector &amp; Non-Profit</strong></td><td>Member research · collaborative design · industry research · value proposition · member engagement</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Not on this list: candidate assessment, hiring, executive selection, succession. <span class="tier t1">T1</span></p>
+
+        <h3>The business model — and why it matters</h3>
+        <p>Vega is sold as <strong>bespoke studies + an annual subscription</strong>, supported by human advisors. <span class="tier t1">T1</span> This is easy to miss and shapes the whole question: <strong>it’s a services / advisory model, not a self-serve software model.</strong> Revenue is people-bound (consultants don’t scale like seats), gross margins look more like a consultancy than a SaaS company, and “traction” shows up as signed engagements and logos rather than sign-ups. It also means the most valuable asset may be the <em>people and the brand</em>, not the software.</p>
+
+        <figure>
+          <svg viewBox="0 0 720 150" role="img" aria-label="How Vega works, left to right">
+            <g font-family="sans-serif">
+              <rect x="8" y="45" width="128" height="60" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="72" y="72" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1c1917">Stakeholders</text>
+              <text x="72" y="90" text-anchor="middle" font-size="11" fill="#57534e">employees / customers</text>
+              <rect x="178" y="45" width="128" height="60" rx="10" fill="#f3e8ff" stroke="#a855f7" stroke-width="1.5"/>
+              <text x="242" y="68" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1c1917">Vega AI</text>
+              <text x="242" y="85" text-anchor="middle" font-size="11" fill="#57534e">conversational</text>
+              <text x="242" y="99" text-anchor="middle" font-size="11" fill="#57534e">interviews at scale</text>
+              <rect x="348" y="45" width="128" height="60" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+              <text x="412" y="68" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1c1917">Signal decode</text>
+              <text x="412" y="85" text-anchor="middle" font-size="11" fill="#57534e">themes, patterns,</text>
+              <text x="412" y="99" text-anchor="middle" font-size="11" fill="#57534e">risks</text>
+              <rect x="518" y="45" width="128" height="60" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+              <text x="582" y="68" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1c1917">Human advisors</text>
+              <text x="582" y="85" text-anchor="middle" font-size="11" fill="#57534e">interpret +</text>
+              <text x="582" y="99" text-anchor="middle" font-size="11" fill="#57534e">action plan</text>
+              <line x1="136" y1="75" x2="176" y2="75" stroke="#78716c" stroke-width="2" marker-end="url(#ar)"/>
+              <line x1="306" y1="75" x2="346" y2="75" stroke="#78716c" stroke-width="2" marker-end="url(#ar)"/>
+              <line x1="476" y1="75" x2="516" y2="75" stroke="#78716c" stroke-width="2" marker-end="url(#ar)"/>
+              <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#78716c"/></marker></defs>
+            </g>
+          </svg>
+          <figcaption>Vega’s claimed flow. The last box — human advisors — is what makes it a services business, and possibly its main differentiator.</figcaption>
+        </figure>
+
+        <div class="callout co-finding">
+          <div class="ct">● Worth keeping in mind</div>
+          <p>Everything above the model line is <strong>the company’s own description</strong>, not independently verified product capability. No third party has validated “thousands of interviews in days,” the analytics quality, or customer results. A live demo and a real customer reference are what would move these from <em>claimed</em> to <em>confirmed</em>.</p>
+        </div>
+
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your note on the product / model <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s2" rows="2" placeholder="Does the services-not-SaaS model change how you'd value it? What would you want to see in a demo?"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S3 ============ -->
+      <section id="s3">
+        <div class="sec-num">The Company · 03</div>
+        <h2>Who's Behind It</h2>
+        <p class="lead">For a company this early, the team is most of what you’re evaluating. We verified every leadership and advisor claim against primary sources. The pedigree is mostly real, framed at the top of its range — with one item worth raising directly.</p>
+
+        <h3>The leadership</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Person / role</th><th>Claim</th><th>Verdict</th><th>What the record shows</th></tr></thead>
+            <tbody>
+              <tr><td class="nowrap"><strong>Gordon Rudow</strong><br>CEO</td><td>Ex-Partner &amp; CLO, Oliver Wyman; CEO of Bonfire</td><td><span class="tag v">verified</span></td><td>Real career in leadership-development / change consulting. “CLO” = Chief <em>Learning</em> Officer (not Legal); “CEO of Bonfire” = an operating role at an existing comms agency, not a founder exit. Domain consultant, <strong>non-technical</strong>. <span class="tier t3">T3</span></td></tr>
+              <tr><td class="nowrap"><strong>Craig Finster</strong><br>CFO</td><td>Ex-President &amp; CFO, Versus Systems</td><td><span class="tag v">verified</span></td><td>True — and context the title omits: Versus Systems (Nasdaq: VS) was a troubled micro-cap (1-for-16 reverse split; in <strong>July 2024 the whole management team, incl. Finster, resigned</strong> in a restructuring). A finance-operator résumé. <span class="tier t1">T1</span></td></tr>
+              <tr><td class="nowrap"><strong>Lamar Pierce</strong><br>Chief Science Officer</td><td>WashU professor; Editor-in-Chief, <em>Organization Science</em></td><td><span class="tag v">verified — T1</span></td><td><strong>The strongest, cleanest credential here.</strong> Chaired professor at WashU’s Olin School, Associate Dean, Editor-in-Chief of a leading management journal (term from 2023). A genuine behavioral-science anchor, zero embellishment. <span class="tier t1">T1</span></td></tr>
+              <tr><td class="nowrap"><strong>Eric Perez</strong><br>Founding Engineer</td><td>Ex-CTO Originate Labs; Dollar Shave Club, JibJab</td><td><span class="tag c">partly verified</span></td><td>The site says “CTO Originate”; his own bio says “<em>Director of Engineering</em> @ Originate.” DSC / JibJab roles couldn’t be independently confirmed. A real engineer; seniority reads softer than stated. <span class="tier t5">T5</span></td></tr>
+              <tr><td class="nowrap"><strong>Monty Coon</strong><br>Product Lead</td><td>Ex-COO / Sr. Dir. Global Ops, 1Mind &amp; AI Foundation</td><td><span class="tag c">partly verified</span></td><td>Links to AI Foundation / 1Mind are real; sourced titles read “Chief Delivery Officer / Product Manager,” not “COO.” <span class="tier t3">T3</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout co-finding">
+          <div class="ct">● A pattern in the record</div>
+          <p>Across the roster, several real roles appear <strong>rounded up by one notch</strong> — Director→CTO, Chief Delivery Officer→COO, an operating CEO role framed like a founder story. None of it is fabrication; it reads as optimistic framing. A useful lens: take each title here as “confirm one level down.”</p>
+        </div>
+
+        <h3>The advisors</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Advisor</th><th>Who they are</th><th>What the record shows</th></tr></thead>
+            <tbody>
+              <tr><td class="nowrap"><strong>Deren Baker</strong></td><td>Now CEO, Flywheel Ventures (Omnicom); ex-CEO Jumpshot; ex-COO Switchfly</td><td><span class="tag r">worth raising</span> He was CEO of <strong>Jumpshot</strong>, the Avast subsidiary <strong>shut down in 2020 for covertly selling users’ browsing data</strong>. <span class="tier t1">T1</span> See the note below.</td></tr>
+              <tr><td class="nowrap"><strong>Josh Bersin</strong></td><td>Founder, The Josh Bersin Company; top global HR analyst</td><td>Real and prominent — <strong>but listed as an advisor on Agency150’s own site</strong>, and his public posture is “interesting startup” commentary. So his endorsement reads as <strong>not fully independent</strong>. <span class="tier t5">T5</span></td></tr>
+              <tr><td class="nowrap"><strong>Jenny Dearborn</strong></td><td>Ex-EVP HR, SAP; CPSO, BTS; author</td><td>Verified, clean. Legitimate senior HR-tech executive and credible domain advisor. <span class="tier t5">T5</span></td></tr>
+              <tr><td class="nowrap"><strong>Rob Meadows</strong></td><td>AI Advisor; co-founder AI Foundation; ex-CEO Originate</td><td>Co-founded AI Foundation (~$10–17M raised); its one durable success — deepfake-detector <em>Reality Defender</em> — spun out and succeeded separately. Title drift (“CTO” vs sourced “co-founder/President”). <span class="tier t3">T3</span></td></tr>
+              <tr><td class="nowrap"><strong>Sergey Gorbatov</strong></td><td>Professor, IE Business School; ex-AbbVie/PMI/Shell</td><td>Verified academic + corporate HR practitioner. <span class="tier t1">T1</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout co-flag">
+          <div class="ct">⚑ One item worth raising directly, stated fairly</div>
+          <p><strong>Deren Baker was the operating CEO of Jumpshot</strong> when, in January 2020, parent company Avast shut it down amid a Vice/PCMag exposé that it had been <strong>harvesting and selling users’ browsing history without adequate consent</strong>. <span class="tier t1">T1</span> In fairness: the wind-down decision was made by Avast’s parent CEO, not Baker, and running a unit that was shut down isn’t the same as personal wrongdoing.</p>
+          <p>The relevance is specific: Agency150’s product is the mass collection of intimate human-interview data. A neutral, reasonable thing to ask the founders is simply <em>how Vega handles data ownership, consent, and governance — especially for employee interviews in the EU.</em> (More on the regulatory side in §8.)</p>
+        </div>
+
+        <div class="callout co-context">
+          <div class="ct">◆ The introduction — a light open question</div>
+          <p>The opportunity reached you through a connection described as having multiple exits and a real investor track record. From the outside, <strong>we couldn’t fully map that person onto the public team</strong> — which is common and not at all a concern in itself; the connector may simply be an angel, board member, or friend of the company who isn’t listed on the site. It’s just a piece we couldn’t complete from public sources, so it’s flagged here as an <em>open item</em> — a no-pressure thing to get a sense of from your own side, not a doubt about anyone.</p>
+        </div>
+
+        <h4>The structural read on the team</h4>
+        <p>A <strong>lean full-time operating core</strong> (a non-technical consultant CEO, a finance CFO, one mid-level “founding engineer,” a product lead) wrapped in a <strong>heavy advisory/fractional bench</strong> of HR brand names. The deepest genuine asset is <em>academic</em> (Pierce). Notably for a company whose product is sophisticated AI: <strong>there’s no clearly-attributed, full-time technical CTO publicly identifiable</strong> — who owns and builds the Vega technology is an open, and important, question (it appears again in §10).</p>
+
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your note on the team / the connector <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s3" rows="2" placeholder="Do you know the connector or anyone here? Does the team give you confidence or pause? Anything to verify on your side…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S4 ============ -->
+      <section id="s4">
+        <div class="sec-num">The Company · 04</div>
+        <h2>Traction, Funding &amp; Stage</h2>
+        <p class="lead">The picture: real, but very early — and quiet. Strong team signal, thin commercial proof. Here’s what’s visible versus what’s only claimed.</p>
+
+        <h3>Funding: appears genuinely unfunded</h3>
+        <p>We found <strong>no evidence of any disclosed raise</strong> — no announced round, no investors, no valuation. <span class="tier t1">T1</span> Tracxn lists Agency150 as <strong>“unfunded,”</strong> and its Crunchbase entry returns a dead page. <span class="tier t4">T4</span> The founder and company feeds through mid-June 2026 are content marketing, with no fundraising signals. <span class="tier t1">T1</span></p>
+        <div class="callout co-finding">
+          <div class="ct">● What this means in practice</div>
+          <p>If it’s truly unfunded, an investment could be <strong>among the first outside money in</strong> — more upside if it works, but priced with no prior institutional diligence to lean on and no market-set valuation. Two things that would close the question: (1) the founders’ direct word on whether there’s a current raise, terms, and any existing investors; (2) a quick <strong>SEC EDGAR full-text search</strong> on “Agency 150” for a Form D — we couldn’t complete that check (the EDGAR endpoint blocked the automated query), so it stays <em>open, not confirmed</em>. <span class="tag u">open</span></p>
+        </div>
+
+        <h3>Traction: thin, worth seeing through</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Signal</th><th>What's actually visible</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Headcount</td><td>~11 employees on LinkedIn (self-reported band “11–50”)</td><td><span class="tag v">evidenced</span></td></tr>
+              <tr><td>Following</td><td>~146 LinkedIn followers — tiny, roughly flat</td><td><span class="tag v">evidenced</span></td></tr>
+              <tr><td>Conference</td><td>Staffed booth + session at <strong>SIOP 2026</strong> (the I/O-psychology conference) — the right room for their positioning</td><td><span class="tag v">evidenced</span></td></tr>
+              <tr><td>Content</td><td>Active blog + a webinar series (with Bersin &amp; a Rivian exec); engagement is low</td><td><span class="tag v">evidenced</span></td></tr>
+              <tr><td><strong>Customers</strong></td><td>Founder references “client engagements” and an “anonymized AI-Readiness report from a real client” — but <strong>no named customer, logo, case study, or testimonial</strong> appears anywhere</td><td><span class="tag c">claimed only</span></td></tr>
+              <tr><td>Product results</td><td>“Thousands of interviews in days,” analytics quality — company capability claims</td><td><span class="tag c">unverified</span></td></tr>
+              <tr><td>Third-party coverage</td><td>None independent; the only “coverage” is from Josh Bersin, a listed advisor</td><td><span class="tag u">none independent</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The model explains the quiet: a bespoke-studies-plus-advisory business shows traction as <em>signed contracts and logos</em>, which often stay private early — not as the public sign-up and review trail a self-serve SaaS leaves. So “no G2 reviews” isn’t telling on its own. The thing a meeting would resolve quickly is the gap between founder language that implies paying clients and the absence of a single named one: <em>two references to call</em> would settle it.</p>
+
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your note on stage / traction <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s4" rows="2" placeholder="Is 'first money in / pre-traction' a fit for how you invest? What proof would you need to see?"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S5 ============ -->
+      <section id="s5">
+        <div class="sec-num">The Landscape · 05</div>
+        <h2>The Market</h2>
+        <p class="lead">The category is real, large, and attracting capital. The catch: there’s no clean, analyst-blessed number for the <em>specific</em> slice Vega occupies — and the tailwind that makes it possible also makes it hard to defend.</p>
+
+        <h3>Sizing — honestly</h3>
+        <p>Vega sits where three markets meet; none is “Vega’s market” exactly. Treat these as <strong>boundaries of the opportunity, not a forecast.</strong> Every figure is sourced and confidence-rated:</p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Market (adjacency)</th><th>Size / growth</th><th>Source</th><th>Confidence</th></tr></thead>
+            <tbody>
+              <tr><td>Global insights / market-research industry</td><td><strong>~$153B</strong> (2024); research-software sub-segment ~$62B growing 11.5%</td><td>ESOMAR 2025 <span class="tier t1">T1</span></td><td><span class="tag v">high</span></td></tr>
+              <tr><td>Employee experience management</td><td><strong>$6.4B → $11.7B</strong> by 2030 (9.7% CAGR)</td><td>Grand View <span class="tier t1">T1</span></td><td><span class="tag v">high</span></td></tr>
+              <tr><td>HR analytics</td><td>$4.7B (2025) → $12.5B (2033), 13% CAGR</td><td>Grand View <span class="tier t1">T1</span></td><td><span class="tag v">high</span></td></tr>
+              <tr><td><strong>AI-moderated qualitative research</strong> <span class="note" style="display:inline">(Vega's truest slice)</span></td><td>$1.3B–$2.8B — but a <strong>2× spread</strong> between vendors</td><td>2nd-tier firms <span class="tier t3">T3</span></td><td><span class="tag r">low — not investment-grade</span></td></tr>
+              <tr><td>AI agents (the “why now” wave)</td><td>$7.6B (2025) → $182.9B (2033), ~50% CAGR</td><td>Grand View <span class="tier t1">T1</span></td><td><span class="tag c">high as category, loose to Vega</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout co-finding">
+          <div class="ct">● The sizing takeaway</div>
+          <p>There’s <strong>no reliable tier-1 standalone TAM for “AI-moderated qualitative research”</strong> — the slice is too new. The honest frame: Vega is attacking a <strong>$150B+ insights industry</strong> and an <strong>~$12B employee-experience market</strong> using a delivery method riding the ~50%-CAGR AI wave. If a deck shows a precise multi-billion-dollar TAM for “AI interview research,” that number is worth scrutiny — the credible analysts haven’t drawn that box yet.</p>
+        </div>
+
+        <h3>Why now (the tailwinds)</h3>
+        <ul>
+          <li><strong>Radical cost compression.</strong> Multiple sources cite <strong>80–95% time/cost savings</strong> versus traditional qualitative research. <span class="tier t2">T2</span></li>
+          <li><strong>A genuine capability unlock.</strong> “Qualitative at quantitative scale” — hundreds-to-thousands of adaptive interviews in parallel — is a <em>new</em> thing. <em>Harvard Business Review</em> covered it in April 2026, a sign it’s reached the boardroom. <span class="tier t1">T1</span></li>
+          <li><strong>Consultant disruption economics.</strong> The insights industry’s human-services leg grows ~5% while software grows ~11.5% — money is rotating from people to software, favoring AI-native entrants. <span class="tier t1">T1</span></li>
+        </ul>
+        <p class="note">The flip side, in §8: the same cheap, mature AI infrastructure that lets Agency150 build Vega lets everyone else build it too.</p>
+
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your note on the market <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s5" rows="2" placeholder="Does the category interest you independent of this company? Your own read on the space…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S6 ============ -->
+      <section id="s6">
+        <div class="sec-num">The Landscape · 06</div>
+        <h2>The Competition</h2>
+        <p class="lead">The context that matters most: Vega’s real competitive set is hot, crowded, and far better funded than Agency150 — and the market the one-line brief implied (AI executive assessment) barely exists.</p>
+
+        <h3>Bucket A — Vega’s true rivals: AI-moderated research platforms</h3>
+        <p>The companies doing what Vega does — AI running research interviews at scale. The capital is striking:</p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Company</th><th>Funding / scale</th><th>Position vs. Vega</th></tr></thead>
+            <tbody>
+              <tr><td class="nowrap"><strong>Listen Labs</strong></td><td><strong>$69M Series B</strong> (Jan 2026, Ribbit) at a <strong>$500M valuation</strong>; ~$100M total; <strong>1M+ interviews</strong>; Microsoft, Sweetgreen, Robinhood <span class="tier t1">T1</span></td><td>The breakout leader; same core pitch. Vega is sub-scale and unfunded against a company growing 15× a year.</td></tr>
+              <tr><td class="nowrap"><strong>Outset.ai</strong></td><td>~$47M raised in 2025 (Series B led by Radical + Microsoft’s M12) <span class="tier t1">T1</span></td><td>Direct overlap on the interview engine; better funded, enterprise logos.</td></tr>
+              <tr><td class="nowrap"><strong>GetWhy</strong></td><td>~$64M+ raised; full-service “study → recruit → insight” <span class="tier t2">T2</span></td><td>Closest to Vega’s full-service framing — but a funded scale-player.</td></tr>
+              <tr><td class="nowrap"><strong>Strella</strong></td><td>$14M Series A (Bessemer, Oct 2025); $1.6M ARR in year one; Amazon, Chobani <span class="tier t1">T1</span></td><td>Direct product overlap. The modest ARR shows the category is still early — the one crack of daylight.</td></tr>
+              <tr><td class="nowrap"><strong>Conveo · Genway · Wondering · Miravoice</strong></td><td>$5–6M seed rounds each (2025) <span class="tier t2">T2</span></td><td>A dozen-plus funded entrants. The “AI runs the interview” primitive is commoditizing fast.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <figure>
+          <svg viewBox="0 0 700 360" role="img" aria-label="Competitive map: capital and scale versus human-advisory depth">
+            <defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#78716c"/></marker></defs>
+            <line x1="70" y1="320" x2="660" y2="320" stroke="#78716c" stroke-width="1.5" marker-end="url(#ar2)"/>
+            <line x1="70" y1="320" x2="70" y2="20" stroke="#78716c" stroke-width="1.5" marker-end="url(#ar2)"/>
+            <text x="370" y="348" text-anchor="middle" font-size="12" font-weight="700" fill="#57534e" font-family="sans-serif">Capital &amp; scale  →</text>
+            <text x="24" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#57534e" font-family="sans-serif" transform="rotate(-90 24 170)">Human-advisory depth  →</text>
+            <circle cx="600" cy="120" r="30" fill="#ede9fe" stroke="#a855f7" stroke-width="1.5"/>
+            <text x="600" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#4c1d95" font-family="sans-serif">Qualtrics</text>
+            <text x="600" y="132" text-anchor="middle" font-size="9" fill="#6b21a8" font-family="sans-serif">Medallia</text>
+            <circle cx="470" cy="245" r="26" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="470" y="243" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e3a5f" font-family="sans-serif">Listen Labs</text>
+            <text x="470" y="257" text-anchor="middle" font-size="9" fill="#1e40af" font-family="sans-serif">Outset · GetWhy</text>
+            <circle cx="270" cy="270" r="22" fill="#f5f4f1" stroke="#a8a29e" stroke-width="1.5"/>
+            <text x="270" y="268" text-anchor="middle" font-size="9.5" font-weight="700" fill="#57534e" font-family="sans-serif">Strella·Conveo</text>
+            <text x="270" y="281" text-anchor="middle" font-size="9" fill="#78716c" font-family="sans-serif">Genway…</text>
+            <circle cx="250" cy="90" r="24" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="250" y="88" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e" font-family="sans-serif">ghSMART /</text>
+            <text x="250" y="102" text-anchor="middle" font-size="9" fill="#92400e" font-family="sans-serif">Oliver Wyman</text>
+            <circle cx="175" cy="150" r="30" fill="#dcfce7" stroke="#15803d" stroke-width="2.5"/>
+            <text x="175" y="148" text-anchor="middle" font-size="12" font-weight="800" fill="#14532d" font-family="sans-serif">Vega</text>
+            <text x="175" y="163" text-anchor="middle" font-size="8.5" fill="#15803d" font-family="sans-serif">unfunded</text>
+          </svg>
+          <figcaption>Where the players sit. Vega’s distinct corner is high human-advisory depth at low scale — a boutique-consultancy position. The funded leaders own the scale axis; the consultancies own the depth axis.</figcaption>
+        </figure>
+
+        <h3>Bucket B — the incumbents it attacks</h3>
+        <p>Vega’s pitch (“surveys give scores, not meaning”) aims at the employee-experience giants: <strong>Qualtrics</strong> ($12.5B), <strong>Medallia</strong> ($6.4B), <strong>Culture Amp</strong> (~$1.5B), plus <strong>Microsoft Viva Glint</strong> and <strong>Workday Peakon</strong> bundled into platforms companies already own. <span class="tier t2">T2</span> All are <strong>adding conversational AI</strong> to their existing install base — which narrows Vega’s “we go deeper” wedge from the other side.</p>
+
+        <h3>Bucket C — the market the brief implied</h3>
+        <p>On the executive-assessment framing: genuine <strong>executive assessment</strong> today is either <strong>human-led</strong> (ghSMART’s “Who” methodology — the real CEO-assessment standard) or <strong>psychometric</strong> (Hogan, SHL). <span class="tier t1">T1</span> The AI-conversational players (HireVue, Maki, HeyMilo, Paradox) serve <strong>high-volume / early-career hiring</strong>, not the C-suite. <span class="tier t1">T1</span> An AI-native <em>CEO-candidate interviewer</em> is essentially a category that doesn’t exist yet — relevant if that was the original draw.</p>
+
+        <div class="callout co-finding">
+          <div class="ct">● The competitive picture</div>
+          <p>Vega’s distinctive edge is <strong>not the AI</strong> (commoditized and out-funded) — it’s the <strong>services wrap</strong>: ex-strategy-consultants + real behavioral-science pedigree, focused on culture/EX/M&amp;A where the funded SaaS players don’t concentrate. That’s a credible <em>boutique-advisory</em> position; it’s a different thing from a defensible venture-scale software platform. The pressure point to watch: funded AI-research leaders moving up-market <em>and</em> Qualtrics/Culture Amp adding AI, from opposite sides at once.</p>
+        </div>
+
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your note on the competition <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s6" rows="2" placeholder="Does the boutique-advisory angle hold up to you? How much does the funding gap worry you?"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S7 ============ -->
+      <section id="s7">
+        <div class="sec-num">Weighing It · 07</div>
+        <h2>The Case For It</h2>
+        <p class="lead">The strongest version of the optimistic read, as the evidence supports it — laid out so you can test each leg against what you know, not as a recommendation.</p>
+        <h3>1. The wave is real, and they’re early to a credible position on it</h3>
+        <p>AI-moderated research delivers genuine 80–95% cost compression and a real new capability (qualitative depth at quantitative scale), now validated up to <em>HBR</em>. A team positioning around it in 2025 is early to the <em>category</em>, even if late to the funding race.</p>
+        <h3>2. A genuine, hard-to-fake credibility asset</h3>
+        <p>Most rivals are engineers who added “behavioral science” to a prompt. Agency150 has an actual Editor-in-Chief of a leading management journal as Chief Science Officer, plus real HR/consulting names. Where buyers are nervous about AI-inferred “behavioral signals,” scientific credibility is a real differentiator — and hard to conjure quickly.</p>
+        <h3>3. A niche the funded players largely ignore</h3>
+        <p>Listen Labs, Outset, Strella concentrate on <em>customer/product</em> research. Agency150 leans into <strong>organizational</strong> work — culture diagnostics, M&amp;A integration, AI-readiness — sold as a high-touch advisory engagement. That’s closer to “a boutique consultancy that owns an AI tool” than a SaaS startup, and consultancies can be durable, profitable businesses on trust and relationships.</p>
+        <h3>4. Early-entry optionality</h3>
+        <p>If genuinely unfunded, entry would come before any institutional markup — the cheapest point, with the most upside <em>if</em> the team executes and a real moat (proprietary data, a wedge vertical, a flagship customer) emerges. Senior operators + a real thesis + a hot category is a shape of bet that sometimes pays off many-fold.</p>
+        <div class="callout co-finding">
+          <div class="ct">● What this case rests on</div>
+          <p>The optimistic read holds <em>if</em>: the founders own real, defensible technology; one or two referenceable customers already pay; there’s a credible path to a moat the funded competitors lack; and the terms price the risk. Those are open questions, not established facts — §10 is built to test them.</p>
+        </div>
+        <div class="notebox">
+          <label><span class="ic">📝</span> Which of these lands for you — and which don’t? <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s7" rows="2" placeholder="The strongest reason to be interested, in your words…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S8 ============ -->
+      <section id="s8">
+        <div class="sec-num">Weighing It · 08</div>
+        <h2>The Case Against It</h2>
+        <p class="lead">The risks, specific and ranked — the protective read. Presented at full strength so you can judge how much each one weighs for you.</p>
+
+        <h4>1. No clear moat / commoditization</h4>
+        <p>If Vega is “GPT + interview prompts + dashboards + consultants,” defensibility is the central question. The moat literature is blunt: the model isn’t the moat — data, distribution, and workflow lock-in are. An unfunded 2025 entrant has none of those yet, while funded leaders are already racing the only real moats (proprietary panels, research repositories, enterprise integrations).</p>
+
+        <h4>2. Squeezed from both sides at once</h4>
+        <p>Funded AI-research leaders (Listen at a $500M valuation, Outset backed by Microsoft) are moving <em>up-market</em> into org/EX use cases and can undercut an advisory engagement’s price. At the same time, EX incumbents (Qualtrics, Culture Amp, Viva Glint) are bolting conversational AI onto install bases they already own. The advisory tier is a real refuge, but small and itself contested by Oliver Wyman / ghSMART now adding AI.</p>
+
+        <h4>3. Unfunded vs. an enterprise sales reality</h4>
+        <p>Selling to leaders means long cycles, procurement, security review, and data-processing agreements. Competitors cross that with $17M–$100M behind them; an unfunded company must survive the 6–12 month cycle <em>and</em> the “will you exist in two years?” vendor-risk conversation against a $500M-valued rival.</p>
+
+        <h4>4. Regulatory / data-privacy drag (specific)</h4>
+        <p>Recording and AI-analyzing <em>employee</em> interviews is riskier than customer research. The EU AI Act treats employee monitoring as “not lawful by default” in places like Germany; a 2025 European Court ruling closed a common works-council workaround; the UK ICO mandates a formal impact assessment. <span class="tier t2">T2</span> Agency150’s British spelling and EU practice leaders put it in that jurisdiction. With the Jumpshot-advisor item (§3), data governance is a live area to probe, not a footnote.</p>
+
+        <h4>5. The framing question + unverified traction</h4>
+        <p>The public product differs from the one-line brief (§1); there are no named customers despite implied ones (§4); titles read a notch high (§3); the connector doesn’t map to the public roster (§3). None is decisive alone; together they point toward verifying before committing.</p>
+
+        <div class="callout co-context">
+          <div class="ct">◆ One analytical view, for context</div>
+          <p>Our market research, looking only at the public competitive picture, framed the risk-adjusted read as cautious — “a feature in search of a moat” against a category being consolidated by better-capitalized leaders. That’s one outside-in view of the public evidence, not a verdict on the deal — and it’s exactly the kind of conclusion the founders’ answers in §10 could strengthen or overturn.</p>
+        </div>
+
+        <div class="notebox">
+          <label><span class="ic">📝</span> Which risk weighs most for you? <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s8" rows="2" placeholder="The one that would most give you pause — or that you'd discount, and why…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S9 — LEDGER ============ -->
+      <section id="s9">
+        <div class="sec-num">Weighing It · 09</div>
+        <h2>Claims vs. Confirmed</h2>
+        <p class="lead">The discipline behind everything above: every material claim, separated into what Agency150 <em>says</em>, what we <strong>independently verified</strong>, and what stays <strong>open</strong>. You can audit the whole briefing from this table.</p>
+        <div class="legend">
+          <span class="li"><span class="tag v">verified</span> confirmed via independent primary source</span>
+          <span class="li"><span class="tag c">claim</span> company’s assertion, not independently confirmed</span>
+          <span class="li"><span class="tag r">flag</span> confirmed and worth raising</span>
+          <span class="li"><span class="tag u">open</span> couldn’t verify — needs founder/EDGAR</span>
+        </div>
+        <div class="tw">
+          <table class="ledger">
+            <thead><tr><th>Material claim</th><th>Status</th><th>Basis / source</th></tr></thead>
+            <tbody>
+              <tr><td>Company is real; AI org/customer research startup, founded 2025, NY</td><td><span class="tag v">verified</span></td><td>LinkedIn, site, Tracxn, Bersin <span class="tier t1">T1</span></td></tr>
+              <tr><td>Markets executive / CEO candidate assessment or hiring</td><td><span class="tag r">not found</span></td><td>Exhaustive negative search; full site taxonomy <span class="tier t1">T1</span></td></tr>
+              <tr><td>Lamar Pierce — WashU prof &amp; Editor-in-Chief, <em>Organization Science</em></td><td><span class="tag v">verified</span></td><td>INFORMS, WashU/Olin <span class="tier t1">T1</span></td></tr>
+              <tr><td>Craig Finster — President/CFO of Versus Systems</td><td><span class="tag v">verified*</span></td><td>SEC EDGAR — *troubled micro-cap, mass resignation 2024 <span class="tier t1">T1</span></td></tr>
+              <tr><td>Gordon Rudow — Oliver Wyman partner; CEO of Bonfire</td><td><span class="tag v">verified</span></td><td>Bios — operating role, not a founder exit <span class="tier t3">T3</span></td></tr>
+              <tr><td>Eric Perez — “CTO” of Originate Labs</td><td><span class="tag c">disputed</span></td><td>His own bio says “Director of Engineering” <span class="tier t5">T5</span></td></tr>
+              <tr><td>Deren Baker (advisor) — ex-CEO of Jumpshot</td><td><span class="tag r">flag</span></td><td>Jumpshot shut down 2020 for selling browsing data <span class="tier t1">T1</span></td></tr>
+              <tr><td>Josh Bersin is an “advisor”</td><td><span class="tag c">claim</span></td><td>Listed on own site; public posture = commenter <span class="tier t5">T5</span></td></tr>
+              <tr><td>“Thousands of interviews in days,” analytics quality</td><td><span class="tag c">claim</span></td><td>No third-party validation <span class="tier t5">T5</span></td></tr>
+              <tr><td>Has paying customers / “real client engagements”</td><td><span class="tag c">claim</span></td><td>Implied by founder; no named customer/logo/case study</td></tr>
+              <tr><td>Company is unfunded / bootstrapped</td><td><span class="tag c">likely</span></td><td>Tracxn “unfunded,” Crunchbase 404, no raise found <span class="tier t4">T4</span></td></tr>
+              <tr><td>No SEC Form D on file</td><td><span class="tag u">open</span></td><td>EDGAR query blocked — to run directly</td></tr>
+              <tr><td>The connector maps to the public team</td><td><span class="tag u">open</span></td><td>No public roster name clearly fits</td></tr>
+              <tr><td>Real, defensible technical moat / ownership of the tech</td><td><span class="tag u">open</span></td><td>No full-time CTO identified publicly</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="notebox">
+          <label><span class="ic">📝</span> Anything here you can move from “open” or “claim” to “known”? <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s9" rows="2" placeholder="What you already know that changes a row…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S10 — QUESTIONS ============ -->
+      <section id="s10">
+        <div class="sec-num">Weighing It · 10</div>
+        <h2>Questions for the Meeting</h2>
+        <p class="lead">Sharp, specific to the actual unknowns above — the answers turn this from a story into something you can decide on. The italic line is <em>why</em> each matters; jot the answer (or your own version of the question) right under it, and it’ll collect at the end to send back.</p>
+
+        <h3>A · The thesis &amp; the framing</h3>
+        <div class="qa"><div class="qa-q">1. In one sentence, what does Vega do and who pays for it today?<span class="qwhy">Listen for “employee/customer research” vs. “executive assessment.” It tells you which product is the real one.</span></div>
+          <div class="notebox q"><textarea data-note="q1" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+        <div class="qa"><div class="qa-q">2. The opportunity reached me as AI for assessing executive candidates — is that something you do, are building, or don’t do?<span class="qwhy">Resolves the framing question directly, in their words.</span></div>
+          <div class="notebox q"><textarea data-note="q2" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+
+        <h3>B · The technology &amp; the moat</h3>
+        <div class="qa"><div class="qa-q">3. Who builds and owns the Vega technology full-time — and is the core IP yours or built on top of OpenAI/Anthropic?<span class="qwhy">No full-time CTO is publicly identifiable; if it’s a thin wrapper, the moat question is the whole game.</span></div>
+          <div class="notebox q"><textarea data-note="q3" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+        <div class="qa"><div class="qa-q">4. What stops Listen Labs, Qualtrics, or OpenAI from doing this next quarter? What’s the defensible asset?<span class="qwhy">A crisp answer vs. a hand-wave is itself the signal.</span></div>
+          <div class="notebox q"><textarea data-note="q4" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+
+        <h3>C · Traction &amp; proof</h3>
+        <div class="qa"><div class="qa-q">5. Can I speak to two current paying customers as references?<span class="qwhy">Zero customers are named publicly; references are the fastest way to separate a real business from a deck.</span></div>
+          <div class="notebox q"><textarea data-note="q5" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+        <div class="qa"><div class="qa-q">6. What’s current revenue / signed ARR, and what’s the pipeline?<span class="qwhy">The services model hides traction — make it explicit. “Pre-revenue” is a fine answer; evasion isn’t.</span></div>
+          <div class="notebox q"><textarea data-note="q6" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+
+        <h3>D · Team, cap table &amp; the introduction</h3>
+        <div class="qa"><div class="qa-q">7. Which team members are full-time vs. advisory/fractional, and who holds equity?<span class="qwhy">The operating core looks lean behind a brand-name advisory bench — know who’s building this Monday morning.</span></div>
+          <div class="notebox q"><textarea data-note="q7" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+        <div class="qa"><div class="qa-q">8. How does [the person who introduced this to you] fit with the company — role, and stake?<span class="qwhy">A natural, friendly question — and it quietly closes the one open item about the introduction.</span></div>
+          <div class="notebox q"><textarea data-note="q8" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+
+        <h3>E · Governance &amp; data</h3>
+        <div class="qa"><div class="qa-q">9. Who owns the interview data, how is consent handled, and what’s the EU employee-monitoring posture?<span class="qwhy">Vega’s asset is intimate human data; the EX angle carries real EU legal drag — a serious answer is also a quality signal.</span></div>
+          <div class="notebox q"><textarea data-note="q9" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+
+        <h3>F · The deal</h3>
+        <div class="qa"><div class="qa-q">10. Are you raising now? Terms, valuation, instrument (SAFE/priced), and who else is in?<span class="qwhy">Pins down whether you’re truly first-money and on what basis — no prior institutional check means no one else has done this diligence.</span></div>
+          <div class="notebox q"><textarea data-note="q10" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+        <div class="qa"><div class="qa-q">11. What does this money buy, and what milestone does it reach?<span class="qwhy">Tests whether there’s a real plan — the answer should name a moat-building milestone, not just “runway.”</span></div>
+          <div class="notebox q"><textarea data-note="q11" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
+
+        <div class="callout co-finding">
+          <div class="ct">● Your own questions</div>
+          <p>These are starting points. Add the ones that matter to <em>you</em> — about the partner’s domain read, the team chemistry, anything the public record can’t show.</p>
+          <div class="notebox q" style="margin-top:10px"><textarea data-note="q-own" rows="3" placeholder="Your own questions to bring…"></textarea></div>
+        </div>
+      </section>
+
+      <!-- ============ S11 — WEIGHING BOTH WAYS ============ -->
+      <section id="s11">
+        <div class="sec-num">Weighing It · 11</div>
+        <h2>Weighing It — Both Ways</h2>
+        <p class="lead">You asked for a picture that lets you decide on facts. So rather than land on an answer, here’s what the evidence puts on each side of the scale, what’s confirmed versus open, and the signals that would tip it — with room for your own read at the end.</p>
+
+        <div class="callout co-context">
+          <div class="ct">◆ Where the evidence sits right now</div>
+          <p>On the <strong>public</strong> record: this is an early, unfunded, services-flavored startup with a genuinely credible science anchor and a brand-name advisory bench, entering a hot category late and under-capitalized, with no public proof of customers and a couple of items worth raising. The strongest, hardest-to-fake asset is real (the science credibility); the biggest unknowns — the moat, the technology ownership, real customers, the terms, and how the introduction fits — are exactly the things that don’t show up in public research and that <strong>only the founders can answer.</strong> The case genuinely turns on those answers, which is why §10 carries so much weight.</p>
+        </div>
+
+        <div class="bb">
+          <div class="card favor">
+            <h4>▲ Signals that would strengthen the case</h4>
+            <ul>
+              <li>Founders demonstrably own real, defensible IP — not a thin model wrapper.</li>
+              <li>Two referenceable paying customers you can actually call.</li>
+              <li>A crisp, specific moat answer (proprietary data / panel / wedge vertical).</li>
+              <li>Clean terms that price early-stage risk; the introduction’s role and track record check out comfortably.</li>
+              <li>A straight, thoughtful answer on data ethics and governance.</li>
+            </ul>
+          </div>
+          <div class="card pause">
+            <h4>▼ Signals that would give pause</h4>
+            <ul>
+              <li>The product turns out to be a GPT-wrapper with no owned technology or data.</li>
+              <li>No real customers — only “engagements” that thin out under questioning.</li>
+              <li>Hand-waving on the moat, or on who actually builds Vega.</li>
+              <li>The introduction’s role or track record is hard to pin down.</li>
+              <li>Evasion on data governance.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout co-finding">
+          <div class="ct">● A way to run it, if useful</div>
+          <p>One efficient order: open with the framing questions (so they define the company before they sell it), then the moat and the references — those three clusters carry most of the signal. How the team <em>responds</em> to the harder questions (the introduction, data ethics) is itself information. None of that decides it for you; it just gets the facts on the table fast.</p>
+        </div>
+
+        <div class="notebox" style="background:#f7fafd;border-color:var(--navy-soft)">
+          <label style="color:var(--navy)"><span class="ic">📝</span> Your read — what are you actually thinking? <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s11" rows="4" placeholder="Lean in or pass? On the fence about what? What would have to be true for you to write the check — or to walk? This is the one that drives v2."></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S12 — COLLECTED NOTES ============ -->
+      <section id="s12">
+        <div class="sec-num">Your Turn</div>
+        <h2>Your Notes — Collected</h2>
+        <p class="lead">Everything you’ve jotted, gathered in one place. Your notes save in this file as you type (they’ll be here if you close and reopen it). When you’re ready, copy them and send them back — that’s what re-sharpens this into a tighter v2 built around what you actually know and decide.</p>
+        <div class="collect-wrap">
+          <div id="collected"><p class="collect-empty">No notes yet — jot a reaction in any section above and it’ll appear here.</p></div>
+          <div class="btnrow">
+            <button class="btn btn-primary" id="copyNotesBtn">Copy my notes to send to Sean</button>
+            <button class="btn btn-ghost" id="refreshNotesBtn">Refresh</button>
+            <button class="btn btn-ghost" id="clearNotesBtn">Clear my notes</button>
+          </div>
+          <p class="note" style="margin-top:14px">Then paste them into a message to <strong>sean.ec@gmail.com</strong>. He feeds them back into EngineOS and returns a v2 recalibrated to what you know — the system working with you, not at you.</p>
+        </div>
+      </section>
+
+      <!-- ============ S13 — HOW BUILT ============ -->
+      <section id="s13">
+        <div class="sec-num">Appendix · 12</div>
+        <h2>How This Was Built</h2>
+        <p class="lead">So you can trust it — and adjust it fast. This was researched, cross-checked, and adversarially reviewed, not written from memory.</p>
+        <ul>
+          <li><strong>Method.</strong> Four parallel research threads — company &amp; product, people, market, competition — each using a <strong>dual-engine</strong> discipline: professional web-data tools first, then independent search to corroborate. Every fact carries a source and a credibility tier (T1 = primary/official → T5 = self-reported).</li>
+          <li><strong>Claims vs. confirmed.</strong> The §9 discipline ran throughout: the company’s own statements never became “facts” without an independent source. Where we couldn’t verify, we said so plainly.</li>
+          <li><strong>Adversarial check.</strong> The load-bearing claims (the Jumpshot history, the academic credential, the competitor valuations) were independently re-verified against primary sources before going in.</li>
+          <li><strong>Disambiguation.</strong> Real care went into confirming this is the <em>right</em> Agency150 and “Vega,” and excluding the same-named companies that make it easy to confuse.</li>
+          <li><strong>Built to work with you.</strong> The note fields in every section are the point: the briefing frames the evidence, and your annotations are where the read forms. It’s a first pass, designed to re-sharpen fast around your input.</li>
+        </ul>
+        <div class="notebox">
+          <label><span class="ic">📝</span> Anything you want researched deeper for v2? <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s13" rows="2" placeholder="What to dig into next…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S14 — SOURCES ============ -->
+      <section id="s14">
+        <div class="sec-num">Appendix · 13</div>
+        <h2>Sources &amp; Confidence</h2>
+        <p class="lead">Where this comes from — and, just as important, what we <em>couldn’t</em> confirm, so the edges of the picture are visible.</p>
+        <h3>Primary &amp; high-confidence sources</h3>
+        <ul>
+          <li><strong>Agency150 itself</strong> — agency150.com (full site), LinkedIn company profile, Tracxn. <span class="tier t1">T1</span> for what they say; their claims about themselves are <span class="tier t5">T5</span> for truth.</li>
+          <li><strong>People</strong> — SEC EDGAR (Finster/Versus Systems); INFORMS &amp; WashU/Olin (Pierce); SparkToro, Vice, TechCrunch, Reuters (Baker/Jumpshot); IE University (Gorbatov). <span class="tier t1">T1</span></li>
+          <li><strong>Market</strong> — ESOMAR 2025, Grand View Research, Harvard Business Review (Apr 2026). <span class="tier t1">T1</span></li>
+          <li><strong>Competitors &amp; funding</strong> — PR Newswire / Forbes / Pear VC / VentureBeat (Listen Labs); Outset.ai / GlobeNewswire; Bessemer / BuiltInNYC (Strella). <span class="tier t1">T1</span></li>
+          <li><strong>Regulatory</strong> — EU AI Act analysis, European Court ruling coverage, UK ICO guidance. <span class="tier t2">T2</span></li>
+        </ul>
+
+        <h3>How much of this picture is independently verified?</h3>
+        <div class="meter" aria-label="Confidence breakdown">
+          <span style="width:42%;background:#15803d">Independently verified 42%</span>
+          <span style="width:34%;background:#b45309">Company claim 34%</span>
+          <span style="width:24%;background:#6b7280">Open 24%</span>
+        </div>
+        <div class="legend">
+          <span class="li"><span class="swatch" style="background:#15803d"></span>Confirmed via primary source — the company, team facts, competitor data</span>
+          <span class="li"><span class="swatch" style="background:#b45309"></span>Company’s assertion, not yet proven — product capability, customers</span>
+          <span class="li"><span class="swatch" style="background:#6b7280"></span>Unknowable from outside — funding, moat, the connector</span>
+        </div>
+        <p class="note">That ~24% “open” slice is the part of any pre-seed picture that lives only inside the company — which is what §10 is for.</p>
+
+        <div class="callout co-flag">
+          <div class="ct">⚑ What we could NOT verify — the round-2 list</div>
+          <ul style="margin:6px 0 0">
+            <li><strong>SEC Form D / any formal raise</strong> — EDGAR full-text query was blocked; a direct search on “Agency 150” would close it.</li>
+            <li><strong>Any customer, revenue, or ARR figure</strong> — none disclosed publicly.</li>
+            <li><strong>Who owns/builds the Vega technology</strong> — no full-time CTO identifiable.</li>
+            <li><strong>How the introduction fits the company</strong> — couldn’t map from public sources.</li>
+            <li><strong>Product capability claims</strong> — no third-party validation.</li>
+          </ul>
+          <p>These are the genuine edges of what’s knowable from outside — and exactly the questions in §10.</p>
+        </div>
+        <p class="note">Prepared June 20, 2026. Web-sourced facts reflect that date; for a live decision, the volatile items (funding, headcount, competitor rounds) are worth a quick re-check at meeting time. A confidential working document for Jimmy — not investment advice, not for distribution.</p>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var PREFIX='agency150:note:';
+  // ---- Mobile drawer ----
+  var sidebar=document.getElementById('sidebar'),scrim=document.getElementById('scrim'),menuBtn=document.getElementById('menuBtn');
+  function openNav(){sidebar.classList.add('open');scrim.classList.add('open');}
+  function closeNav(){sidebar.classList.remove('open');scrim.classList.remove('open');}
+  menuBtn.addEventListener('click',openNav); scrim.addEventListener('click',closeNav);
+  // ---- Desktop sidebar collapse (more room for wide tables) ----
+  var navCollapse=document.getElementById('navCollapse'), navReopen=document.getElementById('navReopen');
+  function updateReopen(){ navReopen.style.display=(document.body.classList.contains('nav-collapsed') && window.innerWidth>=981)?'inline-flex':'none'; }
+  function setCollapsed(c){ document.body.classList.toggle('nav-collapsed',c); try{localStorage.setItem('agency150:navcollapsed',c?'1':'0');}catch(e){} updateReopen(); }
+  try{ if(localStorage.getItem('agency150:navcollapsed')==='1') document.body.classList.add('nav-collapsed'); }catch(e){}
+  updateReopen();
+  window.addEventListener('resize', updateReopen);
+  if(navCollapse) navCollapse.addEventListener('click',function(){setCollapsed(true);});
+  if(navReopen) navReopen.addEventListener('click',function(){setCollapsed(false);});
+  // ---- Scroll-spy ----
+  var links=[].slice.call(document.querySelectorAll('#toc a'));
+  var byId={}; links.forEach(function(a){byId[a.getAttribute('href').slice(1)]=a;});
+  var current=null;
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var link=byId[e.target.id];
+        if(link&&link!==current){ if(current)current.classList.remove('active'); link.classList.add('active'); current=link;
+          var r=link.getBoundingClientRect(); if(r.top<80||r.bottom>window.innerHeight-40) link.scrollIntoView({block:'center'});
+        }
+      }
+    });
+  },{rootMargin:'-12% 0px -75% 0px',threshold:0});
+  [].slice.call(document.querySelectorAll('section')).forEach(function(s){obs.observe(s);});
+  links.forEach(function(a){a.addEventListener('click',function(){if(window.innerWidth<=980)closeNav();});});
+
+  // ---- Note persistence ----
+  var notes=[].slice.call(document.querySelectorAll('textarea[data-note]'));
+  function labelFor(ta){
+    var sec=ta.closest('section');
+    var secTitle=sec?(sec.querySelector('h2')?sec.querySelector('h2').textContent.trim():sec.id):'';
+    var qa=ta.closest('.qa');
+    if(qa){ var q=qa.querySelector('.qa-q'); var qt=q?q.childNodes[0].textContent.trim():''; return secTitle+' — '+qt; }
+    return secTitle;
+  }
+  var saveTimers={};
+  notes.forEach(function(ta){
+    var key=ta.getAttribute('data-note');
+    try{ var v=localStorage.getItem(PREFIX+key); if(v!==null) ta.value=v; }catch(e){}
+    ta.addEventListener('input',function(){
+      try{ localStorage.setItem(PREFIX+key, ta.value); }catch(e){}
+      var ind=ta.parentNode.querySelector('.note-saved');
+      if(ind){ ind.classList.add('show'); clearTimeout(saveTimers[key]); saveTimers[key]=setTimeout(function(){ind.classList.remove('show');},1100); }
+      scheduleGather();
+    });
+  });
+
+  // ---- Collected view ----
+  var collected=document.getElementById('collected');
+  var gatherTimer=null;
+  function scheduleGather(){ clearTimeout(gatherTimer); gatherTimer=setTimeout(gather,300); }
+  function gather(){
+    var items=[];
+    notes.forEach(function(ta){ var v=(ta.value||'').trim(); if(v) items.push({label:labelFor(ta), text:v}); });
+    if(!items.length){ collected.innerHTML='<p class="collect-empty">No notes yet — jot a reaction in any section above and it’ll appear here.</p>'; return; }
+    collected.innerHTML=items.map(function(it){
+      return '<div class="collect-item"><div class="collect-sec"></div><div class="collect-note"></div></div>';
+    }).join('');
+    var rows=collected.querySelectorAll('.collect-item');
+    items.forEach(function(it,i){ rows[i].querySelector('.collect-sec').textContent=it.label; rows[i].querySelector('.collect-note').textContent=it.text; });
+  }
+  function notesText(){
+    var out='Agency150 briefing — Jimmy’s notes (to send to Sean)\n'+'Prepared from the working briefing, '+document.title+'\n\n';
+    var any=false;
+    notes.forEach(function(ta){ var v=(ta.value||'').trim(); if(v){ any=true; out+='• '+labelFor(ta)+'\n  '+v.replace(/\n/g,'\n  ')+'\n\n'; } });
+    return any?out:null;
+  }
+  function fallbackCopy(text){ var t=document.createElement('textarea'); t.value=text; t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.focus(); t.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(t); }
+  var copyBtn=document.getElementById('copyNotesBtn');
+  copyBtn.addEventListener('click',function(){
+    var txt=notesText();
+    if(!txt){ copyBtn.textContent='Nothing to copy yet — add a note first'; setTimeout(function(){copyBtn.textContent='Copy my notes to send to Sean';},2200); return; }
+    function done(){ copyBtn.textContent='Copied ✓  Now paste it to Sean'; setTimeout(function(){copyBtn.textContent='Copy my notes to send to Sean';},3200); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,function(){fallbackCopy(txt);done();}); }
+    else { fallbackCopy(txt); done(); }
+  });
+  document.getElementById('refreshNotesBtn').addEventListener('click',gather);
+  document.getElementById('clearNotesBtn').addEventListener('click',function(){
+    if(!confirm('Clear all your notes from this document? This cannot be undone.')) return;
+    notes.forEach(function(ta){ ta.value=''; try{localStorage.removeItem(PREFIX+ta.getAttribute('data-note'));}catch(e){} });
+    gather();
+  });
+  gather();
+})();
+</script>
+</body>
+</html>
