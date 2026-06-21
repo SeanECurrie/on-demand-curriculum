@@ -90,6 +90,23 @@
   .bb .card h4{margin-top:0; display:flex; align-items:center; gap:8px; font-size:14px; text-transform:uppercase; letter-spacing:.6px}
   .bb .favor h4{color:var(--favor)} .bb .pause h4{color:var(--pause)}
   .bb ul{margin:6px 0 0; padding-left:18px} .bb li{margin:6px 0; font-size:14px; line-height:1.5}
+  /* SWOT 2x2 */
+  .swot{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:20px 0}
+  .swot .q{border:1px solid var(--border); border-radius:12px; padding:16px 18px}
+  .swot .q h4{margin:0 0 8px; font-size:13px; text-transform:uppercase; letter-spacing:.6px; display:flex; align-items:center; gap:8px}
+  .swot .q ul{margin:0; padding-left:18px} .swot .q li{margin:7px 0; font-size:13.5px; line-height:1.45}
+  .swot .s{background:#ecfdf3; border-color:#bbf7d0} .swot .s h4{color:#15803d}
+  .swot .w{background:#fdf6ec; border-color:#f3dcb4} .swot .w h4{color:#b45309}
+  .swot .o{background:#eff6ff; border-color:#bfdbfe} .swot .o h4{color:#1d4ed8}
+  .swot .t{background:#fef2f2; border-color:#fecaca} .swot .t h4{color:#b91c1c}
+  @media(max-width:760px){ .swot{grid-template-columns:1fr} }
+  /* feature matrix marks */
+  .fm-y{color:#15803d;font-weight:800} .fm-p{color:#b45309;font-weight:800} .fm-n{color:#b91c1c;font-weight:800} .fm-u{color:#a8a29e;font-weight:700}
+  /* TAM/SAM/SOM funnel caption rows */
+  .tss{display:flex;flex-direction:column;gap:6px;margin:18px 0}
+  .tss .row{display:flex;align-items:center;gap:14px}
+  .tss .bar{height:46px;border-radius:8px;display:flex;align-items:center;padding:0 14px;color:#fff;font-weight:700;font-size:14px;white-space:nowrap}
+  .tss .meta{font-size:13px;color:var(--text-soft);line-height:1.4}
   .tw{overflow-x:auto; margin:20px 0; border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow-sm)}
   table{border-collapse:collapse; width:100%; font-size:14px; background:var(--surface)}
   th{background:var(--surface-sunk); text-align:left; padding:10px 13px; font-weight:680; font-size:12.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--text-soft); border-bottom:2px solid var(--border-strong); white-space:nowrap}
@@ -183,8 +200,11 @@
       <a href="#s4"><span class="n">04</span>Traction, Funding &amp; Stage</a>
       <div class="grp">The Landscape</div>
       <a href="#s5"><span class="n">05</span>The Market</a>
+      <a href="#s-tam"><span class="n">+</span>Market Size (TAM/SAM/SOM)</a>
       <a href="#s6"><span class="n">06</span>The Competition</a>
+      <a href="#s-features"><span class="n">+</span>Feature Comparison</a>
       <div class="grp">Weighing It</div>
+      <a href="#s-swot"><span class="n">+</span>SWOT — At a Glance</a>
       <a href="#s7"><span class="n">07</span>The Case For It</a>
       <a href="#s8"><span class="n">08</span>The Case Against It</a>
       <a href="#s9"><span class="n">09</span>Claims vs. Confirmed</a>
@@ -200,7 +220,7 @@
   <div class="main">
     <header class="hero">
       <div class="inner">
-        <div class="kicker">Confidential Working Briefing · Prepared for Jimmy</div>
+        <div class="kicker">Confidential Working Briefing · Prepared for Jimmy · v2 — speculative (pre-feedback)</div>
         <h1>Agency150</h1>
         <p class="sub">A fact-checked picture of the company, the people, the market, and the open questions — laid out so <em>you</em> can weigh it and decide. Make notes as you go; they’re where your read takes shape.</p>
         <div class="hero-meta">
@@ -508,6 +528,27 @@
         </div>
       </section>
 
+      <!-- ============ S-TAM (market sizing) ============ -->
+      <section id="s-tam">
+        <div class="sec-num">The Landscape · market size</div>
+        <h2>Market Size — TAM / SAM / SOM</h2>
+        <p class="lead">How big the opportunity is, sized honestly. The outer boundary is well-sourced; the inner two are transparent estimates with the arithmetic shown — not citable market figures. (Extends §5's posture: no hand-waved numbers.)</p>
+        <div class="tss">
+          <div class="row"><div class="bar" style="width:100%;background:var(--navy)">TAM ~ $165B</div><div class="meta">Global insights industry $153B <span class="tier t1">T1</span> (ESOMAR 2025) + employee-experience management $6.4–11.7B <span class="tier t2">T2</span> (Grand View)</div></div>
+          <div class="row"><div class="bar" style="width:58%;background:var(--gold)">SAM ~ $8–11B</div><div class="meta"><span class="tag c">estimate</span> The qualitative/conversational-research + EX-research slice an AI-native platform can serve. Built bottoms-up from sourced sub-segments (qualitative ≈ 6–15% of the $56B research sector + ~$1–2B EX-research), overlap netted out.</div></div>
+          <div class="row"><div class="bar" style="width:24%;background:var(--verified)">SOM ~ $1–4M ARR</div><div class="meta"><span class="tag c">estimate</span> Near-term obtainable for an unfunded boutique entrant (anchor ~$1–1.5M in 12–18 mo). Comps: Strella reached ~$1M revenue in ~9 mo (funded; exact undisclosed) + boutique engagement economics ($25–75K/project).</div></div>
+        </div>
+        <p class="note">Units differ: TAM/SAM are market sizes ($B); SOM is a near-term <em>revenue</em> target ($M), shown not-to-scale. There is <strong>no tier-1 standalone TAM for “AI-moderated qualitative research”</strong> — vendor figures span $1.3–2.8B (2× spread, low confidence), so we don’t anchor on one. Sourced growth: research-software <strong>+11.5%/yr</strong> (the fast layer Vega rides) vs the mature market-research core +4.8%.</p>
+        <div class="callout co-finding">
+          <div class="ct">● The honest read</div>
+          <p>The TAM is real and tier-1-sourced. But the slice Vega can actually serve (SAM) is a constructed estimate, and what it can realistically capture near-term (SOM) is <strong>single-digit millions</strong> against funded competitors — not a land-grab. Weigh the big TAM against the small, conservative SOM, and ask what would move Vega up the funnel.</p>
+        </div>
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your note on the sizing <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s-tam" rows="2" placeholder="Does the SOM reality change the thesis for you? What capture would you underwrite?"></textarea>
+        </div>
+      </section>
+
       <!-- ============ S6 ============ -->
       <section id="s6">
         <div class="sec-num">The Landscape · 06</div>
@@ -520,39 +561,54 @@
           <table>
             <thead><tr><th>Company</th><th>Funding / scale</th><th>Position vs. Vega</th></tr></thead>
             <tbody>
-              <tr><td class="nowrap"><strong>Listen Labs</strong></td><td><strong>$69M Series B</strong> (Jan 2026, Ribbit) at a <strong>$500M valuation</strong>; ~$100M total; <strong>1M+ interviews</strong>; Microsoft, Sweetgreen, Robinhood <span class="tier t1">T1</span></td><td>The breakout leader; same core pitch. Vega is sub-scale and unfunded against a company growing 15× a year.</td></tr>
-              <tr><td class="nowrap"><strong>Outset.ai</strong></td><td>~$47M raised in 2025 (Series B led by Radical + Microsoft’s M12) <span class="tier t1">T1</span></td><td>Direct overlap on the interview engine; better funded, enterprise logos.</td></tr>
+              <tr><td class="nowrap"><strong>Listen Labs</strong></td><td><strong>$69M Series B</strong> (Jan 2026, Ribbit) at a <strong>$500M valuation</strong>; ~$96M cash (≈$100M marketed); <strong>1M+ interviews</strong>; Microsoft, Sweetgreen, Robinhood <span class="tier t2">T2</span></td><td>The breakout leader; same core pitch. Vega is sub-scale and unfunded against a company growing 15× a year.</td></tr>
+              <tr><td class="nowrap"><strong>Outset.ai</strong></td><td>$51M raised (Series B led by Radical Ventures; Microsoft’s M12 participated) <span class="tier t1">T1</span></td><td>Direct overlap on the interview engine; better funded, enterprise logos.</td></tr>
               <tr><td class="nowrap"><strong>GetWhy</strong></td><td>~$64M+ raised; full-service “study → recruit → insight” <span class="tier t2">T2</span></td><td>Closest to Vega’s full-service framing — but a funded scale-player.</td></tr>
-              <tr><td class="nowrap"><strong>Strella</strong></td><td>$14M Series A (Bessemer, Oct 2025); $1.6M ARR in year one; Amazon, Chobani <span class="tier t1">T1</span></td><td>Direct product overlap. The modest ARR shows the category is still early — the one crack of daylight.</td></tr>
+              <tr><td class="nowrap"><strong>Strella</strong></td><td>$14M Series A (Bessemer, Oct 2025); ~$1M revenue in year one (exact undisclosed); Amazon, Chobani <span class="tier t1">T1</span></td><td>Direct product overlap. The modest ARR shows the category is still early — the one crack of daylight.</td></tr>
               <tr><td class="nowrap"><strong>Conveo · Genway · Wondering · Miravoice</strong></td><td>$5–6M seed rounds each (2025) <span class="tier t2">T2</span></td><td>A dozen-plus funded entrants. The “AI runs the interview” primitive is commoditizing fast.</td></tr>
             </tbody>
           </table>
         </div>
 
         <figure>
-          <svg viewBox="0 0 700 360" role="img" aria-label="Competitive map: capital and scale versus human-advisory depth">
-            <defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#78716c"/></marker></defs>
-            <line x1="70" y1="320" x2="660" y2="320" stroke="#78716c" stroke-width="1.5" marker-end="url(#ar2)"/>
-            <line x1="70" y1="320" x2="70" y2="20" stroke="#78716c" stroke-width="1.5" marker-end="url(#ar2)"/>
-            <text x="370" y="348" text-anchor="middle" font-size="12" font-weight="700" fill="#57534e" font-family="sans-serif">Capital &amp; scale  →</text>
-            <text x="24" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#57534e" font-family="sans-serif" transform="rotate(-90 24 170)">Human-advisory depth  →</text>
-            <circle cx="600" cy="120" r="30" fill="#ede9fe" stroke="#a855f7" stroke-width="1.5"/>
-            <text x="600" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#4c1d95" font-family="sans-serif">Qualtrics</text>
-            <text x="600" y="132" text-anchor="middle" font-size="9" fill="#6b21a8" font-family="sans-serif">Medallia</text>
-            <circle cx="470" cy="245" r="26" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
-            <text x="470" y="243" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e3a5f" font-family="sans-serif">Listen Labs</text>
-            <text x="470" y="257" text-anchor="middle" font-size="9" fill="#1e40af" font-family="sans-serif">Outset · GetWhy</text>
-            <circle cx="270" cy="270" r="22" fill="#f5f4f1" stroke="#a8a29e" stroke-width="1.5"/>
-            <text x="270" y="268" text-anchor="middle" font-size="9.5" font-weight="700" fill="#57534e" font-family="sans-serif">Strella·Conveo</text>
-            <text x="270" y="281" text-anchor="middle" font-size="9" fill="#78716c" font-family="sans-serif">Genway…</text>
-            <circle cx="250" cy="90" r="24" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
-            <text x="250" y="88" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e" font-family="sans-serif">ghSMART /</text>
-            <text x="250" y="102" text-anchor="middle" font-size="9" fill="#92400e" font-family="sans-serif">Oliver Wyman</text>
-            <circle cx="175" cy="150" r="30" fill="#dcfce7" stroke="#15803d" stroke-width="2.5"/>
-            <text x="175" y="148" text-anchor="middle" font-size="12" font-weight="800" fill="#14532d" font-family="sans-serif">Vega</text>
-            <text x="175" y="163" text-anchor="middle" font-size="8.5" fill="#15803d" font-family="sans-serif">unfunded</text>
+          <svg viewBox="0 0 700 360" role="img" aria-label="Four-quadrant positioning map: capital and scale versus human-advisory and science depth">
+            <!-- quadrant tints -->
+            <rect x="365" y="20" width="295" height="150" fill="#f2f8f3"/>
+            <!-- visible crossbars (2px solid) -->
+            <line x1="70" y1="170" x2="660" y2="170" stroke="#44403c" stroke-width="2"/>
+            <line x1="365" y1="20" x2="365" y2="320" stroke="#44403c" stroke-width="2"/>
+            <!-- axis-end labels -->
+            <text x="365" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#44403c" font-family="sans-serif">HIGH ADVISORY + SCIENCE DEPTH</text>
+            <text x="365" y="335" text-anchor="middle" font-size="10.5" font-weight="700" fill="#44403c" font-family="sans-serif">LOW ADVISORY DEPTH</text>
+            <text x="64" y="166" text-anchor="start" font-size="10.5" font-weight="700" fill="#44403c" font-family="sans-serif">LOW SCALE</text>
+            <text x="666" y="166" text-anchor="end" font-size="10.5" font-weight="700" fill="#44403c" font-family="sans-serif">HIGH SCALE / CAPITAL</text>
+            <!-- quadrant micro-labels -->
+            <text x="380" y="36" text-anchor="start" font-size="9.5" font-weight="700" fill="#86918a" font-family="sans-serif">Q1 · scale + depth (ideal)</text>
+            <text x="350" y="36" text-anchor="end" font-size="9.5" font-weight="700" fill="#b8b2ad" font-family="sans-serif">Q2 · depth, sub-scale</text>
+            <text x="350" y="312" text-anchor="end" font-size="9.5" font-weight="700" fill="#b8b2ad" font-family="sans-serif">Q3 · sub-scale</text>
+            <text x="380" y="312" text-anchor="start" font-size="9.5" font-weight="700" fill="#b8b2ad" font-family="sans-serif">Q4 · scale, thinner depth</text>
+            <!-- Q1 ideal: empty / contested -->
+            <circle cx="545" cy="92" r="30" fill="none" stroke="#15803d" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <text x="545" y="89" text-anchor="middle" font-size="9" font-weight="700" fill="#15803d" font-family="sans-serif">no one</text>
+            <text x="545" y="101" text-anchor="middle" font-size="9" font-weight="700" fill="#15803d" font-family="sans-serif">here yet</text>
+            <!-- players -->
+            <circle cx="595" cy="258" r="30" fill="#ede9fe" stroke="#a855f7" stroke-width="1.5"/>
+            <text x="595" y="256" text-anchor="middle" font-size="11" font-weight="700" fill="#4c1d95" font-family="sans-serif">Qualtrics</text>
+            <text x="595" y="270" text-anchor="middle" font-size="9" fill="#6b21a8" font-family="sans-serif">Medallia</text>
+            <circle cx="498" cy="212" r="28" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="498" y="210" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e3a5f" font-family="sans-serif">Listen Labs</text>
+            <text x="498" y="224" text-anchor="middle" font-size="9" fill="#1e40af" font-family="sans-serif">Outset · GetWhy</text>
+            <circle cx="212" cy="258" r="24" fill="#f5f4f1" stroke="#a8a29e" stroke-width="1.5"/>
+            <text x="212" y="256" text-anchor="middle" font-size="9.5" font-weight="700" fill="#57534e" font-family="sans-serif">Strella·Conveo</text>
+            <text x="212" y="269" text-anchor="middle" font-size="9" fill="#78716c" font-family="sans-serif">Genway…</text>
+            <circle cx="298" cy="84" r="25" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="298" y="82" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400e" font-family="sans-serif">ghSMART /</text>
+            <text x="298" y="95" text-anchor="middle" font-size="9" fill="#92400e" font-family="sans-serif">Oliver Wyman</text>
+            <circle cx="190" cy="104" r="30" fill="#dcfce7" stroke="#15803d" stroke-width="2.5"/>
+            <text x="190" y="102" text-anchor="middle" font-size="12" font-weight="800" fill="#14532d" font-family="sans-serif">Vega</text>
+            <text x="190" y="117" text-anchor="middle" font-size="8.5" fill="#15803d" font-family="sans-serif">unfunded</text>
           </svg>
-          <figcaption>Where the players sit. Vega’s distinct corner is high human-advisory depth at low scale — a boutique-consultancy position. The funded leaders own the scale axis; the consultancies own the depth axis.</figcaption>
+          <figcaption>Four quadrants, two axes. Vega sits in <strong>Q2</strong> (real advisory/science depth, but sub-scale and unfunded) alongside the human consultancies; the funded AI-research leaders sit in <strong>Q4</strong> (scale, thinner advisory depth). The <strong>ideal Q1</strong> — both scale and depth — is empty: no one has it yet. The investment question is who reaches Q1 first, and from which side.</figcaption>
         </figure>
 
         <h3>Bucket B — the incumbents it attacks</h3>
@@ -569,6 +625,132 @@
         <div class="notebox">
           <label><span class="ic">📝</span> Your note on the competition <span class="note-saved">saved ✓</span></label>
           <textarea data-note="s6" rows="2" placeholder="Does the boutique-advisory angle hold up to you? How much does the funding gap worry you?"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S-FEATURES ============ -->
+      <section id="s-features">
+        <div class="sec-num">The Landscape · feature comparison</div>
+        <h2>Feature Comparison</h2>
+        <p class="lead">Vega against the real field, capability by capability — claims-vs-verified tagged per cell (this is fresh dual-engine research). The pattern: Vega’s focus is genuinely distinct, but it’s the least-proven entrant and the moats sit with the funded players.</p>
+        <div class="legend">
+          <span class="li"><span class="fm-y">✓✓</span> signature strength</span>
+          <span class="li"><span class="fm-y">✓</span> present / verified</span>
+          <span class="li"><span class="fm-p">~</span> partial / claimed</span>
+          <span class="li"><span class="fm-n">✗</span> absent</span>
+          <span class="li"><em>claimed</em> = self-reported, not independently verified</span>
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Player</th><th>AI interview @ scale</th><th>Advisory / science layer</th><th>Proprietary panel</th><th>Research repository</th><th>Primary focus</th><th>Funding (total)</th><th>Named customers</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="nowrap"><strong>Vega / Agency150</strong></td>
+                <td><span class="fm-p">~</span> claimed <span class="tier t5">T5</span></td>
+                <td><span class="fm-y">✓✓</span> ex-Oliver Wyman + Pierce (CSO) <span class="tier t1">T1</span></td>
+                <td><span class="fm-n">✗</span> client’s own people</td>
+                <td><span class="fm-p">~</span> claimed</td>
+                <td><strong>EX / org</strong> (only EX-led)</td>
+                <td><span class="fm-n">✗</span> unfunded</td>
+                <td><span class="fm-n">✗</span> none public</td>
+              </tr>
+              <tr>
+                <td class="nowrap"><strong>Listen Labs</strong></td>
+                <td><span class="fm-y">✓✓</span> >1M interviews <span class="tier t2">T2</span></td>
+                <td><span class="fm-p">~</span> in-house team, no svc wrap</td>
+                <td><span class="fm-y">✓</span> 30M <em>claimed</em></td>
+                <td><span class="fm-y">✓</span> living archive</td>
+                <td>Customer / UX</td>
+                <td>~$96M cash <span class="tier t2">T2</span></td>
+                <td><span class="fm-y">✓✓</span> Microsoft, Sweetgreen</td>
+              </tr>
+              <tr>
+                <td class="nowrap"><strong>Outset.ai</strong></td>
+                <td><span class="fm-y">✓✓</span> 100s concurrent <span class="tier t1">T1</span></td>
+                <td><span class="fm-p">~</span> success team, SaaS</td>
+                <td><span class="fm-n">✗</span> 25+ 3rd-party panels</td>
+                <td><span class="fm-p">~</span> per-study</td>
+                <td>Customer / UX</td>
+                <td>$51M (B led by Radical) <span class="tier t1">T1</span></td>
+                <td><span class="fm-y">✓✓</span> Microsoft, Nestlé, Uber</td>
+              </tr>
+              <tr>
+                <td class="nowrap"><strong>GetWhy</strong></td>
+                <td><span class="fm-p">⚠</span> AI-<em>analysis</em> verified; live moderation = claim</td>
+                <td><span class="fm-y">✓</span> PhD researchers <em>claimed</em></td>
+                <td><span class="fm-p">~</span> orchestrated access</td>
+                <td><span class="fm-y">✓</span> 1M-interview fine-tune <em>claimed</em></td>
+                <td>Customer / market (CPG)</td>
+                <td>~$64M <span class="tier t2">T2</span></td>
+                <td><span class="fm-y">✓✓</span> eBay, Heineken, L’Oréal</td>
+              </tr>
+              <tr>
+                <td class="nowrap"><strong>Strella</strong></td>
+                <td><span class="fm-y">✓✓</span> agentic voice, 90-min <span class="tier t1">T1</span></td>
+                <td><span class="fm-p">~</span> optional human (a feature)</td>
+                <td><span class="fm-y">✓</span> 8M <em>claimed</em></td>
+                <td><span class="fm-y">✓</span> chat-with-research</td>
+                <td>Customer / UX</td>
+                <td>$18M ($14M A Bessemer) <span class="tier t1">T1</span></td>
+                <td><span class="fm-y">✓✓</span> Amazon, Duolingo, Chobani</td>
+              </tr>
+              <tr>
+                <td class="nowrap"><strong>ghSMART</strong><br><span style="font-size:11px;color:var(--text-muted)">human comparator</span></td>
+                <td><span class="fm-n">✗</span> human Topgrading (AI assists)</td>
+                <td><span class="fm-y">✓✓</span> Who/A-Method, ~30k assessments <span class="tier t1">T1</span></td>
+                <td><span class="fm-y">✓</span> assessed-exec network</td>
+                <td><span class="fm-y">✓✓</span> ~30k-assessment dataset (CEO Genome) <span class="tier t2">T2</span></td>
+                <td><strong>Exec / leadership assessment</strong></td>
+                <td>not VC (KKR minority)</td>
+                <td><span class="fm-p">~</span> clients anonymized</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout co-finding">
+          <div class="ct">● What the matrix shows</div>
+          <p><strong>Differentiated:</strong> Vega is the only EX/org-first player — the AI-research funding wave crowded <em>customer</em> research, not employee/org research, and for EX work the missing panel matters less (you interview the client’s own people). <strong>At parity:</strong> the advisory layer isn’t unique — GetWhy claims it, ghSMART out-classes it; the AI-interview engine is becoming table stakes. <strong>Behind:</strong> Vega is the <em>least-proven</em> cell in every column that needs evidence — unfunded, no named customers, no verified panel/repository/integrations, every capability self-reported. The funded players can name Microsoft, Amazon, Nestlé; Vega can name no one yet.</p>
+        </div>
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your note on the comparison <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s-features" rows="2" placeholder="Is the EX-focus wedge enough? Which competitor worries you most?"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ S-SWOT ============ -->
+      <section id="s-swot">
+        <div class="sec-num">Weighing It · at a glance</div>
+        <h2>SWOT — At a Glance</h2>
+        <p class="lead">The same evidence from the sections above, sorted into the four-box view investors scan first. This summarizes; it doesn’t add a verdict. The detailed reads are §7 (the case for) and §8 (the case against).</p>
+        <div class="swot">
+          <div class="q s"><h4>▲ Strengths</h4><ul>
+            <li>A genuine, hard-to-fake science credential — CSO is Editor-in-Chief of <em>Organization Science</em> (§3). <span class="tier t1">T1</span></li>
+            <li>Experienced operators (ex-Oliver Wyman) + a real behavioral-science bench.</li>
+            <li>Rides a real wave — AI compresses qualitative research 80–95%, HBR-validated (§5). <span class="tier t1">T1</span></li>
+            <li>A distinct boutique-advisory niche (org/EX/culture) the funded SaaS players under-serve (§6).</li>
+          </ul></div>
+          <div class="q w"><h4>▼ Weaknesses</h4><ul>
+            <li>Unfunded, pre-traction — no named customers, ~146 followers (§4).</li>
+            <li>Thin technical core; no full-time CTO publicly identifiable (§3).</li>
+            <li>Titles read a notch above their sourced versions (§3).</li>
+            <li>Services model caps growth velocity — people-bound, not seats (§2).</li>
+          </ul></div>
+          <div class="q o"><h4>◆ Opportunities</h4><ul>
+            <li>The ideal “scale + depth” quadrant is empty — room to define it (§6).</li>
+            <li>Money is rotating from human-services to AI-native software (§5).</li>
+            <li>EX / org diagnostics are under-served by the funded customer-research leaders (§6).</li>
+            <li>M&amp;A-integration and AI-readiness are credible wedge verticals (§2).</li>
+          </ul></div>
+          <div class="q t"><h4>⚑ Threats</h4><ul>
+            <li>LLM-wrapper commoditization — the central moat question (§8).</li>
+            <li>Squeezed from above (funded leaders up-market) and below (Qualtrics/Culture Amp adding AI) (§8).</li>
+            <li>EU works-council / AI-Act drag on the employee-interview angle (§8). <span class="tier t2">T2</span></li>
+            <li>A data-privacy advisor flag (Jumpshot) given Vega collects intimate data (§3).</li>
+          </ul></div>
+        </div>
+        <div class="notebox">
+          <label><span class="ic">📝</span> Your note — which box matters most to you? <span class="note-saved">saved ✓</span></label>
+          <textarea data-note="s-swot" rows="2" placeholder="Which single strength is decisive / which threat would be disqualifying…"></textarea>
         </div>
       </section>
 
