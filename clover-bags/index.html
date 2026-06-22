@@ -151,19 +151,28 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 .foot .sib{color:#5e5a53;font-size:11.5px;margin-top:12px;text-transform:none}
 
 .sidegfx{display:none}
+.flowwrap{max-width:880px}
+.cascade{display:flex;flex-direction:column;gap:26px;margin-top:8px}
+.cstep{display:flex;gap:18px;align-items:flex-start;max-width:520px}
+.cicon{width:60px;height:60px;flex-shrink:0;object-fit:contain;opacity:.8;margin-top:2px}
+.cstep h3{font-size:18px;text-transform:none;font-weight:700;letter-spacing:-.01em;color:var(--white)}
+.cstep p{color:var(--muted);font-size:14.5px;margin-top:3px;line-height:1.5}
+.cstep p .em{color:var(--green);font-weight:600}
 @media (min-width:900px){
   .sect.hook .wrap, .sect.expect .wrap{margin-left:clamp(40px,7vw,150px);margin-right:auto;max-width:580px}
-  .sect.flow .wrap, .sect.who .wrap{margin-right:clamp(40px,7vw,150px);margin-left:auto;max-width:580px;text-align:left}
-  .sect.flow .head{text-align:left}
-  .sect.flow .steps{margin-left:0}
+  .sect.who .wrap{margin-right:clamp(40px,7vw,150px);margin-left:auto;max-width:580px;text-align:left}
+  .sect.flow .head{text-align:left;margin-bottom:36px}
   .sect.who .eyebrow.c{justify-content:flex-start}
   .sect.who .eyebrow.c::before{display:none}
   .sect.who .list{margin-left:0}
   .sect.who .kick{margin-left:0;margin-right:auto}
-  .sect.hook,.sect.flow,.sect.expect,.sect.who{overflow:hidden}
+  .sect.hook,.sect.expect,.sect.who{overflow:hidden}
   .sidegfx{display:block;position:absolute;top:50%;transform:translateY(-50%);width:clamp(220px,23vw,360px);opacity:.55;pointer-events:none;z-index:1}
   .sect.hook .sidegfx,.sect.expect .sidegfx{right:max(16px,3vw)}
-  .sect.flow .sidegfx,.sect.who .sidegfx{left:max(16px,3vw)}
+  .sect.who .sidegfx{left:max(16px,3vw)}
+  .cstep:nth-child(2){margin-left:90px}
+  .cstep:nth-child(3){margin-left:180px}
+  .cstep:nth-child(4){margin-left:270px}
 }
 @media (max-width:480px){.sect{padding:48px 0}.cards{grid-template-columns:1fr}.hero{min-height:86vh}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -208,17 +217,16 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 
 <!-- ── HOW IT RUNS ── -->
 <section class="sect panel-d flow" id="how">
-  <img class="sidegfx" src="assets/art/board.png" alt="" aria-hidden="true">
-  <div class="wrap r">
+  <div class="wrap flowwrap">
     <div class="head">
       <h2>How a Monday runs</h2>
-      <div class="sub">Four steps. Walk in, get drawn, play, win.</div>
+      <div class="sub">Walk in, get drawn, play, win — top to bottom.</div>
     </div>
-    <div class="steps">
-      <div class="step"><div class="num">1</div><div><h3>Sign up before we start</h3><p>Walk in, put your name down, grab a drink. <span class="em">No partner needed.</span> Never played? Even better — we'll get you going.</p></div></div>
-      <div class="step"><div class="num">2</div><div><h3>Get drawn a partner</h3><p>Everybody's paired up at random, right there. <span class="em">Luck of the draw</span> — the champ or the rookie. That's the fun.</p></div></div>
-      <div class="step"><div class="num">3</div><div><h3>Play the bracket</h3><p>Double-elimination, games to 21. <span class="em">Everybody plays at least twice</span> — nobody's one-and-done. Two boards going all night.</p></div></div>
-      <div class="step"><div class="num">4</div><div><h3>Win the pot</h3><p>Winning team takes the pot. And all night there's the <span class="em">4-Bagger Pot</span> — a $1 raffle with a jackpot that grows every week it isn't won.</p></div></div>
+    <div class="cascade">
+      <div class="cstep"><img class="cicon" src="assets/art/signup.png" alt="" aria-hidden="true"><div class="ctext"><h3>Sign up before we start</h3><p>Walk in, put your name down, grab a drink. <span class="em">No partner needed.</span> Never played? Even better.</p></div></div>
+      <div class="cstep"><img class="cicon" src="assets/art/draw.png" alt="" aria-hidden="true"><div class="ctext"><h3>Get drawn a partner</h3><p>Everybody's paired up at random, right there. <span class="em">Luck of the draw</span> — the champ or the rookie.</p></div></div>
+      <div class="cstep"><img class="cicon" src="assets/art/board.png" alt="" aria-hidden="true"><div class="ctext"><h3>Play the bracket</h3><p>Double-elimination, games to 21. <span class="em">Everybody plays at least twice.</span> Two boards going all night.</p></div></div>
+      <div class="cstep"><img class="cicon" src="assets/art/trophy.png" alt="" aria-hidden="true"><div class="ctext"><h3>Win the pot</h3><p>Winning team takes the pot — plus the all-night <span class="em">4-Bagger Pot</span>, a $1 jackpot that grows.</p></div></div>
     </div>
   </div>
 </section>
