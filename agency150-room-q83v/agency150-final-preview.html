@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Agency150 — Investment Analysis (Final-Form Preview)</title>
+<style>
+  :root{
+    --bg:#faf9f7; --surface:#ffffff; --surface-alt:#f5f4f1; --surface-sunk:#f0eee9;
+    --text:#1c1917; --text-soft:#44403c; --text-muted:#78716c; --border:#e7e5e4; --border-strong:#d6d3d1;
+    --navy:#1f3a5f; --navy-soft:#2d5180; --gold:#b08423; --gold-soft:#caa450;
+    --verified:#15803d; --verified-bg:#dcfce7; --claim:#b45309; --claim-bg:#fef3c7;
+    --risk:#b91c1c; --risk-bg:#fee2e2; --unverified:#6b7280; --unverified-bg:#f1f0ee;
+    --favor:#15803d; --favor-bg:#ecfdf3; --pause:#b45309; --pause-bg:#fdf6ec;
+    --shadow:0 1px 3px rgba(28,25,23,.06),0 8px 24px rgba(28,25,23,.05); --shadow-sm:0 1px 2px rgba(28,25,23,.06);
+    --maxw:880px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box} ul,ol{padding-left:24px} html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:16.5px;-webkit-font-smoothing:antialiased}
+  .layout{display:flex;min-height:100vh}
+  .sidebar{width:300px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 16px 40px}
+  .brandmark{display:flex;align-items:center;gap:11px;padding:0 8px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+  .brandmark .dot{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--navy),var(--navy-soft));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0}
+  .brandmark .bt{font-size:13.5px;font-weight:700;line-height:1.25} .brandmark .bs{font-size:11px;color:var(--text-muted)}
+  .toc a{display:block;padding:6px 12px;margin:1px 0;border-radius:7px;color:var(--text-soft);text-decoration:none;font-size:13.3px;line-height:1.4;border-left:2px solid transparent}
+  .toc a .n{color:var(--text-muted);font-variant-numeric:tabular-nums;font-size:11.5px;margin-right:8px}
+  .toc a:hover{background:var(--surface-alt);color:var(--text)} .toc a.active{background:#eef2f7;color:var(--navy);border-left-color:var(--navy);font-weight:600}
+  .toc a.sub{padding-left:30px;font-size:12.5px} .toc .grp{font-size:10.5px;text-transform:uppercase;letter-spacing:.9px;color:var(--text-muted);padding:13px 12px 4px;font-weight:700}
+  .main{flex:1;min-width:0} .container{max-width:var(--maxw);margin:0 auto;padding:0 40px 140px}
+  header.hero{background:linear-gradient(160deg,#19314f 0%,#22416a 55%,#2d5180 100%);color:#fff;padding:58px 40px 48px}
+  header.hero .inner{max-width:var(--maxw);margin:0 auto}
+  .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#bcd3ef;font-weight:600;margin-bottom:14px}
+  header.hero h1{font-size:40px;line-height:1.1;font-weight:760;letter-spacing:-.6px;margin-bottom:14px}
+  header.hero .sub{font-size:18px;color:#dce7f4;max-width:700px;line-height:1.5}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:9px 18px;margin-top:24px;font-size:12.5px;color:#cfe0f2}
+  .hero-meta .pill{background:rgba(255,255,255,.12);padding:5px 12px;border-radius:20px} .hero-meta b{color:#fff}
+  section{padding:46px 0 8px;border-bottom:1px solid var(--border);scroll-margin-top:12px}
+  .sec-num{font-size:12.5px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px}
+  h2{font-size:29px;line-height:1.18;font-weight:740;letter-spacing:-.4px;margin-bottom:10px}
+  h3{font-size:20px;font-weight:690;margin:34px 0 10px;color:var(--navy);letter-spacing:-.2px}
+  h4{font-size:15.5px;font-weight:680;margin:22px 0 6px;color:var(--text-soft)}
+  p{margin:13px 0} .lead{font-size:18px;color:var(--text-soft);line-height:1.62} strong{font-weight:680;color:var(--text)}
+  .tier{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:4px;vertical-align:middle;letter-spacing:.3px;margin:0 1px;white-space:nowrap}
+  .t1{background:#dcfce7;color:#14532d} .t2{background:#dbeafe;color:#1e3a5f} .t3{background:#fef3c7;color:#78350f} .t4{background:#ede9fe;color:#4c1d95} .t5{background:#f1f0ee;color:#57534e}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:20px;letter-spacing:.3px;vertical-align:middle;text-transform:uppercase}
+  .tag.v{background:var(--verified-bg);color:var(--verified)} .tag.c{background:var(--claim-bg);color:var(--claim)} .tag.r{background:var(--risk-bg);color:var(--risk)} .tag.u{background:var(--unverified-bg);color:var(--unverified)} .tag.e{background:#ede9fe;color:#5b21b6}
+  .callout{border:1px solid var(--border);border-left-width:4px;border-radius:10px;padding:16px 20px;margin:20px 0;background:var(--surface);box-shadow:var(--shadow-sm)}
+  .callout .ct{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+  .callout p:first-of-type{margin-top:0} .callout p:last-child{margin-bottom:0}
+  .co-finding{border-left-color:var(--navy);background:#f7fafd} .co-finding .ct{color:var(--navy)}
+  .co-risk{border-left-color:var(--risk);background:var(--risk-bg)} .co-risk .ct{color:var(--risk)}
+  .co-flag{border-left-color:var(--claim);background:var(--claim-bg)} .co-flag .ct{color:#92400e}
+  .co-key{border-left-color:var(--gold);background:linear-gradient(180deg,#fdfaf2,#fff)} .co-key .ct{color:var(--gold)}
+  .co-context{border-left-color:var(--navy-soft);background:linear-gradient(180deg,#f4f8fc,#fff)} .co-context .ct{color:var(--navy)}
+  .tw{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-sm);position:relative}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)} th{background:var(--surface-sunk);text-align:left;padding:10px 13px;font-weight:680;font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-soft);border-bottom:2px solid var(--border-strong);white-space:nowrap}
+  td{padding:10px 13px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5} tr:last-child td{border-bottom:none} tbody tr:hover{background:var(--surface-alt)} td.nowrap{white-space:nowrap}
+  @media(max-width:760px){.tw table{min-width:600px}}
+  /* deep-profile card */
+  .profile{border:1px solid var(--border-strong);border-radius:14px;padding:0;margin:26px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .profile .ph{background:var(--surface-sunk);padding:16px 22px;border-bottom:1px solid var(--border)}
+  .profile .ph h3{margin:0;color:var(--text);font-size:21px} .profile .ph .tagline{font-size:13.5px;color:var(--text-muted);margin-top:3px}
+  .profile .pbody{padding:6px 22px 20px}
+  .statrow{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .statrow .stat{background:var(--surface-alt);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:12.5px}
+  .statrow .stat b{color:var(--navy);font-weight:700}
+  .vp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  .vp .col{border-radius:10px;padding:14px 16px;border:1px solid var(--border)} .vp .pro{background:var(--favor-bg);border-color:#bbf7d0} .vp .con{background:var(--pause-bg);border-color:#f3dcb4}
+  .vp .col h5{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.5px} .vp .pro h5{color:var(--favor)} .vp .con h5{color:var(--pause)}
+  .vp ul{margin:0;padding-left:18px} .vp li{margin:5px 0;font-size:13px;line-height:1.45}
+  @media(max-width:760px){.vp{grid-template-columns:1fr}}
+  /* scenarios */
+  .scen{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:20px 0}
+  .scen .s{border:1px solid var(--border);border-radius:12px;padding:16px 18px} .scen .bull{background:var(--favor-bg);border-color:#bbf7d0} .scen .base{background:#f7fafd;border-color:#cfe0f2} .scen .bear{background:var(--risk-bg);border-color:#fecaca}
+  .scen h5{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.5px} .scen .bull h5{color:var(--favor)} .scen .base h5{color:var(--navy)} .scen .bear h5{color:var(--risk)}
+  .scen p{font-size:13px;line-height:1.5;margin:6px 0}
+  @media(max-width:900px){.scen{grid-template-columns:1fr}}
+  /* swot */
+  .swot{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+  .swot .q{border:1px solid var(--border);border-radius:12px;padding:16px 18px} .swot .q h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.6px}
+  .swot .q ul{margin:0;padding-left:18px} .swot .q li{margin:7px 0;font-size:13.5px;line-height:1.45}
+  .swot .s{background:#ecfdf3;border-color:#bbf7d0} .swot .s h4{color:#15803d} .swot .w{background:#fdf6ec;border-color:#f3dcb4} .swot .w h4{color:#b45309}
+  .swot .o{background:#eff6ff;border-color:#bfdbfe} .swot .o h4{color:#1d4ed8} .swot .t{background:#fef2f2;border-color:#fecaca} .swot .t h4{color:#b91c1c}
+  @media(max-width:760px){.swot{grid-template-columns:1fr}}
+  .fm-y{color:#15803d;font-weight:800}.fm-p{color:#b45309;font-weight:800}.fm-n{color:#b91c1c;font-weight:800}
+  figure{margin:26px 0;text-align:center} figure svg{max-width:100%;height:auto} figcaption{font-size:12.5px;color:var(--text-muted);margin-top:8px;font-style:italic}
+  .note{font-size:13.5px;color:var(--text-muted);font-style:italic;margin:10px 0}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--text-muted);margin:8px 0 0} .legend .li{display:flex;align-items:center;gap:6px}
+  .menu-btn{display:none;position:fixed;top:14px;left:14px;z-index:60;background:var(--navy);color:#fff;border:none;width:44px;height:44px;border-radius:10px;font-size:20px;cursor:pointer;box-shadow:var(--shadow)}
+  .scrim{display:none;position:fixed;inset:0;background:rgba(28,25,23,.45);z-index:40}
+  @media(max-width:980px){.menu-btn{display:block}.sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:transform .22s;box-shadow:var(--shadow)}.sidebar.open{transform:translateX(0)}.scrim.open{display:block}.container{padding:0 20px 90px}header.hero{padding:64px 20px 38px}header.hero h1{font-size:30px}}
+  @media(max-width:520px){header.hero h1{font-size:25px}h2{font-size:24px}}
+</style>
+</head>
+<body>
+<button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="brandmark"><div class="dot">A150</div><div><div class="bt">Agency150 — Investment Analysis</div><div class="bs">Final-form preview · for Jimmy</div></div></div>
+    <div class="toc" id="toc">
+      <a href="#x">Executive Analysis</a>
+      <div class="grp">The Company</div>
+      <a href="#co"><span class="n">01</span>Agency150 / Vega — Deep Profile</a>
+      <div class="grp">The Market</div>
+      <a href="#mkt"><span class="n">02</span>Market Structure &amp; Dynamics</a>
+      <a href="#size"><span class="n">03</span>TAM / SAM / SOM, Built Out</a>
+      <div class="grp">The Competitive Field</div>
+      <a href="#comp"><span class="n">04</span>Competitive Landscape</a>
+      <a href="#listen" class="sub">Listen Labs</a>
+      <a href="#outset" class="sub">Outset.ai</a>
+      <a href="#getwhy" class="sub">GetWhy</a>
+      <a href="#strella" class="sub">Strella</a>
+      <a href="#ghsmart" class="sub">ghSMART &amp; the consultancies</a>
+      <a href="#synth"><span class="n">05</span>Competitive Synthesis</a>
+      <div class="grp">The Investment Logic</div>
+      <a href="#swot"><span class="n">06</span>Vega — Full SWOT</a>
+      <a href="#thesis"><span class="n">07</span>Investment Logic &amp; Scenarios</a>
+      <a href="#risk"><span class="n">08</span>Risk Analysis</a>
+      <div class="grp">Appendix</div>
+      <a href="#unlock"><span class="n">09</span>What Jimmy's Input Unlocks</a>
+      <a href="#src"><span class="n">10</span>Sources &amp; Method</a>
+    </div>
+  </nav>
+  <div class="main">
+    <header class="hero"><div class="inner">
+      <div class="kicker">Confidential Investment Analysis · Final-Form Preview · Built Pre-Meeting</div>
+      <h1>Agency150 / “Vega”</h1>
+      <p class="sub">The full analytical work-up behind the briefing — the market, the field, and the investment logic read deeply and honestly. A document to be read, not skimmed. It reaches conclusions where the evidence supports them and names uncertainty where it doesn’t.</p>
+      <div class="hero-meta">
+        <span class="pill">Founded <b>2025</b> · <b>unfunded</b></span>
+        <span class="pill">Prepared <b>June 20, 2026</b></span>
+        <span class="pill">Companion to the <b>engagement dossier</b></span>
+        <span class="pill">Every number <b>dual-engine verified</b></span>
+      </div>
+    </div></header>
+    <div class="container">
+
+      <!-- ============ EXECUTIVE ANALYSIS ============ -->
+      <section id="x">
+        <div class="sec-num">Read This First</div>
+        <h2>Executive Analysis</h2>
+        <p class="lead">This is the analytical read in full, stated plainly. It is not a buy/pass call — that is a judgment for the investor with terms in hand. It is the evidence, worked through to the point where the decision actually turns.</p>
+
+        <p><strong>What Agency150 is.</strong> A brand-new (launched September 2025), <strong>unfunded</strong> company whose product, <strong>Vega</strong>, uses AI to run psychologically-grounded interviews of an organization’s employees and customers at scale, sold as a <strong>boutique advisory engagement</strong> rather than software. Its public differentiation rests on two things that are real: a <strong>genuine behavioral-science credential</strong> (Chief Science Officer Lamar Pierce is the sitting Editor-in-Chief of <em>Organization Science</em>, a leading management journal <span class="tier t1">T1</span>) and an <strong>employee-experience / organizational focus</strong> that, as the competitive section shows, no funded competitor occupies.</p>
+
+        <p><strong>The single most important framing point.</strong> The opportunity was described to the investor as AI that <em>assesses CEO/executive candidates for hire.</em> The public product does not do that — it conducts <em>organizational and customer research.</em> An AI-native executive-candidate-assessment company, in the form imagined, essentially does not exist (the genuine players in executive assessment are human-led, like ghSMART, or psychometric, like Hogan/SHL). This is not a reason to pass; it is the first thing to reconcile with the founders, because it changes what is being bought.</p>
+
+        <p><strong>The investment logic, in one paragraph.</strong> The bull case is coherent: a real wave (AI compresses qualitative research 80–95% <span class="tier t2">T2</span>), a hard-to-fake science credential, and a defensible-looking niche (employee/org research) that the funded AI-research leaders have left alone while they crowd customer research. The bear case is heavier on today’s evidence: Vega is the <strong>least-proven</strong> entrant in its field — unfunded, with no named customers and no independent validation, while its rivals can name Microsoft, Amazon, and Nestlé and have raised $18M–$96M; the “human-advisory” differentiator is <strong>not unique</strong> (GetWhy claims it; ghSMART, with a 30-year, ~30,000-assessment dataset, out-classes it); and the core AI-interview engine is commoditizing into table stakes. The question the deal turns on is whether Vega’s <em>EX-focus-plus-science-advisory</em> bundle is a durable wedge or a temporary gap that a funded player or an incumbent (Qualtrics, Culture Amp) closes first.</p>
+
+        <div class="callout co-key">
+          <div class="ct">◆ The read this analysis lands on</div>
+          <p>On the public evidence, this is <strong>a credible boutique-services business with a genuine niche and a real credential — not, yet, an obvious venture-scale bet, and not the company the investor was pitched.</strong> The factors that would change that read are not in the public record: whether the founders own defensible technology, whether real paying customers exist, what the terms are, and who actually introduced the deal. The analysis below is built so that when those answers arrive, the conclusion can move with them — in either direction. Where the evidence is thin, this document says so rather than dressing it up.</p>
+        </div>
+        <p class="note">Every funding and market figure in this document was re-verified across two independent engines (professional web-data + independent search), with round amounts and cumulative totals labeled separately. Where a figure is an estimate, it is labeled an estimate with its arithmetic shown. Sources and tiers are in §10.</p>
+      </section>
+
+      <!-- ============ COMPANY PROFILE ============ -->
+      <section id="co">
+        <div class="sec-num">The Company · 01</div>
+        <h2>Agency150 / Vega — Deep Profile</h2>
+        <p class="lead">For a company this early, the team and the model <em>are</em> the investment — there is little operating history to weigh. This is the full read on what the company is, who is behind it, what is verified versus claimed, and where the real questions sit.</p>
+
+        <h3>The entity, confirmed</h3>
+        <p>Agency150 (domain agency150.com, brand “Agency 150,” product “Vega”) is a New York company, <strong>founded 2025</strong> and launched publicly <strong>September 9, 2025</strong>, listed under “Research Services,” 11–50 employees, privately held. <span class="tier t1">T1</span> The name is a search hazard — it collides with a Virginia veterinary code, generic “save 150+ hours” marketing copy, and unrelated companies whose products are also called “Vega” (a security-analytics firm, a wealth-management fintech, both of which have raised tens of millions). <span class="tier t2">T2</span> None of those are this company; any “Vega raised $X” headline almost certainly refers to a different business. The identification here is high-confidence, anchored to the founder roster, the product, and an early notice from HR-industry analyst Josh Bersin.</p>
+
+        <h3>The product and the model</h3>
+        <p>Vega is described by the company as “the first AI-native advisory platform” <span class="tag c">company claim</span> <span class="tier t5">T5</span>: an AI agent conducts conversational, “psychologically safe” interviews with an organization’s stakeholders — employees, customers, members — at scale, then decodes the transcripts into themes and “behavioural signals, readiness patterns, trust dynamics,” with a human team of behavioral scientists and ex-strategy-consultants interpreting the results. The pitch is a “best of three”: deeper than surveys (which give scores, not the “why”), faster than consultants (days, not months), and more rigorous than generic AI.</p>
+        <p>The model matters more than it first appears. Vega is sold as <strong>bespoke studies plus an annual subscription, supported by human advisors</strong> <span class="tier t1">T1</span> — a <strong>services / advisory</strong> business, not a self-serve software business. Three consequences follow, and they shape the entire investment question: revenue is people-bound (consultants don’t scale like software seats), gross margins look like a consultancy’s rather than a SaaS company’s, and “traction” will show up as signed engagements and logos rather than sign-ups. The most valuable asset, on this model, is the <em>people and the brand</em> — not the software. That is the lens to read the team through.</p>
+
+        <div class="callout co-flag">
+          <div class="ct">⚑ The framing question, stated once, clearly</div>
+          <p>The opportunity reached the investor as AI that <em>interviews and assesses CEO/executive candidates.</em> An exhaustive search of the site, every 2026 LinkedIn post, founder commentary, and press found <strong>no executive-candidate-assessment or hiring product</strong> anywhere. <span class="tier t1">T1</span> What is public is organizational and customer research (employee experience, customer insight, cultural diagnostics, M&amp;A integration, “AI readiness”). The underlying engine is the same shape either way — AI conducting psychologically-safe interviews at scale — but the <em>market</em> is different. The closest adjacency is a “Due Diligence” use case (surveying a target’s workforce during M&amp;A), which is adjacent in vocabulary to “assessing leadership” but different in function from assessing an individual CEO. This is the first thing to reconcile with the founders.</p>
+        </div>
+
+        <h3>The team — verified, with the pattern named</h3>
+        <p>Every leadership and advisor claim below was checked against primary sources. The headline: the pedigree is mostly real, but consistently framed at the top of its range, and the deepest genuine asset is academic rather than entrepreneurial.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Person / role</th><th>Verdict</th><th>What the record shows</th></tr></thead>
+          <tbody>
+            <tr><td class="nowrap"><strong>Lamar Pierce</strong><br>Chief Science Officer</td><td><span class="tag v">verified — T1</span></td><td><strong>The strongest, cleanest credential on the roster.</strong> Chaired professor at WashU’s Olin School, Associate Dean, and sitting Editor-in-Chief of <em>Organization Science</em> (term from 2023). A genuine behavioral-science anchor; zero embellishment. This is the single hardest-to-fake asset Agency150 has. <span class="tier t1">T1</span></td></tr>
+            <tr><td class="nowrap"><strong>Gordon Rudow</strong><br>CEO</td><td><span class="tag v">verified</span></td><td>Real career in leadership-development / change consulting. But “CLO” = Chief <em>Learning</em> Officer (not Legal), and “CEO of Bonfire” = an operating role at an existing comms agency, not a founder exit. A domain consultant, and <strong>non-technical</strong>. <span class="tier t3">T3</span></td></tr>
+            <tr><td class="nowrap"><strong>Craig Finster</strong><br>CFO</td><td><span class="tag v">verified*</span></td><td>True — and the context the title omits: Versus Systems (Nasdaq: VS) was a troubled micro-cap that did a 1-for-16 reverse split, and in July 2024 its <strong>entire management team, including Finster, resigned</strong> in a restructuring. A finance-operator résumé, not a venture-exit story. <span class="tier t1">T1</span></td></tr>
+            <tr><td class="nowrap"><strong>Eric Perez</strong><br>Founding Engineer</td><td><span class="tag c">partly verified</span></td><td>The site says “CTO Originate”; his own bio says “<em>Director of Engineering</em> @ Originate.” The Dollar Shave Club / JibJab roles could not be independently confirmed. A real engineer; the seniority reads softer than claimed. <span class="tier t5">T5</span></td></tr>
+            <tr><td class="nowrap"><strong>Advisors</strong></td><td><span class="tag c">mixed</span></td><td><strong>Josh Bersin</strong> — real, prominent HR analyst, but listed as an advisor on Agency150’s own site, and his public posture is “interesting startup” commentary, not a disclosed principal — treat the endorsement as not fully independent. <strong>Jenny Dearborn</strong> (ex-EVP HR, SAP) — clean. <strong>Rob Meadows</strong> — co-founded AI Foundation; its one durable success (Reality Defender) spun out and succeeded separately. <span class="tier t3">T3</span></td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout co-finding">
+          <div class="ct">● Two patterns worth holding onto</div>
+          <p><strong>Titles are rounded up by a notch</strong> across the roster — Director→CTO, Chief Delivery Officer→COO, an operating CEO role framed like a founder story. None of it is fabrication; it is optimistic framing. Take each title as “confirm one level down.” And <strong>there is no clearly-attributed, full-time technical CTO publicly identifiable</strong> — for a company whose product is sophisticated AI, who actually owns and architects Vega is the least-substantiated and most important question about this team.</p>
+        </div>
+
+        <div class="callout co-risk">
+          <div class="ct">⚑ One advisor fact worth raising directly, stated fairly</div>
+          <p>Advisor <strong>Deren Baker</strong> was the operating CEO of <strong>Jumpshot</strong> when, in January 2020, parent company Avast shut it down amid a Vice/PCMag exposé revealing it had been <strong>harvesting and selling users’ browsing history without adequate consent.</strong> <span class="tier t1">T1</span> In fairness, the wind-down was Avast’s parent CEO’s decision, not Baker’s, and running a unit that was shut down is not personal wrongdoing. But the relevance is specific: Agency150’s product is the mass collection of intimate human-interview data. A reasonable, neutral question to the founders is simply how Vega handles data ownership, consent, and governance — particularly for employee interviews in the EU (see §8).</p>
+        </div>
+
+        <h3>Traction and funding — the honest state</h3>
+        <p>This is where the early-stage reality is starkest. <strong>Funding:</strong> no evidence of any disclosed raise — no announced round, no investors, no valuation; Tracxn lists the company as “unfunded” and its Crunchbase entry is a dead page. <span class="tier t4">T4</span> If accurate, an investment here could be among the first outside money in — which cuts both ways (more upside, but no prior institutional diligence to lean on, and no market-set price). One open item we could not close: a direct SEC EDGAR Form-D check (the endpoint blocked the automated query) — worth running. <span class="tag u">open</span></p>
+        <p><strong>Traction:</strong> ~11 employees and ~146 LinkedIn followers; a staffed booth at SIOP 2026 (the I/O-psychology conference — the right room); an active blog and a webinar series. But <strong>no named customer, no logo, no case study, and no testimonial appears anywhere</strong>, despite founder language implying paying clients. <span class="tag c">claimed only</span> The single fastest way to convert this from a story into a business is two customer references the investor can call. No independent press coverage exists; the only “coverage” is from Bersin, a listed advisor.</p>
+        <div class="callout co-key">
+          <div class="ct">◆ The company, in one line</div>
+          <p>A seed-stage-or-earlier company with a senior team, a genuine science credential, a real niche, and essentially <strong>no public commercial proof.</strong> What is being underwritten here is <em>people and a thesis</em>, not traction — which makes the team verification above, and the questions only the founders can answer, the whole of the diligence.</p>
+        </div>
+      </section>
+
+      <!-- ============ MARKET ============ -->
+      <section id="mkt">
+        <div class="sec-num">The Market · 02</div>
+        <h2>Market Structure &amp; Dynamics</h2>
+        <p class="lead">The category is real, large, and recently legitimized at the boardroom level. But its structure is the heart of the bear case: the thing that makes Vega possible — cheap, capable AI — is also what makes it hard to defend, and Vega’s one piece of white space is also its most legally exposed.</p>
+
+        <h3>The three markets Vega sits across</h3>
+        <p>Vega plays at the intersection of three markets, none of which is precisely “its” market. The <strong>global insights industry</strong> is the outer boundary: ~$153B in 2024 (ESOMAR), splitting into ~$56B research services, ~$62B research software, and ~$35B reporting. <span class="tier t1">T1</span> The <strong>employee-experience management</strong> market — the lane Vega’s EX focus targets — is ~$6.4B growing to ~$11.7B by 2030 at 9.7% CAGR (Grand View). <span class="tier t2">T2</span> The third, the <strong>AI-moderated qualitative-research</strong> slice that Vega most precisely occupies, <strong>has no tier-1 standalone market figure at all</strong> — it is too new; vendor estimates run $1.3–2.8B with a 2× spread that itself signals how unsettled the number is. <span class="tier t3">T3</span> An honest deck cannot put a precise multi-billion-dollar TAM on Vega’s actual slice; anyone who does is guessing.</p>
+
+        <h3>Segment dynamics — where the money is, and where the white space is</h3>
+        <p>The most important structural fact for this investment: <strong>the AI-research funding wave has crowded <em>customer</em> research, not <em>employee</em> research.</strong> Listen Labs, Outset, GetWhy, and Strella — the funded leaders — all aim primarily at customer / UX / market research, where the buyers (product, marketing, CX teams) and the budgets are largest and the comparison to Qualtrics/Medallia is cleanest. Vega is the <strong>only</strong> AI-interview player in this set positioned employee/organizational-first (cultural diagnostics, change readiness, post-merger integration). That is a genuine white space — and for EX work, the lack of a proprietary respondent panel matters far less, because you interview the client’s own employees. This is the single strongest structural argument in Vega’s favor.</p>
+        <p>The catch, developed below and in §8: that same white space is the <strong>most legally constrained</strong> segment in the market.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Buyer segment</th><th>Growth</th><th>Crowding</th><th>Read for Vega</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Customer / UX research</strong></td><td>UX-research software ~11.6% CAGR; research-software +11.5% <span class="tier t1">T1</span></td><td><strong>Heavily crowded</strong> — Listen ($500M), Strella, Outset, Conveo, Glaut, User Intuition… (Listen’s own blog benchmarks 14 platforms)</td><td>Real demand, most contested lane; a late unfunded entrant has no edge here.</td></tr>
+            <tr><td><strong>Employee / EX research</strong> <em>(Vega’s lane)</em></td><td>EX-mgmt 9.7%; HR analytics 13.0% <span class="tier t2">T2</span></td><td><strong>Less crowded by AI-native startups</strong> — but owned at the top by Qualtrics, Viva Glint, Peakon, Culture Amp</td><td><strong>The genuine white space — and the most regulated.</strong> It’s open because the regulation makes it hard, not because no one noticed.</td></tr>
+            <tr><td>Market research (classic)</td><td>Mature, +4.8% core <span class="tier t1">T1</span></td><td>Consolidated, agency-dominated</td><td>Money rotating <em>out</em> (services→software) — tailwind direction, not greenfield.</td></tr>
+            <tr><td>M&amp;A / diligence research</td><td>No tier-1 figure</td><td>Thin AI-native presence</td><td>Niche potential wedge; unsized and unproven for Vega.</td></tr>
+          </tbody>
+        </table></div>
+        <p>The structure underneath: the $153B insights industry splits into ~$56B research services, ~$62B research <em>software</em> (the fast-growing engine), and ~$35B reporting; within the $56B services sector, turnover is rotating from full-service fieldwork toward software-services. <span class="tier t1">T1</span> The EX-management market ($6.71B in 2024 → $11.71B by 2030, software &gt;61% of it) is, per Grand View’s own competitive set, <strong>already mapped by funded mega-caps</strong> — Qualtrics, Microsoft, Workday, Oracle, Salesforce, ServiceNow, IBM, ADP, Cornerstone, SurveyMonkey. <span class="tier t2">T2</span> Vega’s “white space” is uncontested by <em>startups</em>, not by the giants.</p>
+
+        <h3>Trend forces (each sourced)</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Force</th><th>Direction for Vega</th><th>Evidence</th></tr></thead>
+          <tbody>
+            <tr><td><strong>AI cost-compression of qualitative research</strong></td><td class="nowrap">▲ tailwind</td><td>80–95% time/cost reduction vs traditional qual; “qualitative at quantitative scale” is a genuine capability unlock, not just cheaper. <span class="tier t2">T2</span></td></tr>
+            <tr><td><strong>Boardroom legitimacy</strong></td><td class="nowrap">▲ tailwind</td><td><em>Harvard Business Review</em>, “AI Moderators…”, Apr 6 2026 (Korst, Puntoni, Toubia) — the category has crossed from fringe to mainstream. <span class="tier t1">T1</span></td></tr>
+            <tr><td><strong>Rotation from human-services to software</strong></td><td class="nowrap">▲ tailwind</td><td>Insights-industry research <em>software</em> grows ~11.5%/yr vs the mature services core at ~4.8% — money is moving toward AI-native delivery. <span class="tier t1">T1</span></td></tr>
+            <tr><td><strong>LLM-wrapper commoditization</strong></td><td class="nowrap">▼ headwind</td><td>The interview engine is becoming table stakes; the model is not the moat. Foundation-model labs can absorb the thin-wrapper layer from above. <span class="tier t2">T2</span></td></tr>
+            <tr><td><strong>EU AI Act — workplace emotion-recognition ban</strong></td><td class="nowrap">▼ headwind (EX-specific)</td><td>Article 5(1)(f) bans emotion-recognition systems in the workplace — <strong>live since Feb 2, 2025.</strong> Plus German works-council (BetrVG) veto rights over employee-monitoring tools. Vega’s pitch — “decode behavioural signals” from <em>employee</em> interviews — sits squarely in this zone. <span class="tier t1">T1</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout co-flag">
+          <div class="ct">⚑ The regulatory point is sharper than it looks</div>
+          <p>Vega’s differentiator is decoding behavioural/emotional signals from interviews. When the subjects are <em>employees in the EU</em>, the EU AI Act’s workplace emotion-recognition prohibition (in force since Feb 2025) and works-council veto rights are not abstract compliance overhead — they bear on whether the core product can be sold, as-is, into the exact white-space lane (employee/EX research, EU) that is Vega’s best structural argument. This deserves a direct, specific question to the founders about how Vega is designed and positioned around Article 5.</p>
+        </div>
+
+        <h3>The incumbents — the squeeze from below</h3>
+        <p>Vega’s pitch (“surveys give scores, not meaning”) aims at the employee-experience giants, all verified at scale and all now adding conversational AI to install bases they already own: <strong>Qualtrics</strong> (taken private at $12.5B), <strong>Medallia</strong> ($6.4B), <strong>Culture Amp</strong> (~$1.5B), <strong>Microsoft Viva Glint</strong> (+ Copilot), and <strong>Workday Peakon.</strong> <span class="tier t2">T2</span> They cannot match Vega’s conversational depth today — but they own the distribution, the data, and the customer relationship, and they are moving toward exactly the gap Vega occupies.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Incumbent</th><th>Scale (verified)</th><th>Adding conversational AI?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Qualtrics</strong></td><td>$12.5B take-private (Silver Lake + CPP, Mar 2023) <span class="tier t1">T1</span></td><td>Yes — XM platform, AI text/conversational analytics</td></tr>
+            <tr><td><strong>Medallia</strong></td><td>$6.4B take-private (Thoma Bravo, 2021) — note: PE-distress reporting + ~$2.8B debt load (a cautionary CX comp) <span class="tier t1">T1</span></td><td>Yes — CX/EX listening + conversational AI</td></tr>
+            <tr><td><strong>Culture Amp</strong></td><td>~$1.5B (Series F, 2021) — EX-engagement pure-play <span class="tier t1">T1</span></td><td>Yes — AI-assisted analysis on engagement data</td></tr>
+            <tr><td><strong>MS Viva Glint</strong></td><td>Inside Microsoft 365 / Viva <span class="tier t1">T1</span></td><td><strong>Yes — Copilot analyzes employee feedback “at scale” (Oct 2025).</strong> The listening surface Vega would sell into is already shipping inside M365 to the same buyers, at zero new-vendor friction.</td></tr>
+            <tr><td><strong>Workday Peakon</strong></td><td>~$700M acquisition (2021); “Employee Voice” <span class="tier t1">T1</span></td><td>Yes — continuous-listening + AI insights</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout co-key">
+          <div class="ct">◆ The market read this lands on</div>
+          <p>This is a genuinely real, now-legitimized $150B+ category — but Vega is attacking it via a method that is itself the strategic problem. The category is <strong>commoditizing from above</strong> (foundation models absorbing the interview layer) <strong>and from below</strong> (funded incumbents already 18 months and $50–100M ahead, moving up into Vega’s lane). An unfunded, undifferentiated 2025 entrant sits on the wrong side of every moat that matters — and its one piece of white space, employee/EX research, is also the most legally constrained. The honest risk-adjusted market read is <strong>cautious</strong>, absent evidence of a defensible asset the funded comps lack. That asset, if it exists, is not in the public record — which is why the founder meeting is the whole game.</p>
+        </div>
+      </section>
+
+      <!-- ============ TAM/SAM/SOM ============ -->
+      <section id="size">
+        <div class="sec-num">The Market · 03</div>
+        <h2>TAM / SAM / SOM, Built Out</h2>
+        <p class="lead">The opportunity sized honestly — the outer boundary is tier-1-sourced; the inner two are transparent estimates with the arithmetic shown, never presented as citable market figures.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Layer</th><th>Figure</th><th>How it’s built</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <tr><td class="nowrap"><strong>TAM</strong></td><td class="nowrap">~$153B + ~$11.7B</td><td>Global insights industry $153B (ESOMAR 2025, <span class="tier t1">T1</span>) + EX-management $11.7B by 2030 (Grand View, <span class="tier t2">T2</span>). <em>Overlapping, not additive</em> — the boundary of what Vega could theoretically touch.</td><td><span class="tag v">high</span></td></tr>
+            <tr><td class="nowrap"><strong>SAM</strong></td><td class="nowrap">~$8–11B (≈$9B)</td><td><span class="tag e">estimate</span> The qualitative/conversational-research + EX-research slice an AI-native platform can serve. Bottoms-up: qualitative ≈ 6–15% of the $56B research sector ($3.4–8.4B) + ~$1–2B EX-research, overlap netted ~30%.</td><td><span class="tag c">medium-low</span></td></tr>
+            <tr><td class="nowrap"><strong>SOM</strong></td><td class="nowrap">~$1–4M revenue</td><td><span class="tag e">estimate</span> Near-term obtainable for an unfunded boutique (anchor ~$1–1.5M, 12–18 mo). Comp: Strella reached ~$1M revenue in ~9 mo and $1.6M ARR in year one (Bessemer case study, Apr 2026) — but Strella was funded with marquee logos; an unfunded entrant should expect a fraction of that velocity, offset by higher advisory contract values ($25–75K/engagement).</td><td><span class="tag r">low</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout co-finding">
+          <div class="ct">● Reading the funnel honestly</div>
+          <p>Units differ: TAM/SAM are market sizes ($B); SOM is a near-term <em>revenue</em> target ($M). The gap between a $150B+ TAM and a single-digit-million SOM is the real story — the opportunity is huge in the abstract and small in the concrete for this specific entrant near-term. The investor’s question is not “how big is the market” (big) but “what realistic share can <em>this</em> team capture, against these funded competitors, and on what timeline” — and whether the terms price that honestly. There is, again, <strong>no tier-1 TAM for Vega’s actual slice</strong>; treat any precise figure for “AI-moderated qualitative research” with suspicion.</p>
+        </div>
+      </section>
+
+      <!-- ============ COMPETITIVE LANDSCAPE ============ -->
+      <section id="comp">
+        <div class="sec-num">The Competitive Field · 04</div>
+        <h2>Competitive Landscape</h2>
+        <p class="lead">Vega’s real competition splits in two: the funded AI-research natives that have raised $18M–$96M and can name marquee customers (all customer-research-first), and the human gold standard for the advisory/assessment angle Vega leans on. Each profile below carries fully verified funding, with round amounts and cumulative totals labeled separately.</p>
+
+        <div class="profile">
+          <div class="ph"><h3>Listen Labs <span style="font-size:13px;font-weight:600;color:var(--text-muted)">— the breakout leader</span></h3><div class="tagline">AI-moderated customer research at scale · the category’s funding bellwether</div></div>
+          <div class="pbody">
+            <div class="statrow"><span class="stat"><b>Series A:</b> $27M (Apr 2025, Sequoia)</span><span class="stat"><b>Series B:</b> $69M (Jan 2026, Ribbit)</span><span class="stat"><b>Total raised:</b> ~$96M cash <span class="tier t2">T2</span></span><span class="stat"><b>Valuation:</b> ~$500M</span><span class="stat"><b>Scale:</b> 1M+ interviews</span></div>
+            <p>The clear front-runner. ~$96M cash raised (Forbes’ independent computation; “$100M” is the marketed figure — cite the conservative number), a ~$500M valuation, over a million interviews run, and named, on-record customers including <strong>Microsoft, Sweetgreen, Perplexity, and Robinhood.</strong> <span class="tier t2">T2</span> Its searchable “living archive” — a queryable repository of accumulated interviews — is a real, compounding data asset, and it claims a ~30M pre-qualified respondent panel (self-reported, unaudited). Focus is customer / UX / market research.</p>
+            <div class="vp">
+              <div class="col pro"><h5>Where it beats Vega</h5><ul><li>Scale, capital, and proof Vega has none of — funded, marquee logos, 1M+ interviews.</li><li>A genuine accumulating-data moat (the archive); a panel story.</li></ul></div>
+              <div class="col con"><h5>Where Vega is distinct</h5><ul><li>Listen is customer-research-first; it has <em>not</em> entered Vega’s employee/EX lane.</li><li>It sells software, not a behavioral-science advisory engagement.</li></ul></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile">
+          <div class="ph"><h3>Outset.ai <span style="font-size:13px;font-weight:600;color:var(--text-muted)">— the funded #2, pivoting to a platform</span></h3><div class="tagline">Parnassus Labs, dba Outset · YC-S23 · San Francisco</div></div>
+          <div class="pbody">
+            <div class="statrow"><span class="stat"><b>Seed:</b> $3.8M (Mar 2025)</span><span class="stat"><b>Series A:</b> $17M (Jun 2025, 8VC)</span><span class="stat"><b>Series B:</b> $30M (Dec 2025, Radical led; M12 participated)</span><span class="stat"><b>Total:</b> ~$51M cumulative</span></div>
+            <p>Founders Aaron Cannon (CEO) and Michael Hess (CTO, founder of the #1 app Watch Duty). At its Series B, Outset re-positioned as “the first AI-native CX management platform,” explicitly targeting Qualtrics and Medallia — a move <em>up</em> into enterprise. It runs hundreds of concurrent interviews in 40+ languages and <strong>aggregates 25+ third-party panels</strong> (Prolific, User Interviews, Respondent) rather than owning one. Named customers include Microsoft (whose M12 is now an investor), Nestlé, HubSpot, Uber, and Glassdoor. Valuation and absolute ARR are undisclosed.</p>
+            <p class="note">Round-vs-total, locked: $3.8M + $17M + $30M = <strong>~$51M total.</strong> The Series B is <strong>$30M</strong> (a prior pass conflated the $30M round with the $51M total — corrected and verified here against GlobeNewswire + Built In + Tracxn).</p>
+            <h4>Strategic read</h4>
+            <p>Outset’s Series-B repositioning — from “AI interview tool” to “AI-native CX management platform,” explicitly aimed at Qualtrics and Medallia — is the most strategically telling move in the cohort. It signals where the category is heading: <strong>away from point tools and toward platforms that take on the incumbents directly</strong> — a larger, more defensible game that requires exactly the capital and enterprise muscle Vega lacks. And the panel-aggregation choice (renting reach from 25+ providers rather than owning it) reframes Vega’s missing panel as a <em>category norm</em>, not a unique deficiency — but it also means the durable moats here are turning out to be platform breadth and enterprise distribution, the two axes on which an unfunded entrant is most disadvantaged. For Vega the signal is double-edged: Outset is not chasing employee/org research, so the lane stays open — but its trajectory shows the category rewarding scale, which is the opposite of Vega’s position.</p>
+            <div class="vp">
+              <div class="col pro"><h5>Where it beats Vega</h5><ul><li>Better funded, marquee logos, a multilingual engine at scale.</li><li>The CXM pivot puts real enterprise distribution ambition behind it.</li></ul></div>
+              <div class="col con"><h5>Where Vega is distinct</h5><ul><li>Customer-research / CX focus, not employee/org.</li><li>No owned panel either — its reach is rented from partners.</li></ul></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile">
+          <div class="ph"><h3>GetWhy <span style="font-size:13px;font-weight:600;color:var(--text-muted)">— the closest “full-service + advisory” analog</span></h3><div class="tagline">Copenhagen · rebrand of UserTribe (2011 consultancy) · AI platform since 2022</div></div>
+          <div class="pbody">
+            <div class="statrow"><span class="stat"><b>Series A:</b> $34.5M (PeakSpan, May 2024)</span><span class="stat"><b>A extension:</b> +$20M (Jul 2025)</span><span class="stat"><b>Total:</b> ~$84.5M (~$77M equity + ~$7.5M debt)</span><span class="stat"><b>Sponsor:</b> PeakSpan only</span></div>
+            <p>The competitor that most resembles Vega’s “AI platform + human research wrap + full-service” model — but in the <strong>consumer-insight / brand-marketing</strong> lane, not org/EX or executive assessment. Blue-chip, exec-corroborated logos (eBay, L’Oréal, Heineken, Maersk, Arla, Reckitt) and one genuine independent validation (a Nucleus Research eBay-ROI study). Single-sponsor cap table (PeakSpan) — an investment-relevant concentration signal.</p>
+            <div class="callout co-flag" style="margin:10px 0">
+              <div class="ct">⚑ Verify the “AI-moderated” claim — it applies to GetWhy and to Vega</div>
+              <p>GetWhy’s <em>independently verified</em> capability (2024, CMO on record) is AI-<em>analysis</em> of <em>unmoderated</em> video — no live moderator in the loop. Live adaptive AI-<em>moderation</em> is a 2026 claim, <strong>not independently benchmarked.</strong> The lesson generalizes: “AI moderates the interview” is the category’s headline claim and the <em>least</em> independently verified — including Vega’s, which is self-reported only. Underwrite the verified layer (AI-accelerated analysis + recruitment + a staffed research agency); discount unbenchmarked “moderation leadership” claims, GetWhy’s and Vega’s alike.</p>
+            </div>
+            <h4>Strategic read</h4>
+            <p>GetWhy is the single most instructive comparator for valuing Vega’s <em>model</em>, because it is the same model — AI platform plus human research wrap plus full-service delivery — only fifteen years older, scaled, and funded. It proves the model can become a real business (~$84.5M raised, blue-chip logos, an independent ROI study). But it also shows what that business actually is: a <strong>research <em>services</em> company with proprietary AI</strong>, not a venture-scale software platform — which is precisely the “base case” read for Vega in §7. Two cautions transfer directly. First, the single-sponsor cap table (PeakSpan only) is a concentration signal worth noting in any private company, and Vega — seeking its first money — should be asked the same who-else-is-in question. Second, GetWhy’s most independently-verified capability is AI-<em>analysis</em>, not AI-<em>moderation</em>; the most-marketed claim is the least-proven. Apply that lens to Vega without flinching: its moderation-at-scale claim is self-reported only, and should be underwritten as a claim, not a capability, until demonstrated live.</p>
+            <div class="vp">
+              <div class="col pro"><h5>Where it beats Vega</h5><ul><li>Decisively ahead on tech maturity, scale, capital, and named customers.</li><li>A real, staffed full-service research apparatus already operating.</li></ul></div>
+              <div class="col con"><h5>Where Vega is distinct</h5><ul><li>GetWhy is consumer/brand-insight; Vega is org/EX — different buyer.</li><li>GetWhy’s advisory is research-craft; Vega <em>claims</em> higher-altitude strategy/I-O-psych advisory (pedigree, if real, is the only edge).</li></ul></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile">
+          <div class="ph"><h3>Strella <span style="font-size:13px;font-weight:600;color:var(--text-muted)">— the close product-overlap, well-validated</span></h3><div class="tagline">New York · founded 2023 · ex-Bain + ex-DoorDash founders</div></div>
+          <div class="pbody">
+            <div class="statrow"><span class="stat"><b>Seed:</b> $4M (Oct 2024, Decibel)</span><span class="stat"><b>Series A:</b> $14M (Oct 2025, Bessemer)</span><span class="stat"><b>Total:</b> ~$18M</span><span class="stat"><b>Revenue:</b> $1.6M ARR yr-1 <span class="tier t1">T1</span></span></div>
+            <p>Founders Lydia Hylton (ex-Bain) and Priya Krishnan (ex-DoorDash COO). A fully agentic voice moderator (up to 90-minute interviews) with a “chat with your research” repository as its stated moat. The strongest <em>validation</em> profile of the cohort: 40–45 paying enterprises (Amazon, Duolingo, Chobani, Apollo GraphQL), <strong>$1.6M ARR in its first year of monetization with &gt;150% net revenue retention</strong> — published in lead investor Bessemer’s own case study (Apr 2026), so it is a citable, dated milestone (not a current run-rate). One correction: its “8M participants” is <strong>aggregated third-party access, not an owned panel</strong> — not a moat.</p>
+            <h4>Strategic read</h4>
+            <p>Strella is the clearest illustration of what “proven” looks like in this category, and therefore the sharpest mirror for Vega. Founded the same rough cohort, with comparably credentialed founders (ex-Bain, ex-DoorDash vs Vega’s ex-Oliver Wyman), it has in roughly two years produced what Vega has not produced in one: a funded balance sheet, marquee logos a buyer can call, a <em>disclosed</em> revenue figure with best-in-class net revenue retention (&gt;150%), and a working repository product. The gap is not pedigree — both teams have it — it is <strong>execution evidence.</strong> Strella also confirms the category’s honest moat picture: even the best-validated entrant relies on aggregated panels and frames its repository, not its interview engine, as the defensible asset. The read for Vega is sobering: a near-peer chose the larger customer-research market, executed against it, and has the proof to show — while Vega chose the smaller EX lane and has, so far, only the thesis. That is either Vega’s opportunity (an uncontested lane) or its warning (a harder, smaller market that the proven players rationally skipped).</p>
+            <div class="vp">
+              <div class="col pro"><h5>Where it beats Vega</h5><ul><li>Real revenue, real NRR, marquee logos, top-tier backing — everything Vega cannot yet show.</li><li>A working repository product.</li></ul></div>
+              <div class="col con"><h5>Where Vega is distinct</h5><ul><li>Customer/UX research, not employee/org — different lane.</li><li>Software-led; no behavioral-science advisory wrap.</li></ul></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile">
+          <div class="ph"><h3>ghSMART <span style="font-size:13px;font-weight:600;color:var(--text-muted)">— the human gold standard (and the moat test)</span></h3><div class="tagline">Founded 1995 · employee-owned · the leadership-assessment benchmark</div></div>
+          <div class="pbody">
+            <div class="statrow"><span class="stat"><b>Founded:</b> 1995 (Geoff Smart, Chairman)</span><span class="stat"><b>CEO:</b> Jeff McLean</span><span class="stat"><b>Scale:</b> ~30,000 assessments</span><span class="stat"><b>2025:</b> KKR minority stake (terms undisclosed)</span></div>
+            <p>Not an AI company and not a direct product competitor — but the most important comparator in this document, because Vega’s claimed differentiator is a <em>behavioral-science advisory moat</em>, and ghSMART <em>is</em> that moat at full strength. The “Who”/A-Method/Topgrading methodology, ~30,000 leadership assessments, a 14-person research apparatus (incl. named academic economists), and the CEO Genome dataset (27k C-suite, 2,000+ CEOs → HBR 2017) constitute a genuinely uncopyable, 30-year proprietary asset. In July 2025 <strong>KKR took a significant minority stake (terms undisclosed), explicitly earmarked to “further develop digital product offerings.”</strong> <span class="tier t1">T1</span></p>
+            <div class="callout co-key" style="margin:10px 0">
+              <div class="ct">◆ The decisive finding: ghSMART is already shipping Vega’s claimed edge</div>
+              <p>ghSMART is <strong>already AI-enabling its assessment business</strong> — a proprietary “Leadership Intelligence Platform” (Scorecard Builder, askSMART, digitized assessments) plus a SHAPE-AI leadership framework — now with KKR capital behind it. So the “behavioral-science advisory + AI” combination Vega claims as its wedge is being built by a 30-year incumbent with an uncopyable dataset and fresh growth capital. <strong>Vega’s human-advisory layer is its weakest place to plant a flag, not its strongest.</strong></p>
+            </div>
+
+            <h4>The methodology &amp; the dataset — why the moat is genuinely uncopyable</h4>
+            <p>ghSMART’s craft is the <strong>“Who” / A-Method</strong> (Smart &amp; Street, <em>Who: The A Method for Hiring</em>, 2008), a structured four-interview selection process built on an outcome-driven Scorecard, descended from Topgrading, and delivered as <strong>4-to-5-hour structured interviews</strong> per executive — often supplemented by interviews with the executive’s team and board. <span class="tier t1">T1</span> That depth produces the real asset: a <strong>30-year, structured, outcome-linked, longitudinal dataset.</strong> The numbers reconcile cleanly — the <strong>CEO Genome</strong> research dataset grew from 17,000 C-suite assessments (HBR 2017) to <strong>27,000 C-suite executives including 2,000+ CEOs</strong> over ~15 years, while firm-wide leadership assessments total <strong>~30,000</strong>. <span class="tier t1">T1</span> The CEO Genome project was run by a <strong>14-person research team</strong> including named academic economists (U-Chicago’s Steven Kaplan, Copenhagen’s Morten Sørensen), and produced HBR’s canonical “four behaviors” of successful CEOs. This is data on sitting C-suite executives and CEO candidates — career history linked to behavior linked to business results — that is <em>nearly impossible to assemble from scratch</em> and that no one else holds at this depth. It is the asset KKR is buying into; in a full-circle detail, KKR provided the data for Geoff Smart’s original PhD dissertation 30 years ago, which “facilitated the founding of ghSMART.” <span class="tier t1">T1</span></p>
+
+            <h4>The AI stack — the incumbent is shipping Vega’s claimed edge, with better governance</h4>
+            <p>ghSMART’s “Leadership Intelligence Platform” is explicitly built on “the largest [proprietary database] of its kind, accumulated over 30 years”: <strong>Scorecard Builder</strong> (AI trained on thousands of sanitized ghSMART scorecards), <strong>askSMART</strong> (an internal research chatbot on anonymized data), a Next Gen Leadership Survey, and digitized SmartAssessments. <span class="tier t1">T1</span> On top sits <strong>SHAPE-AI / SHAPEIndex</strong> (whitepapers 2025) — a framework to assess and develop “AI Velocity” in leaders, embedded into hiring scorecards. One detail cuts directly at Vega: ghSMART’s advisors are <strong>barred from public AI models</strong>, and askSMART runs only on anonymized internal data — a deliberate data-governance posture that stands in pointed contrast to the governance question hanging over Vega (the Jumpshot-advisor flag, §1). The incumbent is not only adding AI; it is adding AI with the data discipline Vega has not demonstrated.</p>
+
+            <h4>And it is not the only incumbent moving</h4>
+            <p>The broader advisory class is doing the same. <strong>Oliver Wyman</strong> — the alma mater Vega’s own advisors trade on — now fields a named AI practice, <strong>“Quotient — AI by Oliver Wyman,”</strong> and a Chief AI &amp; Data Officer across Oliver Wyman/Marsh, on ~$3.4B revenue. <span class="tier t2">T2</span> The strategy-consultancy class is bolting AI onto deep client relationships and balance sheets Vega cannot rival. The vise is real and two-sided: funded AI-research scale-players press from below, and elite advisory (ghSMART, Oliver Wyman) presses from above — both adding AI, both collapsing Vega’s wedge.</p>
+            <div class="vp">
+              <div class="col pro"><h5>Where it out-classes Vega</h5><ul><li>30 years, ~30k assessments, a real research bench — vs Vega’s essentially one-person-deep science anchor (Pierce) + a thin veneer.</li><li>Now AI-enabling, with KKR capital.</li></ul></div>
+              <div class="col con"><h5>The two fair mitigants for Vega</h5><ul><li>Different lane: ghSMART does individual C-suite assessment; Vega does org-wide EX/culture/PMI — so it’s “the moat is occupied,” not head-to-head.</li><li>An AI-native cost structure <em>could</em> serve a scale/mid-market segment ghSMART’s 4–5-hour-interview economics can’t — <em>if</em> Vega has real software (the least-substantiated part of its team).</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SYNTHESIS ============ -->
+      <section id="synth">
+        <div class="sec-num">The Competitive Field · 05</div>
+        <h2>Competitive Synthesis</h2>
+        <p class="lead">Put the field on one map and one matrix, and the strategic position resolves cleanly: Vega occupies a real but narrow corner, the funded leaders own the corner that scales, the ideal corner is empty, and Vega’s claimed moat is the one place it is most exposed.</p>
+
+        <h3>The positioning map</h3>
+        <figure>
+          <svg viewBox="0 0 700 360" role="img" aria-label="Four-quadrant positioning: capital and scale versus advisory and science depth">
+            <rect x="365" y="20" width="295" height="150" fill="#f2f8f3"/>
+            <line x1="70" y1="170" x2="660" y2="170" stroke="#44403c" stroke-width="2"/>
+            <line x1="365" y1="20" x2="365" y2="320" stroke="#44403c" stroke-width="2"/>
+            <text x="365" y="13" text-anchor="middle" font-size="10.5" font-weight="700" fill="#44403c" font-family="sans-serif">HIGH ADVISORY + SCIENCE DEPTH</text>
+            <text x="365" y="335" text-anchor="middle" font-size="10.5" font-weight="700" fill="#44403c" font-family="sans-serif">LOW ADVISORY DEPTH</text>
+            <text x="64" y="166" text-anchor="start" font-size="10.5" font-weight="700" fill="#44403c" font-family="sans-serif">LOW SCALE</text>
+            <text x="666" y="166" text-anchor="end" font-size="10.5" font-weight="700" fill="#44403c" font-family="sans-serif">HIGH SCALE / CAPITAL</text>
+            <text x="380" y="36" text-anchor="start" font-size="9.5" font-weight="700" fill="#86918a" font-family="sans-serif">Q1 · scale + depth (ideal)</text>
+            <text x="350" y="36" text-anchor="end" font-size="9.5" font-weight="700" fill="#b8b2ad" font-family="sans-serif">Q2 · depth, sub-scale</text>
+            <text x="350" y="312" text-anchor="end" font-size="9.5" font-weight="700" fill="#b8b2ad" font-family="sans-serif">Q3 · sub-scale</text>
+            <text x="380" y="312" text-anchor="start" font-size="9.5" font-weight="700" fill="#b8b2ad" font-family="sans-serif">Q4 · scale, thinner depth</text>
+            <circle cx="545" cy="92" r="30" fill="none" stroke="#15803d" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <text x="545" y="89" text-anchor="middle" font-size="9" font-weight="700" fill="#15803d" font-family="sans-serif">no one</text>
+            <text x="545" y="101" text-anchor="middle" font-size="9" font-weight="700" fill="#15803d" font-family="sans-serif">here yet</text>
+            <circle cx="300" cy="70" r="26" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="300" y="68" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400e" font-family="sans-serif">ghSMART</text>
+            <text x="300" y="80" text-anchor="middle" font-size="8" fill="#92400e" font-family="sans-serif">+ now AI-enabling →</text>
+            <circle cx="595" cy="258" r="30" fill="#ede9fe" stroke="#a855f7" stroke-width="1.5"/>
+            <text x="595" y="256" text-anchor="middle" font-size="11" font-weight="700" fill="#4c1d95" font-family="sans-serif">Qualtrics</text>
+            <text x="595" y="270" text-anchor="middle" font-size="9" fill="#6b21a8" font-family="sans-serif">Medallia</text>
+            <circle cx="500" cy="210" r="30" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="500" y="207" text-anchor="middle" font-size="10" font-weight="700" fill="#1e3a5f" font-family="sans-serif">Listen · Outset</text>
+            <text x="500" y="221" text-anchor="middle" font-size="9" fill="#1e40af" font-family="sans-serif">GetWhy · Strella</text>
+            <circle cx="188" cy="108" r="30" fill="#dcfce7" stroke="#15803d" stroke-width="2.5"/>
+            <text x="188" y="106" text-anchor="middle" font-size="12" font-weight="800" fill="#14532d" font-family="sans-serif">Vega</text>
+            <text x="188" y="121" text-anchor="middle" font-size="8.5" fill="#15803d" font-family="sans-serif">unfunded</text>
+          </svg>
+          <figcaption>Vega sits in Q2 — real advisory/science depth, but sub-scale and unfunded — sharing that corner with ghSMART (which has vastly more of it). The funded AI-research natives cluster in Q4 (scale, thinner advisory depth). Q1, the ideal of both, is empty. The arrow matters: ghSMART is now moving <em>right</em> (adding AI/scale with KKR capital) toward the ideal — from a position of far deeper advisory depth than Vega.</figcaption>
+        </figure>
+
+        <h3>The feature matrix, at depth</h3>
+        <div class="legend"><span class="li"><span class="fm-y">✓✓</span> signature</span><span class="li"><span class="fm-y">✓</span> verified</span><span class="li"><span class="fm-p">~</span> partial/claimed</span><span class="li"><span class="fm-n">✗</span> absent</span><span class="li"><em>claimed</em> = self-reported</span></div>
+        <div class="tw"><table>
+          <thead><tr><th>Capability</th><th>Vega</th><th>Listen</th><th>Outset</th><th>GetWhy</th><th>Strella</th><th>ghSMART</th></tr></thead>
+          <tbody>
+            <tr><td>AI interview @ scale</td><td><span class="fm-p">~</span> claimed</td><td><span class="fm-y">✓✓</span></td><td><span class="fm-y">✓✓</span></td><td><span class="fm-p">~</span> analysis✓/mod-claim</td><td><span class="fm-y">✓✓</span></td><td><span class="fm-n">✗</span> human</td></tr>
+            <tr><td>Advisory / science layer</td><td><span class="fm-y">✓✓</span> claimed</td><td><span class="fm-p">~</span></td><td><span class="fm-p">~</span></td><td><span class="fm-y">✓</span> research-craft</td><td><span class="fm-p">~</span></td><td><span class="fm-y">✓✓</span> gold std</td></tr>
+            <tr><td>Proprietary panel</td><td><span class="fm-n">✗</span></td><td><span class="fm-p">~</span> 30M claim</td><td><span class="fm-n">✗</span> aggregated</td><td><span class="fm-p">~</span> orchestr.</td><td><span class="fm-n">✗</span> aggregated</td><td><span class="fm-y">✓</span> exec network</td></tr>
+            <tr><td>Data/research repository</td><td><span class="fm-p">~</span> claimed</td><td><span class="fm-y">✓✓</span> archive</td><td><span class="fm-p">~</span></td><td><span class="fm-y">✓</span> claimed</td><td><span class="fm-y">✓</span></td><td><span class="fm-y">✓✓</span> 30k dataset</td></tr>
+            <tr><td>Primary focus</td><td><strong>EX / org</strong></td><td>Customer</td><td>Customer/CX</td><td>Consumer</td><td>Customer</td><td>Exec assess.</td></tr>
+            <tr><td>Funding (total)</td><td><span class="fm-n">✗</span> unfunded</td><td>~$96M</td><td>~$51M</td><td>~$84.5M</td><td>~$18M</td><td>KKR-backed</td></tr>
+            <tr><td>Named customers</td><td><span class="fm-n">✗</span> none</td><td><span class="fm-y">✓✓</span></td><td><span class="fm-y">✓✓</span></td><td><span class="fm-y">✓✓</span></td><td><span class="fm-y">✓✓</span></td><td><span class="fm-p">~</span> anon.</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout co-key">
+          <div class="ct">◆ Where Vega actually sits — the honest synthesis</div>
+          <p><strong>Differentiated (real):</strong> Vega is the only player aimed at employee/org research; in that lane the missing panel matters less, and the focus is genuine white space. <strong>At parity / table stakes:</strong> the AI-interview engine — and Vega’s is the <em>least</em> verified of any here. <strong>Behind (in every evidence-bearing column):</strong> funding, named customers, repository, independent validation — Vega is the only “✗ / none / claimed” row across the board. And the one column it claims as ✓✓, the advisory layer, is the column where <strong>ghSMART out-classes it decisively and is now adding the AI piece.</strong> The strategic truth: Vega’s defensible position is narrow (EX-vertical focus + advisor pedigree), and its claimed moat (advisory) is its most contested flank, not its strongest.</p>
+        </div>
+      </section>
+
+      <!-- ============ SWOT ============ -->
+      <section id="swot">
+        <div class="sec-num">The Investment Logic · 06</div>
+        <h2>Vega — Full SWOT</h2>
+        <p class="lead">The deep version: every item traces to the verified analysis above, and the framing is diagnostic, not promotional. This sorts the evidence; it does not render a verdict.</p>
+        <div class="swot">
+          <div class="q s"><h4>▲ Strengths</h4><ul>
+            <li><strong>A genuine, hard-to-fake science credential</strong> — CSO Lamar Pierce, sitting Editor-in-Chief of <em>Organization Science</em>. The single strongest asset; T1-verifiable. <span class="tier t1">T1</span></li>
+            <li><strong>The only EX/org-first position</strong> in a field of customer-research players — real white space (§2, §5).</li>
+            <li>For EX work, the missing respondent panel matters far less (you interview the client’s own people).</li>
+            <li>Experienced operators (ex-Oliver Wyman) and a brand-name HR advisory bench.</li>
+            <li>If genuinely pre-seed, early-entry optionality before any institutional markup.</li>
+          </ul></div>
+          <div class="q w"><h4>▼ Weaknesses</h4><ul>
+            <li><strong>The least-proven entrant in the field</strong> — unfunded, zero named customers, zero independent validation, while rivals name Microsoft/Amazon/Nestlé and have raised $18–96M (§4).</li>
+            <li><strong>No full-time technical CTO publicly identifiable</strong> — the “real software” the thesis depends on is the least-substantiated part of the team (§1).</li>
+            <li>The advisory “moat” is essentially one person deep (Pierce) + a thin veneer — and is out-classed by ghSMART (§4, §5).</li>
+            <li>Services model caps growth velocity (people-bound, not seats) (§1).</li>
+            <li>Titles inflated a notch across the roster; the deal-framing differs from the public product (§1).</li>
+          </ul></div>
+          <div class="q o"><h4>◆ Opportunities</h4><ul>
+            <li>The ideal “scale + depth” quadrant is empty; the EX lane is genuinely under-served by funded players (§5).</li>
+            <li>A real, HBR-legitimized wave and money rotating human-services → AI-native software (§2).</li>
+            <li>An AI-native cost structure could serve a scale/mid-market EX segment that ghSMART’s 4–5-hour-interview economics can’t — <em>if</em> real software exists.</li>
+            <li>M&amp;A-integration and AI-readiness diagnostics as concrete high-touch wedge engagements.</li>
+          </ul></div>
+          <div class="q t"><h4>⚑ Threats</h4><ul>
+            <li><strong>LLM-wrapper commoditization</strong> — the interview engine is table stakes; foundation models absorb from above (§2).</li>
+            <li><strong>The squeeze:</strong> funded AI-research leaders moving up-market <em>and</em> Qualtrics/Culture Amp adding conversational AI from below (§2, §4).</li>
+            <li><strong>ghSMART is already AI-enabling its advisory business with KKR capital</strong> — invading Vega’s claimed moat from a position of vastly deeper assets (§4).</li>
+            <li><strong>EU AI Act Article 5(1)(f)</strong> bans workplace emotion-recognition (live Feb 2025) + works-council vetoes — direct friction on Vega’s EX lane in the EU (§2, §8).</li>
+            <li>A data-privacy advisor flag (Jumpshot) given what Vega collects (§1).</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- ============ INVESTMENT LOGIC ============ -->
+      <section id="thesis">
+        <div class="sec-num">The Investment Logic · 07</div>
+        <h2>Investment Logic &amp; Scenarios</h2>
+        <p class="lead">The case worked all the way through — bull, base, and bear — with what each scenario <em>requires</em> stated explicitly. This is the analytical core. It deliberately stops short of a buy/pass call, because that call depends on terms and on answers only the founders hold.</p>
+
+        <h3>The bull thesis, stated at full strength</h3>
+        <p>The strongest honest version: AI-moderated research is a real, now-legitimized wave, and Vega is early to the one lane the funded players have left open — <strong>employee/organizational research.</strong> It pairs that focus with the field’s most genuine science credential (Pierce). If Vega builds real software, lands an anchor enterprise or two, and accumulates a proprietary EX-interview dataset, it could become the category-definer for AI-native employee research the way Listen Labs became it for customer research — a category no incumbent currently owns. Senior operators + a real thesis + a hot category + first-money-in pricing is the shape of bet that occasionally returns many-fold. <strong>But every clause in that sentence is a conditional, and none is yet evidenced.</strong></p>
+
+        <h3>The bear thesis, stated at full strength</h3>
+        <p>The heavier version on today’s evidence: Vega is the least-proven entrant in a field commoditizing from above (foundation models) and below (funded incumbents and Qualtrics/Culture Amp), with no funding, no customers, no owned panel or repository, no identifiable technical leadership, and a “moat” — behavioral-science advisory — that ghSMART out-classes by thirty years and is now AI-enabling with KKR money. Its one piece of white space, EU employee research, is also the most legally constrained segment in the market (Article 5(1)(f)). On this read, Vega is a high-touch services business with a thin AI veneer, vulnerable on every axis that determines durable value — “a feature in search of a moat.”</p>
+
+        <h3>Three scenarios</h3>
+        <div class="scen">
+          <div class="s bull"><h5>▲ Bull</h5><p><strong>Vega becomes the “Listen Labs of employee research.”</strong> Owns real tech + a proprietary EX dataset; an anchor enterprise validates it; the EX lane proves defensible because incumbents are slow and the funded players stay in customer research.</p><p><em>Requires:</em> owned IP, ≥1–2 referenceable customers, an accumulating data asset, a workable EU-compliance design, and capital to survive the enterprise sales cycle.</p></div>
+          <div class="s base"><h5>● Base</h5><p><strong>A credible boutique advisory/diagnostics firm.</strong> Wins specific high-touch EX / M&amp;A-integration / AI-readiness engagements on relationships + the Pierce credential; profitable, single-digit-millions revenue; a real business but not venture-scale.</p><p><em>Implies:</em> a modest return for early money <em>if</em> priced as a services business, not as a platform — the valuation-discipline question.</p></div>
+          <div class="s bear"><h5>▼ Bear</h5><p><strong>A GPT-wrapper that never escapes pre-revenue.</strong> The advisory edge evaporates as ghSMART and incumbents add AI; the EX lane proves legally hard in the EU; no owned tech or data accumulates; funded competitors define the category. Capital impaired.</p><p><em>Triggered by:</em> no real IP, no customers, evasive moat/data answers, a connector that doesn’t check out.</p></div>
+        </div>
+
+        <div class="callout co-key">
+          <div class="ct">◆ What would have to be true for the bull case</div>
+          <p>Four things, none in the public record, all answerable in one founder meeting: <strong>(1)</strong> the founders own real, defensible technology — not a thin model wrapper; <strong>(2)</strong> at least one or two real, referenceable paying customers already exist; <strong>(3)</strong> there is a credible path to a moat the funded competitors lack — proprietary EX data, a wedge vertical, a compliance-by-design EU edge; and <strong>(4)</strong> the terms price early-stage, pre-traction risk honestly, and the connector’s track record checks out. If those four are true, the bull case is live and this is interesting. If they are not, the base case is the ceiling and the bear case is the risk. <strong>That is the decision — and it is a decision about evidence the investor can still go get, not about anything in this document.</strong></p>
+        </div>
+      </section>
+
+      <!-- ============ RISK ANALYSIS ============ -->
+      <section id="risk">
+        <div class="sec-num">The Investment Logic · 08</div>
+        <h2>Risk Analysis</h2>
+        <p class="lead">The risks ranked and developed — specific to this company and this evidence, not boilerplate. This is the protective read, and on today’s evidence it is the heavier side of the ledger.</p>
+
+        <h4>1. No durable moat / commoditization — the existential risk</h4>
+        <p>The interview engine is becoming table stakes (every funded rival has it; Vega’s is the least-verified). The model is not the moat — data, distribution, and workflow lock-in are, and Vega has none of them. The funded players are racing to build the only real moats (Listen’s living archive, proprietary panels, enterprise integrations); Vega is late and capital-starved into that race. The threat comes from both directions: foundation-model labs absorbing the thin-wrapper layer from above, and Qualtrics/Medallia/Culture Amp bolting conversational AI onto install bases from below.</p>
+
+        <h4>2. The advisory “moat” is the most contested flank — not the strongest</h4>
+        <p>This is the sharpest finding of the deep competitive work. Vega plants its flag on behavioral-science advisory. But ghSMART — 30 years, ~30,000 assessments, an uncopyable dataset — <em>is</em> that moat at full strength, and as of July 2025 is AI-enabling it with KKR capital. GetWhy also fields a staffed research/advisory apparatus at far greater scale. Vega’s advisory layer is essentially one credentialed academic (Pierce, genuinely excellent) plus a thin veneer. The place Vega claims to be strongest is the place a 30-year incumbent is best positioned to take.</p>
+
+        <h4>3. Regulatory exposure on the one white-space lane (EU, EX)</h4>
+        <p>Vega’s differentiator — decoding behavioural/emotional signals from interviews — collides with the <strong>EU AI Act’s Article 5(1)(f) ban on workplace emotion-recognition</strong> (in force since Feb 2, 2025) and with works-council veto rights when the subjects are EU employees. <span class="tier t1">T1</span> The lane that is Vega’s best structural argument (employee research) is simultaneously its most legally constrained — a tension that needs a specific, designed answer, not a hand-wave.</p>
+
+        <h4>4. Stage risk: unfunded, pre-traction, against funded competitors</h4>
+        <p>Selling to leaders means long enterprise cycles, procurement, security review, and data-processing agreements. Rivals cross that with $18–96M and marquee logos behind them; an unfunded company must survive the 6–12-month cycle <em>and</em> win the “will you exist in two years?” vendor-risk conversation against a $500M-valued competitor. No prior institutional raise also means no one else has done this diligence — the investor is first, without a lead to lean on.</p>
+
+        <h4>5. Team &amp; governance risks</h4>
+        <p>No identifiable full-time technical CTO for an AI product; titles inflated a notch across the roster; the deal-framing (executive assessment) differs from the public product (org research); the “multiple-exits investor” connector doesn’t map to the public team; and a data-privacy-scandal advisor (Baker/Jumpshot) sits on a roster for a company built on collecting intimate data. Individually minor; together they argue for verification before commitment.</p>
+
+        <div class="callout co-risk">
+          <div class="ct">⚑ The risk read, honestly</div>
+          <p>On the public evidence, the risk-adjusted read is <strong>cautious-to-negative</strong> — not because the idea is bad, but because Vega is on the wrong side of every moat that matters and its claimed edge is its most contested one. This read is <em>reversible</em> by facts the founders may hold (real IP, real customers, a real data strategy, a real EU-compliance design) and that this analysis cannot see. The weight of the risk is precisely why those founder answers carry so much — they are not detail, they are the decision.</p>
+        </div>
+      </section>
+
+      <!-- ============ UNLOCK ============ -->
+      <section id="unlock">
+        <div class="sec-num">Appendix · 09</div>
+        <h2>What Jimmy’s Input Would Still Unlock</h2>
+        <p class="lead">This is a finished analytical artifact, built from the public record. But the public record has known edges, and a single founder conversation closes most of them. Noted lightly — these are where the conclusion is genuinely still open.</p>
+        <ul>
+          <li><strong>The moat &amp; the technology.</strong> Whether Vega owns defensible IP or is a wrapper, and who builds it full-time. Moves §5, §7, §8 — potentially the whole read.</li>
+          <li><strong>Real customers &amp; revenue.</strong> Named references and any signed ARR. Converts the “least-proven” weakness into either a strength or a confirmed concern.</li>
+          <li><strong>The data strategy.</strong> Whether a proprietary EX-interview dataset is accumulating (the one moat the EX focus could uniquely build) — and the EU Article-5 compliance design.</li>
+          <li><strong>The deal &amp; the connector.</strong> Terms, instrument, valuation, who else is in; and who actually introduced this and their real track record.</li>
+          <li><strong>The product question.</strong> Whether Vega is, or intends to be, anything like the executive-assessment tool the deal was framed as.</li>
+        </ul>
+        <p class="note">When those answers arrive, this document is built to move with them — the scenarios in §7 and the risks in §8 are written so the read can shift in either direction on facts. That is the honest posture: deep analysis of what is knowable, and clarity about what isn’t yet.</p>
+      </section>
+
+      <!-- ============ SOURCES ============ -->
+      <section id="src">
+        <div class="sec-num">Appendix · 10</div>
+        <h2>Sources &amp; Method</h2>
+        <p class="lead">Every load-bearing number in this document was verified across two independent engines, with round amounts and cumulative totals labeled separately, and estimates labeled as estimates.</p>
+        <h3>Method</h3>
+        <p>Six parallel deep-research passes (one per competitor + market dynamics), each using a dual-engine discipline — professional web-data tools first, then independent search to corroborate — feeding verified profiles that this analysis is built on. Every figure carries a credibility tier (T1 primary/official → T5 self-reported). Estimates (SAM, SOM) show their arithmetic and are labeled estimates; where no reliable figure exists (notably a tier-1 TAM for AI-moderated qualitative research), the document says so rather than inventing one.</p>
+        <h3>Key verified anchors</h3>
+        <ul>
+          <li><strong>Company &amp; people:</strong> agency150.com; LinkedIn; INFORMS &amp; WashU/Olin (Pierce); SEC EDGAR (Finster/Versus Systems); SparkToro/Vice/TechCrunch (Baker/Jumpshot). <span class="tier t1">T1</span></li>
+          <li><strong>Competitor funding (round-vs-total verified):</strong> Forbes/PR Newswire (Listen ~$96M); GlobeNewswire/Built In/Tracxn (Outset Seed $3.8M + A $17M + B $30M = ~$51M); Bessemer/VentureBeat (Strella $4M+$14M=$18M, $1.6M ARR yr-1); TechCrunch/PeakSpan (GetWhy ~$84.5M, $77M equity + $7.5M debt); KKR PR (ghSMART minority stake, ~30k assessments). <span class="tier t1">T1</span></li>
+          <li><strong>Market:</strong> ESOMAR 2025 ($153B); Grand View (EX-management $11.7B by 2030); HBR Apr 6 2026 (Korst/Puntoni/Toubia); EU AI Act Article 5(1)(f). <span class="tier t1">T1</span></li>
+          <li><strong>Incumbents:</strong> Qualtrics $12.5B; Medallia $6.4B; Culture Amp ~$1.5B; Viva Glint; Workday Peakon. <span class="tier t2">T2</span></li>
+        </ul>
+        <div class="callout co-finding">
+          <div class="ct">● Corrections this deeper pass locked in</div>
+          <p><strong>Outset:</strong> Series B is $30M (Radical-led; M12 participated); ~$51M is the cumulative total — not the round. <strong>Strella:</strong> $1.6M ARR (first year) is now citable, corroborated by Bessemer’s own case study; its “8M panel” is aggregated, not owned. <strong>GetWhy:</strong> ~$84.5M total (the debt sits inside the equity figures — not additive); its verified capability is AI-analysis of unmoderated video, with live moderation claimed-not-benchmarked. <strong>ghSMART:</strong> CEO is Jeff McLean (Geoff Smart is Chairman); already AI-enabling with KKR capital.</p>
+        </div>
+        <p class="note">Prepared June 20, 2026. Companion to the engagement dossier (the consumable instrument for the meeting); this is the heavyweight analysis behind it. A confidential decision aid — not investment advice, not for distribution. Volatile figures (funding, valuations) are worth a re-check at decision time.</p>
+      </section>
+
+
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var sb=document.getElementById('sidebar'),sc=document.getElementById('scrim'),mb=document.getElementById('menuBtn');
+  mb.addEventListener('click',function(){sb.classList.add('open');sc.classList.add('open');});
+  sc.addEventListener('click',function(){sb.classList.remove('open');sc.classList.remove('open');});
+  var links=[].slice.call(document.querySelectorAll('#toc a')),by={};
+  links.forEach(function(a){by[a.getAttribute('href').slice(1)]=a;});
+  var cur=null;
+  var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var l=by[e.target.id];if(l&&l!==cur){if(cur)cur.classList.remove('active');l.classList.add('active');cur=l;var r=l.getBoundingClientRect();if(r.top<70||r.bottom>window.innerHeight-30)l.scrollIntoView({block:'center'});}}});},{rootMargin:'-10% 0px -80% 0px',threshold:0});
+  [].slice.call(document.querySelectorAll('section')).forEach(function(s){obs.observe(s);});
+  links.forEach(function(a){a.addEventListener('click',function(){if(window.innerWidth<=980){sb.classList.remove('open');sc.classList.remove('open');}});});
+})();
+</script>
+</body>
+</html>

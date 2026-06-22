@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Agency150 — The Flight Recorder, Annotated</title>
+<style>
+  @page{ size:letter; margin:0.45in; }
+  :root{--bg:#f1f0ee;--surface:#fff;--ink:#1c1917;--soft:#44403c;--muted:#78716c;--line:#ececea;--ls:#d6d3d1;
+    --navy:#1f3a5f;--gold:#b08423;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:14px}
+  .pg{max-width:880px;margin:22px auto;background:var(--surface);box-shadow:0 2px 22px rgba(0,0,0,.08);padding:38px 40px 50px}
+  @media print{body{background:#fff}.pg{margin:0;box-shadow:none;max-width:100%;padding:0}}
+  .kick{font-size:11px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;color:var(--gold)}
+  h1{font-size:28px;font-weight:760;letter-spacing:-.5px;margin:6px 0 8px;line-height:1.1}
+  .sub{font-size:15px;color:var(--soft);max-width:660px}
+  .rule{height:2px;background:linear-gradient(90deg,var(--navy),var(--gold) 70%,transparent);border-radius:2px;margin:18px 0 14px}
+  .intro{font-size:14.5px;color:var(--soft);max-width:680px;margin-bottom:4px}
+  .intro b{color:var(--ink)}
+  .hint{font-size:12.5px;color:var(--muted);font-style:italic;margin:8px 0 2px}
+  .phase{font-size:12.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--navy);margin:26px 0 6px;padding-bottom:5px;border-bottom:2px solid var(--line)}
+  .row{display:grid;grid-template-columns:54px 86px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--line);align-items:start}
+  .row:first-of-type{border-top:none}
+  .row.gate{background:linear-gradient(90deg,#fef4f2,transparent);border-radius:0 8px 8px 0}
+  .row.star{background:linear-gradient(90deg,#fdfaf2,transparent);border-radius:0 8px 8px 0}
+  .tm{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);padding-top:2px}
+  .tag{font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 0;text-align:center;border-radius:5px;height:fit-content}
+  .t-log{background:#eceae7;color:#57534e} .t-judgment{background:#fdf3da;color:#92660f}
+  .t-skill{background:#e2effb;color:#1d4e7e} .t-memory{background:#eee6fa;color:#6b3fae}
+  .t-plan{background:#dcf3ee;color:#1f7a68} .t-gate{background:#fde2dd;color:#b3361f}
+  .t-tool{background:#e2f3e3;color:#1f7a3f} .t-research{background:#e6ebfb;color:#3a4db0}
+  .t-agent{background:#f0e7fb;color:#7a3fb0} .t-review{background:#fdeede;color:#b4641a}
+  .t-note{background:#eceae7;color:#57534e} .t-lift{background:#f3ebdd;color:#8a6a2a}
+  .body .log{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink);line-height:1.45}
+  .body .log .star-i{color:var(--gold);font-weight:800}
+  .body .note{font-size:13px;color:var(--soft);margin-top:3px}
+  .body .note::before{content:"↳ ";color:var(--ls);font-weight:700}
+  /* glossary terms */
+  .term{color:#2d5180;border-bottom:1px dashed rgba(176,132,35,.65);border-radius:2px;padding:0 1.5px;cursor:help;transition:background .12s ease,border-color .12s ease}
+  .term:hover{background:rgba(176,132,35,.15);border-bottom-color:#b08423}
+  @media (hover:none){.term{cursor:pointer;background:rgba(176,132,35,.07)}}
+  .tip{position:absolute;z-index:60;max-width:290px;background:#1f2937;color:#f3f4f6;font-size:12.5px;line-height:1.45;padding:9px 12px;border-radius:9px;box-shadow:0 6px 22px rgba(0,0,0,.22);pointer-events:none}
+  .tip .tiptype{display:block;font-size:9px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:#e0b34d;margin-bottom:3px}
+  @media print{.tip{display:none !important}.term{border-bottom:none}}
+  /* bottom glossary */
+  .gtitle{font-size:20px;font-weight:740;color:var(--navy);margin:36px 0 4px;letter-spacing:-.3px}
+  .gsub{font-size:13px;color:var(--muted);margin-bottom:8px}
+  .gphase{font-size:11.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--navy);margin:20px 0 7px;padding-bottom:4px;border-bottom:2px solid var(--line)}
+  .gitem{padding:8px 0;border-top:1px solid var(--line)}
+  .gitem:first-of-type{border-top:none}
+  .gname{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--ink)}
+  .gtype{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-left:8px}
+  .gdef{font-size:13px;color:var(--soft);margin-top:3px}
+  .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:9px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+  @media (max-width:560px){ .row{grid-template-columns:1fr;gap:3px} .tm,.tag{display:inline-block} .tag{margin-left:8px} }
+</style>
+</head>
+<body>
+<div class="pg">
+  <div class="kick">Agency150 · the flight recorder, annotated</div>
+  <h1>Every move it made — the actual log</h1>
+  <p class="sub">This isn’t a summary. It’s the real log the system stamped while it worked — every line, in order, exactly as it happened — with a plain note on each so you can follow along.</p>
+  <div class="rule"></div>
+  <p class="intro">It started with a couple of casual sentences from Jimmy about a company called <b>Agency150</b> and a meeting where he might invest his own money. From that, the system built a full investment analysis — and recorded each step it took, live, into this log. The gold lines are where it caught something or made a real call. The red lines are its checkpoints.</p>
+  <p class="hint">Tip: the <span class="term" data-k="adversarial-evaluator">underlined terms</span> are EngineOS’s own machinery — hover one (or tap, on a phone) for a quick definition. The full glossary is at the bottom.</p>
+
+  <div id="log"></div>
+  <div id="glossary"></div>
+
+  <div class="foot"><span>Agency150 · built with EngineOS · the raw flight recorder, annotated line-by-line</span><span>Confidential · June 2026</span></div>
+</div>
+
+<script>
+// [time, TAG, verbatim-ish log text, plain-English note, flag?]  flag: 'gate' | 'star' | null
+// PHASE marker: ["PHASE", "title"]
+var L = [
+ ["PHASE","Getting set up"],
+ ["17:20","LOG","flight recorder initialized","Before doing anything, it opened this log — so every step after would be on the record.","star"],
+ ["17:20","JUDGMENT","created the log before any other action so all of it is stamped","A deliberate choice: start the record first, so nothing it does goes untracked."],
+ ["17:21","SKILL","session-orchestrator (session start)","Ran its startup routine — read its own files to get oriented before touching the task."],
+ ["17:21","MEMORY","read CONTEXT + engine registry → Jimmy is a known project; company-briefing is the right archetype; prior Trinity briefing shipped","Pulled up what it already knew: who Jimmy is, and that it had done a briefing like this before."],
+ ["17:21","JUDGMENT","classify as a company-briefing for an end-user walking into a decision (not an SME dossier)","Decided exactly what kind of deliverable this is — which changes how it’s built."],
+ ["17:21","MEMORY","reading prior-session instrumentation: a sealed prediction + a readiness audit","Found notes from an earlier session, including a prediction it had sealed about itself."],
+ ["17:22","MEMORY","read the sealed prediction → 9 ways a rushed version might cut corners; using it as a checklist","Used its own earlier prediction as a self-honesty checklist — not as theater."],
+ ["17:22","JUDGMENT","deliberately close the predicted gaps: recall real exemplars, fire the right skill by name, search the pro tool first, pre-check tools, validate the render, use an independent reviewer","Committed, up front, to not taking the nine shortcuts it predicted a lazy run would take."],
+
+ ["PHASE","The plan, and the one hard rule"],
+ ["17:22","SKILL","phase-controller (classify + run plan + criteria + Gate 0)","Opened a formal plan for the job before building anything."],
+ ["17:23","PLAN","wrote the run plan with 8 hardened success criteria (status: executing)","Wrote 8 specific, gradeable success criteria it would be held to — to disk."],
+ ["17:23","GATE","Gate 0 satisfied; the hard content gate = entity disambiguation; Gate Final = back to Sean","Set the rules: one hard gate it must pass (prove the right company) and a final stop back to a human.","gate"],
+ ["17:24","SKILL","recall (prior briefings: Trinity / Fresha / Veeva)","Looked up its own past work to match and beat what worked before."],
+ ["17:26","TOOL","Bright Data search ×3 — SUCCESS","Searched with the professional web tool — first, on purpose."],
+ ["17:26","TOOL","WebSearch ×1 — SUCCESS (corroborator)","Cross-checked with a second, independent search engine."],
+ ["17:26","RESEARCH","entity-disambiguation pass (both engines: pro tool first, then corroborate)","Ran the 'is this the right company?' check using two independent sources."],
+ ["17:26","GATE","HARD GATE PASS w/ flag: it’s agency150.com — product 'Vega', founded 2025, unfunded. FLAG: public use-case is employee/customer research, NOT the exec-hiring tool Jimmy was told","Confirmed the company (its product is 'Vega') — and caught the twist: it isn’t what it was pitched as. It flagged that instead of building on a wrong premise.","gate"],
+ ["17:26","JUDGMENT","proceed (entity confirmed); treat the 'told vs. reality' gap as a key finding, not a reason to stop","Decided the mismatch was the most important thing Jimmy needs to know — the spine of the whole analysis."],
+
+ ["PHASE","Capturing the company, then fanning out"],
+ ["17:30","TOOL","Bright Data scrape of agency150.com — SUCCESS (whole site in one pull)","Pulled the company’s own website to see exactly how it describes itself."],
+ ["17:30","RESEARCH","company core captured — all tagged as COMPANY-CLAIM pending verification","Wrote down what the company claims — explicitly marked 'claim,' not yet 'fact.'"],
+ ["17:30","JUDGMENT","analytical spine = what Jimmy was told vs. what the company publicly is — different markets, different risks","Locked the analysis around the gap: two different businesses, two different risk profiles."],
+ ["17:30","JUDGMENT","dispatch 4 parallel research agents (people, competitors, market, traction); do precise claim-tagging in the foreground","Decided to split the research four ways and run it all at once."],
+ ["17:33","AGENT","dispatched 4 background research agents — people, competitors, market, traction — all two-engine, claims-vs-verified","Sent out four researchers simultaneously, each on its own angle, each using two sources.","star"],
+ ["17:33","SKILL","company-briefing (load the orchestrator: playbook + templates)","Pulled up its purpose-built briefing playbook — the right tool, not improvising."],
+ ["17:33","JUDGMENT","work the build-prep in the foreground while agents run (non-overlapping)","While the four researchers worked, it prepped the document in parallel — no idle waiting."],
+ ["17:36","TOOL","read the HTML scaffold + style guide","Loaded its house design system so the output would look consistent and professional."],
+ ["17:36","JUDGMENT","light-theme only (style guide overrides the older scaffold) — also avoids a render-check snag","Resolved a conflict between two of its own rules, and picked the one that fits an exec audience."],
+ ["17:36","JUDGMENT","no outside libraries — inline everything so the file opens offline on Jimmy’s machine","Chose to make the file fully self-contained, so it works with no internet and nothing to install."],
+ ["17:37","PLAN","wrote the design doc: 14-section architecture, decision-support spine","Planned the document’s structure on paper before writing a word of it."],
+
+ ["PHASE","The researchers report back"],
+ ["17:48","AGENT","market agent DONE — market size, risks, funding comps; risk-adjusted negative","First researcher back: sized the market and flagged the risks."],
+ ["17:48","AGENT","people agent DONE — pedigree real but top-of-range; a confirmed red flag (Baker/Jumpshot); no 'multiple exits' on the roster","Second researcher: checked the people, confirmed credentials, and found a red flag — and that a claim didn’t hold up."],
+ ["17:48","AGENT","traction agent DONE — verdict: NOT exec-hiring (exhaustively); unfunded; thin traction, no named customers","Third researcher: independently confirmed the twist, and found little real traction."],
+ ["17:48","AGENT","competitors agent DONE — the funded field is crowded (Listen/Outset/GetWhy/Strella); Vega is boutique, not venture-SaaS","Fourth researcher: mapped the competition and placed Vega in it honestly."],
+ ["17:48","TOOL","all 4 agents used both engines successfully (two-engine discipline held end-to-end)","Confirmed every researcher actually used two independent sources — not just one."],
+ ["17:48","PLAN","verification: all 4 promised research files exist on disk + in scope","Checked that the agents actually produced what they claimed — not just said they did."],
+
+ ["PHASE","Checking its own work"],
+ ["17:48","SKILL","sanity-check (a scan against known failure modes)","Ran a self-audit against a list of ways it’s known to go wrong."],
+ ["17:52","REVIEW","flagged #8 (Agent Hallucinated Success): a research claim is load-bearing for Jimmy’s money → verify before trusting","Caught itself: one finding mattered too much to take on faith. It refused to trust it yet.","star"],
+ ["17:52","TOOL","WebSearch ×3 independent verification — SUCCESS","Re-checked the doubted claims with fresh, independent searches."],
+ ["17:52","REVIEW","verdict CLEARED: the red flag, the key credential, and the competitor’s funding all independently CONFIRMED — no hallucination","The claims held up under re-checking. Nothing was made up.","star"],
+ ["17:52","JUDGMENT","frame the red-flag person fairly — the shutdown was the parent-CEO’s call, not his personal scandal","Stopped to be fair to a named person — precision protects someone’s reputation."],
+ ["17:52","SKILL","section-construction (build the ~2,500-line single-file briefing)","Started building the actual document, section by section."],
+ ["18:05","PLAN","walkthrough built: 14 sections, 3 diagrams + confidence meter, a claims ledger, 12 questions, bull/bear","Finished the first full draft — with a ledger separating claims from confirmed facts."],
+ ["18:05","JUDGMENT","added a confidence meter to reinforce the honesty posture","Added a visual that shows how sure it is — leaning into honesty, not hiding uncertainty."],
+
+ ["PHASE","The reviews, and stopping for a human"],
+ ["18:05","SKILL","output-self-test (binary quality gates)","Ran a checklist of plain yes/no quality questions on the draft."],
+ ["18:05","SKILL","render-validate (open it in a real browser, desktop + mobile)","Actually opened the page in a browser to look at it — not just trust the code."],
+ ["18:12","TOOL","browser navigate + screenshot + check — SUCCESS","Loaded it, screenshotted it, and inspected it on screen and phone size."],
+ ["18:12","REVIEW","self-test PASS: 0 placeholders, no outside dependencies, claims traced, clear next step","Passed its own checks: nothing left unfinished, every claim sourced."],
+ ["18:12","REVIEW","render PASS: nothing overflows on mobile, all sections/diagrams/tables render clean, navigation works","Passed the visual check on both a laptop and a phone."],
+ ["18:12","SKILL","adversarial-evaluator (independent-context scored review + re-verify the claims with both engines)","Handed it to a separate reviewer with no memory of how it was built — so it can’t rubber-stamp itself.","star"],
+ ["18:20","TOOL","the reviewer re-verified the big claims with both engines — SUCCESS, all confirmed","The independent reviewer did its OWN fresh research to re-confirm the load-bearing facts."],
+ ["18:20","REVIEW","reviewer PASS — recalculated from the scores (not its word): all 8 criteria met, avg 8.6","It didn’t trust the reviewer’s summary — it recomputed pass/fail from the raw scores itself.","star"],
+ ["18:20","JUDGMENT","applied the reviewer’s real catch: removed a wrong figure from an aside; logged the two minor leads honestly","Fixed the one genuine error the reviewer found, and noted the smaller ones rather than burying them."],
+ ["18:20","JUDGMENT","skipped a 4th fact-check pass — 3 independent verifications already run; diminishing returns","Made a judgment call to stop checking — three passes was enough; a fourth would waste effort."],
+ ["18:24","PLAN","status → awaiting Gate Final (Sean); will flip to complete only on his sign-off","Marked the work as done-but-not-shipped — pending a human’s approval."],
+ ["18:24","RESEARCH","wrote a durable lesson to the intelligence log (disambiguate the use-case, not just the entity)","Captured what it learned so the whole system gets smarter next time."],
+ ["18:24","GATE","Gate Final reached — built + all reviewers PASS; HOLDING for Sean before anything goes to Jimmy","Stopped at the finish line and handed it to a human. It never sends to Jimmy on its own.","gate"],
+
+ ["PHASE","Sean’s call: rebuild it the right way"],
+ ["19:30","JUDGMENT","operator reshape: wrong format (a read-only essay) + wrong posture (concluding for Jimmy). Keep all research; rework framing + structure","Sean pushed back: right facts, wrong shape. It kept every verified fact and changed how it was presented."],
+ ["19:30","MEMORY","study the precedent on disk first: the battle-plan page, the reader template, the Veeva dossier","Before rebuilding, it studied its own best past examples to copy the right pattern."],
+ ["19:35","MEMORY","studied the battle-plan page (per-section note fields + export) and the page scaffold","Found the proven format: a document the reader writes their own notes into, section by section."],
+ ["19:35","JUDGMENT","match + surpass: notes on EVERY section + save them through a reload + a collected end-view + export","Decided to beat the old example — notes that persist even if you close the page."],
+ ["19:35","JUDGMENT","neutralize the posture: stop concluding for Jimmy; reframe to 'confirm against your own understanding'","Reworked the tone so it informs Jimmy’s decision rather than making it for him."],
+ ["19:35","JUDGMENT","keep light-theme (exec audience) despite the example’s dark toggle — Sean’s point was the notes, not the theme","Took the right lesson from the example without copying the wrong parts."],
+ ["19:35","PLAN","this is a framing fix, not a research fix; rebuild while preserving the verified facts verbatim","Drew the line clearly: the research was right; only the presentation needed redoing."],
+ ["19:55","RESEARCH","v2 rebuilt: 15 sections, 24 persistent note fields; all verified facts preserved (grep-confirmed); the wrong figure removed","Rebuilt it — confirmed by search that every real fact survived the rebuild untouched."],
+ ["19:55","JUDGMENT","posture confirmed neutral (0 instances of the old conclude-for-him phrases); softened the connector framing","Verified, by searching its own output, that the old presumptuous language was fully gone."],
+ ["19:55","REVIEW","render PASS: typed a note → reloaded → it SURVIVED; nothing overflows; 24 fields render","Proved the notes actually persist by testing it: type, reload, still there."],
+ ["19:55","REVIEW","self-test PASS: no placeholders, single self-contained file, notes work, claims still traced","Passed the full quality checklist again on the rebuilt version."],
+ ["19:55","MEMORY","wrote a feedback memory: reach for existing patterns first (the gap Sean flagged)","Recorded the lesson from Sean’s correction so it won’t repeat the miss."],
+
+ ["PHASE","Make it work everywhere, then host it"],
+ ["20:30","JUDGMENT","responsiveness: collapsible sidebar, mobile tables scroll, scroll-fade cues, hidden-from-search tag","Made it work cleanly on a phone and a laptop, and kept it out of search engines."],
+ ["20:30","REVIEW","render on iPhone + laptop: PASS; a sidebar-button bug was caught and fixed; screenshots saved","Tested both screen sizes, found a real bug, fixed it, and re-checked."],
+ ["20:30","JUDGMENT","host on the public site — but a named person + Jimmy’s private diligence means: add no-index + an unguessable link; surface to Sean before pushing","Caught a privacy concern on its own and added protections — then flagged it to a human before going live."],
+ ["20:45","GATE","a safety tripwire fired on a cleanup command — intended; used the deliberate override","One of its own guardrails caught a delete command; it confirmed it was intentional and proceeded carefully.","gate"],
+ ["20:45","TOOL","push to the host — first path blocked by a broken local repo → deployed via a clean copy instead. SUCCESS","Hit a real technical snag and worked around it cleanly rather than forcing it."],
+ ["20:45","REVIEW","live URL check: loads (HTTP 200); the hidden-from-search tag is served. PASS","Confirmed the live page actually works and the privacy tag is really in place."],
+ ["20:45","JUDGMENT","unguessable link + no-index + no public listing = privacy for a confidential doc; flagged to Sean with an off-ramp","Documented the privacy trade-offs and gave Sean a way to undo it."],
+
+ ["PHASE","A deeper analytical pass (v2)"],
+ ["21:20","RESEARCH","read past competitive-analysis work + a 26-question framework + positioning-map templates","Pulled in proven analytical frameworks from its own library to go deeper."],
+ ["21:20","PLAN","wrote a planning doc for the v2 expansion and lift opportunities","Planned the deeper version before building it."],
+ ["21:20","JUDGMENT","FLAG: a 'no marketing voice' + map-style lesson has been on disk since last year — this is a reach-for-prior-work gap (again)","Honestly flagged that it had a relevant past lesson it should have used sooner — twice now."],
+ ["21:20","JUDGMENT","upgraded the §6 chart to a proper four-quadrant map per the old lesson — local only, not yet redeployed","Applied the old lesson — but didn’t push it live until showing Sean first."],
+ ["21:20","REVIEW","render check (local) PASS; NOT redeployed (show the diff first)","Verified the change, but held it back for review rather than auto-publishing."],
+ ["21:20","JUDGMENT","proposed all the bigger lifts but built nothing else — awaiting Sean’s decisions","Restrained itself: suggested the bigger moves, didn’t make them without a green light."],
+ ["22:00","JUDGMENT","Sean greenlit the v2 build + the chart upgrade + the cheap lifts; hold the deeper ones","Got the go-ahead and proceeded only on what was approved."],
+ ["22:00","JUDGMENT","v1 = the currently-hosted file; snapshot it from the live URL before changing anything","Preserved the old version first, so nothing is lost and both can be compared."],
+ ["22:00","TOOL","pulled the live URL → saved a frozen v1 snapshot (verified)","Made an untouched backup of the original, confirmed correct."],
+ ["22:05","AGENT","dispatched 2 more research agents — a feature matrix + a market-size model — both two-engine","Sent out two more researchers for the deeper analytical sections."],
+ ["22:05","JUDGMENT","foreground the cheap lifts + a SWOT section while the agents run","Again worked in parallel — building approved pieces while the agents researched."],
+ ["22:08","LIFT","saved the 26-question framework + a voice memory into the system permanently","Promoted a one-off framework into a reusable system capability."],
+ ["22:30","AGENT","market agent DONE — market sizes; caught two competitor-number corrections","Researcher back with sizing — and it corrected two specific funding numbers."],
+ ["22:30","AGENT","feature-matrix agent DONE — Vega’s wedge is real but least-proven; advisory edge isn’t unique; caught more number fixes","Researcher back with the comparison — and caught yet more numbers to correct."],
+ ["22:30","TOOL","both agents two-engine — SUCCESS","Confirmed both used two independent sources."],
+ ["22:30","RESEARCH","built 4 analytical sections (quadrant map, market sizing, feature matrix, SWOT) — each with a note field","Built the deeper analysis into the document, keeping the reader-notes format."],
+ ["22:30","JUDGMENT","applied the agents’ corrections to the existing section for consistency","Pushed the corrected numbers through the whole document so nothing contradicts."],
+ ["22:40","TOOL","browser render check — SUCCESS","Opened it in a browser again to verify the new sections."],
+ ["22:40","REVIEW","render PASS desktop + mobile: 18 sections / 27 notes, nothing overflows, new notes persist","Verified the bigger version still works perfectly on both screens."],
+ ["22:40","REVIEW","self-test PASS: balanced, no placeholders, claims traced + tagged, version labeled","Passed the quality checklist on the expanded version."],
+ ["22:40","SKILL","adversarial-evaluator (independent, re-verify the NEW numbers with both engines)","Sent the new numbers to the independent reviewer to re-confirm."],
+ ["22:50","REVIEW","reviewer FAIL on one criterion — a single tag inconsistency (not a fabrication); the rest strong; avg 8.4","The reviewer found a real inconsistency and failed that check — exactly what it’s for.","star"],
+ ["22:50","JUDGMENT","applied the catch: reconciled the inconsistent tag; re-verified consistent","Fixed the flagged inconsistency and confirmed it was resolved."],
+ ["22:55","TOOL","redeployed v2 + live-URL check (HTTP 200, all 4 new sections live, hidden-from-search served) — PASS","Published the approved v2 and confirmed it’s actually live and correct."],
+
+ ["PHASE","The heavyweight ‘final’ version"],
+ ["23:30","JUDGMENT","operator re-spec: TWO documents, same voice — the hosted dossier stays as-is; build a separate heavyweight analysis, read-only, not deployed","Sean split the work in two; it followed the new spec exactly without disturbing the live one."],
+ ["23:30","JUDGMENT","lock the competitor’s funding as round-vs-total ($30M round, ~$51M total); fix the dossier’s ambiguous cell per Sean’s standing instruction","Got a specific number exactly right — the difference between one round and the cumulative total."],
+ ["23:35","PLAN","wrote the build plan; dispatching 6 deep-research agents for the final version","Planned the heavyweight version and sent out six deep researchers."],
+ ["23:55","AGENT","Outset profile DONE — funding math locked ($3.8M + $17M + $30M = $51M total)","Deep researcher nailed down the full funding history, dollar by dollar."],
+ ["23:55","AGENT","Strella profile DONE — a correction to an earlier correction: the $1.6M figure is now VERIFIED (with a dated source)","Researcher caught that an earlier fix had over-corrected — and restored the right number, with proof."],
+ ["23:55","AGENT","ghSMART profile DONE — KEY FIND: the incumbent is ALREADY adding AI on Vega’s turf, with big-investor capital","The decisive finding: the gold-standard rival is already moving onto Vega’s only claimed advantage.","star"],
+ ["23:55","JUDGMENT","that finding is significant — Vega’s claimed advantage is its weakest flank; fold it into the synthesis + risk","Recognized this as the analytical crux and threaded it through the document."],
+ ["00:10","AGENT","market-dynamics DONE — sizes + a NEW regulatory risk (an EU workplace-emotion-AI ban) that hits Vega’s lane","Researcher surfaced a live regulation that directly threatens the business — a real risk Jimmy should know."],
+ ["00:10","AGENT","GetWhy profile DONE — funding resolved; its AI-moderation claim is claimed-but-not-proven","Researcher resolved a competitor’s numbers and carefully separated claim from proof."],
+ ["00:10","RESEARCH","built the market + sizing sections from the research; building the competitive landscape (5 deep profiles)","Assembled the deep analysis from the verified research files."],
+ ["00:30","JUDGMENT","the draft is shorter than the dossier — below the target depth; expand the profiles from the research files","Caught that its own output was thinner than intended and chose to deepen it rather than ship light."],
+ ["00:45","RESEARCH","deepened with strategic-read paragraphs + the decisive incumbent finding called out","Added real analysis — the 'so what' — not just facts."],
+ ["01:05","RESEARCH","deepened further: full incumbent profile + market structure tables from the research","Built the heavyweight depth out of the already-verified research."],
+ ["01:05","REVIEW","render PASS desktop + mobile: 11 sections, 5 profiles, tables scroll on mobile, ~8,500 words","Verified the long version renders cleanly everywhere."],
+ ["01:05","REVIEW","self-test PASS: balanced, no placeholders, every number two-engine sourced + round-vs-total labeled","Passed quality checks — with every number sourced two ways."],
+ ["01:05","JUDGMENT","be honest about depth: it’s dense but not literal max length; offer to expand any section; don’t overclaim","Told the truth about how deep it went instead of overstating it."],
+ ["01:05","JUDGMENT","did NOT touch the hosted dossier (respected 'don’t touch'); flagged the one number to fix for Sean’s call","Honored an explicit instruction and surfaced the one allowed exception for a human to decide."],
+ ["01:20","JUDGMENT","Sean approved the one fix: corrected the dossier’s funding cell (round vs. total); nothing else touched","Made the single approved correction on the live doc and left everything else alone."],
+ ["01:20","REVIEW","render PASS (both cells corrected, the old misread gone, all 27 notes intact)","Verified the fix landed and broke nothing else."],
+ ["01:20","TOOL","redeployed + live-URL check → the corrected cell is live. HOLDING for Jimmy; no further build","Published the fix, confirmed it live, and stopped — waiting for Jimmy."],
+
+ ["PHASE","After the hold"],
+ ["09:30","AGENT","a 6th researcher returned LATE (~44 min) — confirms the earlier findings; adds a few fine label nuances","Even after stopping, a slow researcher finished — and independently confirmed the priors held up."],
+ ["09:30","JUDGMENT","HOLD still in effect — did NOT edit anything; surfaced the minor nuances to Sean to decide","Respected the hold: it noted the small refinements but changed nothing without a human’s call."],
+];
+
+// ---- Glossary (one source feeds both the tooltips and the bottom list) ----
+var GLOSS = {
+ 'session-orchestrator':{type:'Skill',label:'session-orchestrator',forms:['session-orchestrator'],
+   short:'The startup routine that reads its own files and gets oriented before any work starts.',
+   long:'EngineOS’s session opener. Before touching a task it reads its own context, recent work, and which engine it’s in — so it begins oriented instead of cold.'},
+ 'phase-controller':{type:'Skill',label:'phase-controller',forms:['phase-controller'],
+   short:'Opens a formal plan with pass/fail criteria and gates before building anything.',
+   long:'The governance skill. It classifies the kind of work, writes a run plan with success criteria, and sets the gates the work must pass — so building is planned, not improvised.'},
+ 'recall':{type:'Skill',label:'recall',forms:['recall'],
+   short:'Searches its own memory and past work before deciding, so it builds on what already worked.',
+   long:'A lookup into the system’s accumulated notes, past deliverables, and lessons — how it stands on prior work instead of starting from scratch each time.'},
+ 'company-briefing':{type:'Skill',label:'company-briefing',forms:['company-briefing'],
+   short:'The purpose-built playbook for researching a company for someone walking into a decision.',
+   long:'A named, reusable skill that combines deep research with a structured, audience-shaped writeup — the right tool for exactly this kind of job, not an improvised one-off.'},
+ 'sanity-check':{type:'Skill',label:'sanity-check',forms:['sanity-check'],
+   short:'A fast self-audit against 11 known ways the system tends to go wrong.',
+   long:'A lightweight pass over fresh work against a gallery of 11 documented failure modes (like trusting an unverified claim). A pulse check, not a gate — meant to catch the usual mistakes early.'},
+ 'section-construction':{type:'Skill',label:'section-construction',forms:['section-construction'],
+   short:'Builds long documents one section at a time so the last page is as strong as the first.',
+   long:'Generating a long document in one shot degrades — the ending gets sloppy. This builds it section by section with consistent structure so quality holds end to end.'},
+ 'adversarial-evaluator':{type:'Skill',label:'adversarial-evaluator',forms:['adversarial-evaluator'],
+   short:'An independent reviewer, given the work with no memory of how it was made, told to find problems — not praise.',
+   long:'A separate reviewer with its own fresh context. It can’t see the reasoning that produced the work, and it’s instructed to be skeptical and hunt for flaws. Independence is the point — a builder can’t reliably grade itself.'},
+ 'hardened-criteria':{type:'Governance',label:'hardened criteria',forms:['hardened success criteria','hardened criteria','success criteria'],
+   short:'Specific, gradeable pass/fail tests written before the work — so “done” is measured, not felt.',
+   long:'Concrete success criteria, each with a threshold, written into the plan up front. Work is scored against them rather than waved through on a vibe.'},
+ 'gate':{type:'Governance',label:'gates (Gate 0 / Gate Final)',forms:['hard content gate','Gate Final','Gate 0','HARD GATE'],
+   short:'A checkpoint the work must pass before continuing; the final one always hands back to a human.',
+   long:'Gates are hard stops. A content gate (here, proving the right company) must pass before building. Gate Final hands finished work back to a person before anything ships — it never auto-sends.'},
+ 'disambiguation':{type:'Discipline',label:'entity disambiguation',forms:['entity-disambiguation','entity disambiguation','disambiguation'],
+   short:'Proving it’s the exact right company before building — guarding against same-name mix-ups.',
+   long:'With a thin name like “Agency150,” it’s easy to research the wrong entity. This is the discipline of confirming identity first — and flagging loudly if what’s found doesn’t match what was described.'},
+ 'claims-verified':{type:'Discipline',label:'claims-vs-verified',forms:['claims-vs-verified'],
+   short:'Tagging every fact as either the company’s claim or independently confirmed — never blurring them.',
+   long:'A standing rule: separate what a company says about itself from what an outside source confirms. The two are labeled differently throughout, so the reader always knows which is which.'},
+ 'company-claim':{type:'Discipline',label:'COMPANY-CLAIM',forms:['COMPANY-CLAIM'],
+   short:'A label marking a statement as the company’s own claim — not yet verified.',
+   long:'The explicit tag put on anything taken from the company’s own materials — held as “claimed” until an independent source confirms it.'},
+ 'two-engine':{type:'Discipline',label:'two-engine verification',forms:['two-engine','two engines','both engines','corroborator'],
+   short:'Checking facts with two independent search engines — one leads, the other confirms.',
+   long:'Every non-trivial fact is checked against two independent sources: the professional tool first, a second engine as corroborator. One source can be wrong or biased; agreement across two is the bar.'},
+ 'bright-data':{type:'Tool',label:'Bright Data',forms:['Bright Data'],
+   short:'A professional-grade web-data tool used as the primary, most-reliable source.',
+   long:'The first-line research tool — a paid, professional web-data service used ahead of ordinary search because it pulls cleaner, more complete data. The second engine corroborates it.'},
+ 'intelligence-log':{type:'Memory',label:'intelligence log',forms:['intelligence log'],
+   short:'Where durable lessons get written so the whole system gets smarter over time.',
+   long:'A running record of strategic lessons worth remembering across sessions. Writing a lesson here is how a one-time insight becomes permanent system knowledge.'},
+ 'sealed-prediction':{type:'Concept',label:'the sealed prediction',forms:['the sealed prediction','sealed prediction'],
+   short:'A forecast it wrote and locked earlier about where a rushed version would cut corners — used to stay honest.',
+   long:'Before this run, a prediction was sealed listing the shortcuts a hurried version would likely take. It’s used as a self-honesty checklist — holding the work to a known bar rather than grading on a curve.'},
+ 'mechanical-distrust':{type:'Concept',label:'recalculated from the scores',forms:['recalculated from the scores'],
+   short:'It doesn’t trust the reviewer’s verdict — it re-computes pass/fail from the raw scores itself.',
+   long:'Even the independent reviewer isn’t taken at its word. The system reads the reviewer’s individual scores and recalculates the verdict mechanically — so a “pass” that scored something below the bar can’t sneak through.'}
+};
+
+var _forms=[]; Object.keys(GLOSS).forEach(function(k){GLOSS[k].forms.forEach(function(f){_forms.push([f,k]);});});
+_forms.sort(function(a,b){return b[0].length-a[0].length;});
+var _fk={}; _forms.forEach(function(p){_fk[p[0].toLowerCase()]=p[1];});
+function _esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+var RX=new RegExp('(?<![\\w-])('+_forms.map(function(p){return _esc(p[0]);}).join('|')+')(?![\\w-])','gi');
+function wrap(s){ return s.replace(RX,function(m){ var k=_fk[m.toLowerCase()]; return k?'<span class="term" data-k="'+k+'">'+m+'</span>':m; }); }
+
+var TAGCLASS = {LOG:'t-log',JUDGMENT:'t-judgment',SKILL:'t-skill',MEMORY:'t-memory',PLAN:'t-plan',GATE:'t-gate',TOOL:'t-tool',RESEARCH:'t-research',AGENT:'t-agent',REVIEW:'t-review',NOTE:'t-note',LIFT:'t-lift'};
+var TAGLABEL = {LOG:'Log',JUDGMENT:'Call',SKILL:'Skill',MEMORY:'Memory',PLAN:'Plan',GATE:'Gate',TOOL:'Tool',RESEARCH:'Build',AGENT:'Agents',REVIEW:'Review',NOTE:'Note',LIFT:'Lift'};
+var c = document.getElementById('log'), html='';
+L.forEach(function(e){
+  if(e[0]==='PHASE'){ html+='<div class="phase">'+e[1]+'</div>'; return; }
+  var time=e[0], tag=e[1], text=e[2], note=e[3], flag=e[4]||'';
+  html+='<div class="row '+flag+'">'+
+    '<div class="tm">'+time+'</div>'+
+    '<div class="tag '+(TAGCLASS[tag]||'t-note')+'">'+(TAGLABEL[tag]||tag)+'</div>'+
+    '<div class="body"><div class="log">'+(flag==='star'?'<span class="star-i">★ </span>':'')+wrap(text)+'</div><div class="note">'+wrap(note)+'</div></div>'+
+  '</div>';
+});
+c.innerHTML = html;
+
+// bottom glossary (same source as the tooltips)
+var GORDER=['Skill','Governance','Discipline','Tool','Memory','Concept'];
+var GLABEL={Skill:'Skills — the named routines it runs',Governance:'Governance — how it controls itself',Discipline:'Disciplines — rules it holds to',Tool:'Tools',Memory:'Memory',Concept:'Concepts'};
+var gb={}; Object.keys(GLOSS).forEach(function(k){var g=GLOSS[k];(gb[g.type]=gb[g.type]||[]).push(g);});
+var gh='<h2 class="gtitle">The glossary — what these terms mean</h2><p class="gsub">The underlined terms above, defined. Hover any of them in the log for the short version; here’s the fuller one.</p>';
+GORDER.forEach(function(t){ if(!gb[t])return; gh+='<div class="gphase">'+(GLABEL[t]||t)+'</div>'; gb[t].forEach(function(g){ gh+='<div class="gitem"><span class="gname">'+g.label+'</span><span class="gtype">'+t+'</span><div class="gdef">'+g.long+'</div></div>'; }); });
+document.getElementById('glossary').innerHTML=gh;
+
+// tooltip (hover) / popover (tap) — device decides
+var tip=document.createElement('div'); tip.className='tip'; tip.style.display='none'; document.body.appendChild(tip);
+var hoverCap=window.matchMedia('(hover: hover)').matches; var curEl=null;
+function showTip(el){ var g=GLOSS[el.getAttribute('data-k')]; if(!g)return; tip.innerHTML='<span class="tiptype">'+g.type+'</span>'+g.short; tip.style.display='block';
+  var r=el.getBoundingClientRect(), tw=tip.offsetWidth, th=tip.offsetHeight, cw=document.documentElement.clientWidth, ch=document.documentElement.clientHeight;
+  var left=Math.min(Math.max(8,r.left+window.scrollX),window.scrollX+cw-tw-8);
+  var top=(r.bottom+th+16>ch)? (r.top+window.scrollY-th-7) : (r.bottom+window.scrollY+7);
+  tip.style.left=left+'px'; tip.style.top=top+'px'; curEl=el; }
+function hideTip(){ tip.style.display='none'; curEl=null; }
+Array.prototype.forEach.call(document.querySelectorAll('.term'),function(el){
+  if(hoverCap){ el.addEventListener('mouseenter',function(){showTip(el);}); el.addEventListener('mouseleave',hideTip); }
+  else { el.addEventListener('click',function(ev){ ev.stopPropagation(); if(curEl===el){hideTip();}else{showTip(el);} }); }
+});
+document.addEventListener('click',function(){ if(!hoverCap && curEl) hideTip(); });
+window.addEventListener('scroll',function(){ if(curEl && !hoverCap) hideTip(); },{passive:true});
+</script>
+</body>
+</html>
