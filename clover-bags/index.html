@@ -126,10 +126,13 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 .tile.feat{grid-column:1/-1;background:linear-gradient(135deg,rgba(221,51,51,.18),rgba(221,51,51,.05)),var(--panel-2);border-color:rgba(221,51,51,.42)}
 .tile.feat .ic{color:#fff}.tile.feat h3{color:#fff;font-size:17px}.tile.feat p{color:#ecd3d3}
 .carousel{grid-column:1/-1;position:relative;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.carousel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.carousel-track{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .carousel-track::-webkit-scrollbar{display:none}
-.carousel-track img{flex:0 0 auto;width:min(48%,300px);height:200px;object-fit:cover;scroll-snap-align:start;border-right:1px solid rgba(0,0,0,.45)}
-.carousel-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 16px 9px;font-size:12px;font-weight:600;color:var(--cream);text-transform:none;letter-spacing:.02em;background:linear-gradient(0deg,rgba(8,7,6,.88),transparent);pointer-events:none}
+.carousel-track img{flex:0 0 auto;width:min(46%,290px);height:200px;object-fit:cover;border-right:2px solid var(--panel)}
+.carousel-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 16px 9px;font-size:12px;font-weight:600;color:var(--cream);text-transform:none;letter-spacing:.02em;background:linear-gradient(0deg,rgba(8,7,6,.85),transparent);pointer-events:none}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(8,7,6,.55);backdrop-filter:blur(6px);color:#fff;font-size:22px;line-height:0;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:3;transition:background .15s,border-color .15s}
+.carousel-btn:hover{background:var(--red);border-color:var(--red)}
+.carousel-btn.prev{left:10px}.carousel-btn.next{right:10px}
 @media(max-width:480px){.carousel-track img{width:80%}}
 
 /* ── WHO ── */
@@ -267,7 +270,9 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
           <img src="assets/crowd/c5.jpg" alt="Clover regulars" loading="lazy">
           <img src="assets/crowd/c6.jpg" alt="Clover regulars" loading="lazy">
         </div>
-        <div class="carousel-cap">The regulars — Wednesday nights at Clover</div>
+        <div class="carousel-cap">The crowd at Clover</div>
+        <button class="carousel-btn prev" type="button" aria-label="Previous">&#8249;</button>
+        <button class="carousel-btn next" type="button" aria-label="Next">&#8250;</button>
       </div>
       <div class="tile feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l3.5-10h9L20 17z"/><ellipse cx="13.4" cy="10.6" rx="1.7" ry="1.05" fill="currentColor" stroke="none"/></svg></div><h3>The 4-Bagger Pot</h3><p>Music cuts off. The whole bar turns. One player, four bags, one shot at the jackpot. Miss it and the pot rolls to next Monday — bigger. This is the moment everyone stays for.</p></div>
       <div class="tile"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9.5 4h5v2.4h-5z"/><path d="M9 11.6l1.6 1.6 3-3"/><path d="M9 16.4h6"/></svg></div><h3>Real rules, no gatekeeping</h3><p>Legit cancellation scoring to 21. We'll teach you the count in two minutes.</p></div>
@@ -318,14 +323,31 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 
 <script>
 (function(){
-  var t=document.querySelector('.carousel-track'); if(!t)return;
-  var imgs=t.querySelectorAll('img'), i=0, timer;
-  function go(){ i=(i+1)%imgs.length; t.scrollTo({left:imgs[i].offsetLeft, behavior:'smooth'}); }
-  function start(){ timer=setInterval(go,3200); }
-  function stop(){ clearInterval(timer); }
-  start();
-  t.addEventListener('pointerenter',stop); t.addEventListener('pointerleave',start);
-  t.addEventListener('touchstart',stop,{passive:true});
+  var c=document.querySelector('.carousel'); if(!c)return;
+  var t=c.querySelector('.carousel-track');
+  var imgs=Array.prototype.slice.call(t.querySelectorAll('img'));
+  imgs.forEach(function(im){ t.appendChild(im.cloneNode(true)); }); /* duplicate set for seamless loop */
+  var setW=0;
+  function measure(){ if(t.scrollWidth) setW=t.scrollWidth/2; }
+  measure(); window.addEventListener('load',measure); setTimeout(measure,600); window.addEventListener('resize',measure);
+  var pos=0, paused=false, target=null, speed=0.5; /* px/frame — gentle constant drift */
+  function iw(){ return (imgs[0]? imgs[0].getBoundingClientRect().width : 280) + 2; }
+  function loop(){
+    if(setW){
+      if(target!==null){ pos+=(target-pos)*0.18; if(Math.abs(target-pos)<0.6){pos=target;target=null;} }
+      else if(!paused){ pos+=speed; }
+      if(pos>=setW) pos-=setW; if(pos<0) pos+=setW;
+      t.scrollLeft=pos;
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  c.querySelector('.next').addEventListener('click',function(){ target=(target===null?pos:target)+iw(); });
+  c.querySelector('.prev').addEventListener('click',function(){ target=(target===null?pos:target)-iw(); });
+  c.addEventListener('pointerenter',function(){paused=true});
+  c.addEventListener('pointerleave',function(){paused=false});
+  t.addEventListener('touchstart',function(){paused=true},{passive:true});
+  t.addEventListener('touchend',function(){setTimeout(function(){paused=false},2000);},{passive:true});
 })();
 </script>
 </body>
