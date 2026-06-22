@@ -156,6 +156,22 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
 .gc .ln.warn .k{color:var(--red-l)}
 .gc .ln b{color:#fff;font-weight:600}
 
+/* DOOR KEY */
+.laurels{display:grid;gap:10px;margin-top:10px}
+.lc{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--muted-2);border-radius:var(--r);padding:14px 16px}
+.lc.blue{border-left-color:var(--teal)}
+.lc.gold{border-left-color:var(--gold)}
+.lc.skull{border-left-color:var(--red)}
+.lc h3{font-size:15px;color:#fff;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+.lc h3 .e{font-size:18px;line-height:1}
+.lc p{font-size:13px;color:var(--muted);line-height:1.55}
+.lc p b{color:var(--cream);font-weight:600}
+.sym{font-size:10.5px!important;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700}
+.tbl td .em{font-size:15px;margin-right:6px;vertical-align:-1px}
+.subhd{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin:18px 0 2px}
+.subhd.blue{color:var(--teal)}
+.subhd.mut{color:var(--muted-2)}
+
 /* MOVES */
 .moves{display:grid;gap:10px;margin-top:6px}
 .move{display:flex;gap:13px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
@@ -372,6 +388,78 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- DOOR SYMBOL KEY -->
+<section class="sect">
+  <div class="wrap">
+    <div class="eyebrow">Reading the doors</div>
+    <h2>Door symbol key</h2>
+    <p class="lead">Walking up to a door only says <b>"Embark"</b> — never the reward name. <b>The symbol above the door is your only preview.</b> Learn it once and you read every door at a glance. <span style="color:var(--muted-2)">Verified vs the Hades Wiki.</span></p>
+
+    <div class="laurels">
+      <div class="lc blue"><h3><span class="e">🔵</span> Blue laurel = <span style="color:var(--teal);margin-left:5px">keep forever</span></h3><p>A <b>persistent resource</b> that survives the run (meta-progression). Only 4 wear it. <b>Grab when you're healthy</b> and the run-power options are weak — it's permanent account progress.</p></div>
+      <div class="lc gold"><h3><span class="e">🟡</span> Gold laurel = <span style="color:var(--gold);margin-left:5px">this run only</span></h3><p>Boons, weapon upgrades, health, money — <b>power for the current escape.</b> Gone when you die. <b>Grab when you're actively building</b> toward a win.</p></div>
+      <div class="lc skull"><h3><span class="e">💀</span> Skull = <span style="color:var(--red-l);margin-left:5px">harder, but better</span></h3><p>Tougher fight, <b>upgraded reward.</b> Persistent rewards + Pom strength are <b>doubled</b>; boons roll <b>higher rarity</b>. Worth it whenever you can take the room.</p></div>
+    </div>
+
+    <div class="subhd blue">🔵 Blue laurel — persistent</div>
+    <table class="tbl">
+      <tr><th>Symbol</th><th>Reward</th><th>For</th></tr>
+      <tr><td><span class="em">💧</span>Purple teardrop gem</td><td>Darkness +10</td><td>Mirror of Night upgrades</td></tr>
+      <tr><td><span class="em">🗝️</span>Purple &amp; grey key</td><td>Chthonic Key +1</td><td>Unlock weapons / reset Mirror</td></tr>
+      <tr><td><span class="em">💠</span>Multi-color gems</td><td>Gemstones +5</td><td>House Contractor rooms</td></tr>
+      <tr><td><span class="em">🍶</span>Yellow <b>round</b> bottle</td><td>Nectar +1</td><td>Gift NPCs → keepsakes</td></tr>
+    </table>
+
+    <div class="subhd">🟡 Gold laurel — god boons <span class="sym">(each god = its own emblem)</span></div>
+    <table class="tbl">
+      <tr><th>Emblem</th><th>God</th><th>Lane</th></tr>
+      <tr><td><span class="em">⚡</span>Yellow lightning</td><td>Zeus</td><td>Chain lightning · <b>your Thunder Flourish</b></td></tr>
+      <tr><td><span class="em">🍷</span>Purple wine glass</td><td>Dionysus</td><td>Hangover DoT · AoE fog</td></tr>
+      <tr><td><span class="em">🛡️</span>Yellow shield</td><td>Athena</td><td>Deflect · <b>your Divine Dash</b></td></tr>
+      <tr><td><span class="em">💗</span>Pink heart</td><td>Aphrodite</td><td>Weak debuff · charm</td></tr>
+      <tr><td><span class="em">🗡️</span>Red sword</td><td>Ares</td><td>Doom burst · Blade Rift</td></tr>
+      <tr><td><span class="em">🏹</span>Green bow</td><td>Artemis</td><td>Crit · marked</td></tr>
+      <tr><td><span class="em">🌊</span>Blue trident</td><td>Poseidon</td><td>Knockback · money</td></tr>
+      <tr><td><span class="em">🌾</span>White wheat</td><td>Demeter</td><td>Chill slow → Arctic Blast</td></tr>
+      <tr><td><span class="em">🪽</span>Yellow winged sandal</td><td>Hermes</td><td>Speed/dash · ~2×/run</td></tr>
+    </table>
+
+    <div class="situation" style="margin-top:14px">
+      <div class="h">💡 Two god emblems on one door (+ skull) = TRIAL OF THE GODS</div>
+      <p>You pick <b>one</b> of the two boons. The <b>spurned god</b> throws a wave of enemies at you — then forgives you and hands over <b>their</b> boon too. <b>You leave with BOTH boons.</b> No penalty for which you spurn. A great-value pick whenever you can take the fight.</p>
+    </div>
+
+    <div class="subhd">🟡 Gold laurel — other run rewards</div>
+    <table class="tbl">
+      <tr><th>Symbol</th><th>Reward</th><th>Does</th></tr>
+      <tr><td><span class="em">🔴</span>Pomegranate</td><td>Pom of Power</td><td>+1 level to one <i>eligible</i> boon (you pick)</td></tr>
+      <tr><td><span class="em">🔨</span>Yellow/grey/red hammer</td><td>Daedalus Hammer</td><td><b>Upgrades your WEAPON</b> — build-defining</td></tr>
+      <tr><td><span class="em">❤️</span>Grey &amp; red heart</td><td>Centaur Heart</td><td>+25 max HP (this run)</td></tr>
+      <tr><td><span class="em">🪙</span>Yellow coin</td><td>Charon's Obol</td><td>+100 Obols (shop money)</td></tr>
+    </table>
+    <p class="why"><span class="w">don't mix up</span><b>Pink heart</b> = Aphrodite boon. <b>Grey-red heart</b> = Centaur Heart (max HP). Same shape, different color.</p>
+
+    <div class="subhd mut">⚫ Special / non-combat rooms</div>
+    <table class="tbl">
+      <tr><th>Symbol</th><th>Room</th></tr>
+      <tr><td><span class="em">💰</span>Skull on a coin bag</td><td>Charon's Shop — buy any 3 rewards with Obols</td></tr>
+      <tr><td><span class="em">🪜</span>Stairs</td><td>Biome transition (heal fountain + keepsake swap)</td></tr>
+      <tr><td><span class="em">❗</span>Exclamation on a rock</td><td>NPC (Sisyphus / Eurydice / Patroclus)</td></tr>
+      <tr><td><span class="em">🥚</span>Multicolor egg, on the floor</td><td>Chaos Gate — curse now, stronger boon later</td></tr>
+      <tr><td><span class="em">⛲</span>Fountain</td><td>Healing room</td></tr>
+    </table>
+
+    <div class="subhd mut">🚫 Boss / shop ONLY — never a hallway door</div>
+    <table class="tbl">
+      <tr><th>Symbol</th><th>Reward</th></tr>
+      <tr><td><span class="em">🩸</span>Red blood drop</td><td>Titan Blood — weapon <b>aspect</b> upgrades (beat a biome boss)</td></tr>
+      <tr><td><span class="em">💎</span>White gem</td><td>Diamond — top Contractor upgrades (late bosses)</td></tr>
+      <tr><td><span class="em">🍯</span>Yellow <b>square</b> bottle</td><td>Ambrosia — deepen relationships (late bosses)</td></tr>
+    </table>
+    <p class="why"><span class="w">gotcha</span>The <b>winged sandal is Hermes, not Chaos</b> (a popular guide mislabels it). And <b>Titan Blood / Diamond / Ambrosia never show on a random door</b> — boss &amp; shop only. Nectar = <b>round</b> bottle; Ambrosia = <b>square</b> bottle.</p>
   </div>
 </section>
 
