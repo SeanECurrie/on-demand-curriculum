@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monday Bags at Clover — Runner's Playbook</title>
+<style>
+:root{
+  --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+  --font-mono:"SF Mono",SFMono-Regular,ui-monospace,Menlo,Consolas,monospace;
+  --space-2:8px;--space-3:12px;--space-4:16px;--space-6:24px;--space-8:32px;--space-10:40px;
+  --green-50:#f0fdf4;--green-100:#dcfce7;--green-500:#22c55e;--green-600:#16a34a;--green-700:#15803d;
+  --blue-50:#eff6ff;--blue-100:#dbeafe;--blue-500:#3b82f6;--blue-600:#2563eb;--blue-700:#1d4ed8;
+  --amber-50:#fffbeb;--amber-100:#fef3c7;--amber-500:#f59e0b;--amber-700:#b45309;--amber-800:#92400e;
+  --red-50:#fef2f2;--red-500:#ef4444;--red-600:#dc2626;
+  --stone-50:#fafaf9;--stone-100:#f5f5f4;--stone-200:#e7e5e4;--stone-300:#d6d3d1;--stone-400:#a8a29e;
+  --stone-500:#78716c;--stone-700:#44403c;--stone-800:#292524;--stone-900:#1c1917;
+  --bg:var(--stone-50);--surface:var(--stone-100);--surface-alt:#fff;--border:var(--stone-200);
+  --border-strong:var(--stone-300);--text-muted:var(--stone-400);--text-secondary:var(--stone-500);
+  --text-body:var(--stone-700);--text-heading:var(--stone-800);--text-strong:var(--stone-900);
+  --link:var(--green-600);--link-hover:var(--green-700);
+  --sidebar-bg:var(--stone-100);--clover:#1f8a4c;--clover-soft:#dcf3e5;
+}
+[data-theme="dark"]{
+  --green-50:#052e16;--green-100:rgba(34,197,94,.18);--green-500:#4ade80;--green-600:#22c55e;--green-700:#86efac;
+  --blue-50:#1e3a5f;--blue-100:rgba(59,130,246,.18);--blue-500:#60a5fa;--blue-700:#93c5fd;
+  --amber-50:#451a03;--amber-100:rgba(245,158,11,.18);--amber-700:#fcd34d;--amber-800:#fcd34d;
+  --red-50:#450a0a;--red-600:#fca5a5;
+  --bg:#1a1a1a;--surface:#242424;--surface-alt:#1f1f1f;--border:#3a3a3a;--border-strong:#4a4a4a;
+  --text-muted:#737373;--text-secondary:#a3a3a3;--text-body:#d4d4d4;--text-heading:#e5e5e5;--text-strong:#f5f5f5;
+  --link:#4ade80;--link-hover:#86efac;--sidebar-bg:#1f1f1f;--clover:#34d27e;--clover-soft:rgba(52,210,126,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*{transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+body{font-family:var(--font-body);font-size:16px;line-height:1.65;color:var(--text-body);background:var(--bg);-webkit-font-smoothing:antialiased}
+ul,ol{padding-left:24px}li{margin:4px 0}
+a{color:var(--link);text-decoration:none}a:hover{color:var(--link-hover);text-decoration:underline}
+h1,h2,h3,h4{color:var(--text-heading);line-height:1.25;font-weight:700}
+h1{font-size:34px;margin-bottom:12px}h2{font-size:26px;margin:8px 0 14px}h3{font-size:19px;margin:24px 0 10px}
+h4{font-size:16px;margin:18px 0 8px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-secondary)}
+p{margin:10px 0}strong{color:var(--text-strong)}
+:focus-visible{outline:2px solid var(--clover);outline-offset:2px}
+.layout{display:flex;min-height:100vh}
+.sidebar{position:sticky;top:0;width:280px;height:100vh;overflow-y:auto;flex-shrink:0;background:var(--sidebar-bg);border-right:1px solid var(--border);padding:var(--space-6) 0}
+.sidebar-header{padding:0 var(--space-6) var(--space-4);border-bottom:1px solid var(--border);margin-bottom:var(--space-3)}
+.brand{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--clover)}
+.sidebar-title{font-size:18px;font-weight:800;color:var(--text-strong);margin-top:6px;line-height:1.2}
+.sidebar-sub{font-size:12px;color:var(--text-muted);margin-top:6px}
+.nav-item{display:flex;gap:10px;align-items:baseline;padding:7px var(--space-6);font-size:14px;color:var(--text-secondary);border-left:3px solid transparent}
+.nav-item:hover{background:var(--surface);text-decoration:none;color:var(--text-body)}
+.nav-item.active{background:var(--clover-soft);color:var(--clover);border-left-color:var(--clover);font-weight:600}
+.nav-num{font-family:var(--font-mono);font-size:12px;color:var(--text-muted);min-width:20px}
+.nav-item.active .nav-num{color:var(--clover)}
+.content{flex:1;max-width:860px;padding:var(--space-10) var(--space-10) 120px;min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-8);gap:12px;flex-wrap:wrap}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--clover)}
+.toggle{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;color:var(--text-body);cursor:pointer;font-family:inherit}
+.toggle:hover{border-color:var(--clover)}
+section{scroll-margin-top:20px;padding:var(--space-8) 0;border-top:1px solid var(--border)}
+section:first-of-type{border-top:none;padding-top:0}
+.sec-num{font-family:var(--font-mono);font-size:13px;color:var(--clover);font-weight:700;letter-spacing:.05em}
+.lead{font-size:18px;color:var(--text-body)}
+.callout{border-left:4px solid var(--stone-400);background:var(--surface);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}
+.callout .label{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:4px}
+.callout p{margin:4px 0}
+.callout.rule{border-color:var(--blue-500);background:var(--blue-50)}.callout.rule .label{color:var(--blue-700)}
+.callout.tip{border-color:var(--green-500);background:var(--green-50)}.callout.tip .label{color:var(--green-600)}
+.callout.proposed{border-color:var(--amber-500);background:var(--amber-50)}.callout.proposed .label{color:var(--amber-800)}
+.callout.warn{border-color:var(--red-500);background:var(--red-50)}.callout.warn .label{color:var(--red-600)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-secondary);font-weight:700;background:var(--surface)}
+tr:last-child td{border-bottom:none}
+.card{background:var(--surface-alt);border:1px solid var(--border);border-radius:12px;padding:var(--space-6);margin:16px 0}
+.rules-card{border:2px solid var(--clover);border-radius:12px;padding:var(--space-6);background:var(--surface-alt);margin:18px 0}
+.rules-card h3{margin-top:0;color:var(--clover)}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--clover-soft);color:var(--clover);letter-spacing:.03em;vertical-align:middle}
+.pill.amber{background:var(--amber-100);color:var(--amber-800)}
+/* flow diagram */
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:18px 0}
+.flow-step{flex:1;min-width:120px;background:var(--surface-alt);border:1px solid var(--border);border-top:3px solid var(--clover);border-radius:10px;padding:14px;position:relative}
+.flow-step .n{font-family:var(--font-mono);font-size:12px;color:var(--clover);font-weight:700}
+.flow-step .t{font-weight:700;color:var(--text-strong);margin:4px 0 2px;font-size:15px}
+.flow-step .d{font-size:13px;color:var(--text-secondary)}
+.flow-arrow{display:flex;align-items:center;color:var(--clover);font-size:22px;font-weight:700}
+@media(max-width:680px){.flow-arrow{transform:rotate(90deg)}.flow-step{min-width:100%}}
+/* boards diagram */
+.boards{display:flex;gap:20px;flex-wrap:wrap;margin:16px 0}
+.lane{flex:1;min-width:200px;border:1px dashed var(--border-strong);border-radius:10px;padding:14px;background:var(--surface)}
+.lane h4{margin:0 0 8px}
+.board-ico{display:inline-block;width:34px;height:22px;border:2px solid var(--clover);border-radius:4px;position:relative;vertical-align:middle;margin-right:6px}
+.board-ico::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--clover);top:3px;left:50%;transform:translateX(-50%)}
+/* notes */
+.notes{margin-top:18px;background:var(--surface);border:1px dashed var(--border-strong);border-radius:10px;padding:14px}
+.notes-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.notes-head .lbl{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--text-secondary)}
+.notes-head .status{font-size:11px;color:var(--text-muted)}
+.notes textarea{width:100%;min-height:64px;background:var(--surface-alt);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--font-body);font-size:14px;color:var(--text-body);resize:vertical;line-height:1.5}
+.notes textarea:focus{outline:none;border-color:var(--clover)}
+.notes-tools{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.btn{background:var(--surface-alt);border:1px solid var(--border);border-radius:7px;padding:6px 11px;font-size:12.5px;color:var(--text-body);cursor:pointer;font-family:inherit}
+.btn:hover{border-color:var(--clover);color:var(--clover)}
+.mobile-nav{display:none}
+@media(max-width:920px){
+  .sidebar{display:none}
+  .content{padding:var(--space-6) var(--space-4) 100px;max-width:100%}
+  .mobile-nav{display:block;position:sticky;top:0;z-index:10;background:var(--sidebar-bg);border-bottom:1px solid var(--border);padding:10px var(--space-4)}
+  .mobile-nav select{width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);background:var(--surface-alt);color:var(--text-body);font-family:inherit;font-size:14px}
+  h1{font-size:27px}h2{font-size:22px}
+}
+.footnote{font-size:13px;color:var(--text-muted);margin-top:40px;padding-top:16px;border-top:1px solid var(--border)}
+@media print{.sidebar,.mobile-nav,.notes,.toggle{display:none}.content{max-width:100%;padding:0}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">🌽 Clover · Monday Bags</div>
+    <div class="sidebar-title">Runner's Playbook</div>
+    <div class="sidebar-sub">How to run the night — a living draft. Your notes save in this browser.</div>
+  </div>
+  <nav id="nav">
+    <a class="nav-item" href="#s00"><span class="nav-num">00</span>How to use this page</a>
+    <a class="nav-item" href="#s01"><span class="nav-num">01</span>The 60-second version</a>
+    <a class="nav-item" href="#s02"><span class="nav-num">02</span>Why blind draw</a>
+    <a class="nav-item" href="#s03"><span class="nav-num">03</span>Before the night: setup</a>
+    <a class="nav-item" href="#s04"><span class="nav-num">04</span>Sign-up &amp; the draw</a>
+    <a class="nav-item" href="#s05"><span class="nav-num">05</span>The rules card</a>
+    <a class="nav-item" href="#s06"><span class="nav-num">06</span>Bracket on 2 boards</a>
+    <a class="nav-item" href="#s07"><span class="nav-num">07</span>The money</a>
+    <a class="nav-item" href="#s08"><span class="nav-num">08</span>The 4-Bagger Pot</a>
+    <a class="nav-item" href="#s09"><span class="nav-num">09</span>Juice &amp; growth</a>
+    <a class="nav-item" href="#s10"><span class="nav-num">10</span>Troubleshooting</a>
+    <a class="nav-item" href="#s11"><span class="nav-num">11</span>Open questions for Sean</a>
+  </nav>
+</aside>
+
+<main class="content">
+<div class="mobile-nav">
+  <select onchange="if(this.value)location.hash=this.value">
+    <option value="">Jump to section…</option>
+    <option value="#s00">00 · How to use this page</option>
+    <option value="#s01">01 · The 60-second version</option>
+    <option value="#s02">02 · Why blind draw</option>
+    <option value="#s03">03 · Before the night: setup</option>
+    <option value="#s04">04 · Sign-up &amp; the draw</option>
+    <option value="#s05">05 · The rules card</option>
+    <option value="#s06">06 · Bracket on 2 boards</option>
+    <option value="#s07">07 · The money</option>
+    <option value="#s08">08 · The 4-Bagger Pot</option>
+    <option value="#s09">09 · Juice &amp; growth</option>
+    <option value="#s10">10 · Troubleshooting</option>
+    <option value="#s11">11 · Open questions for Sean</option>
+  </select>
+</div>
+
+<div class="topbar">
+  <div>
+    <div class="eyebrow">Internal · for the runner</div>
+    <h1 style="margin-top:6px">Monday Bags at Clover</h1>
+  </div>
+  <button class="toggle" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+</div>
+<p class="lead">This is the standard for running Clover's Monday night Bags (cornhole) tournament — built off the 15-year Wednesday Blind Draw Darts playbook. It's a <strong>working draft.</strong> Anything tagged <span class="pill amber">PROPOSED</span> is a starting guess from the darts night and needs Sean's sign-off. Drop notes in any section — they save right in this browser.</p>
+
+<!-- 00 -->
+<section id="s00">
+  <div class="sec-num">00</div>
+  <h2>How to use this page</h2>
+  <ul>
+    <li><strong>It's a living guide, not a finished rulebook.</strong> We get the night running, then iterate on this page together.</li>
+    <li><strong>Tags:</strong> <span class="pill">RULE</span> = real cornhole regulation, locked. <span class="pill amber">PROPOSED</span> = mirrored from the darts night, confirm with Sean before treating as final.</li>
+    <li><strong>Your notes auto-save</strong> in this browser (nothing is sent anywhere). Use them to flag what worked, what to change, and questions for Sean. Hit <em>Copy all my notes</em> in Section 11 to send Sean a recap.</li>
+    <li><strong>Print it:</strong> Section 05 (the rules card) is built to print clean for the wall or the sign-up table.</li>
+  </ul>
+  <div class="callout tip"><span class="label">The one job</span><p>Get people signed up, draw partners fair and random, keep two boards moving, run the 4-Bagger Pot with some theater, and make sure everyone — especially the newcomer who's never thrown a bag — leaves wanting to come back Monday.</p></div>
+  <div class="notes" data-note="s00"></div>
+</section>
+
+<!-- 01 -->
+<section id="s01">
+  <div class="sec-num">01</div>
+  <h2>The 60-second version</h2>
+  <p>Monday night. Anyone who walks in can sign up before we start. We <strong>randomly draw partners</strong> (you don't bring a teammate — you get one), play a <strong>double-elimination bracket</strong> on two boards, and somebody wins the pot. Alongside it runs the <strong>4-Bagger Pot</strong> — a $1-ticket raffle with a carryover jackpot that's the night's big moment.</p>
+  <div class="flow">
+    <div class="flow-step"><div class="n">STEP 1</div><div class="t">Sign up</div><div class="d">Walk in, put your name down before we start. $10. No partner needed.</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="n">STEP 2</div><div class="t">Get drawn</div><div class="d">Partners drawn at random. Good, new, doesn't matter — luck of the draw.</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="n">STEP 3</div><div class="t">Play</div><div class="d">Double-elim bracket, games to 21. Everybody plays at least twice.</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="n">STEP 4</div><div class="t">Win</div><div class="d">Winners take the pot. 4-Bagger Pot drawn through the night.</div></div>
+  </div>
+  <div class="callout rule"><span class="label">Default night settings</span>
+    <p>Sign-up closes at start &middot; <strong>$10</strong>/player <span class="pill amber">PROPOSED</span> &middot; blind-draw doubles if 8+ &amp; even, singles if fewer/odd &middot; double elimination &middot; games to <strong>21</strong> (drop to 15 on a packed night) &middot; two boards running at once.</p>
+  </div>
+  <div class="notes" data-note="s01"></div>
+</section>
+
+<!-- 02 -->
+<section id="s02">
+  <div class="sec-num">02</div>
+  <h2>Why blind draw — the whole point</h2>
+  <p>This is the thing that made Wednesday darts last 15 years, and it's why we run bags the same way. <strong>Random partners</strong> means:</p>
+  <ul>
+    <li>Two ringers <strong>can't stack a team</strong> and run the table every week.</li>
+    <li>A brand-new player <strong>always feels like they've got a shot</strong> — because they might draw a great partner.</li>
+    <li>The good players accept they <strong>should win even carrying a weak partner</strong> — so they buy in too.</li>
+    <li>The newer players <strong>get better</strong> fast, playing alongside strong ones. Give it a few months and <em>nobody's bad</em>. The room becomes a crew, not a clique.</li>
+  </ul>
+  <div class="callout tip"><span class="label">Say it out loud to newcomers</span><p>"You don't need a partner — you'll get drawn one. Anybody can win this." That single sentence is the best recruiting tool you have. Comp a newcomer's entry if it helps get the numbers even.</p></div>
+  <p>This is also why we run <strong>real rules</strong>, not watered-down ones (Section 05). The darts night pulled in serious city-league players precisely because it was legit. Rigorous game, welcoming room — that's the combination.</p>
+  <div class="notes" data-note="s02"></div>
+</section>
+
+<!-- 03 -->
+<section id="s03">
+  <div class="sec-num">03</div>
+  <h2>Before the night: setup</h2>
+  <h4>Equipment</h4>
+  <table>
+    <tr><th>Item</th><th>What you need</th></tr>
+    <tr><td>Boards</td><td>2 regulation boards (2 ft × 4 ft, 6-inch hole). <span class="pill">RULE</span></td></tr>
+    <tr><td>Distance</td><td>Regulation is 27 ft front-to-front, but <strong>use 20–25 ft for the bar</strong>. Pick one number, mark the floor with tape, and keep <em>both</em> lanes identical. Watch the ceiling/TVs/lights — bags fly high indoors. <span class="pill">RULE</span></td></tr>
+    <tr><td>Bags</td><td>Dual-sided "pro" bags (one slick side, one sticky), 2 contrasting colors, ideally 2 sets (one per board). Not corn-fill — it rots and dusts indoors. <span class="pill">RULE</span></td></tr>
+    <tr><td>Tournament app</td><td><strong>Scoreholio</strong> (free) on a phone/tablet. It does the random draw, runs the bracket, and shows a live leaderboard you can cast to a TV. <span class="pill amber">PROPOSED</span> tool</td></tr>
+    <tr><td>Backup</td><td>Printed double-elim bracket from PrintYourBrackets.com (same site Sean uses for darts) + a pen, in case the app flakes.</td></tr>
+    <tr><td>Sign-up</td><td>Sign-up sheet or the app's player entry. <strong>Capture a phone number or email</strong> from each player — that's the list you text next week's pot to.</td></tr>
+    <tr><td>4-Bagger Pot</td><td>Roll of raffle tickets + a cup/bucket + a marker for the running pot total (a small whiteboard near the boards is perfect).</td></tr>
+  </table>
+  <div class="callout proposed"><span class="label">Confirm with Sean / the bar</span><p>Exact board distance that fits Clover's floor right now, where the boards live on a busy Monday, and whether the bar's buying the boards/bags or Sean is. Re-confirm once the patio's done — more room means more boards (Section 09).</p></div>
+  <h4>Setup checklist (night-of)</h4>
+  <ul>
+    <li>Boards out, taped at the set distance, lane clear of stools and foot traffic.</li>
+    <li>Scoreholio open, new tournament created (see Section 06), TV showing the bracket if you can.</li>
+    <li>Sign-up sheet + ticket cup on the bar/table where people walk in.</li>
+    <li>Tell the bartender it's bags night — they're your money handoff (Section 07).</li>
+  </ul>
+  <div class="notes" data-note="s03"></div>
+</section>
+
+<!-- 04 -->
+<section id="s04">
+  <div class="sec-num">04</div>
+  <h2>Sign-up &amp; the draw</h2>
+  <h4>Timing</h4>
+  <p>Open sign-ups when the night starts and <strong>close them before the first game</strong> — same as darts. Once it's closed, you draw. Don't hold the bracket waiting on stragglers; let them catch next week (or slot them into the loser's bracket only if you haven't started — your call).</p>
+  <h4>Singles or doubles? (the same rule as darts)</h4>
+  <table>
+    <tr><th>Players signed up</th><th>Format</th></tr>
+    <tr><td><strong>8 or more, even number</strong></td><td>Blind-draw <strong>doubles</strong> — randomly pair everyone into teams.</td></tr>
+    <tr><td><strong>Fewer than 8, or an odd number</strong></td><td>Run it as <strong>singles</strong> (1v1).</td></tr>
+  </table>
+  <div class="callout tip"><span class="label">You're the flex</span><p>Just like Sean steps out of darts to make the numbers work, the runner (or a willing regular) plays or sits to keep it even and teamable. Odd number at 9? Comp a newcomer to make it 10, or sit yourself to make 8. Getting to an even 8+ unlocks doubles, which is the better night.</p></div>
+  <h4>The draw</h4>
+  <p>Let <strong>Scoreholio do the random pairing</strong> (or draw names from a cup if you're going old-school). The randomness has to be visible and fair — that's the whole social contract. Announce the teams out loud; people love hearing who they got.</p>
+  <div class="callout proposed"><span class="label">Variant in the back pocket — Switcholio</span><p>On a thin or odd Monday, Scoreholio's <strong>Switcholio</strong> mode gives everyone a <em>new</em> partner every game and ranks people individually — it kills the odd-number problem and lets people join late or leave early. We're <strong>defaulting to draw-and-keep</strong> (you keep your drawn partner all night, like darts) because being stuck carrying your partner is part of the fun. Keep Switcholio as the rainy-day option.</p></div>
+  <div class="notes" data-note="s04"></div>
+</section>
+
+<!-- 05 -->
+<section id="s05">
+  <div class="sec-num">05</div>
+  <h2>The rules card</h2>
+  <p>This is the real cornhole spine. Print this section and tape it by the boards — it settles 95% of disputes. All <span class="pill">RULE</span> unless marked.</p>
+  <div class="rules-card">
+    <h3>🌽 How to play — Clover Bags</h3>
+    <h4>Scoring (cancellation)</h4>
+    <ul>
+      <li>Bag <strong>through the hole = 3</strong> points. Bag resting <strong>on the board = 1</strong>. On the ground (or touched ground first) = <strong>0</strong>.</li>
+      <li>Each round, <strong>only one team scores.</strong> Total each team's points for the round; the higher subtracts the lower and scores <strong>the difference</strong>. Tie = nobody scores.</li>
+      <li><em>Example:</em> You get 1 in the hole (3) + 1 on the board (1) = 4. They get 2 on the board (2). You score <strong>4 − 2 = 2</strong>. They score 0.</li>
+    </ul>
+    <h4>Winning</h4>
+    <ul>
+      <li><strong>First to 21 or more</strong> at the <strong>end of a full round</strong> wins. Going over is fine — 23 wins. <strong>No "bust," no win-by-2.</strong> (Fastest, fewest arguments.)</li>
+      <li>The win is only checked after all 8 bags are thrown — never mid-round.</li>
+    </ul>
+    <h4>Throwing</h4>
+    <ul>
+      <li>Each player throws <strong>4 bags</strong>, alternating one at a time with the opponent.</li>
+      <li><strong>Last team to score throws first</strong> the next round ("honors"). If nobody scored, same team throws first again.</li>
+      <li><strong>Foul (bag is dead, removed):</strong> stepping on/over the front edge of the board before releasing; a bag that <strong>hits the floor first then slides on</strong>; a bag that hits the ceiling, a light, or a TV.</li>
+      <li>A bag legally on the board that gets <strong>knocked into the hole later</strong> by another bag <em>counts</em> — final resting position is what matters.</li>
+    </ul>
+    <h4>Doubles setup</h4>
+    <ul>
+      <li>Partners stand <strong>diagonally — one at each board.</strong> The two players at the same board are <strong>opponents.</strong> You stay at your board the whole game.</li>
+    </ul>
+    <h4>Speed lever <span class="pill amber">runner's call</span></h4>
+    <ul>
+      <li>Standard game is to <strong>21</strong>. On a packed night with a long bracket, drop to <strong>15</strong> to clear games faster. Decide before the round starts, announce it, keep it consistent.</li>
+    </ul>
+  </div>
+  <div class="callout warn"><span class="label">House-rule trap</span><p>The "bust back to 13 if you go over 21" rule is fun but <strong>slows games and starts arguments</strong> — no pro league uses it. Skip it for the tournament. If the crowd begs for it, run it as a one-off "house night" and post the reset number first.</p></div>
+  <div class="notes" data-note="s05"></div>
+</section>
+
+<!-- 06 -->
+<section id="s06">
+  <div class="sec-num">06</div>
+  <h2>Running the bracket on 2 boards</h2>
+  <p>We start with <strong>two boards</strong> (more when the patio's built). That's the real constraint, so the night is designed around it. Good news: bags games are quick, and two boards means <strong>two matches at once.</strong></p>
+  <h4>The format</h4>
+  <ul>
+    <li><strong>Double elimination</strong> — two losses and you're out. This guarantees everyone <strong>at least two games</strong>, which is the single most important thing for a night people come back to. Nobody drives over, loses once, and leaves mad.</li>
+    <li><strong>One game per match</strong> (to 21), <strong>best-of-3 for the final</strong> only. Single games keep the bracket moving on two boards.</li>
+  </ul>
+  <div class="boards">
+    <div class="lane"><h4><span class="board-ico"></span>Board 1</h4><p style="font-size:13.5px;margin:0;color:var(--text-secondary)">Runs one match while…</p></div>
+    <div class="lane"><h4><span class="board-ico"></span>Board 2</h4><p style="font-size:13.5px;margin:0;color:var(--text-secondary)">…the next match plays here. Winners report to you; you feed the next pair in.</p></div>
+  </div>
+  <h4>Throughput — how big a field fits</h4>
+  <table>
+    <tr><th>Game target</th><th>~Games/hour (2 boards)</th><th>Good for</th></tr>
+    <tr><td>To 21 (20-min cap)</td><td>~6</td><td>Normal night, 8–12 players</td></tr>
+    <tr><td>To 15</td><td>~10</td><td>Packed night, 12–16 players</td></tr>
+  </table>
+  <div class="callout tip"><span class="label">Field size</span><p><strong>12 players is the sweet spot; ~16 is the cap</strong> on two boards before benched people get bored. Past 16, either start a waitlist for next week or split into two tiers. When the patio adds boards, raise the cap.</p></div>
+  <h4>Keeping the energy up while people wait</h4>
+  <ul>
+    <li>Put the <strong>live bracket/leaderboard on a TV</strong> (Clover's got plenty). Benched players are drinking and watching — that's fine for a bar, as long as they can see what's next.</li>
+    <li>Use a <strong>20-minute soft cap</strong> per match; if a game's dragging, call it (highest score wins, or one sudden-death round).</li>
+    <li>Call the <strong>next two pairs</strong> out loud so they're ready the second a board opens. Dead board time is the enemy.</li>
+  </ul>
+  <div class="notes" data-note="s06"></div>
+</section>
+
+<!-- 07 -->
+<section id="s07">
+  <div class="sec-num">07</div>
+  <h2>The money</h2>
+  <div class="callout proposed"><span class="label">All numbers here are PROPOSED — mirrored from darts, confirm with Sean</span><p>This is the part most likely to change. It's set up exactly like the dart night as a starting point.</p></div>
+  <table>
+    <tr><th>Piece</th><th>Starting setup <span class="pill amber">PROPOSED</span></th></tr>
+    <tr><td>Buy-in</td><td><strong>$10 per player</strong>, collected at sign-up.</td></tr>
+    <tr><td>Bar contribution</td><td><strong>$50</strong> added to the pot by the bar (the darts number).</td></tr>
+    <tr><td>Payout</td><td><strong>Winning team takes the pot</strong>, but is expected to <strong>pay second place their buy-in back.</strong> (Exact darts rule.)</td></tr>
+    <tr><td>Who holds the cash</td><td>Same chain as darts: the <strong>runner collects</strong> at sign-up, the <strong>bartender is the bank</strong> / payout point. Sean goes to the Wednesday bartender for darts money and the Hot Shot — mirror that handoff on Mondays.</td></tr>
+  </table>
+  <div class="callout proposed"><span class="label">Open questions for Sean (Section 11)</span><p>Buy-in amount · is $50 the right bar add · does the winner-pays-2nd rule carry over · who exactly holds and pays out the cash on a Monday · does the runner take a cut or is it pure player pot.</p></div>
+  <div class="notes" data-note="s07"></div>
+</section>
+
+<!-- 08 -->
+<section id="s08">
+  <div class="sec-num">08</div>
+  <h2>The 4-Bagger Pot <span class="pill">the night's big moment</span></h2>
+  <p>This is the bags version of the darts <strong>Hot Shot</strong> — same structure, same theater, same carryover drama. It's the thing people remember and the reason the pot grows week over week.</p>
+  <h4>How it runs</h4>
+  <ol>
+    <li>Sell <strong>$1 tickets</strong> all night (separate from the entry). Keep a running <strong>pot total visible</strong> by the boards.</li>
+    <li>At a good moment (between rounds, crowd's into it), <strong>draw tickets in sequence</strong> — same escalation as the darts Hot Shot:
+      <ul>
+        <li><strong>1st draw:</strong> winner gets a <strong>free drink.</strong></li>
+        <li><strong>2nd draw:</strong> winner gets a <strong>shot.</strong></li>
+        <li><strong>3rd draw — the 4-Bagger Challenge:</strong> 🔇 <strong>music off, whole bar watching.</strong> The drawn player gets <strong>one round — 4 bags</strong> — at the board. <strong>Each bag in the hole pays ¼ of the pot.</strong> Sink all four (a true <strong>4-bagger</strong>) and they take the <strong>whole pot.</strong></li>
+      </ul>
+    </li>
+    <li><strong>Whatever isn't won carries over to next Monday.</strong> A fat carryover pot is your best "come back next week" hook — text it to the list.</li>
+    <li><em>Optional 4th draw:</em> one more name, single-bag attempt at a fixed payout if the main challenge whiffed.</li>
+  </ol>
+  <div class="callout tip"><span class="label">The ritual is the point</span><p>Sean's darts tip, straight across: <strong>kill the music, build it up, make the room watch.</strong> The 4-Bagger Challenge is theater. Balance paying out (exciting now) against letting it carry (anticipation later) — a growing jackpot is its own marketing.</p></div>
+  <div class="callout proposed"><span class="label">Second money line — pick one to start</span><p>A <strong>50/50 raffle</strong> or a <strong>$10 mulligan (re-throw) sale</strong> runs in parallel, near-pure-profit, and funds prizes / the bar's cut. Start with whichever's simpler for you to run and we'll tune it.</p></div>
+  <div class="notes" data-note="s08"></div>
+</section>
+
+<!-- 09 -->
+<section id="s09">
+  <div class="sec-num">09</div>
+  <h2>Juice &amp; growth</h2>
+  <h4>Season standings — the come-back hook</h4>
+  <p>Beyond one night's pot, track <strong>weekly placement points</strong> (e.g. 1st = 5, 2nd = 3, 3rd = 2, 4th = 1) on a board or in the app, building to a season champ. This is what turns a fun night into a <em>habit</em> — regulars come back to climb the standings. Real Chicago bar leagues live on this ("every night has a winner, every season has a champ"). <span class="pill amber">PROPOSED enhancement — worth the tracking effort?</span></p>
+  <h4>Slow-night fallback — King of the Hill</h4>
+  <p>If only a handful show, skip the bracket: <strong>winner stays on, loser rotates off, next in line plays.</strong> Lowest overhead, keeps it moving, still fun.</p>
+  <h4>Recruiting (where the players come from)</h4>
+  <ul>
+    <li><strong>Wednesday darts regulars</strong> — same competitive-social crowd, different night. Your warmest list. Text them.</li>
+    <li><strong>Monday's existing Service Industry Night crowd</strong> — industry folks are off Mondays and already in the room (Happy Hour 4–7 + 40% off w/ proof). Pair the bags night with it.</li>
+    <li>The <strong>sports/Iowa crowd</strong> Clover already draws.</li>
+    <li><strong>Capture contacts at every sign-up</strong> and group-text the carryover pot before Mondays — Sean's #1 darts-recruiting move.</li>
+  </ul>
+  <h4>When the patio opens</h4>
+  <p>More space = more boards = bigger field. Raise the cap, run more matches in parallel, and the same model scales (Scoreholio's free plan handles up to 8 courts). This is also the moment to consider a second tier or a bigger "major" night.</p>
+  <div class="notes" data-note="s09"></div>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+  <div class="sec-num">10</div>
+  <h2>Troubleshooting / quick answers</h2>
+  <table>
+    <tr><th>Situation</th><th>What to do</th></tr>
+    <tr><td>Odd number of players</td><td>You (or a regular) sit or play to make it even. Comp a newcomer to get to an even 8+ for doubles. Or run singles.</td></tr>
+    <tr><td>Way too many players (&gt;16)</td><td>Drop games to 15 to clear faster, start a waitlist, or split into two flights. Don't let benched people sit 40 minutes.</td></tr>
+    <tr><td>A game's dragging past the cap</td><td>Call the 20-minute cap: highest score wins, or one sudden-death round.</td></tr>
+    <tr><td>Scoring dispute</td><td>Point to the rules card (Section 05). Cancellation + count out loud before clearing the boards prevents most of these.</td></tr>
+    <tr><td>A bag's in/out call is contested</td><td>On the board surface = 1, through the hole = 3, touched the ground first = dead. If truly 50/50, re-throw that one bag.</td></tr>
+    <tr><td>App dies mid-night</td><td>Switch to the printed PrintYourBrackets sheet and pen. Keep it on the table as backup every week.</td></tr>
+    <tr><td>Thin turnout</td><td>King of the Hill (Section 09) or Switcholio. Keep it fun, don't force a big bracket.</td></tr>
+    <tr><td>No-show after sign-up/draw</td><td>If pre-game, re-draw. If mid-bracket, that team forfeits the current game; use a sub from the bench if everyone agrees.</td></tr>
+  </table>
+  <div class="notes" data-note="s10"></div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+  <div class="sec-num">11</div>
+  <h2>Open questions for Sean</h2>
+  <p>The <span class="pill amber">PROPOSED</span> calls we lock in once we've run a night or two:</p>
+  <ol>
+    <li><strong>Money:</strong> buy-in amount, bar contribution, winner-pays-2nd, who banks/pays the cash, runner's cut (if any).</li>
+    <li><strong>Draw-and-keep vs Switcholio</strong> as the default partner model.</li>
+    <li><strong>Season standings</strong> — do it from day one, or keep it night-by-night to start?</li>
+    <li><strong>Second money line</strong> — 50/50 raffle or mulligan sale?</li>
+    <li><strong>Board distance</strong> that fits Clover's floor now (and the patio later).</li>
+    <li><strong>Start time</strong> — teaser currently says sign up by 7:30, first throw 8pm (mirrors darts). Confirm the Monday time.</li>
+    <li><strong>The handoff</strong> — exactly how much Sean runs vs. hands to the runner.</li>
+  </ol>
+  <div class="card">
+    <h4 style="margin-top:0">📝 Your running notes for Sean</h4>
+    <p style="font-size:14px;color:var(--text-secondary)">Anything you want to flag from a real night — what worked, what to change, questions. Auto-saves here. Hit the button to copy a clean recap of <em>all</em> your section notes to send him.</p>
+    <div class="notes" data-note="s11" data-bare="1"></div>
+    <div class="notes-tools">
+      <button class="btn" onclick="copyAllNotes()">📋 Copy all my notes</button>
+      <button class="btn" onclick="clearAllNotes()">🗑 Clear all notes</button>
+    </div>
+  </div>
+  <p class="footnote">Built by EngineOS for Sean Currie &middot; 2026-06-21 &middot; v1 working draft &middot; synthesized from the Wednesday Blind Draw Darts SOP + cornhole/ACL rules + real Chicago bar-league research. This is a draft to iterate on, not a final standard.</p>
+</section>
+</main>
+</div>
+
+<script>
+// ── theme ──
+var TKEY="cloverbags-theme";
+function applyTheme(t){document.documentElement.setAttribute("data-theme",t);var b=document.getElementById("themeBtn");if(b)b.textContent=t==="dark"?"☀️ Light":"🌙 Dark";}
+function toggleTheme(){var c=document.documentElement.getAttribute("data-theme")==="dark"?"dark":"light";var n=c==="dark"?"light":"dark";applyTheme(n);try{localStorage.setItem(TKEY,n)}catch(e){}}
+(function(){var s="light";try{s=localStorage.getItem(TKEY)||(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}catch(e){}applyTheme(s);})();
+
+// ── persistent per-section notes ──
+var NKEY="cloverbags-notes-";
+function buildNotes(){
+  document.querySelectorAll(".notes[data-note]").forEach(function(box){
+    var id=box.getAttribute("data-note");
+    var bare=box.getAttribute("data-bare");
+    if(!bare){
+      box.innerHTML='<div class="notes-head"><span class="lbl">📝 Notes for this section</span><span class="status" id="st-'+id+'"></span></div>';
+    }
+    var ta=document.createElement("textarea");
+    ta.placeholder="Notes, tweaks, questions for Sean…";
+    try{ta.value=localStorage.getItem(NKEY+id)||""}catch(e){}
+    var t;
+    ta.addEventListener("input",function(){
+      try{localStorage.setItem(NKEY+id,ta.value)}catch(e){}
+      var st=document.getElementById("st-"+id);
+      if(st){st.textContent="saved ✓";clearTimeout(t);t=setTimeout(function(){st.textContent=""},1200);}
+    });
+    box.appendChild(ta);
+  });
+}
+buildNotes();
+function copyAllNotes(){
+  var out=[],map={s00:"00 How to use",s01:"01 60-second",s02:"02 Why blind draw",s03:"03 Setup",s04:"04 Sign-up & draw",s05:"05 Rules",s06:"06 Bracket/2 boards",s07:"07 Money",s08:"08 4-Bagger Pot",s09:"09 Juice & growth",s10:"10 Troubleshooting",s11:"11 Notes for Sean"};
+  Object.keys(map).forEach(function(k){var v="";try{v=localStorage.getItem(NKEY+k)||""}catch(e){}if(v.trim())out.push("### "+map[k]+"\n"+v.trim());});
+  var text=out.length?("Clover Monday Bags — runner notes\n\n"+out.join("\n\n")):"(No notes yet — type in any section first.)";
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){alert("Copied all notes — paste them to Sean.")},function(){fallbackCopy(text)});}else{fallbackCopy(text);}
+}
+function fallbackCopy(text){var ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand("copy");alert("Copied all notes — paste them to Sean.")}catch(e){alert("Couldn't auto-copy. Notes are saved in this browser.")}document.body.removeChild(ta);}
+function clearAllNotes(){if(!confirm("Clear ALL your notes on this page? Can't undo."))return;["s00","s01","s02","s03","s04","s05","s06","s07","s08","s09","s10","s11"].forEach(function(k){try{localStorage.removeItem(NKEY+k)}catch(e){}});document.querySelectorAll(".notes textarea").forEach(function(t){t.value=""});}
+
+// ── scroll-spy ──
+var navlinks=Array.prototype.slice.call(document.querySelectorAll(".nav-item"));
+var secs=navlinks.map(function(a){return document.querySelector(a.getAttribute("href"))}).filter(Boolean);
+function spy(){var y=window.scrollY+120,cur=secs[0];for(var i=0;i<secs.length;i++){if(secs[i].offsetTop<=y)cur=secs[i]}navlinks.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+cur.id)})}
+window.addEventListener("scroll",spy);spy();
+</script>
+</body>
+</html>
