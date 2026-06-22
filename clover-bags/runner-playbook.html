@@ -91,13 +91,14 @@ tr:last-child td{border-bottom:none}
 .lane h4{margin:0 0 8px}
 .board-ico{display:inline-block;width:34px;height:22px;border:2px solid var(--clover);border-radius:4px;position:relative;vertical-align:middle;margin-right:6px}
 .board-ico::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--clover);top:3px;left:50%;transform:translateX(-50%)}
-/* notes */
-.notes{margin-top:18px;background:var(--surface);border:1px dashed var(--border-strong);border-radius:10px;padding:14px}
-.notes-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.notes-head .lbl{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--text-secondary)}
-.notes-head .status{font-size:11px;color:var(--text-muted)}
-.notes textarea{width:100%;min-height:64px;background:var(--surface-alt);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--font-body);font-size:14px;color:var(--text-body);resize:vertical;line-height:1.5}
-.notes textarea:focus{outline:none;border-color:var(--clover)}
+/* notes — interactive, attention-drawing */
+.notes{margin-top:20px;background:var(--clover-soft);border:1px solid var(--clover);border-left:5px solid var(--clover);border-radius:12px;padding:15px 16px 14px;box-shadow:0 3px 14px rgba(31,138,76,.14)}
+.notes-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:8px}
+.notes-head .lbl{font-size:13px;font-weight:800;letter-spacing:.02em;color:var(--clover)}
+.notes-head .status{font-size:11px;font-weight:700;color:var(--clover)}
+.notes textarea{width:100%;min-height:72px;background:var(--surface-alt);border:1px solid var(--border-strong);border-radius:8px;padding:11px 13px;font-family:var(--font-body);font-size:14.5px;color:var(--text-body);resize:vertical;line-height:1.5}
+.notes textarea::placeholder{color:var(--text-secondary)}
+.notes textarea:focus{outline:none;border-color:var(--clover);box-shadow:0 0 0 3px rgba(31,138,76,.18)}
 .notes-tools{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
 .btn{background:var(--surface-alt);border:1px solid var(--border);border-radius:7px;padding:6px 11px;font-size:12.5px;color:var(--text-body);cursor:pointer;font-family:inherit}
 .btn:hover{border-color:var(--clover);color:var(--clover)}
@@ -423,10 +424,10 @@ function buildNotes(){
     var id=box.getAttribute("data-note");
     var bare=box.getAttribute("data-bare");
     if(!bare){
-      box.innerHTML='<div class="notes-head"><span class="lbl">📝 Notes for this section</span><span class="status" id="st-'+id+'"></span></div>';
+      box.innerHTML='<div class="notes-head"><span class="lbl">📝 Your notes for this section</span><span class="status" id="st-'+id+'"></span></div>';
     }
     var ta=document.createElement("textarea");
-    ta.placeholder="Notes, tweaks, questions for Sean…";
+    ta.placeholder="Tap here to jot a note — tweaks, wins, questions for Sean…";
     try{ta.value=localStorage.getItem(NKEY+id)||""}catch(e){}
     var t;
     ta.addEventListener("input",function(){
