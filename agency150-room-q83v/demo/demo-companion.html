@@ -53,6 +53,22 @@
   .gname{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--ink)}
   .gtype{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-left:8px}
   .gdef{font-size:13px;color:var(--soft);margin-top:3px}
+  /* nav aids */
+  .lgnd-h,.mm-h,.ct-h{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:18px 0 7px}
+  .lgnd-i{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--soft);margin:0 12px 6px 0}
+  .lgnd-i .tag{font-size:9px;padding:2px 6px}
+  .mm-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:5px 12px}
+  .mm-i{font-size:12px;color:var(--soft);text-decoration:none;padding:3px 0;border-bottom:1px solid transparent}
+  .mm-i:hover{color:var(--navy);border-bottom-color:var(--line)}
+  .mm-i b{color:var(--gold);font-weight:800;margin-right:4px}
+  #catches{background:#fdfaf2;border:1px solid #ecdcb4;border-radius:10px;padding:13px 16px;margin:16px 0 2px}
+  .ct-h{color:var(--gold);margin:0 0 8px}
+  .ct-i{display:block;font-size:13px;color:var(--ink);text-decoration:none;padding:5px 0 5px 18px;position:relative;border-top:1px solid #f0e6cf}
+  .ct-i:first-of-type{border-top:none}
+  .ct-i::before{content:"→";position:absolute;left:0;color:var(--gold);font-weight:700}
+  .ct-i:hover{color:var(--navy2)}
+  .row:target{background:#fef9e7 !important;box-shadow:inset 3px 0 0 var(--gold)}
+  @media print{#minimap,#catches,#legend{break-inside:avoid}}
   .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:9px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
   @media (max-width:560px){ .row{grid-template-columns:1fr;gap:3px} .tm,.tag{display:inline-block} .tag{margin-left:8px} }
 </style>
@@ -65,6 +81,10 @@
   <div class="rule"></div>
   <p class="intro">It started with a couple of casual sentences from Jimmy about a company called <b>Agency150</b> and a meeting where he might invest his own money. From that, the system built a full investment analysis — and recorded each step it took, live, into this log. The gold lines are where it caught something or made a real call. The red lines are its checkpoints.</p>
   <p class="hint">Tip: the <span class="term" data-k="adversarial-evaluator">underlined terms</span> are EngineOS’s own machinery — hover one (or tap, on a phone) for a quick definition. The full glossary is at the bottom.</p>
+
+  <div id="legend"></div>
+  <div id="minimap"></div>
+  <div id="catches"></div>
 
   <div id="log"></div>
   <div id="glossary"></div>
@@ -283,17 +303,44 @@ function wrap(s){ return s.replace(RX,function(m){ var k=_fk[m.toLowerCase()]; r
 
 var TAGCLASS = {LOG:'t-log',JUDGMENT:'t-judgment',SKILL:'t-skill',MEMORY:'t-memory',PLAN:'t-plan',GATE:'t-gate',TOOL:'t-tool',RESEARCH:'t-research',AGENT:'t-agent',REVIEW:'t-review',NOTE:'t-note',LIFT:'t-lift'};
 var TAGLABEL = {LOG:'Log',JUDGMENT:'Call',SKILL:'Skill',MEMORY:'Memory',PLAN:'Plan',GATE:'Gate',TOOL:'Tool',RESEARCH:'Build',AGENT:'Agents',REVIEW:'Review',NOTE:'Note',LIFT:'Lift'};
-var c = document.getElementById('log'), html='';
+var c = document.getElementById('log'), html='', phaseIdx=0, rowIdx=0, PHASES=[];
 L.forEach(function(e){
-  if(e[0]==='PHASE'){ html+='<div class="phase">'+e[1]+'</div>'; return; }
+  if(e[0]==='PHASE'){ var pid='ph'+(phaseIdx++); PHASES.push({id:pid,title:e[1]}); html+='<div class="phase" id="'+pid+'">'+e[1]+'</div>'; return; }
   var time=e[0], tag=e[1], text=e[2], note=e[3], flag=e[4]||'';
-  html+='<div class="row '+flag+'">'+
+  html+='<div class="row '+flag+'" id="row'+(rowIdx++)+'">'+
     '<div class="tm">'+time+'</div>'+
     '<div class="tag '+(TAGCLASS[tag]||'t-note')+'">'+(TAGLABEL[tag]||tag)+'</div>'+
     '<div class="body"><div class="log">'+(flag==='star'?'<span class="star-i">★ </span>':'')+wrap(text)+'</div><div class="note">'+wrap(note)+'</div></div>'+
   '</div>';
 });
 c.innerHTML = html;
+
+// tag legend
+var TAGGLOSS={Skill:'a routine it ran',Memory:'pulled from its own memory',Call:'a judgment it made',Plan:'planning / governance',Gate:'a hard checkpoint',Tool:'an external tool call',Build:'built or wrote something',Agents:'parallel researchers',Review:'a quality check',Lift:'made a capability permanent'};
+var LEGORDER=['Skill','Memory','Call','Plan','Gate','Tool','Build','Agents','Review','Lift'];
+var TC={Skill:'t-skill',Memory:'t-memory',Call:'t-judgment',Plan:'t-plan',Gate:'t-gate',Tool:'t-tool',Build:'t-research',Agents:'t-agent',Review:'t-review',Lift:'t-lift'};
+var lh='<div class="lgnd-h">The tags — a quick key</div>';
+LEGORDER.forEach(function(t){ lh+='<span class="lgnd-i"><span class="tag '+TC[t]+'">'+t+'</span> '+TAGGLOSS[t]+'</span>'; });
+document.getElementById('legend').innerHTML=lh;
+
+// phase mini-map (jump-nav)
+var mh='<div class="mm-h">The '+PHASES.length+' phases — jump to any</div><div class="mm-list">';
+PHASES.forEach(function(p,i){ mh+='<a class="mm-i" href="#'+p.id+'"><b>'+(i+1)+'</b>'+p.title+'</a>'; });
+document.getElementById('minimap').innerHTML=mh+'</div>';
+
+// the catches rail (marquee moments → jump to the row)
+var CATCHES=[
+ {h:'Caught the twist — it isn’t the company Jimmy was told',m:'caught the twist'},
+ {h:'Flagged a possible made-up claim in its OWN research — then re-verified it',m:'flagged #8'},
+ {h:'An independent reviewer re-checked the big claims with its own fresh research',m:'re-verified the big claims'},
+ {h:'Didn’t take the reviewer’s word — recomputed the verdict from the raw scores',m:'recalculated from the scores'},
+ {h:'An independent reviewer FAILED a check — exactly its job',m:'reviewer FAIL on one criterion'},
+ {h:'Found the gold-standard rival already moving onto Vega’s only claimed edge',m:'KEY FIND'}
+];
+var allRows=document.querySelectorAll('.row');
+var kh='<div class="ct-h">★ The catches — the moments that matter</div>';
+CATCHES.forEach(function(cc){ var id=null; for(var i=0;i<allRows.length;i++){ if(allRows[i].textContent.indexOf(cc.m)>=0){ id=allRows[i].id; break; } } if(id){ kh+='<a class="ct-i" href="#'+id+'">'+cc.h+'</a>'; } });
+document.getElementById('catches').innerHTML=kh;
 
 // bottom glossary (same source as the tooltips)
 var GORDER=['Skill','Governance','Discipline','Tool','Memory','Concept'];
