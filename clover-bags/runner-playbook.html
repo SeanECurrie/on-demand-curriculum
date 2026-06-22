@@ -99,7 +99,9 @@ tr:last-child td{border-bottom:none}
 .notes-head .lbl{font-family:var(--font-mono);font-size:13px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#fff}
 .notes-head .status{font-size:11px;font-weight:700;color:rgba(255,255,255,.92)}
 .notes-body{padding:13px 16px 15px}
-.notes-hint{font-size:13.5px;color:var(--text-secondary);font-weight:600;margin:0 0 9px}
+.notes-q{font-size:15.5px;color:var(--text-strong);font-weight:700;line-height:1.4;margin:0 0 10px}
+.notes-why{margin-top:12px;padding-top:10px;border-top:1px dashed var(--note-soft);font-size:12.5px;line-height:1.5;color:var(--text-secondary)}
+.notes-why .lead{color:var(--note);font-weight:800}
 .notes textarea{width:100%;min-height:78px;background:var(--bg);border:1.5px solid var(--note-soft);border-radius:9px;padding:12px 13px;font-family:var(--font-body);font-size:15px;color:var(--text-body);resize:vertical;line-height:1.5}
 .notes textarea::placeholder{color:var(--text-muted)}
 .notes textarea:focus{outline:none;border-color:var(--note);box-shadow:0 0 0 3px rgba(225,29,72,.20)}
@@ -427,12 +429,25 @@ function toggleTheme(){var c=document.documentElement.getAttribute("data-theme")
 
 // ── persistent per-section notes ──
 var NKEY="cloverbags-notes-";
+var NOTE_Q={
+ s00:{q:"Reading this cold — is anything confusing, missing, or wrong before you run a night?",why:"Your first-read reaction shows us where the playbook is unclear. Fixing that now is what lets it run the night for you later."},
+ s01:{q:"Does this 60-second version match how you'd explain bags night to a stranger at the bar?",why:"If the quick pitch lands, every newcomer gets it in one breath — that's how the room grows."},
+ s02:{q:"Did blind-draw actually win people over, or did anyone push back on not picking their own partner?",why:"Blind draw is the whole social contract of the night. How it played live tells us if the heart of it holds up."},
+ s03:{q:"What did setup really take — board distance, where the boards live, who's buying gear? Note the real numbers.",why:"These are the PROPOSED guesses that need ground-truth. Your real setup is what turns them into a locked checklist."},
+ s04:{q:"How did sign-up and the draw flow — timing, singles vs doubles, getting to an even count?",why:"Sign-up is the first impression of the night. Wherever it snagged is exactly what we tighten for next week."},
+ s05:{q:"Which rules caused confusion or arguments at the boards tonight?",why:"The rules card is built to settle 95% of disputes. The 5% you hit is what we add or reword."},
+ s06:{q:"Did two boards keep up with your field — any dead board time or bored players on the bench?",why:"Throughput is the night's real constraint. Your games-per-hour and field size tune the caps for every runner."},
+ s07:{q:"Did the money setup work — buy-in, the bar's add, the payout, and the cash handoff?",why:"Every number here is mirrored from darts as a guess. Your real result is what we lock as the money model."},
+ s08:{q:"How did the 4-Bagger moment land — did the room actually stop and watch? What was the pot and carryover?",why:"This is the night's signature moment. Whatever got the crowd going is what we build the ritual around."},
+ s09:{q:"Worth tracking season standings? And where did tonight's players actually come from?",why:"Growth is the long game. What hooks regulars and where players come from shapes how we scale when the patio opens."},
+ s10:{q:"What went sideways that this list didn't cover — and how did you handle it?",why:"Every new edge case you hit becomes a quick-answer here, so the next runner never gets stuck on it."}
+};
 function buildNotes(){
   document.querySelectorAll(".notes[data-note]").forEach(function(box){
     var id=box.getAttribute("data-note");
     var bare=box.getAttribute("data-bare");
     var ta=document.createElement("textarea");
-    ta.placeholder="Tap here to jot a note — tweaks, wins, questions for Sean…";
+    ta.placeholder="Jot your answer here — even a quick note helps…";
     try{ta.value=localStorage.getItem(NKEY+id)||""}catch(e){}
     var t;
     ta.addEventListener("input",function(){
@@ -441,11 +456,11 @@ function buildNotes(){
       if(st){st.textContent="saved ✓";clearTimeout(t);t=setTimeout(function(){st.textContent=""},1200);}
     });
     if(bare){box.appendChild(ta);return;}
+    var meta=NOTE_Q[id]||{q:"What worked, what you'd change, anything to ask Sean?",why:"Your notes from running the night are what turn this draft into the locked playbook."};
     box.innerHTML='<div class="notes-head"><span class="lbl">✍️ Your turn</span><span class="status" id="st-'+id+'"></span></div>';
     var body=document.createElement("div");body.className="notes-body";
-    var hint=document.createElement("p");hint.className="notes-hint";
-    hint.textContent="What worked, what you'd change, anything to ask Sean — drop it here before you move on.";
-    body.appendChild(hint);
+    var q=document.createElement("p");q.className="notes-q";q.textContent=meta.q;
+    body.appendChild(q);
     body.appendChild(ta);
     var nav=document.createElement("div");nav.className="notes-next";
     var btn=document.createElement("button");btn.className="note-btn";btn.type="button";
@@ -461,6 +476,9 @@ function buildNotes(){
     }
     nav.appendChild(btn);
     body.appendChild(nav);
+    var why=document.createElement("p");why.className="notes-why";
+    why.innerHTML='<span class="lead">💡 Why it matters:</span> '+meta.why;
+    body.appendChild(why);
     box.appendChild(body);
   });
 }
