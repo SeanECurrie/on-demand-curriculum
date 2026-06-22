@@ -99,8 +99,8 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 .steps{display:flex;flex-direction:column;max-width:560px;margin:0 auto}
 .step{display:flex;gap:16px;align-items:flex-start;position:relative;padding-bottom:24px}
 .step:last-child{padding-bottom:0}
-.step .num{flex-shrink:0;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;background:linear-gradient(145deg,var(--red),var(--red-d));z-index:2;box-shadow:0 0 0 5px rgba(221,51,51,.1),0 7px 16px -7px rgba(221,51,51,.6)}
-.step:not(:last-child)::before{content:"";position:absolute;left:22px;top:48px;bottom:2px;width:2px;background:linear-gradient(180deg,var(--red),rgba(221,51,51,.14))}
+.step .num{flex-shrink:0;width:56px;height:56px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;color:var(--red);background:url(assets/art/ring.png) center/contain no-repeat;z-index:2}
+.step:not(:last-child)::before{content:"";position:absolute;left:27px;top:60px;bottom:2px;width:0;border-left:2px dashed rgba(241,236,225,.32)}
 .step h3{font-size:17px;text-transform:none;font-weight:700;letter-spacing:-.01em}
 .step p{color:var(--muted);font-size:14.5px;margin-top:2px;line-height:1.48}
 .step p .em{color:var(--green);font-weight:600}
