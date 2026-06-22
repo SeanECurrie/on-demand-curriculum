@@ -150,15 +150,20 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 .foot .meta a{color:var(--green)}
 .foot .sib{color:#5e5a53;font-size:11.5px;margin-top:12px;text-transform:none}
 
+.sidegfx{display:none}
 @media (min-width:900px){
-  .sect.hook .wrap, .sect.expect .wrap{margin-left:clamp(40px,7vw,150px);margin-right:auto;max-width:600px}
-  .sect.flow .wrap, .sect.who .wrap{margin-right:clamp(40px,7vw,150px);margin-left:auto;max-width:600px;text-align:left}
+  .sect.hook .wrap, .sect.expect .wrap{margin-left:clamp(40px,7vw,150px);margin-right:auto;max-width:580px}
+  .sect.flow .wrap, .sect.who .wrap{margin-right:clamp(40px,7vw,150px);margin-left:auto;max-width:580px;text-align:left}
   .sect.flow .head{text-align:left}
   .sect.flow .steps{margin-left:0}
   .sect.who .eyebrow.c{justify-content:flex-start}
   .sect.who .eyebrow.c::before{display:none}
   .sect.who .list{margin-left:0}
   .sect.who .kick{margin-left:0;margin-right:auto}
+  .sect.hook,.sect.flow,.sect.expect,.sect.who{overflow:hidden}
+  .sidegfx{display:block;position:absolute;top:50%;transform:translateY(-50%);width:clamp(220px,23vw,360px);opacity:.55;pointer-events:none;z-index:1}
+  .sect.hook .sidegfx,.sect.expect .sidegfx{right:max(16px,3vw)}
+  .sect.flow .sidegfx,.sect.who .sidegfx{left:max(16px,3vw)}
 }
 @media (max-width:480px){.sect{padding:48px 0}.cards{grid-template-columns:1fr}.hero{min-height:86vh}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -190,6 +195,7 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 
 <!-- ── HOOK ── -->
 <section class="sect panel hook">
+  <img class="sidegfx" src="assets/art/draw.png" alt="" aria-hidden="true">
   <div class="wrap l">
     <div class="eyebrow">The deal</div>
     <h2>Show up alone.</h2>
@@ -202,6 +208,7 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 
 <!-- ── HOW IT RUNS ── -->
 <section class="sect panel-d flow" id="how">
+  <img class="sidegfx" src="assets/art/board.png" alt="" aria-hidden="true">
   <div class="wrap r">
     <div class="head">
       <h2>How a Monday runs</h2>
@@ -229,6 +236,7 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 
 <!-- ── EXPECT ── -->
 <section class="sect panel expect">
+  <img class="sidegfx" src="assets/art/cheers.png" alt="" aria-hidden="true">
   <div class="wrap l">
     <div class="eyebrow">What to expect</div>
     <h2>A Monday worth showing up for</h2>
@@ -244,6 +252,7 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 
 <!-- ── WHO ── -->
 <section class="sect panel-d who">
+  <img class="sidegfx" src="assets/art/trophy.png" alt="" aria-hidden="true">
   <div class="wrap r">
     <div class="eyebrow c">Who it's for</div>
     <h2>Basically… you.</h2>
