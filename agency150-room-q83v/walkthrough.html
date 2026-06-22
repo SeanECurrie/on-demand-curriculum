@@ -131,6 +131,24 @@
   .notebox label .ic{font-size:13px}
   .notebox textarea{width:100%; box-sizing:border-box; background:var(--surface); border:1px solid var(--border-strong); border-radius:8px; padding:10px 12px; font-family:inherit; font-size:14.5px; color:var(--text); resize:vertical; line-height:1.55; min-height:46px}
   .notebox textarea:focus{outline:none; border-color:var(--gold-soft); box-shadow:0 0 0 3px rgba(176,132,35,.12)}
+  /* comprehension-design additions */
+  .ledger-count{margin:4px 0 12px}
+  .lc-bar{display:flex;height:11px;border-radius:6px;overflow:hidden;border:1px solid var(--border-strong);margin-bottom:6px}
+  .lc-bar span{display:block;height:100%}
+  .lc-leg{font-size:12.5px;color:#78716c} .lc-leg b{color:var(--text)}
+  .qa.must{border-left:3px solid var(--gold-soft);padding-left:13px;margin-left:-3px;background:linear-gradient(90deg,#fdfaf2,transparent);border-radius:0 8px 8px 0}
+  .must-chip{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:var(--gold-soft);padding:2px 7px;border-radius:20px;margin-right:8px;vertical-align:1px}
+  .must-hdr{font-size:13px;color:#78716c;margin:2px 0 14px}
+  .fundbars{margin:14px 0 18px}
+  .fb-row{display:flex;align-items:center;gap:10px;margin:5px 0}
+  .fb-name{flex:0 0 132px;font-size:12.5px;color:var(--text);font-weight:600;text-align:right}
+  .fb-track{flex:1;height:14px;background:#f0eee9;border-radius:7px;overflow:hidden}
+  .fb-bar{display:block;height:100%;background:linear-gradient(90deg,#2d5180,#3b6aa0);border-radius:7px}
+  .fb-bar.zero{width:3px;background:#b91c1c}
+  .fb-val{flex:0 0 96px;font-size:11.5px;color:#78716c}
+  .fb-row.vega .fb-name,.fb-row.vega .fb-val{color:#15803d;font-weight:800}
+  .fb-cap{font-size:12px;color:#78716c;margin-top:9px;font-style:italic}
+  @media (max-width:560px){ .fb-name{flex-basis:84px} .fb-val{flex-basis:72px} }
   .note-saved{font-size:11px; font-weight:600; color:var(--verified); opacity:0; transition:opacity .25s; margin-left:auto; text-transform:none; letter-spacing:0}
   .note-saved.show{opacity:1}
   .qa{margin:14px 0}
@@ -190,7 +208,7 @@
       <div><div class="bt">Agency150</div><div class="bs">Investment Briefing · for Jimmy</div></div>
       <button class="nav-collapse" id="navCollapse" title="Collapse contents (more room for tables)" aria-label="Collapse contents">«</button>
     </div>
-    <div class="notehint">📝 <b>This is a working document.</b> Every section has a note field — your reactions save in this file and survive a reload. Your notes drive the sharpened v2.</div>
+    <div class="notehint">📝 <b>This is a working document.</b> Every section has a note field — your reactions save in this file and survive a reload. Don't just react: jot <b>why it matters to your decision</b> and <b>how you'd answer if someone pushed back</b> on it — those are the notes you'll actually use in the room. They drive the sharpened v2.</div>
     <div class="toc" id="toc">
       <a href="#s0"><span class="n">—</span>The 90-Second Read</a>
       <div class="grp">The Company</div>
@@ -557,6 +575,15 @@
 
         <h3>Bucket A — Vega’s true rivals: AI-moderated research platforms</h3>
         <p>The companies doing what Vega does — AI running research interviews at scale. The capital is striking:</p>
+        <div class="fundbars">
+          <div class="fb-row"><span class="fb-name">Listen Labs</span><span class="fb-track"><span class="fb-bar" style="width:100%"></span></span><span class="fb-val">~$96M</span></div>
+          <div class="fb-row"><span class="fb-name">GetWhy</span><span class="fb-track"><span class="fb-bar" style="width:67%"></span></span><span class="fb-val">~$64M</span></div>
+          <div class="fb-row"><span class="fb-name">Outset</span><span class="fb-track"><span class="fb-bar" style="width:53%"></span></span><span class="fb-val">~$51M</span></div>
+          <div class="fb-row"><span class="fb-name">Strella</span><span class="fb-track"><span class="fb-bar" style="width:15%"></span></span><span class="fb-val">~$14M</span></div>
+          <div class="fb-row"><span class="fb-name">Conveo · Genway…</span><span class="fb-track"><span class="fb-bar" style="width:6%"></span></span><span class="fb-val">~$6M each</span></div>
+          <div class="fb-row vega"><span class="fb-name">Vega</span><span class="fb-track"><span class="fb-bar zero"></span></span><span class="fb-val">$0 · unfunded</span></div>
+          <div class="fb-cap">Capital raised, to scale. Vega is the only bar at zero — the thesis-tension in one picture.</div>
+        </div>
         <div class="tw">
           <table>
             <thead><tr><th>Company</th><th>Funding / scale</th><th>Position vs. Vega</th></tr></thead>
@@ -820,6 +847,10 @@
           <span class="li"><span class="tag r">flag</span> confirmed and worth raising</span>
           <span class="li"><span class="tag u">open</span> couldn’t verify — needs founder/EDGAR</span>
         </div>
+        <div class="ledger-count">
+          <div class="lc-bar"><span style="width:29%;background:#86b896"></span><span style="width:29%;background:#e3c878"></span><span style="width:21%;background:#d99a8f"></span><span style="width:21%;background:#cfccc7"></span></div>
+          <div class="lc-leg"><b>14</b> material claims: <b>4</b> independently verified · <b>4</b> company claims · <b>3</b> flags/caveats · <b>3</b> still open. <em>The pattern worth noticing: the bull-case items (customers, traction, the moat) sit in “claim” or “open”; the verified facts are mostly neutral-to-cautionary.</em></div>
+        </div>
         <div class="tw">
           <table class="ledger">
             <thead><tr><th>Material claim</th><th>Status</th><th>Basis / source</th></tr></thead>
@@ -852,21 +883,22 @@
         <div class="sec-num">Weighing It · 10</div>
         <h2>Questions for the Meeting</h2>
         <p class="lead">Sharp, specific to the actual unknowns above — the answers turn this from a story into something you can decide on. The italic line is <em>why</em> each matters; jot the answer (or your own version of the question) right under it, and it’ll collect at the end to send back.</p>
+        <div class="must-hdr">★ If you press on only four, press on these — the <b>framing</b>, the <b>moat</b>, the <b>references</b>, and the <b>terms</b>. They're marked <span class="must-chip" style="vertical-align:0">★ must-ask</span> below; the rest sharpen the picture, but these four decide it.</div>
 
         <h3>A · The thesis &amp; the framing</h3>
         <div class="qa"><div class="qa-q">1. In one sentence, what does Vega do and who pays for it today?<span class="qwhy">Listen for “employee/customer research” vs. “executive assessment.” It tells you which product is the real one.</span></div>
           <div class="notebox q"><textarea data-note="q1" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
-        <div class="qa"><div class="qa-q">2. The opportunity reached me as AI for assessing executive candidates — is that something you do, are building, or don’t do?<span class="qwhy">Resolves the framing question directly, in their words.</span></div>
+        <div class="qa must"><div class="qa-q"><span class="must-chip">★ must-ask</span>2. The opportunity reached me as AI for assessing executive candidates — is that something you do, are building, or don’t do?<span class="qwhy">Resolves the framing question directly, in their words.</span></div>
           <div class="notebox q"><textarea data-note="q2" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
 
         <h3>B · The technology &amp; the moat</h3>
         <div class="qa"><div class="qa-q">3. Who builds and owns the Vega technology full-time — and is the core IP yours or built on top of OpenAI/Anthropic?<span class="qwhy">No full-time CTO is publicly identifiable; if it’s a thin wrapper, the moat question is the whole game.</span></div>
           <div class="notebox q"><textarea data-note="q3" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
-        <div class="qa"><div class="qa-q">4. What stops Listen Labs, Qualtrics, or OpenAI from doing this next quarter? What’s the defensible asset?<span class="qwhy">A crisp answer vs. a hand-wave is itself the signal.</span></div>
+        <div class="qa must"><div class="qa-q"><span class="must-chip">★ must-ask</span>4. What stops Listen Labs, Qualtrics, or OpenAI from doing this next quarter? What’s the defensible asset?<span class="qwhy">A crisp answer vs. a hand-wave is itself the signal.</span></div>
           <div class="notebox q"><textarea data-note="q4" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
 
         <h3>C · Traction &amp; proof</h3>
-        <div class="qa"><div class="qa-q">5. Can I speak to two current paying customers as references?<span class="qwhy">Zero customers are named publicly; references are the fastest way to separate a real business from a deck.</span></div>
+        <div class="qa must"><div class="qa-q"><span class="must-chip">★ must-ask</span>5. Can I speak to two current paying customers as references?<span class="qwhy">Zero customers are named publicly; references are the fastest way to separate a real business from a deck.</span></div>
           <div class="notebox q"><textarea data-note="q5" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
         <div class="qa"><div class="qa-q">6. What’s current revenue / signed ARR, and what’s the pipeline?<span class="qwhy">The services model hides traction — make it explicit. “Pre-revenue” is a fine answer; evasion isn’t.</span></div>
           <div class="notebox q"><textarea data-note="q6" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
@@ -882,7 +914,7 @@
           <div class="notebox q"><textarea data-note="q9" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
 
         <h3>F · The deal</h3>
-        <div class="qa"><div class="qa-q">10. Are you raising now? Terms, valuation, instrument (SAFE/priced), and who else is in?<span class="qwhy">Pins down whether you’re truly first-money and on what basis — no prior institutional check means no one else has done this diligence.</span></div>
+        <div class="qa must"><div class="qa-q"><span class="must-chip">★ must-ask</span>10. Are you raising now? Terms, valuation, instrument (SAFE/priced), and who else is in?<span class="qwhy">Pins down whether you’re truly first-money and on what basis — no prior institutional check means no one else has done this diligence.</span></div>
           <div class="notebox q"><textarea data-note="q10" rows="2" placeholder="Their answer / your note…"></textarea></div></div>
         <div class="qa"><div class="qa-q">11. What does this money buy, and what milestone does it reach?<span class="qwhy">Tests whether there’s a real plan — the answer should name a moat-building milestone, not just “runway.”</span></div>
           <div class="notebox q"><textarea data-note="q11" rows="2" placeholder="Their answer / your note…"></textarea></div></div>

@@ -53,22 +53,25 @@
   .gname{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--ink)}
   .gtype{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-left:8px}
   .gdef{font-size:13px;color:var(--soft);margin-top:3px}
-  /* nav aids */
-  .lgnd-h,.mm-h,.ct-h{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:18px 0 7px}
-  .lgnd-i{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--soft);margin:0 12px 6px 0}
-  .lgnd-i .tag{font-size:9px;padding:2px 6px}
-  .mm-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:5px 12px}
-  .mm-i{font-size:12px;color:var(--soft);text-decoration:none;padding:3px 0;border-bottom:1px solid transparent}
-  .mm-i:hover{color:var(--navy);border-bottom-color:var(--line)}
-  .mm-i b{color:var(--gold);font-weight:800;margin-right:4px}
-  #catches{background:#fdfaf2;border:1px solid #ecdcb4;border-radius:10px;padding:13px 16px;margin:16px 0 2px}
-  .ct-h{color:var(--gold);margin:0 0 8px}
-  .ct-i{display:block;font-size:13px;color:var(--ink);text-decoration:none;padding:5px 0 5px 18px;position:relative;border-top:1px solid #f0e6cf}
+  /* two-column layout + sticky side nav */
+  .layout{display:flex;gap:26px;align-items:flex-start;margin-top:16px}
+  .side{flex:0 0 210px;position:sticky;top:14px;max-height:calc(100vh - 28px);overflow:auto;padding-right:2px}
+  .main{flex:1;min-width:0}
+  .mm-h,.ct-h{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 7px}
+  .mm-list{display:flex;flex-direction:column;gap:1px}
+  .mm-i{font-size:12px;color:var(--soft);text-decoration:none;padding:4px 0;line-height:1.3}
+  .mm-i:hover{color:var(--navy)}
+  .mm-i b{color:var(--gold);font-weight:800;margin-right:5px}
+  #catches{background:#fdfaf2;border:1px solid #ecdcb4;border-radius:10px;padding:12px 13px;margin:18px 0 2px}
+  .ct-h{color:var(--gold)}
+  .ct-i{display:block;font-size:11.5px;color:var(--ink);text-decoration:none;padding:6px 0 6px 15px;position:relative;border-top:1px solid #f0e6cf;line-height:1.32}
   .ct-i:first-of-type{border-top:none}
   .ct-i::before{content:"→";position:absolute;left:0;color:var(--gold);font-weight:700}
   .ct-i:hover{color:var(--navy2)}
+  .tag[data-tip]{cursor:help}
   .row:target{background:#fef9e7 !important;box-shadow:inset 3px 0 0 var(--gold)}
-  @media print{#minimap,#catches,#legend{break-inside:avoid}}
+  @media print{ .side{display:none} }
+  @media (max-width:760px){ .layout{flex-direction:column;gap:8px} .side{position:static;flex-basis:auto;max-height:none;width:100%} .mm-list{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px} }
   .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:9px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
   @media (max-width:560px){ .row{grid-template-columns:1fr;gap:3px} .tm,.tag{display:inline-block} .tag{margin-left:8px} }
 </style>
@@ -80,13 +83,17 @@
   <p class="sub">This isn’t a summary. It’s the real log the system stamped while it worked — every line, in order, exactly as it happened — with a plain note on each so you can follow along.</p>
   <div class="rule"></div>
   <p class="intro">It started with a couple of casual sentences from Jimmy about a company called <b>Agency150</b> and a meeting where he might invest his own money. From that, the system built a full investment analysis — and recorded each step it took, live, into this log. The gold lines are where it caught something or made a real call. The red lines are its checkpoints.</p>
-  <p class="hint">Tip: the <span class="term" data-k="adversarial-evaluator">underlined terms</span> are EngineOS’s own machinery — hover one (or tap, on a phone) for a quick definition. The full glossary is at the bottom.</p>
+  <p class="hint">Tip: hover (or tap) the colored <b>tags</b> and the <span class="term" data-k="adversarial-evaluator">underlined terms</span> for a quick plain-English definition. The side menu jumps you to any phase or catch. Full glossary at the bottom.</p>
 
-  <div id="legend"></div>
-  <div id="minimap"></div>
-  <div id="catches"></div>
-
-  <div id="log"></div>
+  <div class="layout">
+    <aside class="side">
+      <div id="minimap"></div>
+      <div id="catches"></div>
+    </aside>
+    <main class="main">
+      <div id="log"></div>
+    </main>
+  </div>
   <div id="glossary"></div>
 
   <div class="foot"><span>Agency150 · built with EngineOS · the raw flight recorder, annotated line-by-line</span><span>Confidential · June 2026</span></div>
@@ -303,25 +310,18 @@ function wrap(s){ return s.replace(RX,function(m){ var k=_fk[m.toLowerCase()]; r
 
 var TAGCLASS = {LOG:'t-log',JUDGMENT:'t-judgment',SKILL:'t-skill',MEMORY:'t-memory',PLAN:'t-plan',GATE:'t-gate',TOOL:'t-tool',RESEARCH:'t-research',AGENT:'t-agent',REVIEW:'t-review',NOTE:'t-note',LIFT:'t-lift'};
 var TAGLABEL = {LOG:'Log',JUDGMENT:'Call',SKILL:'Skill',MEMORY:'Memory',PLAN:'Plan',GATE:'Gate',TOOL:'Tool',RESEARCH:'Build',AGENT:'Agents',REVIEW:'Review',NOTE:'Note',LIFT:'Lift'};
+var TAGTIP={LOG:'the log itself',JUDGMENT:'a judgment it made — it picked one path over another',SKILL:'a named routine it ran',MEMORY:'pulled from its own memory / past work',PLAN:'a planning or governance step',GATE:'a hard checkpoint it had to pass',TOOL:'an external tool call (search, browser, etc.)',RESEARCH:'built or wrote something',AGENT:'sent out parallel researchers',REVIEW:'a quality check, with a verdict',NOTE:'a small aside',LIFT:'made a one-off into a permanent capability'};
 var c = document.getElementById('log'), html='', phaseIdx=0, rowIdx=0, PHASES=[];
 L.forEach(function(e){
   if(e[0]==='PHASE'){ var pid='ph'+(phaseIdx++); PHASES.push({id:pid,title:e[1]}); html+='<div class="phase" id="'+pid+'">'+e[1]+'</div>'; return; }
   var time=e[0], tag=e[1], text=e[2], note=e[3], flag=e[4]||'';
   html+='<div class="row '+flag+'" id="row'+(rowIdx++)+'">'+
     '<div class="tm">'+time+'</div>'+
-    '<div class="tag '+(TAGCLASS[tag]||'t-note')+'">'+(TAGLABEL[tag]||tag)+'</div>'+
+    '<div class="tag '+(TAGCLASS[tag]||'t-note')+'" data-tip="'+(TAGTIP[tag]||'')+'">'+(TAGLABEL[tag]||tag)+'</div>'+
     '<div class="body"><div class="log">'+(flag==='star'?'<span class="star-i">★ </span>':'')+wrap(text)+'</div><div class="note">'+wrap(note)+'</div></div>'+
   '</div>';
 });
 c.innerHTML = html;
-
-// tag legend
-var TAGGLOSS={Skill:'a routine it ran',Memory:'pulled from its own memory',Call:'a judgment it made',Plan:'planning / governance',Gate:'a hard checkpoint',Tool:'an external tool call',Build:'built or wrote something',Agents:'parallel researchers',Review:'a quality check',Lift:'made a capability permanent'};
-var LEGORDER=['Skill','Memory','Call','Plan','Gate','Tool','Build','Agents','Review','Lift'];
-var TC={Skill:'t-skill',Memory:'t-memory',Call:'t-judgment',Plan:'t-plan',Gate:'t-gate',Tool:'t-tool',Build:'t-research',Agents:'t-agent',Review:'t-review',Lift:'t-lift'};
-var lh='<div class="lgnd-h">The tags — a quick key</div>';
-LEGORDER.forEach(function(t){ lh+='<span class="lgnd-i"><span class="tag '+TC[t]+'">'+t+'</span> '+TAGGLOSS[t]+'</span>'; });
-document.getElementById('legend').innerHTML=lh;
 
 // phase mini-map (jump-nav)
 var mh='<div class="mm-h">The '+PHASES.length+' phases — jump to any</div><div class="mm-list">';
@@ -353,13 +353,17 @@ document.getElementById('glossary').innerHTML=gh;
 // tooltip (hover) / popover (tap) — device decides
 var tip=document.createElement('div'); tip.className='tip'; tip.style.display='none'; document.body.appendChild(tip);
 var hoverCap=window.matchMedia('(hover: hover)').matches; var curEl=null;
-function showTip(el){ var g=GLOSS[el.getAttribute('data-k')]; if(!g)return; tip.innerHTML='<span class="tiptype">'+g.type+'</span>'+g.short; tip.style.display='block';
+function showTip(el){ var html;
+  if(el.getAttribute('data-k')){ var g=GLOSS[el.getAttribute('data-k')]; if(!g)return; html='<span class="tiptype">'+g.type+'</span>'+g.short; }
+  else if(el.getAttribute('data-tip')){ html='<span class="tiptype">what this tag means</span>'+el.getAttribute('data-tip'); }
+  else return;
+  tip.innerHTML=html; tip.style.display='block';
   var r=el.getBoundingClientRect(), tw=tip.offsetWidth, th=tip.offsetHeight, cw=document.documentElement.clientWidth, ch=document.documentElement.clientHeight;
   var left=Math.min(Math.max(8,r.left+window.scrollX),window.scrollX+cw-tw-8);
   var top=(r.bottom+th+16>ch)? (r.top+window.scrollY-th-7) : (r.bottom+window.scrollY+7);
   tip.style.left=left+'px'; tip.style.top=top+'px'; curEl=el; }
 function hideTip(){ tip.style.display='none'; curEl=null; }
-Array.prototype.forEach.call(document.querySelectorAll('.term'),function(el){
+Array.prototype.forEach.call(document.querySelectorAll('.term, .tag[data-tip]'),function(el){
   if(hoverCap){ el.addEventListener('mouseenter',function(){showTip(el);}); el.addEventListener('mouseleave',hideTip); }
   else { el.addEventListener('click',function(ev){ ev.stopPropagation(); if(curEl===el){hideTip();}else{showTip(el);} }); }
 });
