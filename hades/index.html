@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shield Battle Plan — Hades (Carl)</title>
-<meta name="description" content="A glance-and-go Hades battle plan for a ranged Shield (Aegis) build: between-run spending, ideal boon flow, and your next moves. All verified vs the Hades Wiki.">
-<meta property="og:title" content="Hades — Shield Battle Plan">
-<meta property="og:description" content="Block. Position. Detonate. The ranged-Shield game plan to get your first escape.">
+<title>Shield Battle Manual — Hades (Carl)</title>
+<meta name="description" content="A Hades battle manual for a ranged Shield (Aegis) build: the stats, the WHY behind every pick, and the ideal situations they create. Verified vs the Hades Wiki.">
+<meta property="og:title" content="Hades — Shield Battle Manual">
+<meta property="og:description" content="Block. Position. Detonate. The numbers, the reasoning, and the kill-zones.">
 <meta name="theme-color" content="#0c0a10">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,19 +36,28 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
 .eyebrow::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--red),transparent);max-width:90px}
 .sect{padding:42px 0;border-top:1px solid var(--line-soft)}
 .sect:first-of-type{border-top:0}
-.lead{color:var(--muted);font-size:15px;margin-top:8px;max-width:60ch}
+.lead{color:var(--muted);font-size:15px;margin-top:8px;max-width:62ch}
 .lead b{color:var(--cream);font-weight:600}
 
+/* shared bits */
+.stat{display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:700;color:var(--gold-l);background:rgba(232,176,75,.1);border:1px solid rgba(232,176,75,.28);padding:1px 7px;border-radius:6px;white-space:nowrap;line-height:1.5}
+.stat.t{color:var(--teal);background:rgba(70,214,198,.1);border-color:rgba(70,214,198,.28)}
+.stat.g{color:var(--green);background:rgba(110,231,168,.1);border-color:rgba(110,231,168,.28)}
+.stat.r{color:var(--red-l);background:rgba(226,59,59,.1);border-color:rgba(226,59,59,.3)}
+.why{font-size:12.5px;color:var(--muted);margin-top:7px;padding-left:11px;border-left:2px solid var(--line);line-height:1.52}
+.why .w{font-weight:700;color:var(--gold);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;margin-right:5px}
+.why b{color:var(--cream);font-weight:600}
+
 /* HERO */
-.hero{position:relative;text-align:center;padding:62px 22px 48px;isolation:isolate;overflow:hidden}
+.hero{position:relative;text-align:center;padding:60px 22px 44px;isolation:isolate;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:
   radial-gradient(70% 55% at 50% 0%,rgba(226,59,59,.28),transparent 70%),
   radial-gradient(60% 50% at 50% 108%,rgba(157,123,255,.16),transparent 70%),
   linear-gradient(180deg,#13101b,var(--bg))}
 .hero .tag{font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-.hero h1{font-family:var(--display);font-weight:900;font-size:clamp(34px,8.6vw,58px);letter-spacing:.01em;line-height:1;color:#fff;text-shadow:0 4px 30px rgba(226,59,59,.4)}
+.hero h1{font-family:var(--display);font-weight:900;font-size:clamp(33px,8.4vw,56px);letter-spacing:.01em;line-height:1;color:#fff;text-shadow:0 4px 30px rgba(226,59,59,.4)}
 .hero h1 .a{color:var(--red-l)}
-.hero .sub{font-size:clamp(14px,3.6vw,16.5px);color:var(--cream);max-width:32ch;margin:16px auto 0}
+.hero .sub{font-size:clamp(14px,3.6vw,16px);color:var(--cream);max-width:34ch;margin:16px auto 0}
 .hero .sub b{color:#fff;font-weight:700}
 .chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:22px}
 .chip{font-size:12px;font-weight:600;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--cream)}
@@ -57,84 +66,87 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
 
 /* RULES */
 .rules{display:grid;gap:10px;margin-top:6px}
-.rule{display:flex;gap:13px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:var(--r);padding:14px 16px}
-.rule .n{flex-shrink:0;font-family:var(--display);font-weight:800;color:var(--gold);font-size:20px;line-height:1.2;width:22px}
+.rule{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:var(--r);padding:14px 16px}
+.rule .top{display:flex;gap:13px;align-items:baseline}
+.rule .n{flex-shrink:0;font-family:var(--display);font-weight:800;color:var(--gold);font-size:19px;width:20px}
 .rule b{color:#fff;font-weight:700}
-.rule span{color:var(--muted);font-size:13.5px}
 
-/* CALLOUTS */
-.callout{border-radius:var(--r);padding:14px 16px;border:1px solid;margin-top:12px;font-size:14px}
-.callout .h{font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.good{background:rgba(110,231,168,.08);border-color:rgba(110,231,168,.35)}
-.good .h{color:var(--green)}
-.bad{background:rgba(226,59,59,.08);border-color:rgba(226,59,59,.4)}
-.bad .h{color:var(--red-l)}
-.key{background:rgba(232,176,75,.08);border-color:rgba(232,176,75,.4)}
-.key .h{color:var(--gold-l)}
+/* PRINCIPLES */
+.principle{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-top:10px}
+.principle h3{font-size:15.5px;color:#fff;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+.principle h3 .e{font-size:19px;line-height:1}
+.principle p{font-size:13.5px;color:var(--muted);line-height:1.56}
+.principle p b{color:var(--cream);font-weight:600}
+.principle .ex{margin-top:8px;font-size:12.5px;color:var(--teal);line-height:1.5}
 
-/* SPEND LIST */
+/* SPEND */
 .spend{display:grid;gap:9px;margin-top:6px}
-.row{display:flex;gap:13px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+.row{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+.row .top{display:flex;gap:13px;align-items:flex-start}
 .row .ic{flex-shrink:0;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--panel-2);border:1px solid var(--line)}
 .row .bd{flex:1;min-width:0}
 .row .cur{font-weight:700;color:#fff;font-size:14.5px}
-.row .cur .pr{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);background:var(--gold);padding:2px 7px;border-radius:999px;margin-left:8px;vertical-align:middle}
+.row .cur .pr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink);background:var(--gold);padding:2px 7px;border-radius:999px;margin-left:8px;vertical-align:middle}
 .row .cur .pr.lo{background:var(--muted-2);color:#fff}
-.row p{color:var(--muted);font-size:13px;margin-top:3px}
-.row p b{color:var(--cream);font-weight:600}
+.row .d{color:var(--muted);font-size:13px;margin-top:3px}
+.row .d b{color:var(--cream);font-weight:600}
 
 /* FLOW */
 .flow{margin-top:8px}
-.fstep{position:relative;padding:0 0 20px 30px}
+.fstep{position:relative;padding:0 0 22px 30px}
 .fstep::before{content:"";position:absolute;left:8px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(226,59,59,.16)}
 .fstep:not(:last-child)::after{content:"";position:absolute;left:12px;top:14px;bottom:0;width:2px;background:linear-gradient(180deg,var(--red),rgba(226,59,59,.12))}
-.fstep .t{font-weight:700;color:#fff;font-size:14.5px;text-transform:uppercase;letter-spacing:.04em}
+.fstep .t{font-weight:700;color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:.04em}
 .fstep .t small{display:inline-block;font-size:11px;color:var(--muted-2);font-weight:600;text-transform:none;letter-spacing:0;margin-left:6px}
-.fstep ul{list-style:none;margin-top:7px;display:grid;gap:6px}
+.fstep ul{list-style:none;margin-top:8px;display:grid;gap:7px}
 .fstep li{font-size:13.5px;color:var(--cream);display:flex;gap:9px;align-items:flex-start}
 .fstep li .b{flex-shrink:0;font-weight:800;font-size:12px;line-height:1.5;color:var(--teal)}
 .fstep li.star .b{color:var(--gold)}
 .fstep li.no .b{color:var(--red-l)}
 .fstep li b{color:#fff;font-weight:600}
 
-/* BUILD TARGET CARD */
+/* TARGET */
 .target{background:linear-gradient(150deg,rgba(226,59,59,.14),rgba(157,123,255,.08)),var(--panel-2);border:1px solid rgba(226,59,59,.4);border-radius:16px;padding:20px;margin-top:6px}
 .target .lbl{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red-l);margin-bottom:8px}
 .target h3{font-size:20px;color:#fff;font-weight:800}
-.target .combo{display:grid;gap:8px;margin-top:14px}
-.target .combo div{display:flex;gap:10px;align-items:baseline;font-size:14px;color:var(--cream)}
-.target .combo .k{flex-shrink:0;width:96px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gold)}
+.target .combo{display:grid;gap:10px;margin-top:14px}
+.target .combo div{display:flex;gap:10px;align-items:baseline;font-size:13.5px;color:var(--cream);line-height:1.5}
+.target .combo .k{flex-shrink:0;width:92px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
 .target .combo .k.t{color:var(--teal)}
-.target .why{margin-top:14px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
-.target .why b{color:var(--green);font-weight:600}
+
+/* SITUATION */
+.situation{background:linear-gradient(150deg,rgba(70,214,198,.1),rgba(232,176,75,.05)),var(--panel-2);border:1px solid rgba(70,214,198,.3);border-radius:var(--r);padding:15px 17px;margin-top:14px}
+.situation .h{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:7px}
+.situation p{font-size:13.5px;color:var(--cream);line-height:1.56}
+.situation p b{color:#fff;font-weight:600}
 
 /* TABLES */
-.tbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.tbl th{background:var(--panel-2);color:var(--white);font-weight:700;text-align:left;padding:9px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-.tbl td{padding:9px 12px;border-top:1px solid var(--line-soft);color:var(--cream);vertical-align:top}
+.tbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.tbl th{background:var(--panel-2);color:var(--white);font-weight:700;text-align:left;padding:9px 11px;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em}
+.tbl td{padding:9px 11px;border-top:1px solid var(--line-soft);color:var(--cream);vertical-align:top}
 .tbl td:first-child{font-weight:700;color:#fff;white-space:nowrap}
 .tbl tr:nth-child(even) td{background:rgba(255,255,255,.015)}
-.st{font-weight:700}
 .duo{display:grid;gap:8px;margin-top:12px}
-.duo div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:13.5px}
+.duo div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:13px;line-height:1.5}
 .duo .nm{font-weight:700;color:var(--gold-l)}
 .duo .nm.star{color:var(--green)}
 .duo span{color:var(--muted)}
+.duo b{color:var(--cream);font-weight:600}
 
-/* NEXT MOVES */
+/* MOVES */
 .moves{display:grid;gap:10px;margin-top:6px}
 .move{display:flex;gap:13px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
 .move .n{flex-shrink:0;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;background:linear-gradient(145deg,var(--red),var(--red-d))}
 .move b{color:#fff;font-weight:700;font-size:14.5px}
-.move p{color:var(--muted);font-size:13px;margin-top:2px}
+.move p{color:var(--muted);font-size:13px;margin-top:2px;line-height:1.5}
 .move p b{color:var(--cream)}
 
 /* FOOTER */
 .foot{background:var(--ink);border-top:1px solid var(--line-soft);padding:30px 22px 42px;text-align:center;margin-top:14px}
 .foot .nm{font-family:var(--display);font-weight:800;color:var(--white);font-size:15px;letter-spacing:.04em}
-.foot .meta{color:var(--muted-2);font-size:12px;margin-top:8px;line-height:1.7;max-width:46ch;margin-left:auto;margin-right:auto}
+.foot .meta{color:var(--muted-2);font-size:12px;margin-top:8px;line-height:1.7;max-width:48ch;margin-left:auto;margin-right:auto}
 .foot .meta b{color:var(--muted)}
-@media (max-width:480px){.sect{padding:36px 0}.target .combo .k{width:84px}}
+@media (max-width:480px){.sect{padding:36px 0}.target .combo .k{width:78px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -142,9 +154,9 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
 
 <!-- HERO -->
 <header class="hero">
-  <div class="tag">⚔ Hades · Aegis Shield</div>
+  <div class="tag">⚔ Hades · Aegis Shield · Battle Manual</div>
   <h1>BLOCK. POSITION.<br><span class="a">DETONATE.</span></h1>
-  <p class="sub">Your ranged-Shield game plan — built to get your <b>first escape</b> out of the Underworld.</p>
+  <p class="sub">The ranged-Shield plan to escape the Underworld — <b>with the numbers and the why behind every pick.</b></p>
   <div class="chips">
     <span class="chip red">Run ~5–6</span>
     <span class="chip">0 escapes — yet</span>
@@ -158,9 +170,34 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
   <div class="wrap">
     <div class="eyebrow">The 3 rules that never change</div>
     <div class="rules">
-      <div class="rule"><div class="n">1</div><div><b>Always grab Athena's Divine Dash.</b> <span>A dash that deflects attacks is the best survival in the game — it fits every build.</span></div></div>
-      <div class="rule"><div class="n">2</div><div><b>Pom your ONE core boon.</b> <span>Never spread Poms of Power around — dump them into your single main damage boon.</span></div></div>
-      <div class="rule"><div class="n">3</div><div><b>Commit by room 3.</b> <span>Pick your god early and stack it. Focus beats variety, every run.</span></div></div>
+      <div class="rule"><div class="top"><div class="n">1</div><div><b>Always grab Athena's Divine Dash.</b></div></div><div class="why"><span class="w">why</span>Your dodge <b>deflects projectiles back as damage</b> and <b>Blinding Flash</b> leaves the foe <b>Exposed</b> <span class="stat">+backstab dmg · 5s</span>. One pick that's both your defense AND a damage opener — nothing else does that.</div></div>
+      <div class="rule"><div class="top"><div class="n">2</div><div><b>Pom your ONE core boon.</b></div></div><div class="why"><span class="w">why</span>Boon levels give <b>diminishing returns</b> (value roughly halves every 2 levels). Funneling every Pom into one boon pushes it to a tier nothing else reaches — spreading them keeps everything mediocre.</div></div>
+      <div class="rule"><div class="top"><div class="n">3</div><div><b>Commit to one god by room 3.</b></div></div><div class="why"><span class="w">why</span>Rarity stacks (Common → Rare → Epic → Heroic, each ≈ +1 level) and <b>Duo Boons</b> both reward focus. A build routed through one or two gods out-scales a scattershot of singles, hard.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- THE LOGIC -->
+<section class="sect">
+  <div class="wrap">
+    <div class="eyebrow">The logic — why these win</div>
+    <h2>Four ideas the whole plan rests on</h2>
+    <div class="principle">
+      <h3><span class="e">🎯</span> Focus out-scales spread</h3>
+      <p>A <b>Level-2 Common = a Level-1 Rare</b>; each rarity step is roughly a free +1 level. Stack one god and your boons climb tiers; sample everyone and you cap out weak. This is <b>why</b> "commit by room 3" and "Pom one boon" exist.</p>
+    </div>
+    <div class="principle">
+      <h3><span class="e">☣️</span> Status + amplifier = passive room-melt</h3>
+      <p>Apply a status, then take a boon that <i>exploits</i> it. <b>Dionysus' Bad Influence</b> = +damage to <b>everything</b> while 3+ foes are Hungover. <b>Aphrodite's Sweet Surrender</b> = Weak foes take +dmg from all sources. The room dies while you just reposition.</p>
+      <div class="ex">Ideal: tag a whole pack with one status, then your normal hits all do bonus damage at once.</div>
+    </div>
+    <div class="principle">
+      <h3><span class="e">🛡️</span> Deflect = defense and offense in one button</h3>
+      <p>Athena's deflect doesn't just block ranged attacks — it <b>reflects them as your damage</b> and marks foes Exposed. In a stage full of lava-throwers (Asphodel), their attack becomes <b>your</b> opener.</p>
+    </div>
+    <div class="principle">
+      <h3><span class="e">📍</span> Zoning decouples damage from danger</h3>
+      <p>The dream Shield setup lets you <b>deal damage while you're nowhere near the fight.</b> Park a damage source, then block and kite. You stay safe; the build does the killing. That's the playstyle you already love — formalized.</p>
     </div>
   </div>
 </section>
@@ -170,14 +207,14 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
   <div class="wrap">
     <div class="eyebrow">Between runs — where your stuff goes</div>
     <h2>Spend it in this order</h2>
-    <p class="lead">You've already nailed the two best Mirror buys (Death Defiance + the extra dash). Here's the priority for everything else.</p>
+    <p class="lead">You've already nailed the two best Mirror buys (Death Defiance + the extra dash). Here's the priority — and why — for everything else.</p>
     <div class="spend">
-      <div class="row"><div class="ic">🟣</div><div class="bd"><div class="cur">Darkness <span class="pr">spend first</span></div><p>→ <b>Mirror of Night.</b> You have Death Defiance r1 + Greater Reflex. Now <b>save toward Death Defiance rank 2</b> (500) — a 2nd extra life is what gets you the escape.</p></div></div>
-      <div class="row"><div class="ic">🦴</div><div class="bd"><div class="cur">Chthonic Keys</div><p>→ unlock more Mirror talents. At <b>5 keys</b> the next tier opens. (You have 3 — save 2 more.)</p></div></div>
-      <div class="row"><div class="ic">🩸</div><div class="bd"><div class="cur">Titan Blood</div><p>→ weapon Aspects. Next one you earn, put it toward <b>Aspect of Zeus</b> on the Shield (costs 2). That's your ranged dream — see below.</p></div></div>
-      <div class="row"><div class="ic">🍶</div><div class="bd"><div class="cur">Nectar</div><p>→ gift NPCs for <b>Keepsakes</b>. Give one to <b>Zeus</b> for the Thunder Signet (fishes your lightning build). Spread the rest to meet everyone.</p></div></div>
-      <div class="row"><div class="ic">💎</div><div class="bd"><div class="cur">Gemstones / Diamonds <span class="pr lo">later</span></div><p>→ House Contractor upgrades. Do the cheap useful ones; not urgent.</p></div></div>
-      <div class="row"><div class="ic">🪙</div><div class="bd"><div class="cur">Obols <span class="pr lo">in-run only</span></div><p><b>Spend them inside a run</b> at Charon's shop — they vanish when you die. Never "save" Obols.</p></div></div>
+      <div class="row"><div class="top"><div class="ic">🟣</div><div class="bd"><div class="cur">Darkness <span class="pr">spend first</span></div><div class="d">→ <b>Mirror of Night.</b> You have Death Defiance r1 <span class="stat">50% HP revive</span> + Greater Reflex <span class="stat t">+1 dash</span>. Now <b>save toward Death Defiance rank 2</b> <span class="stat">500 Darkness</span>.</div></div></div><div class="why"><span class="w">why</span>A first escape is won by <b>not dying</b>, not by more damage. Death Defiance banks up to <b>3 revives at 50% HP each</b> — a second one roughly doubles your margin for the back half of a run.</div></div>
+      <div class="row"><div class="top"><div class="ic">🦴</div><div class="bd"><div class="cur">Chthonic Keys</div><div class="d">→ unlock more Mirror talents. The next tier opens at <span class="stat">5 keys</span> (you have 3 — save 2).</div></div></div><div class="why"><span class="w">why</span>Keys gate the stronger green-side talents (Boiling Blood, the Soul cast upgrades). More talents unlocked = more ways to spend your Darkness on power.</div></div>
+      <div class="row"><div class="top"><div class="ic">🩸</div><div class="bd"><div class="cur">Titan Blood</div><div class="d">→ weapon Aspects. Next one, put it toward <b>Aspect of Zeus</b> on the Shield <span class="stat r">costs 2</span>. Your ranged dream — see below.</div></div></div><div class="why"><span class="w">why</span>Aspects are permanent, run-after-run power. Zeus turns your Special into the parked "Blitz Disc" — the single biggest upgrade to your zoning style.</div></div>
+      <div class="row"><div class="top"><div class="ic">🍶</div><div class="bd"><div class="cur">Nectar</div><div class="d">→ gift NPCs for <b>Keepsakes</b>. Give one to <b>Zeus</b> → <b>Thunder Signet</b>.</div></div></div><div class="why"><span class="w">why</span>Thunder Signet <b>guarantees your first boon is Zeus</b> + gives his boons <span class="stat g">+20% Rare-or-better</span>. That's how you reliably <i>fish</i> the lightning build instead of praying for it.</div></div>
+      <div class="row"><div class="top"><div class="ic">💎</div><div class="bd"><div class="cur">Gemstones / Diamonds <span class="pr lo">later</span></div><div class="d">→ House Contractor upgrades. Cheap useful ones; not urgent.</div></div></div></div>
+      <div class="row"><div class="top"><div class="ic">🪙</div><div class="bd"><div class="cur">Obols <span class="pr lo">in-run only</span></div><div class="d"><b>Spend them inside a run</b> at Charon's shop — they <b>vanish when you die.</b></div></div></div><div class="why"><span class="w">why</span>Zero reason to bank them. Convert every Obol to boons, Poms, or healing before the run ends.</div></div>
     </div>
   </div>
 </section>
@@ -190,33 +227,33 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
     <div class="flow">
       <div class="fstep"><div class="t">Start <small>weapon select</small></div>
         <ul>
-          <li><span class="b">▸</span><span>Keepsake: <b>Thunder Signet</b> (Zeus) to fish lightning — or <b>Old Spiked Collar</b> (+HP) while learning.</span></li>
+          <li><span class="b">▸</span><span>Keepsake: <b>Thunder Signet</b> (Zeus) to fish lightning — or <b>Old Spiked Collar</b> <span class="stat">+50 HP</span> while learning.</span></li>
         </ul>
       </div>
-      <div class="fstep"><div class="t">Rooms 1–3 <small>pick ONE engine</small></div>
+      <div class="fstep"><div class="t">Rooms 1–3 <small>pick ONE engine, then route to it</small></div>
         <ul>
-          <li class="star"><span class="b">★</span><span><b>Zeus on Special</b> (Thunder Flourish) → lightning build</span></li>
-          <li><span class="b">●</span><span><b>Dionysus on Special</b> (Drunken Flourish) → Hangover / poison build</span></li>
-          <li class="star"><span class="b">★</span><span><b>Athena's Divine Dash</b> — grab it ANY time it shows (deflect = survival)</span></li>
+          <li class="star"><span class="b">★</span><span><b>Zeus on Special</b> → chains lightning; <b>Static Discharge</b> makes it apply <b>Jolted</b> (foe self-damages on its next attack).</span></li>
+          <li><span class="b">●</span><span><b>Dionysus on Special</b> → <b>Hangover</b> DoT <span class="stat">ticks 0.5s · stacks ×5</span>; forgiving, no aim needed.</span></li>
+          <li class="star"><span class="b">★</span><span><b>Athena's Divine Dash</b> — grab it ANY time (deflect = survival + reflect).</span></li>
         </ul>
       </div>
       <div class="fstep"><div class="t">Build out</div>
         <ul>
-          <li><span class="b">▸</span><span>Stack your core god on Attack/Special</span></li>
-          <li class="star"><span class="b">★</span><span>Daedalus Hammer → take <b>Explosive Return</b> (the Shield's best)</span></li>
-          <li><span class="b">▸</span><span>Grab HP (Centaur Hearts) + any Athena defense</span></li>
-          <li><span class="b">▸</span><span><b>Pom of Power → all into your ONE core boon</b></span></li>
+          <li><span class="b">▸</span><span>Stack your core god; chase a passive that exploits its status (Bad Influence / Sweet Surrender).</span></li>
+          <li class="star"><span class="b">★</span><span>Daedalus Hammer → <b>Explosive Return</b> <span class="stat">50 dmg on catch</span> — the Shield's best.</span></li>
+          <li><span class="b">▸</span><span>Grab HP (Centaur Hearts) + any Athena defense.</span></li>
+          <li><span class="b">▸</span><span><b>Pom of Power → all into your ONE core boon.</b></span></li>
         </ul>
       </div>
       <div class="fstep"><div class="t">Duo jackpot <small>if your gods line up</small></div>
         <ul>
-          <li class="star"><span class="b">★</span><span><b>Zeus + Dionysus = Scintillating Feast</b> — lightning inside the poison fog. Nasty AoE.</span></li>
+          <li class="star"><span class="b">★</span><span><b>Zeus + Dionysus = Scintillating Feast</b> — Festive Fog also zaps for <span class="stat">60 lightning</span>. Lightning inside the poison = a kill-zone enemies walk into.</span></li>
         </ul>
       </div>
       <div class="fstep"><div class="t">Avoid</div>
         <ul>
-          <li class="no"><span class="b">✕</span><span><b>Poseidon on the Special</b> — knockback scatters foes out of your disc/lightning</span></li>
-          <li class="no"><span class="b">✕</span><span>Taking one boon from every god (weak scattershot)</span></li>
+          <li class="no"><span class="b">✕</span><span><b>Poseidon on the Special</b> — knockback scatters foes out of your disc/fog.</span></li>
+          <li class="no"><span class="b">✕</span><span>One boon from every god (the scattershot trap — see "focus out-scales spread").</span></li>
         </ul>
       </div>
     </div>
@@ -231,37 +268,41 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
       <div class="lbl">The ranged-zoning dream</div>
       <h3>Aspect of Zeus + Explosive Return</h3>
       <div class="combo">
-        <div><span class="k">Aspect</span><span><b>Zeus</b> — turns your Special into a <b>Blitz Disc</b> you park on a target; it deals rapid damage while you move &amp; attack freely.</span></div>
-        <div><span class="k t">Hammer</span><span><b>Explosive Return</b> — catching the disc deals AoE + re-fires your Special's boon.</span></div>
-        <div><span class="k t">Special boon</span><span><b>Zeus</b> (lightning) or <b>Dionysus</b> (Hangover) — turns the parked disc into a constant AoE-status engine.</span></div>
+        <div><span class="k">Aspect</span><span><b>Zeus</b> — Special becomes a <b>Blitz Disc</b> <span class="stat">~30 dmg/hit</span> you park on a target; it keeps hitting while you move, block &amp; attack freely.</span></div>
+        <div><span class="k t">Hammer</span><span><b>Explosive Return</b> — catching the disc deals <span class="stat">50 AoE</span> <i>and</i> re-fires your Special's boon.</span></div>
+        <div><span class="k t">Special boon</span><span><b>Zeus</b> (lightning + Jolted) or <b>Dionysus</b> (Hangover) — turns the parked disc into a constant status-applying engine.</span></div>
       </div>
-      <div class="why">Why this one: it's exactly the playstyle you already fell in love with — <b>block, position, and attack from afar.</b> The Blitz Disc is a permanent version of the block-then-shoot feeling, built to scale.</div>
+      <div class="situation">
+        <div class="h">⚡ The ideal situation it creates</div>
+        <p>Park the disc on the biggest threat, then <b>back off and just block/dodge.</b> The disc ticks it down from total safety. Every time you recall it, Explosive Return adds <b>50 AoE</b> and re-fires your lightning/poison. You're dealing damage <b>while standing behind a shield, untouched</b> — the exact "position and attack from afar" feeling, scaled to clear rooms.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- QUICK REF -->
+<!-- STATUSES -->
 <section class="sect">
   <div class="wrap">
     <div class="eyebrow">Quick reference</div>
-    <h2>Gods &amp; what they do</h2>
+    <h2>Statuses — &amp; how to exploit each</h2>
     <table class="tbl">
-      <tr><th>God</th><th>Status</th><th>Vibe</th></tr>
-      <tr><td>Zeus</td><td><span class="st" style="color:var(--gold-l)">Jolted</span></td><td>Chain lightning — best AoE ★</td></tr>
-      <tr><td>Dionysus</td><td><span class="st" style="color:var(--green)">Hangover</span></td><td>Stacking poison DoT — forgiving ★</td></tr>
-      <tr><td>Athena</td><td>Deflect</td><td>Divine Dash = survival ★</td></tr>
-      <tr><td>Aphrodite</td><td><span class="st" style="color:var(--red-l)">Weak</span></td><td>Enemies hit softer (safe)</td></tr>
-      <tr><td>Ares</td><td><span class="st" style="color:var(--red-l)">Doom</span></td><td>Big delayed burst</td></tr>
-      <tr><td>Artemis</td><td>Marked</td><td>Critical hits</td></tr>
-      <tr><td>Demeter</td><td><span class="st" style="color:var(--teal)">Chill</span></td><td>Slow / freeze + beam</td></tr>
-      <tr><td>Poseidon</td><td>Knockback</td><td>⚠ scatters your disc — skip on Special</td></tr>
+      <tr><th>Status</th><th>God</th><th>What it does</th><th>Exploit</th></tr>
+      <tr><td>Jolted ★</td><td>Zeus</td><td>Foe's next attack self-zaps</td><td>Cold Fusion: never expires</td></tr>
+      <tr><td>Hangover ★</td><td>Dionysus</td><td>DoT, 0.5s tick, ×5 stacks</td><td>Bad Influence: +dmg to all</td></tr>
+      <tr><td>Weak</td><td>Aphrodite</td><td>Foe deals −30% dmg, 4s</td><td>Sweet Surrender: +dmg taken</td></tr>
+      <tr><td>Doom</td><td>Ares</td><td>Burst after 1.1s delay</td><td>Curse of Longing (vs Weak)</td></tr>
+      <tr><td>Chill</td><td>Demeter</td><td>−4%/stack speed, ×10</td><td>Arctic Blast at 10 stacks</td></tr>
+      <tr><td>Marked</td><td>Artemis</td><td>Takes a guaranteed crit</td><td>Pressure Points (+crit)</td></tr>
+      <tr><td>Exposed</td><td>Athena</td><td>+dmg from behind, 5s</td><td>Your deflect applies it</td></tr>
     </table>
-    <h2 style="margin-top:26px">Duos worth chasing</h2>
+    <p class="why"><span class="w">the move</span>An <b>applier + an amplifier</b> is the whole game. Pick a status you can spam (Jolted or Hangover for you), then grab the boon that punishes it — the damage compounds across the whole room for free.</p>
+
+    <h2 style="margin-top:28px">Duos worth chasing</h2>
     <div class="duo">
-      <div><span class="nm star">Scintillating Feast</span> · <span>Zeus + Dionysus — lightning in the fog ★ your jackpot</span></div>
-      <div><span class="nm">Sea Storm</span> · <span>Zeus + Poseidon — knockback also zaps (good, but Poseidon scatters)</span></div>
-      <div><span class="nm">Curse of Longing</span> · <span>Aphrodite + Ares — Doom melts Weak foes</span></div>
-      <div><span class="nm">Deadly Reversal</span> · <span>Athena + Artemis — deflect grants a crit window</span></div>
+      <div><span class="nm star">Scintillating Feast</span> · <span>Zeus + Dionysus — fog also zaps <b>60</b> ★ your jackpot kill-zone</span></div>
+      <div><span class="nm">Sea Storm</span> · <span>Zeus + Poseidon — knock-away also strikes <b>40 lightning</b> (works with Shield knockback)</span></div>
+      <div><span class="nm">Curse of Longing</span> · <span>Aphrodite + Ares — Doom re-strikes Weak foes, each hit 50% of prior</span></div>
+      <div><span class="nm">Deadly Reversal</span> · <span>Athena + Artemis — after a Deflect, <b>+20% crit</b> for 2s</span></div>
     </div>
   </div>
 </section>
@@ -272,18 +313,18 @@ h2{font-weight:800;font-size:clamp(21px,5vw,28px);letter-spacing:-.01em}
     <div class="eyebrow">Right now — your next moves</div>
     <h2>Get past Asphodel</h2>
     <div class="moves">
-      <div class="move"><div class="n">1</div><div><b>Save Darkness → Death Defiance rank 2</b><p>It's 500. A second extra life is the single biggest thing standing between you and your first escape.</p></div></div>
-      <div class="move"><div class="n">2</div><div><b>Next Titan Blood → Aspect of Zeus</b><p>Unlock the Blitz Disc on the Shield (costs 2). It makes the thing you loved even stronger.</p></div></div>
-      <div class="move"><div class="n">3</div><div><b>Give Nectar to Zeus</b><p>Gets you the <b>Thunder Signet</b> keepsake so you can fish the lightning build at the start of a run.</p></div></div>
-      <div class="move"><div class="n">4</div><div><b>Beat the Bone Hydra</b><p>The Asphodel (lava) boss — your next milestone. Keep grabbing Athena + HP, lean on Explosive Return + a status god.</p></div></div>
+      <div class="move"><div class="n">1</div><div><b>Save Darkness → Death Defiance rank 2</b> <span class="stat">500</span><p>A second extra life <span class="stat">+50% HP</span> is the single biggest thing between you and your first escape.</p></div></div>
+      <div class="move"><div class="n">2</div><div><b>Next Titan Blood → Aspect of Zeus</b><p>Unlock the Blitz Disc on the Shield <span class="stat r">2 Titan Blood</span>. It makes the playstyle you loved much stronger.</p></div></div>
+      <div class="move"><div class="n">3</div><div><b>Give Nectar to Zeus</b><p>Earns the <b>Thunder Signet</b> keepsake → guaranteed Zeus first boon + <span class="stat g">+20% rare</span> on his boons all run.</p></div></div>
+      <div class="move"><div class="n">4</div><div><b>Beat the Bone Hydra</b><p>The Asphodel boss. Park your disc on its head, kite the adds, let status + the disc tick it down, and save Death Defiances for the spikes.</p></div></div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer class="foot">
-  <div class="nm">SHIELD BATTLE PLAN</div>
-  <div class="meta"><b>Hades 1 · Aegis (Shield) · ranged-zoning build.</b> Every fact verified against the Hades Wiki (cross-checked vs Game8 / Fextralife / r/HadesTheGame). Updated as you play — ping for changes.</div>
+  <div class="nm">SHIELD BATTLE MANUAL</div>
+  <div class="meta"><b>Hades 1 · Aegis (Shield) · ranged-zoning build.</b> Every stat verified against the Hades Wiki (cross-checked vs Game8 / Fextralife / r/HadesTheGame). Updated as you play — ping for changes.</div>
 </footer>
 
 </body>
