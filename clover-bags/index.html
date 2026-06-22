@@ -87,6 +87,7 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 
 /* ── HOOK ── */
 .hook h2{font-size:clamp(24px,5.4vw,32px);font-weight:900}
+.hook h2 .aside{font-family:var(--script);text-transform:none;font-size:.52em;color:var(--green);font-weight:400;letter-spacing:0;vertical-align:middle;display:inline-block;transform:rotate(-4deg);margin-left:6px;white-space:nowrap}
 .hook .big{font-family:var(--script);text-transform:none;font-size:clamp(19px,4.6vw,27px);color:var(--green);font-weight:400;line-height:1.1;margin:12px 0 2px}
 .hook p{color:var(--cream);font-size:16px;margin:12px 0;max-width:58ch}
 .hook p b{color:#fff;font-weight:600}
@@ -124,6 +125,12 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
 .tile p{color:var(--muted);font-size:13.5px;line-height:1.48}
 .tile.feat{grid-column:1/-1;background:linear-gradient(135deg,rgba(221,51,51,.18),rgba(221,51,51,.05)),var(--panel-2);border-color:rgba(221,51,51,.42)}
 .tile.feat .ic{color:#fff}.tile.feat h3{color:#fff;font-size:17px}.tile.feat p{color:#ecd3d3}
+.carousel{grid-column:1/-1;position:relative;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.carousel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-track img{flex:0 0 auto;width:min(48%,300px);height:200px;object-fit:cover;scroll-snap-align:start;border-right:1px solid rgba(0,0,0,.45)}
+.carousel-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 16px 9px;font-size:12px;font-weight:600;color:var(--cream);text-transform:none;letter-spacing:.02em;background:linear-gradient(0deg,rgba(8,7,6,.88),transparent);pointer-events:none}
+@media(max-width:480px){.carousel-track img{width:80%}}
 
 /* ── WHO ── */
 .who{text-align:center}
@@ -207,8 +214,8 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
   <img class="sidegfx" src="assets/art/draw.png" alt="" aria-hidden="true">
   <div class="wrap l">
     <div class="eyebrow">The deal</div>
-    <h2>Show up alone.</h2>
-    <div class="big">Leave with a crew.</div>
+    <h2>Show up alone. <span class="aside">or bring your people</span></h2>
+    <div class="big">The crew's already here.</div>
     <p>You don't bring a partner — <b>we draw you one at random.</b> That's the whole magic. Two ringers can't team up and run the table. The person who's never thrown a bag might draw the best player in the room. The hotshots have to win even with a rookie on their team. Everybody's got a real shot — and everybody gets better.</p>
     <div class="pull">It's how our Wednesday darts night became an 8-year staple. Now it's Monday's turn.</div>
     <p>Real rules, real competition, laid-back bar vibe. League player or learning the count tonight — pull up.</p>
@@ -251,6 +258,17 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
     <div class="cards">
       <div class="tile"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.6-4.8 5.5-4.8s5.5 1.8 5.5 4.8"/><path d="M16.5 5.6a3 3 0 010 5.8"/><path d="M18 14.4c1.9.6 3 2.1 3 4.6"/></svg></div><h3>Meet the regulars</h3><p>New partner, new faces, every week. This is how the room becomes your room.</p></div>
       <div class="tile"><div class="ic" style="color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14l-7 8z"/><path d="M12 13v6"/><path d="M8.5 21h7"/></svg></div><h3>Service industry? Home.</h3><p>Mondays are Happy Hour + Service Industry Night. Off the clock, on the boards.</p></div>
+      <div class="carousel" aria-label="Clover regulars">
+        <div class="carousel-track">
+          <img src="assets/crowd/c1.jpg" alt="Clover regulars" loading="lazy">
+          <img src="assets/crowd/c2.jpg" alt="Clover regulars" loading="lazy">
+          <img src="assets/crowd/c3.jpg" alt="Clover regulars" loading="lazy">
+          <img src="assets/crowd/c4.jpg" alt="Clover regulars" loading="lazy">
+          <img src="assets/crowd/c5.jpg" alt="Clover regulars" loading="lazy">
+          <img src="assets/crowd/c6.jpg" alt="Clover regulars" loading="lazy">
+        </div>
+        <div class="carousel-cap">The regulars — Wednesday nights at Clover</div>
+      </div>
       <div class="tile feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l3.5-10h9L20 17z"/><ellipse cx="13.4" cy="10.6" rx="1.7" ry="1.05" fill="currentColor" stroke="none"/></svg></div><h3>The 4-Bagger Pot</h3><p>Music cuts off. The whole bar turns. One player, four bags, one shot at the jackpot. Miss it and the pot rolls to next Monday — bigger. This is the moment everyone stays for.</p></div>
       <div class="tile"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9.5 4h5v2.4h-5z"/><path d="M9 11.6l1.6 1.6 3-3"/><path d="M9 16.4h6"/></svg></div><h3>Real rules, no gatekeeping</h3><p>Legit cancellation scoring to 21. We'll teach you the count in two minutes.</p></div>
       <div class="tile"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="11" rx="2"/><path d="M8.5 20h7M12 16v4"/></svg></div><h3>Live on the screens</h3><p>Track the bracket on the TVs while you grab the next round. Never out of it.</p></div>
@@ -298,5 +316,17 @@ h1,h2,h3{font-weight:800;line-height:1.06;letter-spacing:-.015em;text-transform:
   <div class="sib">Blind Draw Bags — every Monday. Sibling to Blind Draw Darts, every Wednesday.</div>
 </footer>
 
+<script>
+(function(){
+  var t=document.querySelector('.carousel-track'); if(!t)return;
+  var imgs=t.querySelectorAll('img'), i=0, timer;
+  function go(){ i=(i+1)%imgs.length; t.scrollTo({left:imgs[i].offsetLeft, behavior:'smooth'}); }
+  function start(){ timer=setInterval(go,3200); }
+  function stop(){ clearInterval(timer); }
+  start();
+  t.addEventListener('pointerenter',stop); t.addEventListener('pointerleave',start);
+  t.addEventListener('touchstart',stop,{passive:true});
+})();
+</script>
 </body>
 </html>
