@@ -20,6 +20,7 @@
   --text-body:var(--stone-700);--text-heading:var(--stone-800);--text-strong:var(--stone-900);
   --link:var(--green-600);--link-hover:var(--green-700);
   --sidebar-bg:var(--stone-100);--clover:#1f8a4c;--clover-soft:#dcf3e5;
+  --note:#e11d48;--note-soft:#f9b8c4;
 }
 [data-theme="dark"]{
   --green-50:#052e16;--green-100:rgba(34,197,94,.18);--green-500:#4ade80;--green-600:#22c55e;--green-700:#86efac;
@@ -29,6 +30,7 @@
   --bg:#1a1a1a;--surface:#242424;--surface-alt:#1f1f1f;--border:#3a3a3a;--border-strong:#4a4a4a;
   --text-muted:#737373;--text-secondary:#a3a3a3;--text-body:#d4d4d4;--text-heading:#e5e5e5;--text-strong:#f5f5f5;
   --link:#4ade80;--link-hover:#86efac;--sidebar-bg:#1f1f1f;--clover:#34d27e;--clover-soft:rgba(52,210,126,.16);
+  --note:#e11d48;--note-soft:rgba(225,29,72,.45);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 *{transition:background-color .2s ease,color .2s ease,border-color .2s ease}
@@ -91,14 +93,20 @@ tr:last-child td{border-bottom:none}
 .lane h4{margin:0 0 8px}
 .board-ico{display:inline-block;width:34px;height:22px;border:2px solid var(--clover);border-radius:4px;position:relative;vertical-align:middle;margin-right:6px}
 .board-ico::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--clover);top:3px;left:50%;transform:translateX(-50%)}
-/* notes — interactive, attention-drawing */
-.notes{margin-top:20px;background:var(--clover-soft);border:1px solid var(--clover);border-left:5px solid var(--clover);border-radius:12px;padding:15px 16px 14px;box-shadow:0 3px 14px rgba(31,138,76,.14)}
-.notes-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:8px}
-.notes-head .lbl{font-size:13px;font-weight:800;letter-spacing:.02em;color:var(--clover)}
-.notes-head .status{font-size:11px;font-weight:700;color:var(--clover)}
-.notes textarea{width:100%;min-height:72px;background:var(--surface-alt);border:1px solid var(--border-strong);border-radius:8px;padding:11px 13px;font-family:var(--font-body);font-size:14.5px;color:var(--text-body);resize:vertical;line-height:1.5}
-.notes textarea::placeholder{color:var(--text-secondary)}
-.notes textarea:focus{outline:none;border-color:var(--clover);box-shadow:0 0 0 3px rgba(31,138,76,.18)}
+/* notes — high-contrast ACTION panel: deliberately breaks the page color language */
+.notes{margin:24px 0 8px;background:var(--surface-alt);border:2.5px solid var(--note);border-radius:14px;overflow:hidden;box-shadow:0 8px 26px rgba(225,29,72,.22)}
+.notes-head{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--note);padding:11px 16px}
+.notes-head .lbl{font-family:var(--font-mono);font-size:13px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#fff}
+.notes-head .status{font-size:11px;font-weight:700;color:rgba(255,255,255,.92)}
+.notes-body{padding:13px 16px 15px}
+.notes-hint{font-size:13.5px;color:var(--text-secondary);font-weight:600;margin:0 0 9px}
+.notes textarea{width:100%;min-height:78px;background:var(--bg);border:1.5px solid var(--note-soft);border-radius:9px;padding:12px 13px;font-family:var(--font-body);font-size:15px;color:var(--text-body);resize:vertical;line-height:1.5}
+.notes textarea::placeholder{color:var(--text-muted)}
+.notes textarea:focus{outline:none;border-color:var(--note);box-shadow:0 0 0 3px rgba(225,29,72,.20)}
+.notes-next{margin-top:11px;display:flex;justify-content:flex-end}
+.note-btn{background:var(--note);color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:.01em;box-shadow:0 2px 8px rgba(225,29,72,.32);transition:transform .08s ease,filter .15s ease}
+.note-btn:hover{filter:brightness(1.07)}
+.note-btn:active{transform:translateY(1px)}
 .notes-tools{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
 .btn{background:var(--surface-alt);border:1px solid var(--border);border-radius:7px;padding:6px 11px;font-size:12.5px;color:var(--text-body);cursor:pointer;font-family:inherit}
 .btn:hover{border-color:var(--clover);color:var(--clover)}
@@ -423,9 +431,6 @@ function buildNotes(){
   document.querySelectorAll(".notes[data-note]").forEach(function(box){
     var id=box.getAttribute("data-note");
     var bare=box.getAttribute("data-bare");
-    if(!bare){
-      box.innerHTML='<div class="notes-head"><span class="lbl">📝 Your notes for this section</span><span class="status" id="st-'+id+'"></span></div>';
-    }
     var ta=document.createElement("textarea");
     ta.placeholder="Tap here to jot a note — tweaks, wins, questions for Sean…";
     try{ta.value=localStorage.getItem(NKEY+id)||""}catch(e){}
@@ -435,7 +440,28 @@ function buildNotes(){
       var st=document.getElementById("st-"+id);
       if(st){st.textContent="saved ✓";clearTimeout(t);t=setTimeout(function(){st.textContent=""},1200);}
     });
-    box.appendChild(ta);
+    if(bare){box.appendChild(ta);return;}
+    box.innerHTML='<div class="notes-head"><span class="lbl">✍️ Your turn</span><span class="status" id="st-'+id+'"></span></div>';
+    var body=document.createElement("div");body.className="notes-body";
+    var hint=document.createElement("p");hint.className="notes-hint";
+    hint.textContent="What worked, what you'd change, anything to ask Sean — drop it here before you move on.";
+    body.appendChild(hint);
+    body.appendChild(ta);
+    var nav=document.createElement("div");nav.className="notes-next";
+    var btn=document.createElement("button");btn.className="note-btn";btn.type="button";
+    var sec=box.closest("section");
+    var next=sec?sec.nextElementSibling:null;
+    while(next&&next.tagName!=="SECTION"){next=next.nextElementSibling;}
+    if(next){
+      btn.textContent="Got it — next section ↓";
+      btn.addEventListener("click",function(){next.scrollIntoView({behavior:"smooth",block:"start"});});
+    }else{
+      btn.textContent="📋 Done — copy my notes for Sean";
+      btn.addEventListener("click",copyAllNotes);
+    }
+    nav.appendChild(btn);
+    body.appendChild(nav);
+    box.appendChild(body);
   });
 }
 buildNotes();
