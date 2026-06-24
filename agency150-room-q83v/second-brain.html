@@ -73,6 +73,15 @@
   .stack{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
   .chip{font-size:12px;color:#33425a;background:#eef2f7;border:1px solid #dde5ef;border-radius:7px;padding:5px 11px}
   .chip b{color:var(--navy)}
+  /* postscript story + pending-feature card */
+  .story{background:linear-gradient(180deg,#fbfaf8,#f7f5f1);border:1px solid #e7e1d4;border-radius:12px;padding:20px 22px;margin:16px 0 2px}
+  .story .sk{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .story p{margin:9px 0;color:var(--soft)} .story p.ink{color:var(--ink)} .story strong{color:var(--ink)}
+  .newcard{background:#f4f8fc;border:1px solid #cfe0f2;border-left:3px solid var(--navy);border-radius:9px;padding:15px 18px;margin:14px 0 2px}
+  .newcard .nh{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .newcard .nt{font-size:14.5px;font-weight:740;color:var(--ink)}
+  .newcard .pend{font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#7a3fb0;background:#f4eefb;border:1px solid #e4d3f5;border-radius:20px;padding:2px 8px}
+  .newcard p{margin:6px 0;font-size:13px;color:var(--soft)} .newcard b{color:var(--ink)}
   @media (max-width:680px){ .pg{padding:28px 20px 36px} .flow{flex-direction:column} .arrow{flex-basis:24px;transform:rotate(90deg)} .nums{grid-template-columns:1fr 1fr} .grid2{grid-template-columns:1fr} }
 </style>
 </head>
@@ -201,6 +210,22 @@ daily/<span class="k">YYYY-MM-DD</span>.md  <span class="f">──(LLM compile)�
     <span class="chip">keyword + index retrieval · <b>no RAG</b></span>
   </div>
   <p class="gcap">The base is open and a weekend's setup. What turns it from a toy into something you trust with months of work is the boring 80% — the cost model, the failure handling, the observability, and wiring it into the harness so it fires whether or not anyone remembers to. Happy to hand you the walkthrough.</p>
+
+  <h2>A footnote that wrote itself</h2>
+  <div class="story">
+    <div class="sk">★ the most EngineOS thing on this page</div>
+    <p class="ink">Quick personal note from Sean, because it's the most EngineOS thing here. The feature in the card below <strong>didn't exist when I started writing this.</strong></p>
+    <p>I was talking the second brain through with someone who'd actually want the architecture — building this explainer for them — and writing the "it doubled my output" line is what surfaced the problem: I was making a claim I had <em>no way to measure</em>. No usage instrumentation existed anywhere. So I cut the claim (you'll spot the hedge a few sections up).</p>
+    <p>Then the part that's the actual point. Right there in the conversation, EngineOS could reason the fix through with me — <strong>what even counts as a "second-brain" session</strong> (turns out the retrieval hook already leaves fingerprints we could read), <strong>where to capture it</strong> without endangering the memory-capture it sits beside, and <strong>what to honestly measure</strong> versus what not to overclaim.</p>
+    <p>And then we just built it, in order: <strong>scoped it in a run plan → wrote the logger and a review script → wired it as one isolated spawn onto a hook that already existed → tested it on a live session → shipped it, pending real data.</strong> Same night.</p>
+    <p class="ink">That's what I actually want you to take from this, more than any single feature: <strong>me noticing a gap mid-conversation is enough to set it off, and the system is wired well enough that considering the design and building it was an afternoon, not a project.</strong> The thing I built to <em>remember</em> just started learning to <em>measure itself</em>. The loop ate its own tail — and you're reading the part where it noticed.</p>
+  </div>
+
+  <div class="newcard">
+    <div class="nh"><span class="nt">The usage log</span><span class="pend">New · pending data</span></div>
+    <p><b>What it is:</b> at every session close, EngineOS now records that session's token footprint and whether it actually drew on the second brain — pulled prior context, read the knowledge base, or hit <code>/recall</code> — or worked cold. It rides the same observability pattern as the health logs above, and it's isolated so it can never interfere with the memory-capture it sits next to.</p>
+    <p><b>What it's for:</b> once enough sessions stack up, an <b>engaged-vs-cold</b> comparison — does the brain make a session leaner, longer, higher-output? <b>The honest answer right now: we don't know yet.</b> It shipped today; the log is empty until sessions accumulate. There's no number to show you — which is exactly the point of building the instrument instead of repeating the claim.</p>
+  </div>
 
   <div class="foot"><span>EngineOS · the second brain · built with EngineOS</span><span>Confidential · June 2026</span></div>
 </div>
