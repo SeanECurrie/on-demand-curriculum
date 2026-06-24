@@ -46,7 +46,34 @@
   .honest .th{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
   .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:10px;font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
   .foot a{color:var(--navy2)}
-  @media (max-width:680px){ .pg{padding:28px 20px 36px} .flow{flex-direction:column} .arrow{flex-basis:24px;transform:rotate(90deg)} .nums{grid-template-columns:1fr 1fr} }
+  /* ── technical extension ── */
+  .techdiv{margin:38px 0 8px;border-top:1px dashed #cbb888;padding-top:22px}
+  .techdiv .kick{color:var(--navy)}
+  .techdiv h1{font-size:25px;margin-top:6px}
+  .mono{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+  .src{background:#14181f;color:#dfe6ef;border-radius:11px;padding:16px 18px;margin:14px 0;font-size:13px;line-height:1.7;overflow-x:auto}
+  .src .cm{color:#7d8aa0}
+  .src .k{color:#e0b15a}
+  .src .f{color:#8fc7e6}
+  .src b{color:#fff;font-weight:700}
+  .tnode .nn{color:var(--navy2)}
+  .tnode{background:#f6f8fb;border-color:#d3dceb}
+  .mech{font-size:11.5px;color:var(--muted);margin-top:7px;border-top:1px solid #e3e9f1;padding-top:6px;line-height:1.4}
+  .mech code,p code,li code,.mech b{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:11.5px}
+  p code,li code{background:#eef0ee;border:1px solid var(--line);border-radius:4px;padding:0 4px;font-size:12px;color:#3a4a63}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:12px 0 2px}
+  .up{background:#fbfaf8;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .up .ut{font-size:13.5px;font-weight:730;color:var(--ink);margin-bottom:4px;display:flex;align-items:baseline;gap:7px}
+  .up .ub{font-size:12.5px;color:var(--soft);line-height:1.45}
+  .up .tag{font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--navy2);background:#e8f0f9;border-radius:5px;padding:1px 5px;white-space:nowrap}
+  ul.tight{margin:8px 0 8px 2px;padding:0;list-style:none}
+  ul.tight li{position:relative;padding-left:17px;margin:6px 0;font-size:13.5px;color:var(--soft);line-height:1.5}
+  ul.tight li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+  ul.tight li b{color:var(--ink)}
+  .stack{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
+  .chip{font-size:12px;color:#33425a;background:#eef2f7;border:1px solid #dde5ef;border-radius:7px;padding:5px 11px}
+  .chip b{color:var(--navy)}
+  @media (max-width:680px){ .pg{padding:28px 20px 36px} .flow{flex-direction:column} .arrow{flex-basis:24px;transform:rotate(90deg)} .nums{grid-template-columns:1fr 1fr} .grid2{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -82,9 +109,9 @@
 
   <h2>By the numbers (today)</h2>
   <div class="nums">
-    <div class="stat"><div class="big">294</div><div class="lab">linked knowledge notes</div></div>
+    <div class="stat"><div class="big">320</div><div class="lab">linked knowledge notes</div></div>
     <div class="stat"><div class="big">~2,800</div><div class="lab">connections between them</div></div>
-    <div class="stat"><div class="big">~9.5</div><div class="lab">links per note (on average)</div></div>
+    <div class="stat"><div class="big">~9</div><div class="lab">links per note (on average)</div></div>
     <div class="stat"><div class="big">0</div><div class="lab">orphans — every note is wired in</div></div>
   </div>
   <p class="gcap">Not a hand-maintained wiki and not the AI's training — it's this system's own accumulated memory of this operator's work, and it grows every week.</p>
@@ -100,6 +127,80 @@
     <div class="th">◆ The honest part</div>
     <p style="margin:2px 0">It's real and it's growing — but it's also a <strong>living system we're still perfecting</strong>. Just tonight, while reviewing how it's doing, we caught and fixed a bug in how it saves new memories (a failed save could quietly skip itself). The point isn't that it's flawless — it's that we <strong>monitor its health and show you the warts</strong>. A system that hides its failures is the one to distrust; one that catches its own and tells you is the one you can.</p>
   </div>
+
+  <!-- ════════════════ TECHNICAL EXTENSION ════════════════ -->
+  <div class="techdiv">
+    <div class="kick">Under the hood · for the technically inclined</div>
+    <h1>How it actually works</h1>
+    <p class="sub">The plain-English version is above. This part is for a reader who wants the architecture — what runs, when, and what we changed to make it hold up. If you know Karpathy's wiki-loop, you already know the shape; the interesting part is the engineering around it.</p>
+  </div>
+
+  <h2>The core idea: logs are source, the knowledge base is the compiled binary</h2>
+  <p class="ink">The mental model is a compiler. Raw conversation logs are <strong>source code</strong>; an LLM reads them and emits structured, linked knowledge articles — the <strong>compiled artifact</strong>. You don't hand-write the wiki; you write the logs by working, and a compile pass builds the wiki from them.</p>
+  <div class="src mono">
+<span class="cm"># the pipeline, in one line</span><br>
+daily/<span class="k">YYYY-MM-DD</span>.md  <span class="f">──(LLM compile)──▶</span>  knowledge/concepts/*.md + connections/*.md + index.md<br>
+<span class="cm"># source (what happened)              # executable (what was learned, linked)</span>
+  </div>
+  <p>That framing is Karpathy's "LLM as the kernel of a new kind of OS," made literal: the daily log is the program, the compile step is the build, the graph is the linked binary. The base we started from is <strong>Cole Medin's compiler repo</strong> (which runs on that wiki-loop idea — keyword/index retrieval, deliberately <em>no</em> vector DB or embeddings). We took that, built our own first version on it, and then spent most of the effort on everything <em>around</em> the loop.</p>
+
+  <h2>The loop, in mechanism</h2>
+  <div class="flow">
+    <div class="node tnode"><div class="nn">01 · Capture</div><div class="nh">Flush on session close</div><div class="nd">A separate agent reads the conversation and writes down what's worth keeping.</div><div class="mech"><b>flush.py</b> — a Claude Agent SDK subprocess spawned by the <code>SessionEnd</code> / <code>PreCompact</code> hooks. Extracts a structured summary (decisions, lessons, action items) → appends to today's daily log. Runs headless, out of band.</div></div>
+    <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#b9883a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h15"/><path d="M13 6l6 6-6 6"/></svg></div>
+    <div class="node tnode"><div class="nn">02 · Compile</div><div class="nh">Logs become linked notes</div><div class="nd">The compiler turns the day's logs into atomic, cross-linked concept notes.</div><div class="mech"><b>compile.py</b> — an SDK agent with Read/Write/Grep. Emits one-idea articles with YAML frontmatter and <code>[[wikilinks]]</code>, updates the index. Fires per session-close, so what you just closed lands in the KB immediately.</div></div>
+    <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#b9883a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h15"/><path d="M13 6l6 6-6 6"/></svg></div>
+    <div class="node tnode"><div class="nn">03 · Retrieve</div><div class="nh">The right notes come back</div><div class="nd">Two paths put relevant memory back into context — one at startup, one per prompt.</div><div class="mech"><b>session-start.py</b> injects the KB index + recent log at every session start. <b>prompt-retrieval.py</b> (a <code>UserPromptSubmit</code> hook) scans the corpus on relevant prompts and injects the top 3 hits as <code>&lt;prior-context&gt;</code>.</div></div>
+  </div>
+  <p class="gcap">The whole thing is wired into the harness lifecycle — <strong>8 hook events</strong> (SessionStart, SessionEnd, PreCompact, PostCompact, UserPromptSubmit, PreToolUse, PostToolUse, Stop). It isn't a script you remember to run; capture fires when a session ends or compacts, recall fires when you start one or ask a question. Nothing depends on the agent choosing to remember — which, under context pressure, it reliably won't.</p>
+
+  <h2>What we changed (the part that took the work)</h2>
+  <p>The wiki-loop is the easy 20%. A loop that survives daily use for months is the other 80%. The improvements below are each a small build of their own, on disk as run plans and audits:</p>
+  <div class="grid2">
+    <div class="up">
+      <div class="ut">Lean compile <span class="tag">token economy</span></div>
+      <div class="ub">The original full-send inlined the <em>entire</em> KB into every compile prompt, so cost scaled with KB <em>size</em>, not session size — fine at zero articles, brutal at a few hundred. Now each compile sends the index plus only the <strong>top-K=20</strong> articles most relevant to the log, and the agent pulls anything else on demand. Context per compile is now <strong>flat as the graph grows</strong> instead of climbing with it.</div>
+    </div>
+    <div class="up">
+      <div class="ut">The retrieval layer <span class="tag">closed the real gap</span></div>
+      <div class="ub">Capture was always strong; <strong>retrieval was the hole</strong> — in one ~30-hour session the agent read zero concept files on its own. The <code>UserPromptSubmit</code> hook fixed that mechanically: a heuristic gate, query-term extraction, a multi-surface scan, top-3 injected. Hard-capped at <strong>1,024 chars / 1,000 ms / silent-fail</strong> so it can never stall or bloat a prompt.</div>
+    </div>
+    <div class="up">
+      <div class="ut">Per-close compile + debounce lock <span class="tag">freshness</span></div>
+      <div class="ub">Compile fires on every session-close that saved something (the old 18:00–06:00 window let overnight closes pile into a 4-day backlog). A <strong>pid-liveness lock with a TTL</strong> serializes concurrent compiles and debounces clustered closes into one run of accumulated changes.</div>
+    </div>
+    <div class="up">
+      <div class="ut">Observability + safety nets <span class="tag">don't lose memory</span></div>
+      <div class="ub">Every flush and retrieval emits a <strong>JSONL health record</strong> with review scripts on a cadence. A failed flush no longer records its dedup state — so the next close <em>retries</em> instead of silently skipping (a real bug that nearly dropped a whole session's capture). Retry-once on transient SDK failures; a recursion guard stops compile-spawned sessions from flushing noise back in.</div>
+    </div>
+  </div>
+  <p class="gcap">All of it is logged: the cost-architecture fix, the retrieval build, the silent-loss patch, the cap tuning — each has a dated run plan and, in most cases, an adversarial review pass on the diff.</p>
+
+  <h2>Why this pairs with session-maxing</h2>
+  <p class="ink">This is the part that connects to actually getting more done in a window. A model starts every session cold. The second brain <strong>de-loads working memory to disk</strong> and pushes the relevant slice back in at startup and per-prompt — so a session opens already oriented instead of spending its first stretch re-deriving what was already figured out. Paired with EngineOS's tiered context budget (only load what the work needs), the effect is less of a finite context window spent on re-warming and more of it spent on the work.</p>
+  <ul class="tight">
+    <li><b>Concrete, on disk:</b> 35 days of logs have compiled into <b>320 linked notes</b> (260 concepts + 60 connection notes) with ~2,800 internal links — a working memory the model can stand on.</li>
+    <li><b>Recall in action:</b> the Agency150 dossier above wasn't built cold. It <b>recalled the shape of past company briefings</b> (Trinity, Fresha) and reused the proven structure — that "recall" is this loop firing during real work.</li>
+    <li><b>The honest version of the payoff:</b> the mechanism is the defensible part — a session opens already holding what past sessions figured out, so it stops re-deriving solved problems. The operator's subjective read is that it's a substantial lift; quantifying that honestly (logging session-usage deltas) is still on the list — there's no instrumented number yet.</li>
+  </ul>
+
+  <div class="honest">
+    <div class="th">◆ The honest engineering tradeoffs</div>
+    <p style="margin:2px 0">It's deliberately <strong>lossy and bounded</strong>, and that's a feature, not an apology. Capture is an LLM's judgment of what mattered (it misses things). Retrieval is a heuristic gate over a keyword index with a top-K cut — <strong>no embeddings, by design</strong> — so it trades some recall for being fast, cheap, and debuggable. Some guards are <strong>detection, not prevention</strong> (they make a failure loud rather than impossible). The reason the system is trustworthy isn't that it's flawless — it's that every limit here is a stated, measured one with a health log behind it.</p>
+  </div>
+
+  <h2>The stack, if you want to build one</h2>
+  <p>You said give you the keywords and you'd figure it out — so, the lineage and the parts:</p>
+  <div class="stack">
+    <span class="chip"><b>Karpathy</b> · LLM-OS / wiki-loop</span>
+    <span class="chip"><b>Cole Medin</b> · the compiler repo we started from</span>
+    <span class="chip"><b>Zettelkasten</b> · atomic, linked notes</span>
+    <span class="chip"><b>Claude Agent SDK</b> · headless flush + compile</span>
+    <span class="chip"><b>Claude Code hooks</b> · the 8-event wiring</span>
+    <span class="chip"><b>Obsidian</b> · the graph view up top</span>
+    <span class="chip">keyword + index retrieval · <b>no RAG</b></span>
+  </div>
+  <p class="gcap">The base is open and a weekend's setup. What turns it from a toy into something you trust with months of work is the boring 80% — the cost model, the failure handling, the observability, and wiring it into the harness so it fires whether or not anyone remembers to. Happy to hand you the walkthrough.</p>
 
   <div class="foot"><span>EngineOS · the second brain · built with EngineOS</span><span>Confidential · June 2026</span></div>
 </div>
