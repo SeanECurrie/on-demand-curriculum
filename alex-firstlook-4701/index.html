@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Alex — Practice & Ventures: First-Look Analysis</title>
+<style>
+  :root{--bg:#f1f0ee;--surface:#fff;--ink:#1c1917;--soft:#44403c;--muted:#78716c;--line:#e7e5e4;
+    --navy:#1f3a5f;--navy2:#2d5180;--navysoft:#eef3f9;--gold:#b08423;--goldsoft:#fdf8ec;
+    --ok:#15803d;--okbg:#ecfdf3;--warn:#b45309;--warnbg:#fdf6ec;--bad:#b91c1c;--mut:#6b7280;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:14.5px}
+  .layout{display:flex;max-width:1180px;margin:0 auto;background:var(--surface);min-height:100vh;box-shadow:0 2px 22px rgba(0,0,0,.08)}
+  /* sidebar */
+  .sidebar{width:262px;flex-shrink:0;background:#fbfbfa;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 16px 40px}
+  .sb-kick{font-size:9.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold)}
+  .sb-title{font-size:17px;font-weight:760;letter-spacing:-.3px;margin:5px 0 2px;line-height:1.15}
+  .sb-sub{font-size:11.5px;color:var(--muted);margin-bottom:20px}
+  .toc a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--soft);font-size:13px;padding:6px 10px;border-radius:7px;border-left:2px solid transparent;margin:1px 0}
+  .toc a:hover{background:#f1f0ec;color:var(--ink)}
+  .toc a.active{background:var(--navysoft);color:var(--navy);border-left-color:var(--navy);font-weight:650}
+  .toc a .n{font:700 10.5px/1.6 var(--mono);color:var(--gold);flex-shrink:0}
+  .toc a.active .n{color:var(--navy2)}
+  .menu-btn{display:none;position:fixed;top:14px;left:14px;z-index:60;background:var(--navy);color:#fff;border:none;width:42px;height:42px;border-radius:10px;font-size:19px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+  .scrim{display:none;position:fixed;inset:0;background:rgba(28,25,23,.45);z-index:40}
+  /* main */
+  .main{flex:1;min-width:0;padding:44px 52px 60px}
+  .kick{font-size:11px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;color:var(--gold)}
+  h1{font-size:33px;font-weight:760;letter-spacing:-.5px;margin:6px 0 9px;line-height:1.07}
+  .sub{font-size:16px;color:var(--soft);max-width:700px}
+  .metaline{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+  .metaline b{color:var(--navy2)}
+  .rule{height:2px;background:linear-gradient(90deg,var(--navy),var(--gold) 70%,transparent);border-radius:2px;margin:20px 0 6px}
+  section{scroll-margin-top:18px}
+  h2{font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:34px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line);display:flex;align-items:baseline;gap:10px}
+  h2 .sn{font:700 11px/1 var(--mono);color:var(--gold);letter-spacing:1px}
+  h3{font-size:15.5px;font-weight:730;color:var(--ink);margin:20px 0 3px;letter-spacing:-.2px}
+  p{margin:9px 0} .lead{color:var(--soft)} strong{font-weight:680;color:var(--ink)} em{font-style:italic;color:var(--ink)}
+  /* §01 ease-in — softer + larger */
+  .ease p{font-size:16.5px;line-height:1.68;color:#3a352f}
+  .ease .converge{font-size:14px}
+  .chip{font:700 10px/1 var(--mono);letter-spacing:.5px;color:var(--navy2);background:var(--navysoft);padding:3px 7px;border-radius:4px;white-space:nowrap}
+  /* tier badge */
+  .tier{display:inline-block;font:700 10px/1.5 var(--mono);padding:1px 5px;border-radius:4px;letter-spacing:.3px;vertical-align:middle;white-space:nowrap}
+  .t1{background:#e7f3ec;color:#15803d}.t2{background:var(--navysoft);color:var(--navy2)}.t3{background:#f4eee2;color:var(--warn)}.tv{background:#ede7f4;color:#6d28d9}
+  /* tooltip */
+  .tip{border-bottom:1px dotted var(--gold);cursor:help;position:relative}
+  .tip .tipbox{position:absolute;bottom:142%;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font:400 12px/1.45 -apple-system,sans-serif;letter-spacing:0;text-transform:none;padding:9px 12px;border-radius:8px;width:248px;opacity:0;visibility:hidden;transition:.14s;z-index:50;box-shadow:0 5px 16px rgba(0,0,0,.22);pointer-events:none}
+  .tip .tipbox::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--navy)}
+  .tip:hover .tipbox{opacity:1;visibility:visible}
+  /* 3-thread weave */
+  .threads{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 0}
+  .tnode{background:#f7fafd;border:1.5px solid #d8e4f0;border-radius:11px;padding:13px 14px}
+  .tnode .tl{font:700 10px/1 var(--mono);letter-spacing:.5px;text-transform:uppercase;color:var(--navy2);margin-bottom:6px}
+  .tnode .tt{font-size:15px;font-weight:730;letter-spacing:-.2px} .tnode .td{font-size:12.5px;color:var(--soft);margin-top:2px;line-height:1.4}
+  .converge{text-align:center;color:var(--gold);font-weight:800;margin:5px 0 0}
+  /* finding panel */
+  .finding{background:#fbfaf8;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:16px 18px;margin:12px 0 2px}
+  .finding.navy{border-left-color:var(--navy);background:#fbfdff}
+  .fh{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--gold);margin-bottom:10px} .finding.navy .fh{color:var(--navy2)}
+  .fline{display:flex;gap:9px;align-items:flex-start;font-size:13.6px;color:var(--soft);margin:8px 0;line-height:1.46}
+  .fdot{flex:0 0 9px;width:9px;height:9px;border-radius:50%;margin-top:5px}
+  .fdot.ok{background:var(--ok)}.fdot.warn{background:var(--warn)}.fdot.bad{background:var(--bad)}.fdot.info{background:var(--navy2)}.fdot.gold{background:var(--gold)}
+  .fline b{color:var(--ink);font-weight:700}
+  /* callouts */
+  .callout{border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14px}
+  .callout.warnb{background:var(--warnbg);border:1px solid #ecd9b6}
+  .callout .ct{display:block;font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--warn);margin-bottom:5px}
+  /* stat band */
+  .band{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:14px 15px;background:var(--surface);border-top:3px solid var(--gold)}
+  .stat .n{font:760 25px/1 -apple-system,sans-serif;color:var(--navy);letter-spacing:-.5px} .stat .n small{font-size:13px;color:var(--muted);font-weight:600}
+  .stat .l{font-size:12px;color:var(--soft);margin-top:6px;line-height:1.4} .stat .s{font:600 9.5px/1.3 var(--mono);color:var(--muted);margin-top:7px;letter-spacing:.3px}
+  /* exhibit chart */
+  .exhibit{border:1px solid var(--line);border-radius:11px;padding:17px 19px;margin:14px 0;background:var(--surface)}
+  .exh-h{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--navy);margin-bottom:14px;display:flex;justify-content:space-between} .exh-h .tag{color:var(--muted);font-weight:600}
+  .bar{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:11px;margin:8px 0;font-size:13px}
+  .bar .lab{text-align:right;color:var(--soft);font-weight:600} .bar .track{height:24px}
+  .bar .fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 9px;color:#fff;font:700 11.5px/1 var(--mono);white-space:nowrap}
+  .fill.good{background:var(--ok)} .fill.bad{background:var(--bad)}
+  .exh-note{font-size:12px;color:var(--muted);margin-top:12px;border-top:1px dashed var(--line);padding-top:10px} .exh-note b{color:var(--ink)}
+  /* dashboard exhibit */
+  .dash{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:14px 0;background:var(--surface)}
+  .dash .dbar{background:var(--navy);color:#fff;padding:10px 16px;font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;display:flex;justify-content:space-between} .dash .dbar .t{color:#c9b07a}
+  .drow{display:flex;justify-content:space-between;align-items:baseline;padding:10px 16px;border-top:1px solid var(--line);font-size:13.5px} .drow .dk{color:var(--soft)} .drow .dv{font:700 14px var(--mono);color:var(--navy)} .drow .dv.g{color:var(--ok)}
+  .dcap{padding:9px 16px;font:600 11px var(--mono);color:var(--muted);background:#fafafa;border-top:1px solid var(--line);letter-spacing:.3px}
+  /* note field */
+  .note{margin:14px 0 2px;border:1px solid #e2e5d9;border-left:3px solid var(--gold);border-radius:9px;background:#fcfbf6;padding:12px 16px}
+  .note .nq{font-size:13.6px;color:var(--ink);font-weight:600;margin:0 0 8px}
+  .note .nq::before{content:"REACT / SHARPEN";display:inline-block;font:800 9.5px/1 var(--mono);letter-spacing:.6px;color:var(--gold);background:var(--goldsoft);border:1px solid #ecd9b6;border-radius:4px;padding:3px 6px;margin-right:9px;vertical-align:1px}
+  .note textarea{width:100%;min-height:40px;border:1px solid var(--line);border-radius:7px;background:#fff;padding:8px 11px;font:13.5px/1.5 inherit;color:var(--ink);resize:vertical} .note textarea:focus{outline:none;border-color:var(--gold)}
+  .note .saved{font:600 9.5px var(--mono);color:var(--ok);opacity:0;transition:opacity .3s;margin-left:8px;letter-spacing:.4px}
+  /* priorities */
+  ol.prio{counter-reset:p;list-style:none;margin:12px 0}
+  ol.prio li{position:relative;padding:10px 0 10px 40px;border-top:1px solid var(--line);font-size:14px} ol.prio li:first-child{border-top:none}
+  ol.prio li::before{counter-increment:p;content:counter(p,decimal-leading-zero);position:absolute;left:0;top:11px;font:800 12px var(--mono);color:var(--gold)} ol.prio b{color:var(--navy2)}
+  .tiny{font-size:12.5px;color:var(--muted)}
+  /* sources */
+  .srcgrp{margin:14px 0} .srcgrp .gl{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
+  .srcrow{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--soft);padding:5px 0;border-top:1px solid var(--line);line-height:1.45} .srcrow:first-of-type{border-top:none}
+  .srcrow .tier{flex-shrink:0;margin-top:1px} .srcrow b{color:var(--ink);font-weight:680}
+  .foot{margin-top:34px;border-top:1px solid var(--line);padding-top:11px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;letter-spacing:.3px}
+  @media (max-width:860px){
+    .menu-btn{display:block} .sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:transform .22s ease;box-shadow:0 0 30px rgba(0,0,0,.2)} .sidebar.open{transform:translateX(0)} body.nav-open .scrim{display:block}
+    .main{padding:54px 22px 40px} .threads,.band{grid-template-columns:1fr} .bar{grid-template-columns:96px 1fr}
+  }
+</style>
+</head>
+<body>
+<button class="menu-btn" id="menuBtn" aria-label="Sections">☰</button>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sb-kick">First-Look Analysis</div>
+    <div class="sb-title">Alex Isaacs</div>
+    <div class="sb-sub">Practice &amp; ventures · prepared by Sean</div>
+    <div class="toc" id="toc">
+      <a href="#s1"><span class="n">01</span>We heard you</a>
+      <a href="#s2"><span class="n">02</span>What you're doing right</a>
+      <a href="#s3"><span class="n">03</span>The honest part</a>
+      <a href="#s4"><span class="n">04</span>What we'd attack</a>
+      <a href="#s5"><span class="n">05</span>The de-risk</a>
+      <a href="#s6"><span class="n">06</span>On one screen</a>
+      <a href="#s7"><span class="n">07</span>We read the code</a>
+      <a href="#s8"><span class="n">08</span>The through-line</a>
+      <a href="#s9"><span class="n">09</span>Where we come in</a>
+      <a href="#s10"><span class="n">10</span>Priorities</a>
+      <a href="#s11"><span class="n">11</span>Sources &amp; method</a>
+    </div>
+  </nav>
+
+  <div class="main">
+  <div class="kick">Confidential · Prepared for Alex · Built with EngineOS</div>
+  <h1>Your practice &amp; ventures — a first-look analysis</h1>
+  <p class="sub">You sent 26 unscripted minutes. We listened twice, researched the rest, and turned it into something you can act on — and react to, all the way down.</p>
+  <div class="metaline"><span>From <b>Sean</b></span><span>A first pass · <b>not</b> a verdict</span><span><b>React anywhere</b> — we're collecting, not concluding</span></div>
+  <div class="rule"></div>
+
+  <section id="s1" class="ease">
+  <h2><span class="sn">01</span>We heard you</h2>
+  <p>Most "intakes" are a form nobody enjoys. You did the opposite — you just talked, across the practice, the trading, and the app. That unscripted version is exactly what let us see the real picture. So before anything else: <strong>that openness is the most useful thing you could have given us.</strong></p>
+  <p>And here's the first thing we noticed — you described three things, but they're really one, wearing three outfits.</p>
+  <div class="threads">
+    <div class="tnode"><div class="tl">Thread 01 · Practice</div><div class="tt">You built it</div><div class="td">designed the model, grow people inside it</div></div>
+    <div class="tnode"><div class="tl">Thread 02 · Trading</div><div class="tt">You learned, then built</div><div class="td">followed a system, then built your own</div></div>
+    <div class="tnode"><div class="tl">Thread 03 · The app</div><div class="tt">You shipped it</div><div class="td">15 years of clinical work, in software</div></div>
+  </div>
+  <div class="converge">▼ one spine ▼</div>
+  <div class="finding navy">
+    <div class="fh">◆ The through-line</div>
+    <div class="fline"><span class="fdot info"></span><span>Each one is something <b>you built well.</b> The gap in each is identical: <b>you can't see the dials</b> — not because you aren't capable (you obviously are), but because nobody ever set up the instruments. Fix that one thing, and most of the rest gets easier. Everything below is detail.</span></div>
+  </div>
+  <div class="note"><p class="nq">Does that land — is "I can't see the dials" the real feeling, or did we miss something?</p><textarea data-key="ax-n1" placeholder="…"></textarea></div>
+  </section>
+
+  <section id="s2">
+  <h2><span class="sn">02</span>What you're already doing that most people don't</h2>
+  <p class="lead">We're not here to rescue anything. You've built real things, and a few are genuinely hard.</p>
+  <div class="finding">
+    <div class="fh">◆ The strengths, stated plainly</div>
+    <div class="fline"><span class="fdot ok"></span><span><b>You built and run a group practice</b> on a model you designed, and you grow new clinicians inside it. It works — clients get better, clinicians level up. That's a business, not a job.</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>You planned for the variability and stayed calm.</b> A major staffing hit landed; you had a buffer and a clear head. Most owners spiral — you ran the math and kept moving.</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>You taught yourself to trade from zero</b>, followed a system with discipline, then built your own systems on top. Most people never get past "I know nothing."</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>You shipped a real app</b> fusing 15 years of clinical expertise with trading. Not dabbling — and (see §07) the clinical part is the bit the market literally can't copy.</span></div>
+  </div>
+  </section>
+
+  <section id="s3">
+  <h2><span class="sn">03</span>The honest part — common, and not your fault</h2>
+  <div class="callout warnb"><span class="ct">Say it plainly</span>A contractor off Fiverr sets up your Google Ads years ago. It kind of works. Then the platform changes under you, the contractor's gone, and you're paying into a black box you can't read. <strong>That's the single most common small-business trap there is, and almost nobody fixes it right.</strong> You noticing it is already further than most people get.</div>
+  <p><strong>The two numbers you don't trust are a settings problem, not a you problem.</strong> Google Ads shows a <span class="tip"><em>"Conversions"</em> column<span class="tipbox">Google Ads has two count columns. "Conversions" counts only the actions you flag as your real goal (and drives the bidding). "All conversions" counts everything, including secondary clicks. Looking at the wrong one makes the number meaningless.</span></span> and an <em>"All conversions"</em> column that count different things. That mismatch is almost certainly what you've been staring at. Config fix: <strong>~10 minutes, $0.</strong> <span class="chip">GOOGLE ADS HELP</span> And your instinct is right — standard tracking stops at the click; it never sees whether that person became a client in your chair. The category itself is brutal:</p>
+  <div class="band">
+    <div class="stat"><div class="n">$141<small>/lead</small></div><div class="l">Mental health is the most expensive of 16 healthcare specialties to advertise — up 146% in a year.</div><div class="s">LOCALIQ / WORDSTREAM '25 <span class="tier t2">T2</span></div></div>
+    <div class="stat"><div class="n">1.85<small>%</small></div><div class="l"><span class="tip">Click→lead conversion<span class="tipbox">Of everyone who clicks your ad, the share who actually take an action (fill a form / call). 1.85% means ~1 in 54 clicks — very low, so you need a lot of clicks per lead.</span></span> — 2nd-lowest of any specialty, down 61% YoY.</div><div class="s">LOCALIQ / WORDSTREAM '25 <span class="tier t2">T2</span></div></div>
+    <div class="stat"><div class="n">~1–2<small>/mo</small></div><div class="l">Leads you likely get at current spend. Too few to even feel — let alone manage by gut.</div><div class="s">DERIVED <span class="tier t3">est</span></div></div>
+  </div>
+  <p class="tiny">That's the deck, not your dealing. The fix isn't "spend more." It's "put a dial on it so you can see."</p>
+  <div class="note"><p class="nq">When you log into Google Ads, roughly what do you actually look at — or do you mostly avoid it?</p><textarea data-key="ax-n3" placeholder="…"></textarea></div>
+  </section>
+
+  <section id="s4">
+  <h2><span class="sn">04</span>What we'd actually attack</h2>
+  <p class="lead">The concrete plan, cheapest-and-fastest first. None of it is "buy more ads."</p>
+  <h3>a · The free 10-minute fix (today)</h3>
+  <p>Sort the Google Ads conversion settings so the number means something, and connect tracking end-to-end. Zero dollars, and the black box gets a window.</p>
+  <h3>b · The website + funnel — let's actually talk about this</h3>
+  <p>Here's the thing nobody says out loud: <strong>ads only work if the website they point to converts, and if the <span class="tip">funnel<span class="tipbox">The path a prospective client travels: sees ad → visits site → fills the form / books → shows up. Each step leaks people. "Tracking the funnel" means knowing the drop-off at every step, so you fix the leak instead of guessing.</span></span> from "clicked" to "booked" is tracked.</strong> If the site is a brochure, or booking is clunky, or no form/booking event fires, you're paying to fill a leaky bucket. The people who run therapy ads for a living say the same — a converting site + tracked funnel is the <em>precondition</em>, not a nice-to-have. <span class="chip">THERAPY-PPC '26</span> So step one of any real ad work is: <strong>does the funnel hold water?</strong> We'd audit the site→booking path, fix the leaks, and put a tracked event on every step.</p>
+  <div class="note"><p class="nq">What's your website + booking situation right now — custom site? Squarespace? Just a Psychology Today page? Booking online, or phone/email?</p><textarea data-key="ax-n4a" placeholder="…"></textarea></div>
+  <h3>c · You're on the two priciest channels, and missing the cheap ones</h3>
+  <div class="exhibit">
+    <div class="exh-h"><span>Exhibit · cost per acquired client, by channel</span><span class="tag">lower = better</span></div>
+    <div class="bar"><div class="lab">Psychology Today</div><div class="track"><div class="fill good" style="width:24%">~$33–120</div></div></div>
+    <div class="bar"><div class="lab">Google Business (free)</div><div class="track"><div class="fill good" style="width:9%">~$0</div></div></div>
+    <div class="bar"><div class="lab">ZocDoc</div><div class="track"><div class="fill bad" style="width:60%">~$120 + ~40% no-shows</div></div></div>
+    <div class="bar"><div class="lab">Google Ads</div><div class="track"><div class="fill bad" style="width:88%">~$250</div></div></div>
+    <div class="exh-note">You're concentrated in the two most expensive, least durable channels — and never mentioned <span class="tip"><b>Psychology Today</b><span class="tipbox">The dominant therapist directory — a $30/mo listing that ranks at the top of "therapist near me" searches. In surveys it's the #1 single source of new-client referrals for therapists.</span></span> ($30/mo, the #1 referral source ~53% of therapists name) or a claimed <span class="tip"><b>Google Business Profile</b><span class="tipbox">Your free listing on Google Maps / local search. Claiming and optimizing it captures the exact "therapist near me" local searches you're currently paying Google Ads for — at $0.</span></span> (free, catches the exact "therapist near me" searches you're paying Google for). <span class="chip">DIRECTORY SURVEYS '26 · R1</span></div>
+  </div>
+  <h3>d · And the spring scare probably wasn't you</h3>
+  <div class="finding">
+    <div class="fh">◆ The tide went out on the whole field</div>
+    <div class="fline"><span class="fdot info"></span><span><b>3M fewer adults</b> treated in 2024 despite rising need (SAMHSA <span class="tier t1">T1</span>); visits declining every year since mid-2021 (peer-reviewed <span class="tier t1">T1</span>).</span></div>
+    <div class="fline"><span class="fdot info"></span><span>Therapists with "no openings" fell <b>53% → 46%</b> in a year (APA <span class="tier t1">T1</span>); cost-as-a-barrier nearly doubled <b>25% → 41%.</b></span></div>
+    <div class="fline"><span class="fdot gold"></span><span>The clincher: <b>spring isn't even a slow season</b> — January's the peak. You didn't cause this. The fix is to measure your own year-over-year so next time you <em>know</em> in a week, not a quarter.</span></div>
+  </div>
+  <div class="note"><p class="nq">Are you on Psychology Today / is your Google Business Profile claimed? And — do you take insurance, or cash-pay? (it changes the whole channel picture)</p><textarea data-key="ax-n4b" placeholder="…"></textarea></div>
+  </section>
+
+  <section id="s5">
+  <h2><span class="sn">05</span>The de-risk — a fix you'll actually like</h2>
+  <p>The staffing hit exposed something real: income riding on other people's labor. First, the reframe — <strong>about a third of clinicians turn over every year in this field. That's the baseline, not bad luck.</strong> The practices that absorb it are simply built to. <span class="chip">CALPCC</span> Your highest-leverage move is the thing you already love — supervising and growing people. Here's how it de-risks you, concretely:</p>
+  <div class="finding">
+    <div class="fh">◆ Group supervision, as a de-risk engine</div>
+    <div class="fline"><span class="fdot gold"></span><span><b>Revenue that isn't a clinical hour.</b> Supervise pre-licensed associates in a group — 6–8 at ~$40–75 each = <b>$240–600 for one two-hour block</b>, not you seeing a client 1-on-1. <span class="chip">FEE SURVEYS '25</span></span></div>
+    <div class="fline"><span class="fdot gold"></span><span><b>A pipeline of clinicians who stay.</b> Pre-licensed associates need <em>your</em> supervised hours to get licensed — stickier than a lateral hire, cheaper while they ramp, and they grow into the staff that fills your caseload. A renewable inflow, not one-off hires.</span></div>
+    <div class="fline"><span class="fdot gold"></span><span><b>Your favorite work becomes the moat.</b> The mentoring you'd do anyway is the engine that both diversifies income <em>and</em> makes the practice resilient to exactly the shock you just took.</span></div>
+    <div class="fline"><span class="fdot warn"></span><span>One flag worth a 20-min CPA call: your field's association is urgently warning owners about <span class="tip"><b>1099-vs-W-2 classification</b><span class="tipbox">Whether a clinician is legally a contractor (1099) or an employee (W-2). If you control their schedule/caseload and they depend on you for income, the IRS/courts may call them an employee regardless of the contract — creating back-tax + penalty exposure. A 2025 ruling sharpened this for therapy practices.</span></span> after a 2025 ruling. A heads-up, not advice. <span class="chip">APA SERVICES, DEC '25 · T1</span></span></div>
+  </div>
+  <div class="note"><p class="nq">Is a structured supervision / associate-pipeline something you'd want to build out — or does that feel like more to manage right now?</p><textarea data-key="ax-n5" placeholder="…"></textarea></div>
+  </section>
+
+  <section id="s6">
+  <h2><span class="sn">06</span>What running this looks like — get it on one screen</h2>
+  <p class="lead">Everything above shares a shape: it should be <strong>measured, automated, and on one screen</strong>, not in your head and three dashboards you don't trust. That's the layer we take off your plate. The thing we'd stand up for you:</p>
+  <div class="dash">
+    <div class="dbar"><span>▦ Practice — this month</span><span class="t">the dashboard we'd build you</span></div>
+    <div class="drow"><span class="dk">New clients booked</span><span class="dv g">+9</span></div>
+    <div class="drow"><span class="dk">Cost / acquired client — Psychology Today</span><span class="dv g">$58</span></div>
+    <div class="drow"><span class="dk">Cost / acquired client — Google Ads</span><span class="dv">$241</span></div>
+    <div class="drow"><span class="dk">Cost / acquired client — ZocDoc</span><span class="dv">$190</span></div>
+    <div class="drow"><span class="dk">Funnel: contacts → responded → booked</span><span class="dv">12 → 8 → 5</span></div>
+    <div class="drow"><span class="dk">vs. same month last year</span><span class="dv g">▲ 18%</span></div>
+    <div class="dcap">illustrative — your real numbers once we close the loop</div>
+  </div>
+  <p>You glance at one screen and <em>know</em> — which channel to feed, which to cut, whether it's you or the market, what each dollar produced. We'd build it, wire the tracking, and run the monthly reconciliation so you never have to. <strong>You stay in the building seat. We run the operate layer.</strong> (Same applies to the app and the trading — measurement is the through-line.)</p>
+  <div class="note"><p class="nq">If you had that one screen tomorrow, what's the first number you'd want on it?</p><textarea data-key="ax-n6" placeholder="…"></textarea></div>
+  </section>
+
+  <section id="s7">
+  <h2><span class="sn">07</span>A bonus you didn't ask for — we read the app's code</h2>
+  <p class="lead">You said anchor's built and now it's the un-fun part. We did the thing most people who say "I can help" never do: we pulled the code and read it — and ran <strong>independent reviewers</strong> over it, because we don't hand you flattery. Calibrated read:</p>
+  <div class="finding navy">
+    <div class="fh">◆ Verified by a hostile code review <span class="tier tv">internal</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>There's real substance — not vibe code.</b> Independent review checked every data route and found <span class="tip"><b>airtight data isolation</b><span class="tipbox">Every user can only ever see their own data — there's no way to tweak a URL or request and read another trader's records. It's a basic but commonly-botched security property; yours is uniform and correct.</span></span>, four <b>real, distinct behavioral detectors</b> wired in, and — the tell that matters — <b>your written clinical spec matches the code that implements it.</b> Above a normal MVP on the parts that count.</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>The hardest-to-fake part is the most yours:</b> the "show the distribution, never diagnose" discipline is built into the design, and it's the reason this reads as a clinical instrument, not another journal. <b>That's your clinical training showing up as software.</b></span></div>
+    <div class="fline"><span class="fdot warn"></span><span><b>Today, in 10 minutes:</b> a live database password is sitting in your git <em>history</em> (an old test script). Deleting the line won't fix it — <b>rotate the password.</b> We never printed it; just flagged it.</span></div>
+    <div class="fline"><span class="fdot info"></span><span><b>Where we'd add the rigor</b> (the "you build, we harden it" split): tighten the broker-import data handling (silent bugs can quietly corrupt the session timing your analysis runs on); make the "never diagnose" guarantee airtight across <em>both</em> render paths (one isn't gated yet); and add one sample file per broker as a test so the parser bugs stop recurring.</span></div>
+  </div>
+  <p class="tiny">An honest note on the market, because you deserve it straight: it's a <strong>contested</strong> space (others ship rule-adherence scoring too), so the edge isn't empty territory — it's <strong>your clinical credibility + execution</strong>, and proving the thing actually changes how traders behave. That's a better, truer position than "you've got it to yourself," and it's exactly where we'd help.</p>
+  <div class="note"><p class="nq">How do you feel about anchor right now — a serious thing you want to push, or a beautiful side-project? (No wrong answer; it changes how hard we'd lean in.)</p><textarea data-key="ax-n7" placeholder="…"></textarea></div>
+  </section>
+
+  <section id="s8">
+  <h2><span class="sn">08</span>The through-line — in your own language</h2>
+  <p>Here's the thread under all of it. <strong>You're an assessment expert.</strong> You'd never call a treatment a success without measuring the outcome — that's just rigor, it's how you're trained. Your ad spend, your channel mix, your app, your trading systems all deserve the same instrument. The fix to nearly everything above isn't "work harder." It's <strong>"put a dial on it so you can see"</strong> — and that happens to be exactly what we're best at.</p>
+  </section>
+
+  <section id="s9">
+  <h2><span class="sn">09</span>Where we come in</h2>
+  <p>Everything about you says <strong>builder</strong> — a practice, a trading system, an app. The building is the fun part; the operate-it, measure-it, market-it part is the wall. That's where we come in: we <strong>organize it, surface it, build the dashboards, wire the automation, and run the parts you'd rather not babysit</strong> — or, at minimum, hand you a clean system to follow. Someone once handed you a trading system you could run to a T, and it worked. We can do that for the rest of it.</p>
+  <div class="finding navy">
+    <div class="fh">◆ The offer, plainly</div>
+    <div class="fline"><span class="fdot info"></span><span><b>You stay building. We make the rest run, and run measured.</b> The walls everyone keeps meaning to get to are our favorite thing to take down. Honestly — this is the stuff Sean's been heads-down excited about, and pointing it at a friend's real situation is the fun version of it.</span></div>
+  </div>
+  </section>
+
+  <section id="s10">
+  <h2><span class="sn">10</span>First-pass priorities</h2>
+  <ol class="prio">
+    <li><b>The free 10-minute fix</b> — Google Ads settings + connect tracking. Today, $0.</li>
+    <li><b>Pressure-test the funnel</b> — does the website→booking path hold water, and is every step tracked. The foundation.</li>
+    <li><b>Claim the cheap shelf</b> — Google Business Profile + a sharp Psychology Today profile. Cheapest clients you'll get.</li>
+    <li><b>Stand up the one-screen dashboard</b> — what each channel actually produced. Never wonder for a quarter again.</li>
+    <li><b>Then the bigger builds</b> — supervision-as-leverage, the app, at your pace.</li>
+  </ol>
+  <p class="tiny">None of it is urgent-scary. The practice is recovering on its own. This is about never flying blind again — and freeing you for the parts you actually like. <strong>That's the first look — a step, not the finish.</strong> Your reactions become version two.</p>
+  </section>
+
+  <section id="s11">
+  <h2><span class="sn">11</span>Sources &amp; method</h2>
+  <p class="lead">You measure things for a living, so here's where every number came from. Researched <strong>dual-engine</strong> (independent web data + a corroborating search on each load-bearing claim), each source rated for credibility: <span class="tier t1">T1</span> primary / official · <span class="tier t2">T2</span> reputable industry · <span class="tier t3">T3</span> practitioner sentiment or estimate · <span class="tier tv">internal</span> our own verified analysis.</p>
+  <div class="srcgrp">
+    <div class="gl">Practice marketing &amp; channel economics</div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>LocaliQ / WordStream</b> — Healthcare Search Ads Benchmarks 2025 (3,542 US campaigns). The $141 cost-per-lead, 1.85% conversion, "most expensive of 16 specialties."</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>Google Ads Help / GA4</b> — official docs on Conversions vs. All-conversions, conversion tracking, enhanced conversions for leads.</span></div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>Reframe Practice · ChoosingTherapy · therapist directory surveys</b> — Psychology Today economics ($29.95/mo; ~53% of therapists name directories their #1 referral source).</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>ZocDoc provider docs</b> <span class="tier t3">+T3</span> <b>r/therapists practice case</b> — pay-per-booking model ($60–120/booking, charged on no-shows; a documented ~40% no-show drag).</span></div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>Therapy Marketer · Therapist Digital Marketing</b> — Google Ads cost-per-client benchmarks for therapy (~$250 cash-pay); "wrong channel for small practices without a converting site."</span></div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>Ruler Analytics</b> — accuracy limits of "how did you hear about us" self-reported attribution.</span></div>
+  </div>
+  <div class="srcgrp">
+    <div class="gl">Demand &amp; market conditions</div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>SAMHSA 2024 NSDUH</b> — 3M fewer adults treated in 2024 vs 2023 despite rising prevalence.</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>PNAS Nexus (peer-reviewed, 2025)</b> — mental-health visit volume declining every year since mid-2021 (336k-visit EHR study).</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>APA 2025 Practitioner Pulse Survey</b> — therapists with "no openings" fell 53% → 46% YoY (capacity loosening).</span></div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>2026 consumer mental-health trends report</b> — cost cited as a care barrier rose 25% → 41% in a year.</span></div>
+  </div>
+  <div class="srcgrp">
+    <div class="gl">Practice structure &amp; de-risk</div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>CALPCC (A. Centore)</b> — ~one-third annual clinician turnover is the baseline in group practice.</span></div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>Kate Walker Training · GreenOak Accounting</b> — group-supervision fee ranges ($40–75/person) and comp-model economics.</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>APA Services + <em>Galarza v. One Call Claims</em> (11th Cir., 2025)</b> — the 1099-vs-W-2 classification warning for psychology group practices.</span></div>
+  </div>
+  <div class="srcgrp">
+    <div class="gl">The app (anchor)</div>
+    <div class="srcrow"><span class="tier tv">internal</span><span><b>Independent hostile code &amp; product review</b> — two adversarial reviewers over the repo + spec (this engagement): verified the build, the data isolation, the spec→code fidelity, and the honest market/limitations read.</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>FCA gamification research</b> <span class="tier t2">+T2</span> product sites/reviews — the trading-psych app landscape (Edgewonk, TradeZella, et al.) and the anti-gamification, clinically-grounded position.</span></div>
+  </div>
+  <p class="tiny" style="margin-top:14px">Method: independent web-data extraction first, corroborated by search; inferences are marked, stale figures flagged and dropped. Full working research files are retained.</p>
+  </section>
+
+  <div class="foot"><span>First-look analysis · prepared for Alex Isaacs · by Sean · built with EngineOS</span><span>Confidential · local · June 2026</span></div>
+  </div>
+</div>
+<script>
+  // notes persistence
+  document.querySelectorAll('.note textarea').forEach(ta=>{
+    const k=ta.dataset.key; const s=localStorage.getItem(k); if(s)ta.value=s;
+    const b=document.createElement('span'); b.className='saved'; b.textContent='SAVED';
+    ta.previousElementSibling && ta.previousElementSibling.classList.contains('nq') && ta.previousElementSibling.appendChild(b);
+    let t; ta.addEventListener('input',()=>{localStorage.setItem(k,ta.value);clearTimeout(t);b.style.opacity=1;t=setTimeout(()=>b.style.opacity=0,900);});
+  });
+  // mobile nav
+  const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn'),sc=document.getElementById('scrim');
+  const toggle=o=>{sb.classList.toggle('open',o);document.body.classList.toggle('nav-open',o);};
+  mb.addEventListener('click',()=>toggle(!sb.classList.contains('open')));
+  sc.addEventListener('click',()=>toggle(false));
+  // scrollspy
+  const links=[...document.querySelectorAll('.toc a')];
+  const map=new Map(links.map(l=>[l.getAttribute('href').slice(1),l]));
+  const obs=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){links.forEach(l=>l.classList.remove('active'));const l=map.get(en.target.id);if(l)l.classList.add('active');}});},{rootMargin:'-12% 0px -78% 0px'});
+  document.querySelectorAll('section[id]').forEach(s=>obs.observe(s));
+  document.querySelectorAll('.toc a').forEach(a=>a.addEventListener('click',()=>{if(window.innerWidth<=860)toggle(false);}));
+</script>
+</body>
+</html>
