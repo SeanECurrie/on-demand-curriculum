@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>Alex — Practice & Ventures: First-Look Analysis</title>
+<title>Alex — Practice & Ventures: Second Look</title>
 <style>
   :root{--bg:#f1f0ee;--surface:#fff;--ink:#1c1917;--soft:#44403c;--muted:#78716c;--line:#e7e5e4;
     --navy:#1f3a5f;--navy2:#2d5180;--navysoft:#eef3f9;--gold:#b08423;--goldsoft:#fdf8ec;
@@ -29,7 +29,7 @@
   .main{flex:1;min-width:0;padding:44px 52px 60px}
   .kick{font-size:11px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;color:var(--gold)}
   h1{font-size:33px;font-weight:760;letter-spacing:-.5px;margin:6px 0 9px;line-height:1.07}
-  .sub{font-size:16px;color:var(--soft);max-width:700px}
+  .sub{font-size:16px;color:var(--soft);max-width:710px}
   .metaline{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
   .metaline b{color:var(--navy2)}
   .rule{height:2px;background:linear-gradient(90deg,var(--navy),var(--gold) 70%,transparent);border-radius:2px;margin:20px 0 6px}
@@ -47,9 +47,9 @@
   .t1{background:#e7f3ec;color:#15803d}.t2{background:var(--navysoft);color:var(--navy2)}.t3{background:#f4eee2;color:var(--warn)}.tv{background:#ede7f4;color:#6d28d9}
   /* tooltip */
   .tip{border-bottom:1px dotted var(--gold);cursor:help;position:relative}
-  .tip .tipbox{position:absolute;bottom:142%;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font:400 12px/1.45 -apple-system,sans-serif;letter-spacing:0;text-transform:none;padding:9px 12px;border-radius:8px;width:248px;opacity:0;visibility:hidden;transition:.14s;z-index:50;box-shadow:0 5px 16px rgba(0,0,0,.22);pointer-events:none}
+  .tip .tipbox{position:absolute;bottom:142%;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font:400 12px/1.45 -apple-system,sans-serif;letter-spacing:0;text-transform:none;padding:9px 12px;border-radius:8px;width:250px;opacity:0;visibility:hidden;transition:.14s;z-index:50;box-shadow:0 5px 16px rgba(0,0,0,.22);pointer-events:none}
   .tip .tipbox::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--navy)}
-  .tip:hover .tipbox{opacity:1;visibility:visible}
+  .tip:hover .tipbox,.tip:focus-visible .tipbox{opacity:1;visibility:visible}
   /* 3-thread weave */
   .threads{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 0}
   .tnode{background:#f7fafd;border:1.5px solid #d8e4f0;border-radius:11px;padding:13px 14px}
@@ -67,25 +67,49 @@
   /* callouts */
   .callout{border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14px}
   .callout.warnb{background:var(--warnbg);border:1px solid #ecd9b6}
+  .callout.navyb{background:var(--navysoft);border:1px solid #d3e0ee}
   .callout .ct{display:block;font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--warn);margin-bottom:5px}
+  .callout.navyb .ct{color:var(--navy2)}
   /* stat band */
   .band{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+  .band.four{grid-template-columns:repeat(4,1fr)}
   .stat{border:1px solid var(--line);border-radius:10px;padding:14px 15px;background:var(--surface);border-top:3px solid var(--gold)}
+  .stat.mut{border-top-color:var(--muted)}
   .stat .n{font:760 25px/1 -apple-system,sans-serif;color:var(--navy);letter-spacing:-.5px} .stat .n small{font-size:13px;color:var(--muted);font-weight:600}
   .stat .l{font-size:12px;color:var(--soft);margin-top:6px;line-height:1.4} .stat .s{font:600 9.5px/1.3 var(--mono);color:var(--muted);margin-top:7px;letter-spacing:.3px}
   /* exhibit chart */
   .exhibit{border:1px solid var(--line);border-radius:11px;padding:17px 19px;margin:14px 0;background:var(--surface)}
   .exh-h{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--navy);margin-bottom:14px;display:flex;justify-content:space-between} .exh-h .tag{color:var(--muted);font-weight:600}
-  .bar{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:11px;margin:8px 0;font-size:13px}
+  .bar{display:grid;grid-template-columns:140px 1fr;align-items:center;gap:11px;margin:8px 0;font-size:13px}
   .bar .lab{text-align:right;color:var(--soft);font-weight:600} .bar .track{height:24px}
   .bar .fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 9px;color:#fff;font:700 11.5px/1 var(--mono);white-space:nowrap}
-  .fill.good{background:var(--ok)} .fill.bad{background:var(--bad)}
+  .fill.good{background:var(--ok)} .fill.bad{background:var(--bad)} .fill.mid{background:var(--gold)}
   .exh-note{font-size:12px;color:var(--muted);margin-top:12px;border-top:1px dashed var(--line);padding-top:10px} .exh-note b{color:var(--ink)}
   /* dashboard exhibit */
   .dash{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:14px 0;background:var(--surface)}
   .dash .dbar{background:var(--navy);color:#fff;padding:10px 16px;font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;display:flex;justify-content:space-between} .dash .dbar .t{color:#c9b07a}
-  .drow{display:flex;justify-content:space-between;align-items:baseline;padding:10px 16px;border-top:1px solid var(--line);font-size:13.5px} .drow .dk{color:var(--soft)} .drow .dv{font:700 14px var(--mono);color:var(--navy)} .drow .dv.g{color:var(--ok)}
+  .drow{display:flex;justify-content:space-between;align-items:baseline;padding:10px 16px;border-top:1px solid var(--line);font-size:13.5px} .drow .dk{color:var(--soft)} .drow .dv{font:700 14px var(--mono);color:var(--navy)} .drow .dv.g{color:var(--ok)} .drow .dv.r{color:var(--bad)}
   .dcap{padding:9px 16px;font:600 11px var(--mono);color:var(--muted);background:#fafafa;border-top:1px solid var(--line);letter-spacing:.3px}
+  /* ledger artifact */
+  .ledger{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.8px}
+  .ledger th{background:var(--navy);color:#fff;font:700 10px/1.3 var(--mono);letter-spacing:.4px;text-transform:uppercase;padding:8px 9px;text-align:left}
+  .ledger th.r,.ledger td.r{text-align:right}
+  .ledger td{border-top:1px solid var(--line);padding:7px 9px;color:var(--soft)}
+  .ledger td.r{font:600 12.5px var(--mono);color:var(--navy)}
+  .ledger tr:nth-child(even) td{background:#fbfaf8}
+  .ledger td .good{color:var(--ok);font-weight:700}.ledger td .bad{color:var(--bad);font-weight:700}
+  /* the 3x rule visual */
+  .rule3{display:flex;align-items:center;gap:16px;background:var(--navysoft);border:1px solid #d3e0ee;border-radius:11px;padding:15px 18px;margin:14px 0}
+  .rule3 .big{font:800 34px/1 -apple-system,sans-serif;color:var(--navy);letter-spacing:-1px;flex-shrink:0}
+  .rule3 .rt{font-size:13.8px;color:var(--soft);line-height:1.5}.rule3 .rt b{color:var(--ink)}
+  /* collapsible (progressive disclosure) */
+  .collapse{border:1px solid var(--line);border-radius:9px;background:#fbfaf8;margin:13px 0;overflow:hidden}
+  .collapse>summary{cursor:pointer;list-style:none;padding:11px 16px;font:800 11px/1.3 var(--mono);letter-spacing:.5px;text-transform:uppercase;color:var(--navy);display:flex;justify-content:space-between;align-items:center}
+  .collapse>summary::-webkit-details-marker{display:none}
+  .collapse>summary::after{content:"＋ open";color:var(--gold);font-size:10px}
+  .collapse[open]>summary::after{content:"－ close"}
+  .collapse .cbody{padding:0 16px 14px;font-size:13.4px;color:var(--soft);line-height:1.5}
+  .collapse .cbody p{margin:9px 0} .collapse .cbody b{color:var(--ink)}
   /* note field */
   .note{margin:14px 0 2px;border:1px solid #e2e5d9;border-left:3px solid var(--gold);border-radius:9px;background:#fcfbf6;padding:12px 16px}
   .note .nq{font-size:13.6px;color:var(--ink);font-weight:600;margin:0 0 8px}
@@ -100,6 +124,7 @@
   .collect-empty{color:var(--muted);font-style:italic;font-size:13.5px}
   .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0}
   .btn{font-family:inherit;font-weight:680;font-size:14px;padding:10px 18px;border-radius:9px;cursor:pointer;border:1px solid transparent}
+  .btn:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
   .btn-primary{background:var(--navy);color:#fff} .btn-primary:hover{background:var(--navy2)}
   .btn-ghost{background:var(--surface);color:var(--soft);border-color:var(--line)} .btn-ghost:hover{background:#f4f3f0}
   /* priorities */
@@ -116,34 +141,35 @@
     .sidebar,.menu-btn,.scrim,.btnrow{display:none!important}
     .layout{box-shadow:none;max-width:100%} .main{padding:0 0 20px}
     section{page-break-inside:avoid}
+    .collapse{border:1px solid #ccc} .collapse .cbody{display:block!important}
     .note textarea{border:1px solid #ccc;min-height:auto} .tip .tipbox{display:none}
     a{color:inherit;text-decoration:none}
   }
   @media (max-width:860px){
     .menu-btn{display:block} .sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:transform .22s ease;box-shadow:0 0 30px rgba(0,0,0,.2)} .sidebar.open{transform:translateX(0)} body.nav-open .scrim{display:block}
-    .main{padding:54px 22px 40px} .threads,.band{grid-template-columns:1fr} .bar{grid-template-columns:96px 1fr}
+    .main{padding:54px 22px 40px} .threads,.band,.band.four{grid-template-columns:1fr} .bar{grid-template-columns:104px 1fr}
   }
 </style>
 </head>
 <body>
-<button class="menu-btn" id="menuBtn" aria-label="Sections">☰</button>
+<button class="menu-btn" id="menuBtn" aria-label="Open section menu">☰</button>
 <div class="scrim" id="scrim"></div>
 <div class="layout">
 
   <nav class="sidebar" id="sidebar">
-    <div class="sb-kick">First-Look Analysis</div>
+    <div class="sb-kick">Second Look · v2</div>
     <div class="sb-title">Alex Isaacs</div>
     <div class="sb-sub">Practice &amp; ventures · prepared by Sean</div>
     <div class="toc" id="toc">
-      <a href="#s1"><span class="n">01</span>We heard you</a>
+      <a href="#s1"><span class="n">01</span>We heard you, and adjusted</a>
       <a href="#s2"><span class="n">02</span>What you're doing right</a>
       <a href="#s3"><span class="n">03</span>The honest part</a>
-      <a href="#s4"><span class="n">04</span>What we'd attack</a>
-      <a href="#s5"><span class="n">05</span>The de-risk</a>
-      <a href="#s6"><span class="n">06</span>On one screen</a>
-      <a href="#s7"><span class="n">07</span>We read the code</a>
-      <a href="#s8"><span class="n">08</span>The through-line</a>
-      <a href="#s9"><span class="n">09</span>Where we come in</a>
+      <a href="#s4"><span class="n">04</span>What we'd actually attack</a>
+      <a href="#s5"><span class="n">05</span>How the pros measure this</a>
+      <a href="#s6"><span class="n">06</span>Get it on one screen</a>
+      <a href="#s7"><span class="n">07</span>The de-risk you'll like</a>
+      <a href="#s8"><span class="n">08</span>The app, where it stands</a>
+      <a href="#s9"><span class="n">09</span>The through-line + us</a>
       <a href="#s10"><span class="n">10</span>Priorities</a>
       <a href="#s11"><span class="n">11</span>Sources &amp; method</a>
       <a href="#s12"><span class="n">12</span>Your notes → send back</a>
@@ -151,27 +177,27 @@
   </nav>
 
   <div class="main">
-  <div class="kick">Confidential · Prepared for Alex · Built with EngineOS</div>
-  <h1>Your practice &amp; ventures — a first-look analysis</h1>
-  <p class="sub">You sent 26 unscripted minutes. We listened twice, researched the rest, and turned it into something you can act on — and react to, all the way down.</p>
-  <div class="metaline"><span>From <b>Sean</b></span><span>A first pass · <b>not</b> a verdict</span><span><b>React anywhere</b> — we're collecting, not concluding</span></div>
+  <div class="kick">Confidential · A second look for Alex · from Sean</div>
+  <h1>Your practice &amp; ventures: the second look</h1>
+  <p class="sub">You read the first look and pushed back, answered, and sharpened. This is version two: same listening, more depth, and every place you corrected us folded in. Still a first pass you can react to, all the way down.</p>
+  <div class="metaline"><span>From <b>Sean</b></span><span>Version <b>two</b> · built from your notes</span><span><b>June 2026</b></span><span><b>React anywhere</b>, we're collecting, not concluding</span></div>
   <div class="rule"></div>
 
   <section id="s1" class="ease">
-  <h2><span class="sn">01</span>We heard you</h2>
-  <p>Most "intakes" are a form nobody enjoys. You did the opposite — you just talked, across the practice, the trading, and the app. That unscripted version is exactly what let us see the real picture. So before anything else: <strong>that openness is the most useful thing you could have given us.</strong></p>
-  <p>And here's the first thing we noticed — you described three things, but they're really one, wearing three outfits.</p>
+  <h2><span class="sn">01</span>We heard you, and adjusted</h2>
+  <p>First: you read it, and you pushed back on one thing. <strong>You were right, and we changed it.</strong> We'd said you couldn't "see the dials" on any of the three. On trading, you can. You learned a mentor's system cold, then researched your own thesis and backtested it before you risked anything. That isn't flying blind. That's an analyst doing the work.</p>
+  <p>So here's the sharper read. You bring real rigor to the work you take on. You backtested a trading thesis. You poured fifteen years of clinical judgment into the app. The one place that rigor hasn't been pointed yet is your practice's marketing, and not because you can't do it. It's the operating-and-measuring layer, a different kind of work than the building, and the part most builders never get around to.</p>
   <div class="threads">
-    <div class="tnode"><div class="tl">Thread 01 · Practice</div><div class="tt">You built it</div><div class="td">designed the model, grow people inside it</div></div>
-    <div class="tnode"><div class="tl">Thread 02 · Trading</div><div class="tt">You learned, then built</div><div class="td">followed a system, then built your own</div></div>
-    <div class="tnode"><div class="tl">Thread 03 · The app</div><div class="tt">You shipped it</div><div class="td">15 years of clinical work, in software</div></div>
+    <div class="tnode"><div class="tl">Thread 01 · Practice</div><div class="tt">You built it</div><div class="td">your model, your people; marketing is the one dark corner</div></div>
+    <div class="tnode"><div class="tl">Thread 02 · Trading</div><div class="tt">You instrumented it</div><div class="td">researched the thesis, backtested it, dials visible</div></div>
+    <div class="tnode"><div class="tl">Thread 03 · The app</div><div class="tt">You shipped it</div><div class="td">15 years of clinical work in software, done</div></div>
   </div>
-  <div class="converge">▼ one spine ▼</div>
+  <div class="converge">▼ the one real gap ▼</div>
   <div class="finding navy">
-    <div class="fh">◆ The through-line</div>
-    <div class="fline"><span class="fdot info"></span><span>Each one is something <b>you built well.</b> The gap in each is identical: <b>you can't see the dials</b> — not because you aren't capable (you obviously are), but because nobody ever set up the instruments. Fix that one thing, and most of the rest gets easier. Everything below is detail.</span></div>
+    <div class="fh">◆ The recalibrated through-line</div>
+    <div class="fline"><span class="fdot info"></span><span>You already know how to put a dial on something and read it. You've done it on the things you've taken on. <b>The practice's marketing is the single place that instinct hasn't been aimed.</b> Point your kind of rigor at that one blind spot, and most of the rest of this document is detail. That is the whole job.</span></div>
   </div>
-  <div class="note"><p class="nq">Does that land — is "I can't see the dials" the real feeling, or did we miss something?</p><textarea data-key="alex-tk-n1" placeholder="…"></textarea></div>
+  <div class="note"><p class="nq">Does the adjusted read land better: rigor where you're engaged, the marketing as the one unpointed spot?</p><textarea data-key="alex-tk6-n1" placeholder="…"></textarea></div>
   </section>
 
   <section id="s2">
@@ -179,187 +205,256 @@
   <p class="lead">We're not here to rescue anything. You've built real things, and a few are genuinely hard.</p>
   <div class="finding">
     <div class="fh">◆ The strengths, stated plainly</div>
-    <div class="fline"><span class="fdot ok"></span><span><b>You built and run a group practice</b> on a model you designed, and you grow new clinicians inside it. It works — clients get better, clinicians level up. That's a business, not a job.</span></div>
-    <div class="fline"><span class="fdot ok"></span><span><b>You planned for the variability and stayed calm.</b> A major staffing hit landed; you had a buffer and a clear head. Most owners spiral — you ran the math and kept moving.</span></div>
-    <div class="fline"><span class="fdot ok"></span><span><b>You taught yourself to trade from zero</b>, followed a system with discipline, then built your own systems on top. Most people never get past "I know nothing."</span></div>
-    <div class="fline"><span class="fdot ok"></span><span><b>You shipped a real app</b> fusing 15 years of clinical expertise with trading. Not dabbling — and (see §07) the clinical part is the bit the market literally can't copy.</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>You built and run a group practice</b> on a model you designed, and you grow new clinicians inside it. It works, clients get better, clinicians level up. That's a business, not a job.</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>You planned for the variability.</b> So when a major staffing hit landed, you had options and a process where most owners have neither. You ran the math and kept moving.</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>You researched a trading thesis and backtested it</b> before committing, after learning a system from a mentor and following it with discipline. That's method.</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>You shipped a real app</b> fusing 15 years of clinical expertise with trading. Not dabbling. And (see §08) the clinical part is the bit the market literally can't copy.</span></div>
   </div>
   </section>
 
   <section id="s3">
-  <h2><span class="sn">03</span>The honest part — common, and not your fault</h2>
+  <h2><span class="sn">03</span>The honest part, common, and not your fault</h2>
   <div class="callout warnb"><span class="ct">Say it plainly</span>A contractor off Fiverr sets up your Google Ads years ago. It kind of works. Then the platform changes under you, the contractor's gone, and you're paying into a black box you can't read. <strong>That's the single most common small-business trap there is, and almost nobody fixes it right.</strong> You noticing it is already further than most people get.</div>
-  <p><strong>The two numbers you don't trust are a settings problem, not a you problem.</strong> Google Ads shows a <span class="tip"><em>"Conversions"</em> column<span class="tipbox">Google Ads has two count columns. "Conversions" counts only the actions you flag as your real goal (and drives the bidding). "All conversions" counts everything, including secondary clicks. Looking at the wrong one makes the number meaningless.</span></span> and an <em>"All conversions"</em> column that count different things. That mismatch is almost certainly what you've been staring at. Config fix: <strong>~10 minutes, $0.</strong> <span class="chip">GOOGLE ADS HELP</span> And your instinct is right — standard tracking stops at the click; it never sees whether that person became a client in your chair. The category itself is brutal:</p>
-  <div class="band">
-    <div class="stat"><div class="n">$141<small>/lead</small></div><div class="l">Mental health is the most expensive of 16 healthcare specialties to advertise — up 146% in a year.</div><div class="s">LOCALIQ / WORDSTREAM '25 <span class="tier t2">T2</span></div></div>
-    <div class="stat"><div class="n">1.85<small>%</small></div><div class="l"><span class="tip">Click→lead conversion<span class="tipbox">Of everyone who clicks your ad, the share who actually take an action (fill a form / call). 1.85% means ~1 in 54 clicks — very low, so you need a lot of clicks per lead.</span></span> — 2nd-lowest of any specialty, down 61% YoY.</div><div class="s">LOCALIQ / WORDSTREAM '25 <span class="tier t2">T2</span></div></div>
-    <div class="stat"><div class="n">~1–2<small>/mo</small></div><div class="l">Leads you likely get at current spend. Too few to even feel — let alone manage by gut.</div><div class="s">DERIVED <span class="tier t3">est</span></div></div>
+  <p>You told us exactly how you read it: you don't really log into Google Ads, you skim the <strong>weekly performance email.</strong> Here's a real one you sent us:</p>
+  <div class="band four" role="img" aria-label="Your weekly Google Ads email: 26 clicks, $7.63 cost per click, 2.07% clickthrough, 1,000 impressions, all top-of-funnel">
+    <div class="stat mut"><div class="n">26</div><div class="l">Clicks <span style="color:var(--bad)">▼19%</span></div><div class="s">TOP OF FUNNEL</div></div>
+    <div class="stat mut"><div class="n">$7.63</div><div class="l">Cost per click <span style="color:var(--warn)">▲15%</span></div><div class="s">TOP OF FUNNEL</div></div>
+    <div class="stat mut"><div class="n">2.07<small>%</small></div><div class="l">Clickthrough rate <span style="color:var(--ok)">▲50%</span></div><div class="s">TOP OF FUNNEL</div></div>
+    <div class="stat mut"><div class="n">1K</div><div class="l">Impressions <span style="color:var(--bad)">▼46%</span></div><div class="s">TOP OF FUNNEL</div></div>
+  </div>
+  <p><strong>Every one of those four numbers measures the same thing: how many strangers saw or tapped your ad.</strong> Not one of them answers the only question you'd actually spend money on, <em>did any of those clicks become a client sitting in a chair, and what did that client cost?</em> So the email feels like proof it's "working," but there's nothing in it to act on. That's not you missing something. <strong>The number that matters was never wired up.</strong></p>
+  <p>Two specifics, both fixable. Google Ads shows a <span class="tip" tabindex="0"><em>"Conversions"</em> column<span class="tipbox">Google Ads has two count columns. "Conversions" counts only the actions you flag as your real goal (and drives the bidding). "All conversions" counts everything, including secondary clicks. Looking at the wrong one makes the number meaningless.</span></span> and an <em>"All conversions"</em> column that count different things, and the mismatch is almost certainly what you've been staring at. The fix is about <strong>10 minutes, $0.</strong> <span class="chip">GOOGLE ADS HELP · T1</span> And your instinct is right that the tracking stops at the click and never sees the booked client. The category itself is brutal, which is why it feels worse than it should:</p>
+  <div class="band" role="img" aria-label="Mental-health paid-search benchmarks: $141 per lead, 1.85% click-to-lead, roughly 1 to 2 leads per month at current spend">
+    <div class="stat"><div class="n">$141<small>/lead</small></div><div class="l">Mental health has the highest cost-per-lead of 16 healthcare specialties, up 146% in a year.</div><div class="s">LOCALIQ / WORDSTREAM '25 <span class="tier t2">T2</span></div></div>
+    <div class="stat"><div class="n">1.85<small>%</small></div><div class="l"><span class="tip" tabindex="0">Click→lead rate<span class="tipbox">Of everyone who clicks your ad, the share who actually take an action (fill a form / call). 1.85% means ~1 in 54 clicks, very low, so you need a lot of clicks per lead.</span></span>, 2nd-lowest of any specialty, down 61% YoY.</div><div class="s">LOCALIQ / WORDSTREAM '25 <span class="tier t2">T2</span></div></div>
+    <div class="stat"><div class="n">~1–2<small>/mo</small></div><div class="l">Leads you likely get at current spend. Too few to even feel, let alone manage by gut.</div><div class="s">DERIVED <span class="tier t3">est</span></div></div>
   </div>
   <p class="tiny">That's the deck, not your dealing. The fix isn't "spend more." It's "put a dial on it so you can see."</p>
-  <div class="note"><p class="nq">When you log into Google Ads, roughly what do you actually look at — or do you mostly avoid it?</p><textarea data-key="alex-tk-n3" placeholder="…"></textarea></div>
+  <div class="note"><p class="nq">Does the weekly-email read match how you actually use it: skim, feel reassured, move on? Anything you <em>do</em> act on in there?</p><textarea data-key="alex-tk6-n3" placeholder="…"></textarea></div>
   </section>
 
   <section id="s4">
   <h2><span class="sn">04</span>What we'd actually attack</h2>
-  <p class="lead">The concrete plan, cheapest-and-fastest first. None of it is "buy more ads."</p>
-  <h3>a · The free 10-minute fix (today)</h3>
-  <p>Sort the Google Ads conversion settings so the number means something, and connect tracking end-to-end. Zero dollars, and the black box gets a window.</p>
-  <h3>b · The website + funnel — let's actually talk about this</h3>
-  <p>Here's the thing nobody says out loud: <strong>ads only work if the website they point to converts, and if the <span class="tip">funnel<span class="tipbox">The path a prospective client travels: sees ad → visits site → fills the form / books → shows up. Each step leaks people. "Tracking the funnel" means knowing the drop-off at every step, so you fix the leak instead of guessing.</span></span> from "clicked" to "booked" is tracked.</strong> If the site is a brochure, or booking is clunky, or no form/booking event fires, you're paying to fill a leaky bucket. The people who run therapy ads for a living say the same — a converting site + tracked funnel is the <em>precondition</em>, not a nice-to-have. <span class="chip">THERAPY-PPC '26</span> So step one of any real ad work is: <strong>does the funnel hold water?</strong> We'd audit the site→booking path, fix the leaks, and put a tracked event on every step.</p>
-  <div class="note"><p class="nq">What's your website + booking situation right now — custom site? Squarespace? Just a Psychology Today page? Booking online, or phone/email?</p><textarea data-key="alex-tk-n4a" placeholder="…"></textarea></div>
-  <h3>c · You're on the two priciest channels, and missing the cheap ones</h3>
-  <div class="exhibit">
-    <div class="exh-h"><span>Exhibit · cost per acquired client, by channel</span><span class="tag">lower = better</span></div>
-    <div class="bar"><div class="lab">Psychology Today</div><div class="track"><div class="fill good" style="width:24%">~$33–120</div></div></div>
-    <div class="bar"><div class="lab">Google Business (free)</div><div class="track"><div class="fill good" style="width:9%">~$0</div></div></div>
-    <div class="bar"><div class="lab">ZocDoc</div><div class="track"><div class="fill bad" style="width:60%">~$120 + ~40% no-shows</div></div></div>
-    <div class="bar"><div class="lab">Google Ads</div><div class="track"><div class="fill bad" style="width:88%">~$250</div></div></div>
-    <div class="exh-note">You're concentrated in the two most expensive, least durable channels — and never mentioned <span class="tip"><b>Psychology Today</b><span class="tipbox">The dominant therapist directory — a $30/mo listing that ranks at the top of "therapist near me" searches. In surveys it's the #1 single source of new-client referrals for therapists.</span></span> ($30/mo, the #1 referral source ~53% of therapists name) or a claimed <span class="tip"><b>Google Business Profile</b><span class="tipbox">Your free listing on Google Maps / local search. Claiming and optimizing it captures the exact "therapist near me" local searches you're currently paying Google Ads for — at $0.</span></span> (free, catches the exact "therapist near me" searches you're paying Google for). <span class="chip">DIRECTORY SURVEYS '26 · R1</span></div>
+  <p class="lead">You gave us the real plumbing: a Squarespace site, a form that emails you, your phone, a Zocdoc "Book Now" button, plus Psychology Today and insurance pages. So this stops being generic. Here's the concrete plan, cheapest and safest first.</p>
+
+  <h3>a · One health-provider check before anything else (free)</h3>
+  <div class="callout navyb"><span class="ct">Because you're a therapist, not a shoe store</span>Standard marketing advice says "slap a tracking pixel on your site." For a therapy practice that advice is a <strong>liability</strong>, not a tip. Regulators treat a visit to a therapist's website as health information, and the usual ad trackers (Meta Pixel, plain Google Analytics) can't legally carry it. The makers won't sign the agreement (a <b>BAA</b>, the data-handling contract) that would make it OK. This is the exact thing the FTC fined <strong>BetterHelp ($7.8M), Cerebral, and Monument</strong> for. <span class="chip">HHS/OCR + FTC · T1</span> So step zero is a free 20-minute check that nothing like that is already on your site. (A 2024 court case narrowed how far this rule reaches, but the careful default still holds, which is why we lead with the check.) Then we measure in ways that keep client data where it belongs.</div>
+
+  <h3>b · The free wins that are also clean for a health practice (this week, ~$0)</h3>
+  <p>The point isn't to bolt trackers onto a therapy site. It's to get the answer you want from data that's safe to collect:</p>
+  <div class="finding">
+    <div class="fh">◆ The clean, free wins</div>
+    <div class="fline"><span class="fdot gold"></span><span><b>Fix the Google Ads number (10 min, $0).</b> Sort the Conversions column so it counts booked clients, not stray clicks. A settings change, not a new tracker, so there's nothing to leak.</span></div>
+    <div class="fline"><span class="fdot gold"></span><span><b>See which ad actually makes a client, the safe way.</b> Most of your bookings are phone calls. A BAA-signed call-tracking number plus a one-time link to Google Ads sends Google back only its own anonymous click ID, never a name or a health detail. That closes the loop §03 said was missing, compliantly. <span class="chip">R7 · T1</span></span></div>
+    <div class="fline"><span class="fdot gold"></span><span><b>Claim your Google Business Profile (free).</b> It catches the "therapist near me" searches you currently pay Google Ads for, at $0, and a booking through it dodges Zocdoc's fee.</span></div>
+    <div class="fline"><span class="fdot info"></span><span><b>The one screen runs on a habit, not a pixel.</b> One question at intake ("how did you hear about us?") tallied monthly is what feeds the dashboard in §06. Nothing on your site to leak, and it lights up the phone and email channels no software can see.</span></div>
+    <div class="fline"><span class="fdot warn"></span><span><b>Optional, and only with care.</b> On-site web-form tracking can be added to a health practice, but only with real safeguards (no client data in the tracking, addresses anonymized) and as a deliberate call with your counsel, not a casual toggle. The loop above already answers your core question, so this is a "later, if ever." <span class="chip">R6/R7</span></span></div>
   </div>
-  <h3>d · And the spring scare probably wasn't you</h3>
+
+  <h3>c · Your funnel, and where it's currently dark</h3>
+  <p>Most of your clients reach you by <strong>phone or email</strong>, which a standard setup can't see at all. Here's the map you gave us, honestly marked:</p>
+  <div class="finding navy">
+    <div class="fh">◆ How people reach you, and what's trackable today</div>
+    <div class="fline"><span class="fdot warn"></span><span><b>Website form → your inbox</b>, invisible to analytics unless you add the optional web tracking. The intake question catches it either way.</span></div>
+    <div class="fline"><span class="fdot warn"></span><span><b>Phone call</b>, the biggest blind spot. A <span class="tip" tabindex="0">tracking phone number<span class="tipbox">A forwarding number that shows a different line per traffic source, so an inbound call can be tied to the ad or listing that produced it. The HIPAA-safe ones (CallRail Healthcare, WhatConverts) sign the required agreement and mask caller info.</span></span> that's HIPAA-safe ties a booked call back to what produced it. WhatConverts runs ~$30–60/mo (cheapest with a BAA), CallRail Healthcare ~$150/mo (easiest), and it's only worth it once the free steps are in.</span></div>
+    <div class="fline"><span class="fdot info"></span><span><b>Zocdoc "Book Now" button</b>, trackable as intent only if you add the optional web tracking; the booking itself completes inside Zocdoc.</span></div>
+    <div class="fline"><span class="fdot bad"></span><span><b>Psychology Today &amp; insurance pages → phone/email</b>, structurally dark. No setting fixes these; the only instrument is one question at intake (below).</span></div>
+  </div>
+  <p>The honest limit, because you of all people will respect it: <strong>we can measure intent to book, never the kept appointment</strong>. That completion lives inside Zocdoc and your scheduler. So the one human step that lights up every dark channel is a single intake question: <em>"How did you hear about us?"</em> plus <em>"Did you click an online ad?"</em> Tagged each month, that's the missing half of the picture. <span class="chip">R2 · R9</span></p>
+
+  <h3>d · You're on the two priciest channels, and the free shelf is open</h3>
+  <div class="exhibit" role="img" aria-label="Cost per acquired client by channel: free listings and Psychology Today cheapest; Zocdoc and Google Ads most expensive">
+    <div class="exh-h"><span>Exhibit · cost per acquired client, by channel</span><span class="tag">lower = better · widths schematic</span></div>
+    <div class="bar"><div class="lab">Psychology Today</div><div class="track"><div class="fill good" style="width:22%">~$33–120</div></div></div>
+    <div class="bar"><div class="lab">Google Business (free)</div><div class="track"><div class="fill good" style="width:4%">~$0</div></div></div>
+    <div class="bar"><div class="lab">Insurance directories</div><div class="track"><div class="fill mid" style="width:4%">~$0 (passive)</div></div></div>
+    <div class="bar"><div class="lab">Zocdoc</div><div class="track"><div class="fill bad" style="width:32%">~$50–120 + no-shows</div></div></div>
+    <div class="bar"><div class="lab">Google Ads</div><div class="track"><div class="fill bad" style="width:96%">~$235–470</div></div></div>
+    <div class="exh-note"><b>The pattern worth seeing:</b> your spend is highest exactly where the data is clearest (Zocdoc, Ads), and the free channels are the dark ones, which is backwards from where your attention should go. You confirmed you're on <span class="tip" tabindex="0"><b>Psychology Today</b><span class="tipbox">The dominant therapist directory, a ~$30/mo listing that ranks at the top of "therapist near me" searches. It shows you views and contacts, but goes dark below that. A phone call it sent looks the same as any other.</span></span> (good, keep it, don't over-rely). The open one is a <span class="tip" tabindex="0"><b>Google Business Profile</b><span class="tipbox">Your free listing on Google Maps / local search. Claiming and optimizing it captures the exact "therapist near me" searches you currently pay Google Ads for, at $0, and a booking that comes through it isn't charged by Zocdoc.</span></span>: free, you weren't sure it's claimed, it catches the same "therapist near me" searches you pay Ads for, and a booking through it dodges Zocdoc's fee. And since you take insurance, your <b>insurer directory listings</b> are real passive volume; the only lever there is keeping them accurate (those directories are notoriously stale). Bar widths are schematic, scaled to typical cost per kept client (Zocdoc carries a no-show drag); the $0 channels show near-zero. <span class="chip">DIRECTORY RESEARCH '26 · R1/R9</span></div>
+  </div>
+
+  <h3>e · And the spring scare probably wasn't you</h3>
   <div class="finding">
     <div class="fh">◆ The tide went out on the whole field</div>
     <div class="fline"><span class="fdot info"></span><span><b>3M fewer adults</b> treated in 2024 despite rising need (SAMHSA <span class="tier t1">T1</span>); visits declining every year since mid-2021 (peer-reviewed <span class="tier t1">T1</span>).</span></div>
     <div class="fline"><span class="fdot info"></span><span>Therapists with "no openings" fell <b>53% → 46%</b> in a year (APA <span class="tier t1">T1</span>); cost-as-a-barrier nearly doubled <b>25% → 41%.</b></span></div>
-    <div class="fline"><span class="fdot gold"></span><span>The clincher: <b>spring isn't even a slow season</b> — January's the peak. You didn't cause this. The fix is to measure your own year-over-year so next time you <em>know</em> in a week, not a quarter.</span></div>
+    <div class="fline"><span class="fdot gold"></span><span>The clincher: <b>spring isn't even a slow season</b>, January's the peak. You didn't cause this. The fix is to measure your own year-over-year so next time you <em>know</em> in a week, not a quarter.</span></div>
   </div>
-  <div class="note"><p class="nq">Are you on Psychology Today / is your Google Business Profile claimed? And — do you take insurance, or cash-pay? (it changes the whole channel picture)</p><textarea data-key="alex-tk-n4b" placeholder="…"></textarea></div>
+  <div class="note"><p class="nq">Two quick yes/nos that unlock the most: (1) want us to run the free site check + the clean fixes, and (2) is Google Business Profile something you'd let us just claim and set up for you?</p><textarea data-key="alex-tk6-n4" placeholder="…"></textarea></div>
   </section>
 
   <section id="s5">
-  <h2><span class="sn">05</span>The de-risk — a fix you'll actually like</h2>
-  <p>The staffing hit exposed something real: income riding on other people's labor. First, the reframe — <strong>about a third of clinicians turn over every year in this field. That's the baseline, not bad luck.</strong> The practices that absorb it are simply built to. <span class="chip">CALPCC</span> Your highest-leverage move is the thing you already love — supervising and growing people. Here's how it de-risks you, concretely:</p>
-  <div class="finding">
-    <div class="fh">◆ Group supervision, as a de-risk engine</div>
-    <div class="fline"><span class="fdot gold"></span><span><b>Revenue that isn't a clinical hour.</b> Supervise pre-licensed associates in a group — 6–8 at ~$40–75 each = <b>$240–600 for one two-hour block</b>, not you seeing a client 1-on-1. <span class="chip">FEE SURVEYS '25</span></span></div>
-    <div class="fline"><span class="fdot gold"></span><span><b>A pipeline of clinicians who stay.</b> Pre-licensed associates need <em>your</em> supervised hours to get licensed — stickier than a lateral hire, cheaper while they ramp, and they grow into the staff that fills your caseload. A renewable inflow, not one-off hires.</span></div>
-    <div class="fline"><span class="fdot gold"></span><span><b>Your favorite work becomes the moat.</b> The mentoring you'd do anyway is the engine that both diversifies income <em>and</em> makes the practice resilient to exactly the shock you just took.</span></div>
-    <div class="fline"><span class="fdot warn"></span><span>One flag worth a 20-min CPA call: your field's association is urgently warning owners about <span class="tip"><b>1099-vs-W-2 classification</b><span class="tipbox">Whether a clinician is legally a contractor (1099) or an employee (W-2). If you control their schedule/caseload and they depend on you for income, the IRS/courts may call them an employee regardless of the contract — creating back-tax + penalty exposure. A 2025 ruling sharpened this for therapy practices.</span></span> after a 2025 ruling. A heads-up, not advice. <span class="chip">APA SERVICES, DEC '25 · T1</span></span></div>
+  <h2><span class="sn">05</span>How the sharp operators measure this: translated to you</h2>
+  <p class="lead">You asked for the super-brain version, so here's how growth teams and the people who fund them actually think about this. It's less than you'd think.</p>
+  <p><strong>The one idea:</strong> the pros don't track <em>more</em>; they track the <em>right one number</em> and tie it to what a client is worth. Everything else is decoration. The rule they live by fits on a coaster:</p>
+  <div class="rule3">
+    <div class="big">3:1</div>
+    <div class="rt">A channel earns its budget when a client is worth at least about <b>three times</b> what you paid to get them. Under that, you fix it or cut it. That single line is what decides where the money goes. <span class="tier t1">a16z · T1</span></div>
   </div>
-  <div class="note"><p class="nq">Is a structured supervision / associate-pipeline something you'd want to build out — or does that feel like more to manage right now?</p><textarea data-key="alex-tk-n5" placeholder="…"></textarea></div>
+  <p>Run against <em>your</em> channels, that turns "two metrics I don't trust" into one page you would. The artifact, with illustrative numbers in your shape:</p>
+  <table class="ledger">
+    <thead><tr><th>Channel</th><th class="r">Spend</th><th class="r">Clients (booked)</th><th class="r">Cost / client</th><th class="r">Worth 3×?</th></tr></thead>
+    <tbody>
+      <tr><td>Referral / word-of-mouth</td><td class="r">$0</td><td class="r">6</td><td class="r">~$0</td><td class="r"><span class="good">▲ yes</span></td></tr>
+      <tr><td>Google Business (free)</td><td class="r">$0</td><td class="r">3</td><td class="r">~$0</td><td class="r"><span class="good">▲ yes</span></td></tr>
+      <tr><td>Psychology Today</td><td class="r">$30</td><td class="r">2</td><td class="r">$15</td><td class="r"><span class="good">▲ yes</span></td></tr>
+      <tr><td>Zocdoc</td><td class="r">$240</td><td class="r">4</td><td class="r">$60</td><td class="r">depends</td></tr>
+      <tr><td>Google Ads</td><td class="r">$300</td><td class="r">1</td><td class="r">$300</td><td class="r"><span class="bad">▼ check</span></td></tr>
+    </tbody>
+  </table>
+  <p class="tiny">Illustrative, your real numbers drop in once the loop is closed. The "worth 3×" test needs one input only you have: what a client is worth to you (roughly, your fee × how many sessions a typical client stays × your margin). We'd never make that number up.</p>
+  <details class="collapse">
+    <summary>The four ideas behind that, named once</summary>
+    <div class="cbody">
+      <p><b>Cost per client, per channel</b>: spend ÷ clients who actually booked and showed (not clicks, not leads). The denominator is the whole game.</p>
+      <p><b>Last-touch is a trap</b>: a friend refers someone, they Google your name, click your ad, and book; the naive setup credits the <em>ad</em> for a client the <em>referral</em> earned. The two intake questions fix it for free.</p>
+      <p><b>Cohort by source</b>: tag each client with their start month <em>and</em> source, then watch how many sessions each group completes. A "cheap" channel that sends one-and-done clients is actually expensive. Almost no small practice looks at this, and it's <b>exactly how you already think clinically</b> (do clients improve over the course of treatment). Same instinct, pointed at marketing.</p>
+      <p><b>One number per season</b>: pick the single metric that matters right now (cost per booked-and-shown client), and ignore the other thirteen. Fewer, trusted numbers beat a dashboard you distrust. <span class="tier t2">Lean Analytics · Reforge</span></p>
+    </div>
+  </details>
+  <div class="note"><p class="nq">Be honest: is this the right altitude (useful, "oh that's clever"), or more than you want on your plate? It tunes how much of this we surface vs. just quietly run.</p><textarea data-key="alex-tk6-n5" placeholder="…"></textarea></div>
   </section>
 
   <section id="s6">
-  <h2><span class="sn">06</span>What running this looks like — get it on one screen</h2>
-  <p class="lead">Everything above shares a shape: it should be <strong>measured, automated, and on one screen</strong>, not in your head and three dashboards you don't trust. That's the layer we take off your plate. The thing we'd stand up for you:</p>
-  <div class="dash">
-    <div class="dbar"><span>▦ Practice — this month</span><span class="t">the dashboard we'd build you</span></div>
-    <div class="drow"><span class="dk">New clients booked</span><span class="dv g">+9</span></div>
-    <div class="drow"><span class="dk">Cost / acquired client — Psychology Today</span><span class="dv g">$58</span></div>
-    <div class="drow"><span class="dk">Cost / acquired client — Google Ads</span><span class="dv">$241</span></div>
-    <div class="drow"><span class="dk">Cost / acquired client — ZocDoc</span><span class="dv">$190</span></div>
-    <div class="drow"><span class="dk">Funnel: contacts → responded → booked</span><span class="dv">12 → 8 → 5</span></div>
+  <h2><span class="sn">06</span>Get it on one screen: the thing you asked for</h2>
+  <p class="lead">You said it cleanly: you want to see <strong>how many clients come from each tool, so you can allocate budget.</strong> That's exactly the screen. It's free to build (Looker Studio), and here's what it looks like:</p>
+  <div class="dash" role="img" aria-label="Illustrative practice dashboard: new clients and cost per client by acquisition channel this month">
+    <div class="dbar"><span>▦ Practice, clients by channel, this month</span><span class="t">the dashboard we'd build you</span></div>
+    <div class="drow"><span class="dk">New clients booked &amp; shown</span><span class="dv g">+18</span></div>
+    <div class="drow"><span class="dk">Referral / word-of-mouth</span><span class="dv">6 · ~$0 each</span></div>
+    <div class="drow"><span class="dk">Google Business (free)</span><span class="dv g">3 · ~$0 each</span></div>
+    <div class="drow"><span class="dk">Zocdoc</span><span class="dv">4 · $60 each</span></div>
+    <div class="drow"><span class="dk">Psychology Today</span><span class="dv g">2 · $15 each</span></div>
+    <div class="drow"><span class="dk">Google Ads</span><span class="dv r">1 · $300 each</span></div>
     <div class="drow"><span class="dk">vs. same month last year</span><span class="dv g">▲ 18%</span></div>
-    <div class="dcap">illustrative — your real numbers once we close the loop</div>
+    <div class="dcap">illustrative, your real numbers once we close the loop</div>
   </div>
-  <p>You glance at one screen and <em>know</em> — which channel to feed, which to cut, whether it's you or the market, what each dollar produced. We'd build it, wire the tracking, and run the monthly reconciliation so you never have to. <strong>You stay in the building seat. We run the operate layer.</strong> (Same applies to the app and the trading — measurement is the through-line.)</p>
-  <div class="note"><p class="nq">If you had that one screen tomorrow, what's the first number you'd want on it?</p><textarea data-key="alex-tk-n6" placeholder="…"></textarea></div>
+  <p>One glance and you <em>know</em>: which channel to feed, which to cut, whether a shift actually moved the needle, and whether a soft month is you or the market. <strong>The honest catch is not the tool. It's the 20 minutes a month</strong> someone spends typing in two numbers per channel. A dashboard nobody feeds quietly shows last month's truth forever, which is worse than none. So the real deliverable isn't the chart. It's us running that monthly reconciliation <em>for</em> you so it never goes stale.</p>
+  <div class="note"><p class="nq">If you had that screen tomorrow, what's the first number your eye would go to?</p><textarea data-key="alex-tk6-n6" placeholder="…"></textarea></div>
   </section>
 
   <section id="s7">
-  <h2><span class="sn">07</span>A bonus you didn't ask for — we read the app's code</h2>
-  <p class="lead">You said anchor's built and now it's the un-fun part. We did the thing most people who say "I can help" never do: we pulled the code and read it — and ran <strong>independent reviewers</strong> over it, because we don't hand you flattery. Calibrated read:</p>
-  <div class="finding navy">
-    <div class="fh">◆ Verified by a hostile code review <span class="tier tv">internal</span></div>
-    <div class="fline"><span class="fdot ok"></span><span><b>There's real substance — not vibe code.</b> Independent review checked every data route and found <span class="tip"><b>airtight data isolation</b><span class="tipbox">Every user can only ever see their own data — there's no way to tweak a URL or request and read another trader's records. It's a basic but commonly-botched security property; yours is uniform and correct.</span></span>, four <b>real, distinct behavioral detectors</b> wired in, and — the tell that matters — <b>your written clinical spec matches the code that implements it.</b> Above a normal MVP on the parts that count.</span></div>
-    <div class="fline"><span class="fdot ok"></span><span><b>The hardest-to-fake part is the most yours:</b> the "show the distribution, never diagnose" discipline is built into the design, and it's the reason this reads as a clinical instrument, not another journal. <b>That's your clinical training showing up as software.</b></span></div>
-    <div class="fline"><span class="fdot warn"></span><span><b>Today, in 10 minutes:</b> a live database password is sitting in your git <em>history</em> (an old test script). Deleting the line won't fix it — <b>rotate the password.</b> We never printed it; just flagged it.</span></div>
-    <div class="fline"><span class="fdot info"></span><span><b>Where we'd add the rigor</b> (the "you build, we harden it" split): tighten the broker-import data handling (silent bugs can quietly corrupt the session timing your analysis runs on); make the "never diagnose" guarantee airtight across <em>both</em> render paths (one isn't gated yet); and add one sample file per broker as a test so the parser bugs stop recurring.</span></div>
+  <h2><span class="sn">07</span>The de-risk you'll actually like</h2>
+  <p>The staffing hit exposed something real: income riding on other people's labor. First, the reframe: <strong>somewhere between a third and a half of clinicians turn over every year in this field (30–60% is the range). That's the baseline, not bad luck.</strong> The practices that absorb it are simply built to. <span class="chip">SECTOR DATA · T2</span> You asked what "a structured supervision pipeline" even means, so plainly:</p>
+  <div class="callout navyb"><span class="ct">Plainly</span>A supervision pipeline is how a licensed psychologist turns her single license into a team's worth of billable care. You bring on clinicians who are fully trained but not yet independently licensed, still earning the supervised hours the state requires, and they see clients under your oversight, billed under your credential. Because you supply the supervision they're legally required to have, the practice keeps a larger share of what they bill. You earn on their work without spending your own client hours, and because they need your supervision to get licensed, they tend to stay and grow into senior staff.</div>
+  <div class="finding">
+    <div class="fh">◆ Why it's your highest-alignment move</div>
+    <div class="fline"><span class="fdot gold"></span><span><b>Revenue that isn't a clinical hour of yours.</b> Group-supervise pre-licensed associates, 6–8 at ~$40–75 each is <b>$240–600 for one two-hour block</b>, plus the margin on their client billings (their split is lower precisely because you provide required supervision). <span class="chip">FEE + SPLIT DATA · T2</span></span></div>
+    <div class="fline"><span class="fdot gold"></span><span><b>A pipeline of clinicians who stay.</b> They need <em>your</em> hours to get licensed, stickier than a lateral hire, cheaper while they ramp, and they grow into the staff that fills your caseload. Replacing a clinician runs 50–200% of salary; a renewable inflow is the antidote.</span></div>
+    <div class="fline"><span class="fdot gold"></span><span><b>The work you're best at becomes the moat.</b> The mentoring you're already good at is the engine that both diversifies income <em>and</em> hardens the practice against exactly the shock you just took.</span></div>
+    <div class="fline"><span class="fdot info"></span><span><b>The Illinois detail we checked so you don't have to:</b> in IL the trainee can <em>not</em> pay you for supervision, or the hours don't count and the insurer won't pay. The model is "employ them, earn margin, supervise as part of the job." Blue Cross IL does reimburse trainee sessions billed under your credential (with limits: up to 4 trainees, you available 100% of the time). <span class="chip">225 ILCS 15 + BCBSIL '25 · T1</span></span></div>
+    <div class="fline"><span class="fdot warn"></span><span>One flag worth a 20-min CPA call: your field's association is warning owners about <span class="tip" tabindex="0"><b>1099-vs-W-2 classification</b><span class="tipbox">Whether a clinician is legally a contractor (1099) or an employee (W-2). If you control schedule/caseload and they depend on you for income, the IRS may call them an employee regardless of the contract, creating back-tax exposure. A 2025 ruling sharpened this for therapy practices.</span></span> after a 2025 ruling. A heads-up, not advice.</span></div>
   </div>
-  <p class="tiny">An honest note on the market, because you deserve it straight: it's a <strong>contested</strong> space (others ship rule-adherence scoring too), so the edge isn't empty territory — it's <strong>your clinical credibility + execution</strong>, and proving the thing actually changes how traders behave. That's a better, truer position than "you've got it to yourself," and it's exactly where we'd help.</p>
-  <div class="note"><p class="nq">How do you feel about anchor right now — a serious thing you want to push, or a beautiful side-project? (No wrong answer; it changes how hard we'd lean in.)</p><textarea data-key="alex-tk-n7" placeholder="…"></textarea></div>
+  <div class="note"><p class="nq">Now that it's defined, is the associate/supervision pipeline something you'd want help building out, or is now not the right time to take it on?</p><textarea data-key="alex-tk6-n7" placeholder="…"></textarea></div>
   </section>
 
   <section id="s8">
-  <h2><span class="sn">08</span>The through-line — in your own language</h2>
-  <p>Here's the thread under all of it. <strong>You're an assessment expert.</strong> You'd never call a treatment a success without measuring the outcome — that's just rigor, it's how you're trained. Your ad spend, your channel mix, your app, your trading systems all deserve the same instrument. The fix to nearly everything above isn't "work harder." It's <strong>"put a dial on it so you can see"</strong> — and that happens to be exactly what we're best at.</p>
+  <h2><span class="sn">08</span>The app, where it really stands, and the one move</h2>
+  <p class="lead">You told us you're waiting to see if anchor actually does what you intended. If the feedback says it made traders more consistent, you'd commit to it. <strong>That's exactly the right gate.</strong> And it happens to be a measurement question.</p>
+  <div class="finding navy">
+    <div class="fh">◆ What we found when we read the code <span class="tier tv">internal</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>There's real substance here. This is a real build, engineered, not thrown together.</b> Independent review checked every data route and found <span class="tip" tabindex="0"><b>airtight data isolation</b><span class="tipbox">Every user can only ever see their own data. There is no way to tweak a URL and read another trader's records. A basic but commonly-botched property; yours is uniform and correct.</span></span>, four real, distinct behavioral detectors wired in, and the tell that matters, <b>your written clinical spec matches the code.</b> Above a normal MVP on the parts that count.</span></div>
+    <div class="fline"><span class="fdot ok"></span><span><b>The hardest-to-fake part is the most yours:</b> the "show the distribution, never diagnose" discipline is built into the design. That's your clinical training showing up as software, and it's why this reads as an instrument, not another journal.</span></div>
+    <div class="fline"><span class="fdot warn"></span><span><b>Today, in 10 minutes:</b> a live database password sits in your git <em>history</em> (an old test script). Deleting the line won't fix it. <b>Rotate the password.</b> We never printed it; just flagged it.</span></div>
+  </div>
+  <div class="finding">
+    <div class="fh">◆ The one move: get your "is it working" signal in ~2 weeks, not 6 months</div>
+    <div class="fline"><span class="fdot gold"></span><span><b>The signal you're waiting on is the metric the app already computes</b>: adherence (did the trader follow their own rules), plus "did they come back without a nudge." Expose that as a trend; you don't need a new system.</span></div>
+    <div class="fline"><span class="fdot gold"></span><span><b>At a handful of users, the stories are the evidence, not the chart.</b> The rigorous read is each trader as their own control: their consistency before the app vs. during. A recognized method for small numbers, and frankly the way you'd evaluate a treatment. <span class="chip">n-of-1 / SCED · T1</span></span></div>
+    <div class="fline"><span class="fdot gold"></span><span><b>One free tool, one question.</b> Wire one event in a free analytics tool (an afternoon), run weekly check-ins that ask what they <em>actually did</em> last trade (not "do you like it"), and at ~week four ask the one question that predicts it all: "how would you feel if you couldn't use this anymore?" That's a GO/NO-GO in two weeks.</span></div>
+  </div>
+  <p class="tiny">An honest note on the market, straight: it's a <strong>contested</strong> space, others ship rule-adherence scoring too, so the edge isn't empty territory. It's <strong>your clinical credibility plus execution</strong>, and proving the thing changes how traders behave. That's a truer, stronger position than "you've got it to yourself," and it's exactly where we'd help.</p>
+  <div class="note"><p class="nq">Worth us setting up that 2-week signal so the go/no-go is evidence, not a hunch? (Zero pressure, it's your project, your pace.)</p><textarea data-key="alex-tk6-n8" placeholder="…"></textarea></div>
   </section>
 
   <section id="s9">
-  <h2><span class="sn">09</span>Where we come in</h2>
-  <p>Everything about you says <strong>builder</strong> — a practice, a trading system, an app. The building is the fun part; the operate-it, measure-it, market-it part is the wall. That's where we come in: we <strong>organize it, surface it, build the dashboards, wire the automation, and run the parts you'd rather not babysit</strong> — or, at minimum, hand you a clean system to follow. Someone once handed you a trading system you could run to a T, and it worked. We can do that for the rest of it.</p>
+  <h2><span class="sn">09</span>The through-line, and where we come in</h2>
+  <p>Here's the thread under all of it. <strong>You're an assessment expert.</strong> You'd never call a treatment a success without measuring the outcome. That's just rigor, it's how you're trained, and it's why you backtested your trading before you trusted it. Your practice's marketing deserves the same instrument, and it's the one place you haven't pointed it. The fix to nearly everything above isn't "work harder." It's <strong>"put a dial on it so you can see."</strong> That's the work we do.</p>
   <div class="finding navy">
     <div class="fh">◆ The offer, plainly</div>
-    <div class="fline"><span class="fdot info"></span><span><b>You stay building. We make the rest run, and run measured.</b> The walls everyone keeps meaning to get to are our favorite thing to take down. Honestly — this is the stuff Sean's been heads-down excited about, and pointing it at a friend's real situation is the fun version of it.</span></div>
+    <div class="fline"><span class="fdot info"></span><span><b>You keep doing the clinical and product work. We wire, measure, and run the marketing operations.</b> Give us read-only access to the four places your numbers already live: Google Ads, the website/analytics side, Zocdoc, your scheduler. Then we set up the clean tracking, claim the free shelf, build the one screen, and run the monthly reconciliation. We move in days, not months, and you never babysit a dashboard. That operating layer is exactly the part we take off your plate, and doing it for a friend is the fun version.</span></div>
   </div>
   </section>
 
   <section id="s10">
   <h2><span class="sn">10</span>First-pass priorities</h2>
   <ol class="prio">
-    <li><b>The free 10-minute fix</b> — Google Ads settings + connect tracking. Today, $0.</li>
-    <li><b>Pressure-test the funnel</b> — does the website→booking path hold water, and is every step tracked. The foundation.</li>
-    <li><b>Claim the cheap shelf</b> — Google Business Profile + a sharp Psychology Today profile. Cheapest clients you'll get.</li>
-    <li><b>Stand up the one-screen dashboard</b> — what each channel actually produced. Never wonder for a quarter again.</li>
-    <li><b>Then the bigger builds</b> — supervision-as-leverage, the app, at your pace.</li>
+    <li><b>The free health-provider check + the clean fixes</b>: make sure nothing's leaking, then set up the safe tracking. This week, $0.</li>
+    <li><b>Claim the free shelf</b>: Google Business Profile (you weren't sure it's claimed) + keep Psychology Today sharp + tidy your insurance listings. Cheapest clients you'll get.</li>
+    <li><b>Stand up the one screen</b>: clients and cost per channel, and we run the monthly reconciliation so it stays true.</li>
+    <li><b>The de-risk, at your pace</b>: the supervision/associate pipeline, built clean (with the 1099/W-2 tidy-up).</li>
+    <li><b>The app's 2-week signal</b>: instrument the beta so "lock back in or not" becomes evidence. Separate track, your call.</li>
   </ol>
-  <p class="tiny">None of it is urgent-scary. The practice is recovering on its own. This is about never flying blind again — and freeing you for the parts you actually like. <strong>That's the first look — a step, not the finish.</strong> Your reactions become version two.</p>
+  <p class="tiny">None of it is urgent-scary. The practice is recovering on its own. This is about never flying blind again, and freeing your time for the clinical and product work only you can do. <strong>That's the second look: a step, not the finish.</strong> Your reactions become version three.</p>
   </section>
 
   <section id="s11">
   <h2><span class="sn">11</span>Sources &amp; method</h2>
-  <p class="lead">You measure things for a living, so here's where every number came from. Researched <strong>dual-engine</strong> (independent web data + a corroborating search on each load-bearing claim), each source rated for credibility: <span class="tier t1">T1</span> primary / official · <span class="tier t2">T2</span> reputable industry · <span class="tier t3">T3</span> practitioner sentiment or estimate · <span class="tier tv">internal</span> our own verified analysis.</p>
+  <p class="lead">You measure things for a living, so here's where every number came from. Researched <strong>dual-engine</strong> (independent web data + a corroborating search on each load-bearing claim), each source rated: <span class="tier t1">T1</span> primary / official · <span class="tier t2">T2</span> reputable industry · <span class="tier t3">T3</span> practitioner sentiment or estimate · <span class="tier tv">internal</span> our own verified analysis.</p>
   <div class="srcgrp">
-    <div class="gl">Practice marketing &amp; channel economics</div>
-    <div class="srcrow"><span class="tier t2">T2</span><span><b>LocaliQ / WordStream</b> — Healthcare Search Ads Benchmarks 2025 (3,542 US campaigns). The $141 cost-per-lead, 1.85% conversion, "most expensive of 16 specialties."</span></div>
-    <div class="srcrow"><span class="tier t1">T1</span><span><b>Google Ads Help / GA4</b> — official docs on Conversions vs. All-conversions, conversion tracking, enhanced conversions for leads.</span></div>
-    <div class="srcrow"><span class="tier t2">T2</span><span><b>Reframe Practice · ChoosingTherapy · therapist directory surveys</b> — Psychology Today economics ($29.95/mo; ~53% of therapists name directories their #1 referral source).</span></div>
-    <div class="srcrow"><span class="tier t1">T1</span><span><b>ZocDoc provider docs</b> <span class="tier t3">+T3</span> <b>r/therapists practice case</b> — pay-per-booking model ($60–120/booking, charged on no-shows; a documented ~40% no-show drag).</span></div>
-    <div class="srcrow"><span class="tier t2">T2</span><span><b>Therapy Marketer · Therapist Digital Marketing</b> — Google Ads cost-per-client benchmarks for therapy (~$250 cash-pay); "wrong channel for small practices without a converting site."</span></div>
-    <div class="srcrow"><span class="tier t2">T2</span><span><b>Ruler Analytics</b> — accuracy limits of "how did you hear about us" self-reported attribution.</span></div>
+    <div class="gl">Practice marketing, attribution &amp; the Squarespace wiring</div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>LocaliQ / WordStream</b>, Healthcare Search Ads Benchmarks 2025 (3,542 US campaigns): the $141 cost-per-lead, 1.85% click→lead, "most expensive of 16 specialties."</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>Google Ads &amp; GA4 Help; Squarespace &amp; Google "Set up your Google tag"</b>, Conversions vs All-conversions; GA4 via header code (not the legacy field); form /thank-you event; Enhanced-Measurement outbound clicks; importing events as Ads conversions.</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>Zocdoc Help Center</b>, the shareable "Booking Link" (an outbound click is trackable; the booking itself completes on Zocdoc); pay-per-new-booking, no-shows billed, GBP-sourced bookings not charged.</span></div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>Ruler Analytics</b>, self-reported "how did you hear about us" is ~47% unreliable alone, so it's a backstop, not the system.</span></div>
   </div>
   <div class="srcgrp">
-    <div class="gl">Demand &amp; market conditions</div>
-    <div class="srcrow"><span class="tier t1">T1</span><span><b>SAMHSA 2024 NSDUH</b> — 3M fewer adults treated in 2024 vs 2023 despite rising prevalence.</span></div>
-    <div class="srcrow"><span class="tier t1">T1</span><span><b>PNAS Nexus (peer-reviewed, 2025)</b> — mental-health visit volume declining every year since mid-2021 (336k-visit EHR study).</span></div>
-    <div class="srcrow"><span class="tier t1">T1</span><span><b>APA 2025 Practitioner Pulse Survey</b> — therapists with "no openings" fell 53% → 46% YoY (capacity loosening).</span></div>
-    <div class="srcrow"><span class="tier t2">T2</span><span><b>2026 consumer mental-health trends report</b> — cost cited as a care barrier rose 25% → 41% in a year.</span></div>
+    <div class="gl">Health-provider compliance (the reason we lead with the audit)</div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>HHS/OCR online-tracking guidance (2022, rev. 2024; narrowed by <em>AHA v. Becerra</em>, 2024)</b> + <b>FTC actions: BetterHelp $7.8M, Cerebral $7M, Monument, GoodRx $1.5M</b>, health-context tracking data is PHI; Meta/Google won't sign BAAs for their pixels (via Covington, Davis Wright Tremaine, Holland &amp; Knight summaries).</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>CallRail Healthcare / WhatConverts</b>, HIPAA-safe call tracking with a signed BAA; <b>GCLID-only</b> offline import closes the click→client loop sending Google no personal or health data.</span></div>
   </div>
   <div class="srcgrp">
-    <div class="gl">Practice structure &amp; de-risk</div>
-    <div class="srcrow"><span class="tier t2">T2</span><span><b>CALPCC (A. Centore)</b> — ~one-third annual clinician turnover is the baseline in group practice.</span></div>
-    <div class="srcrow"><span class="tier t2">T2</span><span><b>Kate Walker Training · GreenOak Accounting</b> — group-supervision fee ranges ($40–75/person) and comp-model economics.</span></div>
-    <div class="srcrow"><span class="tier t1">T1</span><span><b>APA Services + <em>Galarza v. One Call Claims</em> (11th Cir., 2025)</b> — the 1099-vs-W-2 classification warning for psychology group practices.</span></div>
+    <div class="gl">Channels, demand &amp; the one screen</div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>Psychology Today</b> ($29.95/mo) · <b>Google Business Profile</b> native Performance insights, free · <b>Looker Studio</b> + free Google Ads / GA4 / Sheets connectors (the one-screen dashboard is $0). <span class="tier t3">+T3</span> the "most practices under-use GBP" figure is single-source vendor.</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>SAMHSA 2024 NSDUH</b> (3M fewer treated) · <b>PNAS Nexus 2025</b> (visits declining since mid-2021) · <b>APA 2025 Practitioner Pulse</b> ("no openings" 53%→46%).</span></div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>NPR / ProPublica (2024)</b>, insurer behavioral-health directories are "akin to a coin flip" for accuracy, so the lever there is listing hygiene.</span></div>
   </div>
   <div class="srcgrp">
-    <div class="gl">The app (anchor)</div>
-    <div class="srcrow"><span class="tier tv">internal</span><span><b>Independent hostile code &amp; product review</b> — two adversarial reviewers over the repo + spec (this engagement): verified the build, the data isolation, the spec→code fidelity, and the honest market/limitations read.</span></div>
-    <div class="srcrow"><span class="tier t1">T1</span><span><b>FCA gamification research</b> <span class="tier t2">+T2</span> product sites/reviews — the trading-psych app landscape (Edgewonk, TradeZella, et al.) and the anti-gamification, clinically-grounded position.</span></div>
+    <div class="gl">De-risk &amp; supervision</div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>225 ILCS 15 (IL Clinical Psychologist Licensing Act)</b> + <b>BCBSIL provider notice (Oct 2025)</b>, the supervised-hours requirement; trainee billing under the supervisor's NPI; the "trainee can't pay for supervision" guardrail; reimbursement limits.</span></div>
+    <div class="srcrow"><span class="tier t2">T2</span><span><b>Mentalyc, Ensora, GreenOak, CALPCC</b>, three-stream group economics, the lower pre-licensed split, ~50–200% cost to replace a clinician, ~1/3 annual turnover baseline.</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>APA Services + a 2025 federal ruling</b>, the 1099-vs-W-2 classification warning for psychology group practices.</span></div>
+  </div>
+  <div class="srcgrp">
+    <div class="gl">The app (anchor) &amp; the "how the pros measure" layer</div>
+    <div class="srcrow"><span class="tier tv">internal</span><span><b>Independent hostile code &amp; product review</b>, two adversarial reviewers over the repo + spec (this engagement): the build, the data isolation, the spec→code fidelity, and the honest contested-market read.</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>n-of-1 / single-case design (JMIR)</b> · free analytics tiers (PostHog/Mixpanel/Amplitude). <span class="tier t2">+T2</span> the Sean Ellis "very disappointed" + Mom Test methods (practitioner-standard), getting an efficacy signal from a handful of users.</span></div>
+    <div class="srcrow"><span class="tier t1">T1</span><span><b>a16z (LTV:CAC 3:1)</b>, <b>Lean Analytics (one metric that matters)</b>, <b>Amplitude (cohort retention)</b>, <b>ACM (last- vs multi-touch)</b>, the caliber-layer frameworks, translated to your scale.</span></div>
   </div>
   <div class="srcgrp">
     <div class="gl">What we could NOT confirm (stated plainly)</div>
-    <div class="srcrow"><span class="tier t3">open</span><span><b>Your own funnel + cost-per-client numbers</b> — everything practice-specific here is <em>directional</em> until we get read-access to your Google Ads / ZocDoc / scheduler. The benchmarks are the field; your real figures are a measurement away.</span></div>
-    <div class="srcrow"><span class="tier t3">open</span><span><b>Whether your spring dip exceeded the sector's</b> — the macro headwind is well-evidenced; how much was market vs. your specific mix needs your own year-over-year.</span></div>
-    <div class="srcrow"><span class="tier t3">open</span><span><b>Chicago/IL-specific ZocDoc fees + Google CPCs</b> — not separately published; pull live at onboarding before committing budget.</span></div>
-    <div class="srcrow"><span class="tier t3">est</span><span><b>Google-Ads cost-per-acquired-<em>client</em> (~$235–470)</b> — an inference from cost-per-lead × a plausible close rate, not a sourced figure. Your monthly reconciliation produces the real number.</span></div>
+    <div class="srcrow"><span class="tier t3">open</span><span><b>Your own funnel + cost-per-client numbers</b>, everything practice-specific is <em>directional</em> until we get read-access to your Google Ads / Zocdoc / scheduler. The benchmarks are the field; your real figures are a measurement away.</span></div>
+    <div class="srcrow"><span class="tier t3">open</span><span><b>Whether a tracking pixel is on your site today, whether your Squarespace plan allows custom code, and whether Google Business is claimed</b>, all checkable in minutes at the start, not assumed here.</span></div>
+    <div class="srcrow"><span class="tier t3">open</span><span><b>What a client is worth to you</b> (fee × typical sessions × margin), the one input the "3×" test needs, and the one we would never invent. Yours to fill.</span></div>
+    <div class="srcrow"><span class="tier t3">open</span><span><b>Pre-licensed reimbursement beyond Blue Cross IL</b>, varies payer-by-payer (and Medicare has its own stricter rules); a quick check with your billing/CPA before building.</span></div>
   </div>
-  <p class="tiny" style="margin-top:14px">Method: independent web-data extraction first, corroborated by search; inferences are marked, stale figures flagged and dropped. Full working research files are retained. <strong>How this was built:</strong> a clean intake → five parallel research threads (each dual-engine + credibility-tiered) → synthesis → this document, with an independent hostile review over both the analysis and the app's code.</p>
+  <p class="tiny" style="margin-top:14px">Method: independent web-data extraction first, corroborated by search; inferences are marked, stale figures flagged and dropped. <strong>How this was built:</strong> your recorded intake and your first-look notes → twelve parallel research threads (each dual-engine + credibility-tiered) → synthesis → this document, with independent hostile reviews over both the analysis and the app's code. This is not legal or billing advice; a BAA and a quick word with your counsel/CPA are the right backstops before launch.</p>
   </section>
 
   <section id="s12">
-  <h2><span class="sn">12</span>Your notes — send them back</h2>
-  <p class="lead">Everything you typed in the <strong>REACT / SHARPEN</strong> boxes above is gathered here. Hit copy, paste it into a message to Sean, and your reactions become the next version — the system working <em>with</em> you, not at you.</p>
+  <h2><span class="sn">12</span>Your notes, send them back</h2>
+  <p class="lead">Everything you typed in the <strong>REACT / SHARPEN</strong> boxes above is gathered here. Hit copy, paste it into a message to Sean, and your reactions become version three, built from what you actually think, not our guesses.</p>
   <div class="collect-wrap">
-    <div id="collected"><p class="collect-empty">No notes yet — jot a reaction in any REACT / SHARPEN box above and it'll appear here.</p></div>
+    <div id="collected"><p class="collect-empty">No notes yet, jot a reaction in any REACT / SHARPEN box above and it'll appear here.</p></div>
     <div class="btnrow">
       <button class="btn btn-primary" id="copyNotesBtn">Copy my notes to send to Sean</button>
       <button class="btn btn-ghost" id="refreshNotesBtn">Refresh</button>
       <button class="btn btn-ghost" id="clearNotesBtn">Clear my notes</button>
     </div>
-    <p class="tiny" style="margin-top:12px">Then paste them into a message to <strong>sean.ec@gmail.com</strong>. (Heads-up: your notes save in <em>this</em> browser only — so copy + send them; they don't reach Sean automatically.)</p>
+    <p class="tiny" style="margin-top:12px">Then paste them into a message to <strong>sean.ec@gmail.com</strong>. (Heads-up: your notes save in <em>this</em> browser only, so copy + send them; they don't reach Sean automatically.)</p>
   </div>
   </section>
 
-  <div class="foot"><span>First-look analysis · prepared for Alex Isaacs · by Sean · built with EngineOS</span><span>Confidential · local · June 2026</span></div>
+  <div class="foot"><span>Second look · prepared for Alex Isaacs · by Sean · built with EngineOS</span><span>Confidential · local · June 2026</span></div>
   </div>
 </div>
 <script>
   // notes persistence
   document.querySelectorAll('.note textarea').forEach(ta=>{
-    const k=ta.dataset.key; const s=localStorage.getItem(k); if(s)ta.value=s;
+    const k=ta.dataset.key; try{const s=localStorage.getItem(k); if(s)ta.value=s;}catch(e){}
     const b=document.createElement('span'); b.className='saved'; b.textContent='SAVED';
     ta.previousElementSibling && ta.previousElementSibling.classList.contains('nq') && ta.previousElementSibling.appendChild(b);
-    let t; ta.addEventListener('input',()=>{localStorage.setItem(k,ta.value);clearTimeout(t);b.style.opacity=1;t=setTimeout(()=>b.style.opacity=0,900);});
+    let t; ta.addEventListener('input',()=>{try{localStorage.setItem(k,ta.value);}catch(e){}clearTimeout(t);b.style.opacity=1;t=setTimeout(()=>b.style.opacity=0,900);});
   });
   // mobile nav
   const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn'),sc=document.getElementById('scrim');
@@ -384,9 +479,9 @@
       items.push({label,v});
     });
     const box=document.getElementById('collected');
-    if(!items.length){box.innerHTML='<p class="collect-empty">No notes yet — jot a reaction in any REACT / SHARPEN box above and it\'ll appear here.</p>';return '';}
+    if(!items.length){box.innerHTML='<p class="collect-empty">No notes yet, jot a reaction in any REACT / SHARPEN box above and it\'ll appear here.</p>';return '';}
     box.innerHTML=items.map(i=>`<div class="collect-item"><div class="collect-sec">${esc(i.label)}</div><div class="collect-note">${esc(i.v)}</div></div>`).join('');
-    return 'My notes on the first-look (Alex):\n\n'+items.map(i=>'— '+i.label+'\n'+i.v).join('\n\n');
+    return 'My notes on the second look (Alex):\n\n'+items.map(i=>' '+i.label+'\n'+i.v).join('\n\n');
   }
   const copyBtn=document.getElementById('copyNotesBtn');
   if(copyBtn) copyBtn.addEventListener('click',async()=>{
@@ -394,13 +489,13 @@
     if(!txt){copyBtn.textContent='Nothing to copy yet';setTimeout(()=>copyBtn.textContent='Copy my notes to send to Sean',1600);return;}
     try{await navigator.clipboard.writeText(txt);}
     catch(e){const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(_){}t.remove();}
-    copyBtn.textContent='Copied ✓ — paste into a message to Sean';
+    copyBtn.textContent='Copied ✓, paste into a message to Sean';
     setTimeout(()=>copyBtn.textContent='Copy my notes to send to Sean',2400);
   });
   const rfBtn=document.getElementById('refreshNotesBtn'); if(rfBtn) rfBtn.addEventListener('click',collectNotes);
   const clBtn=document.getElementById('clearNotesBtn'); if(clBtn) clBtn.addEventListener('click',()=>{
     if(!confirm('Clear all your notes? This cannot be undone.'))return;
-    document.querySelectorAll('.note textarea').forEach(ta=>{localStorage.removeItem(ta.dataset.key);ta.value='';});
+    document.querySelectorAll('.note textarea').forEach(ta=>{try{localStorage.removeItem(ta.dataset.key);}catch(e){}ta.value='';});
     collectNotes();
   });
   collectNotes();
