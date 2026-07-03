@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Methodology Index — EngineOS Docs</title>
-  <meta name="description" content="15 formalized methodology documents live at methodology/. They are protected by a path-scoped immutability rule (.claude/rules/methodology-immutable.md) -- modification requires explicit operator appr">
+  <meta name="description" content="24 formalized methodology documents live at methodology/. They are protected by a path-scoped immutability rule (.claude/rules/methodology-immutable.md) -- modification requires explicit operator appr">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -45,18 +45,174 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s09">
-  <div class="eyebrow">EngineOS System Documentation · Section 09 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 09 · Built 2026-07-03</div>
   <h1>Methodology Index</h1>
-  <p class="subhead">15 formalized methodology documents live at methodology/. They are protected by a path-scoped immutability rule (.claude/rules/methodology-immutable.md) -- modification requires explicit operator approval. These encode proven methodology from production work across 11 source projects, with the majority sourced from the</p>
+  <p class="subhead">24 formalized methodology documents live at methodology/. They are protected by a path-scoped immutability rule (.claude/rules/methodology-immutable.md) -- modification requires explicit operator approval. These encode proven methodology from production work across 11 source projects, with the majority sourced from the</p>
 </header>
 <section class="content">
 <h2 id="overview">Overview<a class="anchor-link" href="#overview" title="Permalink">¶</a></h2>
-<p>The methodology layer is reference infrastructure, not working documentation. Skills reference these documents; they do not duplicate their content. New methodology documents require operator approval and must follow the existing format: problem statement, methodology, binary self-tests, anti-pattern companions.</p>
-<p>The <code>methodology/</code> directory also contains two subdirectories: <code>research/</code> (supplementary research artifacts including <code>agent-architecture-landscape.md</code>) and <code>walkthroughs/</code> (walkthrough-related materials). These are supporting resources, not part of the 15 core methodology documents.</p>
+<p><strong>Charter (split made explicit 2026-07-02, resolving audit fork F4):</strong> this index is the <strong>catalog</strong> — the canonical per-document cards and master table; <a href="methodology.html">methodology.md</a> is the <strong>narrative</strong> layer. Doc-by-doc detail lives here and only here.</p>
+<p>The methodology layer is reference infrastructure, not working documentation. Skills reference these documents; they do not duplicate their content. New methodology documents require operator approval and must follow the existing format: problem statement, methodology, binary self-tests, anti-pattern companions. A precedence rule (methodology-immutable rule 5, added 2026-06-12) governs divergence: when a skill and its companion methodology document diverge on operational specifics (thresholds, IDs, procedures), the skill is the operational source of truth and the methodology document carries rationale and history &ndash; divergences are defects to reconcile toward the skill, not licenses to pick either.</p>
+<p>The <code>methodology/</code> directory also contains two subdirectories: <code>research/</code> (supplementary research artifacts including <code>agent-architecture-landscape.md</code>, which the 24 census count includes) and <code>walkthroughs/</code> (walkthrough-related materials). The cards below index the top-level core documents.</p>
+<hr />
+<h2 id="at-a-glance">At a Glance<a class="anchor-link" href="#at-a-glance" title="Permalink">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Domain</th>
+<th>One line</th>
+<th>Companion skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>credibility-tiers</td>
+<td>Research</td>
+<td>5-tier source weighting for every claim</td>
+<td>research-engine, findings-formatter</td>
+</tr>
+<tr>
+<td>dual-source-intelligence</td>
+<td>Research</td>
+<td>Official docs + community intel per claim</td>
+<td>research-engine, depth-governor</td>
+</tr>
+<tr>
+<td>depth-assessment</td>
+<td>Research</td>
+<td>30-second scan vs deep-dive classification</td>
+<td>depth-governor</td>
+</tr>
+<tr>
+<td>findings-pattern-library</td>
+<td>Research</td>
+<td>7 validated structures for research output</td>
+<td>findings-formatter</td>
+</tr>
+<tr>
+<td>research-cadence-template</td>
+<td>Research</td>
+<td>Scheduled staleness-driven refresh design</td>
+<td>research-engine, market-scanner</td>
+</tr>
+<tr>
+<td>competitive-research-framework</td>
+<td>Research</td>
+<td>The 26-question competitor battery</td>
+<td>market-scanner, company-briefing</td>
+</tr>
+<tr>
+<td>epistemic-tagging</td>
+<td>Research</td>
+<td>Per-claim confidence tags + unknowns ledger + observation-beats-theory</td>
+<td>(discipline; pairs with credibility-tiers)</td>
+</tr>
+<tr>
+<td>binary-self-tests</td>
+<td>Quality</td>
+<td>YES/NO gates by pipeline stage (R/S/O/V/X)</td>
+<td>output-self-test, sanity-check</td>
+</tr>
+<tr>
+<td>anti-patterns</td>
+<td>Quality</td>
+<td>15 evidence-based failure modes in three categories</td>
+<td>sanity-check</td>
+</tr>
+<tr>
+<td>adversarial-validation</td>
+<td>Quality</td>
+<td>Independent-context two-agent evaluation</td>
+<td>adversarial-evaluator</td>
+</tr>
+<tr>
+<td>section-construction</td>
+<td>Production</td>
+<td>Incremental build for &gt;500-line outputs</td>
+<td>render-validate</td>
+</tr>
+<tr>
+<td>factory-pattern</td>
+<td>Production</td>
+<td>Four variants of system-produces-system</td>
+<td>(referenced by ecosystem-build)</td>
+</tr>
+<tr>
+<td>editorial-standards</td>
+<td>Production</td>
+<td>Six principles for written output</td>
+<td>output-self-test, qa-pipeline</td>
+</tr>
+<tr>
+<td>tone-firewall</td>
+<td>Production</td>
+<td>Hype-voice vs claim-voice separation</td>
+<td>(discipline; pairs with epistemic-tagging)</td>
+</tr>
+<tr>
+<td>company-briefing</td>
+<td>Production</td>
+<td>Research-backed interactive HTML briefing pipeline</td>
+<td>company-briefing</td>
+</tr>
+<tr>
+<td>comprehension-design</td>
+<td>Production</td>
+<td>Calibrate FORM to the human; substance uncompromised (incl. §G)</td>
+<td>section-construction, framework-explainer</td>
+</tr>
+<tr>
+<td>engagement-workup</td>
+<td>Production</td>
+<td>The 4-type client-engagement router and motion</td>
+<td>engagement-workup</td>
+</tr>
+<tr>
+<td>ecosystem-build</td>
+<td>System Building</td>
+<td>Three-act audit-to-composite build</td>
+<td>codebase-onboarder</td>
+</tr>
+<tr>
+<td>lift-audit</td>
+<td>System Building</td>
+<td>Regression + currency audit after lifts</td>
+<td>sanity-check</td>
+</tr>
+<tr>
+<td>planning-enforcement</td>
+<td>System Building</td>
+<td>When planning skills are structurally required</td>
+<td>phase-controller</td>
+</tr>
+<tr>
+<td>cross-operator-distribution</td>
+<td>System Building</td>
+<td>Fork EngineOS to a new operator safely</td>
+<td>corpus-ingest, profile-builder</td>
+</tr>
+<tr>
+<td>memory-architecture</td>
+<td>Governance</td>
+<td>8-surface memory + 3-layer retrieval canon</td>
+<td>session-orchestrator, recall</td>
+</tr>
+<tr>
+<td>people-profiling</td>
+<td>Governance</td>
+<td>Six-axis people subsystem canon</td>
+<td>person-profiler, people-curator</td>
+</tr>
+</tbody>
+</table>
+<p><em>23 top-level core documents are indexed above and carded below; the 24 census count also includes the supplementary <code>research/agent-architecture-landscape.md</code> (counted recursively, not carded).</em></p>
 <hr />
 <h2 id="by-domain">By Domain<a class="anchor-link" href="#by-domain" title="Permalink">¶</a></h2>
 <h3 id="research-methodology">Research Methodology<a class="anchor-link" href="#research-methodology" title="Permalink">¶</a></h3>
@@ -90,17 +246,29 @@
 <p><strong>Companion skill:</strong> research-engine (executes refresh sweeps), market-scanner (landscape-level refresh).</p>
 <p><strong>When loaded:</strong> Referenced when configuring a new engine&rsquo;s research schedule or when evaluating whether existing knowledge base entries are still trustworthy. The credibility-tiers document provides the tier definitions that feed confidence-based decay rates.</p>
 <hr />
+<h4 id="competitive-research-frameworkmd">competitive-research-framework.md<a class="anchor-link" href="#competitive-research-frameworkmd" title="Permalink">¶</a></h4>
+<p><strong>What it covers:</strong> A standard, reusable <strong>26-question battery</strong> to run against any target or competitor when building a competitive analysis, company briefing, or investment dossier. It exists so the research surface is consistent and complete rather than ad-hoc &ndash; every company gets asked the same dimensions (company &amp; structure, product, pricing, positioning, customers, and so on), which keeps cross-competitor matrices clean and comparable. Each dimension runs under the dual-engine discipline (Bright Data first → WebSearch corroborator), credibility-tiered (T1 official → T5 self-reported), with claim-vs-independently-verified tagging. The battery is a minimum coverage checklist, not a maximum; dimensions that don&rsquo;t apply are skipped with a one-line note rather than fabricated. Lifted 2026-06-20 from the competitive-analysis (MLR) engine&rsquo;s <code>competitive-research-brightdata</code> skill (the migration of the registry <code>competitive-research</code> capability to OS level &ndash; a cabin lift of the question list; the heavier QA skill and deliverable templates remain candidates for a later cementing pass).</p>
+<p><strong>Key concepts:</strong> 26-dimension coverage battery, dual-engine discipline (primary + corroborator), credibility-tiering every answer, claim-vs-verified tagging, minimum-coverage-checklist (skip-with-note over fabricate), consistent question set as the enabler of comparable cross-competitor matrices.</p>
+<p><strong>Companion skill:</strong> market-scanner, company-briefing, research-engine (all reference the battery when scoping competitor/target research).</p>
+<p><strong>When loaded:</strong> Referenced when scoping research for a competitive analysis, company briefing, or investment dossier. Pairs with dual-source-intelligence (the corroboration discipline) and credibility-tiers (the tier definitions applied to each answer).</p>
+<hr />
+<h4 id="epistemic-taggingmd">epistemic-tagging.md<a class="anchor-link" href="#epistemic-taggingmd" title="Permalink">¶</a></h4>
+<p><strong>What it covers:</strong> Per-claim confidence discipline &ndash; the structural backstop for Core Behavior #1 (&ldquo;research before agreeing&rdquo;). EngineOS already rated <em>sources</em> (credibility-tiers); this adds the missing layer for individual <em>claims</em>: (1) per-claim confidence tags &ndash; <code>(VERIFIED)</code> / <code>(LIKELY)</code> / <code>(UNKNOWN)</code> &ndash; riding the sentence, not the document; (2) an <strong>active-unknowns ledger</strong> that tracks what we don&rsquo;t know as first-class objects with a resolution lifecycle; (3) the <strong>observation-beats-theory</strong> rule &ndash; a direct observation outranks documented theory. A decision that depends on an <code>(UNKNOWN)</code> must surface that dependency and suggest resolving it before committing. Promoted to OS Layer 1 on 2026-06-26 from the <code>sandbox/gaming/</code> decision engine (D45, the first exercise of the sandbox promotion path) &ndash; the game engine, built for fun with nobody watching, independently engineered this backstop.</p>
+<p><strong>Key concepts:</strong> claim-level (not source-level) confidence, the three tags, unknowns as tracked objects with lifecycle, observation-beats-theory, the erosion failure mode (a <code>(LIKELY)</code> becomes a <code>(VERIFIED)</code> when a document flattens to uniform confident voice).</p>
+<p><strong>Companion skill:</strong> None directly &ndash; a discipline consumed by research and synthesis skills. Pairs with credibility-tiers (source axis ⊥ claim axis) and tone-firewall (the voice-level enforcement of the same honesty).</p>
+<p><strong>When loaded:</strong> Referenced during research synthesis and whenever a decision rides on an unverified claim. The sandbox charter (<code>sandbox/README.md</code>) documents its promotion provenance.</p>
+<hr />
 <h3 id="quality-framework">Quality Framework<a class="anchor-link" href="#quality-framework" title="Permalink">¶</a></h3>
 <h4 id="binary-self-testsmd">binary-self-tests.md<a class="anchor-link" href="#binary-self-testsmd" title="Permalink">¶</a></h4>
-<p><strong>What it covers:</strong> Concrete YES/NO tests that the engine can run against its own output to verify quality. Replaces aspirational quality language (&ldquo;make it clear&rdquo;) with testable checkpoints (&ldquo;cover paragraph 3, read it without paragraph 1 &ndash; does it still track?&rdquo;). Organized by pipeline stage: Research Stage Tests (R1-R4), Synthesis Stage Tests (S1-S4), and Output Generation Tests (O1-O3). Each test has paired quick (scan depth) and thorough (deep-dive depth) variants. Includes test design rules: answerable YES/NO in under 5 seconds, references specific parts of output, a NO answer implies a specific fix.</p>
-<p><strong>Key concepts:</strong> Binary (YES/NO) quality verification, paired quick/thorough test variants, 4 test design rules, tests by pipeline stage (research, synthesis, output generation), the principle that LLMs can evaluate concrete yes/no questions but cannot reliably evaluate &ldquo;is this good?&rdquo;</p>
+<p><strong>What it covers:</strong> Concrete YES/NO tests that the engine can run against its own output to verify quality. Replaces aspirational quality language (&ldquo;make it clear&rdquo;) with testable checkpoints (&ldquo;cover paragraph 3, read it without paragraph 1 &ndash; does it still track?&rdquo;). Organized by pipeline stage: Research Stage Tests (R1-R4), Synthesis Stage Tests (S1-S4), Output Generation Tests (O1-O4), Visual Output Tests (V1-V6), and Cross-Cutting Tests (X1-X4, applied to everything). Each test has paired quick (scan depth) and thorough (deep-dive depth) variants. Includes test design rules: answerable YES/NO in under 5 seconds, references specific parts of output, a NO answer implies a specific fix.</p>
+<p><strong>Key concepts:</strong> Binary (YES/NO) quality verification, paired quick/thorough test variants, 4 test design rules, tests by pipeline stage (research, synthesis, output generation), the principle that LLMs can evaluate concrete yes/no questions but cannot reliably evaluate &ldquo;is this good?&rdquo; A canonical-battery note (2026-06-12) cross-maps the doc&rsquo;s pipeline-stage batteries to the <strong>operational</strong> canonical batteries in <code>.claude/skills/output-self-test/SKILL.md</code> &ndash; new operational tests go to output-self-test; new rationale goes here.</p>
 <p><strong>Companion skill:</strong> output-self-test (executes binary tests against deliverables), sanity-check (uses binary tests for spot-checks).</p>
 <p><strong>When loaded:</strong> Referenced during QA stages of any governed operation. The phase-controller forces output-self-test invocation during skill chains. The depth-assessment document determines which test variant (quick or thorough) to run. Individual tests reference credibility-tiers and editorial-standards for their evaluation criteria.</p>
 <hr />
 <h4 id="anti-patternsmd">anti-patterns.md<a class="anchor-link" href="#anti-patternsmd" title="Permalink">¶</a></h4>
-<p><strong>What it covers:</strong> A catalog of 14 real failure modes observed during production engine work. Every entry cites a specific incident &ndash; a file, a log entry, a session where something went wrong. Organized into Research Anti-Patterns, Production Anti-Patterns, and Governance Anti-Patterns. Each entry has four components: what it looks like (recognition), why it happens (understanding the temptation), what good looks like (the alternative), and a binary self-test (catch it before it ships). Examples include The Understated Warning, Premature Confidence, The Settled Question That Was Not Settled, and The Comfortable Middle.</p>
-<p><strong>Key concepts:</strong> 14 evidence-based failure modes, the requirement that every entry cite a real failure (no theoretical anti-patterns), framing as failure modes rather than commandments, binary self-tests as catch mechanisms, the principle that an engine that cannot name its own failure modes cannot improve.</p>
-<p><strong>Companion skill:</strong> sanity-check (encodes 9 of the anti-patterns as binary spot-checks).</p>
+<p><strong>What it covers:</strong> A catalog of 15 real failure modes observed during production engine work. Every entry cites a specific incident &ndash; a file, a log entry, a session where something went wrong. Organized into <strong>Research Anti-Patterns</strong>, <strong>Output Anti-Patterns</strong>, and <strong>Process Anti-Patterns</strong>. Each entry has four components: what it looks like (recognition), why it happens (understanding the temptation), what good looks like (the alternative), and a binary self-test (catch it before it ships). Examples include The Understated Warning, Premature Confidence, The Settled Question That Was Not Settled, and The Half-Lifted Subsystem. <em>(This card previously said 14 entries in Research/Production/Governance categories and cited an example entry that does not exist in the catalog &ndash; fixed 2026-07-02 against disk.)</em></p>
+<p><strong>Key concepts:</strong> 15 evidence-based failure modes, the requirement that every entry cite a real failure (no theoretical anti-patterns), framing as failure modes rather than commandments, binary self-tests as catch mechanisms, the principle that an engine that cannot name its own failure modes cannot improve.</p>
+<p><strong>Companion skill:</strong> sanity-check (its 11-mode spot-check gallery grew from the same incidents and overlaps this catalog; the two are maintained separately &ndash; operational spot-checks there, full rationale here).</p>
 <p><strong>When loaded:</strong> Referenced during QA operations and when the sanity-check skill detects a failure mode. The phase-controller can invoke sanity-check during forced chains. Skills that produce deliverables should be aware of the failure modes relevant to their output type.</p>
 <hr />
 <h4 id="adversarial-validationmd">adversarial-validation.md<a class="anchor-link" href="#adversarial-validationmd" title="Permalink">¶</a></h4>
@@ -111,14 +279,14 @@
 <hr />
 <h3 id="production-methodology">Production Methodology<a class="anchor-link" href="#production-methodology" title="Permalink">¶</a></h3>
 <h4 id="section-constructionmd">section-construction.md<a class="anchor-link" href="#section-constructionmd" title="Permalink">¶</a></h4>
-<p><strong>What it covers:</strong> A formalized incremental build process for complex outputs (interactive walkthroughs, comprehensive reports, multi-section deliverables). Prevents quality degradation from generating large outputs in single passes. Defines four phases: Phase A (plan sections with boundaries, cross-references, namespaces, and size estimates &ndash; presented for operator approval), Phase B (build one section at a time with cross-reference management and per-section binary self-tests), Phase C (full-output review for cross-reference integrity, convention consistency, and progressive complexity), Phase D (operator review checkpoint). Activates only at deep-dive depth for outputs exceeding ~500 lines.</p>
-<p><strong>Key concepts:</strong> Four-phase incremental build (plan, build per-section, full review, operator review), namespace convention for IDs and anchors, cross-reference management, the gating question (&ldquo;if I generate this entire output in one pass, will the last section be as good as the first?&rdquo;), the ~32K token practical ceiling for coherent single-pass generation.</p>
+<p><strong>What it covers:</strong> A formalized incremental build process for complex outputs (interactive walkthroughs, comprehensive reports, multi-section deliverables). Prevents quality degradation from generating large outputs in single passes. Defines the phases: Phase A (plan sections with boundaries, cross-references, namespaces, and size estimates &ndash; presented for operator approval), Phase B (build one section at a time with cross-reference management and per-section binary self-tests), Phase C (full-output review for cross-reference integrity, convention consistency, and progressive complexity), Phase C.5 (render-validate loop &ndash; visual/interactive outputs only), and Phase D (Iterate &ndash; fold review findings back in). Activates only at deep-dive depth for outputs exceeding ~500 lines.</p>
+<p><strong>Key concepts:</strong> Phased incremental build (plan, build per-section, whole-output review, render-validate loop, iterate), namespace convention for IDs and anchors, cross-reference management, the gating question (&ldquo;if I generate this entire output in one pass, will the last section be as good as the first?&rdquo;), the ~32K token practical ceiling for coherent single-pass generation.</p>
 <p><strong>Companion skill:</strong> render-validate (verifies HTML output integrity after section construction).</p>
 <p><strong>When loaded:</strong> Referenced during production of complex deliverables classified at deep-dive depth. The depth-assessment document determines activation. The phase-controller includes section construction in skill chains for applicable output types.</p>
 <hr />
 <h4 id="factory-patternmd">factory-pattern.md<a class="anchor-link" href="#factory-patternmd" title="Permalink">¶</a></h4>
-<p><strong>What it covers:</strong> Four variants of the &ldquo;how does one system produce and maintain another&rdquo; pattern, each with documented maintenance protocols. The variants are: Full Extraction (complete capability lift with severed runtime dependency), Selective Lift (specific capabilities ported while source continues evolving), Template Propagation (structural templates deployed across instances), and Composite Build (best-version-wins assembly from multiple sources). Each variant includes: when to use, ecosystem examples with citations, maintenance protocols with staleness indicators, and anti-patterns. The core problem addressed is that innovation flows outward from factories and never returns.</p>
-<p><strong>Key concepts:</strong> 4 factory variants (full extraction, selective lift, template propagation, composite build), reverse audit for back-porting product innovations, extraction manifests for provenance tracking, constitution drift checks, the principle that factories should absorb their products&rsquo; improvements.</p>
+<p><strong>What it covers:</strong> Four variants of the &ldquo;how does one system produce and maintain another&rdquo; pattern, each with documented maintenance protocols. The variants on disk are: <strong>Full Extraction</strong> (complete capability lift with severed runtime dependency &ndash; the JSE-from-SEE case), <strong>Team Deployment</strong> (a configured workspace deployed for a team with different identity/access &ndash; the WondaKB case), <strong>Thin Routing</strong> (a capability stays at the OS and is reached through a routing skill rather than copied), and <strong>Instance Spawning</strong> (repeatable per-instance stand-up from a template). Each variant includes: when to use, ecosystem examples with citations, maintenance protocols with staleness indicators, and anti-patterns. The core problem addressed is that innovation flows outward from factories and never returns. <em>(This card previously named three variants that do not exist in the document &ndash; fixed 2026-07-02 against disk.)</em></p>
+<p><strong>Key concepts:</strong> 4 factory variants (full extraction, team deployment, thin routing, instance spawning), reverse audit for back-porting product innovations, extraction manifests for provenance tracking, constitution drift checks, the principle that factories should absorb their products&rsquo; improvements.</p>
 <p><strong>Companion skill:</strong> None directly. Referenced by ecosystem-build methodology and the codebase-onboarder skill.</p>
 <p><strong>When loaded:</strong> Referenced when building new engines, migrating capabilities between engines, or auditing capability drift between a source and its deployed product. The ecosystem-build methodology uses the composite build variant. The lift-audit methodology checks for regressions introduced by factory operations.</p>
 <hr />
@@ -127,6 +295,36 @@
 <p><strong>Key concepts:</strong> 6 editorial principles, the evidence requirement (if you can&rsquo;t cite it don&rsquo;t claim it), residual risk as a mandatory element, transferable vs. tool-specific framing, security-at-every-step, living documentation with never-delete, the tone standard of &ldquo;knowledgeable colleague, not manual or marketing page.&rdquo;</p>
 <p><strong>Companion skill:</strong> output-self-test (tests against editorial standards), qa-pipeline (includes editorial checks).</p>
 <p><strong>When loaded:</strong> Referenced during any content production operation. The findings-pattern-library requires source and tier tagging per the evidence requirement. The binary-self-tests reference editorial standards in their evaluation criteria. Applies to all written output across all engines.</p>
+<hr />
+<h4 id="tone-firewallmd">tone-firewall.md<a class="anchor-link" href="#tone-firewallmd" title="Permalink">¶</a></h4>
+<p><strong>What it covers:</strong> The rule that <strong>enthusiasm and assertion are two different voices governed by two different rules &ndash; never let hype attach to an unverified claim.</strong> Hype-voice (licensed): identity, vision, momentum &ndash; riffing about what a thing <em>will be</em> is a working tool. Claim-voice (gated): any specific factual assertion a decision will ride on &ndash; banned from hype-voice until verified per epistemic-tagging. Motivated enthusiasm is how a <code>(LIKELY)</code> becomes a <code>(VERIFIED)</code> by tone alone; the firewall lets the operator be genuinely enthusiastic without the enthusiasm corrupting the evidence base. Promoted to OS Layer 1 on 2026-06-26 from the sandbox gaming engine&rsquo;s &ldquo;Carl-Tone vs Claim-Tone Firewall&rdquo; (D45) &ndash; the operator&rsquo;s sharpest articulation of a discipline the professional corpus already gestured at.</p>
+<p><strong>Key concepts:</strong> hype-voice vs claim-voice, enthusiasm attaches only to the verified version of a thing, the unifying mechanism under <code>feedback_positioning_not_marketing_voice</code>, comprehension-design&rsquo;s honesty-as-trust, and the D43 cheerleader-check.</p>
+<p><strong>Companion skill:</strong> None directly &ndash; a voice discipline consumed wherever deliverables or recommendations are written. Pairs with editorial-standards (principle 2, honest assessment) and epistemic-tagging (the claim-state machinery it enforces at the voice level).</p>
+<p><strong>When loaded:</strong> Referenced when producing any persuasive or enthusiasm-bearing output &ndash; positioning documents, briefings, recommendations &ndash; and when reviewing output for marketing-voice drift.</p>
+<hr />
+<h4 id="company-briefingmd">company-briefing.md<a class="anchor-link" href="#company-briefingmd" title="Permalink">¶</a></h4>
+<p><strong>What it covers:</strong> The production playbook for a research-backed, single-file interactive HTML walkthrough about a specific target company, produced for a specific audience walking into a decision or conversation about that company. Formalized 2026-06-10 from three production instances: an engagement-prep briefing (2026-05-19), a walking-in briefing (2026-05-31 &ndash; introduced the 7-thread orthogonal dispatch), and a competitive-analysis dossier (2026-06-10). Defines a five-phase pipeline: Phase 1 (intake + depth classification, ending at a hard operator gate before dispatch), Phase 2 (research dispatch across orthogonal threads), Phase 3 (synthesis + tier coding), Phase 4 (design + build), Phase 5 (QA + deploy). Includes the intake structure (with a landing-page card toggle added 2026-06-12 &ndash; on by default, operator can decline; deploy-verification criterion C6 is conditioned on this setting so a card-less build on instruction still passes), the dimension-split heuristic for thread design, tool assignment per dimension, an adversarial criteria template, the GitHub Pages deploy convention, 5 anti-patterns, and binary self-tests. Covers orchestration only &ndash; substantive research methodology lives in the donor engines (SEE for credibility tiers + dual-source intelligence, ODC for the HTML output pattern + deploy convention).</p>
+<p><strong>Key concepts:</strong> Deliverable archetype (the briefing is the output &ndash; not a system-walkthrough explaining EngineOS), orthogonal research dispatch (typically 6-8 threads, 100+ tier-coded sources; N adapts &ndash; orthogonal coverage is the principle, not a fixed thread count), hard Gate 0 before dispatch (scope drift after parallel threads have run is asymmetrically expensive), audience-is-always-specific, the &ldquo;how this was built&rdquo; meta-section.</p>
+<p><strong>Companion skill:</strong> company-briefing (orchestrates the pipeline). The framework pattern <code>patterns/frameworks/company-briefing.md</code> abstracts it.</p>
+<p><strong>When loaded:</strong> Referenced when the operator names a target company, a specific audience, and requests an interactive HTML output. The depth-assessment document governs Phase 1 classification; credibility-tiers and dual-source-intelligence govern Phases 2-3; section-construction and render-validate govern Phases 4-5.</p>
+<hr />
+<h4 id="comprehension-designmd">comprehension-design.md<a class="anchor-link" href="#comprehension-designmd" title="Permalink">¶</a></h4>
+<p><strong>What it covers:</strong> The parent standard for audience-facing deliverables: <strong>calibrate the <em>form</em> of a deliverable to the specific human reading it, so the <em>substance</em> lands &ndash; without simplifying the substance.</strong> It is the opposite of dumbing down &ndash; honesty and rigor made legible IS the trust signal, and EngineOS&rsquo;s documented failure mode is <em>under</em>-presenting rigor. The flowchart pattern (<code>patterns/problems/connective-visual-language-for-nontechnical-buyin.md</code>) is one instance of this parent standard; the standard applies to every audience-facing deliverable EngineOS produces. Established 2026-06-21 (operator-named off the flowchart canon during an investor-diligence audit), grounded in a 6-agent dual-engine research audit (findings at <code>docs/plans/2026-06-21-comprehension-design-findings.md</code>) that converges across intelligence, medicine, consulting, and cognitive science.</p>
+<p><strong>Key concepts:</strong></p>
+<ul>
+<li>form-to-human calibration without simplifying substance; honesty-as-trust-signal</li>
+<li>the documented failure mode is <em>under</em>-presenting rigor, not overwhelming the reader</li>
+<li>the toolkit: answer-first (A), magnitude→visual / dual-coding (B), honesty as the trust engine (C), make-it-stick via active production (D), progressive disclosure (E), audience calibration (F)</li>
+<li><strong>§G (ratified 2026-07-01): the returning-stakeholder surface</strong> &ndash; a managed, ongoing engagement gets a &ldquo;since your last look&rdquo; front door so a returning reader sees what changed and why before re-reading anything</li>
+</ul>
+<p><strong>Companion skill:</strong> section-construction, render-validate, framework-explainer, company-briefing (all audience-facing production skills calibrate form to the named human per this standard).</p>
+<p><strong>When loaded:</strong> Referenced when producing any audience-facing deliverable &ndash; before deciding its form, structure, and visual language for the named audience. Pairs with editorial-standards (voice/quality) and the connective-visual-language problem pattern (one concrete instance).</p>
+<hr />
+<h4 id="engagement-workupmd">engagement-workup.md<a class="anchor-link" href="#engagement-workupmd" title="Permalink">¶</a></h4>
+<p><strong>What it covers:</strong> The playbook for EngineOS&rsquo;s core client-engagement motion: <em>someone brings a situation (intake, brain-dump, brief, voicemail, transcript); we research it, synthesize it, and return something that surfaces what matters &ndash; or execute the thing and systematize it.</em> A <strong>4-type router</strong>: Type A (decision-support briefing), Type B (intake-response synthesis), Type C (execute + systematize), Type D (capability-setup). Subject-agnostic by doctrine &ndash; a cornhole tournament and a pharma diligence brief run the identical motion (a go-to-market launch engagement ≡ a competitive-analysis dossier). Includes the person-card firewall (candor calibrates strategy; it is never quoted back), the audio-intake path (transcribe → transcript-processor), and step 6&rsquo;s iteration lifecycle co-owned with the SME-iteration loop (<code>patterns/frameworks/sme-iteration-loop.md</code>): the 3 feedback flavors (direction / insider fact / reasoned disagreement), the adjudication table, the early ground-truth gate, and the context handoff. Extracted constitution-from-reality from the EngineOS-era arc (a comp-benchmarking engagement → a walking-in briefing → two competitive-analysis dossiers → a go-to-market launch engagement → an investor-diligence engagement + the Cloudflare execute-and-systematize motion), D42; cold-start culmination test passed live on a real 26-minute audio intake (2026-06-25).</p>
+<p><strong>Key concepts:</strong> the 4-type router, don&rsquo;t-ask-twenty-questions-first (clarifying questions are a <em>deliverable at the end</em>, not a gate at the start), subject-agnostic traversal via doctrine not domain expertise, the person-card firewall, the SME-iteration loop with its early ground-truth gate, engagement-artifact structure (name=identity, state=field; snap-across-the-gate vs iterate-within).</p>
+<p><strong>Companion skill:</strong> engagement-workup (the orchestrator / cold-session entry point). Framework patterns: <code>engagement-workup</code>, <code>sme-iteration-loop</code>, <code>engagement-artifact-structure</code>.</p>
+<p><strong>When loaded:</strong> Referenced when an engagement fires (&ldquo;here&rsquo;s an intake from [name]&rdquo;, &ldquo;do a workup on X&rdquo;, a voicemail/transcript arrives). The EN chain in phase-controller routes through it; transcribe and transcript-processor feed it.</p>
 <hr />
 <h3 id="system-building">System Building<a class="anchor-link" href="#system-building" title="Permalink">¶</a></h3>
 <h4 id="ecosystem-buildmd">ecosystem-build.md<a class="anchor-link" href="#ecosystem-buildmd" title="Permalink">¶</a></h4>
@@ -147,14 +345,39 @@
 <p><strong>Companion skill:</strong> phase-controller (enforces planning requirements per chain type).</p>
 <p><strong>When loaded:</strong> Referenced by the phase-controller during chain execution. The run plan Layer 4 (Design + Plan) is the structural enforcement mechanism. Applies to BL, EW, EN-deliverable, and CP operation types.</p>
 <hr />
+<h4 id="cross-operator-distributionmd">cross-operator-distribution.md<a class="anchor-link" href="#cross-operator-distributionmd" title="Permalink">¶</a></h4>
+<p><strong>What it covers:</strong> How EngineOS gets distributed to a new operator without leaking the author&rsquo;s personal data &ndash; preserve the substrate verbatim (methodology, patterns, skills, principles, rules, hooks, design system), strip the operator-specific surfaces (<code>operator/</code>, <code>knowledge/</code>, <code>daily/</code>, <code>logs/</code>, <code>engines/</code>), pre-load the new operator&rsquo;s engine, and author a walkthrough that gets them to a working first session in one or two sittings. Formalized from the 2026-06-04 second-operator JSE bootstrap and the 2026-06-08 → 2026-06-09 second-operator fork build. Defines a five-phase architecture: Phase A (Substrate Prep &ndash; new capabilities land in the author&rsquo;s working OS first because the fork copies the substrate: corpus-ingest, profile-builder refresh mode, session-orchestrator fresh-install branch, <code>scripts/bootstrap.py</code>, <code>scripts/fork-strip.py</code>), Phase B (Fork + Strip), Phase C (Walkthrough Authoring), Phase D (Validation), Phase E (Ship). Includes the easy-setup pass methodology with six classes of silent-failure point, 5 anti-patterns, and binary self-tests.</p>
+<p><strong>Key concepts:</strong> Substrate-vs-surface split (operator-agnostic substrate ships verbatim; operator-specific data is stripped), build-in-the-author&rsquo;s-OS-first (capabilities not in the substrate at fork time are not in the fork), pre-loading the new operator&rsquo;s engine, six silent-failure classes (hardcoded author-machine paths, marketplace assumptions, predicate-polluting marker files, and others), the principle that ad-hoc transfer hits silent failures everywhere &ndash; this turns it into a repeatable build with named failure modes.</p>
+<p><strong>Companion skill:</strong> corpus-ingest (seeds the new operator&rsquo;s second brain from their own material), profile-builder (refresh mode for profile ownership), session-orchestrator (fresh-install branch detection).</p>
+<p><strong>When loaded:</strong> Referenced when handing EngineOS to a new operator, splitting an engine off as a separate workspace, or building a domain starter pack. Companion to ecosystem-build (how to build the factory) and factory-pattern (how the factory produces products) &ndash; this doc covers the third class: how the factory clones itself for someone else.</p>
+<hr />
 <h3 id="governance">Governance<a class="anchor-link" href="#governance" title="Permalink">¶</a></h3>
 <h4 id="memory-architecturemd">memory-architecture.md<a class="anchor-link" href="#memory-architecturemd" title="Permalink">¶</a></h4>
-<p><strong>What it covers:</strong> Both halves of how EngineOS remembers &ndash; write-side capture (D-1 through D-5) and read-side retrieval (Retrieval Surfaces section, added 2026-06-04). The write-side specifies the 8-surface memory hierarchy with locked architectural decisions governing what each surface is for, how logs split between OS and engines, when CONTEXT archives, and what log schemas are canonical. Five locked decisions: D-1 defines the canonical memory hierarchy with one-job-per-surface (CLAUDE.md for constitution, CONTEXT.md for current state, run plans for active execution, activity log for breadcrumbs, intelligence log for strategic memory, operator files for identity, auto-memory for cross-session). D-2 locks root-only logging with engine tags. D-3 sets CONTEXT-HISTORY archival triggers. D-4 defines registry ID scope. D-5 locks log schemas with the engine column addition. The read-side Retrieval Surfaces section closes the capture-without-retrieval gap (zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work before the fix). Three retrieval layers (session-start injection, <code>UserPromptSubmit</code> mid-work hook, manual <code>/recall</code> escalation) operate over the same six-surface priority corpus (intel-log → KB-index → concepts/connections → daily 30d → run-plans 60d → methodology). Each decision and the retrieval layer are backed by external research (44+ sources across D-1..D-5; the retrieval layer is anchored in DECISIONS.md D32).</p>
-<p><strong>Key concepts:</strong> 8-surface memory hierarchy with one-job-per-surface, root-only log model with engine tags (not per-tenant logs), CONTEXT-HISTORY archival triggers (size and time), the binary test for surface selection (&ldquo;which surface&rsquo;s one job matches this information?&rdquo;), the principle that surface role confusion (a surface doing two jobs) is a violation to correct, three-layer retrieval architecture (session-start / mid-work hook / manual escalation), six-surface priority corpus with signal-to-noise ordering, stopping rule (surfaces 1-2 yielding 3+ strong hits halts sweep of lower surfaces), the principle that capture without retrieval is a write-only system, why structured markdown + ripgrep beats vector retrieval at personal-KB scale (&lt;2000 articles).</p>
+<p><strong>What it covers:</strong> Both halves of how EngineOS remembers &ndash; write-side capture (D-1 through D-5) and read-side retrieval (Retrieval Surfaces, added 2026-06-04):</p>
+<ul>
+<li><strong>Write-side: the 8-surface memory hierarchy</strong> with one-job-per-surface (D-1): CLAUDE.md constitution · CONTEXT.md current state · run plans active execution · activity log breadcrumbs · intelligence log strategic memory · operator files identity · auto-memory cross-session.</li>
+<li><strong>D-2</strong> locks root-only logging with engine tags; <strong>D-3</strong> sets CONTEXT-HISTORY archival triggers; <strong>D-4</strong> defines registry ID scope; <strong>D-5</strong> locks the canonical log schemas (engine column on every row).</li>
+<li><strong>Read-side: three retrieval layers</strong> (session-start injection, <code>UserPromptSubmit</code> mid-work hook, manual <code>/recall</code> escalation) over the six-surface priority corpus (intel-log → KB-index → concepts/connections → daily 30d → run-plans 60d → methodology). Closes the capture-without-retrieval gap (zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work before the fix).</li>
+<li>Each decision and the retrieval layer are backed by external research (44+ sources across D-1..D-5; retrieval anchored in DECISIONS.md D32).</li>
+</ul>
+<p><strong>Key concepts:</strong> 8-surface memory hierarchy with one-job-per-surface, root-only log model with engine tags (not per-tenant logs), CONTEXT-HISTORY archival triggers (size and time), the binary test for surface selection (&ldquo;which surface&rsquo;s one job matches this information?&rdquo;), the principle that surface role confusion (a surface doing two jobs) is a violation to correct, three-layer retrieval architecture (session-start / mid-work hook / manual escalation), six-surface priority corpus with signal-to-noise ordering, stopping rule (surfaces 1-2 yielding 3+ strong hits halts sweep of lower surfaces), the principle that capture without retrieval is a write-only system, why structured markdown + ripgrep beats vector retrieval at personal-KB scale (&lt;2000 articles). <!-- census-ok: D32 threshold --></p>
 <p><strong>Companion skill:</strong> session-orchestrator (reads CONTEXT.md per the hierarchy; triggers Layer 1 retrieval injection), phase-controller (writes run plans per the hierarchy), recall (executes Layer 3 manual escalation across the six-surface corpus).</p>
 <p><strong>When loaded:</strong> Referenced when making decisions about where information belongs in the system OR when prior context needs to be pulled back into active work. The logging specification at <code>.claude/rules/logging.md</code> implements the write-side architecture. The session-orchestrator reads CONTEXT.md as the Tier 1 orientation surface. The PostToolUse hook populates the activity log per the D-2 root-only model and D-5 schema. The <code>UserPromptSubmit</code> hook at <code>hooks/prompt-retrieval.py</code> implements Layer 2 retrieval; <code>scripts/retrieval-health.jsonl</code> records every invocation; the operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions for the keep/tune/kill decision per D32. Pairs with the <code>retrieval-before-decide</code> framework pattern (the discipline that fires manual escalation). For the deep operational walkthrough, see <a href="second-brain.html">second-brain.md</a>.</p>
 <hr />
-<p><em>EngineOS Methodology Index &ndash; produced from direct inspection of all 15 methodology documents at <code>methodology/</code>.</em></p>
+<h4 id="people-profilingmd">people-profiling.md<a class="anchor-link" href="#people-profilingmd" title="Permalink">¶</a></h4>
+<p><strong>What it covers:</strong> The canon for EngineOS&rsquo;s People Profiling subsystem &ndash; a cross-cutting OS capability (Layer 1), not an engine, for profiling the people the operator works with:</p>
+<ul>
+<li><strong>The core principle:</strong> a person is several <strong>independent</strong> axes, not one rank &ndash; collapsing them is how a friend&rsquo;s offhand take becomes system canon.</li>
+<li><strong>The six axes:</strong> Tier (importance, operator-set, sticky) · Heat (activity, computed by <code>scripts/people-heat.py</code>) · Influence (does their input count as canon? &ndash; canon / domain-authority / lessons-only / NOT-canon) · Value-type · Relationship-direction · Sensitivity.</li>
+<li><strong>Tier ⊥ Heat ⊥ Influence</strong>, and <strong>Influence is a SAFETY axis</strong> (important-to-operator ≠ right-for-the-system) &ndash; enforced loudly via a profile caveat block and <code>prompt-retrieval.py</code> echoing ⚠ NOT-CANON on mention.</li>
+<li><strong>The five disciplines:</strong> operator is the gate; draft-and-react; append-only + evidence-tagged + pointer-based; everyone accounted for; bidirectional canon. Plus the candidate-ranking rule (Core/Active-thin → untiered-high-heat → Reference-suppressed).</li>
+<li><strong>Provenance:</strong> re-lifted from the SEE source on 2026-06-24 after the original compositing left it engine-bound (only the operator self-profile came over) &ndash; engine-coupling it again would repeat that incomplete-lift bug.</li>
+</ul>
+<p><strong>Key concepts:</strong> six independent profiling axes, Tier ⊥ Heat ⊥ Influence, Influence as a safety axis (NOT-canon enforcement), operator-is-the-gate, draft-and-react over interrogate, append-only/evidence-tagged/pointer-based profiles, everyone-accounted-for (pointer-cards minimum), bidirectional canon (agent may notice and propose; operator rules), heat as booster/tiebreaker not sort key, the review-and-adjust dossier as the steering surface.</p>
+<p><strong>Companion skill:</strong> person-profiler (synthesis &ndash; build/update a profile to the template), people-curator (operator-facing curation &ndash; triage / feed-intel / adjudicate / inventory; drives person-profiler). Heat engine <code>scripts/people-heat.py</code>; review dossier <code>scripts/people-dossier.py</code> → <code>people/dossier/index.html</code>; index <code>registry/people.md</code>.</p>
+<p><strong>When loaded:</strong> Referenced when profiling, adjudicating, or feeding intel on a person, or when deciding where someone lands on the axes. The subsystem front door is <code>people/README.md</code>; the full standard with worked examples is <code>docs/plans/2026-06-24-people-profiling-standard.md</code>. See <a href="architecture.md#people-profiling-subsystem">Architecture</a> for the subsystem&rsquo;s place in Layer 1.</p>
+<hr />
+<p><em>EngineOS Methodology Index &ndash; produced from direct inspection of the 24 methodology documents at <code>methodology/</code>.</em></p>
 </section>
 
 </main>

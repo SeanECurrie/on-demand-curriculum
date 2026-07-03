@@ -45,11 +45,13 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s01">
-  <div class="eyebrow">EngineOS System Documentation · Section 01 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 01 · Built 2026-07-03</div>
   <h1>Overview</h1>
   <p class="subhead">EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS — shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines — domain-specific tenants that inherit OS capabilities and keep their own engagement data, kno</p>
 </header>
@@ -72,32 +74,37 @@
 <tbody>
 <tr>
 <td>Skills</td>
-<td>29</td>
+<td>37</td>
 <td><code>.claude/skills/</code></td>
 </tr>
 <tr>
 <td>Patterns</td>
-<td>70 (58 problem, 5 deliverable, 7 framework)</td>
+<td>87 (64 problem · 6 deliverable · 17 framework)</td>
 <td><code>patterns/</code></td>
 </tr>
 <tr>
 <td>Methodology docs</td>
-<td>15</td>
+<td>24</td>
 <td><code>methodology/</code></td>
 </tr>
 <tr>
 <td>Rules</td>
-<td>7 (3 unconditional, 4 path-scoped)</td>
+<td>8 (3 unconditional, 5 path-scoped)</td>
 <td><code>.claude/rules/</code></td>
 </tr>
 <tr>
 <td>Hooks</td>
-<td>8 events (PreToolUse, PostToolUse, Stop, PostCompact, SessionStart, PreCompact, SessionEnd, UserPromptSubmit)</td>
-<td><code>hooks/</code></td>
+<td>8 wired events (PreToolUse, PostToolUse, Stop, PostCompact, SessionStart, PreCompact, SessionEnd, UserPromptSubmit) across 7 <code>.sh</code> + 6 <code>.py</code> scripts</td>
+<td><code>hooks/</code> + <code>.claude/settings.json</code></td>
+</tr>
+<tr>
+<td>Registered capabilities</td>
+<td>43 active (+2 pending migration)</td>
+<td><code>registry/capabilities.md</code></td>
 </tr>
 <tr>
 <td>Templates</td>
-<td>38 (27 deliverable, 11 engagement)</td>
+<td>38 (README indexes excluded)</td>
 <td><code>templates/</code></td>
 </tr>
 <tr>
@@ -106,9 +113,29 @@
 <td><code>principles/</code></td>
 </tr>
 <tr>
-<td>Engine sources</td>
-<td>9 (4 active tenants, 5 at source locations)</td>
-<td><code>engines/</code> + Desktop</td>
+<td>Engine tenants</td>
+<td>4 in-repo (remaining sources at Desktop, mapped in <code>registry/engines.md</code>)</td>
+<td><code>engines/</code></td>
+</tr>
+<tr>
+<td>Sandbox categories</td>
+<td>2 (personal tier, D44)</td>
+<td><code>sandbox/</code></td>
+</tr>
+<tr>
+<td>Projects</td>
+<td>10 (professional, OS-level)</td>
+<td><code>projects/</code></td>
+</tr>
+<tr>
+<td>KB articles</td>
+<td>454 (371 concepts + 83 connections)</td>
+<td><code>knowledge/</code></td>
+</tr>
+<tr>
+<td>Decisions</td>
+<td>D1–D54</td>
+<td><code>DECISIONS.md</code></td>
 </tr>
 <tr>
 <td>Operation types</td>
@@ -117,66 +144,85 @@
 </tr>
 <tr>
 <td>Design system files</td>
-<td>6</td>
+<td>7</td>
 <td><code>design-system/</code></td>
 </tr>
 <tr>
 <td>Registries</td>
-<td>2 (capabilities, engines)</td>
+<td>4 (capabilities, engines, people, sandbox)</td>
 <td><code>registry/</code></td>
+</tr>
+<tr>
+<td>OS subsystems</td>
+<td>2 cross-cutting (Second Brain, People Profiling)</td>
+<td><code>knowledge/</code> + <code>people/</code></td>
 </tr>
 </tbody>
 </table>
+<p><em>Counts in this table are <code>{{CENSUS:key}}</code> tokens resolved from live disk state on every rebuild (<code>scripts/build-docs.py</code>); they cannot go stale in the built page.</em></p>
 </div>
 <hr />
 <h2 id="file-map">File Map<a class="anchor-link" href="#file-map" title="Permalink">¶</a></h2>
 <div class="highlight"><pre><span></span><code>EngineOS/
-  CLAUDE.md                 # Constitution and routing layer (~200 lines)
+  CLAUDE.md                 # Constitution and routing layer
   CONTEXT.md                # Current system state (updated every session)
   CONTEXT-HISTORY.md        # Archived context entries
-  DECISIONS.md              # All design decisions with rationale (D1-D32)
+  DECISIONS.md              # All design decisions with rationale (D1 onward; latest count in the Glance table)
+  .gitignore                # Git repo initialized 2026-06-12 (baseline commit); knowledge/, daily/, logs/, run-plans/ stay tracked
 
   .claude/
-    rules/                  # 7 governance rules (3 unconditional + 4 path-scoped)
-    skills/                 # 29 OS-level skills
+    rules/                  # Governance rules (unconditional + path-scoped; counts in the Glance table)
+    skills/                 # OS-level skills
     settings.json           # Hook wiring and permissions
 
-  hooks/                    # 8 hook scripts (4 .sh + 4 .py) for mechanical enforcement
-    pre-write-governance.sh # Blocks writes without active run plan
+  hooks/                    # Hook scripts (7 .sh + 6 .py) for mechanical enforcement
+    pre-write-governance.sh # Gates Write/Edit writes without active run plan (fails CLOSED)
+    pre-bash-tripwire.sh    # DENIES rm recursive+force before it runs (D35; # eos-allow-rm escape)
     post-tool-use.sh        # Mechanical activity logging
-    stop.sh                 # Session-end CONTEXT.md check
+    post-bash-governance.sh # Warns (never blocks) on ungoverned Bash writes to governed paths (D34)
+    _governance-common.sh   # Shared policy lib: exempt list + scope matching (gate/detector/post-compact)
+    stop.sh                 # State-aware turn-end checks (WS2 rewrite)
     post-compact.sh         # Core behavior re-injection after compaction
     session-start.py        # Session orientation + retrieval Layer 1 injection
-    session-end.py          # Session-arc capture via flush.py spawn
+    session-end.py          # Session-arc capture via flush.py spawn + background cache refreshes
     pre-compact.py          # Memory flush before compaction (paired with SessionEnd)
-    prompt-retrieval.py     # UserPromptSubmit retrieval injection (D32)
+    prompt-retrieval.py     # UserPromptSubmit retrieval injection (D32) + people surface
     _flush_common.py        # Shared flush module (D29 anti-drift discipline)
-    retrieval-triggers.json # Config for prompt-retrieval heuristic gate
+    _people_surface.py      # People-mention surface module (profiling Layer A)
+    retrieval-triggers.json # Config for prompt-retrieval heuristic gate (+ people_close_scan flag)
 
-  engines/                  # Layer 2 tenants
-    job-search/             # Active: 8 domain skills, 9-lane pipeline, Notion integration
-    job-search-arnett/      # Active: Arnett McMurray JSE tenant, mechanically isolated
+  engines/                  # Layer 2 tenants (professional domains)
+    job-search/             # Active: 9 domain skills, 9-lane pipeline, Notion integration
+    job-search-secondary/      # Active: second-operator JSE tenant, mechanically isolated
     on-demand-curriculum/   # Portfolio: 2 domain skills, 8 outputs, this documentation
-    sales-enablement/       # Test stub: all capabilities lifted to OS
+    sales-enablement/       # Test stub — validation configuration; all capabilities lifted to OS
 
-  methodology/              # 15 protected documents (immutability rule)
+  projects/                 # Professional engagements at the OS level (per-person/per-company; living-projects rule)
+  sandbox/                  # Personal tier (D44): for-fun work, firewalled from the professional layer
+    gaming/                 # First category: the multi-game playthrough engine (promotion path to Layer 1)
+
+  methodology/              # Protected methodology documents (immutability rule)
     research/               # Landscape research and supporting material
 
-  patterns/                 # 70 evidence-based patterns
-    problems/               # 58 problem patterns
-    deliverables/           # 5 deliverable patterns
-    frameworks/             # 7 framework patterns
+  patterns/                 # Evidence-based patterns (breakdown in the Glance table)
+    problems/               # Problem patterns
+    deliverables/           # Deliverable patterns
+    frameworks/             # Framework patterns
 
-  principles/               # 5 operating principles
+  principles/               # Operating principles
   design-system/            # Enterprise CSS, color tokens, typography, accessibility
-  templates/                # 38 templates for deliverables and engagements
-    deliverables/           # 27 deliverable templates (6 subcategories)
-    engagement/             # 11 engagement scaffold templates
+  templates/                # Deliverable + engagement + knowledge-base templates (count in Glance table)
+    deliverables/           # Client-facing and operational output templates
+    engagement/             # Copy-as-a-unit engagement scaffold
+    knowledge-base/         # Person-profile template (people subsystem)
 
   registry/                 # Stable identifiers
-    capabilities.md         # 32 capabilities with locations and sources
-    engines.md              # 9 engine sources with migration status
+    capabilities.md         # Active capabilities registry (rows ARE the census; count in Glance table)
+    engines.md              # Engine sources with migration status (incl. the retired DCC row)
+    people.md               # Authoritative people index (six axes per person) — People subsystem
+    sandbox.md              # Personal-tier index (D44)
 
+  people/                   # People-profiling subsystem (Layer 1, cross-cutting): README front door, profiles, dossier/
   operator/                 # Operator identity (populated via Phase 0 intake)
   scripts/                  # Second-brain pipeline + executable utilities
     flush.py                # Session-arc capture to daily logs
@@ -219,7 +265,7 @@
 <td><a href="governance.html">Governance</a></td>
 </tr>
 <tr>
-<td>What the 29 skills do and how they chain</td>
+<td>What the 37 skills do and how they chain</td>
 <td><a href="skill-system.html">Skill System</a></td>
 </tr>
 <tr>
@@ -233,6 +279,10 @@
 <tr>
 <td>How memory capture and retrieval work (KB, daily logs, /recall, retrieval hooks)</td>
 <td><a href="second-brain.html">Second Brain</a></td>
+</tr>
+<tr>
+<td>How the system profiles people (six axes, person-profiler/people-curator, review dossier)</td>
+<td><a href="architecture.md#people-profiling-subsystem">Architecture</a> · <a href="methodology-index.html">Methodology Index</a></td>
 </tr>
 <tr>
 <td>CRM and Notion integration</td>
@@ -259,11 +309,11 @@
 <tbody>
 <tr>
 <td>A specific skill</td>
-<td><a href="skills-reference.html">Skills Reference</a> — all 29 with triggers, tools, behaviors</td>
+<td><a href="skills-reference.html">Skills Reference</a> — all 33 with triggers, tools, behaviors</td>
 </tr>
 <tr>
 <td>A specific pattern</td>
-<td><a href="patterns-reference.html">Patterns Reference</a> — all 70 categorized with 10 deep examples</td>
+<td><a href="patterns-reference.html">Patterns Reference</a> — all 72 categorized with 10 deep examples</td>
 </tr>
 <tr>
 <td>Available templates</td>
@@ -271,7 +321,7 @@
 </tr>
 <tr>
 <td>Methodology docs</td>
-<td><a href="methodology-index.html">Methodology Index</a> — all 15 with coverage and companion skills</td>
+<td><a href="methodology-index.html">Methodology Index</a> — all 20 with coverage and companion skills</td>
 </tr>
 </tbody>
 </table>
@@ -305,7 +355,7 @@
 </ul>
 <p>The primary donors: SEE (operator identity, CRM integration, engagement workflows), JSE (governance stack, phase control, depth governance), ODC (methodology layer, editorial standards), WondaKB (multi-user architecture, Notion integration), MLR (QA pipeline, enterprise CSS), Restaurant (transcript innovations).</p>
 <p>The audit evidence lives at <code>~/Desktop/ecosystem-audit-act-2/findings/</code>. The build record is at <code>~/Desktop/ecosystem-audit-act-3/docs/build-log.md</code>.</p>
-<p>The substrate has continued to evolve since the initial build: a substrate-tightening operation (D25, April 2026) tested the governance stack against real failures and added the evidence-first-reporting rule plus sanity-check #11; a re-lift audit (D26) restored capabilities missed by the initial Act 3 pass; and the second-brain capture+retrieval layer (D29-D32, June 2026) added marathon-session capture caps with a shared hook module, retry+observability infrastructure, and a three-layer retrieval architecture (SessionStart injection, UserPromptSubmit mid-work hook, manual <code>/recall</code> escalation) over a six-surface corpus. See <a href="second-brain.html">Second Brain</a> for the retrieval and capture pipeline.</p>
+<p>The substrate has continued to evolve since the initial build: a substrate-tightening operation (D25, April 2026) tested the governance stack against real failures and added the evidence-first-reporting rule plus sanity-check #11; a re-lift audit (D26) restored capabilities missed by the initial Act 3 pass; and the second-brain capture+retrieval layer (D29-D32, June 2026) added marathon-session capture caps with a shared hook module, retry+observability infrastructure, and a three-layer retrieval architecture (SessionStart injection, UserPromptSubmit mid-work hook, manual <code>/recall</code> escalation) over a six-surface corpus. The arc since D32 (June-July 2026): the Bash-governance pair (D34/D35), reviewer telemetry (D36), the people-profiling subsystem recovery and six-axis standard, the private-gated-hosting capability (D41), the engagement-workup playbook (D42) and SME-iteration loop (D48), the personal sandbox tier with its promotion path (D44/D45), the session-orchestrator&rsquo;s Full-Breadth Start (D50), the second-brain health process (D51), the census single-sourcing + living health dashboard that keep these very pages true (D52), and the usage-economy disciplines + telemetry economy lens that keep a session&rsquo;s cost legible (D53/D54) — each recorded in <code>DECISIONS.md</code> and reflected across these pages. See <a href="second-brain.html">Second Brain</a> for the retrieval and capture pipeline.</p>
 <hr />
 <h2 id="what-this-documentation-is-not">What This Documentation Is Not<a class="anchor-link" href="#what-this-documentation-is-not" title="Permalink">¶</a></h2>
 <p>This documentation explains EngineOS to humans. It does not replace the operational files that serve the system at runtime:</p>

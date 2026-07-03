@@ -45,11 +45,13 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s02">
-  <div class="eyebrow">EngineOS System Documentation · Section 02 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 02 · Built 2026-07-03</div>
   <h1>Architecture</h1>
   <p class="subhead">EngineOS is structured as two distinct layers with a context engineering system that controls how much of the system loads into Claude Code&#x27;s context window at any given time. This architecture was a deliberate design decision (D11) that reduced context consumption by 68% compared to the original Sales Enablement Engin</p>
 </header>
@@ -65,11 +67,12 @@
 <div class="tech-detail">
 <div class="highlight"><pre><span></span><code>  EngineOS (Layer 1 — the OS)
   ┌──────────────────────────────────────────────────────┐
-  │  29 Skills  │  15 Methodology  │  70 Patterns        │
+  │  33 Skills  │  20 Methodology  │  72 Patterns        │
   │  7 Rules    │  8 Hooks         │  5 Principles        │
   │  Design System  │  Templates   │  Operator Identity   │
   │  Governance Stack (phase-controller + enforcement)    │
   │  Second Brain (KB + daily/ + retrieval pipeline)      │
+  │  People Profiling (registry/people.md + dossier)      │
   └──────┬─────────┬──────────────┬──────────────┬───────┘
          │         │              │              │
      inherits  inherits       inherits       inherits
@@ -77,7 +80,7 @@
   ┌──────▼───┐ ┌───▼──────┐ ┌─────▼──────┐ ┌────▼─────┐
   │ Job      │ │ Job      │ │ On-Demand  │ │ Sales    │
   │ Search   │ │ Search   │ │ Curriculum │ │ Enable-  │
-  │ (Sean)   │ │ (Arnett) │ │            │ │ ment     │
+  │ (op 1)   │ │ (op 2)   │ │            │ │ ment     │
   │ 8 skills │ │ tenant   │ │ 2 skills   │ │ test stub│
   └──────────┘ └──────────┘ └────────────┘ └──────────┘
        Layer 2 — Engine Tenants
@@ -87,8 +90,8 @@
 <hr />
 <h2 id="four-tier-context-engineering">Four-Tier Context Engineering<a class="anchor-link" href="#four-tier-context-engineering" title="Permalink">¶</a></h2>
 <div class="intro-card">
-<p>Context engineering is the core architectural problem for any system built on an LLM. Claude Code has a finite context window. EngineOS has 29 skills (some over 700 lines), 15 methodology docs, 70 patterns, 38 templates, and extensive operator identity files. Loading everything at once would consume the entire window before any work begins.</p>
-<p>EngineOS solves this with <strong>four tiers</strong> that load proportionally to the work — always-present constitution (Tier 1), path-triggered rules (Tier 2), skill descriptions discovered at start but full content only on invocation (Tier 3), and explicit-reference content loaded by skills or operator on demand (Tier 4). A typical session uses ~1,300–2,500 lines of EngineOS context, leaving the majority of the window for actual work content. Compare that to the SEE&rsquo;s original approach of loading all 49 skills, all patterns, all templates at session start — D11 (four-tier budget) was a founding architectural decision that made the system viable.</p>
+<p>Context engineering is the core architectural problem for any system built on an LLM. Claude Code has a finite context window. EngineOS has 37 skills (some over 700 lines), 24 methodology docs, 87 patterns, 38 templates, and extensive operator identity files. Loading everything at once would consume the entire window before any work begins.</p>
+<p>EngineOS solves this with <strong>four tiers</strong> that load proportionally to the work — always-present constitution (Tier 1), path-triggered rules (Tier 2), skill descriptions discovered at start but full content only on invocation (Tier 3), and explicit-reference content loaded by skills or operator on demand (Tier 4). A typical session uses ~1,300–2,500 lines of EngineOS context, leaving the majority of the window for actual work content. Compare that to the SEE&rsquo;s original approach of loading all 49 skills, all patterns, all templates at session start — D11 (four-tier budget) was a founding architectural decision that made the system viable. <!-- census-ok: SEE's historical pre-EngineOS count --></p>
 </div>
 <h3 id="tier-1-always-present">Tier 1: Always Present<a class="anchor-link" href="#tier-1-always-present" title="Permalink">¶</a></h3>
 <p><strong>Loads:</strong> Every session, unconditionally.</p>
@@ -156,6 +159,11 @@
 <td><code>methodology/**</code></td>
 <td>Immutability protection for methodology docs</td>
 </tr>
+<tr>
+<td><code>sandbox-tier.md</code></td>
+<td><code>sandbox/**</code></td>
+<td>Posture for the personal tier (D44): personal/for-fun, firewalled from the professional layer, promotion path to Layer 1</td>
+</tr>
 </tbody>
 </table>
 <p>The loading is automatic based on Claude Code&rsquo;s native rule system. The <code>paths:</code> array in each rule&rsquo;s YAML frontmatter is the control mechanism:</p>
@@ -169,8 +177,8 @@
 <p>When a session never touches integration files, the integration rules never load. This is zero-cost context when not needed.</p>
 <h3 id="tier-3-skill-invoked">Tier 3: Skill-Invoked<a class="anchor-link" href="#tier-3-skill-invoked" title="Permalink">¶</a></h3>
 <p><strong>Loads:</strong> Skill descriptions load passively at session start (~2% of context budget). Full skill content loads only when a skill is actually invoked.</p>
-<p>EngineOS has 29 skills at <code>.claude/skills/</code>. Each skill has a <code>SKILL.md</code> file with YAML frontmatter containing a <code>description</code> field. Claude Code reads these descriptions at session start for discovery purposes — so it knows what skills exist and when to suggest them.</p>
-<p>The full SKILL.md content (which can be substantial — <code>phase-controller</code> is 739 lines, <code>attio-optimizer</code> is over 500) only enters context when the skill is invoked. This means a session that uses 3 skills loads 3 skills, not 29.</p>
+<p>EngineOS has 37 skills at <code>.claude/skills/</code>. Each skill has a <code>SKILL.md</code> file with YAML frontmatter containing a <code>description</code> field. Claude Code reads these descriptions at session start for discovery purposes — so it knows what skills exist and when to suggest them.</p>
+<p>The full SKILL.md content (which can be substantial — <code>phase-controller</code> is 739 lines, <code>attio-optimizer</code> is over 500) only enters context when the skill is invoked. This means a session that uses 3 skills loads 3 skills, not 37. <!-- census-ok: illustrative --></p>
 <p>Example frontmatter showing the two key fields:</p>
 <div class="highlight"><pre><span></span><code><span class="nn">---</span>
 <span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
@@ -194,12 +202,12 @@
 </thead>
 <tbody>
 <tr>
-<td>Methodology docs (15)</td>
+<td>Methodology docs (20)</td>
 <td><code>methodology/</code></td>
 <td>When a skill chain includes a methodology load step (e.g., BL chains mandate <code>ecosystem-build.md</code>)</td>
 </tr>
 <tr>
-<td>Patterns (64)</td>
+<td>Patterns (72)</td>
 <td><code>patterns/</code></td>
 <td>When sanity-check detects a failure mode, or when analyzing a specific incident</td>
 </tr>
@@ -233,12 +241,12 @@
 - <strong>Tier 3:</strong> 2-4 skill descriptions passively + 2-4 full skills on invocation (~600-1,200 lines)
 - <strong>Tier 4:</strong> 1-3 methodology docs if the skill chain requires them (~300-900 lines)</p>
 <p><strong>Total:</strong> ~1,300-2,500 lines of EngineOS context, leaving the majority of the window for actual work content.</p>
-<p>Compare this to the SEE&rsquo;s original approach: load all 49 skills, all patterns, all templates at session start. That&rsquo;s why D11 (four-tier context budget) was one of the founding architectural decisions — it made the system viable.</p>
+<p>Compare this to the SEE&rsquo;s original approach: load all 49 skills, all patterns, all templates at session start. That&rsquo;s why D11 (four-tier context budget) was one of the founding architectural decisions — it made the system viable. <!-- census-ok: SEE's historical pre-EngineOS count --></p>
 <hr />
 <h2 id="retrieval-architecture">Retrieval Architecture<a class="anchor-link" href="#retrieval-architecture" title="Permalink">¶</a></h2>
 <div class="intro-card">
 <p>The four-tier model controls <strong>what loads</strong> into the window. Retrieval controls <strong>what gets found</strong> inside the system&rsquo;s own corpus mid-work. The two are peers: the context budget is the write-side; retrieval is the read-side.</p>
-<p>EngineOS captures heavily — 216+ knowledge base articles, 70+ intelligence log entries, daily session arcs, run plans. Until 2026-06-04, capture-without-retrieval was a write-only system: a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work. <strong>D32 closed the gap</strong> with three retrieval layers reading a six-surface corpus, sized for personal-KB scale (grep + markdown index beat vector retrieval on precision at &lt;500 articles).</p>
+<p>EngineOS captures heavily — 454 knowledge base articles, 245 intelligence log entries, daily session arcs, run plans. Until 2026-06-04, capture-without-retrieval was a write-only system: a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work. <strong>D32 closed the gap</strong> with three retrieval layers reading a six-surface corpus, sized for personal-KB scale (grep + markdown index beat vector retrieval on precision at &lt;500 articles). <!-- census-ok: D32 scale threshold --></p>
 </div>
 <h3 id="three-retrieval-layers">Three Retrieval Layers<a class="anchor-link" href="#three-retrieval-layers" title="Permalink">¶</a></h3>
 <table>
@@ -275,17 +283,75 @@
 <h3 id="six-surface-priority-corpus">Six-Surface Priority Corpus<a class="anchor-link" href="#six-surface-priority-corpus" title="Permalink">¶</a></h3>
 <p>All three layers read the same corpus in the same priority order: <code>logs/intelligence-log.md</code> → <code>knowledge/index.md</code> → <code>knowledge/concepts/*.md</code> + <code>connections/*.md</code> → <code>daily/*.md</code> (last 30d) → <code>run-plans/*.md</code> (last 60d) → <code>methodology/*.md</code>. Higher surfaces have higher signal-to-noise. Stopping rule: when surfaces 1-2 yield 3+ strong hits, lower surfaces aren&rsquo;t swept.</p>
 <h3 id="why-no-vector-db">Why No Vector DB<a class="anchor-link" href="#why-no-vector-db" title="Permalink">¶</a></h3>
-<p>At personal-KB scale (&lt;500 articles, currently 216), structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob — zero API cost. The Phase C vector layer is deferred with explicit revisit conditions in D32 (KB exceeds 2000 articles, or hook gate hit rate sustained &gt;60% with useful injections, or semantic misses grep can&rsquo;t surface).</p>
+<p>At personal-KB scale (currently 454 articles, against a &lt;500-article research threshold), structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob — zero API cost. The Phase C vector layer is deferred with explicit revisit conditions in D32 (KB exceeds 2000 articles, <!-- census-ok: D32 scale thresholds --> or hook gate hit rate sustained &gt;60% with useful injections, or semantic misses grep can&rsquo;t surface).</p>
 <h3 id="measurement-built-in">Measurement Built In<a class="anchor-link" href="#measurement-built-in" title="Permalink">¶</a></h3>
 <p><code>scripts/retrieval-health.jsonl</code> is append-only, one record per <code>UserPromptSubmit</code> invocation (gate fire, query terms, surfaces searched, chars injected, exec time). The operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions to make the keep/tune/kill decision. Healthy band: gate hit rate 10-60%.</p>
 <p>See <a href="second-brain.html">Second Brain</a> for the full capture-plus-retrieval pipeline (flush.py, compile.py, knowledge/, daily/, health logs, decision rules). This section is the architectural slot; the deep reference is one click away.</p>
 <hr />
+<h2 id="people-profiling-subsystem">People Profiling Subsystem<a class="anchor-link" href="#people-profiling-subsystem" title="Permalink">¶</a></h2>
+<div class="intro-card">
+<p><strong>People Profiling is a cross-cutting OS subsystem (Layer 1) — a peer to the Second Brain, the governance stack, and the design system, NOT an engine.</strong> It profiles the people the operator works with — collaborators, stakeholders, friends, advisors, subjects — so the system stops guessing wrong about who matters and whose judgment counts.</p>
+</div>
+<p><strong>Why it&rsquo;s a subsystem, not an engine.</strong> Engines (Layer 2) are domain tenants serving one line of work. People appear in <em>every</em> domain, so the capability is engine-<em>independent</em> and invokable from anywhere. It was re-lifted from the SEE source on 2026-06-24 after the original compositing left it engine-bound; engine-coupling it again would repeat that incomplete-lift bug. If it ever splits off, it does so as a <em>distributable capability</em> via the fork / cross-operator-distribution pattern — not as an engine.</p>
+<p><strong>The six axes.</strong> A person is several <strong>independent</strong> axes, not one rank — collapsing them is how a friend&rsquo;s offhand take becomes system canon:</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Answers</th>
+<th>Set by</th>
+<th>Slides?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tier</strong></td>
+<td>How much do they matter? (Core / Active / Reference)</td>
+<td>Operator</td>
+<td>Sticky</td>
+</tr>
+<tr>
+<td><strong>Heat</strong></td>
+<td>How much are they coming up <em>now</em>?</td>
+<td>Computed (<code>scripts/people-heat.py</code>)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Influence</strong> ⚑</td>
+<td>Does their input count as <strong>canon</strong>? (canon / domain-authority / lessons-only / <strong>NOT-canon</strong>)</td>
+<td>Operator</td>
+<td>Sticky</td>
+</tr>
+<tr>
+<td><strong>Value-type</strong></td>
+<td>What do they bring? (builder/SME/connector/channel/friend/advisor/subject)</td>
+<td>Operator/observed</td>
+<td>Slow</td>
+</tr>
+<tr>
+<td><strong>Relationship direction</strong></td>
+<td>Who serves whom?</td>
+<td>Operator/observed</td>
+<td>Slow</td>
+</tr>
+<tr>
+<td><strong>Sensitivity</strong></td>
+<td>Capture/share limits (public-professional default)</td>
+<td>Convention</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tier ⊥ Heat ⊥ Influence.</strong> A Core person can be quiet; an important person&rsquo;s input can be NOT-canon; high heat can be a research artifact, not a relationship. <strong>Influence is a SAFETY axis</strong> (important-to-operator ≠ right-for-the-system) — enforced loudly via a caveat block in the profile and <code>prompt-retrieval.py</code> echoing ⚠ NOT-CANON on mention, even by first name.</p>
+<p><strong>The mechanism.</strong> Two skills — <code>person-profiler</code> (synthesis: build/update a profile to the template) and <code>people-curator</code> (operator-facing curation: triage / feed-intel / adjudicate / inventory). The heat engine <code>scripts/people-heat.py</code> scores activity and surfaces thin-profile candidates at session start; the review dossier <code>scripts/people-dossier.py</code> → <code>people/dossier/index.html</code> is the invokable review-and-adjust surface. <code>registry/people.md</code> is the authoritative index (the six axes per person). <strong>The operator is always the gate</strong> — the system proposes from evidence; the operator rules.</p>
+<p>See <a href="methodology-index.html">Methodology Index</a> for the <code>people-profiling</code> methodology doc and <a href="skills-reference.html">Skills Reference</a> for <code>person-profiler</code> + <code>people-curator</code>. The subsystem front door is <code>people/README.md</code>.</p>
+<hr />
 <h2 id="registry-system">Registry System<a class="anchor-link" href="#registry-system" title="Permalink">¶</a></h2>
 <div class="intro-card">
-<p><strong>Two registries provide stable identifiers</strong> for system components so references survive when files move. When a skill is renamed or a capability is restructured, the registry is updated and every reference resolves through it — no broken cross-links, no need to grep-and-replace across the codebase. The registries store identifiers and pointers, not content (D4 from <code>methodology/memory-architecture.md</code>), which keeps them minimal and drift-resistant.</p>
+<p><strong>Registries provide stable identifiers</strong> for system components so references survive when files move. When a skill is renamed or a capability is restructured, the registry is updated and every reference resolves through it — no broken cross-links, no need to grep-and-replace across the codebase. The registries store identifiers and pointers, not content (D4 from <code>methodology/memory-architecture.md</code>), which keeps them minimal and drift-resistant. The two structural registries (capabilities, engines) are joined by <code>registry/people.md</code> — the index for the People Profiling subsystem (one row per person, the six axes).</p>
 </div>
 <h3 id="capability-registry-registrycapabilitiesmd">Capability Registry (<code>registry/capabilities.md</code>)<a class="anchor-link" href="#capability-registry-registrycapabilitiesmd" title="Permalink">¶</a></h3>
-<p>32 capabilities with stable identifiers, current file locations, and source engines. When a skill or file moves, the registry is updated — all references resolve through it.</p>
+<p>43 active capabilities (+2 pending migration) with stable identifiers, current repo-relative file locations, and source engines. When a skill or file moves, the registry is updated — all references resolve through it.</p>
 <div class="highlight"><pre><span></span><code>| Identifier            | Capability                    | Current Location             | Source    |
 | `market-research`     | Market intelligence           | .claude/skills/market-scanner| JSE       |
 | `execution-governance`| Forced skill chains           | .claude/skills/phase-controller | JSE    |
@@ -317,27 +383,27 @@
 </tr>
 <tr>
 <td><code>.claude/skills/</code></td>
-<td>29 OS-level skills (loaded on invocation)</td>
+<td>37 OS-level skills (loaded on invocation)</td>
 <td>Medium — skills evolve with use</td>
 </tr>
 <tr>
 <td><code>hooks/</code></td>
-<td>8 wired hook events (4 shell + 4 Python) for mechanical enforcement, capture, and retrieval</td>
+<td>8 wired hook events across 7 shell + 6 Python scripts, for mechanical enforcement, capture, and retrieval</td>
 <td>Low — changes are governance decisions</td>
 </tr>
 <tr>
 <td><code>engines/</code></td>
-<td>Layer 2 tenants (4 active: job-search, job-search-arnett, on-demand-curriculum, sales-enablement)</td>
+<td>Layer 2 tenants (4: job-search active, job-search-secondary active, on-demand-curriculum portfolio, sales-enablement test stub)</td>
 <td>High — active engine work happens here</td>
 </tr>
 <tr>
 <td><code>methodology/</code></td>
-<td>15 protected documents (immutable without approval)</td>
+<td>24 protected documents (immutable without approval)</td>
 <td>Very low — operator approval required</td>
 </tr>
 <tr>
 <td><code>patterns/</code></td>
-<td>70 evidence-based patterns (58 problem + 5 deliverable + 6 framework)</td>
+<td>87 evidence-based patterns (64 problem · 6 deliverable · 17 framework)</td>
 <td>Low — new patterns added, existing rarely changed</td>
 </tr>
 <tr>
@@ -357,13 +423,18 @@
 </tr>
 <tr>
 <td><code>registry/</code></td>
-<td>2 stable identifier registries</td>
-<td>Medium — updated when capabilities or engines change</td>
+<td>4 registries (capabilities, engines, people, sandbox)</td>
+<td>Medium — updated when capabilities, engines, or people change</td>
 </tr>
 <tr>
 <td><code>operator/</code></td>
 <td>Operator identity (profile, evidence, voice)</td>
 <td>Medium — updated during onboarding or calibration</td>
+</tr>
+<tr>
+<td><code>people/</code></td>
+<td>People Profiling subsystem (Layer 1, cross-cutting): README front door, cross-cutting profiles, generated <code>dossier/</code></td>
+<td>Medium — profiles append-only; operator-gated</td>
 </tr>
 <tr>
 <td><code>scripts/</code></td>
@@ -377,7 +448,7 @@
 </tr>
 <tr>
 <td><code>knowledge/</code></td>
-<td>Second-brain KB (216+ articles): concepts/, connections/, index.md, log.md, qa/ — surfaces at all three retrieval layers</td>
+<td>Second-brain KB (454 articles): concepts/, connections/, index.md, log.md, qa/ — surfaces at all three retrieval layers</td>
 <td>Medium — compile.py promotes high-signal moments</td>
 </tr>
 <tr>
@@ -463,7 +534,7 @@
 <p><strong>PostCompact hook</strong> fires after every compaction and re-injects the 6 core governance behaviors as plain text, active run plan awareness (recent <code>.md</code> files in run-plans directories), and the current engine tenant list. CLAUDE.md is re-read on the next interaction.</p>
 </li>
 <li>
-<p><strong>PreCompact hook</strong> fires <em>before</em> the compaction lands and flushes the session arc to <code>daily/&lt;today&gt;.md</code> via <code>flush.py</code>. This means the conversation history that&rsquo;s about to be lost from the window has already been written to disk — recovery doesn&rsquo;t depend on PostCompact re-injection alone. The shared <code>_flush_common.py</code> module (D29) is the single source of truth for capture caps (<code>MAX_TURNS=60</code>, <code>MAX_CONTEXT_CHARS=30_000</code>) across both PreCompact and SessionEnd.</p>
+<p><strong>PreCompact hook</strong> fires <em>before</em> the compaction lands and flushes the session arc to <code>daily/&lt;today&gt;.md</code> via <code>flush.py</code>. This means the conversation history that&rsquo;s about to be lost from the window has already been written to disk — recovery doesn&rsquo;t depend on PostCompact re-injection alone. The shared <code>_flush_common.py</code> module (D29) is the single source of truth for capture caps (<code>MAX_TURNS=60</code>, <code>MAX_CONTEXT_CHARS=40_000</code> — bumped from 30_000 on 2026-06-12 after &gt;50% of sessions hit the cap) across both PreCompact and SessionEnd.</p>
 </li>
 <li>
 <p><strong>SessionStart hook</strong> re-establishes orientation on the post-compaction session by injecting KB index + today&rsquo;s daily log, restoring retrieval surfaces that compaction stripped.</p>
@@ -535,12 +606,42 @@
 <tr>
 <td>D29</td>
 <td>Marathon-session capture caps + shared hook module</td>
-<td>Bumped flush caps to MAX_TURNS=60 / MAX_CONTEXT_CHARS=30_000 and extracted <code>_flush_common.py</code> so cap changes propagate to both SessionEnd and PreCompact. Anti-drift via shared module.</td>
+<td>Bumped flush caps to MAX_TURNS=60 / MAX_CONTEXT_CHARS=30_000 (later bumped to 40_000, 2026-06-12) and extracted <code>_flush_common.py</code> so cap changes propagate to both SessionEnd and PreCompact. Anti-drift via shared module.</td>
 </tr>
 <tr>
 <td>D32</td>
 <td>Second-brain retrieval layer (hooks + skill, no vector DB)</td>
-<td>Three layers (SessionStart injection, UserPromptSubmit hook, /recall manual escalation) over a six-surface corpus. Closes the capture-without-retrieval gap. Pure Read/Grep/Glob beats vector retrieval at &lt;500-article scale.</td>
+<td>Three layers (SessionStart injection, UserPromptSubmit hook, /recall manual escalation) over a six-surface corpus. Closes the capture-without-retrieval gap. Pure Read/Grep/Glob beats vector retrieval at &lt;500-article scale. <!-- census-ok: D32 scale threshold --></td>
+</tr>
+<tr>
+<td>D44</td>
+<td>The personal <code>sandbox/</code> tier</td>
+<td>A third top-level tier (sibling to engines/ + projects/) for personal/for-fun work — firewalled from the professional layer, own posture rule, and a promotion path to Layer 1 (first exercised by D45: epistemic-tagging + tone-firewall).</td>
+</tr>
+<tr>
+<td>D50</td>
+<td>Session-entry posture: the Full-Breadth Start</td>
+<td>The session-orchestrator natively owns capability self-orientation — on a full-breadth opener it self-updates from <code>scripts/capability-snapshot.json</code> (counts derived live) and STANDS READY without guessing the work. Backed by behavior 7.6 and the SessionStart surface.</td>
+</tr>
+<tr>
+<td>D51</td>
+<td>Second-brain health process</td>
+<td><code>kb-health</code> composes live KB stats + graph health + pipeline vital signs into one fireable report; <code>kb-stats</code> becomes the single source for any &ldquo;by the numbers&rdquo; claim — hand-typed health numbers are the rot class it closes.</td>
+</tr>
+<tr>
+<td>D52</td>
+<td>Census single-sourcing + the living health dashboard</td>
+<td>Docs counts become <code>{{CENSUS:key}}</code> tokens resolved from live disk at build time (hand-typed censuses linted); <code>docs/site/dashboard.html</code> composes every health surface into a status strip + heartbeat tiles + the observability inventory — standing audit practice, refreshed at session end.</td>
+</tr>
+<tr>
+<td>D53</td>
+<td>Usage economy — disciplines + the instrument&rsquo;s economy lens</td>
+<td>Session cost ≈ context-size × turn-count (mostly cache reads re-paid each turn); the usage log gains an economy view (tokens/turn, <code>ctx/turn</code> context-floor, cache-hit%) in <code>usage-review.py</code> + a dashboard tile. Correctness-neutral levers — fewer/denser turns, protect the cache, model+effort to task, sequential-near-limit — plus disabling two never-invoked plugin packs (<code>enabledPlugins:false</code>) for context economy.</td>
+</tr>
+<tr>
+<td>D54</td>
+<td>Retire the usage-log&rsquo;s engaged-vs-cold headline</td>
+<td>At a degenerate 26:1 engaged:cold ratio the comparison had no baseline; <code>usage-review.py</code> now leads with the economy lens and auto-suppresses the comparison until a real cold baseline accumulates (self-healing, never-delete).</td>
 </tr>
 </tbody>
 </table>

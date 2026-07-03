@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Templates Reference — EngineOS Docs</title>
-  <meta name="description" content="EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement direct">
+  <meta name="description" content="EngineOS provides 38 templates (README indexes excluded from the count), organized across four locations: deliverables/ (client-facing and operational outputs in six subcategories plus top-level brief">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -45,17 +45,19 @@
   <a class="nav-item active" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s13">
-  <div class="eyebrow">EngineOS System Documentation · Section 13 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 13 · Built 2026-07-03</div>
   <h1>Templates Reference</h1>
-  <p class="subhead">EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement directories. All templates are designed for AI-assisted population using consistent placeholder conventions.</p>
+  <p class="subhead">EngineOS provides 38 templates (README indexes excluded from the count), organized across four locations: deliverables/ (client-facing and operational outputs in six subcategories plus top-level briefs), engagement/ (a copy-as-a-unit scaffold for new client engagement directories), knowledge-base/ (profiling templates)</p>
 </header>
 <section class="content">
 <h2 id="overview">Overview<a class="anchor-link" href="#overview" title="Permalink">¶</a></h2>
-<p>Three placeholder types appear across the library:</p>
+<p>Four placeholder types appear across the library:</p>
 <table>
 <thead>
 <tr>
@@ -87,10 +89,10 @@
 </tr>
 </tbody>
 </table>
-<p>Templates live at <code>templates/</code> with two subdirectories: <code>deliverables/</code> and <code>engagement/</code>.</p>
+<p>Templates live at <code>templates/</code> across two subdirectories — <code>deliverables/</code> and <code>engagement/</code> — plus <code>knowledge-base/</code> and four loose top-level template files.</p>
 <hr />
 <h2 id="deliverable-templates-27">Deliverable Templates (27)<a class="anchor-link" href="#deliverable-templates-27" title="Permalink">¶</a></h2>
-<p>Organized into six subcategories plus two top-level templates. Source index: <code>templates/deliverables/README.md</code>.</p>
+<p>Organized into six subcategories plus three top-level templates. Source index: <code>templates/deliverables/README.md</code>.</p>
 <h3 id="reports-6">Reports (6)<a class="anchor-link" href="#reports-6" title="Permalink">¶</a></h3>
 <table>
 <thead>
@@ -283,7 +285,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="top-level-2">Top-Level (2)<a class="anchor-link" href="#top-level-2" title="Permalink">¶</a></h3>
+<h3 id="top-level-3">Top-Level (3)<a class="anchor-link" href="#top-level-3" title="Permalink">¶</a></h3>
 <p>These sit directly in <code>templates/deliverables/</code> rather than in a subcategory folder.</p>
 <table>
 <thead>
@@ -300,6 +302,10 @@
 <tr>
 <td><code>notion-task-import-template.md</code></td>
 <td>CSV import template for Notion task boards with column mapping and field-type constraints</td>
+</tr>
+<tr>
+<td><code>context-handoff.md</code></td>
+<td>Stakeholder-facing &ldquo;what changed &amp; why&rdquo; delta &ndash; the <em>deliver</em> half of the SME-iteration loop (D48). External twin of the internal version-freeze: the freeze is the audit trail for us; the handoff is the legible delta for them. Worked exemplar: an investor-diligence engagement handoff (2026-06-26).</td>
 </tr>
 </tbody>
 </table>
@@ -408,6 +414,53 @@
 </ol>
 <p>The checklist also defines a minimum viable engagement (copy, edit README, edit CONTEXT, create primary contact profile, start working) to prevent setup from blocking actual work.</p>
 <hr />
+<h2 id="knowledge-base-templates-1">Knowledge-Base Templates (1)<a class="anchor-link" href="#knowledge-base-templates-1" title="Permalink">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>person-profile.md</code></td>
+<td><code>knowledge-base/</code></td>
+<td>The OS-level, engine-independent person-profile template for the People Profiling subsystem &ndash; six-axis fields (Tier · Heat · Influence · Value-type · Relationship-direction · Sensitivity), append-only history, evidence tags, and the loud Influence caveat block. Generalized from the SEE prospect/team/contact-profiler templates (re-lift 2026-06-24).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="loose-top-level-templates-4">Loose Top-Level Templates (4)<a class="anchor-link" href="#loose-top-level-templates-4" title="Permalink">¶</a></h2>
+<p>Four templates sit directly at <code>templates/</code> (not in a subdirectory):</p>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engagement-CONTEXT-template.md</code></td>
+<td>The per-engagement front door &ndash; copy to <code>projects/&lt;subject&gt;/CONTEXT.md</code> (or the engine&rsquo;s engagement dir). The present-tense answer to &ldquo;what is all this and where are we&rdquo; (D46, engagement-artifact-structure).</td>
+</tr>
+<tr>
+<td><code>house-deliverable-component-checklist.md</code></td>
+<td>The canonical component manifest for an interactive single-file HTML client deliverable in the house style &ndash; clone-and-prune from the exemplar plus a binary gate, born from a hostile UI/UX review after repeated missing-component ships (2026-06-25).</td>
+</tr>
+<tr>
+<td><code>research-mandate-template.md</code></td>
+<td>The operator&rsquo;s natural format for tasking research &ndash; a memo with built-in adversarial framing, for commissioning sweeps that must come back rigorous and decision-ready, not a content dump. Promoted from the sandbox gaming engine (D45).</td>
+</tr>
+<tr>
+<td><code>session-handoff-template.md</code></td>
+<td>Session handoff / blind-spots audit &ndash; the battle-tested format for bridging cold sessions; a richer, more operational instance of the CONTEXT.md handoff. Promoted from the sandbox gaming engine (D45).</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h2 id="how-templates-work">How Templates Work<a class="anchor-link" href="#how-templates-work" title="Permalink">¶</a></h2>
 <h3 id="standard-workflow">Standard Workflow<a class="anchor-link" href="#standard-workflow" title="Permalink">¶</a></h3>
 <ol>
@@ -429,7 +482,7 @@
 <h3 id="html-deliverables">HTML Deliverables<a class="anchor-link" href="#html-deliverables" title="Permalink">¶</a></h3>
 <p>Deliverables that produce HTML output use the EngineOS design system at <code>design-system/</code>. The enterprise stylesheet at <code>design-system/enterprise-styles.css</code> provides consistent styling. The render-validate skill verifies HTML output quality.</p>
 <hr />
-<p><em>EngineOS Templates Reference &ndash; produced from <code>templates/deliverables/README.md</code>, <code>templates/engagement/README.md</code>, and direct inspection of all 38 template files.</em></p>
+<p><em>EngineOS Templates Reference &ndash; produced from <code>templates/deliverables/README.md</code>, <code>templates/engagement/README.md</code>, and direct inspection of the 38 template files.</em></p>
 </section>
 
 </main>

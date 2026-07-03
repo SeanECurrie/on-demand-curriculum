@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Skill System — EngineOS Docs</title>
-  <meta name="description" content="EngineOS ships 29 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run c">
+  <meta name="description" content="EngineOS ships 37 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run c">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -45,13 +45,15 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s05">
-  <div class="eyebrow">EngineOS System Documentation · Section 05 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 05 · Built 2026-07-03</div>
   <h1>Skill System</h1>
-  <p class="subhead">EngineOS ships 29 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run controller. The system&#x27;s value isn&#x27;t in any single skill — it&#x27;s in the composition: how skills chain together, how access</p>
+  <p class="subhead">EngineOS ships 37 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run controller. The system&#x27;s value isn&#x27;t in any single skill — it&#x27;s in the composition: how skills chain together, how access</p>
 </header>
 <section class="content">
 <div class="intro-card">
@@ -60,13 +62,13 @@
 <hr />
 <h2 id="discovery">Discovery<a class="anchor-link" href="#discovery" title="Permalink">¶</a></h2>
 <div class="intro-card">
-<p>Skills are <strong>discovered, not configured</strong>. Claude Code scans <code>.claude/skills/*/SKILL.md</code> at session start and learns what exists from each skill&rsquo;s YAML description. <strong>Passive loading</strong> keeps all 29 descriptions visible (~2% of context); <strong>full loading</strong> only fires when a skill is actually invoked. The practical effect: EngineOS carries 29 skills without paying the context cost of 29 skills. A session that uses 3 skills loads 3, not 29.</p>
+<p>Skills are <strong>discovered, not configured</strong>. Claude Code scans <code>.claude/skills/*/SKILL.md</code> at session start and learns what exists from each skill&rsquo;s YAML description. <strong>Passive loading</strong> keeps all 37 descriptions visible (~2% of context); <strong>full loading</strong> only fires when a skill is actually invoked. The practical effect: EngineOS carries 37 skills without paying the context cost of 37 skills. A session that uses 3 skills loads 3, not 33. <!-- census-ok: illustrative --></p>
 </div>
 <p>The two phases in detail:</p>
-<p><strong>Passive loading (~2% of context):</strong> Skill descriptions from YAML frontmatter load at session start. Claude Code sees the name and a one-line summary for all 29 skills. This is the index &ndash; enough to know what exists, not enough to execute.</p>
+<p><strong>Passive loading (~2% of context):</strong> Skill descriptions from YAML frontmatter load at session start. Claude Code sees the name and a one-line summary for all 37 skills. This is the index &ndash; enough to know what exists, not enough to execute.</p>
 <p><strong>Full loading (on invocation):</strong> When a skill is invoked by name, its full SKILL.md loads into context. The complete methodology, phase structure, integration points, anti-patterns, and self-tests become available.</p>
-<p>This is the Tier 3 context budget model from CLAUDE.md. A session that uses 3 skills loads 3, not 29. A research session loads depth-governor, market-scanner, and findings-formatter. A CRM audit loads attio-mapper, attio-optimizer, and attio-refiner. Skills the session never touches stay at their 2% description footprint.</p>
-<p>The practical effect: EngineOS carries 29 skills without paying the context cost of 29 skills. A focused session consumes context proportional to its actual work, not proportional to the system&rsquo;s total capability.</p>
+<p>This is the Tier 3 context budget model from CLAUDE.md. A session that uses 3 skills loads 3, not 37. <!-- census-ok: illustrative --> A research session loads depth-governor, market-scanner, and findings-formatter. A CRM audit loads attio-mapper, attio-optimizer, and attio-refiner. Skills the session never touches stay at their 2% description footprint.</p>
+<p>The practical effect: EngineOS carries 37 skills without paying the context cost of 37 skills. A focused session consumes context proportional to its actual work, not proportional to the system&rsquo;s total capability.</p>
 <h3 id="passive-retrieval-via-userpromptsubmit-hook">Passive Retrieval via UserPromptSubmit Hook<a class="anchor-link" href="#passive-retrieval-via-userpromptsubmit-hook" title="Permalink">¶</a></h3>
 <p>Native skill discovery is the routing layer for <em>capability</em> loading &ndash; which procedure should fire for a given prompt. A parallel mechanism handles <em>context</em> loading: the <code>UserPromptSubmit</code> hook (<code>hooks/prompt-retrieval.py</code>, added 2026-06-04 per D32) silently injects relevant prior context from the second brain into the prompt before any skill loads. A heuristic gate (trigger words, question-form starts, minimum prompt length) decides whether to fire. When it fires, it searches the same six-surface priority corpus as the <code>recall</code> skill &ndash; intelligence log, knowledge index, KB concepts/connections, recent daily logs, recent run-plans, methodology &ndash; and injects up to 1,024 characters of top-3 matches with a ≤1-second budget.</p>
 <p>The hook complements native discovery without replacing it. Discovery answers &ldquo;which skill should run.&rdquo; The retrieval hook answers &ldquo;what does the corpus already know that the operator hasn&rsquo;t said.&rdquo; Together they front-load both capability and context before the model decides what to do. When the hook misses or the operator wants a deeper sweep, the <code>recall</code> skill (Read-only, manual invocation) handles the unbounded version of the same search. Append-only health records at <code>scripts/retrieval-health.jsonl</code> make the hook&rsquo;s behavior auditable &ndash; the operator runs <code>scripts/retrieval-review.py</code> periodically to keep, tune, or kill the gate.</p>
@@ -142,8 +144,8 @@
 <tbody>
 <tr>
 <td><strong>Read-only</strong></td>
-<td><code>Read, Glob, Grep</code></td>
-<td>Can observe and report. Cannot modify files. Cannot invoke other skills.</td>
+<td><code>Read, Glob, Grep</code> (+ <code>Bash</code> where the body emits reviewer telemetry)</td>
+<td>Can observe and report. Cannot modify files. Cannot invoke other skills. output-self-test and sanity-check carry Bash solely for the mechanical reviewer-health emit (frontmatter aligned to their own instructions, 2026-07-02).</td>
 <td>depth-governor, output-self-test, sanity-check, recall</td>
 </tr>
 <tr>
@@ -184,7 +186,7 @@
 <tbody>
 <tr>
 <td>adversarial-evaluator</td>
-<td><code>Read, Bash, Glob, Grep</code></td>
+<td><code>Read, Bash, Glob, Grep, WebSearch, mcp__brightdata__search_engine, mcp__brightdata__scrape_as_markdown</code> (no Write/Edit)</td>
 </tr>
 <tr>
 <td>attio-mapper</td>
@@ -219,12 +221,24 @@
 <td><code>Read, Glob, Grep, Bash</code></td>
 </tr>
 <tr>
+<td>company-briefing</td>
+<td><code>Read, Bash, Glob, Grep, WebFetch, WebSearch, Agent, Write, Edit, mcp__brightdata__*, mcp__context7__*</code></td>
+</tr>
+<tr>
 <td>content-updater</td>
 <td><code>Read, Write, Edit, Glob, Grep, Skill</code></td>
 </tr>
 <tr>
+<td>corpus-ingest</td>
+<td><code>Read, Write, Edit, Bash, Glob, Grep</code></td>
+</tr>
+<tr>
 <td>depth-governor</td>
 <td><code>Read, Glob, Grep</code></td>
+</tr>
+<tr>
+<td>engagement-workup</td>
+<td><code>Read, Write, Edit, Bash, Glob, Grep, Skill, Agent</code></td>
 </tr>
 <tr>
 <td>eos-assistant</td>
@@ -237,6 +251,14 @@
 <tr>
 <td>framework-explainer</td>
 <td><code>Read, Write, Edit, Glob, Grep</code></td>
+</tr>
+<tr>
+<td>gated-deploy</td>
+<td><code>Bash, Read</code></td>
+</tr>
+<tr>
+<td>kb-health</td>
+<td><code>Bash, Read, Grep, Glob</code></td>
 </tr>
 <tr>
 <td>lead-builder</td>
@@ -256,7 +278,15 @@
 </tr>
 <tr>
 <td>output-self-test</td>
-<td><code>Read, Glob, Grep</code></td>
+<td><code>Read, Glob, Grep, Bash</code></td>
+</tr>
+<tr>
+<td>people-curator</td>
+<td><code>Read, Write, Edit, Bash, Glob, Grep, Skill</code></td>
+</tr>
+<tr>
+<td>person-profiler</td>
+<td><code>Read, Write, Edit, Glob, Grep, Bash, Skill</code></td>
 </tr>
 <tr>
 <td>phase-controller</td>
@@ -284,7 +314,7 @@
 </tr>
 <tr>
 <td>sanity-check</td>
-<td><code>Read, Glob, Grep</code></td>
+<td><code>Read, Glob, Grep, Bash</code></td>
 </tr>
 <tr>
 <td>section-construction</td>
@@ -292,7 +322,11 @@
 </tr>
 <tr>
 <td>session-orchestrator</td>
-<td><code>Read, Write, Edit, Glob, Grep, Skill</code></td>
+<td><code>Read, Write, Edit, Glob, Grep, Skill, Bash</code></td>
+</tr>
+<tr>
+<td>transcribe</td>
+<td><code>Bash, Read, Write, Glob, Skill</code></td>
 </tr>
 <tr>
 <td>transcript-processor</td>
@@ -301,8 +335,8 @@
 </tbody>
 </table>
 <h3 id="why-this-matters">Why This Matters<a class="anchor-link" href="#why-this-matters" title="Permalink">¶</a></h3>
-<p>Tool asymmetry is the structural mechanism that prevents quality evaluation from collapsing into self-approval. The adversarial-evaluator has <code>Read, Bash, Glob, Grep</code> &ndash; it can read deliverables and run checks, but it cannot fix what it finds. This is deliberate. An evaluator with Write access becomes a fixer, and a fixer is not adversarial. The same principle from Cole&rsquo;s adversarial-dev evaluator: tool asymmetry forces honest scoring because the evaluator cannot resolve its own criticism.</p>
-<p>Governance skills (depth-governor, output-self-test, sanity-check) are read-only for the same reason. They observe and report. They do not modify. If a sanity-check finds a problem, it surfaces the problem to the operator or the orchestrating skill &ndash; it does not silently fix it.</p>
+<p>Tool asymmetry is the structural mechanism that prevents quality evaluation from collapsing into self-approval. The adversarial-evaluator has <code>Read, Bash, Glob, Grep</code> plus external corroboration tools (<code>WebSearch</code> and two Bright Data endpoints, so it can verify claims against live sources) &ndash; but NO Write and NO Edit: it can read deliverables and run checks, it cannot fix what it finds. This is deliberate. An evaluator with Write access becomes a fixer, and a fixer is not adversarial. The same principle from Cole&rsquo;s adversarial-dev evaluator: tool asymmetry forces honest scoring because the evaluator cannot resolve its own criticism.</p>
+<p>Governance skills (depth-governor, output-self-test, sanity-check) are read-only for the same reason. They observe and report. They do not modify. If a sanity-check finds a problem, it surfaces the problem to the operator or the orchestrating skill &ndash; it does not silently fix it. Concretely (2026-06-12): sanity-check&rsquo;s failure-mode gallery now admits explicitly-declared &ldquo;seed&rdquo; entries (anticipated failure modes not yet observed), and its seed-hygiene rule keeps them honest &ndash; a seed that no longer fits is <em>flagged for the operator to cull</em> (mark-outdated or archive), never deleted on the skill&rsquo;s own judgment. Even gallery hygiene stays inside never-delete and operator-gated deletion.</p>
 <p>MCP scoping prevents integration skills from accessing unrelated external systems. The attio-mapper can call <code>mcp__attio-mcp__records_get_attributes</code> but not Bright Data search endpoints. The market-scanner can call Bright Data and Context7 but not Attio or Notion. Each skill sees only the external surface it needs.</p>
 <hr />
 <h2 id="skill-categories">Skill Categories<a class="anchor-link" href="#skill-categories" title="Permalink">¶</a></h2>
@@ -346,7 +380,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="content-and-deliverable-production-7-skills">Content and Deliverable Production (7 skills)<a class="anchor-link" href="#content-and-deliverable-production-7-skills" title="Permalink">¶</a></h3>
+<h3 id="content-and-deliverable-production-10-skills">Content and Deliverable Production (10 skills)<a class="anchor-link" href="#content-and-deliverable-production-10-skills" title="Permalink">¶</a></h3>
 <p>Skills that produce client-facing and internal deliverables. They share write access and typically appear inside iteration envelopes where the adversarial-evaluator scores their output.</p>
 <table>
 <thead>
@@ -382,7 +416,19 @@
 </tr>
 <tr>
 <td><strong>content-updater</strong></td>
-<td>Choke point for all content modifications. Routes updates through origin-skill audit requirements and cascades to related files.</td>
+<td>Choke point for all content modifications. Routes updates through origin-skill audit requirements (falling back to audit-logging&rsquo;s Skill-Specific Audit Requirements table) and cascades to related files.</td>
+</tr>
+<tr>
+<td><strong>corpus-ingest</strong></td>
+<td>Ingests operator&rsquo;s pre-existing personal material (notes, journals, mixed file types) into the second brain as initial KB seed. Batch-confirmed, idempotent, Claude Code SDK-backed.</td>
+</tr>
+<tr>
+<td><strong>company-briefing</strong></td>
+<td>Research-backed single-file interactive HTML walkthrough about a target company for a named audience. Orchestrates SEE research methodology + ODC HTML output home &ndash; owns the combination contract, not the substrate.</td>
+</tr>
+<tr>
+<td><strong>transcribe</strong></td>
+<td>On-device audio→text via MLX Whisper (no subscription, nothing uploaded). The front half of the intake pipeline; chains to transcript-processor. Reflexive: fires when audio appears.</td>
 </tr>
 </tbody>
 </table>
@@ -458,7 +504,7 @@
 </tr>
 <tr>
 <td><strong>adversarial-evaluator</strong></td>
-<td>Spawns an independent subagent with no access to the executor&rsquo;s context. Scores deliverables against structured criteria as JSON. Tool-asymmetric: Read + Bash only, no Write.</td>
+<td>Spawns an independent subagent with no access to the executor&rsquo;s context. Scores deliverables against structured criteria as JSON. Tool-asymmetric: Read/Bash/search for verification, no Write &ndash; it cannot fix what it finds.</td>
 </tr>
 <tr>
 <td><strong>audit-logging</strong></td>
@@ -466,7 +512,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="system-awareness-1-skill">System Awareness (1 skill)<a class="anchor-link" href="#system-awareness-1-skill" title="Permalink">¶</a></h3>
+<h3 id="system-awareness-2-skills">System Awareness (2 skills)<a class="anchor-link" href="#system-awareness-2-skills" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -479,13 +525,67 @@
 <td><strong>eos-assistant</strong></td>
 <td>EngineOS-aware conversational partner. Knows system state, engine health, methodology, patterns, and connections. Two modes: strategic conversation (default) and production mode (governance-active when operator signals &ldquo;let&rsquo;s build&rdquo;).</td>
 </tr>
+<tr>
+<td><strong>kb-health</strong></td>
+<td>The fireable second-brain health check (D51). One script run composing live KB stats, graph health, state checks, and the five pipeline vital signs into an honest report + fix-list. Composes the existing reviewers, duplicates none.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="engagement-orchestration-1-skill">Engagement Orchestration (1 skill)<a class="anchor-link" href="#engagement-orchestration-1-skill" title="Permalink">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>engagement-workup</strong></td>
+<td>The cold-session entry point for the client/colleague engagement motion (D42). Classifies the engagement into one of 4 types (briefing / intake-response synthesis / execute+systematize / capability-setup) and routes to the matching chain &ndash; the orchestration spine of the EN chain below. Playbook: <code>methodology/engagement-workup.md</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hosting-1-skill">Hosting (1 skill)<a class="anchor-link" href="#hosting-1-skill" title="Permalink">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>gated-deploy</strong></td>
+<td>Re-deploys content to an EXISTING Cloudflare-Access-gated site through a Pages:Edit-only token that provably cannot touch the gate (church/state by token boundary). Crystallized from 3 real reps (D41 doctrine). Content path only; gate creation stays the operator&rsquo;s by-hand setup.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="people-profiling-2-skills">People Profiling (2 skills)<a class="anchor-link" href="#people-profiling-2-skills" title="Permalink">¶</a></h3>
+<p>The two skills of the People Profiling subsystem (Layer 1, cross-cutting — see <a href="architecture.md#people-profiling-subsystem">Architecture</a>). <code>people-curator</code> is the operator&rsquo;s steering wheel; it routes the doing to <code>person-profiler</code>. Both keep the operator as the gate and the six axes independent.</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>person-profiler</strong></td>
+<td>Synthesis engine: create or update a structured profile for ANY person the operator works with (collaborator/stakeholder/friend/advisor/subject). Append-only, evidence-tagged, pointer-based; checks <code>registry/people.md</code> first (duplicate prevention) and writes the row. The complement to <code>profile-builder</code> (which is the operator&rsquo;s own profile).</td>
+</tr>
+<tr>
+<td><strong>people-curator</strong></td>
+<td>Operator-facing curation front end: four modes (triage candidates / feed intel / adjudicate where a person lands / inventory) across the six axes (Tier·Heat·Influence·Value·Direction·Sensitivity). Drives <code>person-profiler</code>; reads the heat engine (<code>scripts/people-heat.py</code>) and the review dossier; operator is the gate.</td>
+</tr>
 </tbody>
 </table>
 <hr />
 <h2 id="forced-skill-chains">Forced Skill Chains<a class="anchor-link" href="#forced-skill-chains" title="Permalink">¶</a></h2>
 <div class="intro-card">
 <p>The defining feature of the skill system is <strong>composition</strong>. Skills don&rsquo;t fire independently — they chain into typed workflows enforced by the phase-controller. Classification picks the chain template; the chain specifies which skills fire, in what order, with what gates between them.</p>
-<p><strong>The chains are not suggestions.</strong> Phase-controller Rule 1: <em>&ldquo;Every skill in the chain gets invoked. Not referenced, not &lsquo;kept in mind&rsquo; — actually loaded and executed.&rdquo;</em> Rule 4: <em>&ldquo;Gates are non-negotiable. Work does not proceed past a gate without the operator&rsquo;s explicit approval.&rdquo;</em> This is what turns skills from a library into an operating system.</p>
+<p><strong>The chains are not suggestions.</strong> Phase-controller Rule 1: <em>&ldquo;Every skill in the chain gets invoked. Not referenced, not &lsquo;kept in mind&rsquo; — actually loaded and executed.&rdquo;</em> Rule 4: <em>&ldquo;Gates are non-negotiable — but the operator may pre-authorize collapse.&rdquo;</em> (Work does not proceed past a gate without the operator&rsquo;s explicit approval; when the operator&rsquo;s own prompt pre-approves scope, plan, and deliverables, internal sub-phase gates collapse into logged self-reviews — Gate 0 and Gate Final never collapse.) This is what turns skills from a library into an operating system.</p>
 </div>
 <h3 id="the-iteration-envelope">The Iteration Envelope<a class="anchor-link" href="#the-iteration-envelope" title="Permalink">¶</a></h3>
 <p>Production chains (BL, EW, EN, CP, RE) wrap their produce-and-evaluate steps in an <strong>iteration envelope</strong> &ndash; an evaluator-optimizer loop:</p>
@@ -582,6 +682,37 @@ AFTER ENVELOPE (runs once on final version):
 </code></pre></div>
 
 <p><strong>What makes CP distinct:</strong> Writing-plans is structurally enforced (Layer 4 must be populated before production begins). Brainstorming is not in this chain &ndash; the operator&rsquo;s brief typically provides scope. The qa-pipeline fires only for external-facing content.</p>
+<hr />
+<h3 id="en-engagement-chain">EN (Engagement) Chain<a class="anchor-link" href="#en-engagement-chain" title="Permalink">¶</a></h3>
+<p>For client engagement work &ndash; someone brings a situation and EngineOS researches, synthesizes, and returns something that surfaces what matters, or executes the task and systematizes it. The chain&rsquo;s orchestration spine is the <code>engagement-workup</code> skill (D42): it classifies the engagement into one of 4 types (A decision-support briefing / B intake-response synthesis / C execute + systematize / D capability-setup) and routes to the matching sub-chain. Phase-controller&rsquo;s Type EN defines two common shapes; the research-task shape:</p>
+<div class="highlight"><pre><span></span><code> 1. phase-controller            --&gt; classify as EN, build run plan
+ 2. engagement-workup           --&gt; classify engagement type (A/B/C/D), route
+    (audio intake? transcribe --&gt; transcript-processor first)
+ 3. depth-governor              --&gt; scan or deep-dive per topic area
+ 4. Execute research            --&gt; market-scanner / research-engine /
+    findings-formatter          --&gt; structure each finding
+    sanity-check                --&gt; lint after research sweep
+    Output: findings            --&gt; appended to Layer 3
+ 5. SOFT GATE                   --&gt; findings review (operator may wave through)
+    |
+    |  &gt;&gt;&gt; ITERATION ENVELOPE (max 3 retries) &lt;&lt;&lt;
+    |
+ 6. Synthesis                   --&gt; findings-formatter structures it
+    Output: synthesis           --&gt; appended to Layer 4
+ 7. adversarial-evaluator       --&gt; independent scoring
+    --&gt; IF FAIL: feedback injection, retry from step 6
+    --&gt; IF FAIL x3: OPERATOR GATE
+    |
+    |  &gt;&gt;&gt; ITERATION ENVELOPE END &lt;&lt;&lt;
+    |
+ 8. output-self-test            --&gt; verify before declaring complete
+ 9. audit-logging               --&gt; log findings (activity + intelligence)
+10. content-updater             --&gt; update engagement KB files
+11. Update engagement CONTEXT.md
+</code></pre></div>
+
+<p>The deliverable-production shape adds <code>writing-plans [MANDATORY - structural]</code> before production (Layer 4 must be populated &ndash; same enforcement as CP), runs the production skills inside the envelope, and ends at qa-pipeline + an operator approval gate before anything ships.</p>
+<p><strong>What makes EN distinct:</strong> the engagement is the driver and research serves it (an engagement requiring research classifies EN, not RE &ndash; heaviest-type rule). Iteration with the client/SME is first-class: step 6 of the playbook runs the <strong>SME-iteration loop</strong> (<code>patterns/frameworks/sme-iteration-loop.md</code>) &ndash; classify feedback into its 3 flavors (strategic re-direction / insider ground-truth / reasoned disagreement), adjudicate defend-or-fold, gate on <strong>early ground-truth</strong> (the MLR lesson: a false premise survived to a near-final deck because nothing checked it early), and hand back a <strong>context handoff</strong> so a returning stakeholder sees what changed and why. The person-card firewall applies throughout: a subject&rsquo;s candor calibrates strategy and is never quoted back. When the close is a private share, <code>gated-deploy</code> ships it behind the existing Cloudflare Access gate.</p>
 <hr />
 <h3 id="re-research-chain">RE (Research) Chain<a class="anchor-link" href="#re-research-chain" title="Permalink">¶</a></h3>
 <p>For market intelligence, competitive analysis, exploratory research &ndash; work where the output is structured findings and synthesis.</p>
@@ -936,7 +1067,7 @@ recall fires (Read-only, no run plan required)
 <p><strong>Written to disk:</strong> Nothing &ndash; read-only. Recall is search infrastructure, not a producer. The operator does the synthesis after seeing the hits. If the operator decides the recalled context warrants a new article or intelligence-log entry, that write goes through content-updater or audit-logging separately.</p>
 <hr />
 <h2 id="methodology-to-skill-relationship">Methodology-to-Skill Relationship<a class="anchor-link" href="#methodology-to-skill-relationship" title="Permalink">¶</a></h2>
-<p>Skills automate methodology. The <code>methodology/</code> directory contains 15 formalized documents encoding proven research and quality methodology. Skills reference these documents during execution; methodology documents are immutable without operator approval (enforced by <code>.claude/rules/methodology-immutable.md</code>).</p>
+<p>Skills automate methodology. The <code>methodology/</code> directory contains 18 formalized documents encoding proven research and quality methodology. Skills reference these documents during execution; methodology documents are immutable without operator approval (enforced by <code>.claude/rules/methodology-immutable.md</code>).</p>
 <p>Five skills have direct methodology companions &ndash; the skill operationalizes what the methodology document defines:</p>
 <table>
 <thead>
@@ -981,10 +1112,10 @@ recall fires (Read-only, no run plan required)
 <p>The skill system does not enforce itself. Three mechanisms external to skills make the chains non-optional:</p>
 <ol>
 <li>
-<p><strong>PreToolUse hook (<code>pre-write-governance.sh</code>)</strong> &ndash; Blocks deliverable writes to engine paths without an active run plan at the canonical run-plans directory. The phase-controller must have created a run plan before any production skill can write output.</p>
+<p><strong>PreToolUse hook (<code>pre-write-governance.sh</code>)</strong> &ndash; Gates <code>Write</code>/<code>Edit</code> deliverable writes without an active run plan at the canonical run-plans directory, including subagent Write/Edit calls (verified empirically 2026-06-12). Bash-mediated writes are not mechanically gated &ndash; for those, governance is the forced skill chain plus the parent&rsquo;s post-hoc output verification. The phase-controller must have created a run plan before any production skill can write output.</p>
 </li>
 <li>
-<p><strong>Phase-controller forcing function rules</strong> &ndash; 11 rules govern chain execution. Rule 1: every chain skill gets invoked. Rule 4: gates require explicit operator approval. Rule 7: skipping requires justification. Rule 10: mandatory steps require invocation or documented skip-justification. Rule 11: evidence-before-reporting at phase transitions.</p>
+<p><strong>Phase-controller forcing function rules</strong> &ndash; 11 forcing-function rules govern chain execution. Rule 1: every chain skill gets invoked. Rule 4: gates require explicit operator approval. Rule 7: skipping requires justification. Rule 10: mandatory steps require invocation or documented skip-justification. Rule 11: evidence-before-reporting at phase transitions.</p>
 </li>
 <li>
 <p><strong>Structural enforcement via Layer 4</strong> &ndash; For chains with <code>[MANDATORY - structural]</code> planning steps, the production step reads Layer 4 of the run plan as its first action. Empty Layer 4 means the plan was never written, and production cannot proceed. This is file-based communication between the planning step and the production step.</p>

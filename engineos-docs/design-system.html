@@ -45,11 +45,13 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s12">
-  <div class="eyebrow">EngineOS System Documentation · Section 12 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 12 · Built 2026-07-03</div>
   <h1>Design System</h1>
   <p class="subhead">The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two production-proven sources: MLR&#x27;s enterprise stylesheet (776 lines, November 2025, battle-tested across 13 professional deliv</p>
 </header>
@@ -57,6 +59,9 @@
 <h2 id="overview">Overview<a class="anchor-link" href="#overview" title="Permalink">¶</a></h2>
 <p>Engines producing HTML link this stylesheet. Engine-specific visual additions go in engine-level CSS that follows or imports the shared file. No engine duplicates tokens defined at the OS layer.</p>
 <p>The system ships with five companion reference documents: <code>color-tokens.md</code> (full token inventory), <code>typography.md</code> (type scales and spacing), <code>accessibility.md</code> (verified contrast tables), <code>pdf-pipeline.md</code> (Chrome headless generation), and <code>render-validate-pipeline.md</code> (6-step visual QA). This document synthesizes all six sources into one architectural reference.</p>
+<hr />
+<h2 id="the-house-deliverable-style-navygold">The House Deliverable Style (navy/gold)<a class="anchor-link" href="#the-house-deliverable-style-navygold" title="Permalink">¶</a></h2>
+<p>The enterprise stylesheet below is the <em>walkthrough/showcase</em> lineage. Client deliverables ship in a second, newer identity: the <strong>house navy/gold report page</strong> — white page on warm-gray canvas, navy <code>#1f3a5f</code> + gold <code>#b08423</code> spine, finding-panels, tier badges, the claims-confidence bar, and the per-section engagement loop. It evolved across the June 2026 client arc (an investor-diligence engagement, a client intake-response engagement, a comp-benchmarking engagement, a go-to-market launch engagement) and was enforced through operator feedback and exemplars before it had a home in this directory; as of 2026-07-02 it is captured at the source level in <strong><code>design-system/house-style.md</code></strong> (identity, signature components, the de-AI rules, and the clone-and-prune build motion). The operational ship-gate is <code>templates/house-deliverable-component-checklist.md</code>. When producing a client deliverable, that pair — not the enterprise stylesheet alone — is the standard.</p>
 <hr />
 <h2 id="7-layer-css-architecture">7-Layer CSS Architecture<a class="anchor-link" href="#7-layer-css-architecture" title="Permalink">¶</a></h2>
 <p>The stylesheet is organized into seven layers, ordered by specificity and dependency. Each layer builds on the one before it. The layering exists for three reasons: it enforces a single source of truth for design tokens (Layer 1), it separates concerns cleanly enough that an engine can use Layer 2 for reports without pulling in Layer 3&rsquo;s interactive components, and it keeps print/dark/responsive overrides isolated from the base visual system.</p>

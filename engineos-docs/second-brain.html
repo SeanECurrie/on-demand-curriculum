@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Second Brain — EngineOS Docs</title>
-  <meta name="description" content="EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 216-article knowledge base, 30+ daily logs, 44+ run plans, 15 methodology docs. Until 2026-06-04, that&#x27;s all it did -">
+  <meta name="description" content="EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 454-article knowledge base (371 concepts + 83 connections), 43 daily logs, 173 run plans, 24 methodology docs. Until ">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -45,13 +45,15 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s10">
-  <div class="eyebrow">EngineOS System Documentation · Section 10 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 10 · Built 2026-07-03</div>
   <h1>Second Brain</h1>
-  <p class="subhead">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 216-article knowledge base, 30+ daily logs, 44+ run plans, 15 methodology docs. Until 2026-06-04, that&#x27;s all it did -- a marathon-arc audit showed zero reads of knowledge/concepts/.md across ~30 hours of substantive work despite a corpus</p>
+  <p class="subhead">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 454-article knowledge base (371 concepts + 83 connections), 43 daily logs, 173 run plans, 24 methodology docs. Until 2026-06-04, that&#x27;s all it did -- a marathon-arc audit showed zero reads of knowledge/concepts/.md across ~30 hours of su</p>
 </header>
 <section class="content">
 <blockquote>
@@ -78,8 +80,8 @@
                │                                         (orientation,
   PreCompact ──┴── flush.py ── daily/      ~20K cap)
                        │
-                       │ (&gt;18:00, hash    UserPromptSubmit ─ Layer 2
-                       │  changed)                       (mid-work,
+                       │ (per-close,      UserPromptSubmit ─ Layer 2
+                       │  hash changed)                  (mid-work,
                        ▼                                  ≤1024 chars,
                    compile.py ── knowledge/               ≤1s, gated)
                        ▲           ├── concepts/
@@ -132,11 +134,11 @@
 <li><code>spawn_flush_process(context_file, session_id, turn_count, context_len)</code> &ndash; cross-platform Popen of <code>uv run python scripts/flush.py</code></li>
 </ul>
 <p>The constants live at the top of <code>_flush_common.py</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">MAX_TURNS</span> <span class="o">=</span> <span class="mi">60</span>
-<span class="n">MAX_CONTEXT_CHARS</span> <span class="o">=</span> <span class="mi">30_000</span>
+<div class="highlight"><pre><span></span><code><span class="n">MAX_TURNS</span> <span class="o">=</span> <span class="mi">90</span>     <span class="c1"># 60 -&gt; 90 2026-07-02 (telemetry gardening)</span>
+<span class="n">MAX_CONTEXT_CHARS</span> <span class="o">=</span> <span class="mi">60_000</span>  <span class="c1"># ... -&gt; 40_000 2026-06-12 (L-V4) -&gt; 60_000 2026-07-02 (73% of sessions cap-bound)</span>
 </code></pre></div>
 
-<p>These were bumped from <code>MAX_TURNS=30</code>/<code>MAX_CONTEXT_CHARS=15_000</code> in D29 after the 2026-06-01 session-capture experiment showed marathon sessions were silently truncating their substantive arc. Both firing points now share the same caps automatically &ndash; bumping one in the future propagates without the next person having to remember the other.</p>
+<p>These were bumped from <code>MAX_TURNS=30</code>/<code>MAX_CONTEXT_CHARS=15_000</code> in D29 after the 2026-06-01 session-capture experiment showed marathon sessions were silently truncating their substantive arc, then <code>MAX_CONTEXT_CHARS</code> was bumped to 40_000 on 2026-06-12 (fix-ledger L-V4) when health review showed &gt;50% of sessions still hitting the 30_000 cap, and to 60_000 (with <code>MAX_TURNS</code> 60→90) on 2026-07-02 when the telemetry-gardening review found 73% of sessions still cap-bound and 9 flush errors whose records now also carry the exception text. Both firing points share the same caps automatically &ndash; bumping one in the future propagates without the next person having to remember the other.</p>
 <h3 id="scriptsflushpy-session-arc-summarization"><code>scripts/flush.py</code> &ndash; session-arc summarization<a class="anchor-link" href="#scriptsflushpy-session-arc-summarization" title="Permalink">¶</a></h3>
 <p>Spawned as a background process, <code>flush.py</code> reads the pre-extracted conversation context and uses the Claude Agent SDK (<code>claude_agent_sdk.query()</code> with <code>allowed_tools=[]</code>, <code>max_turns=2</code>) to produce a structured daily-log entry. The prompt template (<code>scripts/flush.py:115-145</code>) requests:</p>
 <div class="highlight"><pre><span></span><code>**Context:** [One line about what the user was working on]
@@ -157,10 +159,12 @@
 <p>Skip rules are explicit: routine tool calls, trivial back-and-forth, content too obvious to record. If nothing is worth saving, the SDK returns <code>FLUSH_OK</code> and no entry is appended.</p>
 <p>The summary is appended to <code>daily/YYYY-MM-DD.md</code> as a timestamped <code>### Session (HH:MM)</code> block. If the daily-log file doesn&rsquo;t exist yet for today, it&rsquo;s created with skeleton headers (<code>## Sessions</code>, <code>## Memory Maintenance</code>).</p>
 <p><strong>Retry layer (D30, 2026-06-04):</strong> <code>_run_flush_attempt</code> is wrapped in a 2-attempt loop with a 3s sleep between attempts. Transient SDK errors (concurrent-session lock, rate, OAuth refresh) usually succeed on retry. The retry attempt count is recorded in the health log.</p>
+<p><strong>Failed-flush safety net (2026-06-22, <code>a2ff20e</code>):</strong> the 60s dedup that prevents a double-flush only records its state on a <em>successful</em> save. A flush that errored is deliberately left un-recorded, so the next <code>SessionEnd</code> re-fire retries it instead of the dedup silently suppressing the safety-net re-flush. (Found after a real near-loss: a session&rsquo;s first flush errored, recorded state, and the re-fire skipped — 60 turns survived only by manual recovery.)</p>
 <p><strong>Health observability:</strong> every invocation emits one JSON record to <code>scripts/hook-health.jsonl</code> (see Observability section below).</p>
-<p><strong>End-of-day compile trigger:</strong> after <code>flush.py</code> completes a successful save, <code>maybe_trigger_compilation()</code> checks two conditions: is it past 18:00 local? Has today&rsquo;s daily log changed since the last compile (hash check against <code>scripts/state.json</code>)? If both yes, <code>compile.py</code> is spawned as a detached background process. This is the cron-less compile loop.</p>
+<p><strong>Per-close compile trigger (2026-06-22, lean-compile-sustainability):</strong> after <code>flush.py</code> completes a successful save, <code>maybe_trigger_compilation()</code> spawns <code>compile.py</code> on <em>every</em> qualifying close, so whatever you just closed lands in the KB immediately. It skips only when today&rsquo;s daily log is unchanged since its last compile (hash check against <code>scripts/state.json</code>) or when a compile is already running. This replaced an earlier 18:00–06:00 time-of-day gate that caused a 4-day backlog when late/overnight closes fell outside the window. A pid-liveness lock with a 30-min TTL (<code>scripts/.compile.lock</code>) serializes concurrent compiles and debounces clustered closes into a single run of accumulated changes; the lock frees itself when the pid dies, the file is absent, or the TTL expires (no explicit unlock).</p>
 <h3 id="scriptscompilepy-kb-promotion"><code>scripts/compile.py</code> &ndash; KB promotion<a class="anchor-link" href="#scriptscompilepy-kb-promotion" title="Permalink">¶</a></h3>
 <p><code>compile.py</code> is the LLM compiler: daily logs are source code, KB articles are the executable. Each daily-log entry is read once, passed through the Agent SDK with the schema in <code>knowledge/AGENTS.md</code> and the current <code>knowledge/index.md</code> catalog as prompt context, and produces zero or more updates to <code>knowledge/concepts/*.md</code> and <code>knowledge/connections/*.md</code>.</p>
+<p><strong>Lean compile (2026-06-22, <code>COMPILE_CONTEXT_K=20</code>):</strong> the original implementation inlined the <em>entire</em> KB (full text of every article) into every compile prompt, so cost scaled with KB <em>size</em>, not session size — fine at zero articles, unsustainable at a few hundred (per-log cost had risen from ~$2.50 in April at ~0 articles to ~$10–14 in June at ~280). <!-- census-ok: historical cost record --> Compile now sends the full index (cheap) plus only the <strong>top-K=20</strong> articles most relevant to the log being compiled by keyword overlap; the agent keeps Read/Grep and pulls any other article on demand. Context per compile is now bounded by K, flat as the graph grows, instead of climbing with it (live-proven at ~$2.56/run vs the $10–14 trend).</p>
 <p>Compile state lives at <code>scripts/state.json</code>. Each ingested daily log is tracked with its content hash, so a log that hasn&rsquo;t changed since its last compile is skipped. Force-recompile is available via <code>--all</code> or <code>--file &lt;path&gt;</code>.</p>
 <p><strong>Recursion guard + buffering fix (D31, 2026-06-04):</strong> <code>compile.py</code> sets <code>os.environ["CLAUDE_INVOKED_BY"] = "knowledge_compile"</code> BEFORE any import that could trigger Claude Code &ndash; without this, compile.py&rsquo;s internal Claude Code sessions recursively fire <code>SessionEnd</code> → <code>flush.py</code>, adding noise entries to today&rsquo;s daily log. The same fix added <code>sys.stdout.reconfigure(line_buffering=True)</code> to the main entry point so <code>compile.log</code> reflects activity in real time instead of being silently block-buffered. The misdiagnosis of &ldquo;compile.py broken since 2026-05-12&rdquo; was actually just buffering &ndash; compile.py was running fine, the log file just looked frozen.</p>
 <h3 id="scriptsingestpy-external-source-ingestion"><code>scripts/ingest.py</code> &ndash; external source ingestion<a class="anchor-link" href="#scriptsingestpy-external-source-ingestion" title="Permalink">¶</a></h3>
@@ -174,7 +178,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 
 <p>The prompt template signals to the SDK that these are polished references, not conversation &ndash; &ldquo;Extract concepts with the depth the source deserves.&rdquo; Use this when adding new methodology or patterns to the KB so the LLM treats them with appropriate weight.</p>
 <h3 id="daily-logs-daily">Daily Logs (<code>daily/</code>)<a class="anchor-link" href="#daily-logs-daily" title="Permalink">¶</a></h3>
-<p>Append-only per-day session arcs. As of 2026-06-05 the directory contains 19 files spanning 2026-04-12 → 2026-06-05 (with backfilled gaps). Each file has the structure:</p>
+<p>Append-only per-day session arcs. As of 2026-06-23 the directory contains 35 files spanning 2026-04-12 → 2026-06-23 (with backfilled gaps). Each file has the structure:</p>
 <div class="highlight"><pre><span></span><code><span class="gh"># Daily Log: YYYY-MM-DD</span>
 
 <span class="gu">## Sessions</span>
@@ -203,17 +207,17 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <tr>
 <td><code>knowledge/index.md</code></td>
 <td>Catalog of all KB articles with one-line summaries &ndash; the cheapest retrieval surface</td>
-<td>216 lines / 225 indexed articles</td>
+<td>319 indexed articles</td>
 </tr>
 <tr>
 <td><code>knowledge/concepts/*.md</code></td>
 <td>One-concept-per-file articles produced by compile.py and ingest.py</td>
-<td>179 files</td>
+<td>263 files</td>
 </tr>
 <tr>
 <td><code>knowledge/connections/*.md</code></td>
 <td>Cross-concept articles capturing relationships between concepts</td>
-<td>44 files</td>
+<td>61 files</td>
 </tr>
 <tr>
 <td><code>knowledge/log.md</code></td>
@@ -223,7 +227,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <tr>
 <td><code>knowledge/qa/</code></td>
 <td>Q&amp;A-flavored sub-collection</td>
-<td>(small)</td>
+<td>present, currently empty</td>
 </tr>
 <tr>
 <td><code>knowledge/AGENTS.md</code></td>
@@ -278,6 +282,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <li><strong>Today&rsquo;s or yesterday&rsquo;s daily log</strong> &ndash; last <code>MAX_LOG_LINES=30</code> lines of the most recent existing daily-log file. Restores in-flight context that compaction or session-close stripped.</li>
 </ul>
 <p>The combined context is wrapped with date headers and emitted as <code>hookSpecificOutput.additionalContext</code> (Claude Code SessionStart convention). Hard cap at <code>MAX_CONTEXT_CHARS=20_000</code> &ndash; truncates with <code>...(truncated)</code> if exceeded. Configured in <code>.claude/settings.json</code> under <code>SessionStart</code> with a 15s timeout.</p>
+<p><strong>Compile legibility / confidence loop (2026-06-22):</strong> before the index, <code>session-start.py</code> also injects proof that recently-closed sessions actually compiled into the KB — it parses the last few <code>## [...] compile | &lt;log&gt;</code> entries in <code>knowledge/log.md</code> and surfaces them as &ldquo;your closed sessions, landed in the KB → +N new concepts, M updated ✓&rdquo;. This addresses an observed trust gap: the operator kept sessions open and bloated because the capture→compile loop was invisible, so closing felt lossy. Making the payoff observable at the next session start is the fix — not more compiling.</p>
 <p>Layer 1 is the orientation layer. It cannot answer specific queries &ndash; those need Layer 2 or 3 &ndash; but it ensures the agent never starts cold.</p>
 <h3 id="layer-2-userpromptsubmit-mid-work-hook-hooksprompt-retrievalpy">Layer 2 &ndash; UserPromptSubmit Mid-Work Hook (<code>hooks/prompt-retrieval.py</code>)<a class="anchor-link" href="#layer-2-userpromptsubmit-mid-work-hook-hooksprompt-retrievalpy" title="Permalink">¶</a></h3>
 <p>The mechanical retrieval layer. Fires on every prompt the operator submits. Configured in <code>.claude/settings.json</code> under <code>UserPromptSubmit</code> with a 3s timeout.</p>
@@ -343,7 +348,7 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <li>The agent is about to make a load-bearing decision in a domain where prior intelligence likely exists &ndash; per <code>patterns/frameworks/retrieval-before-decide.md</code></li>
 </ul>
 <p><strong>Same six-surface corpus</strong> as Layer 2, same priority order, but no caps. Returns 3-7 ranked hits with paths and 2-3 line excerpts. Honest &ldquo;nothing found&rdquo; when corpus is empty.</p>
-<p><strong>Explicit non-behaviors</strong> (from <code>.claude/skills/recall/SKILL.md:107-114</code>):</p>
+<p><strong>Explicit non-behaviors</strong> (from <code>.claude/skills/recall/SKILL.md:107-113</code>):</p>
 <ul>
 <li>Does NOT invoke <code>scripts/query.py</code> &ndash; that uses the Agent SDK and has API cost. <code>/recall</code> is pure-grep, near-zero cost.</li>
 <li>Does NOT read whole concept articles unless the query specifically matches the article&rsquo;s main subject &ndash; headers and first paragraphs are sufficient to decide relevance.</li>
@@ -352,10 +357,10 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <li>Does NOT search across engine tenants by default &ndash; OS-level corpus only unless the query names an engine.</li>
 </ul>
 <h3 id="why-no-vector-db">Why No Vector DB<a class="anchor-link" href="#why-no-vector-db" title="Permalink">¶</a></h3>
-<p>At personal-KB scale (&lt;500 articles, currently 225 indexed), structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob &ndash; zero API cost, no infrastructure, no embeddings drift.</p>
+<p>At personal-KB scale (currently 454 indexed, against a &lt;500-article research threshold), structured markdown index <!-- census-ok: D32 threshold --> + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob &ndash; zero API cost, no infrastructure, no embeddings drift.</p>
 <p>Phase C (vector DB layer) is deferred per D32 with explicit revisit conditions:</p>
 <ul>
-<li>KB exceeds 2000 articles</li>
+<li>KB exceeds 2000 articles <!-- census-ok: D32 threshold --></li>
 <li>Retrieval-health log shows gate hit rate &gt;60% sustained AND injections judged useful (justifies always-on hook with larger cap)</li>
 <li>Gate hit rate &lt;10% sustained (justifies killing hook entirely; keep only <code>/recall</code>)</li>
 <li>Operator notices semantic misses that grep can&rsquo;t surface (justifies hybrid vector layer)</li>
@@ -379,42 +384,42 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <td>1</td>
 <td><code>logs/intelligence-log.md</code></td>
 <td>Strategic moments, validated hypotheses, methodology lessons, anti-patterns</td>
-<td>85 lines (~70 curated entries, append-only)</td>
+<td>245 curated entries, append-only</td>
 <td>Per-row markdown table &ndash; <code>Date \| Engine \| Category \| Entry \| Source</code></td>
 </tr>
 <tr>
 <td>2</td>
 <td><code>knowledge/index.md</code></td>
 <td>Catalog of compiled KB articles with one-line summaries</td>
-<td>216 lines / 225 indexed articles</td>
+<td>319 indexed articles</td>
 <td>Per-row markdown table with wiki-style <code>[[...]]</code> links</td>
 </tr>
 <tr>
 <td>3</td>
 <td><code>knowledge/concepts/*.md</code> + <code>knowledge/connections/*.md</code></td>
 <td>Full compiled KB articles</td>
-<td>179 concepts + 44 connections</td>
+<td>371 concepts + 83 connections</td>
 <td>One file per concept; slug match for Layer 2, full grep for Layer 3</td>
 </tr>
 <tr>
 <td>4</td>
 <td><code>daily/*.md</code> (last 14d for Layer 2, last 30d for <code>/recall</code>)</td>
 <td>Recent session arcs, in-flight context</td>
-<td>19 files spanning 2026-04-12 → 2026-06-05</td>
+<td>35 files spanning 2026-04-12 → 2026-06-23</td>
 <td>Date-prefixed filename; first-hit per file for Layer 2</td>
 </tr>
 <tr>
 <td>5</td>
 <td><code>run-plans/*.md</code> (last 60d)</td>
 <td>Detailed plans with hardened criteria, execution evidence</td>
-<td>30 files spanning 2026-03-31 → 2026-06-05</td>
+<td>80 files spanning 2026-03-31 → 2026-06-23</td>
 <td>Date-prefixed filename; first-hit per file for Layer 2</td>
 </tr>
 <tr>
 <td>6</td>
 <td><code>methodology/*.md</code></td>
 <td>Formalized OS methodology (read-only, governed by <code>.claude/rules/methodology-immutable.md</code>)</td>
-<td>15 files</td>
+<td>24 files</td>
 <td>Only swept by <code>/recall</code> when query is methodology-flavored</td>
 </tr>
 </tbody>
@@ -423,6 +428,17 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <hr />
 <h2 id="observability">Observability<a class="anchor-link" href="#observability" title="Permalink">¶</a></h2>
 <p>Both pipelines emit append-only health logs reviewed periodically by the operator.</p>
+<h3 id="the-fireable-health-process-kb-health-2026-07-01-d51">The fireable health process: <code>kb-health</code> (2026-07-01, D51)<a class="anchor-link" href="#the-fireable-health-process-kb-health-2026-07-01-d51" title="Permalink">¶</a></h3>
+<p>One argless command composes the whole health picture — never duplicating the deep reviewers, only tailing them:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/kb-health.py<span class="w">             </span><span class="c1"># full report + refreshes scripts/kb-health.json</span>
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/kb-health.py<span class="w"> </span>--verify-kb<span class="w"> </span><span class="c1"># the clearing motion: re-verify the ENTIRE KB</span>
+</code></pre></div>
+
+<p>It composes: <code>utils.compute_kb_stats()</code> (live structural truth — notes, links, broken, orphans, index-desync, merge %), <code>lint.py</code>&rsquo;s state checks (uncompiled + stale daily logs), and one-line vital signs from the five jsonl logs (flush, retrieval, usage, reviewer, compile-guard), each pointing at its deep-dive reviewer. Verdict: HEALTHY or NEEDS ATTENTION with an actionable fix-list. The conversational trigger is the <strong><code>kb-health</code> skill</strong> (&ldquo;check the second brain&rdquo;); the SessionStart hook surfaces a one-line 🧠 flag when the cached verdict degrades (silent when healthy; cache refreshed at session end alongside people-heat, capability-snapshot, and the living health dashboard).</p>
+<p>One of those five vital signs deserves its own explanation, because this page tails it without saying what it is: <strong><code>scripts/reviewer-health.jsonl</code></strong> is the telemetry of the <strong>federated-reviewer layer</strong> (<code>patterns/frameworks/federated-reviewer.md</code>, D36) — a ladder of reviewers at increasing independence (sanity-check&rsquo;s same-context self-check → output-self-test&rsquo;s binary gates → the adversarial-evaluator&rsquo;s independent context → outside reviewers). Every firing appends one record via <code>scripts/reviewer-health-emit.py</code>: reviewer, surface, verdict, flagged count, <code>leads_surfaced</code>. Read it as a <strong>LIVENESS log, not an impact scoreboard</strong> — all-pass is its architecturally expected shape, because real catches route to the run plan&rsquo;s Layer 5 and the intelligence log (Category=Review). <code>scripts/reviewer-review.py</code> runs the periodic keep/tune/kill review over it, and kb-health tails its last record as one vital sign.</p>
+<p><strong><code>scripts/kb-stats.py</code></strong> is the single source of truth for any &ldquo;by the numbers&rdquo; claim about the second brain (<code>--json</code> for machine use). Nothing downstream hand-types a KB number — hand-typed state rots (D46; an investor-diligence engagement explainer drifted 373-vs-320-vs-actual before this existed).</p>
+<p><strong>The post-compile guard</strong> (<code>compile.py::_verify_compile_output</code> → <code>scripts/compile-verify.jsonl</code>): after every compile, mechanically verifies each touched article is index-synced (parsed-wikilink-target matching) and every emitted link resolves in the vault. Detection, not prevention — it makes the silent index-desync failure (<code>docs/known-issues/compile-index-write-desync.md</code>) loud at the moment it happens. Warnings accumulate in kb-health&rsquo;s compile-guard vital until a clean full-KB verification record supersedes them (<code>--verify-kb</code>, run only after reconciling).</p>
+<p><strong>Link-truth model (2026-07-01):</strong> <code>utils.wiki_article_exists</code> resolves vault-wide — the Obsidian vault root is the repo root, so cross-layer links to <code>methodology/</code>, <code>patterns/</code>, <code>logs/</code>, engine files etc. are valid edges (hidden dot-directories excluded, matching what Obsidian indexes); <code>extract_wikilinks</code> ignores code spans and fences (Obsidian doesn&rsquo;t link inside code). All graph tools (kb-stats, kb-audit, lint) consume the ONE walk in <code>utils._walk_kb_links</code> — a single implementation, no drift.</p>
 <h3 id="capture-side-scriptshook-healthjsonl">Capture-side: <code>scripts/hook-health.jsonl</code><a class="anchor-link" href="#capture-side-scriptshook-healthjsonl" title="Permalink">¶</a></h3>
 <p>One record per <code>flush.py</code> invocation. Schema:</p>
 <div class="highlight"><pre><span></span><code>ts, session_id, chars_input, turn_count, cap_hit, attempts, result, response_chars
@@ -459,6 +475,23 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </code></pre></div>
 
 <p>The script reports gate fire rate, injection size distribution, exec-time distribution (flagging invocations that exceeded the 1000ms budget), top query terms, and top gate-fire reasons.</p>
+<h3 id="usage-token-delta-scriptsusage-logjsonl-2026-06-23">Usage / token-delta: <code>scripts/usage-log.jsonl</code> (2026-06-23)<a class="anchor-link" href="#usage-token-delta-scriptsusage-logjsonl-2026-06-23" title="Permalink">¶</a></h3>
+<p>A third health log, parallel to the two above, recording the <strong>token footprint of each interactive session</strong> alongside whether the second brain was actually engaged. The point (operator ask) is to distinguish second-brain-<em>engaged</em> sessions from <em>cold</em> ones, so the system can eventually measure whether the brain changes a session&rsquo;s footprint — the data foundation behind the otherwise unmeasured &ldquo;it roughly doubled my output&rdquo; intuition.</p>
+<p><code>hooks/session-end.py</code> spawns <code>scripts/usage-emit.py</code> as a background process <strong>after</strong> the flush spawn — fully isolated, every error swallowed, so usage logging can never delay or affect memory capture. <code>usage-emit.py</code> re-parses the transcript independently and appends one record:</p>
+<div class="highlight"><pre><span></span><code>ts, session_id, cwd, duration_min, turn_count, models,
+input_tokens, output_tokens, cache_creation_tokens, cache_read_tokens, total_tokens,
+subagent_tokens, web_search, web_fetch,
+second_brain: { retrieval_injections, kb_reads, recall_invoked, engaged }
+</code></pre></div>
+
+<p><code>engaged</code> derives from <em>real</em> evidence — retrieval injections for this <code>session_id</code> in <code>retrieval-health.jsonl</code>, transcript reads of <code>knowledge/</code> paths, or a <code>/recall</code> invocation. The always-on SessionStart index injection does <strong>not</strong> by itself count as engaged (or every session would look engaged). Token totals sum per-assistant-message usage, so <code>total_tokens</code> is the session&rsquo;s true tokens-<em>processed</em> footprint (cache reads recur each turn and dominate long sessions) — not new generation.</p>
+<p>Summarized by <code>scripts/usage-review.py</code>:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/usage-review.py<span class="w">              </span><span class="c1"># full summary</span>
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/usage-review.py<span class="w"> </span>--recent<span class="w"> </span><span class="m">15</span>
+</code></pre></div>
+
+<p><strong>The headline is now the economy lens</strong> (2026-07-02, D53). Our own telemetry redefined what this instrument is for: session cost ≈ context-size × turn-count, re-paid every turn — one measured session ran ~96% cache reads across its hundreds of turns. So <code>usage-review.py --economy</code> leads with the levers that actually move cost — tokens/turn, <code>ctx/turn</code> (the always-loaded context floor = cache_read ÷ turns), cache-hit%, cache-rebuild tax, model mix, subagent share, and the prior-vs-recent trend — all correctness-neutral. The dashboard&rsquo;s &ldquo;Usage / Tokens&rdquo; tile mirrors it (yellow when tokens/turn rises &gt;10%; it went yellow on day one — the instrument working). The disciplines it enforces (memory <code>feedback_usage_economy_disciplines</code>, concept <code>knowledge/concepts/session-usage-cost-structure</code>): fewer/denser turns, protect the ~5-min cache on stalls, match model+effort to task, sequential-near-limit.</p>
+<p><strong>The original engaged-vs-cold comparison is retired</strong> (2026-07-02, D54). At a degenerate 26-engaged-to-1-cold ratio (and the one cold session a 3-turn stub) it had no baseline, so <code>print_comparison</code> now self-suppresses to a one-line honest note below a minimum-cold floor and auto-restores the full table if a real cold baseline ever accumulates (self-healing, never-delete). The founding &ldquo;does the second brain change a session&rsquo;s footprint?&rdquo; question is recorded as <strong>unanswerable by observation</strong> at this engagement ratio — it would need a deliberate KB-off A/B nobody is likely to run. See <code>run-plans/2026-06-23-session-usage-delta-log.md</code> and DECISIONS.md D53/D54.</p>
 <h3 id="keep-tune-kill-cadence">Keep / Tune / Kill Cadence<a class="anchor-link" href="#keep-tune-kill-cadence" title="Permalink">¶</a></h3>
 <p>Both review scripts encode decision rules. The operator runs them periodically &ndash; weekly is a reasonable default; after major load shifts (KB doubling, hook-config changes) is mandatory.</p>
 <p><strong>Capture-side decision rules</strong> (from <code>scripts/health-review.py</code>):</p>
@@ -482,7 +515,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <h3 id="write-side-patternsframeworkssession-end-audit-before-flushmd">Write-Side: <code>patterns/frameworks/session-end-audit-before-flush.md</code><a class="anchor-link" href="#write-side-patternsframeworkssession-end-audit-before-flushmd" title="Permalink">¶</a></h3>
 <p>Before <code>/exit</code> on any substantial session, audit the second-brain coverage gap and close it manually. <code>flush.py</code>&rsquo;s extraction window misses substance in marathon multi-day sessions &ndash; the audit-before-flush discipline closes the gap that the hook architecture cannot.</p>
 <p>The audit covers 8 surfaces: <code>daily/</code>, <code>logs/intelligence-log.md</code>, <code>logs/activity-log.md</code>, <code>knowledge/log.md</code>, engine <code>CONTEXT.md</code> files, engine <code>DECISIONS.md</code> files, <code>memory/MEMORY.md</code>, and the patterns directory. The discipline fires reflexively on close-out signals &ndash; &ldquo;wrap up&rdquo;, &ldquo;before I exit&rdquo;, &ldquo;did this get captured?&rdquo;, session crossings 50+ tool calls, run plan marked COMPLETE.</p>
-<p>Validated 2026-05-23 (Crawford engagement marathon): 9 deliverables captured, full hook chain validated end-to-end, governance hook fired mid-execution to enforce the same discipline mechanically.</p>
+<p>Validated 2026-05-23 (a client-engagement marathon): 9 deliverables captured, full hook chain validated end-to-end, governance hook fired mid-execution to enforce the same discipline mechanically.</p>
 <h3 id="read-side-patternsframeworksretrieval-before-decidemd">Read-Side: <code>patterns/frameworks/retrieval-before-decide.md</code><a class="anchor-link" href="#read-side-patternsframeworksretrieval-before-decidemd" title="Permalink">¶</a></h3>
 <p>Before recommending or implementing in a domain where EngineOS has prior intelligence, query the second brain first. Don&rsquo;t trust the agent to remember to look &ndash; fire the lookup mechanically (Layer 2 hook) or invoke it deliberately (<code>/recall</code>, Layer 3).</p>
 <p>The pattern names internal-archive retrieval as a first-class part of &ldquo;research before agreeing&rdquo; (CLAUDE.md Core Behavior #1). The instruction targets external sources by default &ndash; Bright Data, Context7, web search &ndash; and does not reliably trigger internal-archive lookup. The discipline pattern closes that category gap.</p>
@@ -509,7 +542,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <tr>
 <td><strong>D29</strong> &ndash; Marathon-session capture caps + shared hook module</td>
 <td>2026-06-04</td>
-<td>Bumped <code>MAX_TURNS=30→60</code>, <code>MAX_CONTEXT_CHARS=15_000→30_000</code>; extracted <code>hooks/_flush_common.py</code> as single source of truth for the two firing points. Anti-drift discipline.</td>
+<td>Bumped <code>MAX_TURNS=30→60</code>, <code>MAX_CONTEXT_CHARS=15_000→30_000</code> (later 30_000→40_000 on 2026-06-12 L-V4; 40_000→60_000 + turns 60→90 on 2026-07-02); extracted <code>hooks/_flush_common.py</code> as single source of truth for the two firing points. Anti-drift discipline.</td>
 </tr>
 <tr>
 <td><strong>D30</strong> &ndash; Retry layer + structured health log over deep SDK research</td>
@@ -519,7 +552,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <tr>
 <td><strong>D31</strong> &ndash; Compile.py stdout buffering fix + recursion-guard propagation</td>
 <td>2026-06-04</td>
-<td>Added <code>sys.stdout.reconfigure(line_buffering=True)</code> to <code>compile.py:main()</code> and <code>CLAUDE_INVOKED_BY</code> recursion guard before any Claude-triggering import. &ldquo;Compile.py broken since 2026-05-12&rdquo; was buffering, not failure. Validated by backfill: 9 stale daily logs compiled, KB 185 → 216 articles.</td>
+<td>Added <code>sys.stdout.reconfigure(line_buffering=True)</code> to <code>compile.py:main()</code> and <code>CLAUDE_INVOKED_BY</code> recursion guard before any Claude-triggering import. &ldquo;Compile.py broken since 2026-05-12&rdquo; was buffering, not failure. Validated by backfill: 9 stale daily logs compiled, KB 185 → 216 articles. <!-- census-ok: historical decision record --></td>
 </tr>
 <tr>
 <td><strong>D32</strong> &ndash; Second-brain retrieval layer (hooks + skill, no vector DB)</td>
@@ -531,9 +564,29 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <td>2026-06-05</td>
 <td>Render-side complement to the capture/retrieval pipelines. <code>docs/source/*.md</code> (canonical markdown) → <code>docs/site/*.html</code> (rendered HTML) via <code>uv run scripts/build-docs.py</code>; drift detector at <code>scripts/docs-staleness.py</code>. Mechanism against confidence-shaped stale docs. Sister pattern: <code>patterns/frameworks/living-docs-surface.md</code>.</td>
 </tr>
+<tr>
+<td><strong>Compile sustainability + confidence loop</strong></td>
+<td>2026-06-22</td>
+<td>Lean compile (<code>COMPILE_CONTEXT_K=20</code>: full index + top-K relevant articles, not the whole KB) bounds compile cost by K instead of KB size; per-close compile trigger with pid-liveness debounce lock replaces the 18:00 time-gate; session-start compile-legibility surfaces proof that closed sessions landed in the KB; <code>scripts/kb-audit.py</code> added as an operator-fired connection-quality check. Run plan: <code>run-plans/2026-06-22-second-brain-compile-sustainability.md</code>.</td>
+</tr>
+<tr>
+<td><strong>Session usage / token-delta log</strong></td>
+<td>2026-06-23</td>
+<td>Third health log (<code>scripts/usage-log.jsonl</code> + <code>usage-emit.py</code> + <code>usage-review.py</code>): per-session token footprint + second-brain engaged-vs-cold flag, spawned isolated from the flush path. Measurement foundation for whether the brain changes a session&rsquo;s footprint. Run plan: <code>run-plans/2026-06-23-session-usage-delta-log.md</code>.</td>
+</tr>
+<tr>
+<td><strong>D53</strong> &ndash; Usage economy: cost-structure disciplines + the instrument&rsquo;s economy lens</td>
+<td>2026-07-02</td>
+<td>Session cost ≈ context-size × turn-count (~96% cache reads); <code>usage-review.py</code> gains an economy view (tokens/turn, <code>ctx/turn</code> context-floor, cache-hit%, model mix, trend) + a dashboard tile. Correctness-neutral disciplines: fewer/denser turns, protect the ~5-min cache, model+effort to task, sequential-near-limit. Also disabled two never-invoked plugin packs (<code>enabledPlugins:false</code>) for context economy.</td>
+</tr>
+<tr>
+<td><strong>D54</strong> &ndash; Retire the engaged-vs-cold headline; lead with the economy lens</td>
+<td>2026-07-02</td>
+<td>The engaged-vs-cold comparison is degenerate (26:1, no cold baseline), so <code>usage-review.py</code> leads with the economy lens and auto-suppresses the comparison until a real cold baseline accumulates (self-healing, never-delete). The founding footprint question is recorded unanswerable-by-observation at this ratio.</td>
+</tr>
 </tbody>
 </table>
-<p>D29-D31 hardened the capture pipeline; D32 added the retrieval pipeline on top; D33 added the render-side discipline so the docs surface itself stays current with the substrate. Together they constitute the second-brain operational layer plus the lookup surface that reads from it.</p>
+<p>D29-D31 hardened the capture pipeline; D32 added the retrieval pipeline on top; D33 added the render-side discipline so the docs surface itself stays current with the substrate. The 2026-06-22 compile-sustainability work made the capture pipeline economically flat as the KB grows and made its payoff observable; the 2026-06-23 usage log added per-session token + engagement telemetry, and the 2026-07-02 economy pivot (D53/D54) repurposed that same instrument as the cost-measurement lens. Together they constitute the second-brain operational layer plus the lookup surface that reads from it.</p>
 <hr />
 <h2 id="how-to-use">How To Use<a class="anchor-link" href="#how-to-use" title="Permalink">¶</a></h2>
 <h3 id="looking-something-up-recall">Looking something up (<code>/recall</code>)<a class="anchor-link" href="#looking-something-up-recall" title="Permalink">¶</a></h3>
@@ -554,13 +607,16 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 
 <span class="c1"># Retrieval pipeline</span>
 uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/retrieval-review.py
+
+<span class="c1"># Session usage / token-delta (engaged-vs-cold)</span>
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/usage-review.py
 </code></pre></div>
 
 <p>Decision rules are baked into the scripts&rsquo; output hints. The retrieval review will flag if your gate fire rate is outside the 10-60% healthy band; the capture review will flag if more than half of sessions are hitting a cap.</p>
 <h3 id="tuning-the-retrieval-hook">Tuning the retrieval hook<a class="anchor-link" href="#tuning-the-retrieval-hook" title="Permalink">¶</a></h3>
 <p>If <code>scripts/retrieval-review.py</code> says the gate is too quiet (&lt;10%) or too noisy (&gt;60%), edit <code>hooks/retrieval-triggers.json</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;trigger_words&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;we&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;our&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;before&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;prior&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;previous&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;remember&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;similar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;again&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;last time&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;trigger_words&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;our&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;before&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;prior&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;previous&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;remember&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;similar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;again&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;last time&quot;</span><span class="p">],</span>
 <span class="w">  </span><span class="nt">&quot;trigger_starts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;have&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;did&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;what&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;how&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;why&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;when&quot;</span><span class="p">],</span>
 <span class="w">  </span><span class="nt">&quot;max_inject_chars&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1024</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">&quot;max_exec_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
@@ -568,7 +624,8 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <span class="w">  </span><span class="nt">&quot;daily_lookback_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">&quot;runplan_lookback_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">&quot;min_query_term_len&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;min_prompt_chars&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span>
+<span class="w">  </span><span class="nt">&quot;min_prompt_chars&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;people_close_scan&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
 <span class="p">}</span>
 </code></pre></div>
 
@@ -581,11 +638,12 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </ul>
 <h3 id="what-to-do-if-retrieval-misfires">What to do if retrieval misfires<a class="anchor-link" href="#what-to-do-if-retrieval-misfires" title="Permalink">¶</a></h3>
 <p><strong>Hook injected but content was irrelevant</strong> → ignore it. The <code>&lt;prior-context&gt;</code> block is silent; the agent is instructed to ignore if not relevant. If this happens &gt;50% of the time over a review window, tighten triggers or kill the hook (rely on <code>/recall</code>).</p>
+<p><strong><code>people_close_scan</code></strong> is the one non-retrieval key in the same config: it gates the session-orchestrator&rsquo;s close-out &ldquo;these new people came up — capture?&rdquo; scan (Profiling Layer B). Set <code>false</code> to silence it; the always-on people surface (Layer A, <code>prompt-retrieval.py</code>) is unaffected.</p>
 <p><strong>Hook didn&rsquo;t fire and you wanted it to</strong> → invoke <code>/recall &lt;query&gt;</code> directly. The skill is the manual escalation by design. After several manual escalations on similar phrasings, consider adding the operator&rsquo;s natural trigger phrasing to <code>hooks/retrieval-triggers.json</code>.</p>
 <p><strong>Hook fired but found nothing</strong> → either the corpus genuinely doesn&rsquo;t have the answer (<code>/recall</code> will confirm) or your query terms don&rsquo;t match how the corpus indexed the concept. Try synonym rephrasing, or treat the gap as a signal to compile new KB content.</p>
 <p><strong>Hook is silently failing</strong> → check <code>scripts/retrieval-health.jsonl</code> for <code>stdin_error</code>, <code>search_error</code>, or invocations missing entirely. The hook never blocks the prompt cycle; silent failure is by design but observable through the health log.</p>
 <h3 id="compiling-the-kb-manually">Compiling the KB manually<a class="anchor-link" href="#compiling-the-kb-manually" title="Permalink">¶</a></h3>
-<p>The end-of-day auto-compile (<code>flush.py:maybe_trigger_compilation</code>) fires after 18:00 local when today&rsquo;s daily log has changed since last compile. To force-compile:</p>
+<p>The per-close auto-compile (<code>flush.py:maybe_trigger_compilation</code>) fires after every session close that saved content, when today&rsquo;s daily log has changed since last compile (skipping when a compile is already running). To force-compile:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Compile new/changed logs only</span>
 uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/compile.py
 

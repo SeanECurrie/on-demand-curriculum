@@ -45,11 +45,13 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s11">
-  <div class="eyebrow">EngineOS System Documentation · Section 11 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 11 · Built 2026-07-03</div>
   <h1>Integrations</h1>
   <p class="subhead">EngineOS integrates with external systems through a layered architecture: MCP (Model Context Protocol) servers provide tool-level access, skills encode domain logic and workflow orchestration, and direct API scripts handle operations where MCP falls short. Seven skills and a Node.js utility suite cover the two primary </p>
 </header>
@@ -199,7 +201,7 @@ attio-mapper ──&gt; attio-qualify
 </ol>
 <hr />
 <h3 id="direct-api-layer">Direct API Layer<a class="anchor-link" href="#direct-api-layer" title="Permalink">¶</a></h3>
-<p>The <code>scripts/attio/</code> directory contains a production REST API client suite that exists because the Attio MCP server has known bugs. Four zero-dependency Node.js scripts (built-ins only &ndash; <code>https</code>, <code>fs</code>, <code>path</code>):</p>
+<p>The OS-root <code>scripts/attio/</code> directory contains a production REST API client suite that exists because the Attio MCP server has known bugs. It is shared across all engines &ndash; the Attio skills point at root <code>scripts/attio/</code>, and engines do not carry local <code>scripts/attio/</code> copies (engine-specific field mappings and overrides live in <code>engines/&lt;engine&gt;/integrations/attio/config/</code>, not in the scripts). The suite is zero-dependency Node.js (built-ins only &ndash; <code>https</code>, <code>fs</code>, <code>path</code>): four core utilities plus three engagement-specific batch scripts (<code>ivrha-*.js</code>) and a README. The core four:</p>
 <table>
 <thead>
 <tr>
@@ -252,7 +254,7 @@ attio-mapper ──&gt; attio-qualify
 - Generates <code>databases.py</code> as the primary reference: database ID constants, per-database property maps with types, select options, relation targets (showing both human-readable title and machine-usable ID), rollup sources (marked read-only), and working create/query examples.</p>
 <p><strong>MCP tools used:</strong>
 - <code>mcp__claude_ai_Notion__notion-search</code>, <code>notion-fetch</code>, <code>notion-query-database-view</code></p>
-<p><strong>Output location:</strong> <code>engines/&lt;engine&gt;/config/notion/playbook/</code> &ndash; <code>workspace-map.json</code>, <code>databases.py</code>, <code>relations.md</code>, <code>pitfalls.md</code>, <code>changelog.md</code>, <code>_meta.json</code>.</p>
+<p><strong>Output location:</strong> <code>engines/&lt;engine&gt;/integrations/notion/playbook/</code> &ndash; <code>workspace-map.json</code>, <code>databases.py</code>, <code>relations.md</code>, <code>pitfalls.md</code>, <code>changelog.md</code>, <code>_meta.json</code>.</p>
 <p><strong>Scripts:</strong> <code>map_workspace.py</code>, <code>workspace_mapper.py</code>, <code>playbook_generator.py</code>, <code>change_detector.py</code>, <code>formatters.py</code>, <code>notion_client.py</code> &ndash; all in <code>.claude/skills/notion-mapper/scripts/</code>.</p>
 <hr />
 <h4 id="notion-ops-readwrite-operations">notion-ops &ndash; Read/Write Operations<a class="anchor-link" href="#notion-ops-readwrite-operations" title="Permalink">¶</a></h4>
@@ -313,8 +315,45 @@ attio-mapper ──&gt; attio-qualify
 <p><strong>AI-managed properties are READ-ONLY.</strong> Notion AI manages certain properties (task suggestions, project next steps, meeting summaries, action items). These are marked <code>DO NOT WRITE</code> in the playbook. Scripts can read them to extract insights but never write to them &ndash; doing so would conflict with Notion AI&rsquo;s management.</p>
 <p><strong>Two-way relations: set one side, the other auto-populates.</strong> When Notion relations are configured as two-way, setting a Task&rsquo;s <code>Project</code> field automatically updates the Project&rsquo;s <code>Tasks</code> list. The playbook documents which relations are two-way so scripts don&rsquo;t redundantly set both sides.</p>
 <p><strong>Workspace context as configuration, not embedded knowledge.</strong> The WondaKB engine proved that providing workspace context (known databases, AI-managed properties, domain patterns) dramatically improves mapping quality. This insight was lifted to the OS level: any engine can provide a <code>workspace-context.md</code> file, and the mapper uses it as an accelerator. The skill itself contains zero workspace-specific knowledge.</p>
-<p><strong>Credentials are engine-scoped.</strong> Each engine provides its own Notion credentials at <code>engines/&lt;engine&gt;/config/notion/credentials.json</code> (or the path specified in engine config). Different engines can connect to different Notion workspaces.</p>
+<p><strong>Credentials are engine-scoped.</strong> Each engine provides its own Notion credentials at <code>engines/&lt;engine&gt;/integrations/notion/config/notion-credentials.json</code> (or the path specified in engine config). Different engines can connect to different Notion workspaces.</p>
 <p><strong>API version pinning and a known breaking change.</strong> Notion&rsquo;s API is versioned via the <code>Notion-Version</code> header. The current playbook scripts pin to <code>2022-06-28</code>. A D27 adjacent finding flagged a breaking change in Notion API versions released after 2026-03-11: the <code>archived</code> boolean property was renamed to <code>in_trash</code>. Code on the older pinned version continues to work, but mappers and ops scripts that auto-upgrade or copy current Notion docs may break on the rename. When refreshing the playbook or generating new query/filter code, verify which field name the active <code>Notion-Version</code> expects.</p>
+<hr />
+<h2 id="hosting-access-control-cloudflare">Hosting &amp; Access Control (Cloudflare)<a class="anchor-link" href="#hosting-access-control-cloudflare" title="Permalink">¶</a></h2>
+<p>The newest integration domain (D41, 2026-06-24; skill crystallized 2026-06-27 from 3 real reps): <strong>private-by-default hosting</strong> for client deliverables. The old default — GitHub Pages, public to anyone with the URL — was fine for showcases and wrong for real client/relationship work. The stack: <strong>private GitHub repo → Cloudflare Pages → Cloudflare Access email-OTP gate</strong>, so a deliverable is visible only to identities the operator has explicitly allowed.</p>
+<h3 id="the-churchstate-boundary">The Church/State Boundary<a class="anchor-link" href="#the-churchstate-boundary" title="Permalink">¶</a></h3>
+<p>The defining safety property is a <strong>token boundary</strong>: the agent-side deploy credential is a <strong>Pages:Edit-only token</strong>. It can push bytes to an existing Pages project; it <strong>provably cannot</strong> touch the Access gate, policies, or who-can-see-what (verified empirically by failing Workers/Access API probes). Content flows through the agent; <em>access control never does</em>. Standing up a NEW gated project — creating the Access application, the allow-policies, the OTP gate — is the <strong>operator&rsquo;s by-hand act, by design</strong> (<code>docs/plans/2026-06-24-cloudflare-by-hand-setup.md</code>). Sharing with a new person means the operator adds an <code>allow-&lt;who&gt;</code> policy: a deliberate who-can-see-what decision each time.</p>
+<h3 id="the-pieces">The Pieces<a class="anchor-link" href="#the-pieces" title="Permalink">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Piece</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gated-deploy</code> skill</td>
+<td>The content path: re-deploy updated bytes to an EXISTING gated project. Runs the locked deploy sequence and ends by <strong>proving the gate still bounces a logged-out visitor</strong> (the verify battery is part of the motion).</td>
+</tr>
+<tr>
+<td><code>scripts/cloudflare/</code></td>
+<td>The mechanical floor: <code>deploy.py</code>, <code>verify.py</code>, <code>guard.py</code>, <code>cf_api.py</code> guarded wrappers + <code>known-bugs.md</code>. The skill drives these, never raw API calls.</td>
+</tr>
+<tr>
+<td><code>patterns/frameworks/private-gated-static-hosting.md</code></td>
+<td>The as-built pattern: full stack, locked deploy sequence pointer, gotchas.</td>
+</tr>
+<tr>
+<td>Credentials</td>
+<td><code>keys.env</code>, out of repo and gitignored — never committed, never logged, per Operator Protection. Token roll is a standing operator to-do whenever a credential ages out.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="known-gotcha-known-bugs-3">Known Gotcha (known-bugs #3)<a class="anchor-link" href="#known-gotcha-known-bugs-3" title="Permalink">¶</a></h3>
+<p>Account-scoped <code>cfat_</code> tokens falsely read &ldquo;invalid&rdquo; via the generic <code>/user/tokens/verify</code> endpoint. Validate against the Pages <strong>project</strong> endpoint instead — the generic verifier is the wrong oracle for account-scoped tokens.</p>
+<hr />
+<h2 id="local-model-integration-transcribe">Local-Model Integration: transcribe<a class="anchor-link" href="#local-model-integration-transcribe" title="Permalink">¶</a></h2>
+<p>Not every integration is a SaaS. The <code>transcribe</code> skill wraps <code>scripts/transcribe.py</code> — <strong>MLX Whisper on Apple Silicon</strong> — turning audio/video into text <strong>entirely on-device</strong>: no subscription, no upload, only model <em>weights</em> are ever downloaded. It is the front half of the intake pipeline (audio→text) and chains to <code>transcript-processor</code> (text→intelligence), which is what makes &ldquo;just send a voice memo&rdquo; a first-class engagement intake. Lifted and upgraded from the un-lifted WondaKB <code>video-recording-to-transcript</code> capability (2026-06-25).</p>
 <hr />
 <h2 id="mcp-tool-scoping">MCP Tool Scoping<a class="anchor-link" href="#mcp-tool-scoping" title="Permalink">¶</a></h2>
 <p>Every skill in EngineOS declares an <code>allowed-tools</code> block in its YAML frontmatter. This restricts which tools &ndash; filesystem, MCP, and skill invocation &ndash; are available during that skill&rsquo;s execution. The scoping is declarative and inspectable: reading a skill&rsquo;s frontmatter tells you its full external surface area.</p>
@@ -423,7 +462,7 @@ attio-mapper ──&gt; attio-qualify
 </tr>
 <tr>
 <td>Notion playbook</td>
-<td><code>engines/&lt;engine&gt;/config/notion/playbook/</code></td>
+<td><code>engines/&lt;engine&gt;/integrations/notion/playbook/</code></td>
 </tr>
 <tr>
 <td>Direct API scripts</td>
@@ -436,6 +475,18 @@ attio-mapper ──&gt; attio-qualify
 <tr>
 <td>Known MCP bugs (Attio)</td>
 <td><code>engines/&lt;engine&gt;/integrations/attio/attio-playbook/known-bugs.md</code></td>
+</tr>
+<tr>
+<td>Cloudflare guarded wrappers + known bugs</td>
+<td><code>scripts/cloudflare/</code> (<code>known-bugs.md</code>)</td>
+</tr>
+<tr>
+<td>Gated-hosting pattern</td>
+<td><code>patterns/frameworks/private-gated-static-hosting.md</code></td>
+</tr>
+<tr>
+<td>On-device transcription</td>
+<td><code>scripts/transcribe.py</code> (MLX Whisper) via the <code>transcribe</code> skill</td>
 </tr>
 <tr>
 <td>Activity logging</td>

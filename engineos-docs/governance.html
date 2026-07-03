@@ -45,11 +45,13 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s03">
-  <div class="eyebrow">EngineOS System Documentation · Section 03 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 03 · Built 2026-07-03</div>
   <h1>Governance</h1>
   <p class="subhead">EngineOS governs a confident AI agent — one that will skip steps it considers unnecessary, generate plausible completion summaries for work that didn&#x27;t happen, and report filesystem facts from memory instead of checking disk. The governance stack exists because methodology alone does not survive contact with that agent</p>
 </header>
@@ -61,14 +63,20 @@
 <div class="intro-card">
 <p>The stack has <strong>two layers</strong>. Mechanical enforcement uses hooks that block tool calls at the Claude Code platform level. Advisory enforcement uses instructions (CLAUDE.md, rules files, skill specs) that depend on the agent following them. A <strong>run plan</strong> bridges both: a planning artifact created by advisory governance that doubles as a mechanical gate key the hook checks before allowing writes.</p>
 </div>
+<p><strong>TL;DR — what actually blocks a write, and what only detects:</strong></p>
+<ul>
+<li><strong>Blocks:</strong> the PreToolUse <code>Write|Edit</code> gate (<code>hooks/pre-write-governance.sh</code>) — a non-exempt write with no scope-matched active run plan is denied, and the gate <strong>fails closed</strong> if its policy library is missing. And the PreToolUse <code>Bash</code> tripwire (<code>hooks/pre-bash-tripwire.sh</code>, D35) — denies <code>rm</code> with recursive+force flags; <code># eos-allow-rm</code> is the deliberate-override escape.</li>
+<li><strong>Detects, never blocks:</strong> the PostToolUse <code>Bash</code> detector (<code>hooks/post-bash-governance.sh</code>, D34) — warns loudly after an ungoverned Bash write to a watched governed path. The write has already happened.</li>
+<li><strong>Everything else is advisory.</strong> The Bash write channel as a whole is Turing-complete and cannot be gated; rules and skills depend on the agent following them; the operator is the final enforcement layer.</li>
+</ul>
 <hr />
 <h2 id="two-enforcement-layers">Two Enforcement Layers<a class="anchor-link" href="#two-enforcement-layers" title="Permalink">¶</a></h2>
 <h3 id="mechanical-enforcement-hooks">Mechanical Enforcement (Hooks)<a class="anchor-link" href="#mechanical-enforcement-hooks" title="Permalink">¶</a></h3>
 <div class="intro-card">
-<p>Hooks are the <strong>mechanical layer</strong> — they fire at lifecycle events in Claude Code and either block, log, or augment the agent&rsquo;s behavior. They don&rsquo;t depend on the agent reading instructions. EngineOS deploys <strong>eight wired hook events</strong> that together cover write-governance, audit logging, post-compact recovery, session-start orientation, session-arc capture (twice — on SessionEnd and PreCompact), and mid-work retrieval injection. The stack grew from four events (April 2026, original governance build) to eight (June 2026, when the second-brain capture and retrieval layer landed per D29-D32).</p>
+<p>Hooks are the <strong>mechanical layer</strong> — they fire at lifecycle events in Claude Code and either block, log, or augment the agent&rsquo;s behavior. They don&rsquo;t depend on the agent reading instructions. EngineOS wires <strong>8 hook events carrying ten hook wirings</strong> — PreToolUse and PostToolUse each run two matcher groups (<code>Write|Edit</code> and <code>Bash</code>). Together they cover write-governance, a destructive-<code>rm</code> tripwire, Bash-write detection, audit logging, post-compact recovery, session-start orientation, session-arc capture (twice — on SessionEnd and PreCompact), and mid-work retrieval injection. The stack grew from four events (April 2026, original governance build) to eight (June 2026, when the second-brain capture and retrieval layer landed per D29-D32), then gained the Bash-governance pair on the two tool events (2026-06-13: D34 detector + D35 tripwire).</p>
 </div>
 <div class="tech-detail">
-<p><strong>The eight wired hook events:</strong></p>
+<p><strong>The ten hook wirings across 8 events</strong> (1–8 in build order; 9–10 are the 2026-06-13 Bash-governance pair):</p>
 <table>
 <thead>
 <tr>
@@ -136,110 +144,49 @@
 <td><code>hooks/pre-compact.py</code></td>
 <td>Spawn <code>flush.py</code> to capture the session arc into today&rsquo;s daily log before compaction discards detail</td>
 </tr>
+<tr>
+<td>9</td>
+<td><code>PreToolUse</code></td>
+<td><code>Bash</code></td>
+<td><code>hooks/pre-bash-tripwire.sh</code></td>
+<td>DENY <code>rm</code> with recursive+force before it runs (named-pattern accident catch, D35; <code># eos-allow-rm</code> escape)</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>PostToolUse</code></td>
+<td><code>Bash</code></td>
+<td><code>hooks/post-bash-governance.sh</code></td>
+<td>Warn — never block — after an ungoverned Bash write to a watched governed path (D34; detection, not prevention)</td>
+</tr>
 </tbody>
 </table>
-<p>The wiring in <code>.claude/settings.json</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;PreToolUse&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Write|Edit&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash $HOME/Desktop/EngineOS/hooks/pre-write-governance.sh&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;PostToolUse&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Write|Edit&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash $HOME/Desktop/EngineOS/hooks/post-tool-use.sh&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;Stop&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash $HOME/Desktop/EngineOS/hooks/stop.sh&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;PostCompact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash $HOME/Desktop/EngineOS/hooks/post-compact.sh&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;SessionStart&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
-<span class="w">                    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv run --directory $HOME/Desktop/EngineOS python hooks/session-start.py&quot;</span><span class="p">,</span>
-<span class="w">                    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;PreCompact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
-<span class="w">                    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv run --directory $HOME/Desktop/EngineOS python hooks/pre-compact.py&quot;</span><span class="p">,</span>
-<span class="w">                    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;SessionEnd&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
-<span class="w">                    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv run --directory $HOME/Desktop/EngineOS python hooks/session-end.py&quot;</span><span class="p">,</span>
-<span class="w">                    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;UserPromptSubmit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
-<span class="w">                    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uv run --directory $HOME/Desktop/EngineOS python hooks/prompt-retrieval.py&quot;</span><span class="p">,</span>
-<span class="w">                    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Each hook type fires at a different point in the agent lifecycle. The <code>matcher</code> field on PreToolUse and PostToolUse restricts which tool invocations trigger the hook &ndash; <code>Write|Edit</code> means only file-writing operations. Hooks 1-4 are shell scripts (the April 2026 governance core); hooks 5-8 are Python scripts run via <code>uv</code> (the June 2026 second-brain layer). The two flush hooks (SessionEnd, PreCompact) share extraction and spawn logic via <code>hooks/_flush_common.py</code> (D29) so capture caps stay in sync across both firing points.</p>
+<p>The wiring lives in <code>.claude/settings.json</code> — described here rather than quoted, because quoted configs rot (this very section once showed one hook per tool event long after disk had two; the file itself is one Read away). The same file also carries <code>enabledPlugins</code> (added 2026-07-02, D53): two plugin packs with zero Skill-invocations across the transcript history are disabled there for context economy — a config lever on the always-loaded surface, distinct from the hook wiring. Each of the 8 events maps to one or two matcher groups: PreToolUse and PostToolUse each define TWO — <code>Write|Edit</code> and <code>Bash</code> — while the six lifecycle events match everything. Shell hooks are invoked as <code>bash $CLAUDE_PROJECT_DIR/hooks/&lt;name&gt;.sh</code>; Python hooks run via <code>uv run --directory $CLAUDE_PROJECT_DIR python hooks/&lt;name&gt;.py</code> with per-hook timeouts (15s session-start, 10s pre-compact and session-end, 3s prompt-retrieval).</p>
+<p>On disk that is 7 shell scripts (the governance core: gate, tripwire, detector, activity logging, Stop checks, post-compact recovery, plus the shared policy library <code>hooks/_governance-common.sh</code>) and 6 Python files (the second-brain layer: session-start/end, pre-compact, prompt-retrieval, plus shared modules <code>_flush_common.py</code> and <code>_people_surface.py</code>). All shell scripts resolve the repo root portably via <code>ENGINEOS_ROOT="${CLAUDE_PROJECT_DIR:-$HOME/Desktop/EngineOS}"</code> rather than hardcoded paths. The two flush hooks (SessionEnd, PreCompact) share extraction and spawn logic via <code>hooks/_flush_common.py</code> (D29) so capture caps stay in sync across both firing points.</p>
 </div>
 <hr />
 <h4 id="hook-1-pretooluse-governance-gate-pre-write-governancesh">Hook 1: PreToolUse &ndash; Governance Gate (<code>pre-write-governance.sh</code>)<a class="anchor-link" href="#hook-1-pretooluse-governance-gate-pre-write-governancesh" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PreToolUse (fires before a Write or Edit tool call executes)
 <strong>Trigger:</strong> Every attempt to write or edit any file
-<strong>What it does:</strong> Blocks deliverable writes unless a scope-matched run plan exists on disk</p>
+<strong>What it does:</strong> Gates <code>Write</code>/<code>Edit</code> deliverable writes unless a scope-matched active run plan exists on disk</p>
 <p>This is the hook that makes governance mechanical rather than advisory. A confident agent can ignore instructions. It cannot ignore a JSON response that denies permission to execute its tool call.</p>
+<p><strong>The honest boundary of the gate:</strong> the matcher is <code>Write|Edit</code>, so the gate covers Write and Edit tool calls — <strong>including subagent Write/Edit calls</strong> (hook firing in subagent context verified empirically 2026-06-12; re-verify after harness updates). <strong>Bash-mediated writes are not gated by this hook</strong> — the Bash channel is Turing-complete and not heuristically gateable, and no denylist closes it. Since 2026-06-13 that gap is made <strong>loud rather than closed</strong>: the PostToolUse Bash detector (D34) warns after an ungoverned Bash write, and the PreToolUse tripwire (D35) denies the single most common destructive fat-finger. See <strong>Hooks 9 &amp; 10: The Bash-Governance Surface</strong> below. For everything the detector cannot see (external paths, <code>.gitignored</code> paths, deliberate evasion), governance remains the forced skill chain plus the parent&rsquo;s post-hoc verification of outputs against the active plan.</p>
 <p><strong>The deny mechanism:</strong></p>
 <p>When no qualifying run plan is found, the hook outputs JSON to stdout:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;hookSpecificOutput&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;hookEventName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PreToolUse&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;permissionDecision&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;deny&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;permissionDecisionReason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GOVERNANCE GATE (scope-matched): No active run plan found in [scope] for write to [path]. Before writing deliverables or modifying engine state, invoke phase-controller to classify this operation and create a scope-matched run plan.&quot;</span>
+<span class="w">    </span><span class="nt">&quot;permissionDecisionReason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GOVERNANCE GATE (scope-matched): No active run plan found in [scope] for write to [path]. Before writing deliverables or modifying engine state, invoke phase-controller to classify this operation and create a scope-matched run plan. If this is a trivial fix (typo, metadata), phase-controller will classify it as skip in under 60 seconds. Exempt paths (logs, CONTEXT.md, DECISIONS.md, run-plans, memory) do not require a run plan; hook/rule/settings edits DO (de-exempted 2026-06-12 per fix-ledger L-G3).&quot;</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <p>Claude Code reads <code>permissionDecision: "deny"</code> and blocks the tool call. The agent sees the <code>permissionDecisionReason</code> and must comply &ndash; there is no override available to the agent. Only the operator can create a run plan (via approving one), and only the hook can unlock the write.</p>
 <p><strong>Exempt paths:</strong></p>
-<p>Not every write needs a run plan. The hook maintains a skip list for housekeeping writes:</p>
-<div class="highlight"><pre><span></span><code><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
-<span class="w">    </span>*/logs/*<span class="o">)</span><span class="w">            </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Activity log, intelligence log</span>
-<span class="w">    </span>*/CONTEXT.md<span class="o">)</span><span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Session state updates</span>
-<span class="w">    </span>*/DECISIONS.md<span class="o">)</span><span class="w">      </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Decision recording</span>
-<span class="w">    </span>*/.claude/settings*<span class="o">)</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Hook/settings configuration</span>
-<span class="w">    </span>*/.claude/rules/*<span class="o">)</span><span class="w">   </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Governance rules</span>
-<span class="w">    </span>*/hooks/*<span class="o">)</span><span class="w">           </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Hook scripts</span>
-<span class="w">    </span>*/run-plans/*<span class="o">)</span><span class="w">       </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Run plan files themselves</span>
-<span class="w">    </span>*/memory/*<span class="o">)</span><span class="w">          </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Auto-memory system</span>
-<span class="w">    </span>*MEMORY.md<span class="o">)</span><span class="w">          </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span><span class="w">  </span><span class="c1"># Memory index</span>
-<span class="k">esac</span>
-</code></pre></div>
-
-<p>Exempt paths exit 0 with no output, which means &ldquo;no opinion&rdquo; &ndash; the normal permission flow continues. This maps to the phase-controller&rsquo;s skip list: the same categories of work that don&rsquo;t need a run plan in the advisory layer don&rsquo;t need one in the mechanical layer.</p>
-<p><strong>Scope-matching logic (v2):</strong></p>
-<p>The hook&rsquo;s critical evolution was from v1 (any recent plan anywhere unlocks any write) to v2 (scope-matched plans). The v1 governance hole: an agent working on a JSE engagement could write to ODC files because an unrelated JSE run plan existed somewhere in the tree. v2 fixes this:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># --- SCOPE DETECTION ---</span>
-<span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;/engines/&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nv">after_engines</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FILE_PATH</span><span class="p">#*/engines/</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">after_engines</span><span class="p">%%/*</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">fi</span>
-
-<span class="c1"># --- SCOPE-MATCHED RUN PLAN CHECK ---</span>
-<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINE</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="c1"># Engine-scoped write: accept plan at engines/$ENGINE/run-plans/ OR root run-plans/</span>
-<span class="w">    </span><span class="nv">ACTIVE_PLAN</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/engines/</span><span class="nv">$ENGINE</span><span class="s2">/run-plans&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/run-plans&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">        </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.md&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>-2<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
-<span class="k">else</span>
-<span class="w">    </span><span class="c1"># OS-level write: require plan at root run-plans/</span>
-<span class="w">    </span><span class="nv">ACTIVE_PLAN</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/run-plans&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">        </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.md&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>-2<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
-<span class="k">fi</span>
-</code></pre></div>
-
+<p>Not every write needs a run plan. The exempt list — housekeeping writes that map to phase-controller&rsquo;s skip list — lives in <code>hooks/_governance-common.sh</code> (<code>eos_is_exempt_path</code>), the single policy source shared with the Bash detector: <code>*/logs/*</code>, <code>*/CONTEXT.md</code>, <code>*/DECISIONS.md</code>, <code>*/run-plans/*</code>, <code>*/memory/*</code>, <code>*MEMORY.md</code>. An exempt path exits with no opinion and the normal permission flow continues. Note what is deliberately <em>absent</em> from the list: <code>.claude/settings*</code>, <code>.claude/rules/</code>, and <code>hooks/</code> were de-exempted 2026-06-12 (fix-ledger L-G3) — edits to the governance infrastructure itself require an active run plan, closing the hole where the gate&rsquo;s own configuration was the easiest thing to write without governance.</p>
+<p><strong>Fail-closed posture (v2.1):</strong> if the gate cannot read <code>_governance-common.sh</code>, it does not shrug and allow — it DENIES with a &ldquo;GOVERNANCE GATE MISCONFIGURED&rdquo; reason naming the missing library. A gate that cannot evaluate its policy must not silently allow writes.</p>
+<p><strong>Scope-matching logic (v2; extracted to the shared library in v2.1):</strong></p>
+<p>The hook&rsquo;s critical evolution was from v1 (any recent plan anywhere unlocks any write) to v2 (scope-matched plans). The v1 governance hole: an agent working on a JSE engagement could write to ODC files because an unrelated JSE run plan existed somewhere in the tree. Since v2.1 (2026-06-13, the D34 build) the scope logic lives in <code>hooks/_governance-common.sh</code> — <code>eos_engine_of_path</code> (which engine a path belongs to), <code>eos_active_plan_for</code> (find a scope-matched active plan at the canonical flat paths, <code>-maxdepth 1</code>, <code>-mtime -2</code>), and the D2 status filter <code>eos_first_active_plan</code> (a candidate counts as active only if it is not a <code>DEBRIEF-*</code> file and its <code>**Status:**</code> line is not COMPLETE/ARCHIVED; plans with no Status line fail open — legacy plans predate the convention) — one sourced file, so the gate and the Bash detector can never drift into disagreement. Behavior is byte-for-byte v2; only the implementation is shared. (This section once quoted the hook&rsquo;s inline code; the quote rotted when the code moved to the library — described-and-linked now.)</p>
 <p>The rules:</p>
 <table>
 <thead>
@@ -263,14 +210,16 @@
 </tr>
 </tbody>
 </table>
-<p>Root <code>run-plans/</code> always qualifies because OS-level operations (builds, audits) legitimately touch engine files. Engine-specific <code>run-plans/</code> directories scope engine work to its own tenant. The <code>-maxdepth 1</code> enforces canonical flat paths &ndash; no nested subdirectories like <code>engines/X/pipeline/run-plans/</code> (a legacy pattern that was deprecated in the v2 rewrite). The <code>-mtime -2</code> requires the plan to have been modified within the last 2 days &ndash; stale plans don&rsquo;t unlock writes.</p>
+<p>Root <code>run-plans/</code> always qualifies because OS-level operations (builds, audits) legitimately touch engine files. Engine-specific <code>run-plans/</code> directories scope engine work to its own tenant. The <code>-maxdepth 1</code> enforces canonical flat paths &ndash; no nested subdirectories like <code>engines/X/pipeline/run-plans/</code> (a legacy pattern that was deprecated in the v2 rewrite). The <code>-mtime -2</code> requires the plan to have been modified within the last 2 days &ndash; stale plans don&rsquo;t unlock writes. The status filter (2026-06-12, fix-ledger L-G2) adds a content check on top of the mtime check: <code>DEBRIEF-*</code> files never qualify, and a plan whose <code>**Status:**</code> line reads COMPLETE or ARCHIVED no longer unlocks writes even if recently touched. Plans with no Status line fail open (legacy plans predate the convention).</p>
 <hr />
 <h4 id="hook-2-posttooluse-activity-logging-post-tool-usesh">Hook 2: PostToolUse &ndash; Activity Logging (<code>post-tool-use.sh</code>)<a class="anchor-link" href="#hook-2-posttooluse-activity-logging-post-tool-usesh" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PostToolUse (fires after a Write or Edit tool call completes)
 <strong>Trigger:</strong> Every successful file write or edit
 <strong>What it does:</strong> Appends a timestamped entry to <code>logs/activity-log.md</code></p>
 <p>This hook solves a specific governance gap: advisory logging dropped during subagent dispatch because no skill explicitly instructed the subagent to log. Mechanical logging fires regardless of what the agent or subagent thinks about logging.</p>
-<div class="highlight"><pre><span></span><code><span class="nv">INPUT</span><span class="o">=</span><span class="k">$(</span>cat<span class="k">)</span>
+<div class="highlight"><pre><span></span><code><span class="nv">ENGINEOS_ROOT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CLAUDE_PROJECT_DIR</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/Desktop/EngineOS</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="nv">INPUT</span><span class="o">=</span><span class="k">$(</span>cat<span class="k">)</span>
 <span class="nv">FILE_PATH</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$INPUT</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.tool_input.file_path // &quot;unknown&quot;&#39;</span><span class="k">)</span>
 <span class="nv">TOOL_NAME</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$INPUT</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.tool_name // &quot;unknown&quot;&#39;</span><span class="k">)</span>
 
@@ -281,84 +230,53 @@
 <span class="w">    </span><span class="nv">ACTION</span><span class="o">=</span><span class="s2">&quot;Updated&quot;</span>
 <span class="k">fi</span>
 
-<span class="c1"># Determine engine from file path</span>
+<span class="c1"># Strip the repo-root prefix for cleaner log entries</span>
+<span class="nv">FILE_PATH_CLEAN</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FILE_PATH</span><span class="p">#</span><span class="nv">$ENGINEOS_ROOT</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="c1"># Determine engine from file path (engine-agnostic, defaults to &quot;OS&quot;)</span>
 <span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;OS&quot;</span>
-<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;/engines/job-search/&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;job-search&quot;</span>
-<span class="k">elif</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;/engines/on-demand-curriculum/&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;on-demand-curriculum&quot;</span>
-<span class="k">elif</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;/engines/sales-enablement/&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;sales-enablement&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FILE_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span>~<span class="w"> </span>/engines/<span class="o">([</span>^/<span class="o">]</span>+<span class="o">)</span>/<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nv">ENGINE</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_REMATCH</span><span class="p">[1]</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="k">fi</span>
 
+<span class="c1"># Schema: 6-column (Date|Engine|Action|File|Skill|User) per methodology/memory-architecture.md D-5</span>
 <span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;| </span><span class="nv">$TIMESTAMP</span><span class="s2"> | </span><span class="nv">$ENGINE</span><span class="s2"> | </span><span class="nv">$ACTION</span><span class="s2"> | </span><span class="nv">$FILE_PATH_CLEAN</span><span class="s2"> | hook:post-tool-use | </span><span class="si">${</span><span class="nv">USER</span><span class="k">:-</span><span class="nv">operator</span><span class="si">}</span><span class="s2"> |&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ACTIVITY_LOG</span><span class="s2">&quot;</span>
 </code></pre></div>
 
-<p>Every write produces a row in the activity log with timestamp, engine tag, action type, file path, and attribution. The infinite-loop guard (<code>if [[ "$FILE_PATH" == *"activity-log.md" ]]; then exit 0</code>) prevents the hook from logging its own writes. Attribution reads from <code>$USER</code> environment variable with fallback to &ldquo;operator&rdquo; &ndash; preparing for future multi-user support without breaking the single-operator default.</p>
+<p>Every write produces a row in the activity log using the canonical 6-column schema (Date | Engine | Action | File | Skill | User) from <code>.claude/rules/logging.md</code>. Engine detection is an engine-agnostic regex over the <code>/engines/&lt;name&gt;/</code> path segment &ndash; new tenants get tagged without editing the hook. The infinite-loop guard (<code>if [[ "$FILE_PATH" == *"activity-log.md" ]]; then exit 0</code>) prevents the hook from logging its own writes. Attribution reads from <code>$USER</code> environment variable with fallback to &ldquo;operator&rdquo; &ndash; preparing for future multi-user support without breaking the single-operator default.</p>
 <hr />
-<h4 id="hook-3-stop-session-end-check-stopsh">Hook 3: Stop &ndash; Session-End Check (<code>stop.sh</code>)<a class="anchor-link" href="#hook-3-stop-session-end-check-stopsh" title="Permalink">¶</a></h4>
-<p><strong>Type:</strong> Stop (fires when a Claude Code session ends)
-<strong>Trigger:</strong> Session termination
-<strong>What it does:</strong> Warns if CONTEXT.md was not updated during the session</p>
-<div class="highlight"><pre><span></span><code><span class="nv">CONTEXT_FILE</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/CONTEXT.md&quot;</span>
-<span class="nv">TODAY</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span><span class="s1">&#39;+%Y-%m-%d&#39;</span><span class="k">)</span>
-
-<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONTEXT_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nv">LAST_MOD</span><span class="o">=</span><span class="k">$(</span>stat<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;%Sm&#39;</span><span class="w"> </span>-t<span class="w"> </span><span class="s1">&#39;%Y-%m-%d&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONTEXT_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
-<span class="w">               </span>date<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONTEXT_FILE</span><span class="s2">&quot;</span><span class="w"> </span><span class="s1">&#39;+%Y-%m-%d&#39;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="k">)</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LAST_MOD</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TODAY</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Warning: CONTEXT.md was not updated this session (last modified: </span><span class="nv">$LAST_MOD</span><span class="s2">).&quot;</span>
-<span class="w">    </span><span class="k">fi</span>
-<span class="k">fi</span>
-
-<span class="c1"># Also checks every engine tenant&#39;s CONTEXT.md</span>
-<span class="k">for</span><span class="w"> </span>ENGINE_CONTEXT<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">&quot;</span>/engines/*/CONTEXT.md<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">    </span><span class="c1"># ... same date check per engine</span>
-<span class="k">done</span>
-</code></pre></div>
-
-<p>This hook is advisory, not blocking. It does not prevent session end. It surfaces a warning when the session handoff mechanism (CONTEXT.md) was not updated &ndash; catching the case where meaningful work happened but the recovery point was not written. The check covers both the root CONTEXT.md and every engine tenant&rsquo;s CONTEXT.md.</p>
+<h4 id="hook-3-stop-session-state-checks-stopsh">Hook 3: Stop &ndash; Session-State Checks (<code>stop.sh</code>)<a class="anchor-link" href="#hook-3-stop-session-state-checks-stopsh" title="Permalink">¶</a></h4>
+<p><strong>Type:</strong> Stop (fires at EVERY turn-end, not just session close)
+<strong>Trigger:</strong> Turn end
+<strong>What it does:</strong> Runs four STATE-AWARE advisory checks and emits any warnings as a single user-visible <code>systemMessage</code></p>
+<p>The naive version of this hook (&ldquo;CONTEXT.md wasn&rsquo;t updated today&rdquo;) fired mid-session before the producing step had a chance to run — it could not tell <em>broken</em> from <em>nothing-happened-yet</em>, and it trained the operator to ignore it. The WS2 hook-honesty rewrite (2026-06-20, <code>run-plans/2026-06-20-ws2-hook-honesty-build.md</code>) made every check state-aware: each warns only on a TRUE condition and names what triggered it so the operator can verify. <strong>A warning is a LEAD, not a defect</strong> — the hook&rsquo;s own output header says so.</p>
+<p>The four checks (described from the live file rather than quoted — the previous quoted body outlived two rewrites):</p>
+<ol>
+<li><strong>Root CONTEXT.md stale + real work today.</strong> Warns only when the activity log shows a today-dated Created/Updated row AND CONTEXT.md&rsquo;s mtime is older than today. Read-only or judgment-only sessions stay silent — the false positive the old version generated constantly.</li>
+<li><strong>Engine CONTEXT.md stale + that engine worked today.</strong> The same gate, scoped per tenant via the activity log&rsquo;s Engine column.</li>
+<li><strong>Knowledge-base compile drift.</strong> Compares the last compile date in <code>knowledge/log.md</code> against the newest <code>daily/</code> file; warns past a 3-day tolerance band. (Unchanged in WS2 — it was already honest.)</li>
+<li><strong>Missing daily log + a flush was actually attempted.</strong> <code>daily/&lt;today&gt;.md</code> absent mid-session is NORMAL — flush runs on SessionEnd/PreCompact, which fire after Stop. This warns only when <code>scripts/flush.log</code> records a flush attempt today and the file is still missing: a real pipeline failure, distinguishable from &ldquo;nothing has happened yet.&rdquo;</li>
+</ol>
+<p>The hook is advisory, not blocking — it never prevents session end. The delivery mechanism was re-plumbed 2026-06-12 (fix-ledger L-G5): plain stdout from a Stop hook on exit 0 is NOT shown to the user (it goes to the debug log only, per the official hooks doc), so warnings accumulate and emit once as a JSON <code>systemMessage</code> via <code>jq</code>, which IS user-visible.</p>
 <hr />
 <h4 id="hook-4-postcompact-compaction-recovery-post-compactsh">Hook 4: PostCompact &ndash; Compaction Recovery (<code>post-compact.sh</code>)<a class="anchor-link" href="#hook-4-postcompact-compaction-recovery-post-compactsh" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PostCompact (fires after Claude Code compacts its context window)
 <strong>Trigger:</strong> Context compaction event
 <strong>What it does:</strong> Re-injects core behaviors and active run plan awareness</p>
 <p>Context compaction is the event where Claude Code&rsquo;s context window fills and older conversation turns are summarized or dropped. CLAUDE.md and rules survive compaction (they&rsquo;re always-loaded files), but in-session awareness of active work can be lost.</p>
-<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Core behaviors (always active):&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  1. Research before agreeing&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  2. Push back with evidence&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  3. Write as you go&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  4. Never delete&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  5. Constitution from reality&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  6. Govern before producing — no deliverable writes without a run plan&quot;</span>
-
-<span class="c1"># Check for active run plans</span>
-<span class="nv">RUN_PLANS</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">&quot;</span><span class="w"> </span>-path<span class="w"> </span><span class="s2">&quot;*/run-plans/*.md&quot;</span><span class="w"> </span>-newer<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ENGINEOS_ROOT</span><span class="s2">/CONTEXT.md&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="k">)</span>
-<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RUN_PLANS</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Active run plans found:&quot;</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RUN_PLANS</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>plan<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  -&gt; </span><span class="nv">$plan</span><span class="s2">&quot;</span>
-<span class="w">    </span><span class="k">done</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Resume the active run plan before starting new work.&quot;</span>
-<span class="k">else</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;No active run plans found.&quot;</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  Invoke phase-controller before writing any deliverables.&quot;</span>
-<span class="k">fi</span>
-</code></pre></div>
-
-<p>The hook lists active run plans (files newer than CONTEXT.md at canonical run-plan paths) and reminds the agent to resume them. If no active plans exist, it reminds the agent that the PreToolUse hook will block deliverable writes. The active engine tenants are enumerated so the agent knows which engines exist.</p>
+<p>The live behavior (described, not quoted — the previously quoted body used the <code>-newer CONTEXT.md</code> heuristic that the live file&rsquo;s own comment now calls &ldquo;the old bug&rdquo;): the hook echoes the seven core behaviors as a plain-text reminder, then lists ACTIVE run plans using the same single-source-of-truth definition the gate uses — it sources <code>hooks/_governance-common.sh</code> and calls <code>eos_list_active_plans</code> (canonical flat paths only, <code>-mtime -2</code>, <code>**Status:**</code> not COMPLETE/ARCHIVED, <code>DEBRIEF-*</code> excluded). The old <code>-newer CONTEXT.md</code> approach hid every plan whenever CONTEXT.md was touched after the plan (a common ordering) and scanned non-canonical nested dirs — a definition-mismatch with the gate found and fixed by the WS2 hook-honesty build (2026-06-20). If the shared library can&rsquo;t be sourced, the hook fails open to the behavior reminder — it is advisory, never a gate. It closes by enumerating the engine tenants and pointing the agent at CONTEXT.md and the activity log.</p>
 <p>This hook is the compaction survival mechanism. The run plan on disk persists the full execution state (6 layers of context). The PostCompact hook tells the agent where to find it. Together, they bridge the compaction gap.</p>
 <hr />
 <h4 id="hook-5-userpromptsubmit-retrieval-injection-prompt-retrievalpy">Hook 5: UserPromptSubmit &ndash; Retrieval Injection (<code>prompt-retrieval.py</code>)<a class="anchor-link" href="#hook-5-userpromptsubmit-retrieval-injection-prompt-retrievalpy" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> UserPromptSubmit (fires after the operator submits a prompt, before the agent receives it)
 <strong>Trigger:</strong> Every prompt matching the heuristic gate (trigger words, question starts, minimum length)
 <strong>What it does:</strong> Searches the second brain and injects the top 3 matches as <code>&lt;prior-context&gt;...&lt;/prior-context&gt;</code> mid-prompt</p>
-<p>This is the mechanical half of the retrieval architecture (DECISIONS.md D32). Capture-side infrastructure (<code>flush.py</code>, <code>compile.py</code>, the KB, daily logs, intel log) grew strong by mid-2026 &ndash; 216 KB articles, 70+ intel-log entries, 18 daily logs &ndash; but a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work. Capture without retrieval is a write-only system. This hook closes the gap mechanically so the agent doesn&rsquo;t have to remember to query its own corpus.</p>
+<p>This is the mechanical half of the retrieval architecture (DECISIONS.md D32). Capture-side infrastructure (<code>flush.py</code>, <code>compile.py</code>, the KB, daily logs, intel log) grew strong by mid-2026 &ndash; 216 KB articles, 70+ intel-log entries, 18 daily logs at the time <!-- census-ok: D32-era historical record --> &ndash; but a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work. Capture without retrieval is a write-only system. This hook closes the gap mechanically so the agent doesn&rsquo;t have to remember to query its own corpus.</p>
 <p><strong>Gate heuristic:</strong></p>
 <p>The hook does not fire on every prompt. It applies three cheap tests (config in <code>hooks/retrieval-triggers.json</code>):</p>
 <ol>
 <li><strong>Prompt length</strong> &ndash; skip if under 20 chars (one-liners aren&rsquo;t worth a corpus sweep)</li>
-<li><strong>Trigger words</strong> &ndash; fires when prompt contains one of: <code>we</code>, <code>our</code>, <code>before</code>, <code>prior</code>, <code>previous</code>, <code>remember</code>, <code>similar</code>, <code>again</code>, <code>last time</code></li>
+<li><strong>Trigger words</strong> &ndash; fires when prompt contains one of: <code>our</code>, <code>before</code>, <code>prior</code>, <code>previous</code>, <code>remember</code>, <code>similar</code>, <code>again</code>, <code>last time</code> (<code>we</code> was removed 2026-07-02 — it fired on 602 of 756 gate hits, making the gate effectively always-on)</li>
 <li><strong>Question starts</strong> &ndash; fires when prompt begins with <code>have</code>, <code>did</code>, <code>what</code>, <code>how</code>, <code>why</code>, <code>when</code></li>
 </ol>
 <p>Either trigger condition firing is sufficient. The thresholds tune the noise/signal balance &ndash; defaults target a 10-60% gate hit rate per session.</p>
@@ -406,19 +324,25 @@
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Extraction and spawn logic both live in <code>hooks/_flush_common.py</code> &ndash; shared with Hook 8. The recursion guard prevents infinite loops when flush.py&rsquo;s internal Claude Code session would otherwise re-fire SessionEnd. Hook 3 (Stop) still fires separately and handles the CONTEXT.md update check; the two are independent.</p>
+<p>Extraction and spawn logic both live in <code>hooks/_flush_common.py</code> &ndash; shared with Hook 8. The recursion guard prevents infinite loops when flush.py&rsquo;s internal Claude Code session would otherwise re-fire SessionEnd. Hook 3 (Stop) still fires separately and handles the CONTEXT.md update check; the two are independent. After the flush spawn, the hook also refreshes the derived caches in detached background processes &ndash; <code>people-heat.py</code>, <code>capability-snapshot.py</code>, <code>kb-health.py</code>, and <code>build-dashboard.py</code> (the living health dashboard at <code>docs/site/dashboard.html</code>) &ndash; isolated so capture is never affected.</p>
 <hr />
 <h4 id="hook-8-precompact-compaction-time-capture-pre-compactpy">Hook 8: PreCompact &ndash; Compaction-Time Capture (<code>pre-compact.py</code>)<a class="anchor-link" href="#hook-8-precompact-compaction-time-capture-pre-compactpy" title="Permalink">¶</a></h4>
 <p><strong>Type:</strong> PreCompact (fires before Claude Code auto-compacts the context window)
 <strong>Trigger:</strong> Imminent compaction
 <strong>What it does:</strong> Same as SessionEnd &ndash; extracts recent transcript turns, spawns <code>flush.py</code> &ndash; but at the marathon-session boundary instead of at session termination</p>
 <p>Compaction discards detail by summarizing older turns. Without this hook, marathon sessions would lose the substantive arc to summarization before SessionEnd ever fires. PreCompact captures the arc into the daily log first; SessionEnd then captures the remainder at session close. Together they cover the two boundaries where session content might be lost.</p>
-<p>Both hooks share <code>hooks/_flush_common.py</code> (DECISIONS.md D29). The shared module exports <code>extract_conversation_context()</code>, <code>parse_hook_input()</code>, <code>spawn_flush_process()</code>, and the cap constants <code>MAX_TURNS=60</code> / <code>MAX_CONTEXT_CHARS=30_000</code> as a single source of truth. Bumping a cap in <code>_flush_common.py</code> updates both firing points automatically &ndash; the anti-drift discipline that prevents the next person from forgetting one of the two hooks. The recursion guard is identical to Hook 7.</p>
+<p>Both hooks share <code>hooks/_flush_common.py</code> (DECISIONS.md D29). The shared module exports <code>extract_conversation_context()</code>, <code>parse_hook_input()</code>, <code>spawn_flush_process()</code>, and the cap constants <code>MAX_TURNS=90</code> / <code>MAX_CONTEXT_CHARS=60_000</code> (30_000 → 40_000 on 2026-06-12 per fix-ledger L-V4; 40_000 → 60_000 and turns 60 → 90 on 2026-07-02 after the telemetry review found 73% of sessions cap-bound) as a single source of truth. Bumping a cap in <code>_flush_common.py</code> updates both firing points automatically &ndash; the anti-drift discipline that prevents the next person from forgetting one of the two hooks. The recursion guard is identical to Hook 7.</p>
 <p><code>MIN_TURNS_TO_FLUSH</code> differs: SessionEnd flushes at ≥1 turn (any real conversation is worth capturing); PreCompact requires ≥5 turns (avoid spurious flushes for incidental compactions early in a session).</p>
+<hr />
+<h4 id="hooks-9-10-the-bash-governance-surface-pre-bash-tripwiresh-post-bash-governancesh">Hooks 9 &amp; 10: The Bash-Governance Surface (<code>pre-bash-tripwire.sh</code> + <code>post-bash-governance.sh</code>)<a class="anchor-link" href="#hooks-9-10-the-bash-governance-surface-pre-bash-tripwiresh-post-bash-governancesh" title="Permalink">¶</a></h4>
+<p>The PreToolUse gate (Hook 1) sees Write and Edit tool calls. It cannot see a heredoc, a <code>sed -i</code>, a <code>cp</code>, a <code>python -c</code> — the <strong>Bash write channel is Turing-complete and cannot be gated by a denylist</strong>. Rather than pretending otherwise, EngineOS ships two hooks (both 2026-06-13) that implement the honest version of the boundary: one named-pattern accident catch that blocks, and one detector that makes ungoverned writes loud.</p>
+<p><strong>Hook 9 — the destructive-<code>rm</code> tripwire (PreToolUse <code>Bash</code>, D35).</strong> DENIES a command whose <code>rm</code> invocation carries BOTH recursive and force flags (<code>rm -rf</code>, <code>-fr</code>, <code>-r -f</code>, <code>--recursive --force</code>, sudo-prefixed variants) — the single most common irreversible-loss fat-finger. The parsing is segment-bound: the flags must belong to the <code>rm</code> segment itself (<code>pip install --force-reinstall &amp;&amp; rm tmp</code> does not trip), and quoted mentions (<code>echo "rm -rf x"</code>) are stripped before testing. <strong>Escape hatch:</strong> re-run the SAME command with <code># eos-allow-rm</code> appended — a legitimate deletion costs ~10 seconds of deliberateness, not a dead end. (The harness&rsquo;s &ldquo;ask&rdquo; permission decision silently degrades to allow — verified empirically 2026-06-13 — so deny-with-escape is the design, not a preference.) <strong>It is an accident catch, NOT a guard against destructive operations:</strong> obfuscated or scripted <code>rm</code>, <code>find -delete</code>, <code>shutil.rmtree</code>, truncating redirects, and <code>git clean -fd</code> all pass through untouched. Fail-open by design — a broken tripwire must never block legitimate commands.</p>
+<p><strong>Hook 10 — the ungoverned-write detector (PostToolUse <code>Bash</code>, D34).</strong> Fires AFTER every Bash command and checks the <em>filesystem</em> — git porcelain, never command-string parsing (which would be the same Turing-complete trap) — for changes under watched governed prefixes (<code>engines/</code>, <code>.claude/</code>, <code>hooks/</code>, <code>methodology/</code>, <code>patterns/</code>, <code>principles/</code>, <code>design-system/</code>, <code>registry/</code>, <code>docs/source/</code>, <code>operator/</code>, <code>templates/</code>, <code>scripts/</code>; <code>*.log</code> churn ignored). For each changed path it applies the SAME policy the gate uses — <code>eos_is_exempt_path</code> plus the scope-matched active-plan check from <code>_governance-common.sh</code> — and when a non-exempt path changed with no active scope-matched run plan, it emits BOTH channels: a <code>systemMessage</code> (operator-visible, the loud half) and <code>additionalContext</code> (agent-visible, routing the agent to phase-controller). An incremental seen-set dedupes so the same dirty path doesn&rsquo;t re-warn on every command; every invocation appends a health record to <code>scripts/bash-detector-health.jsonl</code>. <strong>It is DETECTION, not prevention</strong> — the write already happened — and it <strong>supplements, never replaces</strong> the human verification contract (forced skill chain + the parent verifying outputs against the active plan). It does not see external-path writes, <code>.gitignored</code> paths, or deliberate evasion. When it warns, the contract is: cite the active run plan the work falls under, or invoke phase-controller to classify it — never dismiss the warning silently.</p>
+<p><strong>The shared policy library (<code>hooks/_governance-common.sh</code>).</strong> The exempt list, engine-scope detection, the D2 status-filtered active-plan check, and <code>eos_list_active_plans</code> (the post-compact reminder&rsquo;s full-list variant) live in ONE sourced file, so the gate, the detector, and the post-compact reminder can never drift into disagreement. Consumers differ in failure posture on purpose: the gate fails CLOSED if the library is unreadable; the advisory hooks fail open (a detector must never break a session).</p>
 <hr />
 <h3 id="advisory-enforcement-rules-claudemd">Advisory Enforcement (Rules + CLAUDE.md)<a class="anchor-link" href="#advisory-enforcement-rules-claudemd" title="Permalink">¶</a></h3>
 <p>The mechanical layer handles what can be blocked with a shell script. The advisory layer handles everything else &ndash; quality standards, research discipline, methodology compliance, voice consistency, and the hundreds of judgment calls that cannot be reduced to a <code>deny</code> JSON response.</p>
-<p><strong>CLAUDE.md core behaviors</strong> are the top-level instructions. Six non-negotiable behaviors survive context compaction because CLAUDE.md is always loaded:</p>
+<p><strong>CLAUDE.md core behaviors</strong> are the top-level instructions. They survive context compaction because CLAUDE.md is always loaded (and <code>.claude/rules/governance-baseline.md</code> restates them unconditionally):</p>
 <ol>
 <li>Research before agreeing</li>
 <li>Push back with evidence</li>
@@ -426,19 +350,22 @@
 <li>Never delete, mark outdated</li>
 <li>Constitution from reality (describe what exists, not what was planned)</li>
 <li>Govern before producing (no deliverable writes without a run plan)</li>
+<li>Verify state before reporting (re-check filesystem/state claims against disk; backed by the unconditional <code>evidence-first-reporting</code> rule)</li>
 </ol>
-<p><strong>7 rules</strong> in <code>.claude/rules/</code> provide specific enforcement instructions. Three are unconditional (loaded every session):</p>
+<p>Four later behaviors extend the set: <strong>close out run plans at terminal state</strong> (2026-06-20, numbered 7 in <code>governance-baseline.md</code> — a plan that shipped gets its Status flipped the same session; leaving EXECUTING on shipped work is the documented anti-pattern), <strong>7.5 — conjecture under rigor; never run the production line</strong> (2026-06-26: research-before-advising even in conversation, hold the whole arc, a miss is a gap not a failure), <strong>7.6 — stand ready; don&rsquo;t pre-route</strong> (2026-06-30, D50: on a full-breadth opener, self-orient from the capability snapshot then stand ready — catalytic context is for orientation, never scope), and <strong>7.7 — communication economy; trim the prose, never the audit trail</strong> (2026-07-02, from an outside-reviewer verbosity critique that could see only a raw terminal transcript — no CLAUDE.md, rules, or hooks). Economy applies to <em>conversational prose</em>: drop &ldquo;I&rsquo;ll now…&rdquo; pre-tool-call announcements, don&rsquo;t restate a run plan back at kickoff, don&rsquo;t narrate what a tool result already shows, collapse per-agent status churn into one batch summary. It never applies to the <strong>audit trail</strong> — the run-plan Layer 5 log, the Stop-hook CONTEXT.md check, and disk-verify-before-report (Behaviors 3/6/7) are the filesystem recovery point, invisible in a terminal transcript, and exactly what a disk-blind observer mistakes for overhead. Bounded by <code>feedback_async_build_transparency</code> (&gt;5-min async builds still get a one-line status every 2-3 min) — economy is not silence. The two files number their additions differently (CLAUDE.md&rsquo;s #7 is verify-state; governance-baseline&rsquo;s #7 is run-plan close-out) — an inherited numbering quirk, not a content disagreement.</p>
+<p><strong>8 rules</strong> in <code>.claude/rules/</code> provide specific enforcement instructions. 3 are unconditional (loaded every session):</p>
 <ul>
 <li><code>governance-baseline.md</code> &ndash; restates core behaviors with operator protection clauses</li>
 <li><code>logging.md</code> &ndash; specifies the two-layer logging model (activity log breadcrumbs + intelligence log strategic moments)</li>
-<li><code>evidence-first-reporting.md</code> &ndash; requires disk verification before filesystem/state claims</li>
+<li><code>evidence-first-reporting.md</code> &ndash; requires disk verification before filesystem/state claims. Its <strong>Delegated-Work Completion Verification</strong> section (added 2026-07-02) extends the rule to dispatched/background agents: a subagent&rsquo;s &ldquo;finished&rdquo;/&rdquo;done&rdquo; is a claim about its own <em>termination</em>, not evidence its outputs exist on disk — an agent can return confident final text having written <strong>zero</strong> files. Before treating a phase complete, disk-verify each <strong>pre-declared</strong> output (phase-controller Rule 8 is what makes this mechanical), and treat a completion that coincides with a usage/session-limit reset (or any mid-run kill) as a <strong>red alert</strong> — distrust every in-flight agent&rsquo;s status and disk-verify the whole batch, because partial or zero output is the expected shape there, not the exception. Re-dispatch only the missing pieces (never-delete what landed). Backed by <code>patterns/problems/background-agent-completion-under-usage-limit.md</code>.</li>
 </ul>
-<p>Four are path-scoped (loaded automatically when working in matching directories):</p>
+<p>5 are path-scoped (loaded automatically when working in matching directories):</p>
 <ul>
 <li><code>engagement-structure.md</code> &ndash; engagement directory conventions</li>
 <li><code>integrations.md</code> &ndash; CRM/Notion integration rules</li>
 <li><code>living-projects.md</code> &ndash; active project management rules</li>
-<li><code>methodology-immutable.md</code> &ndash; protects methodology documents from unauthorized modification</li>
+<li><code>sandbox-tier.md</code> &ndash; posture for the personal <code>sandbox/</code> tier (D44): for-fun work under the same living-agent powers, firewalled from the professional layer, with a promotion path to OS Layer 1</li>
+<li><code>methodology-immutable.md</code> &ndash; protects methodology documents from unauthorized modification. Rule 5 (added 2026-06-12) sets precedence when a skill and its companion methodology doc diverge on operational specifics: the skill is the operational source of truth for <em>existing</em> divergence (methodology carries the <em>why</em>, skills the <em>how, right now</em>). Hardened the same day with a no-backdoor clause &ndash; creating a <em>new</em> skill↔methodology divergence is not a license to pick either; it still requires rule-1 operator approval.</li>
 </ul>
 <p><strong>The honest acknowledgment:</strong> Advisory enforcement depends on the agent following instructions. A sufficiently confident agent can ignore every rule, skip every skill invocation, and produce output that looks professional but followed none of the governance. This is not hypothetical &ndash; it happened in three consecutive sessions (WS3-WS5) where the agent skipped planning skills entirely while producing acceptable output. The mechanical layer (hooks) exists because advisory alone demonstrably fails on confident agents. The advisory layer remains essential for everything the mechanical layer cannot reach.</p>
 <hr />
@@ -643,8 +570,8 @@ Approve to begin execution?
 </tr>
 <tr>
 <td>4</td>
-<td><strong>Gates are non-negotiable.</strong> Work does not proceed past a gate without the operator&rsquo;s explicit approval. Not silence. Not implied consent.</td>
-<td>The operator is the final enforcement layer. Gates are where human judgment enters.</td>
+<td><strong>Gates are non-negotiable &ndash; but the operator may pre-authorize collapse.</strong> Work does not proceed past a gate without the operator&rsquo;s explicit approval. Not silence. Not implied consent. The ratified collapse clause — its two narrow triggers, what never collapses, and its retroactive revocability — is spelled out once, in the Rule 4 emphasis below this table.</td>
+<td>The operator is the final enforcement layer. The collapse trigger is ALWAYS the operator&rsquo;s explicit reduced-gating words or an approved disk plan &ndash; never the agent&rsquo;s confidence, and never a detailed prompt on its own.</td>
 </tr>
 <tr>
 <td>5</td>
@@ -669,7 +596,7 @@ Approve to begin execution?
 <tr>
 <td>8</td>
 <td><strong>Subagent outputs are pre-declared in the run plan.</strong></td>
-<td>Subagents don&rsquo;t inherit parent hooks or governance. The run plan is their governance contract.</td>
+<td>Hook firing in subagent context is harness-version-dependent (fired as of 2026-06-12, falsifying the earlier &ldquo;subagents don&rsquo;t inherit hooks&rdquo; reading) &ndash; the run plan, not the hook, is the durable governance contract for subagent work. After a subagent returns, the parent verifies each pre-declared output exists on disk and falls within the active plan&rsquo;s scope.</td>
 </tr>
 <tr>
 <td>9</td>
@@ -689,7 +616,7 @@ Approve to begin execution?
 </tbody>
 </table>
 <p>Rules 4, 10, and 11 deserve emphasis:</p>
-<p><strong>Rule 4</strong> is why the operator matters. Every gate is a human judgment checkpoint. The system does not auto-approve. The operator reviews the work, asks questions, redirects if needed, and explicitly says &ldquo;proceed.&rdquo; This is not a rubber stamp &ndash; in production, the operator has caught the evaluator validating against the wrong baseline, redirected scope that was drifting, and rejected plans that were over-engineered for the task.</p>
+<p><strong>Rule 4</strong> is why the operator matters. Every gate is a human judgment checkpoint. The system does not auto-approve. The operator reviews the work, asks questions, redirects if needed, and explicitly says &ldquo;proceed.&rdquo; This is not a rubber stamp &ndash; in production, the operator has caught the evaluator validating against the wrong baseline, redirected scope that was drifting, and rejected plans that were over-engineered for the task. The ratified collapse clause (2026-06-12, tightened the same day at guided review) formalizes a standing production practice under a deliberately narrow trigger: internal sub-phase gates collapse into logged self-reviews plus phase-boundary status updates ONLY when (a) the operator explicitly authorizes reduced gating in their own words, or (b) the operator approved a pre-existing disk plan and instructs its execution. A detailed task description alone &ndash; however thorough &ndash; is NEVER a collapse trigger; it authorizes the work, not reduced scrutiny. Two gates never collapse &ndash; Gate 0 (scope/classification approval; the operator&rsquo;s prompt itself can satisfy it) and Gate Final (operator reviews the deliverable). Collapse is revocable retroactively: the operator may reopen any collapsed gate and re-review item by item, so collapsed-gate decisions are provisional until Gate Final passes. Every collapsed gate gets a Layer 5 log entry naming the verbatim pre-approval it rests on. (The original wording triggered collapse whenever a prompt &ldquo;pre-approves scope, plan, and deliverables&rdquo; &ndash; tightened after that breadth was found to license reduced scrutiny on a detailed prompt alone. Operator authorization may collapse gates; it never collapses diligence.)</p>
 <p><strong>Rule 10</strong> addresses the demonstrated failure pattern where agents skip planning. In three consecutive sessions (WS3-WS5), the agent skipped both brainstorming and writing-plans skills entirely &ndash; while producing acceptable output. The enforcement model is two-tiered: <code>[MANDATORY - structural]</code> steps (writing-plans) create artifacts that the production step reads as a required input &ndash; empty Layer 4 means production cannot proceed. <code>[MANDATORY]</code> steps (brainstorming) use advisory enforcement with transparency &ndash; if skipped, the agent must write a justification visible to the operator at the approval gate. This asymmetry is intentional: structural enforcement works where artifacts are concrete; advisory enforcement with transparency works where artifacts are fuzzy.</p>
 <p><strong>Rule 11</strong> addresses the verified-state-claim failure pattern. An agent declared a directory did not exist after 4 glob attempts. The actual path was <code>WONDA-STUFF</code> (all-caps, hyphens instead of spaces). That wrong negative propagated into an audit conclusion that an entire capability &ldquo;never existed in sources&rdquo; &ndash; structurally invalidating a quadrant of a capability audit. The operator found the path with one case-insensitive <code>ls</code>. Rule 11 requires re-verification against disk before any state claim at a phase transition.</p>
 <hr />
@@ -749,7 +676,7 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 <hr />
 <h2 id="retrieval-architecture">Retrieval Architecture<a class="anchor-link" href="#retrieval-architecture" title="Permalink">¶</a></h2>
 <p>The mechanical-enforcement layer described above is governance-by-blocking: hooks deny tool calls, force run plans, and re-inject behaviors after compaction. The retrieval architecture is the sister mechanism &ndash; <strong>governance-by-information-flow</strong>. It does not block; it changes what the agent sees by the time it acts. Where mechanical enforcement closes &ldquo;research before producing,&rdquo; retrieval closes &ldquo;research before agreeing&rdquo; applied to the agent&rsquo;s own corpus.</p>
-<p>The architecture was added 2026-06-04 per DECISIONS.md D32. The trigger was an audit finding (D32 Context): EngineOS had strong CAPTURE &ndash; <code>flush.py</code> + <code>compile.py</code> + 216 KB articles + 70+ intel-log entries + 18 daily logs + 27 run plans &ndash; but weak RETRIEVAL. During normal work the agent rarely read concept articles or queried the intel log. Mid-task focus suppresses reflexive internal-archive lookup. Capture without retrieval was a write-only system. For full architecture detail, decision rationale, and the why-not-vector-DB analysis, see <strong><code>docs/source/second-brain.md</code></strong> and <code>methodology/memory-architecture.md § Retrieval Surfaces</code>. This section covers the governance-relevant slice.</p>
+<p>The architecture was added 2026-06-04 per DECISIONS.md D32. The trigger was an audit finding (D32 Context): EngineOS had strong CAPTURE &ndash; <code>flush.py</code> + <code>compile.py</code> + 216 KB articles + 70+ intel-log entries + 18 daily logs + 27 run plans at the time <!-- census-ok: D32-era historical record --> &ndash; but weak RETRIEVAL. During normal work the agent rarely read concept articles or queried the intel log. Mid-task focus suppresses reflexive internal-archive lookup. Capture without retrieval was a write-only system. For full architecture detail, decision rationale, and the why-not-vector-DB analysis, see <strong><code>docs/source/second-brain.md</code></strong> and <code>methodology/memory-architecture.md § Retrieval Surfaces</code>. This section covers the governance-relevant slice.</p>
 <h3 id="three-layers">Three Layers<a class="anchor-link" href="#three-layers" title="Permalink">¶</a></h3>
 <table>
 <thead>
@@ -832,7 +759,7 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 </tr>
 </tbody>
 </table>
-<p>Higher surfaces have higher signal-to-noise. Stopping rule: when surfaces 1-2 yield 3+ strong hits, lower surfaces are skipped. The whole corpus is markdown &ndash; structured KB index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision at personal-KB scale (&lt;500 articles, currently 216). Vector DB / GraphRAG / Mem0-style frameworks are Phase C deferred with explicit revisit conditions in D32 (corpus &gt;2000 articles, sustained semantic-miss complaints, etc.).</p>
+<p>Higher surfaces have higher signal-to-noise. Stopping rule: when surfaces 1-2 yield 3+ strong hits, lower surfaces are skipped. The whole corpus is markdown &ndash; structured KB index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision at personal-KB scale (currently 454 notes, against a &lt;500-article research threshold). Vector DB / GraphRAG / Mem0-style frameworks are Phase C deferred with explicit revisit conditions in D32 (corpus &gt;2000 articles, sustained semantic-miss complaints, etc.). <!-- census-ok: D32 scale thresholds --></p>
 <h3 id="discipline-pattern-pairing">Discipline + Pattern Pairing<a class="anchor-link" href="#discipline-pattern-pairing" title="Permalink">¶</a></h3>
 <p>The mechanical layer is paired with an advisory discipline so retrieval still fires when the hook&rsquo;s heuristic gate misses:</p>
 <ul>
@@ -856,7 +783,9 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 <ul>
 <li><strong><code>scripts/hook-health.jsonl</code></strong> (DECISIONS.md D30) &ndash; one record per <code>flush.py</code> invocation. Schema includes attempt count, retry success/failure, exec time, cap hits, response size. <code>scripts/health-review.py</code> summarizes failure rate, retry rate, cap-hit distribution, recent-records table.</li>
 <li><strong><code>scripts/retrieval-health.jsonl</code></strong> (DECISIONS.md D32) &ndash; one record per UserPromptSubmit invocation (see Measurement above). <code>scripts/retrieval-review.py</code> summarizes gate hit rate, injection size distribution, top query terms, top gate-fire reasons, exec-time distribution.</li>
+<li><strong><code>scripts/bash-detector-health.jsonl</code></strong> (D34) &ndash; one record per firing of the ungoverned-write detector (Hook 10): changed/ungoverned/newly-warned counts, warned flag, exec time. Fire-rate instrumentation for the detection-not-prevention surface.</li>
 </ul>
+<p>A telemetry layer also sits above the hooks: <strong><code>scripts/reviewer-health.jsonl</code></strong> (D36) records every federated-reviewer firing — sanity-check, output-self-test, adversarial-evaluator, independent reviewers — with reviewer, surface, verdict, flagged count, and <code>leads_surfaced</code>. It is a LIVENESS instrument, not an impact scoreboard: all-pass is its architecturally expected shape, because real catches route to run-plan Layer 5 and the intelligence log (Category=Review) per D36. <code>scripts/reviewer-review.py</code> runs the periodic keep/tune/kill review over it. The ladder itself is <code>patterns/frameworks/federated-reviewer.md</code>.</p>
 <p>D30 also added a 2-attempt retry loop (3s sleep) wrapping <code>query()</code> calls in both <code>flush.py:run_flush()</code> and <code>compile.py:compile_daily_log()</code>. The retry absorbs transient SDK errors (concurrent-session lock, rate, OAuth refresh) cheaply; the health log captures evidence about whether deeper investigation is warranted. If retry-success-rate stays high, the layered fix IS the answer; if <code>flush_error</code> rate stays &gt;5% after retries, that&rsquo;s the real signal to escalate. The operator runs <code>health-review.py</code> ad hoc when suspecting drift &ndash; not on a fixed cadence. Operator-driven keep/tune/kill.</p>
 <p>A related operational fix is captured in DECISIONS.md D31: Python&rsquo;s <code>print()</code> uses block buffering when stdout is a file, which had made <code>compile.py</code> look silently broken for ~3 weeks (<code>compile.log</code> mtime froze) when it was actually running fine intermittently. Fix is one line &ndash; <code>sys.stdout.reconfigure(line_buffering=True)</code> at the top of <code>compile.py:main()</code>. Also added: propagation of <code>CLAUDE_INVOKED_BY=knowledge_compile</code> BEFORE imports that could trigger Claude Code, preventing recursive SessionEnd → flush.py → compile.py → SessionEnd loops from spawning noise daily-log entries. The buffering insight is captured as an intelligence-log entry and as the <code>block-buffered-stdout-masks-progress</code> pattern &ndash; reusable across any future background-spawn pattern.</p>
 <hr />
@@ -870,7 +799,7 @@ Iteration 3: avg 8.1 — PASSED. All criteria &gt;= threshold.
 <p><strong>What it catches:</strong> Structural problems &ndash; missing citations, placeholder text, generic output, voice mismatch, broken formatting. <strong>What it misses:</strong> Fabricated citations that look correct, criteria that technically pass but miss the intent, quality issues invisible in a quick skim.</p>
 <h3 id="sanity-check-periodic-spot-check">sanity-check (Periodic Spot-Check)<a class="anchor-link" href="#sanity-check-periodic-spot-check" title="Permalink">¶</a></h3>
 <p>11 known failure modes, each with a binary test. Runs at natural pause points during execution &ndash; not at every commit, not mid-sentence, but at phase boundaries and after producing substantial output. Takes under 2 minutes.</p>
-<p>The 11 failure modes, each backed by a real production incident:</p>
+<p>The 11 failure modes (the gallery is honest about provenance: an entry either cites a real production incident or carries an explicit declared-seed note awaiting its first observed instance — 3 are incident-grounded so far, and seeds get grounded or culled as the gallery is touched):</p>
 <table>
 <thead>
 <tr>
@@ -986,9 +915,9 @@ Operator commissioned external audit. Two-pass structural analysis identified co
 
 **Type:** BL -- Build/Audit (Heavy scope)
 **Basis:** Changes what EngineOS IS at the substrate layer. Touches every engine.
-**Current state:** 28 skills, 4 deployed hooks, 3 engine tenants. Known drift in CLAUDE.md (claimed 27 skills, hooks "planned"). [^historical-1]
+**Current state:** 28 skills, 4 deployed hooks, 3 engine tenants. Known drift in CLAUDE.md (claimed 27 skills, hooks "planned"). <!-- census-ok: historical run-plan excerpt --> [^historical-1]
 
-[^historical-1]: These counts reflect the system state at the time of the 2026-04-05 substrate-tightening operation. Current counts (2026-06-05): 29 skills (recall added 2026-06-04 per D32), 8 wired hook events (4 .sh + 4 .py per D32). The 3 engine tenants count remains accurate; a 4th tenant (`job-search-arnett`) was bootstrapped 2026-06-04. Excerpt left intact as authentic run-plan evidence.
+[^historical-1]: These counts reflect the system state at the time of the 2026-04-05 substrate-tightening operation. Current counts are injected live at every rebuild: 37 skills, 8 wired hook events across 7 `.sh` + 6 `.py` scripts, 4 engine tenants. Excerpt left intact as authentic run-plan evidence.
 **Staleness check:** CONTEXT.md last updated 2 days ago. Current.
 </details>
 
@@ -998,7 +927,7 @@ Operator commissioned external audit. Two-pass structural analysis identified co
 7 topic areas classified (5 deep-dive, 2 scan). 4-phase execution plan:
 - **Phase A:** Control Plane Truth Reconciliation (11 CLAUDE.md/CONTEXT.md/registry edits)
 - **Phase B:** Path + Hook Infrastructure Hardening (hook rewrite, path migration)
-- **Phase C:** Cowork Patterns Installation (5 new patterns, 1 new rule, 2 skill extensions)
+- **Phase C:** Cowork Patterns Installation (5 new patterns, 1 new rule, 2 skill extensions) <!-- census-ok: historical run-plan excerpt -->
 - **Phase D:** Culmination Test + Intelligence Capture
 
 5 gates (plan approval, and one after each phase).
@@ -1040,7 +969,6 @@ Operator commissioned external audit. Two-pass structural analysis identified co
 - Patterns: 59 (52 problem + 4 deliverable + 3 framework)
 - Capabilities: 32 active + 2 pending migration
 
-[^historical-2]: Counts as verified on 2026-04-05 during this run plan&#39;s Phase A execution. Current counts (2026-06-05): 29 skills, 15 methodology docs, 69 patterns (58 problem + 5 deliverable + 6 framework). The Phase A excerpt is preserved as the original execution evidence; current state is documented in `overview.md` and `architecture.md`.
 
 **CLAUDE.md edits (5 distinct edits):**
 - Line 41: Removed MEMORY.md from Tier 1
@@ -1058,6 +986,7 @@ Operator commissioned external audit. Two-pass structural analysis identified co
 
 </details>
 
+<p>[^historical-2]: Counts as verified on 2026-04-05 during this run plan&rsquo;s Phase A execution. Current counts are injected live at every rebuild: 37 skills, 24 methodology docs, 87 patterns (64 problem · 6 deliverable · 17 framework). The Phase A excerpt is preserved as the original execution evidence; current state is documented in <code>overview.md</code> and <code>architecture.md</code>.</p>
 <p>This run plan bridged both purposes: it guided the 35-step execution (planning artifact) and its presence at <code>run-plans/</code> unlocked every write across 4 phases of substrate changes (gate key).</p>
 <hr />
 <h2 id="the-operator-as-final-enforcement-layer">The Operator as Final Enforcement Layer<a class="anchor-link" href="#the-operator-as-final-enforcement-layer" title="Permalink">¶</a></h2>

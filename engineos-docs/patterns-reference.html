@@ -45,18 +45,20 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s07">
-  <div class="eyebrow">EngineOS System Documentation · Section 07 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 07 · Built 2026-07-03</div>
   <h1>Patterns Reference</h1>
   <p class="subhead">Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and converted into a reusable lesson with clear trigger conditions and solutions.</p>
 </header>
 <section class="content">
 <h2 id="what-patterns-are-in-engineos">What Patterns Are in EngineOS<a class="anchor-link" href="#what-patterns-are-in-engineos" title="Permalink">¶</a></h2>
 <p>The pattern format is consistent: provenance header (source project, last verified date, staleness status), problem statement, step-by-step solution, when to use, when not to use, concrete example from real work, variations, and origin story. Every pattern traces back to a specific engagement, session, or test that produced it.</p>
-<p><strong>Breakdown:</strong> 58 problem patterns, 5 deliverable patterns, 7 framework patterns.</p>
+<p><strong>Breakdown:</strong> 58 problem patterns, 5 deliverable patterns, 9 framework patterns.</p>
 <p><strong>Source distribution:</strong></p>
 <table>
 <thead>
@@ -70,39 +72,44 @@
 <tr>
 <td>SEE + WondaKB (deduplicated)</td>
 <td>37</td>
-<td>CRM integration, sales intelligence, data quality, research methodology. 19 byte-identical pairs collapsed; 12 client-scrubbed WondaKB versions preferred for reuse.</td>
+<td>CRM integration, sales intelligence, data quality, research methodology. 19 byte-identical pairs collapsed; 12 client-scrubbed WondaKB versions preferred for reuse. <!-- census-ok: Act-3 consolidation provenance --></td>
 </tr>
 <tr>
 <td>JSE</td>
 <td>13</td>
-<td>6 original (evidence/validation, intake), 7 domain-adapted from SEE concepts (research, job search).</td>
+<td>6 original (evidence/validation, intake), 7 domain-adapted from SEE concepts (research, job search). <!-- census-ok: Act-3 consolidation provenance --></td>
 </tr>
 <tr>
 <td>ODC</td>
 <td>5</td>
-<td>All original. Security and agent infrastructure patterns from a 48-source security posture analysis.</td>
+<td>All original. Security and agent infrastructure patterns from a 48-source security posture analysis. <!-- census-ok: Act-3 consolidation provenance --></td>
 </tr>
 <tr>
 <td>EngineOS testing arc</td>
 <td>3</td>
-<td>Governance and validation patterns from adversarial cowork testing (March 2026).</td>
+<td>Governance and validation patterns from adversarial cowork testing (March 2026). <!-- census-ok: Act-3 consolidation provenance --></td>
 </tr>
 <tr>
 <td>EngineOS cowork sessions</td>
 <td>6</td>
-<td>Planning enforcement, path search discipline, negative findings, tool-wrapper diagnostics, scope-creep detection, canary pattern for destructive operations (April 2026).</td>
+<td>Planning enforcement, path search discipline, negative findings, tool-wrapper diagnostics, scope-creep detection, canary pattern for destructive operations (April 2026). <!-- census-ok: Act-3 consolidation provenance --></td>
 </tr>
 <tr>
 <td>EngineOS second-brain remediation + showcase production</td>
 <td>5</td>
 <td>Retrieval discipline, session-end audit, meta-section showcase framework, block-buffered stdout observability, parallel-agent background-mode UX (May-June 2026).</td>
 </tr>
+<tr>
+<td>EngineOS June 2026 framework builds</td>
+<td>3</td>
+<td>Living-docs surface (D33 build), cross-operator engine fork (the second-operator fork build), company-briefing archetype formalization (June 2026).</td>
+</tr>
 </tbody>
 </table>
-<p>The library consolidated from 93 source pattern files across 4 projects during the Act 3 build, then grew by 14 patterns through subsequent governance testing, production cowork sessions, and second-brain remediation arcs.</p>
+<p>The library consolidated from 93 source pattern files across 4 projects during the Act 3 build, then grew through subsequent governance testing, production cowork sessions, second-brain remediation, engagement-motion systematization, and framework formalization arcs to the current 87.</p>
 <hr />
 <h2 id="categorized-index">Categorized Index<a class="anchor-link" href="#categorized-index" title="Permalink">¶</a></h2>
-<h3 id="agent-reliability-4-patterns">Agent Reliability (4 patterns)<a class="anchor-link" href="#agent-reliability-4-patterns" title="Permalink">¶</a></h3>
+<h3 id="agent-reliability-5-patterns">Agent Reliability (5 patterns)<a class="anchor-link" href="#agent-reliability-5-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -126,6 +133,10 @@
 <tr>
 <td>parallel-agents-need-background-mode</td>
 <td>Dispatching multiple parallel subagents without <code>run_in_background: true</code> blocks the parent until the slowest finishes; the operator sees silence that looks identical to &ldquo;stuck&rdquo; for 17+ minutes.</td>
+</tr>
+<tr>
+<td>background-agent-completion-under-usage-limit</td>
+<td>A dispatched/background agent reports &ldquo;finished&rdquo; while having written zero or partial output on disk — usually cut off by a usage-limit reset mid-run — and the parent misreads termination as completion; disk-verify each pre-declared output before treating the phase done, and red-alert any completion that coincides with a reset.</td>
 </tr>
 </tbody>
 </table>
@@ -226,7 +237,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="evidence-validation-3-patterns">Evidence &amp; Validation (3 patterns)<a class="anchor-link" href="#evidence-validation-3-patterns" title="Permalink">¶</a></h3>
+<h3 id="evidence-validation-4-patterns">Evidence &amp; Validation (4 patterns)<a class="anchor-link" href="#evidence-validation-4-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -246,6 +257,10 @@
 <tr>
 <td>source-material-cross-validation</td>
 <td>Source material provided during intake may not have been written by the operator; distinguish factual content (valid regardless of author) from voice/framing content (valid only if operator-authored).</td>
+</tr>
+<tr>
+<td>investor-deck-independent-read</td>
+<td>When a target company&rsquo;s own deck or data room arrives mid-engagement, run an independent read against the prior public analysis before folding it in &ndash; the deck is ground truth for facts but a pitch for framing. Rep-1 archetype-candidate (2026-06-27).</td>
 </tr>
 </tbody>
 </table>
@@ -454,7 +469,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="system-process-3-patterns">System &amp; Process (3 patterns)<a class="anchor-link" href="#system-process-3-patterns" title="Permalink">¶</a></h3>
+<h3 id="system-process-4-patterns">System &amp; Process (4 patterns)<a class="anchor-link" href="#system-process-4-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -475,9 +490,32 @@
 <td>block-buffered-stdout-masks-progress</td>
 <td>Long-running Python scripts spawned via Popen with file-redirected stdout default to block buffering &ndash; output accumulates invisibly until process exit, making a healthy process look hung for hours (3-week compile.py misdiagnosis in 2026-05). Set <code>sys.stdout.reconfigure(line_buffering=True)</code> at entry.</td>
 </tr>
+<tr>
+<td>postmortem-as-skill-step</td>
+<td>Bake the postmortem INTO the skill as a numbered final step (what surprised us / what drifted / what to encode) instead of relying on a separate retro that never fires. Promoted from the sandbox gaming engine (D45).</td>
+</tr>
 </tbody>
 </table>
-<h3 id="deliverables-5-patterns">Deliverables (5 patterns)<a class="anchor-link" href="#deliverables-5-patterns" title="Permalink">¶</a></h3>
+<h3 id="session-capability-orientation-2-patterns">Session &amp; Capability Orientation (2 patterns)<a class="anchor-link" href="#session-capability-orientation-2-patterns" title="Permalink">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>premature-routing</td>
+<td>On a vague or priming opener, do not route to the loudest recent thread &ndash; self-orient, present readiness, and STAND READY until the operator&rsquo;s actual ask lands. Catalytic context is for orientation, never scope (D50; the live failure: a specific client engagement guessed twice from a full-breadth opener).</td>
+</tr>
+<tr>
+<td>dormant-capability-as-symptom</td>
+<td>A well-built capability that sits dormant is a structural symptom, not a usage failure &ndash; relocate the function to its definitional owner and harvest the dormant thing&rsquo;s standards rather than bolting it on (D50; the eos-assistant → session-orchestrator case).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deliverables-7-patterns">Deliverables (7 patterns)<a class="anchor-link" href="#deliverables-7-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -506,9 +544,17 @@
 <td>destructive-ops-canary-pattern</td>
 <td>Isolate a single-record canary with hard pause before running bulk destructive operations; verify state change via independent re-fetch before committing to the batch.</td>
 </tr>
+<tr>
+<td>round-trip-command-deck</td>
+<td>A single-file interactive HTML command deck that ROUND-TRIPS: generated from structured state, annotated in use, and its annotations flow back into state &ndash; the deliverable is a working surface, not a printout. Promoted from the sandbox gaming engine (D45).</td>
+</tr>
+<tr>
+<td>connective-visual-language-for-nontechnical-buyin</td>
+<td>For non-technical/C-suite audiences, render processes as explicit connective flowcharts (arrows, nodes, &ldquo;you are here&rdquo;) rather than prose or lists &ndash; the connective tissue is what buys comprehension and buy-in. A child instance of the comprehension-design standard.</td>
+</tr>
 </tbody>
 </table>
-<h3 id="frameworks-7-patterns">Frameworks (7 patterns)<a class="anchor-link" href="#frameworks-7-patterns" title="Permalink">¶</a></h3>
+<h3 id="frameworks-17-patterns">Frameworks (17 patterns)<a class="anchor-link" href="#frameworks-17-patterns" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -545,11 +591,74 @@
 <td>living-docs-surface</td>
 <td>When a subsystem keeps evolving, the lookup surface must be rebuildable from disk truth on demand. Markdown source-of-truth (<code>docs/source/</code>) + explicit rebuild command (<code>scripts/build-docs.py</code>) + drift detection (<code>scripts/docs-staleness.py</code>); render-side sister to retrieval-before-decide (read) and session-end-audit-before-flush (write).</td>
 </tr>
+<tr>
+<td>cross-operator-engine-fork</td>
+<td>When handing an established EngineOS to a new operator, fork the full substrate (not a &ldquo;lite&rdquo; subset), strip the author&rsquo;s personal data, pre-load the new operator&rsquo;s engine, and ship a walkthrough to a working first session &ndash; five-phase build with guardrails at every transition.</td>
+</tr>
+<tr>
+<td>company-briefing</td>
+<td>Single-file interactive HTML walkthrough about a specific target company for a named audience walking into a decision or conversation about it. Names the archetype, distinguishes it from system-walkthrough showcases, and provides binary completeness checks before deploy.</td>
+</tr>
+<tr>
+<td>engagement-workup</td>
+<td>The client-engagement motion as a 4-type router (briefing / intake-response synthesis / execute+systematize / capability-setup) &ndash; subject-agnostic by doctrine, person-card firewall, cold-session-fireable from the skill alone (D42).</td>
+</tr>
+<tr>
+<td>engagement-artifact-structure</td>
+<td>Name=identity, state=field: per-engagement artifacts keep a stable name while Phase ⊥ Status ⊥ Version fields carry state; iterate within a stage, SNAP across the gate; every engagement gets a CONTEXT.md front door (D46).</td>
+</tr>
+<tr>
+<td>sme-iteration-loop</td>
+<td>Iterating a deliverable on SME/stakeholder feedback: classify each item into its 3 flavors (strategic re-direction / insider ground-truth / reasoned disagreement), adjudicate defend-or-fold, gate on EARLY ground-truth, freeze versions, close with a context handoff (D48).</td>
+</tr>
+<tr>
+<td>federated-reviewer</td>
+<td>A ladder of reviewers at increasing independence (same-context self-check → independent-context evaluator → outside reviewer) with verdict routing and reviewer-health telemetry &ndash; liveness instrumented in <code>scripts/reviewer-health.jsonl</code>; impact routes to Layer 5 + the intelligence log (D36).</td>
+</tr>
+<tr>
+<td>private-gated-static-hosting</td>
+<td>Private-by-default hosting: private repo → Cloudflare Pages → Cloudflare Access email-OTP gate, with a church/state token boundary (the deploy credential provably cannot touch the gate) and gate creation kept the operator&rsquo;s by-hand act (D41).</td>
+</tr>
+<tr>
+<td>people-profiling-subsystem</td>
+<td>The recovered people-profiling capability as a subsystem: one generalized person-profiler + <code>registry/people.md</code> index + <code>people/</code> home + a 3-layer forcing function (retrieval-hook surface, session close-scan, always-loaded rule) so capture/lookup can&rsquo;t silently lapse again (2026-06-24).</td>
+</tr>
+<tr>
+<td>launch-hub-go-to-market-in-a-box</td>
+<td>Hand a client a complete go-to-market for one recurring event &ndash; concept to live, already built &ndash; behind a single interactive front door that doubles as a calling card. CANDIDATE v1 (rep 1: a go-to-market launch engagement, 2026-07-01).</td>
+</tr>
+<tr>
+<td>same-scene-subject-composite</td>
+<td>Deterministic (non-generative) person-insert for the same-camera/static-scene photo case: SIFT homography align → BiRefNet matte → subject-only insert → depth-order → feathered blend → grain match. Fully local; model weights download, the photos never leave the machine (D47).</td>
+</tr>
 </tbody>
 </table>
 <hr />
+<h2 id="alphabetical-index">Alphabetical Index<a class="anchor-link" href="#alphabetical-index" title="Permalink">¶</a></h2>
+<p>Every live pattern by name (category directory in parentheses). Generated from <code>patterns/</code> at repair time; the categorized tables above carry the descriptions.</p>
+<p><strong>A</strong> — <code>advisory-governance-failure</code> · <code>agent-hallucinated-success-verification</code> · <code>application-readiness-litmus-test</code> · <code>arnaud-friendly-campaign-overview</code> · <code>attio-import-escalation</code></p>
+<p><strong>B</strong> — <code>background-agent-completion-under-usage-limit</code> · <code>batch-rate-limiting</code> · <code>block-buffered-stdout-masks-progress</code></p>
+<p><strong>C</strong> — <code>campaign-readiness-litmus-test</code> · <code>company-briefing</code> · <code>confident-negative-finding</code> · <code>connective-visual-language-for-nontechnical-buyin</code> · <code>content-excitement-outpaces-infrastructure</code> · <code>context-isolation</code> · <code>context-isolation-for-research</code> · <code>crm-id-mapping-disambiguation</code> · <code>crm-integration-maintenance-cadence</code> · <code>cross-operator-engine-fork</code> · <code>csv-line-ending-normalization</code> · <code>culmination-test-design</code> · <code>custom-skills-over-mcp</code></p>
+<p><strong>D</strong> — <code>data-normalization-for-matching</code> · <code>dependency-chain-masking</code> · <code>destructive-ops-canary-pattern</code> · <code>direct-ats-query-over-search</code> · <code>domain-first-company-resolution</code> · <code>domain-specific-research</code> · <code>dormant-capability-as-symptom</code></p>
+<p><strong>E</strong> — <code>education-sector-research</code> · <code>engagement-artifact-structure</code> · <code>engagement-workup</code> · <code>evidence-strength-tagging</code> · <code>exploratory-list-building</code> · <code>export-match-local-for-scale</code></p>
+<p><strong>F</strong> — <code>federated-reviewer</code></p>
+<p><strong>G</strong> — <code>ground-truth-before-scoring</code></p>
+<p><strong>H</strong> — <code>healthcare-icp-classification-framework</code> · <code>hidden-champion-identification</code></p>
+<p><strong>I</strong> — <code>idempotent-api-operations</code> · <code>intake-question-file</code> · <code>investor-deck-independent-read</code></p>
+<p><strong>J</strong> — <code>job-title-credential-normalization</code> · <code>jse-exploratory-list-building</code></p>
+<p><strong>L</strong> — <code>launch-hub-go-to-market-in-a-box</code> · <code>living-docs-surface</code> · <code>local-cache-api-efficiency</code> · <code>local-gguf-embeddings</code></p>
+<p><strong>M</strong> — <code>mcp-silent-failure-detection</code> · <code>mcp-token-management</code> · <code>meeting-memo-processing</code> · <code>meta-section-as-system-showcase</code></p>
+<p><strong>N</strong> — <code>network-first-before-cold-apply</code> · <code>network-first-campaign-launch</code> · <code>no-results-as-signal</code> · <code>notion-ai-properties</code> · <code>notion-property-types</code> · <code>notion-relation-patterns</code></p>
+<p><strong>P</strong> — <code>parallel-agents-need-background-mode</code> · <code>path-search-discipline</code> · <code>people-profiling-subsystem</code> · <code>per-agent-routing-over-elevated-mode</code> · <code>phone-number-format-normalization</code> · <code>planning-skip-on-confidence</code> · <code>postmortem-as-skill-step</code> · <code>power-user-analysis</code> · <code>premature-routing</code> · <code>private-gated-static-hosting</code></p>
+<p><strong>R</strong> — <code>reader-agent-prompt-injection-defense</code> · <code>reengagement-scoring</code> · <code>retrieval-before-decide</code> · <code>revenue-attribution-gap</code> · <code>round-trip-command-deck</code></p>
+<p><strong>S</strong> — <code>same-scene-subject-composite</code> · <code>scope-creep-disguised-as-diligence</code> · <code>session-end-audit-before-flush</code> · <code>sme-iteration-loop</code> · <code>snippet-extraction-over-scraping</code> · <code>source-material-cross-validation</code> · <code>system-optimization-conversation</code></p>
+<p><strong>T</strong> — <code>tool-wrapper-vs-capability-limit</code> · <code>two-layer-company-profiles</code></p>
+<p><strong>U</strong> — <code>university-land-and-expand</code></p>
+<p><strong>V</strong> — <code>verify-single-before-batch</code> · <code>vertical-icp-segmentation</code> · <code>video-recording-to-transcript</code></p>
+<p><strong>W</strong> — <code>webhook-n8n-integration</code></p>
+<h2 id="z-zero-clawhub-supply-chain-defense"><strong>Z</strong> — <code>zero-clawhub-supply-chain-defense</code><a class="anchor-link" href="#z-zero-clawhub-supply-chain-defense" title="Permalink">¶</a></h2>
 <h2 id="key-patterns-deep-examples">Key Patterns &ndash; Deep Examples<a class="anchor-link" href="#key-patterns-deep-examples" title="Permalink">¶</a></h2>
-<p>The following 10 patterns are presented in full detail. They were selected because they tell the story of how EngineOS learned from its own production work. Each one traces back to a specific incident where something went wrong, was analyzed, and became permanent institutional memory.</p>
+<p>The following 10 patterns <!-- census-ok: the doc's own showcase count --> are presented in full detail. They were selected because they tell the story of how EngineOS learned from its own production work. Each one traces back to a specific incident where something went wrong, was analyzed, and became permanent institutional memory.</p>
 <h3 id="1-confident-negative-finding">1. Confident Negative Finding<a class="anchor-link" href="#1-confident-negative-finding" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> When an agent declares &ldquo;X does not exist&rdquo; with confident framing, that finding becomes a premise for downstream analysis. If the finding is wrong, everything built on top of it is structurally invalidated &ndash; not just incorrect in one detail, but wrong at the foundation. The cost of a wrong negative is asymmetric: a wrong positive gets corrected when someone looks closer, but a wrong negative closes off investigation entirely.</p>
@@ -644,7 +753,7 @@
 <h2 id="how-the-library-works">How the Library Works<a class="anchor-link" href="#how-the-library-works" title="Permalink">¶</a></h2>
 <p><strong>Before solving a problem:</strong> Check the library. If a pattern exists, use it. If not, solve the problem, then consider extracting a new pattern.</p>
 <p><strong>When to extract a new pattern:</strong> You solved something reusable, found a better approach than an existing pattern, identified a framework worth standardizing, or made a mistake worth preventing.</p>
-<p><strong>Staleness review:</strong> Patterns not verified within 90 days are marked <code>needs-review</code>. Patterns contradicted by current practice are marked <code>superseded</code> (currently 1: <code>custom-skills-over-mcp</code>). Superseded patterns are retained for historical reference &ndash; they document what was believed and why it changed.</p>
+<p><strong>Staleness review:</strong> Patterns not verified within 90 days are marked <code>needs-review</code>. Patterns contradicted by current practice are marked <code>superseded</code> (currently 1: <code>custom-skills-over-mcp</code>). Superseded patterns are retained for historical reference &ndash; they document what was believed and why it changed. At the other end of the lifecycle, a pattern captured at rep 1 may carry a <strong><code>candidate</code> / <code>archetype-candidate</code></strong> status (e.g. <code>launch-hub-go-to-market-in-a-box</code>, <code>investor-deck-independent-read</code>): the motion is recorded so rep 2 can harden it, and it is not canon until a further rep validates the shape (the D41 crystallize-from-reps doctrine).</p>
 <p><strong>Cross-engine applicability:</strong> This library serves all EngineOS engines. Patterns from any engine that solve problems across domains belong here. The domain distribution ranges from very high transferability (Agent Reliability, Governance &amp; Validation, Evidence &amp; Validation &ndash; applicable to any agent system) to medium transferability (CRM Integration, Notion Integration &ndash; platform-specific details but transferable principles).</p>
 <p>Every pattern carries its provenance. You can trace any pattern back to the project, engagement, and date that produced it. This is how institutional memory persists across sessions, across engines, and across time.</p>
 </section>

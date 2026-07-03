@@ -45,24 +45,26 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s00">
-  <div class="eyebrow">Living documentation · Rebuilt from disk truth · 2026-06-05</div>
+  <div class="eyebrow">Living documentation · Rebuilt from disk truth · 2026-07-03</div>
   <h1>EngineOS — System Documentation</h1>
-  <p class="subhead">A two-layer operating system for professional work. One operator. 100+ days. Every count below is verified against disk on each rebuild.</p>
+  <p class="subhead">A two-layer operating system for professional work. One operator. 100+ days. Every count below is derived from disk at build time.</p>
   <div class="stat-strip">
-    <div class="stat-card" title=".claude/skills/"><span class="num">29</span><span class="label">OS skills</span></div>
-    <div class="stat-card" title="patterns/"><span class="num">70</span><span class="label">Patterns</span></div>
-    <div class="stat-card" title="methodology/"><span class="num">15</span><span class="label">Methodology docs</span></div>
+    <div class="stat-card" title=".claude/skills/"><span class="num">37</span><span class="label">OS skills</span></div>
+    <div class="stat-card" title="patterns/"><span class="num">87</span><span class="label">Patterns</span></div>
+    <div class="stat-card" title="methodology/"><span class="num">24</span><span class="label">Methodology docs</span></div>
     <div class="stat-card" title=".claude/settings.json"><span class="num">8</span><span class="label">Hook events</span></div>
-    <div class="stat-card" title=".claude/rules/"><span class="num">7</span><span class="label">Rules</span></div>
+    <div class="stat-card" title=".claude/rules/"><span class="num">8</span><span class="label">Rules</span></div>
     <div class="stat-card" title="principles/"><span class="num">5</span><span class="label">Principles</span></div>
     <div class="stat-card" title="templates/"><span class="num">38</span><span class="label">Templates</span></div>
     <div class="stat-card" title="engines/"><span class="num">4</span><span class="label">Engine tenants</span></div>
-    <div class="stat-card" title="knowledge/"><span class="num">216</span><span class="label">KB articles</span></div>
-    <div class="stat-card" title="DECISIONS.md"><span class="num">33</span><span class="label">Decisions</span></div>
+    <div class="stat-card" title="knowledge/"><span class="num">454</span><span class="label">KB articles</span></div>
+    <div class="stat-card" title="DECISIONS.md"><span class="num">54</span><span class="label">Decisions</span></div>
   </div>
 </header>
 <section class="section" id="sections">
@@ -84,31 +86,31 @@
 </div>
 <h3 class="group-label">Skills &amp; Patterns</h3>
 <div class="card-grid">
-  <a class="doc-card" href="skill-system.html"><div class="doc-card__num">05</div><div class="doc-card__title">Skill System</div><div class="doc-card__blurb">EngineOS ships 29 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run c</div></a>
-  <a class="doc-card" href="skills-reference.html"><div class="doc-card__num">06</div><div class="doc-card__title">Skills Reference</div><div class="doc-card__blurb">EngineOS ships 29 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a</div></a>
+  <a class="doc-card" href="skill-system.html"><div class="doc-card__num">05</div><div class="doc-card__title">Skill System</div><div class="doc-card__blurb">EngineOS ships 37 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run c</div></a>
+  <a class="doc-card" href="skills-reference.html"><div class="doc-card__num">06</div><div class="doc-card__title">Skills Reference</div><div class="doc-card__blurb">EngineOS ships 37 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a</div></a>
   <a class="doc-card" href="patterns-reference.html"><div class="doc-card__num">07</div><div class="doc-card__title">Patterns Reference</div><div class="doc-card__blurb">Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and</div></a>
 </div>
 <h3 class="group-label">Methodology</h3>
 <div class="card-grid">
-  <a class="doc-card" href="methodology.html"><div class="doc-card__num">08</div><div class="doc-card__title">Methodology</div><div class="doc-card__blurb">EngineOS encodes quality methodology as infrastructure, not documentation. 15 methodology docs live at methodology/ and are protected by an immutability rule -- modification requires operator approval</div></a>
-  <a class="doc-card" href="methodology-index.html"><div class="doc-card__num">09</div><div class="doc-card__title">Methodology Index</div><div class="doc-card__blurb">15 formalized methodology documents live at methodology/. They are protected by a path-scoped immutability rule (.claude/rules/methodology-immutable.md) -- modification requires explicit operator appr</div></a>
+  <a class="doc-card" href="methodology.html"><div class="doc-card__num">08</div><div class="doc-card__title">Methodology</div><div class="doc-card__blurb">EngineOS encodes quality methodology as infrastructure, not documentation. 24 methodology docs live at methodology/ and are protected by an immutability rule -- modification requires operator approval</div></a>
+  <a class="doc-card" href="methodology-index.html"><div class="doc-card__num">09</div><div class="doc-card__title">Methodology Index</div><div class="doc-card__blurb">24 formalized methodology documents live at methodology/. They are protected by a path-scoped immutability rule (.claude/rules/methodology-immutable.md) -- modification requires explicit operator appr</div></a>
 </div>
 <h3 class="group-label">Memory</h3>
 <div class="card-grid">
-  <a class="doc-card" href="second-brain.html"><div class="doc-card__num">10</div><div class="doc-card__title">Second Brain</div><div class="doc-card__blurb">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 216-article knowledge base, 30+ daily logs, 44+ run plans, 15 methodology docs. Until 2026-06-04, that&#x27;s all it did -</div></a>
+  <a class="doc-card" href="second-brain.html"><div class="doc-card__num">10</div><div class="doc-card__title">Second Brain</div><div class="doc-card__blurb">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 454-article knowledge base (371 concepts + 83 connections), 43 daily logs, 173 run plans, 24 methodology docs. Until </div></a>
 </div>
 <h3 class="group-label">Infrastructure</h3>
 <div class="card-grid">
   <a class="doc-card" href="integrations.html"><div class="doc-card__num">11</div><div class="doc-card__title">Integrations</div><div class="doc-card__blurb">EngineOS integrates with external systems through a layered architecture: MCP (Model Context Protocol) servers provide tool-level access, skills encode domain logic and workflow orchestration, and dir</div></a>
   <a class="doc-card" href="design-system.html"><div class="doc-card__num">12</div><div class="doc-card__title">Design System</div><div class="doc-card__blurb">The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two prod</div></a>
-  <a class="doc-card" href="templates-reference.html"><div class="doc-card__num">13</div><div class="doc-card__title">Templates Reference</div><div class="doc-card__blurb">EngineOS provides 38 templates organized into two categories: 27 deliverable templates for client-facing and operational outputs, and 11 engagement templates that scaffold new client engagement direct</div></a>
+  <a class="doc-card" href="templates-reference.html"><div class="doc-card__num">13</div><div class="doc-card__title">Templates Reference</div><div class="doc-card__blurb">EngineOS provides 38 templates (README indexes excluded from the count), organized across four locations: deliverables/ (client-facing and operational outputs in six subcategories plus top-level brief</div></a>
 </div>
 <h3 class="group-label">Reference</h3>
 <div class="card-grid">
   <a class="doc-card" href="faq.html"><div class="doc-card__num">14</div><div class="doc-card__title">FAQ</div><div class="doc-card__blurb">Questions a developer, systems architect, or technical reviewer would actually ask about EngineOS.</div></a>
 </div>
 </section>
-<footer class="footer"><p>Living-docs subsystem · <a href="overview.html">D33 architecture</a> · <a href="https://github.com/SeanECurrie/on-demand-curriculum">repo</a></p></footer>
+<footer class="footer"><p>Living-docs subsystem · <a href="overview.html">D33 architecture</a> · <a href="dashboard.html">living health dashboard</a> · <a href="https://github.com/SeanECurrie/on-demand-curriculum">repo</a></p></footer>
 
 </main>
 <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>

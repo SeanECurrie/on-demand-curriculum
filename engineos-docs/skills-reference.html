@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Skills Reference — EngineOS Docs</title>
-  <meta name="description" content="EngineOS ships 29 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a">
+  <meta name="description" content="EngineOS ships 37 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -45,13 +45,15 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
+  <div class="nav-group-label">Live</div>
+  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
 <header class="hero" id="s06">
-  <div class="eyebrow">EngineOS System Documentation · Section 06 · Built 2026-06-05</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 06 · Built 2026-07-03</div>
   <h1>Skills Reference</h1>
-  <p class="subhead">EngineOS ships 29 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, and integration points.</p>
+  <p class="subhead">EngineOS ships 37 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, and integration points.</p>
 </header>
 <section class="content">
 <p>Skills load passively via native discovery (descriptions only, ~2% of context). Full content loads only on invocation. Every skill declares its <code>allowed-tools</code> in frontmatter, restricting what tools it can access.</p>
@@ -146,6 +148,36 @@
 <td>Read, Glob, Grep, Puppeteer MCP</td>
 </tr>
 <tr>
+<td>corpus-ingest</td>
+<td>Content</td>
+<td>Ingest operator&rsquo;s pre-existing personal material into the second brain as initial seed</td>
+<td>Read, Write, Edit, Bash, Glob, Grep</td>
+</tr>
+<tr>
+<td>company-briefing</td>
+<td>Content</td>
+<td>Research-backed interactive HTML walkthrough about a target company for a named audience</td>
+<td>Read, Bash, Glob, Grep, WebFetch, WebSearch, Agent, Write, Edit, Bright Data, Context7</td>
+</tr>
+<tr>
+<td>transcribe</td>
+<td>Content</td>
+<td>On-device audio→text (MLX Whisper) &ndash; the front half of the intake pipeline; chains to transcript-processor</td>
+<td>Bash, Read, Write, Glob, Skill</td>
+</tr>
+<tr>
+<td>engagement-workup</td>
+<td>Engagement</td>
+<td>The 4-type client-engagement orchestrator &ndash; classify (briefing / synthesis / execute+systematize / capability-setup), route, run to a gated deliverable</td>
+<td>Read, Write, Edit, Bash, Glob, Grep, Skill, Agent</td>
+</tr>
+<tr>
+<td>gated-deploy</td>
+<td>Hosting</td>
+<td>Re-deploy content to an EXISTING Cloudflare-Access-gated site through a Pages:Edit-only token that provably cannot touch the gate</td>
+<td>Bash, Read</td>
+</tr>
+<tr>
 <td>attio-mapper</td>
 <td>Integration</td>
 <td>Map Attio CRM workspaces to generate schema caches and playbooks</td>
@@ -197,7 +229,7 @@
 <td>session-orchestrator</td>
 <td>Governance</td>
 <td>Orient the OS at session start &ndash; phase detection, tiered context loading, dashboard, work routing</td>
-<td>Read, Write, Edit, Glob, Grep, Skill</td>
+<td>Read, Write, Edit, Glob, Grep, Skill, Bash</td>
 </tr>
 <tr>
 <td>qa-pipeline</td>
@@ -209,13 +241,13 @@
 <td>output-self-test</td>
 <td>Governance</td>
 <td>Run binary self-tests against output before declaring it complete</td>
-<td>Read, Glob, Grep</td>
+<td>Read, Glob, Grep, Bash</td>
 </tr>
 <tr>
 <td>sanity-check</td>
 <td>Governance</td>
 <td>Quick scan for 11 known failure modes at natural pause points</td>
-<td>Read, Glob, Grep</td>
+<td>Read, Glob, Grep, Bash</td>
 </tr>
 <tr>
 <td>content-updater</td>
@@ -233,13 +265,31 @@
 <td>adversarial-evaluator</td>
 <td>Governance</td>
 <td>Spawn an independent subagent to adversarially score deliverables against criteria</td>
-<td>Read, Bash, Glob, Grep</td>
+<td>Read, Bash, Glob, Grep, WebSearch, Bright Data (search + scrape)</td>
 </tr>
 <tr>
 <td>eos-assistant</td>
 <td>System</td>
 <td>EngineOS-aware conversational partner &ndash; knows the system, detects drift, challenges framing</td>
 <td>Read, Glob, Grep, Skill, Bash</td>
+</tr>
+<tr>
+<td>kb-health</td>
+<td>System</td>
+<td>The fireable second-brain health check &ndash; live stats + graph health + pipeline vital signs in one honest report</td>
+<td>Bash, Read, Grep, Glob</td>
+</tr>
+<tr>
+<td>person-profiler</td>
+<td>People</td>
+<td>Create or update a structured profile for ANY person the operator works with &ndash; synthesis engine, append-only, evidence-tagged</td>
+<td>Read, Write, Edit, Glob, Grep, Bash, Skill</td>
+</tr>
+<tr>
+<td>people-curator</td>
+<td>People</td>
+<td>Operator-facing curation front end &ndash; adjudicate the six axes, feed intel, walk candidates; drives person-profiler</td>
+<td>Read, Write, Edit, Bash, Glob, Grep, Skill</td>
 </tr>
 </tbody>
 </table>
@@ -266,6 +316,7 @@
 <p><strong>Key behaviors:</strong>
 - Thin orchestration skill that routes, not researches. Research logic lives in market-scanner and other registered capabilities.
 - Runs a 5-stage pipeline: Intake (clarify who and what), Research (route via registry), Analysis (three-ring convergence, findings-formatter), Deliverable (section-construction, render-validate), Delivery (deploy, quality gate).
+- Tracks each research engagement as an instance at <code>projects/research-instances/[name]/INSTANCE.md</code> with a lifecycle (INTAKE → RESEARCHING → ANALYZING → PRODUCING → DELIVERED), and checks <code>projects/research-instances/domain-guides/</code> for an existing domain guide at intake &ndash; the first instance in a new domain becomes its guide.
 - Applies the three-ring approach to every research request: primary data, industry surveys, and broader context. When all three rings agree, the finding is solid. When they disagree, the contradiction is flagged.</p>
 <p><strong>Invokes:</strong> market-scanner, findings-formatter, section-construction, render-validate, qa-pipeline, depth-governor (via registry resolution)</p>
 <p><strong>Invoked by:</strong> phase-controller (via skill chain), eos-assistant (in production mode)</p>
@@ -317,7 +368,7 @@
 <p><strong>Invoked by:</strong> Manual <code>/recall &lt;query&gt;</code> invocation; auto-fire via the <code>UserPromptSubmit</code> retrieval hook&rsquo;s heuristic gate (<code>hooks/prompt-retrieval.py</code>, ~90% of retrieval) and the <code>retrieval-before-decide</code> framework pattern at architecture/methodology decision points.</p>
 <hr />
 <h3 id="content-and-deliverable-production">Content and Deliverable Production<a class="anchor-link" href="#content-and-deliverable-production" title="Permalink">¶</a></h3>
-<p>Seven skills that produce client-facing or operator-facing content. framework-explainer is cross-listed from Research.</p>
+<p>Ten skills that produce client-facing or operator-facing content. framework-explainer is cross-listed from Research.</p>
 <hr />
 <h4 id="campaign-builder">campaign-builder<a class="anchor-link" href="#campaign-builder" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Email sequence and outreach campaign creation. Orchestration tier &ndash; invokes content-updater for KB updates and qa-pipeline before delivery.</p>
@@ -396,6 +447,57 @@
 <p><strong>Invokes:</strong> qa-pipeline (on generated HTML), audit-logging</p>
 <p><strong>Invoked by:</strong> phase-controller (via skill chain)</p>
 <p><em>Cross-listed: Also appears under Research and Intelligence as it explains complex systems.</em></p>
+<hr />
+<h4 id="corpus-ingest">corpus-ingest<a class="anchor-link" href="#corpus-ingest" title="Permalink">¶</a></h4>
+<p><strong>One-liner:</strong> Ingest operator&rsquo;s existing personal material (notes, journals, files) into the second brain as initial seed.</p>
+<p><strong>Triggers:</strong> &ldquo;seed my second brain&rdquo;, &ldquo;ingest my notes&rdquo;, session-orchestrator fresh-install branch option (b).</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Bash, Glob, Grep</code></p>
+<p><strong>Key behaviors:</strong>
+- Walks a source directory, filters to supported types (<code>.md</code>, <code>.txt</code>, <code>.pdf</code>, <code>.docx</code>), groups into batches of ~20 files, and requires operator confirmation per batch before any KB write fires.
+- Writes structured KB articles to <code>knowledge/concepts/</code> via the Claude Code SDK &ndash; same output format as <code>compile.py</code> / <code>ingest.py</code>, so retrieval works uniformly across all three input classes. Idempotent state tracking (hash + mtime) skips already-ingested files on re-runs.
+- Handles the third input class alongside <code>scripts/ingest.py</code> (curated reference docs) and <code>scripts/compile.py</code> (daily conversation logs; pipeline: SessionEnd / PreCompact hooks -&gt; flush.py -&gt; compile.py).</p>
+<p><strong>Invokes:</strong> None (uses the Claude Code SDK via Bash)</p>
+<p><strong>Invoked by:</strong> session-orchestrator (fresh-install branch option b); manual invocation</p>
+<hr />
+<h4 id="company-briefing">company-briefing<a class="anchor-link" href="#company-briefing" title="Permalink">¶</a></h4>
+<p><strong>One-liner:</strong> Build a research-backed, single-file interactive HTML walkthrough about a specific company for a specific audience walking into a decision or conversation about that company.</p>
+<p><strong>Triggers:</strong> &ldquo;build a briefing on company X&rdquo;, &ldquo;do a walking-in briefing for Y&rdquo;, &ldquo;competitive intel walkthrough for Z&rdquo;, &ldquo;pre-engagement briefing on W&rdquo; &ndash; any variation combining (a) target company, (b) named audience, (c) interactive HTML output.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Bash, Glob, Grep, WebFetch, WebSearch, Agent, Write, Edit, mcp__brightdata__*, mcp__context7__*</code></p>
+<p><strong>Key behaviors:</strong>
+- Orchestrates donor substrate, does not own it: SEE research methodology (credibility-tiers, dual-source-intelligence, market-scanner) plus ODC HTML output home (comp-study report design, walkthrough style guide). Owns only the combination contract.
+- Required intake before any research dispatch: target company, audience name + role, purpose (walk-in / decision-support / engagement-prep / competitive-intel), sensitivity constraints, deploy destination, landing-page card (on by default, <strong>operator-declared at intake only &ndash; an agent may not set or flip it off on its own inference</strong>; operator can decline, and evaluator criterion C6 is conditioned on this setting so a card-less build on instruction still passes &ndash; the symmetric C6 also fails a card added when the operator declined, closing the dodge in both directions), surface depth, tone. Generic audience = push back &ndash; a briefing without an audience is just a research report.
+- Deep research via orthogonal parallel subagent dispatch (typically 6-8 threads, 80-150+ tier-coded sources), validated through render-validate and adversarial-evaluator with a bounded iteration envelope.</p>
+<p><strong>Invokes:</strong> depth-governor, market-scanner, findings-formatter, section-construction, render-validate, adversarial-evaluator</p>
+<p><strong>Invoked by:</strong> phase-controller (via skill chain); operator-initiated</p>
+<hr />
+<h4 id="transcribe">transcribe<a class="anchor-link" href="#transcribe" title="Permalink">¶</a></h4>
+<p><strong>One-liner:</strong> Turn audio (or video) into text &ndash; on-device via MLX Whisper (Apple Silicon), no subscription, no upload. The FRONT HALF of the intake pipeline (audio→text); the back half is transcript-processor (text→intelligence).</p>
+<p><strong>Triggers:</strong> The operator provides or points at an audio/voice file &ndash; a voice memo, <code>.m4a</code> / <code>.mp3</code> / <code>.wav</code> / <code>.m4v</code> / <code>.mov</code> / <code>.mp4</code>, &ldquo;here&rsquo;s a recording&rdquo;, &ldquo;I recorded a brain-dump&rdquo;, &ldquo;transcribe this&rdquo;. Reflexive capability: when audio appears, reach for this without being asked.</p>
+<p><strong>Allowed tools:</strong> <code>Bash, Read, Write, Glob, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Wraps <code>scripts/transcribe.py</code> (MLX Whisper) &ndash; everything stays on-device; only model weights are ever downloaded, never the audio.
+- Produces the full transcript plus timestamped segments; a single-speaker brain-dump needs no diarization.
+- Chains forward to transcript-processor so raw audio becomes structured intelligence in one motion &ndash; this is what makes &ldquo;just send a voice memo&rdquo; a first-class intake path.
+- Provenance: lifts and upgrades the un-lifted WondaKB <code>video-recording-to-transcript</code> capability (2026-06-25, D42 arc).</p>
+<p><strong>Invokes:</strong> transcript-processor (the chained back half).</p>
+<p><strong>Invoked by:</strong> engagement-workup (the audio-intake path); any operator audio drop.</p>
+<hr />
+<h3 id="engagement-orchestration">Engagement Orchestration<a class="anchor-link" href="#engagement-orchestration" title="Permalink">¶</a></h3>
+<p>One skill &ndash; the cold-session entry point for the client/colleague engagement motion (D42). Playbook: <code>methodology/engagement-workup.md</code>.</p>
+<hr />
+<h4 id="engagement-workup">engagement-workup<a class="anchor-link" href="#engagement-workup" title="Permalink">¶</a></h4>
+<p><strong>One-liner:</strong> The orchestrator for a client/colleague engagement &ndash; someone brings a situation (intake, brain-dump, brief, voicemail, transcript, or request) and we research it, synthesize it, and return something that surfaces what matters, OR execute the task and systematize it. Subject-agnostic by doctrine.</p>
+<p><strong>Triggers:</strong> &ldquo;fire up an engagement-workup session&rdquo;, &ldquo;here&rsquo;s an intake/brain-dump from [a client/colleague/prospect]&rdquo;, &ldquo;do a workup on [X]&rdquo;, &ldquo;they want us to understand/assess/move/build their thing&rdquo;, &ldquo;here&rsquo;s a voicemail from a prospective client&rdquo;, or a transcript/audio handed over with &ldquo;how do we help?&rdquo;</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Bash, Glob, Grep, Skill, Agent</code></p>
+<p><strong>Key behaviors:</strong>
+- <strong>4-type router:</strong> Type A (decision-support briefing), Type B (intake-response synthesis), Type C (execute + systematize), Type D (capability-setup) &ndash; classification first, then the matching chain.
+- <strong>Don&rsquo;t ask twenty questions first.</strong> Runs the motion on what arrived; clarifying questions are a <em>deliverable at the end</em> (Type B), not a gate at the start. They brain-dump, we come back impressive.
+- <strong>Subject-agnostic traversal:</strong> the doctrine + methodology carry it across any domain (a cornhole tournament and a pharma diligence brief ran the identical motion).
+- <strong>Person-card firewall:</strong> a subject&rsquo;s candor calibrates strategy; it is never quoted back into a deliverable.
+- <strong>Step 6 (iterate)</strong> runs the SME-iteration loop (<code>patterns/frameworks/sme-iteration-loop.md</code>): 3 feedback flavors, the adjudication table, the early ground-truth gate, the context handoff.
+- Ends at a gated deliverable &ndash; operator reviews before anything ships.</p>
+<p><strong>Invokes:</strong> transcribe + transcript-processor (audio intake), depth-governor, research skills (market-scanner / research-engine / company-briefing), production skills (section-construction, render-validate), adversarial-evaluator, gated-deploy (when the close is a gated share).</p>
+<p><strong>Invoked by:</strong> Operator engagement triggers; the phase-controller EN chain (it is the EN chain&rsquo;s orchestration spine).</p>
 <hr />
 <h3 id="integration">Integration<a class="anchor-link" href="#integration" title="Permalink">¶</a></h3>
 <p>Seven skills that connect EngineOS to external platforms (Attio CRM and Notion).</p>
@@ -477,6 +579,22 @@
 <p><strong>Invokes:</strong> notion-mapper (prerequisite if playbook missing), audit-logging</p>
 <p><strong>Invoked by:</strong> transcript-processor (for action item routing), session-orchestrator (auto-suggest)</p>
 <hr />
+<h3 id="hosting">Hosting<a class="anchor-link" href="#hosting" title="Permalink">¶</a></h3>
+<p>One skill &ndash; the content half of the private-by-default hosting capability (D41/D48). The Access gate itself is stood up by the operator by hand; see <code>patterns/frameworks/private-gated-static-hosting.md</code>.</p>
+<hr />
+<h4 id="gated-deploy">gated-deploy<a class="anchor-link" href="#gated-deploy" title="Permalink">¶</a></h4>
+<p><strong>One-liner:</strong> Re-deploy updated content to an EXISTING private, Cloudflare-Access-gated static site. The CONTENT path only &ndash; bytes flow through a Pages:Edit-only token that provably cannot touch the Access gate or who-can-see-what (church/state by token boundary).</p>
+<p><strong>Triggers:</strong> &ldquo;deploy this behind the gate&rdquo;, &ldquo;push the updated work to Cloudflare&rdquo;, &ldquo;re-deploy the gated site&rdquo;, &ldquo;ship the new version to the private site&rdquo;, or any variation of pushing fresh bytes to a project that is already private + identity-gated.</p>
+<p><strong>Allowed tools:</strong> <code>Bash, Read</code></p>
+<p><strong>Key behaviors:</strong>
+- Mechanical floor is <code>scripts/cloudflare/</code> (<code>deploy.py</code>, <code>verify.py</code>, <code>guard.py</code>, <code>cf_api.py</code>, <code>known-bugs.md</code>) &ndash; the guarded wrappers, not raw API calls.
+- Runs the locked deploy sequence: sync a clean manifest into the deploy repo → commit → push → deploy through the guarded wrapper → <strong>prove the gate still bounces a logged-out visitor</strong> (the verify battery is part of the motion, not optional).
+- <strong>Cannot stand up a NEW gated project</strong> &ndash; Access-gate creation is the operator&rsquo;s by-hand setup, by design. The deploy credential failing Workers/Access probes is the church/state proof.
+- Known gotcha (known-bugs #3): account-scoped <code>cfat_</code> tokens falsely read &ldquo;invalid&rdquo; via <code>/user/tokens/verify</code> &ndash; validate against the Pages project endpoint instead.
+- Crystallized 2026-06-27 from 3 real reps (Phase-0 build + 2 content re-deploys), per the D41 crystallize-from-reps doctrine.</p>
+<p><strong>Invokes:</strong> None (pure Bash over the guarded wrappers).</p>
+<p><strong>Invoked by:</strong> Operator deploy requests; engagement-workup when an engagement closes to a gated share.</p>
+<hr />
 <h3 id="governance-and-quality">Governance and Quality<a class="anchor-link" href="#governance-and-quality" title="Permalink">¶</a></h3>
 <p>Eight skills that enforce methodology, quality gates, and operational discipline.</p>
 <hr />
@@ -494,7 +612,7 @@
 <h4 id="session-orchestrator">session-orchestrator<a class="anchor-link" href="#session-orchestrator" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Orient the OS at session start. Detects phase, loads tiered context, shows engine states, routes by intent.</p>
 <p><strong>Triggers:</strong> Beginning of every session. <code>/start-session</code>.</p>
-<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill, Bash</code> (Bash for the capability-snapshot regeneration in the Full-Breadth Start motion)</p>
 <p><strong>Key behaviors:</strong>
 - Multi-user check (dormant until profiles exist), phase detection (fresh install vs. existing operator), context staleness alerts (7-day warning, 14-day escalation).
 - Four-tier context loading: Tier 1 always (CONTEXT.md, PROFILE.md, capabilities), Tier 2 phase-hinted (active engine context, recent intelligence), Tier 3 on-demand (skill content, engine methodology), Tier 4 reference (intelligence log, patterns, methodology docs).
@@ -516,7 +634,7 @@
 <h4 id="output-self-test">output-self-test<a class="anchor-link" href="#output-self-test" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Run binary self-tests against output before declaring it complete. Yes/no questions, not judgment calls.</p>
 <p><strong>Triggers:</strong> About to say &ldquo;done&rdquo;, &ldquo;complete&rdquo;, &ldquo;ready for review&rdquo;. Invoked when finishing any research, content production, integration output, or deliverable.</p>
-<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Bash</code> (Bash solely for the mechanical reviewer-health emit)</p>
 <p><strong>Key behaviors:</strong>
 - Binary test design rules: answerable YES/NO in under 5 seconds, references specific parts of the output, a NO implies a specific fix, paired quick/thorough versions for scan vs. deep-dive depth.
 - Test sets selected by output type: Research Output Tests, Content/Deliverable Tests, HTML Output Tests, Integration Output Tests, plus Cross-Cutting Tests that always run.
@@ -527,7 +645,7 @@
 <h4 id="sanity-check">sanity-check<a class="anchor-link" href="#sanity-check" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Quick scan for 11 known failure modes at natural pause points. A pulse check, not a gate.</p>
 <p><strong>Triggers:</strong> &ldquo;sanity check this&rdquo;, something feels off, after producing a large chunk of work, natural pause points between phases.</p>
-<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Bash</code> (Bash solely for the mechanical reviewer-health emit)</p>
 <p><strong>Key behaviors:</strong>
 - 11 binary tests against known failure modes: Premature Confidence, Staleness Blindness, Scope Ratchet, Generic Output, Claim Hallucination, Missing Source Trail, Contradictory Frame, Agent Hallucinated Success, Depth Miscalibration, Cross-Engine Contamination, Unverified State Claim.
 - Should take under 2 minutes. If it takes longer, you&rsquo;re overthinking it. Lightweight by design &ndash; not a substitute for qa-pipeline.
@@ -541,7 +659,7 @@
 <p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Skill</code></p>
 <p><strong>Key behaviors:</strong>
 - Four-phase workflow: Phase 0 (check logs for prior context), Phase 1 (identify content type and load origin skill&rsquo;s audit requirements), Phase 2 (execute the update, cascade to related files), Phase 3 (mandatory audit logging with user attribution).
-- Origin-skill delegation: reads the originating skill&rsquo;s &ldquo;Audit Requirements&rdquo; section and executes those requirements. This is how skill-specific audit discipline is enforced on ad-hoc updates.
+- Origin-skill delegation: reads the originating skill&rsquo;s &ldquo;Audit Requirements&rdquo; section and executes those requirements. This is how skill-specific audit discipline is enforced on ad-hoc updates. When the origin skill has no Audit Requirements section (most don&rsquo;t), falls back to the Skill-Specific Audit Requirements table in audit-logging&rsquo;s SKILL.md.
 - User attribution always present. Single-operator mode uses operator name from PROFILE.md; multi-user mode supports &ldquo;Mike (drafted for Sarah)&rdquo; attribution.</p>
 <p><strong>Invokes:</strong> audit-logging (always), origin skill&rsquo;s audit requirements (loaded dynamically)</p>
 <p><strong>Invoked by:</strong> campaign-builder, transcript-processor, profile-builder, attio-ops, attio-qualify, attio-refiner, and any skill that modifies tracked content</p>
@@ -560,7 +678,7 @@
 <h4 id="adversarial-evaluator">adversarial-evaluator<a class="anchor-link" href="#adversarial-evaluator" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> Spawn an independent evaluator subagent to adversarially score deliverables against structured criteria. The evaluator has no access to the executor&rsquo;s context.</p>
 <p><strong>Triggers:</strong> After producing any research document, engagement deliverable, or content piece. As a step in a phase-controller skill chain. When the operator requests &ldquo;evaluate this&rdquo; or &ldquo;score this against criteria.&rdquo;</p>
-<p><strong>Allowed tools:</strong> <code>Read, Bash, Glob, Grep</code></p>
+<p><strong>Allowed tools:</strong> <code>Read, Bash, Glob, Grep, WebSearch, mcp__brightdata__search_engine, mcp__brightdata__scrape_as_markdown</code> &ndash; still NO Write and NO Edit: the evaluator can read, verify, and now externally corroborate, but it cannot fix what it finds.</p>
 <p><strong>Key behaviors:</strong>
 - Dispatches a subagent with independent context. The subagent receives only deliverable paths, criteria JSON, pass threshold, and a one-line task description. No conversation history, no run plan.
 - Tool asymmetry: subagent has Read, Bash, Glob, Grep but NOT Write or Edit. It diagnoses; it cannot fix. This prevents the evaluator from silently patching issues instead of reporting them.
@@ -569,7 +687,7 @@
 <p><strong>Invoked by:</strong> phase-controller (as evaluation step in skill chains), qa-pipeline (can be a stage)</p>
 <hr />
 <h3 id="system-awareness">System Awareness<a class="anchor-link" href="#system-awareness" title="Permalink">¶</a></h3>
-<p>One skill that provides strategic conversation and system awareness.</p>
+<p>Two skills that provide strategic conversation and system self-awareness: eos-assistant (the conversational partner) and kb-health (the fireable second-brain health check, D51).</p>
 <hr />
 <h4 id="eos-assistant">eos-assistant<a class="anchor-link" href="#eos-assistant" title="Permalink">¶</a></h4>
 <p><strong>One-liner:</strong> EngineOS-aware conversational partner. Knows the system cold &ndash; current state, engine health, methodology, patterns, connections, history.</p>
@@ -581,6 +699,42 @@
 - Eight behavioral directives encoding how an intelligent partner actually operated across the system: know the system not just the task, push back with evidence, surface staleness with a throttle, think in the operator&rsquo;s decision framework, separate interesting from actionable, challenge framing before it propagates, treat second occurrences as patterns, persist corrections as feedback memories.</p>
 <p><strong>Invokes:</strong> phase-controller (in production mode), any skill via on-demand loading based on conversation topic</p>
 <p><strong>Invoked by:</strong> Manual invocation only. Not invoked by other skills.</p>
+<hr />
+<h4 id="kb-health">kb-health<a class="anchor-link" href="#kb-health" title="Permalink">¶</a></h4>
+<p><strong>One-liner:</strong> The fireable second-brain health check &ndash; one argless script run composing live KB stats, graph health (broken links / orphan concepts / index-desync), state checks (uncompiled + stale daily logs), and the five pipeline vital signs (flush, retrieval, usage, reviewer, compile-guard) into one honest report with an actionable fix-list.</p>
+<p><strong>Triggers:</strong> &ldquo;check the second brain&rdquo;, &ldquo;KB health&rdquo;, &ldquo;how&rsquo;s the knowledge base&rdquo;, &ldquo;run kb-health&rdquo;, a 🧠 SessionStart flag on cached-verdict degradation, or before making any &ldquo;by the numbers&rdquo; claim about the second brain (explainer refreshes, showcase pages).</p>
+<p><strong>Allowed tools:</strong> <code>Bash, Read, Grep, Glob</code></p>
+<p><strong>Key behaviors:</strong>
+- One command: <code>uv run python scripts/kb-health.py</code> &ndash; read-only orchestration plus one script run, zero API cost.
+- <strong>Composes, never duplicates:</strong> orchestrates <code>utils.compute_kb_stats()</code> + <code>lint.py</code> state checks + the five <code>.jsonl</code> vital signs. Deep-dive analysis stays in the dedicated reviewers (<code>health-review.py</code>, <code>retrieval-review.py</code>, <code>usage-review.py</code>, <code>reviewer-review.py</code>, <code>kb-audit.py</code>); this skill runs the composite and interprets it. (The no-duplication boundary is a hardened criterion from its build &ndash; the first pass FAILED adversarial review for three parallel graph walks and was consolidated into one <code>utils._walk_kb_links</code>.)
+- <code>--verify-kb</code> is the clearing motion after hand-reconciliation of a flagged desync.
+- <code>kb-stats</code> is the single source for ANY &ldquo;by the numbers&rdquo; claim about the KB &ndash; hand-typed numbers on health surfaces are the exact rot class this skill exists to prevent (D51, born from the 373-vs-320-vs-actual-387 explainer drift).</p>
+<p><strong>Invokes:</strong> None (runs scripts; read-only otherwise).</p>
+<p><strong>Invoked by:</strong> Operator health triggers; the SessionStart hook&rsquo;s 🧠 flag surface (cache refreshed at session end). See <a href="second-brain.html">Second Brain</a> → Observability. (D51)</p>
+<h3 id="people-profiling">People Profiling<a class="anchor-link" href="#people-profiling" title="Permalink">¶</a></h3>
+<p>Two skills of the People Profiling subsystem (Layer 1, cross-cutting — see <a href="architecture.md#people-profiling-subsystem">Architecture</a>). <code>person-profiler</code> is the synthesis engine; <code>people-curator</code> is the operator&rsquo;s steering wheel and routes the doing to it. Both keep the six axes independent (Tier ⊥ Heat ⊥ Influence) and the operator as the gate.</p>
+<hr />
+<h4 id="person-profiler">person-profiler<a class="anchor-link" href="#person-profiler" title="Permalink">¶</a></h4>
+<p><strong>One-liner:</strong> Create or update a structured profile for ANY person the operator works with — collaborator, stakeholder, friend, advisor, prospect, recruiter, counterpart, subject. The OS-level, engine-independent people-profiling capability (the operator&rsquo;s own profile lives in <code>profile-builder</code>; this is everyone else).</p>
+<p><strong>Triggers:</strong> &ldquo;create a profile for [name]&rdquo;, &ldquo;update [name]&rsquo;s profile&rdquo;, &ldquo;what do we know about [name]&rdquo;, &ldquo;I talked to [name]&rdquo;, or transcript-processor Phase 7 confirmation.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Glob, Grep, Bash, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Checks <code>registry/people.md</code> (the authoritative index) FIRST on any person query, and before creating any profile (duplicate prevention by normalized name/email/filename). Profile home by reach: cross-cutting → <code>people/&lt;slug&gt;.md</code>; project-bound → <code>projects/&lt;project&gt;/people/</code>; engine/sales → <code>engines/&lt;engine&gt;/knowledge/profiles/</code>.
+- Append-only + evidence-tagged: preserves all existing content, routes new info to the right section (Working/Comms style, Interaction Timeline, Notable Quotes), never assesses a working-style dimension without dated evidence — blank beats a guess.
+- Re-lifted to EngineOS 2026-06-24 from the SEE <code>contact-profiler</code> and generalized from &ldquo;sales contacts&rdquo; to &ldquo;any person&rdquo; (the original compositing left it engine-bound).</p>
+<p><strong>Invokes:</strong> market-scanner / research-engine (optional public-source enrichment when the operator wants it)</p>
+<p><strong>Invoked by:</strong> people-curator (synthesis routing), transcript-processor (Phase 7), the <code>prompt-retrieval.py</code> people surface (pointer auto-surface), OS CLAUDE.md discoverability rule.</p>
+<hr />
+<h4 id="people-curator">people-curator<a class="anchor-link" href="#people-curator" title="Permalink">¶</a></h4>
+<p><strong>One-liner:</strong> Operator-facing front end for the people layer — answer questions about people, feed better intel, adjudicate where someone lands, or walk the current profiling candidates. The interactive curation layer that drives <code>person-profiler</code>.</p>
+<p><strong>Triggers:</strong> &ldquo;/people&rdquo;, &ldquo;curate people&rdquo;, &ldquo;let&rsquo;s go through people&rdquo;, &ldquo;tell me about [person]&rdquo; (to feed intel), &ldquo;who do we have / who&rsquo;s missing&rdquo;, &ldquo;adjudicate [person]&rdquo;, or acting on the SessionStart &ldquo;⚑ Profiling candidates&rdquo; block.</p>
+<p><strong>Allowed tools:</strong> <code>Read, Write, Edit, Bash, Glob, Grep, Skill</code></p>
+<p><strong>Key behaviors:</strong>
+- Four modes: triage/adjudicate candidates, feed intel, adjudicate a single person, inventory. Every adjudication sets the six axes — Tier · Heat (computed; don&rsquo;t ask) · <strong>Influence</strong> (canon / domain-authority / lessons-only / NOT-canon) · Value-type · Relationship-direction · Sensitivity — kept independent.
+- Operator is the gate: never auto-assigns tier/influence or auto-balloons a profile; draft-and-react over interrogate. <strong>Influence is a safety axis</strong> — when set NOT-canon/lessons-only, says so loudly so <code>prompt-retrieval.py</code> echoes ⚠ on mention.
+- Reads the heat engine (<code>scripts/people-heat.py</code> → <code>people-heat.json</code>, surfaced at session start) and the review dossier (<code>scripts/people-dossier.py</code> → <code>people/dossier/index.html</code>); routes building/updating to <code>person-profiler</code>; the standard is <code>docs/plans/2026-06-24-people-profiling-standard.md</code>.</p>
+<p><strong>Invokes:</strong> person-profiler (build/update profiles), profile-builder (only for the operator&rsquo;s own profile — NOT this skill)</p>
+<p><strong>Invoked by:</strong> Manual invocation (<code>/people</code>); surfaced by the SessionStart profiling-candidates block.</p>
 <hr />
 <h3 id="cross-category-notes">Cross-Category Notes<a class="anchor-link" href="#cross-category-notes" title="Permalink">¶</a></h3>
 <p>Several skills appear in multiple categories by nature of their function:</p>
