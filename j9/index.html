@@ -8,11 +8,11 @@
 <link rel="icon" href="assets/j9/j9-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Lato:wght@400;700;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --canvas:#0f0a0b; --surface:#1b1314; --surface-2:#15100f; --raise:#1a251e;
-  --ink:#f3eeee; --soft:#b5adae; --muted:#8a8283; --faint:#625b5c;
+  --canvas:#131611; --surface:#1d211b; --surface-2:#171b15; --raise:#1a251e;
+  --ink:#f1eee1; --soft:#b5b0a0; --muted:#8b8779; --faint:#615e52;
   --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.05);
   --red:#a8323a; --red-ink:#de8a8e; --red-wash:rgba(168,50,58,.20);
   --green:#3fbf78; --green-wash:rgba(63,191,120,.17);
@@ -26,7 +26,7 @@
   --pop:0 20px 48px -18px rgba(0,0,0,.75),0 0 0 1px var(--line);
   --font:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   --script:'Kaushan Script',cursive;
-  --ink-1:#0d0d0d; --ink-2:#161514; --red-l:#d4787d; --green-brand:#75d69c; --cream:#f1ead8;
+  --ink-1:#1a1e19; --ink-2:#1a1e19; --red-l:#d4787d; --green-brand:#75d69c; --cream:#f1ead8;
   --r:12px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -312,8 +312,8 @@ kbd{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(-
 .cont-c .thumb{aspect-ratio:4/5;background:var(--raise);position:relative;overflow:hidden}
 .cont-c .thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
 .cont-c .thumb.txt{display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px}
-.cont-c .thumb.cap{background:linear-gradient(160deg,#20180f,#161210)}
-.cont-c .thumb.email{background:linear-gradient(160deg,#1a1617,#141212)}
+.cont-c .thumb.cap{background:linear-gradient(160deg,#232720,#181c16)}
+.cont-c .thumb.email{background:linear-gradient(160deg,#1c201a,#161a15)}
 .cont-c .thumb.txt .qi{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px}
 .cont-c .thumb.txt .qi svg{width:15px;height:15px;color:var(--red-l)}
 .cont-c .thumb.txt .qt{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.45}
@@ -346,7 +346,7 @@ kbd{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(-
 .rep-row .rbg{width:34px;height:34px;border-radius:9px;background:var(--red-wash);color:var(--red-l);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0}
 .rep-row .rnm{flex:1;font-size:13px;font-weight:700}.rep-row .rnm span{display:block;font-size:11px;color:var(--muted);font-weight:500}
 .rep-row .rst{text-align:right;font-size:12px;color:var(--soft);line-height:1.5}.rep-row .rst b{color:var(--ink)}
-.connect{background:linear-gradient(140deg,#211812,#161210);box-shadow:var(--card);border-radius:14px;padding:17px 20px;margin-top:16px;display:flex;gap:14px;align-items:center}
+.connect{background:linear-gradient(140deg,#232820,#181c16);box-shadow:var(--card);border-radius:14px;padding:17px 20px;margin-top:16px;display:flex;gap:14px;align-items:center}
 .connect .ci{width:42px;height:42px;border-radius:11px;background:var(--red-wash);color:var(--red-l);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .connect .ci svg{width:22px;height:22px}
 .connect .cx b{font-size:13.5px;font-weight:800}.connect .cx p{font-size:12px;color:var(--soft);margin-top:3px;line-height:1.5;max-width:60ch}
@@ -402,7 +402,7 @@ kbd{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(-
 .dl b{color:var(--ink);font-weight:600}
 .dl .dc{width:16px;height:16px;color:var(--green);flex-shrink:0}
 /* ═══════ VISIBLY CLOVER — the OS wears the bar's brand ═══════ */
-.side{background:#100a0b;box-shadow:inset -1px 0 0 rgba(255,255,255,.06)}
+.side{background:#131611;box-shadow:inset -1px 0 0 rgba(255,255,255,.06)}
 .side::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.045) 1px,transparent 0);background-size:22px 22px;z-index:0}
 .side>*{position:relative;z-index:1}
 .side .brand .mk{width:34px;height:34px;box-shadow:0 6px 16px -6px rgba(168,50,58,.75)}
@@ -420,7 +420,7 @@ kbd{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(-
 .side .helprow{color:#b4aea3}.side .helprow:hover{background:rgba(255,255,255,.06);color:#fff}.side .helprow svg{color:#6d685f}
 .side .acct .an{color:#fff}.side .acct .ar{color:#8f8a80}
 .topbar{box-shadow:inset 0 -1px 0 var(--line),inset 0 3px 0 var(--red)}
-.hzone{background:radial-gradient(130% 150% at 100% -35%,rgba(168,50,58,.22),transparent 52%),radial-gradient(95% 120% at -10% 130%,rgba(117,214,156,.07),transparent 58%),linear-gradient(180deg,#20160f,#161110)}
+.hzone{background:radial-gradient(130% 150% at 100% -35%,rgba(168,50,58,.22),transparent 52%),radial-gradient(95% 120% at -10% 130%,rgba(117,214,156,.07),transparent 58%),linear-gradient(180deg,#20241d,#171a15)}
 .hzone::before{background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.03) 1px,transparent 0)}
 .hzone::after{content:none}
 .metric.hero{background:linear-gradient(140deg,#24100f,#220e0c);box-shadow:0 1px 2px rgba(0,0,0,.4),0 0 0 1px rgba(168,50,58,.42)}
@@ -487,6 +487,14 @@ kbd{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(-
 .metric.hero{box-shadow:0 1px 2px rgba(0,0,0,.4),0 0 0 1px rgba(201,164,92,.28)}
 .introCard .room{width:calc(100% + 68px);max-width:none;margin:-34px -34px 20px;height:196px;object-fit:cover;object-position:center 32%;border-radius:18px 18px 0 0;display:block}
 .introScrim.show .introCard{overflow:hidden}
+
+/* ── shell-material morph: sage parlor + wine-list serif ── */
+h1,.dr-hd h2,.introCard h2{font-family:'Playfair Display',Georgia,serif;font-weight:700;letter-spacing:.005em}
+.vhead h1{font-size:27px}
+.metric.hero .mn{color:var(--gold)}
+.metric.hero .ml{color:rgba(201,164,92,.75)}
+.bd-hero{background:linear-gradient(96deg,rgba(19,22,17,.96) 30%,rgba(19,22,17,.8) 60%,rgba(19,22,17,.5)),url('assets/j9/interior-3.jpg') 70% 62%/cover no-repeat;border-radius:16px;padding:18px 20px;box-shadow:0 0 0 1px rgba(201,164,92,.15)}
+.panel .pt,.ph .pt{letter-spacing:.02em}
 </style>
 </head>
 <body>
@@ -681,8 +689,8 @@ function filt(el,r){document.querySelectorAll('.filt').forEach(function(f){f.cla
 function openMod(id){var m=MODS.filter(function(x){return x.id===id;})[0];if(!m)return;
   var builds=(m.builds||[['Posters','feed, story, print — in your brand'],['Captions','ready to post, multiple versions'],['A calendar','every post tied to a day'],['A run-sheet','so any staffer can run it']]);
   var bh='';builds.forEach(function(b){bh+='<div class="bld"><div class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div><div class="bt">'+b[0]+'</div><div class="bs">'+b[1]+'</div></div></div>';});
-  var pv='';if(m.posters){pv='<div class="dr-k">What it makes — in your brand</div><div class="previews">';m.posters.forEach(function(p){pv+='<div class="pv"><img src="'+p[0]+'" alt=""><div class="pl">'+p[1]+'</div></div>';});pv+='</div><div class="brandline"><span class="sw"><i style="background:#a8323a"></i><i style="background:#d4787d"></i><i style="background:#0d0d0d"></i><i style="background:#f1ead8"></i></span>Your colors, logo, and voice — baked in, every time.</div>';}
-  else{pv='<div class="brandline"><span class="sw"><i style="background:#a8323a"></i><i style="background:#d4787d"></i><i style="background:#0d0d0d"></i><i style="background:#f1ead8"></i></span>Generates in your J9 brand — colors, logo, and voice, baked in.</div>';}
+  var pv='';if(m.posters){pv='<div class="dr-k">What it makes — in your brand</div><div class="previews">';m.posters.forEach(function(p){pv+='<div class="pv"><img src="'+p[0]+'" alt=""><div class="pl">'+p[1]+'</div></div>';});pv+='</div><div class="brandline"><span class="sw"><i style="background:#a8323a"></i><i style="background:#d4787d"></i><i style="background:#1a1e19"></i><i style="background:#f1ead8"></i></span>Your colors, logo, and voice — baked in, every time.</div>';}
+  else{pv='<div class="brandline"><span class="sw"><i style="background:#a8323a"></i><i style="background:#d4787d"></i><i style="background:#1a1e19"></i><i style="background:#f1ead8"></i></span>Generates in your J9 brand — colors, logo, and voice, baked in.</div>';}
   document.getElementById('drawer-inner').innerHTML=
    '<div class="dr-top"><span class="dt">Block · '+RECL[m.rec]+'</span><button class="dr-x" onclick="closeDrawer()" title="Close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'+
    '<div class="dr-body"><div class="dr-hd"><span class="ic '+m.tint+'">'+svg(m.id,1.6)+'</span><div><h2>'+m.name+'</h2><span class="rec">'+RECL[m.rec]+' night</span></div></div>'+
