@@ -473,6 +473,20 @@ kbd{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(-
 .introCard p{font-size:13.5px;line-height:1.6;color:rgba(51,32,28,.85);margin-bottom:9px}
 .introCard .go{margin-top:12px;background:#8b0f10;color:#fff;font-weight:700;font-size:13.5px;padding:11px 22px;border-radius:9px;box-shadow:0 10px 22px -10px rgba(139,15,16,.8)}
 .introCard .fine{font-size:11px;color:rgba(51,32,28,.55);margin-top:16px}
+
+/* ── aesthetic morph: the ROOM (from their photography — gold sign, candle glow, parlor) ── */
+:root{--gold:#c9a45c;--gold-wash:rgba(201,164,92,.14)}
+#view-home .hzone{background:
+ linear-gradient(97deg,rgba(15,10,11,.97) 34%,rgba(15,10,11,.88) 55%,rgba(20,12,10,.55) 82%,rgba(20,12,10,.42)),
+ url('assets/j9/interior-1.jpg') 85% 38%/cover no-repeat;
+ box-shadow:0 0 0 1px rgba(201,164,92,.16),0 24px 60px -30px rgba(0,0,0,.8)}
+.vhead .k{color:var(--gold);letter-spacing:.22em}
+.dr-top .dt{color:var(--gold)}
+.j9k{color:var(--gold)}
+.j9plan{background:linear-gradient(140deg,#20241f,#171a16);box-shadow:0 0 0 1px rgba(201,164,92,.12)}
+.metric.hero{box-shadow:0 1px 2px rgba(0,0,0,.4),0 0 0 1px rgba(201,164,92,.28)}
+.introCard .room{width:calc(100% + 68px);max-width:none;margin:-34px -34px 20px;height:196px;object-fit:cover;object-position:center 32%;border-radius:18px 18px 0 0;display:block}
+.introScrim.show .introCard{overflow:hidden}
 </style>
 </head>
 <body>
@@ -840,6 +854,7 @@ var toastEl;
 function toast(msg){if(!toastEl){toastEl=document.createElement('div');toastEl.className='toast';document.body.appendChild(toastEl);}toastEl.innerHTML=msg;toastEl.classList.add('show');clearTimeout(toastEl._t);toastEl._t=setTimeout(function(){toastEl.classList.remove('show');},3800);}
 </script>
 <div class="introScrim show" id="introScrim"><div class="introCard">
+<img class="room" src="assets/j9/interior-1.jpg" alt="J9 Wine Bar, 1961 N Halsted at night">
 <img src="assets/j9-logo.png" alt="J9 Wine Bar">
 <h2>Your bar, already running on its own operating system.</h2>
 <p>Everything in here &mdash; the calendar, the tastings, the photos, the words &mdash; was built from J9&rsquo;s public site and Instagram. No meeting. No questions asked. This is the first draft.</p>
