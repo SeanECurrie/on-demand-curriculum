@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Trajector Medical — the lawsuit, and what it means for you</title>
+<style>
+  :root{
+    --bg:#faf9f7; --surface:#ffffff; --surface-alt:#f5f4f1; --surface-sunk:#f0eee9;
+    --text:#1c1917; --text-soft:#44403c; --text-muted:#78716c;
+    --border:#e7e5e4; --border-strong:#d6d3d1;
+    --navy:#1f3a5f; --navy-soft:#2d5180; --gold:#b08423; --gold-soft:#caa450;
+    --verified:#15803d; --verified-bg:#dcfce7; --claim:#b45309; --claim-bg:#fef3c7;
+    --risk:#b91c1c; --risk-bg:#fee2e2; --unverified:#6b7280; --unverified-bg:#f1f0ee;
+    --code-bg:#1c2533; --code-text:#e7edf5; --code-soft:#9fb3c8;
+    --shadow:0 1px 3px rgba(28,25,23,.06),0 8px 24px rgba(28,25,23,.05);
+    --shadow-sm:0 1px 2px rgba(28,25,23,.06);
+    --maxw:880px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:16px}
+  ul,ol{padding-left:22px}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--text);line-height:1.65;font-size:16.5px;-webkit-font-smoothing:antialiased}
+
+  /* LAYOUT */
+  .layout{display:flex;min-height:100vh}
+  .sidebar{width:288px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);
+           position:sticky;top:0;height:100vh;overflow-y:auto;padding:24px 16px 40px}
+  .brandmark{display:flex;align-items:center;gap:11px;padding:4px 10px 16px;position:relative}
+  .brandmark .dot{width:34px;height:34px;border-radius:9px;flex-shrink:0;
+       background:linear-gradient(135deg,var(--navy),var(--navy-soft));color:#fff;
+       display:flex;align-items:center;justify-content:center;font-weight:760;font-size:15px;letter-spacing:-.5px}
+  .brandmark .bm-t{font-weight:730;font-size:15px;letter-spacing:-.2px;line-height:1.15}
+  .brandmark .bm-s{font-size:11.5px;color:var(--text-muted);margin-top:1px}
+  .nav-collapse{position:absolute;top:2px;right:4px;background:none;border:1px solid var(--border);
+       border-radius:6px;width:24px;height:24px;cursor:pointer;color:var(--text-muted);font-size:14px;line-height:1}
+  .notehint{font-size:12px;color:var(--text-soft);background:var(--surface-alt);border:1px solid var(--border);
+       border-radius:8px;padding:9px 11px;margin:0 8px 14px;line-height:1.5}
+  .toc a{display:flex;gap:9px;align-items:baseline;padding:7px 12px;border-radius:7px;color:var(--text-soft);
+       text-decoration:none;font-size:13.7px;border-left:2px solid transparent;transition:background .12s,color .12s}
+  .toc a .n{font-variant-numeric:tabular-nums;color:var(--text-muted);font-size:11.5px;min-width:18px}
+  .toc a:hover{background:var(--surface-alt);color:var(--text)}
+  .toc a.active{background:#eef2f7;color:var(--navy);border-left-color:var(--navy);font-weight:600}
+  .toc a.active .n{color:var(--navy)}
+  .toc .grp{font-size:10.5px;text-transform:uppercase;letter-spacing:.9px;color:var(--text-muted);
+       padding:16px 12px 5px;font-weight:700}
+  .toc .grp.act{color:var(--risk)}
+  .toc a.notes-link{color:var(--gold);margin-top:4px}
+
+  .main{flex:1;min-width:0}
+  .container{max-width:var(--maxw);margin:0 auto;padding:0 36px 120px}
+
+  /* HERO */
+  header.hero{background:linear-gradient(160deg,#1f3a5f,#274a73 55%,#2d5180);color:#fff;padding:54px 36px 46px}
+  header.hero .inner{max-width:var(--maxw);margin:0 auto}
+  .kicker{font-size:12.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#bcd3ef;margin-bottom:14px}
+  header.hero h1{font-size:38px;font-weight:760;letter-spacing:-.5px;line-height:1.12;max-width:20ch}
+  header.hero .sub{font-size:18px;color:#dbe6f3;margin-top:16px;max-width:60ch;line-height:1.55}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .hero-meta .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);
+       padding:5px 12px;border-radius:20px;font-size:12.5px;color:#eaf1f9}
+
+  /* SECTIONS + TYPE */
+  section{padding:40px 0 8px;border-bottom:1px solid var(--border);scroll-margin-top:16px}
+  .sec-num{font-size:12.5px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px}
+  .sec-num.act{color:var(--risk)}
+  h2{font-size:27px;font-weight:730;letter-spacing:-.3px;line-height:1.2}
+  h3{font-size:18.5px;font-weight:680;color:var(--navy);margin:26px 0 9px;letter-spacing:-.2px}
+  h4{font-size:14px;font-weight:680;color:var(--text-soft);text-transform:uppercase;letter-spacing:.4px;margin:18px 0 8px}
+  p{margin:13px 0}
+  .lead{font-size:18px;color:var(--text-soft);line-height:1.6;margin:12px 0 4px}
+  a.inline{color:var(--navy-soft);text-decoration:underline;text-decoration-color:var(--border-strong);text-underline-offset:2px}
+  sup a{color:var(--navy-soft);text-decoration:none;font-weight:700;font-size:11px;padding:0 1px}
+  code.f{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:var(--surface-sunk);
+       border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:var(--text);white-space:nowrap}
+  strong{font-weight:680}
+
+  /* EVIDENCE TAGS */
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.3px;padding:2px 7px;border-radius:5px;
+       vertical-align:middle;text-transform:uppercase}
+  .tag.sec{color:var(--risk);background:var(--risk-bg)}
+  .tag.alleged{color:var(--claim);background:var(--claim-bg)}
+  .tag.corr{color:var(--navy);background:#e6edf5}
+  .tag.good{color:var(--verified);background:var(--verified-bg)}
+  .tag.perf{color:var(--unverified);background:var(--unverified-bg)}
+
+  /* CALLOUTS */
+  .callout{border-left:4px solid var(--border-strong);background:var(--surface-alt);border-radius:0 9px 9px 0;
+       padding:14px 18px;margin:18px 0}
+  .callout .ct{font-weight:700;font-size:13.5px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+  .callout p{margin:6px 0 0}
+  .co-risk{border-left-color:var(--risk);background:#fff5f4}
+  .co-risk .ct{color:var(--risk)}
+  .co-flag{border-left-color:var(--claim);background:#fdf8ed}
+  .co-flag .ct{color:var(--claim)}
+  .co-confirm{border-left-color:var(--gold);background:#fbf6ec}
+  .co-confirm .ct{color:var(--gold)}
+  .co-good{border-left-color:var(--verified);background:#f1faf3}
+  .co-good .ct{color:var(--verified)}
+  .co-context{border-left-color:var(--navy);background:linear-gradient(180deg,#f4f7fb,#fff)}
+  .co-context .ct{color:var(--navy)}
+
+  /* TL;DR / ANSWER FIRST */
+  .tldr{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;
+       box-shadow:var(--shadow);margin:18px 0}
+  .onesent{font-size:20px;font-weight:560;line-height:1.5;color:var(--text)}
+  .todo-row{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--border)}
+  .todo-row .tn{flex-shrink:0;width:26px;height:26px;border-radius:7px;background:var(--navy);color:#fff;
+       font-weight:730;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .todo-row .tn.warn{background:var(--risk)}
+  .todo-row .tt{font-weight:680;color:var(--text)}
+  .todo-row .td{font-size:14.5px;color:var(--text-soft);margin-top:1px}
+
+  /* BULLETS */
+  .bullets{list-style:none;padding:0;margin:14px 0}
+  .bullets li{position:relative;padding:7px 0 7px 22px;border-top:1px solid var(--border);font-size:15.5px;color:var(--text-soft)}
+  .bullets li:first-child{border-top:none}
+  .bullets li::before{content:"";position:absolute;left:2px;top:14px;width:7px;height:7px;border-radius:50%;background:var(--navy-soft)}
+  .bullets li.g::before{background:var(--verified)}
+  .bullets li.w::before{background:var(--claim)}
+  .bullets li.b::before{background:var(--risk)}
+
+  /* KEY-FACT CARD (case box) */
+  .factcard{background:var(--code-bg);border-radius:12px;margin:18px 0;overflow:hidden;box-shadow:var(--shadow)}
+  .factcard .fc-head{padding:11px 18px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08);
+       color:var(--code-soft);font-size:12.5px;font-weight:600;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
+  .factcard .fc-head .gl{color:var(--gold-soft)}
+  .factcard dl{margin:0;padding:8px 18px 16px;display:grid;grid-template-columns:auto 1fr;gap:0}
+  .factcard dt{color:var(--code-soft);font-size:12px;text-transform:uppercase;letter-spacing:.5px;padding:9px 16px 9px 0;
+       border-top:1px solid rgba(255,255,255,.07);white-space:nowrap}
+  .factcard dd{color:var(--code-text);font-size:14px;padding:9px 0;border-top:1px solid rgba(255,255,255,.07);line-height:1.5}
+  .factcard dl>dt:first-of-type,.factcard dl>dt:first-of-type + dd{border-top:none}
+
+  /* STEPS */
+  .steps{counter-reset:st;list-style:none;padding:0;margin:14px 0}
+  .steps li{counter-increment:st;position:relative;padding:11px 0 11px 40px;border-top:1px solid var(--border);font-size:15px;color:var(--text-soft)}
+  .steps li:first-child{border-top:none}
+  .steps li::before{content:counter(st);position:absolute;left:0;top:11px;width:26px;height:26px;border-radius:7px;
+       background:var(--navy);color:#fff;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center}
+  .steps li strong{color:var(--text)}
+
+  /* TIMELINE */
+  .timeline{list-style:none;padding:0;margin:18px 0;position:relative}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--border-strong)}
+  .timeline li{position:relative;padding:0 0 18px 34px}
+  .timeline li::before{content:"";position:absolute;left:2px;top:5px;width:14px;height:14px;border-radius:50%;
+       background:#fff;border:3px solid var(--navy-soft)}
+  .timeline li.risk::before{border-color:var(--risk)}
+  .timeline li.gold::before{border-color:var(--gold)}
+  .timeline .tl-date{font-size:12.5px;font-weight:700;color:var(--navy);letter-spacing:.3px}
+  .timeline .tl-body{font-size:14.5px;color:var(--text-soft);margin-top:2px}
+
+  /* TABLES */
+  .tw{overflow-x:auto;border:1px solid var(--border);border-radius:10px;margin:18px 0;position:relative}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{background:var(--surface-alt);text-align:left;font-size:12.5px;font-weight:680;text-transform:uppercase;
+     letter-spacing:.4px;color:var(--text-soft);padding:10px 14px;border-bottom:1px solid var(--border)}
+  td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-soft);vertical-align:top;line-height:1.5}
+  tr:last-child td{border-bottom:none}
+  td .sev{font-weight:700;font-size:11px;padding:2px 7px;border-radius:5px}
+  .sev.hi{color:var(--risk);background:var(--risk-bg)}
+  .sev.md{color:var(--claim);background:var(--claim-bg)}
+  .sev.lo{color:var(--unverified);background:var(--unverified-bg)}
+
+  /* FIGURES */
+  figure{margin:22px 0}
+  figure svg{max-width:100%;height:auto;display:block}
+  figcaption{font-size:13.5px;font-style:italic;color:var(--text-muted);margin-top:9px;text-align:center}
+
+  /* 2x2 GRID */
+  .quad{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+  .qcard{border:1px solid var(--border);border-radius:11px;padding:16px 18px;background:var(--surface)}
+  .qcard .qt{font-weight:730;font-size:16px;display:flex;align-items:center;gap:8px}
+  .qcard .qx{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-top:2px}
+  .qcard p{font-size:14px;margin:9px 0 0;color:var(--text-soft)}
+  .qcard.q1{border-top:3px solid #d97706}.qcard.q2{border-top:3px solid #2563eb}
+  .qcard.q3{border-top:3px solid #7c3aed}.qcard.q4{border-top:3px solid #0d9488}
+
+  /* DETAILS / DIG IN */
+  details{border:1px solid var(--border);border-radius:10px;margin:14px 0;background:var(--surface);overflow:hidden}
+  details summary{cursor:pointer;padding:14px 18px;font-weight:680;font-size:15.5px;color:var(--navy);
+       list-style:none;display:flex;align-items:center;justify-content:space-between}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";font-size:20px;color:var(--text-muted);font-weight:400}
+  details[open] summary::after{content:"\2212"}
+  details[open] summary{border-bottom:1px solid var(--border)}
+  details .db{padding:6px 18px 18px}
+
+  .grule{height:2px;border:none;margin:8px 0 2px;
+       background:linear-gradient(90deg,var(--navy),var(--gold) 70%,transparent)}
+
+  /* SOURCES */
+  .srclist{list-style:none;padding:0;margin:14px 0;counter-reset:src}
+  .srclist li{counter-increment:src;position:relative;padding:10px 0 10px 34px;border-top:1px solid var(--border);font-size:14px;color:var(--text-soft)}
+  .srclist li:first-child{border-top:none}
+  .srclist li::before{content:counter(src);position:absolute;left:0;top:10px;width:24px;height:24px;border-radius:6px;
+       background:var(--surface-sunk);border:1px solid var(--border);color:var(--text-muted);font-weight:700;font-size:12px;
+       display:flex;align-items:center;justify-content:center}
+  .srclist a{color:var(--navy-soft);text-decoration:underline;text-decoration-color:var(--border-strong);word-break:break-word}
+  .srclist .st{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;
+       padding:1px 6px;border-radius:4px;margin-left:6px;color:var(--text-muted);background:var(--surface-sunk);vertical-align:middle}
+
+  /* NOTES */
+  .notebox{margin:22px 0 6px;background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;padding:13px 15px}
+  .notebox label{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:680;color:var(--text-soft);margin-bottom:7px}
+  .notebox .note-saved{color:var(--verified);font-size:11.5px;font-weight:600;opacity:0;transition:opacity .2s}
+  .notebox .note-saved.show{opacity:1}
+  .notebox textarea{width:100%;border:1px solid var(--border-strong);border-radius:7px;padding:9px 11px;
+       font-family:inherit;font-size:14.5px;color:var(--text);background:#fff;resize:vertical;line-height:1.5}
+  .notebox textarea:focus{outline:2px solid var(--navy-soft);outline-offset:0;border-color:transparent}
+
+  .collect-wrap{margin:8px 0 4px}
+  .collect-item{border-left:3px solid var(--gold);background:var(--surface-alt);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0}
+  .collect-item .cl{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:3px}
+  .collect-item .cx{font-size:14.5px;color:var(--text);white-space:pre-wrap}
+  .collect-empty{color:var(--text-muted);font-style:italic;font-size:14.5px;padding:8px 0}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .btn{border:1px solid var(--border-strong);background:#fff;color:var(--text);border-radius:8px;
+       padding:8px 16px;font-size:13.5px;font-weight:600;cursor:pointer;transition:background .14s}
+  .btn:hover{background:var(--surface-alt)}
+  .btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .btn.primary:hover{background:var(--navy-soft)}
+  .btn.done{background:var(--verified);border-color:var(--verified);color:#fff}
+
+  footer{max-width:var(--maxw);margin:0 auto;padding:30px 36px 60px;color:var(--text-muted);font-size:13px}
+
+  /* CHROME */
+  .menu-btn{display:none;position:fixed;top:14px;left:14px;z-index:40;background:var(--navy);color:#fff;border:none;
+       width:42px;height:42px;border-radius:10px;font-size:19px;cursor:pointer;box-shadow:var(--shadow)}
+  .scrim{display:none;position:fixed;inset:0;background:rgba(28,25,23,.4);z-index:30}
+  .scrim.open{display:block}
+  .nav-reopen{display:none;position:fixed;top:14px;left:14px;z-index:25;background:#fff;border:1px solid var(--border-strong);
+       border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--navy);box-shadow:var(--shadow-sm)}
+
+  /* RESPONSIVE */
+  @media (min-width:981px){
+    body.nav-collapsed .sidebar{display:none}
+    body.nav-collapsed .container,body.nav-collapsed header.hero .inner,body.nav-collapsed footer{max-width:1180px}
+    body.nav-collapsed .nav-reopen{display:block}
+  }
+  @media (max-width:980px){
+    .menu-btn{display:block}
+    .sidebar{position:fixed;z-index:35;transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow)}
+    .sidebar.open{transform:translateX(0)}
+    .container{padding:0 22px 90px}
+    header.hero{padding:64px 22px 40px}
+    .quad{grid-template-columns:1fr}
+    .factcard dl{grid-template-columns:1fr}
+    .factcard dt{border-top:1px solid rgba(255,255,255,.07);padding-bottom:2px}
+    .factcard dd{padding-top:2px;border-top:none}
+  }
+  @media (max-width:520px){
+    body{font-size:16px}
+    header.hero h1{font-size:27px}
+    h2{font-size:23px}
+    .onesent{font-size:18px}
+    .container{padding:0 16px 80px}
+  }
+  @media print{
+    .sidebar,.menu-btn,.scrim,.nav-reopen,.btnrow,.notebox{display:none!important}
+    .main{width:100%}
+    section{page-break-inside:avoid;border-bottom:1px solid #ccc}
+    .factcard{border:1px solid #999}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:.01ms!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+<button class="menu-btn" id="menuBtn" aria-label="Open contents">☰</button>
+<button class="nav-reopen" id="navReopen" aria-label="Show contents">☰ Contents</button>
+<div class="scrim" id="scrim"></div>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Contents">
+    <div class="brandmark">
+      <div class="dot">T</div>
+      <div><div class="bm-t">Trajector</div><div class="bm-s">VA claims lawsuit · a research brief</div></div>
+      <button class="nav-collapse" id="navCollapse" aria-label="Collapse sidebar">«</button>
+    </div>
+    <div class="notehint"><span aria-hidden="true">📝</span> This is a working document. Every section has a note box — type in it and it saves in your browser. Your notes collect at the bottom so you can copy them out (e.g. to bring to a VSO or lawyer).</div>
+    <div class="toc" id="toc">
+      <a href="#s0"><span class="n">—</span>The 90-second read</a>
+      <div class="grp">Understand — the case</div>
+      <a href="#s1"><span class="n">01</span>Who Trajector is</a>
+      <a href="#s2"><span class="n">02</span>Why the fees may be illegal</a>
+      <a href="#s3"><span class="n">03</span>The "CallBot" machine</a>
+      <a href="#s4"><span class="n">04</span>The class action</a>
+      <a href="#s5"><span class="n">05</span>The VA's two warnings</a>
+      <a href="#s6"><span class="n">06</span>Congress &amp; regulators</a>
+      <div class="grp act">What it means for you</div>
+      <a href="#s7"><span class="n">07</span>Steps to consider</a>
+      <div class="grp">Dig in — full reference</div>
+      <a href="#s8"><span class="n">08</span>Trajector's side</a>
+      <a href="#s9"><span class="n">09</span>What's still uncertain</a>
+      <a href="#s10"><span class="n">10</span>Sources</a>
+      <a href="#collected" class="notes-link"><span class="n">📝</span>Your notes — collected</a>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="hero">
+      <div class="inner">
+        <div class="kicker">Research brief · from Sean &amp; Claude</div>
+        <h1>Trajector Medical: the lawsuit, and what it means for you.</h1>
+        <p class="sub">Trajector charged disabled veterans thousands of dollars for VA disability-claim help that federal law says must be free. It's now facing a nationwide class action, two ignored VA cease-and-desist letters, and a bill in Congress. Here's the whole picture — and the practical steps worth thinking about.</p>
+        <div class="hero-meta">
+          <span class="pill">Class action filed Apr 2026 · C.D. Cal.</span>
+          <span class="pill">Allegations unproven — Trajector denies them</span>
+          <span class="pill">Not legal advice</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- S0 -->
+      <section id="s0">
+        <div class="sec-num">Start here</div>
+        <h2>The 90-second read</h2>
+        <p class="lead">Trajector Medical is a for-profit company that helped veterans with VA disability claims and charged them for it — often four to five figures. The core of every complaint against it is one simple point: by law, that help is supposed to be <em>free</em>, from <em>accredited</em> people. Trajector was neither.</p>
+
+        <div class="tldr">
+          <div class="onesent">A nationwide class action now accuses Trajector of illegally charging disabled veterans thousands for claims help the law says is free. The allegations aren't proven yet — but the paper trail behind them is unusually strong.</div>
+          <div class="todo-row">
+            <div class="tn">1</div>
+            <div><div class="tt">The alleged scheme.</div><div class="td">Charge veterans ~5× their monthly benefit increase ($4,500–$20,000+) for claim help, while not being VA-accredited. <a class="inline" href="#s2">Section 2 →</a></div></div>
+          </div>
+          <div class="todo-row">
+            <div class="tn">2</div>
+            <div><div class="tt">The "CallBot."</div><div class="td">An auto-dialer that used veterans' SSNs to watch VA systems for benefit increases, then auto-billed them. <a class="inline" href="#s3">Section 3 →</a></div></div>
+          </div>
+          <div class="todo-row">
+            <div class="tn warn">3</div>
+            <div><div class="tt">What to do if Dad paid them.</div><div class="td">He likely never legally owed a fee for an initial claim. Keep every document; free accredited help exists. <a class="inline" href="#s7">Section 7 →</a></div></div>
+          </div>
+        </div>
+
+        <div class="callout co-context">
+          <div class="ct">How to read this doc</div>
+          <p>Tags mark how solid each claim is: <span class="tag good">confirmed</span> = documented fact, <span class="tag alleged">alleged</span> = a claim from the lawsuit that a court has <em>not</em> ruled on, <span class="tag sec">legal risk</span> = a legal exposure. Superscript numbers link to sources in <a class="inline" href="#s10">Section 10</a>. This is research, not legal advice — for Dad's actual situation, a VSO or veterans-law attorney is the right call.</p>
+        </div>
+
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s0" rows="2" placeholder="First reactions, questions, anything to come back to…"></textarea></div>
+      </section>
+
+      <!-- S1 -->
+      <section id="s1">
+        <div class="sec-num">Understand · 01</div>
+        <h2>Who Trajector is</h2>
+        <p class="lead">A large, fast-growing Florida company that turned "help a veteran document their conditions" into a business charging a percentage of the benefits the veteran won.</p>
+        <ul class="bullets">
+          <li><strong>Founded 2014</strong> as <em>Vet Comp &amp; Pen Medical Consulting</em>; later rebranded to Trajector. Based in Gainesville, Florida. Founders: <strong>Jim Hill</strong> (Navy veteran) and <strong>Gina Uribe</strong> (a former VA medical examiner). <span class="tag good">confirmed</span><sup><a href="#src1">1</a></sup></li>
+          <li>Grew to <strong>1,300+ employees</strong> by 2021 and even filed — then withdrew — SEC paperwork toward going public. This is a real company at scale, not a fly-by-night operation. <span class="tag good">confirmed</span><sup><a href="#src1">1</a></sup></li>
+          <li><strong>The business model:</strong> Trajector's fee is contingent — roughly <strong>five times</strong> a veteran's <em>monthly</em> benefit increase if the claim succeeds. Reported bills ran <strong>$4,500 to $20,000+</strong>. <span class="tag good">confirmed</span><sup><a href="#src1">1</a></sup><sup><a href="#src2">2</a></sup></li>
+          <li>Trajector describes itself as a <strong>"medical evidence" company</strong> — it says it helps veterans identify and document conditions, and insists it does <em>not</em> fill out or file VA claim forms. That distinction is the heart of its legal defense (see <a class="inline" href="#s8">Section 8</a>). <span class="tag corr">its framing</span><sup><a href="#src1">1</a></sup></li>
+        </ul>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s1" rows="2" placeholder="Does this match Dad's experience with them?"></textarea></div>
+      </section>
+
+      <!-- S2 -->
+      <section id="s2">
+        <div class="sec-num">Understand · 02</div>
+        <h2>Why the fees may be illegal</h2>
+        <p class="lead">Two federal rules govern who can help with VA claims and whether they can charge. Understanding them is the whole case — and there's a twist that explains why this industry exists at all.</p>
+
+        <h3>The transferable principle</h3>
+        <p>Helping a veteran with a VA disability claim isn't an open market. Federal law restricts it to protect veterans from exactly this kind of fee-taking:</p>
+        <ul class="bullets">
+          <li class="b"><strong>38 U.S.C. § 5901 — accreditation.</strong> Only people <strong>accredited by the VA</strong> (attorneys, claims agents, or recognized service-organization reps) may assist with preparing or presenting a claim for pay. Trajector, the lawsuit says, was <strong>not accredited</strong>. <span class="tag sec">legal risk</span><sup><a href="#src2">2</a></sup></li>
+          <li class="b"><strong>38 U.S.C. § 5905 — no fee for an initial claim.</strong> It is <strong>illegal to charge a veteran to prepare an initial disability claim</strong>. Accredited service organizations (VFW, American Legion, DAV, county veteran service officers) do this <strong>for free</strong>. <span class="tag sec">legal risk</span><sup><a href="#src6">6</a></sup></li>
+        </ul>
+
+        <div class="callout co-flag">
+          <div class="ct">⚑ The twist that explains everything</div>
+          <p>Charging for initial claims is illegal — but nearly two decades ago Congress <strong>stripped out the penalties</strong> for breaking that rule. So the conduct stayed illegal on paper while becoming <em>effectively unenforceable</em>. That enforcement gap is the vacuum a whole "cottage industry" of paid claims consultants grew into. This is the single most important thing to understand: the rule wasn't unclear — it just had no teeth. <span class="tag good">confirmed</span><sup><a href="#src7">7</a></sup></p>
+        </div>
+
+        <h3>Trajector's counter (and why authorities reject it)</h3>
+        <p>Trajector argues it only supplies <em>medical evidence</em> and doesn't "prepare" claims, so neither statute applies (see <a class="inline" href="#s8">Section 8</a> for its full position). Independent authorities push back hard:</p>
+        <div class="callout co-risk">
+          <div class="ct">■ On the record against the defense</div>
+          <p>Former VA Inspector General <strong>Michael Missal</strong> said the approach "certainly violates the spirit and I would say it would violate the meaning of the law as well."<sup><a href="#src1">1</a></sup> The VA itself, in writing, told the company its materials "strongly suggest" it was unlawfully assisting with claims (see <a class="inline" href="#s5">Section 5</a>).</p>
+        </div>
+        <p><strong>Honest read:</strong> This "evidence, not claims" distinction is the whole ballgame, and <em>a court has not yet ruled on it.</em> The plaintiffs think it's a fiction; Trajector is betting it's a real legal line. Nobody should treat the outcome as decided.</p>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s2" rows="2" placeholder="…"></textarea></div>
+      </section>
+
+      <!-- S3 -->
+      <section id="s3">
+        <div class="sec-num">Understand · 03</div>
+        <h2>The "CallBot" — the machine that turned this into a national story</h2>
+        <p class="lead">More than the fees themselves, it's <em>how</em> Trajector allegedly collected them that drew investigators and Congress. Former employees described an automated system, internally nicknamed "the bloodhound."</p>
+
+        <figure>
+          <svg viewBox="0 0 880 200" role="img" aria-label="The alleged CallBot fee loop: veteran signs contract giving SSN and birthdate, CallBot auto-dials the VA hotline to watch for a benefit increase, an increase triggers an automatic invoice of five times the monthly increase, then collections calls begin.">
+            <defs>
+              <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#78716c"/></marker>
+            </defs>
+            <g font-family="-apple-system,Segoe UI,Roboto,sans-serif">
+              <rect x="8" y="66" width="150" height="70" rx="11" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+              <text x="83" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12">Contract signed</text>
+              <text x="83" y="110" text-anchor="middle" font-size="10.5" fill="#92400e">SSN + birthdate</text>
+              <text x="83" y="124" text-anchor="middle" font-size="10.5" fill="#92400e">handed over</text>
+              <line x1="158" y1="101" x2="190" y2="101" stroke="#78716c" stroke-width="2" marker-end="url(#ar)"/>
+
+              <rect x="192" y="66" width="150" height="70" rx="11" fill="#e6edf5" stroke="#2d5180" stroke-width="1.5"/>
+              <text x="267" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#1f3a5f">CallBot dials VA</text>
+              <text x="267" y="106" text-anchor="middle" font-size="10.5" fill="#2d5180">auto-calls the hotline,</text>
+              <text x="267" y="120" text-anchor="middle" font-size="10.5" fill="#2d5180">watches for an increase</text>
+              <line x1="342" y1="101" x2="374" y2="101" stroke="#78716c" stroke-width="2" marker-end="url(#ar)"/>
+
+              <rect x="376" y="66" width="150" height="70" rx="11" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+              <text x="451" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#5b21b6">Increase detected</text>
+              <text x="451" y="110" text-anchor="middle" font-size="10.5" fill="#6d28d9">benefit goes up →</text>
+              <text x="451" y="124" text-anchor="middle" font-size="10.5" fill="#6d28d9">trigger fires</text>
+              <line x1="526" y1="101" x2="558" y2="101" stroke="#78716c" stroke-width="2" marker-end="url(#ar)"/>
+
+              <rect x="560" y="66" width="150" height="70" rx="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+              <text x="635" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#7f1d1d">Auto-invoice</text>
+              <text x="635" y="110" text-anchor="middle" font-size="10.5" fill="#991b1b">5× the monthly</text>
+              <text x="635" y="124" text-anchor="middle" font-size="10.5" fill="#991b1b">increase, automatically</text>
+              <line x1="710" y1="101" x2="742" y2="101" stroke="#78716c" stroke-width="2" marker-end="url(#ar)"/>
+
+              <rect x="744" y="66" width="128" height="70" rx="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+              <text x="808" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#7f1d1d">Collections</text>
+              <text x="808" y="114" text-anchor="middle" font-size="10.5" fill="#991b1b">calls begin</text>
+
+              <text x="440" y="172" text-anchor="middle" font-size="11.5" fill="#78716c" font-style="italic">The bill fired whether or not Trajector actually caused the increase — this is the alleged design.</text>
+            </g>
+          </svg>
+          <figcaption>The alleged fee loop described by former employees and the complaint. <span class="tag alleged">alleged</span></figcaption>
+        </figure>
+
+        <ul class="bullets">
+          <li>CallBot repeatedly auto-dialed the <strong>VA Benefits Hotline</strong> using veterans' <strong>Social Security numbers and birthdates</strong> (collected in signed contracts) to detect when a rating or payment went up — reportedly across <strong>tens of thousands of veterans</strong>, with up to <strong>20 concurrent calls running for days</strong>. <span class="tag alleged">alleged</span><sup><a href="#src1">1</a></sup></li>
+          <li>On detecting an increase, it <strong>automatically generated an invoice</strong> (5× the monthly increase) — <em>regardless of whether Trajector actually caused the outcome</em> — and collections began. <span class="tag alleged">alleged</span><sup><a href="#src1">1</a></sup></li>
+          <li>Tellingly: when the VA <strong>blocked Trajector's phone numbers</strong>, the company's collections revenue reportedly dropped — a sign of how central the automated dialing was. <span class="tag good">confirmed reporting</span><sup><a href="#src1">1</a></sup></li>
+        </ul>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s3" rows="2" placeholder="Did Dad give them his SSN / birthdate? Did bills arrive right after a rating change?"></textarea></div>
+      </section>
+
+      <!-- S4 -->
+      <section id="s4">
+        <div class="sec-num">Understand · 04</div>
+        <h2>The class action</h2>
+        <p class="lead">A nationwide case filed in April 2026 pulls all of the above together into federal claims on behalf of every veteran Trajector charged.</p>
+
+        <div class="factcard">
+          <div class="fc-head"><span class="gl">▣</span> Case at a glance</div>
+          <dl>
+            <dt>Case</dt><dd>Gilbert Quijada, Jr. v. Trajector, Inc. (&amp; Trajector Medical, LLC)</dd>
+            <dt>Court</dt><dd>U.S. District Court, Central District of California (Western Division)</dd>
+            <dt>Docket</dt><dd>No. 2:26-cv-03792</dd>
+            <dt>Filed</dt><dd>April 10, 2026 · 58-page complaint (announced Apr 28, 2026)</dd>
+            <dt>Plaintiffs</dt><dd>Gilbert Quijada, Jr., for a nationwide class of disabled veterans charged by Trajector</dd>
+            <dt>Counsel</dt><dd>Aylstock, Witkin, Kreis &amp; Overholtz (lead); Bradley/Grombacher; Pittman, Dutton, Hellums, Bradley &amp; Mann</dd>
+            <dt>Status</dt><dd>Early — no class certified, no ruling on the merits, no settlement</dd>
+          </dl>
+        </div>
+        <p style="font-size:12.5px;color:var(--text-muted);margin-top:2px">Sources: <sup><a href="#src2">2</a></sup><sup><a href="#src3">3</a></sup></p>
+
+        <h3>What the complaint alleges</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Allegation</th><th>In plain terms</th><th>Type</th></tr></thead>
+            <tbody>
+              <tr><td>Unaccredited fee-charging</td><td>Charged for claim help while not VA-accredited (§ 5901)</td><td><span class="sev hi">legal</span></td></tr>
+              <tr><td>Fees for initial claims</td><td>Charged for help that must be free (§ 5905)</td><td><span class="sev hi">legal</span></td></tr>
+              <tr><td>Deceptive contracts</td><td>"Misleading contracts that obscured the true nature of their services"</td><td><span class="sev md">consumer</span></td></tr>
+              <tr><td>CallBot / data access</td><td>Used veterans' personal data to monitor VA systems and auto-bill</td><td><span class="sev md">privacy</span></td></tr>
+              <tr><td>Predatory collections</td><td>Repeated calls, legal threats, demands even on disputed invoices</td><td><span class="sev md">consumer</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout co-context">
+          <div class="ct">Strengths &amp; hurdles — an honest handicap</div>
+          <p><strong>Unusually strong for plaintiffs:</strong> two written VA cease-and-desist letters and an NPR investigation with 11 former employees on record. <strong>Real hurdles:</strong> (1) Trajector's "medical evidence, not claim prep" defense is untested in court; (2) these contracts often bury <strong>arbitration / class-waiver clauses</strong> that defendants use to force disputes out of class actions into individual arbitration. Watch whether Trajector moves to compel arbitration — it's the most likely early battleground.</p>
+        </div>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s4" rows="2" placeholder="…"></textarea></div>
+      </section>
+
+      <!-- S5 -->
+      <section id="s5">
+        <div class="sec-num">Understand · 05</div>
+        <h2>The VA's two warnings — the paper trail</h2>
+        <p class="lead">This isn't a surprise enforcement action. The VA told Trajector, in writing, twice — and then, per reporting, did nothing.</p>
+
+        <ul class="timeline">
+          <li class="gold">
+            <div class="tl-date">June 29, 2017</div>
+            <div class="tl-body">VA Office of General Counsel sends a cease-and-desist letter (to the company then named Vet Comp &amp; Pen). It says the company's materials "strongly suggest" it is "unlawfully assisting in the preparation, presentation and prosecution of claims" and charging for it — and orders it to "immediately cease." <span class="tag good">confirmed</span><sup><a href="#src1">1</a></sup></div>
+          </li>
+          <li class="risk">
+            <div class="tl-date">January 2022</div>
+            <div class="tl-body">A <strong>12-page follow-up</strong> letter says the practices violate federal law and threatens referral to "Federal and State law-enforcement authorities" if it doesn't stop. <span class="tag good">confirmed</span><sup><a href="#src2">2</a></sup></div>
+          </li>
+          <li>
+            <div class="tl-date">After 2022</div>
+            <div class="tl-body">Trajector replies asserting it complies. Per NPR, <strong>the VA never followed up, and the company kept operating and billing.</strong> That inaction is now Exhibit A for why Congress says the law needs its teeth back. <span class="tag good">confirmed</span><sup><a href="#src1">1</a></sup></div>
+          </li>
+        </ul>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s5" rows="2" placeholder="…"></textarea></div>
+      </section>
+
+      <!-- S6 -->
+      <section id="s6">
+        <div class="sec-num">Understand · 06</div>
+        <h2>Congress &amp; regulators — the "claim shark" fight</h2>
+        <p class="lead">A December 2025 NPR investigation put Trajector at the center of a national push to rein in companies charging veterans for free benefits — the so-called "claim sharks."</p>
+        <ul class="bullets">
+          <li><strong>Dec 2025 — regulators put on notice.</strong> Roughly <strong>40 members of Congress</strong> asked the VA, FTC, and CFPB to act. As of the reporting, Rep. Chris Pappas said they'd received <strong>no response.</strong> <span class="tag good">confirmed</span><sup><a href="#src4">4</a></sup><sup><a href="#src5">5</a></sup></li>
+          <li><strong>The GUARD Act.</strong> The bipartisan <em>Governing Unaccredited Representatives Defrauding VA Benefits Act</em> would <strong>reinstate the § 5905 penalties</strong> Congress stripped years ago — restoring fines for charging veterans for claims work. Currently <strong>stalled in the House Committee on Veterans' Affairs.</strong> <span class="tag good">confirmed</span><sup><a href="#src8">8</a></sup></li>
+          <li><strong>The robo-dialer bill.</strong> A separate Pappas / Bacon bill would <strong>bar companies from using auto-dialers to call federal agencies</strong> — aimed directly at CallBot-style conduct. <span class="tag good">confirmed</span><sup><a href="#src6">6</a></sup></li>
+          <li class="w"><strong>The counter-move.</strong> An <strong>industry-backed bill</strong> would instead <em>legitimize</em> paid consultants with a <strong>$12,500 fee cap.</strong> Note the tension: one track wants to ban the fees, the other to legalize-and-cap them. Worth watching which wins. <span class="tag good">confirmed</span><sup><a href="#src6">6</a></sup></li>
+        </ul>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s6" rows="2" placeholder="…"></textarea></div>
+      </section>
+
+      <!-- S7 -->
+      <section id="s7">
+        <div class="sec-num act">For you · 07</div>
+        <h2>What this means for Dad — steps to consider</h2>
+        <p class="lead">If he used and paid Trajector, here's a practical checklist. To be clear: this is research, not legal advice — but these are the concrete, low-regret moves.</p>
+
+        <ol class="steps">
+          <li><strong>Save everything.</strong> The contract, every invoice, proof of payment, and a log of any collection calls or messages. This is the evidence that matters whether he joins the class or disputes a bill. He <em>likely never legally owed a fee for an initial claim</em> — that's the whole premise of the suit.</li>
+          <li><strong>Read the contract for an arbitration / class-waiver clause.</strong> This one clause decides whether he can join the class action or would be pushed into private, individual arbitration. If he can't find it or can't tell, that's a specific question for a lawyer or VSO.</li>
+          <li><strong>Consider contacting the plaintiffs' firms.</strong> Aylstock, Witkin, Kreis &amp; Overholtz and Bradley/Grombacher filed the case. If he thinks he's a class member, he can reach out to ask about eligibility and any coming class notice — usually at no upfront cost in these cases.</li>
+          <li><strong>If he's still being billed or in "collections," dispute it in writing.</strong> The debt's very legality is contested. Don't ignore it, but don't assume it's valid either — a written dispute preserves his rights.</li>
+          <li><strong>Revoke any standing authorization</strong> he gave Trajector to access his VA information (the SSN/birthdate authorization that powers CallBot), if it's still active.</li>
+          <li><strong>File complaints — they build the enforcement record.</strong> Regulators are under public pressure to act, and complaints are the raw material:
+            <div style="margin-top:8px;font-size:14px">• <strong>VA Office of General Counsel</strong> (unaccredited practice) &nbsp;• <strong>FTC</strong> — reportfraud.ftc.gov &nbsp;• <strong>CFPB</strong> (debt-collection) &nbsp;• <strong>Florida Attorney General</strong> (50+ complaints already on file there).</div>
+          </li>
+          <li><strong>Get future help free, from an accredited source.</strong> <strong>VFW, American Legion, DAV</strong>, or his <strong>county Veteran Service Officer</strong> are VA-accredited and legally free — the exact service Trajector charged five figures for. Find a VSO at <code class="f">va.gov/ogc/apps/accreditation</code>.</li>
+        </ol>
+
+        <div class="callout co-good">
+          <div class="ct">✓ The reassuring part</div>
+          <p>Nothing here jeopardizes Dad's <em>benefits</em>. The VA rating he was awarded is his — this dispute is strictly about the <em>fee Trajector charged</em>, not the disability award itself. The worst realistic case is a fee fight; the benefits stand.</p>
+        </div>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your action notes <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s7" rows="3" placeholder="What's done, what's next, questions for a VSO/lawyer…"></textarea></div>
+      </section>
+
+      <!-- S8 -->
+      <section id="s8">
+        <div class="sec-num">Dig in · 08</div>
+        <h2>Trajector's side — steelmanned</h2>
+        <p class="lead">Fairness and honesty require stating their position at its strongest, not a strawman. Here it is.</p>
+        <ul class="bullets">
+          <li><strong>"We provide medical evidence, not claims prep."</strong> Trajector's core argument is that it helps veterans document medical conditions and does not prepare, present, or file VA claims — so §§ 5901/5905 (which govern <em>claims</em> assistance) don't apply to it.<sup><a href="#src1">1</a></sup></li>
+          <li><strong>"The complaint is without merit."</strong> Spokesperson Steve Zenofsky said the company "intends to defend itself vigorously," and points to a <strong>4.6-star Google rating</strong> and an <strong>A+ BBB rating</strong> as evidence of genuine value to real veterans.<sup><a href="#src3">3</a></sup></li>
+          <li><strong>"Veterans authorized it."</strong> Trajector says clients <em>expressly authorized</em> access to their VA information in signed contracts and can self-report increases — framing the data access as consented-to, not covert.<sup><a href="#src1">1</a></sup></li>
+        </ul>
+        <div class="callout co-flag">
+          <div class="ct">⚑ Weighing it</div>
+          <p>The ratings and the "consent" point are real and shouldn't be dismissed — many veterans <em>did</em> get help. But two things cut against the defense: the VA told the company <em>in writing, twice</em> that its own materials looked unlawful, and a former VA Inspector General said the evidence/claims distinction violates "the meaning of the law." The defense is coherent, but it's swimming against a strong current. A court hasn't decided — and until it does, both of these are live.</p>
+        </div>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s8" rows="2" placeholder="…"></textarea></div>
+      </section>
+
+      <!-- S9 -->
+      <section id="s9">
+        <div class="sec-num">Dig in · 09</div>
+        <h2>What's still uncertain</h2>
+        <p class="lead">Being precise about what we <em>don't</em> know is part of an honest brief. Open questions as of this writing (July 2026):</p>
+        <ul class="bullets">
+          <li class="w"><strong>No ruling yet.</strong> The class action is months old. Nothing has been proven; the "alleged" tags throughout are load-bearing, not decoration.</li>
+          <li class="w"><strong>Arbitration unknown.</strong> Whether Trajector's contracts force individual arbitration — which could gut the class action — hasn't surfaced publicly. It's the biggest single unknown for a would-be class member.</li>
+          <li class="w"><strong>Regulators silent.</strong> As of the reporting, the VA/FTC/CFPB had not publicly responded to Congress. No confirmed formal FTC action against Trajector exists in the sources — despite the request for one.</li>
+          <li class="w"><strong>Possible related suits.</strong> Given the counsel involved and the scale, additional or consolidated filings are plausible over time, but this brief documents the one confirmed nationwide case.</li>
+          <li class="w"><strong>Legislation is a coin-flip.</strong> The GUARD Act is stalled and faces a competing industry bill. Which framework becomes law will shape whether this conduct is banned or capped-and-legalized.</li>
+        </ul>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s9" rows="2" placeholder="…"></textarea></div>
+      </section>
+
+      <!-- S10 -->
+      <section id="s10">
+        <div class="sec-num">Dig in · 10</div>
+        <h2>Sources</h2>
+        <p class="lead">Every claim above traces to one of these. Credibility noted: official documents and established investigative journalism carry the most weight; the lawsuit itself is a set of allegations, not findings.</p>
+        <ol class="srclist">
+          <li id="src1"><a href="https://www.npr.org/2025/12/02/nx-s1-5507111/disabled-veterans-investigation" target="_blank" rel="noopener">NPR — "This company charges disabled vets millions, even after VA said it's likely illegal" (Dec 2, 2025)</a><span class="st">investigative</span></li>
+          <li id="src2"><a href="https://www.military.com/daily-news/2026/04/14/disabled-veterans-charged-20k-file-va-benefits-claims-lawsuit.html" target="_blank" rel="noopener">Military.com — "Disabled Veterans Charged Up to $20K to File VA Benefits Claims: Lawsuit" (Apr 14, 2026)</a><span class="st">news</span></li>
+          <li id="src3"><a href="https://www.prnewswire.com/news-releases/trajector-faces-class-action-lawsuit-over-alleged-deceptive-and-abusive-practices-toward-nations-disabled-veterans-302756178.html" target="_blank" rel="noopener">PRNewswire (Bradley/Grombacher) — Class action announcement, case &amp; docket details (Apr 28, 2026)</a><span class="st">plaintiff counsel</span></li>
+          <li id="src4"><a href="https://www.npr.org/2025/12/10/nx-s1-5639990/congress-crackdown-veterans-companies-disabled" target="_blank" rel="noopener">NPR — "Congress calls for a crackdown on companies charging disabled vets" (Dec 10, 2025)</a><span class="st">news</span></li>
+          <li id="src5"><a href="https://pappas.house.gov/sites/evo-subsites/pappas.house.gov/files/evo-media-document/12.10.25-pappas-et-al-letter-to-va-ftc-cfpb-in-response-to-npr-investigation-on-trajector-predatory-practices-targeting-veteran-benefits.pdf" target="_blank" rel="noopener">Rep. Pappas et al. — Letter to VA / FTC / CFPB re: Trajector (PDF, Dec 10, 2025)</a><span class="st">primary</span></li>
+          <li id="src6"><a href="https://www.npr.org/2026/05/04/nx-s1-5719493/veterans-disabilities-claims-congress-legislation" target="_blank" rel="noopener">NPR — "Bill aims to stop 'claim sharks' from targeting disabled vets" (May 4, 2026)</a><span class="st">news</span></li>
+          <li id="src7"><a href="https://www.wcmu.org/national-world-news/2025-12-02/firms-that-help-military-vets-with-their-disability-claims-can-charge-exorbitant-fees" target="_blank" rel="noopener">NPR / WCMU — "Firms that help military vets with their disability claims can charge exorbitant fees" (Dec 2, 2025)</a><span class="st">news</span></li>
+          <li id="src8"><a href="https://pappas.house.gov/media/press-releases/guard-va-benefits-act" target="_blank" rel="noopener">Rep. Chris Pappas — GUARD VA Benefits Act (bill summary &amp; § 5905 penalty reinstatement)</a><span class="st">primary</span></li>
+          <li><a href="https://thewarhorse.org/veterans-affairs-claim-benefit-company-letters/" target="_blank" rel="noopener">The War Horse — VA warning letters to veteran-benefit companies</a><span class="st">news</span></li>
+          <li><a href="https://codes.findlaw.com/us/title-38-veterans-benefits/38-usc-sect-5905.html" target="_blank" rel="noopener">38 U.S.C. § 5905 — "Penalty for certain acts" (statute text)</a><span class="st">statute</span></li>
+        </ol>
+        <div class="notebox"><label><span aria-hidden="true">📝</span> Your note <span class="note-saved" role="status">saved ✓</span></label><textarea data-note="s10" rows="2" placeholder="…"></textarea></div>
+      </section>
+
+      <!-- COLLECTED -->
+      <section id="collected">
+        <div class="sec-num">Your notes</div>
+        <h2>Your notes — collected</h2>
+        <p class="lead">Everything you typed, gathered in one place. Copy it all out to bring to a VSO or attorney, or send back to Sean.</p>
+        <div class="collect-wrap" id="collectWrap"></div>
+        <div class="btnrow">
+          <button class="btn primary" id="copyNotes">Copy all my notes</button>
+          <button class="btn" id="refreshNotes">Refresh</button>
+          <button class="btn" id="clearNotes">Clear all</button>
+        </div>
+        <hr class="grule">
+        <p style="font-size:13px;color:var(--text-muted);margin-top:14px">Your notes are saved only in this browser (nothing is sent anywhere). Clearing your browser data will erase them — copy them out if they matter.</p>
+      </section>
+
+      <footer>
+        Research brief compiled July 2026 from public reporting and court filings · <strong>Allegations described here are unproven; Trajector denies wrongdoing and no court has ruled.</strong> · This document is informational research, <strong>not legal advice</strong> — for a specific situation, consult a VA-accredited representative or a veterans-law attorney.
+      </footer>
+    </div>
+  </div>
+</div>
+
+<script>(function(){
+  var PREFIX='trajector:note:';
+  // ---- mobile drawer ----
+  var sidebar=document.getElementById('sidebar'),scrim=document.getElementById('scrim'),
+      menuBtn=document.getElementById('menuBtn');
+  function openNav(){sidebar.classList.add('open');scrim.classList.add('open');}
+  function closeNav(){sidebar.classList.remove('open');scrim.classList.remove('open');}
+  menuBtn&&menuBtn.addEventListener('click',openNav);
+  scrim&&scrim.addEventListener('click',closeNav);
+  // ---- desktop collapse ----
+  var navCollapse=document.getElementById('navCollapse'),navReopen=document.getElementById('navReopen');
+  if(localStorage.getItem(PREFIX+'collapsed')==='1')document.body.classList.add('nav-collapsed');
+  function toggleCollapse(){document.body.classList.toggle('nav-collapsed');
+    localStorage.setItem(PREFIX+'collapsed',document.body.classList.contains('nav-collapsed')?'1':'0');}
+  navCollapse&&navCollapse.addEventListener('click',toggleCollapse);
+  navReopen&&navReopen.addEventListener('click',toggleCollapse);
+  // ---- nav clicks close drawer on mobile ----
+  document.querySelectorAll('#toc a').forEach(function(a){a.addEventListener('click',function(){if(window.innerWidth<=980)closeNav();});});
+  // ---- scroll-spy ----
+  var tocLinks={};document.querySelectorAll('#toc a').forEach(function(a){tocLinks[a.getAttribute('href').slice(1)]=a;});
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){
+      var id=e.target.id,link=tocLinks[id];
+      if(link){Object.keys(tocLinks).forEach(function(k){tocLinks[k].classList.remove('active');});link.classList.add('active');
+        if(link.offsetTop<sidebar.scrollTop||link.offsetTop>sidebar.scrollTop+sidebar.clientHeight)
+          link.scrollIntoView({block:'nearest'});}
+    }});
+  },{rootMargin:'-12% 0px -75% 0px'});
+  document.querySelectorAll('section').forEach(function(s){obs.observe(s);});
+  // ---- notes ----
+  function saveIndicator(ta){var s=ta.closest('.notebox').querySelector('.note-saved');
+    if(!s)return;s.classList.add('show');clearTimeout(ta._t);ta._t=setTimeout(function(){s.classList.remove('show');},1100);}
+  document.querySelectorAll('textarea[data-note]').forEach(function(ta){
+    var key=PREFIX+ta.getAttribute('data-note'),saved=localStorage.getItem(key);
+    if(saved!==null)ta.value=saved;
+    ta.addEventListener('input',function(){localStorage.setItem(key,ta.value);saveIndicator(ta);clearTimeout(window._g);window._g=setTimeout(gather,300);});
+  });
+  // ---- collected ----
+  var wrap=document.getElementById('collectWrap');
+  function labelFor(ta){var sec=ta.closest('section');var h=sec&&sec.querySelector('h2');return h?h.textContent.trim():ta.getAttribute('data-note');}
+  function gather(){
+    if(!wrap)return;var items=[];
+    document.querySelectorAll('textarea[data-note]').forEach(function(ta){
+      if(ta.value.trim())items.push({label:labelFor(ta),text:ta.value.trim()});});
+    if(!items.length){wrap.innerHTML='<div class="collect-empty">No notes yet. Type in any “Your note” box above and it shows up here.</div>';return;}
+    wrap.innerHTML=items.map(function(it){
+      return '<div class="collect-item"><div class="cl">'+esc(it.label)+'</div><div class="cx">'+esc(it.text)+'</div></div>';}).join('');
+  }
+  function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+  function notesText(){
+    var out=['Trajector research brief — my notes',''];
+    document.querySelectorAll('textarea[data-note]').forEach(function(ta){
+      if(ta.value.trim())out.push('## '+labelFor(ta),ta.value.trim(),'');});
+    return out.join('\n');
+  }
+  // ---- copy helper ----
+  function copyText(text,btn,doneLabel,restoreLabel){
+    var fin=function(){if(btn){btn.textContent=doneLabel;btn.classList.add('done');setTimeout(function(){btn.textContent=restoreLabel;btn.classList.remove('done');},2400);}};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(fin,function(){fallback(text);fin();});}
+    else{fallback(text);fin();}
+  }
+  function fallback(text){var t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.focus();t.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(t);}
+  // ---- buttons ----
+  var cn=document.getElementById('copyNotes');cn&&cn.addEventListener('click',function(){copyText(notesText(),cn,'Copied ✓','Copy all my notes');});
+  var rn=document.getElementById('refreshNotes');rn&&rn.addEventListener('click',gather);
+  var clr=document.getElementById('clearNotes');clr&&clr.addEventListener('click',function(){
+    if(!confirm('Clear all your notes? This cannot be undone.'))return;
+    document.querySelectorAll('textarea[data-note]').forEach(function(ta){localStorage.removeItem(PREFIX+ta.getAttribute('data-note'));ta.value='';});gather();});
+  gather();
+})();</script>
+</body>
+</html>
