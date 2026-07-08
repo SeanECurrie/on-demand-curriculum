@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Monday Bags — IG Static (Anybody Can Win)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Kaushan+Script&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#dd3333; --red-l:#ff5247; --white:#f9f9f9; --cream:#f1ead8;
+    --green:#75d69c; --muted:#b2aca1; --ink:#070707;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:#000;font-family:'Poppins',sans-serif}
+
+  /* ── 1080×1350 IG feed 4:5 · one root div, overflow hidden, screenshots clean ── */
+  .post{
+    width:1080px;height:1350px;position:relative;overflow:hidden;
+    background:#070707;color:var(--white);
+  }
+
+  /* ── full-bleed figure (fills the whole frame; cover-crop keeps full height, trims sides) ── */
+  .post>img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    object-position:55% 50%;filter:brightness(.95) saturate(1.07);z-index:0}
+
+  /* ── brand scrims: legibility first, then warmth, then texture (matches intro-hero recipe) ── */
+  .scrim{position:absolute;inset:0;z-index:1;pointer-events:none}
+  .scrim.dark{background:
+     linear-gradient(180deg,
+       rgba(7,7,7,.64) 0%,
+       rgba(7,7,7,.12) 16%,
+       transparent 34%,
+       rgba(7,7,7,.20) 50%,
+       rgba(7,7,7,.64) 70%,
+       rgba(7,7,7,.93) 88%,
+       #070707 100%)}
+  .scrim.glow{background:
+     radial-gradient(72% 42% at 26% 100%,rgba(221,51,51,.22),transparent 72%),
+     radial-gradient(58% 30% at 90% 4%,rgba(117,214,156,.08),transparent 70%)}
+  .scrim.dots{opacity:.4;
+     background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.04) 1px,transparent 0);
+     background-size:24px 24px}
+  .scrim.vig{box-shadow:inset 0 0 240px 70px rgba(0,0,0,.62)}
+
+  /* ── TOP: logo + tag, small, top-left corner ── */
+  .top{position:absolute;top:54px;left:64px;right:64px;z-index:3;display:flex;align-items:center;gap:18px}
+  .top img{width:104px;height:auto;filter:drop-shadow(0 3px 16px rgba(0,0,0,.85))}
+  .top .tag{font-weight:700;font-size:18px;letter-spacing:.30em;text-transform:uppercase;color:var(--cream);
+     text-shadow:0 2px 10px rgba(0,0,0,.85);padding-top:4px}
+  .top .tag .r{color:var(--red-l)}
+
+  /* ── BOTTOM block: bottom-weighted, left-aligned, asymmetric ── */
+  .block{position:absolute;left:64px;right:60px;bottom:58px;z-index:3}
+  .kick{font-family:'Kaushan Script',cursive;color:var(--red);font-size:58px;line-height:.9;
+     transform:rotate(-4deg);transform-origin:left center;margin-left:6px;margin-bottom:8px;
+     text-shadow:0 4px 24px rgba(221,51,51,.5),0 2px 10px rgba(0,0,0,.75)}
+  .hook{font-weight:900;font-size:158px;line-height:.80;letter-spacing:-.035em;text-transform:uppercase;
+     text-shadow:0 12px 44px rgba(0,0,0,.72)}
+  .hook .r{color:var(--red-l)}
+  .when{margin-top:26px;font-weight:700;font-size:31px;letter-spacing:.13em;text-transform:uppercase;color:#fff;
+     text-shadow:0 2px 12px rgba(0,0,0,.9)}
+  .when .dot{color:var(--red)}
+  .when .walk{color:var(--cream)}
+  .rule{width:148px;height:4px;margin-top:24px;border-radius:4px;
+     background:linear-gradient(90deg,var(--red),rgba(221,51,51,0))}
+  .chan{margin-top:18px;font-weight:700;font-size:21px;letter-spacing:.04em;color:#d2cbbd;
+     text-shadow:0 2px 10px rgba(0,0,0,.9)}
+  .chan .at{color:#fff}
+  .chan .h{color:var(--red-l);font-weight:800}
+
+  /* ── MONEY: tiny, bottom-right corner, for who-cares — never the headline ── */
+  .money{position:absolute;right:64px;bottom:62px;z-index:4;text-align:right;
+     font-size:15px;line-height:1.55;color:var(--cream);letter-spacing:.04em;
+     text-shadow:0 2px 10px rgba(0,0,0,.95)}
+  .money b{color:#fff;font-weight:800}
+  .money .g{color:var(--green);font-weight:700}
+</style>
+</head>
+<body>
+<div class="post">
+  <!-- celebrate.jpeg — couple celebrating a win over the cornhole board; object-position 55% keeps both faces, natural frame-edge crops on the raised hand + her right side -->
+  <img class="bg" src="../../site/assets/photos/celebrate.jpeg" alt="Monday Bags night at Clover River West">
+
+  <div class="scrim dark"></div>
+  <div class="scrim glow"></div>
+  <div class="scrim dots"></div>
+  <div class="scrim vig"></div>
+
+  <div class="top">
+    <img src="../../site/assets/logo.png" alt="Clover River West">
+    <div class="tag">Monday <span class="r">Bags</span> · River West</div>
+  </div>
+
+  <div class="block">
+    <div class="kick">Monday Bags</div>
+    <div class="hook">Anybody<br>can <span class="r">win.</span></div>
+    <div class="when">Mondays <span class="dot">·</span> sign up by 7 <span class="dot">·</span> <span class="walk">just walk in</span></div>
+    <div class="rule"></div>
+    <div class="chan"><span class="at">@cloverchicago</span> &nbsp;·&nbsp; <span class="h">#BAGSATCLOVER</span></div>
+  </div>
+
+  <div class="money">
+    <b>$10</b> to play · Clover adds <b>$50</b><br><span class="g">winner takes the pot</span>
+  </div>
+</div>
+</body>
+</html>

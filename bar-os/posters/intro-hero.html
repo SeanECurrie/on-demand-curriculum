@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Monday Bags — Intro Hero Poster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Kaushan+Script&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#dd3333; --red-l:#ff5247; --white:#f9f9f9; --cream:#f1ead8;
+    --green:#75d69c; --muted:#b2aca1; --ink:#070707;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:#000;font-family:'Poppins',sans-serif}
+  .poster{
+    width:1080px;height:1350px;position:relative;overflow:hidden;
+    background:radial-gradient(120% 55% at 50% 92%,#13180f 0%,#0b0b0b 48%,#070707 100%);
+    color:var(--white);display:flex;flex-direction:column;
+  }
+  .poster::before{content:"";position:absolute;inset:0;opacity:.5;z-index:1;
+    background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.035) 1px,transparent 0);background-size:24px 24px}
+  .poster::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(55% 32% at 50% 100%,rgba(221,51,51,.13),transparent 70%),
+               radial-gradient(46% 26% at 50% 0%,rgba(117,214,156,.07),transparent 70%)}
+
+  /* ── photo band ── */
+  .band{position:relative;height:356px;overflow:hidden;flex-shrink:0}
+  .band img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.82) saturate(1.06)}
+  .band .ov{position:absolute;inset:0;z-index:2;
+    background:linear-gradient(180deg,rgba(8,7,6,.55) 0%,rgba(8,7,6,.2) 38%,rgba(7,7,7,.86) 86%,#070707 100%),
+              radial-gradient(70% 60% at 50% 0%,rgba(221,51,51,.16),transparent 70%)}
+  .band .top{position:absolute;top:46px;left:0;right:0;z-index:3;display:flex;flex-direction:column;align-items:center;gap:16px}
+  .band .top img{position:static;width:118px;height:auto;object-fit:contain;filter:drop-shadow(0 3px 16px rgba(0,0,0,.8))}
+  .eyebrow{font-weight:700;font-size:23px;letter-spacing:.26em;text-transform:uppercase;color:var(--red-l);
+    display:flex;align-items:center;gap:14px}
+  .eyebrow::before,.eyebrow::after{content:"";width:34px;height:2px;background:linear-gradient(90deg,transparent,var(--red))}
+  .eyebrow::after{background:linear-gradient(90deg,var(--red),transparent)}
+
+  /* ── body ── */
+  .z{position:relative;z-index:3;flex:1;display:flex;flex-direction:column;align-items:center;
+     padding:14px 70px 40px;text-align:center}
+  .script{font-family:'Kaushan Script',cursive;color:var(--red);font-size:56px;line-height:.9;
+    transform:rotate(-4deg);text-shadow:0 4px 22px rgba(221,51,51,.45);margin-bottom:2px}
+  .title{font-weight:900;font-size:182px;line-height:.8;letter-spacing:-.02em;text-transform:uppercase;
+    text-shadow:0 8px 34px rgba(0,0,0,.6)}
+  .hook{margin-top:24px;font-weight:800;font-size:43px;line-height:1.04;letter-spacing:-.01em;color:#fff;max-width:18ch}
+  .hook .g{color:var(--green);font-family:'Kaushan Script',cursive;font-weight:400;font-size:.82em;display:inline-block;transform:rotate(-3deg)}
+  .say{margin-top:15px;font-weight:500;font-size:25px;line-height:1.42;color:var(--cream);max-width:30ch}
+  .say b{color:#fff;font-weight:700}
+
+  /* money strip */
+  .money{margin-top:22px;display:inline-flex;align-items:stretch;border:2px solid rgba(221,51,51,.5);border-radius:16px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(221,51,51,.12),rgba(221,51,51,.03))}
+  .money .cell{padding:15px 26px;display:flex;flex-direction:column;gap:3px;min-width:0}
+  .money .cell+.cell{border-left:1px solid rgba(221,51,51,.32)}
+  .money .n{font-weight:900;font-size:36px;line-height:1;color:#fff}
+  .money .n.red{color:var(--red-l)}
+  .money .l{font-weight:600;font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+
+  /* time */
+  .when{margin-top:24px;display:flex;flex-direction:column;gap:6px;align-items:center}
+  .when .day{font-weight:900;font-size:58px;line-height:1;text-transform:uppercase;color:#fff;letter-spacing:.01em}
+  .when .day .r{color:var(--red)}
+  .when .sub{font-weight:700;font-size:30px;letter-spacing:.06em;text-transform:uppercase;color:var(--cream)}
+
+  /* footer */
+  .foot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:11px;width:100%}
+  .foot .bar{width:150px;height:4px;background:linear-gradient(90deg,transparent,var(--red),transparent);border-radius:4px;margin-bottom:8px}
+  .foot .icon{width:50px;opacity:.92}
+  .foot .addr{font-weight:800;font-size:27px;letter-spacing:.05em;text-transform:uppercase;color:#fff}
+  .foot .grp{font-weight:600;font-size:20px;color:#8d8d8d;letter-spacing:.05em;text-transform:uppercase}
+  .foot .grp b{color:var(--green);font-weight:700}
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="band">
+    <img src="../../site/assets/photos/celebrate.jpeg" alt="">
+    <div class="ov"></div>
+    <div class="top">
+      <img src="../../site/assets/logo.png" alt="Clover River West">
+      <div class="eyebrow">Every Monday · River West</div>
+    </div>
+  </div>
+
+  <div class="z">
+    <div class="script">Monday Blind Draw</div>
+    <div class="title">Bags</div>
+
+    <div class="hook">Show up alone. <span class="g">we draw you a partner.</span></div>
+    <div class="say">Real blind-draw cornhole at Clover. <b>No partner needed — anybody can win,</b> even your first night.</div>
+
+    <div class="money">
+      <div class="cell"><span class="n red">$10</span><span class="l">to play</span></div>
+      <div class="cell"><span class="n">+$50</span><span class="l">Clover adds</span></div>
+      <div class="cell"><span class="n">Pot</span><span class="l">winner takes</span></div>
+    </div>
+
+    <div class="when">
+      <div class="day">Mondays · <span class="r">7:30</span></div>
+      <div class="sub">Sign up by 7 · just walk in</div>
+    </div>
+
+    <div class="foot">
+      <div class="bar"></div>
+      <img class="icon" src="../../site/assets/clover-icon.png" alt="">
+      <div class="addr">Clover River West · 722 W Grand</div>
+      <div class="grp">Sibling to the 8-year <b>Wednesday Blind Draw Darts</b></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
