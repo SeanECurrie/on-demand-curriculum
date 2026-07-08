@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Run the Night — Monday Bags · Clover River West</title>
+<meta name="description" content="A Monday Bags night start to finish — setup, sign-up, the draw, the bracket, the 4-Bagger Pot, and what to do if it goes sideways. So anyone can run it.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="../../site/assets/clover-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Kaushan+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hub.css">
+<style>
+.phead{padding:56px 28px 8px;background:radial-gradient(110% 60% at 0% -8%,rgba(167,139,250,.15),transparent 56%),var(--black)}
+.phead h1{font-size:clamp(30px,6vw,50px);font-weight:900;margin:14px 0 14px;max-width:18ch}
+.phead h1 .s{font-family:var(--script);text-transform:none;font-weight:400;color:var(--purple)}
+/* numbered flow (the night in one line) */
+.flow{display:flex;align-items:stretch;flex-wrap:nowrap;gap:0;margin-top:8px}
+.fnode{flex:1 1 0;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-top:3px solid var(--purple);border-radius:12px;padding:15px 14px;text-align:center}
+.fnode .num{width:26px;height:26px;border-radius:50%;background:var(--purple);color:#160a2b;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin:0 auto 9px}
+.fnode .t{font-size:14px;font-weight:700;text-transform:none;letter-spacing:-.01em;color:#fff}
+.fnode .d{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.farrow{flex:0 0 26px;display:flex;align-items:center;justify-content:center;color:var(--purple)}
+.farrow svg{width:22px;height:22px}
+@media(max-width:720px){.flow{flex-direction:column;gap:0}.farrow{flex-basis:26px;transform:rotate(90deg);margin:2px 0}}
+/* timeline */
+.tl{margin-top:8px;position:relative}
+.tl-row{display:grid;grid-template-columns:76px 26px 1fr;gap:0;align-items:start}
+.tl-time{font-size:13px;font-weight:800;color:var(--purple);text-align:right;padding:2px 14px 0 0;white-space:nowrap;letter-spacing:.01em}
+.tl-mid{display:flex;flex-direction:column;align-items:center;align-self:stretch}
+.tl-dot{width:13px;height:13px;border-radius:50%;background:var(--panel);border:2px solid var(--purple);margin-top:4px;flex-shrink:0;z-index:2}
+.tl-line{width:2px;flex:1;background:linear-gradient(180deg,rgba(167,139,250,.4),rgba(167,139,250,.14));margin:3px 0 0}
+.tl-row:last-child .tl-line{display:none}
+.tl-body{padding:0 0 26px 18px}
+.tl-body h3{font-size:15.5px;font-weight:700;text-transform:none;letter-spacing:-.01em;color:#fff}
+.tl-body p{font-size:13px;color:var(--muted);line-height:1.55;margin-top:5px}
+.tl-body p b{color:var(--cream);font-weight:600}
+.tl-row.key .tl-dot{background:var(--purple);box-shadow:0 0 0 4px rgba(167,139,250,.16)}
+.tl-row.key .tl-body h3{color:var(--purple)}
+@media(max-width:640px){.tl-row{grid-template-columns:56px 22px 1fr}.tl-time{font-size:12px;padding-right:9px}}
+/* money panel */
+.money{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;margin-top:8px}
+@media(max-width:760px){.money{grid-template-columns:1fr}}
+.mcard{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.mcard h3{font-size:15px;font-weight:800;text-transform:none;letter-spacing:-.01em;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.mcard h3 .ic{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mrow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-faint)}
+.mrow:last-child{border-bottom:none}
+.mrow .lbl{font-size:13px;color:var(--cream)}
+.mrow .lbl b{color:#fff;font-weight:600}
+.mrow .amt{font-size:15px;font-weight:800;white-space:nowrap}
+.mrow .amt.in{color:var(--red-l)} .mrow .amt.add{color:var(--green)} .mrow .amt.out{color:#fff}
+.mcard.pot{background:linear-gradient(150deg,rgba(240,162,58,.08),transparent),var(--panel-2);border-color:rgba(240,162,58,.28)}
+.mcard.pot h3 .ic{background:rgba(240,162,58,.14);color:var(--amber)}
+.mcard.main h3 .ic{background:rgba(117,214,156,.13);color:var(--green)}
+.potstep{display:flex;gap:11px;align-items:flex-start;font-size:12.5px;color:var(--muted);line-height:1.5;padding:7px 0}
+.potstep .n{font-size:10px;font-weight:800;color:var(--amber);border:1px solid rgba(240,162,58,.4);border-radius:6px;padding:2px 6px;flex-shrink:0;margin-top:1px}
+.potstep b{color:var(--cream);font-weight:600}
+/* rules brief */
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+@media(max-width:680px){.rules{grid-template-columns:1fr}}
+.rule{background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:0 var(--r) var(--r) 0;padding:16px 18px}
+.rule h4{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:8px}
+.rule p{font-size:13px;color:var(--muted);line-height:1.55}
+.rule p b{color:var(--cream);font-weight:600}
+/* sideways */
+.sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:8px}
+.sw{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r);padding:18px 19px;transition:border-color .18s}
+.sw:hover{border-color:#3a3833}
+.sw .sit{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;color:#fff;text-transform:none}
+.sw .sit .ic{width:24px;height:24px;border-radius:7px;background:rgba(221,51,51,.12);color:var(--red-l);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sw .sit .ic svg{width:14px;height:14px}
+.sw .fix{font-size:13px;color:var(--muted);line-height:1.55;margin-top:9px}
+.sw .fix b{color:var(--green);font-weight:600}
+/* grow */
+.grow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+@media(max-width:760px){.grow{grid-template-columns:1fr}}
+.gcard{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r);padding:20px;text-align:left}
+.gcard .ic{width:40px;height:40px;border-radius:11px;background:rgba(117,214,156,.12);border:1px solid rgba(117,214,156,.26);color:var(--green);display:flex;align-items:center;justify-content:center;margin-bottom:13px}
+.gcard .ic svg{width:21px;height:21px}
+.gcard h3{font-size:15px;font-weight:700;text-transform:none;letter-spacing:-.01em;color:#fff}
+.gcard p{font-size:13px;color:var(--muted);line-height:1.55;margin-top:6px}
+.gcard p b{color:var(--cream);font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<nav class="bar">
+  <div class="row">
+    <a class="back" href="index.html">↩ Hub</a>
+    <a class="brand" href="index.html">
+      <img src="../../site/assets/logo.png" alt="Clover River West">
+      <span class="t">Run the Night <span>· game time</span></span>
+    </a>
+    <div class="links">
+      <a href="#timeline">The night</a>
+      <a href="#money">The money</a>
+      <a href="#sideways">If it goes sideways</a>
+    </div>
+    <span class="tag">Private · for Clover</span>
+  </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<header class="phead">
+  <div class="wrap">
+    <span class="eyebrow p rv">Run the night</span>
+    <h1 class="rv">A Monday, <span class="s">start to finish.</span></h1>
+    <p class="lead rv">Everything that happens on a game night — setup, sign-up, the draw, the bracket, and the 4-Bagger moment — laid out so <b>anyone on staff can run it.</b> Plus the part most nights skip: what to do when it doesn't go to plan. Nothing left to guess.</p>
+  </div>
+</header>
+
+<!-- ── THE NIGHT IN ONE LINE ── -->
+<section class="sect pop pur" id="flow">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <span class="eyebrow p">The 60-second version</span>
+      <h2>Five moves, <span class="s" style="color:var(--purple)">top to bottom.</span></h2>
+    </div>
+    <div class="flow rv">
+      <div class="fnode"><div class="num">1</div><div class="t">Sign up</div><div class="d">Walk in, name down by 7. $10. No partner needed.</div></div>
+      <div class="farrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h14"/><path d="M13 6l6 6-6 6"/></svg></div>
+      <div class="fnode"><div class="num">2</div><div class="t">Get drawn</div><div class="d">Random partners, out loud. Luck of the draw.</div></div>
+      <div class="farrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h14"/><path d="M13 6l6 6-6 6"/></svg></div>
+      <div class="fnode"><div class="num">3</div><div class="t">Play the bracket</div><div class="d">Double-elim on two boards, games to 21.</div></div>
+      <div class="farrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h14"/><path d="M13 6l6 6-6 6"/></svg></div>
+      <div class="fnode"><div class="num">4</div><div class="t">The 4-Bagger</div><div class="d">Music off, whole bar. One shot at the pot.</div></div>
+      <div class="farrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h14"/><path d="M13 6l6 6-6 6"/></svg></div>
+      <div class="fnode"><div class="num">5</div><div class="t">Recap</div><div class="d">A few photos, the winner — proof for next week.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THE NIGHT, MINUTE BY MINUTE ── -->
+<section class="sect pop grn" id="timeline">
+  <div class="wrap narrow">
+    <div class="sect-head rv">
+      <span class="eyebrow g">The night, minute by minute</span>
+      <h2>How a Monday <span class="s" style="color:var(--green)">actually runs.</span></h2>
+      <p class="lead">The clock, from doors to last bag. The two times that matter are locked: <b>sign-up closes at 7, first bags fly at 7:30.</b></p>
+    </div>
+    <div class="tl rv">
+      <div class="tl-row"><div class="tl-time">4:00</div><div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><h3>Happy Hour + Service Industry Night</h3><p>Mondays already run Happy Hour 4–7 and Service Industry Night. The crowd's building — boards can go up whenever there's room.</p></div></div>
+      <div class="tl-row"><div class="tl-time">by 6:45</div><div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><h3>Set up</h3><p>Two boards out, taped at the line (same distance both lanes). Sign-up sheet and the <b>4-Bagger ticket cup</b> on the bar where people walk in. Bracket ready on the app — with the printed bracket + pen as backup. Door poster up.</p></div></div>
+      <div class="tl-row key"><div class="tl-time">7:00</div><div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><h3>Sign-up closes</h3><p><b>$10 a player</b>, collected at sign-up. Grab a phone number or email from each — that's next week's list. Once it's closed, you draw; don't hold the bracket for stragglers.</p></div></div>
+      <div class="tl-row"><div class="tl-time">7:10</div><div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><h3>Draw the partners</h3><p>Pair everyone at random and <b>announce the teams out loud</b> — people love hearing who they got. <b>Doubles</b> if 8 or more and even; <b>singles</b> if fewer or odd. Set the double-elim bracket, first matches to both boards.</p></div></div>
+      <div class="tl-row key"><div class="tl-time">7:30</div><div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><h3>Bags fly</h3><p>First throw. <b>Games to 21</b> (drop to 15 on a packed night), cancellation scoring, two matches running at once. Double-elim means <b>everyone plays at least twice</b> — nobody drives over, loses once, and leaves.</p></div></div>
+      <div class="tl-row"><div class="tl-time">all night</div><div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><h3>The 4-Bagger Pot runs alongside</h3><p>Sell <b>$1 tickets</b> all night, pot total on a small board by the lanes. At a good moment, draw for it — the signature stop-the-room moment (see the money below).</p></div></div>
+      <div class="tl-row"><div class="tl-time">close</div><div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><h3>Winners paid, photos grabbed</h3><p>Winning team takes the pot; second gets their buy-in back. <b>Grab two or three photos</b> — the winners, a packed board, the 4-Bagger moment. That's the recap.</p></div></div>
+      <div class="tl-row"><div class="tl-time">Tuesday</div><div class="tl-mid"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body"><h3>Post the recap</h3><p>Winner + a photo, the next morning. It's the proof that powers the next week — the recap caption's already written in <a href="assets.html#captions" style="color:var(--green)">the Assets</a>.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THE MONEY ── -->
+<section class="sect pop amb" id="money">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <span class="eyebrow a">The money</span>
+      <h2>Two pots, <span class="s" style="color:var(--amber)">kept separate.</span></h2>
+      <p class="lead">The entry pot pays the winners. The 4-Bagger Pot is its own thing — a running jackpot that's the night's big moment. Keep them separate and it stays simple.</p>
+    </div>
+    <div class="money rv">
+      <div class="mcard main">
+        <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.8 1.8 0 010 3.6h-3a1.8 1.8 0 000 3.6h4"/></svg></span>The entry pot</h3>
+        <div class="mrow"><span class="lbl"><b>$10</b> a player</span><span class="amt in">collected at sign-up</span></div>
+        <div class="mrow"><span class="lbl">Clover adds <b>$50</b></span><span class="amt add">+ $50</span></div>
+        <div class="mrow"><span class="lbl"><b>Winning team</b> takes the pot</span><span class="amt out">the pot</span></div>
+        <div class="mrow"><span class="lbl"><b>Second place</b> gets their buy-in back</span><span class="amt out">$10 ea.</span></div>
+      </div>
+      <div class="mcard pot">
+        <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l3.5-10h9L20 17z"/><ellipse cx="13.4" cy="10.6" rx="1.7" ry="1.05" fill="currentColor" stroke="none"/></svg></span>The 4-Bagger Pot</h3>
+        <div class="potstep"><span class="n">$1</span><span>Sell <b>$1 tickets</b> all night, separate from entry. Running total stays visible by the boards.</span></div>
+        <div class="potstep"><span class="n">draw</span><span>Escalating draws: <b>free drink → a shot →</b> the 4-Bagger Challenge.</span></div>
+        <div class="potstep"><span class="n">4</span><span><b>Music off, whole bar watching.</b> One player, one round, four bags. Each in the hole pays a quarter of the pot — sink all four and take the whole thing.</span></div>
+        <div class="potstep"><span class="n">↻</span><span>Whatever isn't won <b>carries over to next Monday</b> — a fat jackpot is its own reason to come back.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THE RULES, IN BRIEF ── -->
+<section class="sect pop pur" id="rules">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <span class="eyebrow p">The rules, in brief</span>
+      <h2>Real rules — <span class="s" style="color:var(--purple)">no gatekeeping.</span></h2>
+      <p class="lead">Legit cornhole, so the competition's real, but simple enough to teach a first-timer in two minutes. This settles almost every question at the boards.</p>
+    </div>
+    <div class="rules rv">
+      <div class="rule"><h4>Scoring — cancellation</h4><p>In the hole = <b>3</b>, on the board = <b>1</b>, on the ground = 0. Only one team scores a round: higher total minus lower, and you score <b>the difference.</b></p></div>
+      <div class="rule"><h4>Winning</h4><p>First to <b>21 or more</b> at the end of a full round wins. Going over is fine — 23 wins. No "bust," no win-by-two. Check the score only after all 8 bags are thrown.</p></div>
+      <div class="rule"><h4>Throwing</h4><p>Four bags each, alternating one at a time. Last team to score throws first next round. Step over the line, or hit the floor first, and the bag's dead.</p></div>
+      <div class="rule"><h4>Speed lever</h4><p>Standard game is to <b>21.</b> On a packed night with a long bracket, drop to <b>15</b> to clear games faster — decide before the round, announce it, keep it consistent.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── IF IT GOES SIDEWAYS ── -->
+<section class="sect pop red" id="sideways">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <span class="eyebrow">If it goes sideways</span>
+      <h2>Already <span class="s" style="color:var(--red-l)">planned for.</span></h2>
+      <p class="lead">Every night has a curveball. Here's the move for each one, so nobody's improvising at the boards — the answer's already decided.</p>
+    </div>
+    <div class="sw-grid">
+      <div class="sw rv"><div class="sit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>A thin crowd</div>
+        <p class="fix"><b>Run it anyway — small and loud.</b> Under 8? Play singles. A handful of teams still fills two boards and makes noise. Grab the photos, post the recap — a real night on the feed is what pulls the next crowd in.</p></div>
+      <div class="sw rv"><div class="sit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8l4 4-4 4M3 12h18"/></svg></span>Too many to fit (16+)</div>
+        <p class="fix">Good problem. <b>Drop games to 15</b> to clear faster, start a <b>waitlist for next week</b>, or split into two flights. Twelve is the sweet spot on two boards; past sixteen, don't let the bench sit long.</p></div>
+      <div class="sw rv"><div class="sit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 8h6M3 16h6"/></svg></span>An odd number</div>
+        <p class="fix">Get to an even 8+ so you can run doubles: <b>the runner sits in or plays</b>, or comp a newcomer's entry to round it out. Doubles is the better night — worth a free entry to unlock it.</p></div>
+      <div class="sw rv"><div class="sit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>A game's dragging</div>
+        <p class="fix">Call the <b>20-minute cap</b>: highest score wins, or one sudden-death round. Announce the next two pairs out loud so a board never sits empty — dead board time is the enemy.</p></div>
+      <div class="sw rv"><div class="sit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 4.3L3 17a2 2 0 002 3h14a2 2 0 002-3L13.7 4.3a2 2 0 00-3.4 0z"/></svg></span>A scoring dispute</div>
+        <p class="fix"><b>Point to the rules.</b> Cancellation scoring, counted out loud before you clear the boards, settles almost all of them. If a single bag's truly 50/50, re-throw just that bag.</p></div>
+      <div class="sw rv"><div class="sit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></span>The app dies</div>
+        <p class="fix">The <b>printed bracket and a pen</b> live on the table every week for exactly this. Switch over and keep the night moving — nobody even notices.</p></div>
+      <div class="sw rv"><div class="sit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21c0-3.3 3.6-5 8-5M17 15l2 2 4-4"/></svg></span>A no-show after the draw</div>
+        <p class="fix">Before games start, <b>just re-draw.</b> Mid-bracket, that team forfeits the current game — or drop in a willing player from the bench if everyone's cool with it.</p></div>
+      <div class="sw rv"><div class="sit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 4.5L19 8.2l-3.5 3.4.8 4.9L12 14.2 7.7 16.5l.8-4.9L5 8.2l4.8-.7z"/></svg></span>Not sure it landed</div>
+        <p class="fix"><b>One good Monday is enough to build on.</b> Every night captures a photo and a winner; every recap makes the next Thursday's post stronger. It compounds — you're never starting from zero twice.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TWO THINGS THAT MAKE NEXT MONDAY BIGGER ── -->
+<section class="sect pop grn" id="grow">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <span class="eyebrow g">The multiplier</span>
+      <h2>Two things make <span class="s" style="color:var(--green)">next Monday bigger.</span></h2>
+      <p class="lead">The night runs itself. These two habits are what turn one good Monday into a standing crowd.</p>
+    </div>
+    <div class="grow rv">
+      <div class="gcard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.4"/><path d="M8 6l1.5-2h5L16 6"/></svg></div>
+        <h3>Grab a few photos</h3><p>Two or three every night — winners, a packed board, the 4-Bagger. <b>It's the one thing no graphic can fake,</b> and it's the whole recap.</p></div>
+      <div class="gcard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 01-11.5 7.2L4 20l1-4.2A8 8 0 1121 12z"/></svg></div>
+        <h3>Post the Tuesday recap</h3><p>Winner and a photo, the next morning. <b>Proof is the best recruiter</b> — it makes Thursday's intro post land harder every single week.</p></div>
+      <div class="gcard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4zM4 12h16M4 16h10"/><path d="M17 15l2 2 4-4"/></svg></div>
+        <h3>Capture a contact at sign-up</h3><p>A phone or email from each player builds a list. <b>Text the carryover pot before the next Monday</b> — the single best way to fill the room.</p></div>
+    </div>
+    <div style="margin-top:44px;text-align:center">
+      <a class="btn ghost" href="index.html">↩ Back to the hub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="foot">
+  <img class="lg" src="../../site/assets/logo.png" alt="">
+  <div class="nm">Clover Sports &amp; Leisure · River West</div>
+  <div class="meta">722 W Grand Ave, Chicago · <a href="https://cloverchicago.com">cloverchicago.com</a> · @cloverchicago · #BAGSATCLOVER</div>
+  <div class="sib">Monday Bags — every Monday. Sibling to the 8-year Wednesday Blind Draw Darts.</div>
+  <div class="priv">Private launch hub · prepared for Clover</div>
+</footer>
+
+<script src="hub.js"></script>
+</body>
+</html>

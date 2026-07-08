@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monday Bags — Launch Hub · Clover River West</title>
+<meta name="description" content="The Monday Bags launch, in one place — the plan, the month-ahead calendar, every asset ready to post, and how to run the night. Prepared for Clover River West.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="../../site/assets/clover-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Kaushan+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hub.css">
+<style>
+/* ── hero ── */
+.hero{position:relative;text-align:center;padding:76px 28px 66px;overflow:hidden;
+  background:radial-gradient(120% 62% at 50% -6%,rgba(221,51,51,.15),transparent 55%),radial-gradient(90% 52% at 50% 114%,rgba(117,214,156,.09),transparent 60%),var(--black)}
+.hero .logo{width:92px;margin:0 auto 22px;filter:drop-shadow(0 3px 16px rgba(0,0,0,.8))}
+.hero .kick{font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--red-l);margin-bottom:18px}
+.hero h1{font-size:clamp(40px,9vw,82px);font-weight:900;line-height:.9;max-width:15ch;margin:0 auto}
+.hero h1 .s{display:block;font-family:var(--script);text-transform:none;font-weight:400;font-size:.5em;color:var(--red-l);transform:rotate(-3deg);margin:8px 0 2px;text-shadow:0 3px 20px rgba(221,51,51,.4)}
+.hero .sub{font-size:clamp(15.5px,2.6vw,18.5px);color:var(--cream);font-weight:400;max-width:52ch;margin:26px auto 0;line-height:1.62}
+.hero .sub b{color:#fff;font-weight:600}
+.hero .cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px}
+.hero .fork{margin-top:20px;font-size:13px;color:var(--muted-2);max-width:50ch;margin-left:auto;margin-right:auto;line-height:1.6}
+.hero .fork b{color:var(--cream);font-weight:600}
+/* ── rooms ── */
+.rooms{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+@media(max-width:840px){.rooms{grid-template-columns:1fr}}
+.room{display:flex;flex-direction:column;background:var(--panel-2);border:1px solid var(--line);border-left:4px solid var(--muted-3);border-radius:var(--r);padding:22px 22px 20px;transition:transform .18s,border-color .18s,background .18s;position:relative;overflow:hidden}
+.room::after{content:"";position:absolute;inset:0;opacity:0;transition:opacity .18s;pointer-events:none}
+.room:hover{transform:translateY(-3px)}
+.room.grn{border-left-color:var(--green)} .room.grn:hover{border-color:rgba(117,214,156,.42)} .room.grn::after{background:radial-gradient(90% 60% at 100% 0%,rgba(117,214,156,.08),transparent 60%)} .room.grn:hover::after{opacity:1}
+.room.amb{border-left-color:var(--amber)} .room.amb:hover{border-color:rgba(240,162,58,.42)} .room.amb::after{background:radial-gradient(90% 60% at 100% 0%,rgba(240,162,58,.08),transparent 60%)} .room.amb:hover::after{opacity:1}
+.room.pur{border-left-color:var(--purple)} .room.pur:hover{border-color:rgba(167,139,250,.42)} .room.pur::after{background:radial-gradient(90% 60% at 100% 0%,rgba(167,139,250,.08),transparent 60%)} .room.pur:hover::after{opacity:1}
+.room .r-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px;position:relative;z-index:2}
+.room .r-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+.room.grn .r-ic{color:var(--green);background:rgba(117,214,156,.1);border-color:rgba(117,214,156,.26)}
+.room.amb .r-ic{color:var(--amber);background:rgba(240,162,58,.1);border-color:rgba(240,162,58,.26)}
+.room.pur .r-ic{color:var(--purple);background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.26)}
+.room .r-ic svg{width:23px;height:23px}
+.room .r-badge{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+.room .r-nm{font-size:20px;font-weight:800;text-transform:none;letter-spacing:-.01em;color:#fff;position:relative;z-index:2}
+.room .r-desc{font-size:13.5px;color:var(--muted);line-height:1.5;margin-top:8px;position:relative;z-index:2}
+.room .r-in{list-style:none;margin:15px 0 0;padding:0;display:flex;flex-direction:column;gap:7px;position:relative;z-index:2}
+.room .r-in li{font-size:12.5px;color:var(--cream);display:flex;align-items:flex-start;gap:9px;line-height:1.4}
+.room .r-in li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--muted-3);margin-top:7px;flex-shrink:0}
+.room.grn .r-in li::before{background:var(--green)} .room.amb .r-in li::before{background:var(--amber)} .room.pur .r-in li::before{background:var(--purple)}
+.room .r-go{margin-top:auto;padding-top:18px;font-size:13.5px;font-weight:800;letter-spacing:.01em;color:#fff;display:inline-flex;align-items:center;gap:7px;position:relative;z-index:2}
+.room.grn .r-go{color:var(--green)} .room.amb .r-go{color:var(--amber)} .room.pur .r-go{color:var(--purple)}
+.room .r-go .arw{transition:transform .18s}
+.room:hover .r-go .arw{transform:translateX(4px)}
+/* ── FAQ ── */
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:720px){.qa{grid-template-columns:1fr}}
+.qcard{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r);padding:19px 20px;transition:border-color .18s}
+.qcard:hover{border-color:#3a3833}
+.qcard h3{font-size:15px;font-weight:700;text-transform:none;letter-spacing:-.01em;color:#fff;display:flex;gap:10px;align-items:flex-start}
+.qcard h3 .q{color:var(--red-l);font-weight:800;flex-shrink:0}
+.qcard p{font-size:13.5px;color:var(--muted);line-height:1.55;margin-top:9px}
+.qcard p b{color:var(--cream);font-weight:600}
+.qcard .more{margin-top:11px;font-size:12px;font-weight:700;color:var(--amber);display:inline-flex;align-items:center;gap:6px}
+.qcard .more:hover{text-decoration:underline}
+/* ── scale tease ── */
+.scale{position:relative;text-align:center;min-height:56vh;display:flex;align-items:center;justify-content:center;padding:84px 28px;overflow:hidden;isolation:isolate}
+.scale .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:brightness(.66) saturate(1.05)}
+.scale .ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(9,8,6,.84),rgba(10,8,6,.66) 45%,rgba(7,7,7,.94)),radial-gradient(55% 50% at 50% 100%,rgba(221,51,51,.2),transparent 70%)}
+.scale .inner{position:relative;z-index:3;max-width:620px}
+.scale .logo{width:60px;margin:0 auto 18px;opacity:.95}
+.scale h2{font-size:clamp(29px,6.4vw,50px);font-weight:900;line-height:.98;text-shadow:0 4px 26px rgba(0,0,0,.6)}
+.scale h2 .r{color:var(--red-l)}
+.scale .tease{margin-top:20px;font-family:var(--script);text-transform:none;font-size:clamp(20px,4.4vw,30px);color:var(--green);line-height:1.18;transform:rotate(-2deg)}
+.scale .micro{margin-top:20px;font-size:14px;color:var(--muted);max-width:40ch;margin-left:auto;margin-right:auto;line-height:1.55}
+</style>
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<nav class="bar">
+  <div class="row">
+    <a class="brand" href="#top">
+      <img src="../../site/assets/logo.png" alt="Clover River West">
+      <span class="t">Monday Bags <span>· Launch Hub</span></span>
+    </a>
+    <div class="links">
+      <a href="../owner-deck/index.html">The System</a>
+      <a href="assets.html">The Assets</a>
+      <a href="run-night.html">Run the Night</a>
+    </div>
+    <span class="tag">Private · for Clover</span>
+  </div>
+</nav>
+
+<!-- ── HERO / ORIENT ── -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <img class="logo rv" src="../../site/assets/logo.png" alt="Clover River West">
+    <div class="kick rv">The launch for the new Monday night — built, and handed to you</div>
+    <h1 class="rv">Monday Bags<span class="s">the whole launch, in one place.</span></h1>
+    <p class="sub rv">A complete plan for the new Monday night — concept to live, <b>already built and detailed.</b> The positioning, a month of ready-to-post content, the calendar that runs it, and how to run the night itself. Open any door below. Your only job is to post the thing — or run the night.</p>
+    <div class="cta-row rv">
+      <a class="btn primary" href="../owner-deck/index.html">See the whole plan
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
+      <a class="btn ghost" href="assets.html">Grab something to post
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0l-4-4m4 4l4-4"/><path d="M5 21h14"/></svg></a>
+    </div>
+    <p class="fork rv"><b>First time here?</b> Start with <b>the plan</b> — the whole system at a glance. <b>Just need a post right now?</b> Jump to <b>the assets</b> and grab one.</p>
+  </div>
+</header>
+
+<!-- ── THE NIGHT, LOCKED (facts) ── -->
+<section class="canon">
+  <div class="wrap rv">
+    <div class="hd">
+      <span class="t">The night, in one line</span>
+      <span class="badge">One source of truth</span>
+      <span class="note">Stated identically on every asset.</span>
+    </div>
+    <div class="factgrid">
+      <div class="fact"><div class="k">What it is</div><div class="v"><b>Monday Bags</b> — every-Monday <b>blind-draw cornhole</b></div></div>
+      <div class="fact"><div class="k">How it works</div><div class="v">Sign up solo · drawn a <b>random partner</b> · double-elim · everyone plays <b>≥ twice</b></div></div>
+      <div class="fact"><div class="k">The money</div><div class="v"><span class="rd">$10</span> to play · Clover adds <span class="gn">$50</span> · winner takes the pot, 2nd gets buy-in back</div></div>
+      <div class="fact"><div class="k">Signature pot</div><div class="v">Separate <b>$1 4-Bagger Pot</b> — carryover jackpot all night</div></div>
+      <div class="fact"><div class="k">When</div><div class="v">Every <b>Monday · 7:30</b> · sign up by <b>7</b></div></div>
+      <div class="fact"><div class="k">Where</div><div class="v"><b>Clover River West</b> · 722 W Grand</div></div>
+      <div class="fact"><div class="k">The CTA</div><div class="v"><b>Come as you will</b> — no reservation, walk in, name down</div></div>
+      <div class="fact"><div class="k">Lineage</div><div class="v">Sibling to the <b>8-year</b> Wednesday Blind Draw Darts</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THE ROOMS (three doors) ── -->
+<section class="sect pop amb" id="rooms">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <span class="eyebrow a">Three doors</span>
+      <h2>Everything's here. <span class="s" style="color:var(--amber)">Pick where you're going.</span></h2>
+      <p class="lead">The plan you can see at a glance, the assets you grab and post, and the playbook for the night itself. Nothing left to make — just open the one you need.</p>
+    </div>
+    <div class="rooms">
+
+      <a class="room grn rv" href="../owner-deck/index.html">
+        <div class="r-top">
+          <span class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/><path d="M7.5 13l1.5 1.5 3-3"/></svg></span>
+          <span class="r-badge">The plan</span>
+        </div>
+        <div class="r-nm">The System</div>
+        <p class="r-desc">The whole launch at a glance — and always a month ahead. What posts, when, and why.</p>
+        <ul class="r-in">
+          <li>The month-ahead calendar, filled four weeks out</li>
+          <li>The weekly loop + the four-week ramp</li>
+          <li>The full library, shown off and organized</li>
+          <li>How changes turn around in under 48 hours</li>
+        </ul>
+        <span class="r-go">Open The System <span class="arw">→</span></span>
+      </a>
+
+      <a class="room amb rv" href="assets.html">
+        <div class="r-top">
+          <span class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V7a2 2 0 00-2-2h-7l-2-2H5a2 2 0 00-2 2v13a2 2 0 002 2h9"/><path d="M17 14v7m0 0l-3-3m3 3l3-3"/></svg></span>
+          <span class="r-badge">Ready to post</span>
+        </div>
+        <div class="r-nm">The Assets</div>
+        <p class="r-desc">Everything built and ready. Grab any piece — it downloads ready to post, caption and all.</p>
+        <ul class="r-in">
+          <li>6 poster formats — download the image, PDF, or print it</li>
+          <li>18 captions — copy the text, or grab an editable doc</li>
+          <li>3 emails — subject, body, paste-ready</li>
+          <li>Each one tagged with where it goes and when</li>
+        </ul>
+        <span class="r-go">Open The Assets <span class="arw">→</span></span>
+      </a>
+
+      <a class="room pur rv" href="run-night.html">
+        <div class="r-top">
+          <span class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 4.5L19 8.2l-3.5 3.4.8 4.9L12 14.2 7.7 16.5l.8-4.9L5 8.2l4.8-.7z"/></svg></span>
+          <span class="r-badge">Game time</span>
+        </div>
+        <div class="r-nm">Run the Night</div>
+        <p class="r-desc">Start to finish, so anyone on staff can run it — and nothing gets left to guess.</p>
+        <ul class="r-in">
+          <li>The night, minute by minute — setup to last bag</li>
+          <li>How the money and the 4-Bagger Pot work</li>
+          <li>If it goes sideways — thin night, packed night, no runner</li>
+          <li>The two things that make next Monday bigger</li>
+        </ul>
+        <span class="r-go">Open Run the Night <span class="arw">→</span></span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── EVERYTHING YOU MIGHT ASK ── -->
+<section class="sect pop grn" id="faq">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <span class="eyebrow g">Answered in advance</span>
+      <h2>Everything you might ask, <span class="s" style="color:var(--green)">already answered.</span></h2>
+      <p class="lead">The questions that come up on the way to a first Monday — here up front, so nobody has to chase an answer.</p>
+    </div>
+    <div class="qa">
+      <div class="qcard rv"><h3><span class="q">Q</span>What do I actually post — and when?</h3>
+        <p>The calendar tells you exactly. Every piece is tagged with the day it fires and why. <b>If you only do three things a week:</b> a Thursday intro, a Monday-morning "tonight" reminder, and a Tuesday recap.</p>
+        <a class="more" href="../owner-deck/index.html#calendar">See the calendar →</a></div>
+
+      <div class="qcard rv"><h3><span class="q">Q</span>Which poster is which?</h3>
+        <p>Six formats, each with one job — the <b>IG single</b> for the weekly punch, the <b>story</b> for day-of, the <b>carousel</b> for the swipe, the <b>reel</b> for reach, the <b>print poster</b> for the door, the <b>website hero</b> for the full read. All labeled.</p>
+        <a class="more" href="assets.html#posters">See the posters →</a></div>
+
+      <div class="qcard rv"><h3><span class="q">Q</span>Do people sign up ahead of time?</h3>
+        <p>No. <b>Come as you will</b> — walk in, put your name down by 7, ten bucks, get drawn a partner. No app, no reservation, no list to manage. That's the whole point of a blind draw.</p></div>
+
+      <div class="qcard rv"><h3><span class="q">Q</span>What does it cost, and what's the pot?</h3>
+        <p><b>$10 a player.</b> Clover adds <b>$50.</b> Winner takes the pot; second gets their buy-in back. The <b>$1 4-Bagger Pot</b> runs separately all night — carryover jackpot, the night's big moment.</p>
+        <a class="more" href="run-night.html#money">How the money works →</a></div>
+
+      <div class="qcard rv"><h3><span class="q">Q</span>What if nobody shows the first time?</h3>
+        <p>It's planned for. <b>Run it anyway — small and loud.</b> A handful of teams still fills the boards, and the recap seeds the next week. The playbook has the thin-night version (and the packed-night one).</p>
+        <a class="more" href="run-night.html#sideways">If it goes sideways →</a></div>
+
+      <div class="qcard rv"><h3><span class="q">Q</span>Something needs to change — a time, a price?</h3>
+        <p>Just say the word. One update flows to <b>every post, poster, and email</b>, and it's back out the same week — <b>under 48 hours.</b> You never chase a fix across a pile of files.</p>
+        <a class="more" href="../owner-deck/index.html#runs">How it stays in sync →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── QUIET SCALE TEASE ── -->
+<section class="scale">
+  <img class="bg" src="../../site/assets/photos/celebrate.jpeg" alt="" aria-hidden="true">
+  <div class="ov"></div>
+  <div class="inner rv">
+    <img class="logo" src="../../site/assets/logo.png" alt="Clover River West">
+    <span class="eyebrow">One night, fully handled</span>
+    <h2>A Monday that <span class="r">runs itself.</span></h2>
+    <div class="tease">The calendar doesn't know it's only Mondays.</div>
+    <p class="micro">Same system, same visibility — whenever you want the next one.</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="foot">
+  <img class="lg" src="../../site/assets/logo.png" alt="">
+  <div class="nm">Clover Sports &amp; Leisure · River West</div>
+  <div class="meta">722 W Grand Ave, Chicago · <a href="https://cloverchicago.com">cloverchicago.com</a> · @cloverchicago · #BAGSATCLOVER</div>
+  <div class="sib">Monday Bags — every Monday. Sibling to the 8-year Wednesday Blind Draw Darts.</div>
+  <div class="priv">Private launch hub · prepared for Clover</div>
+</footer>
+
+<script src="hub.js"></script>
+</body>
+</html>
