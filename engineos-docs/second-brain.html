@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Second Brain — EngineOS Docs</title>
-  <meta name="description" content="EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 539-article knowledge base (438 concepts + 101 connections), 50 daily logs, 231 run plans, 24 methodology docs. Until">
+  <meta name="description" content="EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 544-article knowledge base (443 concepts + 101 connections), 50 daily logs, 231 run plans, 24 methodology docs. Until">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -53,7 +53,7 @@
 <header class="hero" id="s10">
   <div class="eyebrow">EngineOS System Documentation · Section 10 · Built 2026-07-10</div>
   <h1>Second Brain</h1>
-  <p class="subhead">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 539-article knowledge base (438 concepts + 101 connections), 50 daily logs, 231 run plans, 24 methodology docs. Until 2026-06-04, that&#x27;s all it did -- a marathon-arc audit showed zero reads of knowledge/concepts/.md across ~30 hours of s</p>
+  <p class="subhead">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 544-article knowledge base (443 concepts + 101 connections), 50 daily logs, 231 run plans, 24 methodology docs. Until 2026-06-04, that&#x27;s all it did -- a marathon-arc audit showed zero reads of knowledge/concepts/.md across ~30 hours of s</p>
 </header>
 <section class="content">
 <blockquote>
@@ -207,12 +207,12 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <tr>
 <td><code>knowledge/index.md</code></td>
 <td>Catalog of all KB articles with one-line summaries &ndash; the cheapest retrieval surface. <strong>GENERATED from article frontmatter since 2026-07-03 (A1)</strong> &ndash; never hand-edited</td>
-<td>539 indexed articles</td>
+<td>544 indexed articles</td>
 </tr>
 <tr>
 <td><code>knowledge/concepts/*.md</code></td>
 <td>One-concept-per-file articles produced by compile.py and ingest.py</td>
-<td>438 files</td>
+<td>443 files</td>
 </tr>
 <tr>
 <td><code>knowledge/connections/*.md</code></td>
@@ -359,7 +359,7 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <li>Does NOT search across engine tenants by default &ndash; OS-level corpus only unless the query names an engine.</li>
 </ul>
 <h3 id="why-no-vector-db">Why No Vector DB<a class="anchor-link" href="#why-no-vector-db" title="Permalink">¶</a></h3>
-<p>At personal-KB scale (currently 539 indexed, against a &lt;500-article research threshold), structured markdown index <!-- census-ok: D32 threshold --> + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob &ndash; zero API cost, no infrastructure, no embeddings drift.</p>
+<p>At personal-KB scale (currently 544 indexed, against a &lt;500-article research threshold), structured markdown index <!-- census-ok: D32 threshold --> + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob &ndash; zero API cost, no infrastructure, no embeddings drift.</p>
 <p>D32&rsquo;s Phase C deferral carried explicit revisit conditions; <strong>as of 2026-07-03 (D57) the hybrid layer is BUILT but NOT the default</strong> — it sits behind <code>/recall</code> as a measured escalation while grep remains the answer path (see &ldquo;Phase C — the hybrid index behind Layer 3&rdquo; above). The original revisit conditions, which govern the HOOK and the eventual keep/tune/kill adjudication:</p>
 <ul>
 <li>KB exceeds 2000 articles <!-- census-ok: D32 threshold --></li>
@@ -386,21 +386,21 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <td>1</td>
 <td><code>logs/intelligence-log.md</code></td>
 <td>Strategic moments, validated hypotheses, methodology lessons, anti-patterns</td>
-<td>311 curated entries, append-only</td>
+<td>315 curated entries, append-only</td>
 <td>Per-row markdown table &ndash; <code>Date \| Engine \| Category \| Entry \| Source</code></td>
 </tr>
 <tr>
 <td>2</td>
 <td><code>knowledge/index.md</code></td>
 <td>Catalog of compiled KB articles with one-line summaries (generated from frontmatter, A1 2026-07-03)</td>
-<td>539 indexed articles</td>
+<td>544 indexed articles</td>
 <td>Per-row markdown table with wiki-style <code>[[...]]</code> links</td>
 </tr>
 <tr>
 <td>3</td>
 <td><code>knowledge/concepts/*.md</code> + <code>knowledge/connections/*.md</code></td>
 <td>Full compiled KB articles</td>
-<td>438 concepts + 101 connections</td>
+<td>443 concepts + 101 connections</td>
 <td>One file per concept; slug match for Layer 2, full grep for Layer 3</td>
 </tr>
 <tr>

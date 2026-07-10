@@ -246,7 +246,7 @@
 <h2 id="retrieval-architecture">Retrieval Architecture<a class="anchor-link" href="#retrieval-architecture" title="Permalink">¶</a></h2>
 <div class="intro-card">
 <p>The four-tier model controls <strong>what loads</strong> into the window. Retrieval controls <strong>what gets found</strong> inside the system&rsquo;s own corpus mid-work. The two are peers: the context budget is the write-side; retrieval is the read-side.</p>
-<p>EngineOS captures heavily — 539 knowledge base articles, 311 intelligence log entries, daily session arcs, run plans. Until 2026-06-04, capture-without-retrieval was a write-only system: a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work. <strong>D32 closed the gap</strong> with three retrieval layers reading a six-surface corpus, sized for personal-KB scale (grep + markdown index beat vector retrieval on precision at &lt;500 articles). <!-- census-ok: D32 scale threshold --></p>
+<p>EngineOS captures heavily — 544 knowledge base articles, 315 intelligence log entries, daily session arcs, run plans. Until 2026-06-04, capture-without-retrieval was a write-only system: a marathon-arc audit showed zero reads of <code>knowledge/concepts/*.md</code> across ~30 hours of substantive work. <strong>D32 closed the gap</strong> with three retrieval layers reading a six-surface corpus, sized for personal-KB scale (grep + markdown index beat vector retrieval on precision at &lt;500 articles). <!-- census-ok: D32 scale threshold --></p>
 </div>
 <h3 id="three-retrieval-layers">Three Retrieval Layers<a class="anchor-link" href="#three-retrieval-layers" title="Permalink">¶</a></h3>
 <table>
@@ -283,7 +283,7 @@
 <h3 id="six-surface-priority-corpus">Six-Surface Priority Corpus<a class="anchor-link" href="#six-surface-priority-corpus" title="Permalink">¶</a></h3>
 <p>All three layers read the same corpus in the same priority order: <code>logs/intelligence-log.md</code> → <code>knowledge/index.md</code> → <code>knowledge/concepts/*.md</code> + <code>connections/*.md</code> → <code>daily/*.md</code> (last 30d) → <code>run-plans/*.md</code> (last 60d) → <code>methodology/*.md</code>. Higher surfaces have higher signal-to-noise. Stopping rule: when surfaces 1-2 yield 3+ strong hits, lower surfaces aren&rsquo;t swept.</p>
 <h3 id="why-no-vector-db">Why No Vector DB<a class="anchor-link" href="#why-no-vector-db" title="Permalink">¶</a></h3>
-<p>At personal-KB scale (currently 539 articles, against a &lt;500-article research threshold), <!-- census-ok: D32 scale threshold --> structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob — zero API cost. The original D32 deferral of a vector layer has since been <em>measured rather than assumed</em>: Phase C (D57, 2026-07-03) built an optional on-device hybrid index behind <code>/recall</code> as an escalation, and the <code>recall-eval</code> harness (2026-07-06) then measured it — BM25 (FTS5) beat dense-hybrid fusion at this corpus scale, so <strong>D63</strong> flipped the escalation default to pure BM25 and retired the dense path to opt-in (repaired and dependency-pinned, re-measurable as the corpus grows). Grep remains the step-1 default throughout; D32 was never overridden.</p>
+<p>At personal-KB scale (currently 544 articles, against a &lt;500-article research threshold), <!-- census-ok: D32 scale threshold --> structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob — zero API cost. The original D32 deferral of a vector layer has since been <em>measured rather than assumed</em>: Phase C (D57, 2026-07-03) built an optional on-device hybrid index behind <code>/recall</code> as an escalation, and the <code>recall-eval</code> harness (2026-07-06) then measured it — BM25 (FTS5) beat dense-hybrid fusion at this corpus scale, so <strong>D63</strong> flipped the escalation default to pure BM25 and retired the dense path to opt-in (repaired and dependency-pinned, re-measurable as the corpus grows). Grep remains the step-1 default throughout; D32 was never overridden.</p>
 <h3 id="measurement-built-in">Measurement Built In<a class="anchor-link" href="#measurement-built-in" title="Permalink">¶</a></h3>
 <p><code>scripts/retrieval-health.jsonl</code> is append-only, one record per <code>UserPromptSubmit</code> invocation (gate fire, query terms, surfaces searched, chars injected, exec time). The operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions to make the keep/tune/kill decision. Healthy band: gate hit rate 10-60%.</p>
 <p>See <a href="second-brain.html">Second Brain</a> for the full capture-plus-retrieval pipeline (flush.py, compile.py, knowledge/, daily/, health logs, decision rules). This section is the architectural slot; the deep reference is one click away.</p>
@@ -448,7 +448,7 @@
 </tr>
 <tr>
 <td><code>knowledge/</code></td>
-<td>Second-brain KB (539 articles): concepts/, connections/, index.md, log.md, qa/ — surfaces at all three retrieval layers</td>
+<td>Second-brain KB (544 articles): concepts/, connections/, index.md, log.md, qa/ — surfaces at all three retrieval layers</td>
 <td>Medium — compile.py promotes high-signal moments</td>
 </tr>
 <tr>
@@ -656,7 +656,7 @@
 <tr>
 <td>D62/D64</td>
 <td>The EngineOS Console — read-only live cockpit</td>
-<td>A localhost governance console over the existing instrument estate, architected as a consumer, not a producer: it reads every surface (decision queue, vitals, transcripts, the KB graph) and executes nothing ungoverned. Command-deck intents queue as JSON records for the governed session to pick up; direct headless execution is deliberately absent.</td>
+<td>A localhost governance console over the existing instrument estate, architected as a consumer, not a producer: it reads every surface (decision queue, vitals, transcripts, the KB graph) and executes nothing ungoverned. Command-deck intents queue as JSON records for the governed session to pick up; direct headless execution is deliberately absent. Its core posture inverts the usual dashboard: a populated decision queue is the <em>expected healthy state</em> — the system out-builds the review lane by design, and all-green more likely means something stopped reporting.</td>
 </tr>
 <tr>
 <td>D63</td>
