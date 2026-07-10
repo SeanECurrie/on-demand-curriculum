@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Skills Reference — EngineOS Docs</title>
   <meta name="description" content="EngineOS ships 38 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a">
-  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
+  <link rel="stylesheet" href="assets/style.css?v=cc39fe20">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -18,6 +18,7 @@
 <div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
+    <div class="brandmark" aria-hidden="true">E</div>
     <div class="sidebar-title">EngineOS · Docs</div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -45,8 +46,8 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
-  <div class="nav-group-label">Live</div>
-  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
+  
+  
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
@@ -56,7 +57,7 @@
   <p class="subhead">EngineOS ships 38 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, and integration points.</p>
 </header>
 <section class="content">
-<p>Skills load passively via native discovery (descriptions only, ~2% of context). Full content loads only on invocation. Every skill declares its <code>allowed-tools</code> in frontmatter, restricting what tools it can access.</p>
+<p><span class="term" tabindex="0" role="note" aria-label="Skills: A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it." data-tip="A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it.">Skills</span> load passively via native discovery (descriptions only, ~2% of context). Full content loads only on invocation. Every skill declares its <code>allowed-tools</code> in <span class="term" tabindex="0" role="note" aria-label="frontmatter: A small structured header at the top of a file (title, type, summary) that machines can read reliably." data-tip="A small structured header at the top of a file (title, type, summary) that machines can read reliably.">frontmatter</span>, restricting what tools it can access.</p>
 <hr />
 <h2 id="summary-table">Summary Table<a class="anchor-link" href="#summary-table" title="Permalink">¶</a></h2>
 <table>
@@ -102,7 +103,7 @@
 <tr>
 <td>recall</td>
 <td>Research</td>
-<td>Search EngineOS&rsquo;s second brain (intel log, KB index, concepts, recent daily logs, run-plans, methodology) for prior context</td>
+<td>Search EngineOS&rsquo;s <span class="term" tabindex="0" role="note" aria-label="second brain: The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later." data-tip="The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later.">second brain</span> (intel log, <span class="term" tabindex="0" role="note" aria-label="KB: The library of distilled notes (one concept per file) that the system builds from its own work sessions." data-tip="The library of distilled notes (one concept per file) that the system builds from its own work sessions.">KB</span> index, concepts, recent <span class="term" tabindex="0" role="note" aria-label="daily logs: A per-day journal of work sessions, captured automatically when a session ends." data-tip="A per-day journal of work sessions, captured automatically when a session ends.">daily logs</span>, <span class="term" tabindex="0" role="note" aria-label="run-plans: A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped." data-tip="A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped.">run-plans</span>, methodology) for prior context</td>
 <td>Read, Glob, Grep</td>
 </tr>
 <tr>
@@ -121,7 +122,7 @@
 <td>lead-builder</td>
 <td>Content</td>
 <td>Enriched lead list and prospect profile generation for targeted outreach</td>
-<td>Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bright Data, Attio MCP</td>
+<td>Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bright Data, Attio <span class="term" tabindex="0" role="note" aria-label="MCP: Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database)." data-tip="Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database).">MCP</span></td>
 </tr>
 <tr>
 <td>transcript-processor</td>
@@ -132,7 +133,7 @@
 <tr>
 <td>profile-builder</td>
 <td>Content</td>
-<td>Build operator profile from source material and structured intake</td>
+<td>Build <span class="term" tabindex="0" role="note" aria-label="operator: The human running the system. Every consequential decision routes through them — the system proposes; the operator rules." data-tip="The human running the system. Every consequential decision routes through them — the system proposes; the operator rules.">operator</span> profile from source material and structured intake</td>
 <td>Read, Write, Edit, Glob, Grep, Skill</td>
 </tr>
 <tr>
@@ -174,13 +175,13 @@
 <tr>
 <td>gated-deploy</td>
 <td>Hosting</td>
-<td>Re-deploy content to an EXISTING Cloudflare-Access-gated site through a Pages:Edit-only token that provably cannot touch the gate</td>
+<td>Re-deploy content to an EXISTING Cloudflare-Access-gated site through a Pages:Edit-only token that provably cannot touch the <span class="term" tabindex="0" role="note" aria-label="gate: A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing." data-tip="A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing.">gate</span></td>
 <td>Bash, Read</td>
 </tr>
 <tr>
 <td>pages-deploy</td>
 <td>Hosting</td>
-<td>Deploy to PUBLIC GitHub Pages in one governed motion (clone→stage→scrub gate→push→propagation poll) &ndash; the git-only public sibling of gated-deploy; structurally cannot touch gated surfaces</td>
+<td>Deploy to PUBLIC GitHub Pages in one governed motion (clone→stage→<span class="term" tabindex="0" role="note" aria-label="scrub gate: An automated check that scans everything about to be published for credentials and private names, and blocks the publish if it finds any." data-tip="An automated check that scans everything about to be published for credentials and private names, and blocks the publish if it finds any.">scrub gate</span>→push→propagation poll) &ndash; the git-only public sibling of gated-deploy; structurally cannot touch gated surfaces</td>
 <td>Bash, Read, Grep, Glob</td>
 </tr>
 <tr>
@@ -227,7 +228,7 @@
 </tr>
 <tr>
 <td>phase-controller</td>
-<td>Governance</td>
+<td><span class="term" tabindex="0" role="note" aria-label="Governance: The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships." data-tip="The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships.">Governance</span></td>
 <td>The run controller &ndash; classifies operations, builds disk-persisted run plans, forces skill chains</td>
 <td>Read, Write, Edit, Glob, Grep, Skill</td>
 </tr>
@@ -264,13 +265,13 @@
 <tr>
 <td>audit-logging</td>
 <td>Governance</td>
-<td>Two-layer audit system &ndash; Activity Log (breadcrumbs) and Intelligence Log (strategic moments)</td>
+<td>Two-layer audit system &ndash; <span class="term" tabindex="0" role="note" aria-label="Activity Log: The mechanical breadcrumb trail: one line per file operation, written automatically by a hook." data-tip="The mechanical breadcrumb trail: one line per file operation, written automatically by a hook.">Activity Log</span> (breadcrumbs) and <span class="term" tabindex="0" role="note" aria-label="Intelligence Log: The selective journal of strategic moments — insights and lessons, not routine actions (those go in the activity log)." data-tip="The selective journal of strategic moments — insights and lessons, not routine actions (those go in the activity log).">Intelligence Log</span> (strategic moments)</td>
 <td>Read, Write, Edit, Glob, Grep</td>
 </tr>
 <tr>
-<td>adversarial-evaluator</td>
+<td><span class="term" tabindex="0" role="note" aria-label="adversarial-evaluator: An independent AI reviewer that scores finished work against written criteria — it can read and test, but cannot edit, so it has no stake in passing its own work." data-tip="An independent AI reviewer that scores finished work against written criteria — it can read and test, but cannot edit, so it has no stake in passing its own work.">adversarial-evaluator</span></td>
 <td>Governance</td>
-<td>Spawn an independent subagent to adversarially score deliverables against criteria</td>
+<td>Spawn an independent <span class="term" tabindex="0" role="note" aria-label="subagent: A separate AI instance dispatched to do one job and report back — with its own fresh working memory, not a copy of the main conversation." data-tip="A separate AI instance dispatched to do one job and report back — with its own fresh working memory, not a copy of the main conversation.">subagent</span> to adversarially score deliverables against criteria</td>
 <td>Read, Bash, Glob, Grep, WebSearch, Bright Data (search + scrape)</td>
 </tr>
 <tr>
@@ -365,14 +366,14 @@
 <p><strong>Triggers:</strong> <code>/recall &lt;query&gt;</code>, &ldquo;have we seen this&rdquo;, &ldquo;what&rsquo;s our prior thinking on X&rdquo;, &ldquo;what did we decide about&rdquo;, &ldquo;do we have notes on&rdquo;, &ldquo;remember&rdquo;, &ldquo;look up&rdquo;, &ldquo;search the second brain&rdquo;, or before making an architecture/methodology/pattern decision in a domain where prior intelligence likely exists.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Bash</code> (Bash added 2026-07-03 solely for the Phase C hybrid escalation — <code>uv run scripts/retrieval-query.py --log</code>)</p>
 <p><strong>Key behaviors:</strong>
-- <strong>Index escalation (Phase C, D57; mode settled by D63, 2026-07-06):</strong> grep stays step 1 always; escalates to the local index (<code>scripts/retrieval-query.py</code>, on-device) only when grep yields &lt;3 strong hits AND the query is paraphrase-shaped; every escalation logs to <code>scripts/retrieval-ab.jsonl</code> with <code>--grep-hits &lt;N&gt;</code> (the grep-vs-index comparison) and <code>--useful yes|no|partial</code> (the usefulness judgment) so the operator&rsquo;s keep/tune/kill adjudication reads real signal, not just invocation counts. The escalation mode is <strong>pure BM25 (FTS5)</strong>: the <code>recall-eval</code> harness measured it beating dense-hybrid fusion at current corpus scale (Success@10 0.821 vs 0.786), so <code>--mode fts</code> is the default and the dense path is retired to opt-in (repaired + dependency-pinned for future re-measurement). Degrades to grep-only with a one-line note if the index is missing.
+- <strong>Index escalation (Phase C, D57; mode settled by D63, 2026-07-06):</strong> grep stays step 1 always; escalates to the local index (<code>scripts/retrieval-query.py</code>, on-device) only when grep yields &lt;3 strong hits AND the query is paraphrase-shaped; every escalation logs to <code>scripts/retrieval-ab.jsonl</code> with <code>--grep-hits &lt;N&gt;</code> (the grep-vs-index comparison) and <code>--useful yes|no|partial</code> (the usefulness judgment) so the operator&rsquo;s keep/tune/kill adjudication reads real signal, not just invocation counts. The escalation mode is <strong>pure <span class="term" tabindex="0" role="note" aria-label="BM25: A classic keyword-ranking algorithm for search — the battle-tested way to find documents matching your words, no AI required." data-tip="A classic keyword-ranking algorithm for search — the battle-tested way to find documents matching your words, no AI required.">BM25</span> (FTS5)</strong>: the <code>recall-eval</code> harness measured it beating dense-hybrid fusion at current corpus scale (Success@10 0.821 vs 0.786), so <code>--mode fts</code> is the default and the dense path is retired to opt-in (repaired + dependency-pinned for future re-measurement). Degrades to grep-only with a one-line note if the index is missing.
 - Six-surface priority order: (1) <code>logs/intelligence-log.md</code> &ndash; curated strategic moments, highest density; (2) <code>knowledge/index.md</code> &ndash; 200+ row catalog with summaries, cheapest pointer; (3) <code>knowledge/concepts/*.md</code> + <code>knowledge/connections/*.md</code> &ndash; full KB articles, grep headers and first paragraphs unless query matches main subject; (4) <code>daily/*.md</code> last 30 days &ndash; recent session arcs and work-in-flight context; (5) <code>run-plans/*.md</code> last 60 days &ndash; detailed plans with hardened criteria and execution logs; (6) <code>methodology/*.md</code> &ndash; only when query is methodology-flavored. Stopping rule: if surfaces 1-2 yield 3+ strong hits, do not exhaustively grep lower surfaces.
 - Honest &ldquo;nothing found&rdquo; on zero hits &ndash; does NOT hallucinate matches when the corpus is empty. Returns the surfaces searched and suggests rephrasing, <code>scripts/query.py</code> for LLM-ranked deeper search, or noting the gap as a candidate for a new article.
 - Does NOT invoke <code>scripts/query.py</code> (which uses Claude Agent SDK and has API cost). Recall is pure ripgrep + Read; typical invocation under 2 seconds wall-clock. The Agent SDK path remains available for synthesis-heavy queries when recall returns nothing.
 - Does NOT add interpretive commentary &ndash; cites, does not synthesize. The operator does the synthesis after seeing the ranked hits.
-- Does NOT search across engine tenants by default. OS-level corpus only unless the query names an engine (&ldquo;in JSE&rdquo;, &ldquo;for sales-enablement&rdquo;), in which case the grep extends into that engine&rsquo;s <code>knowledge/</code>, <code>engagements/</code>, and <code>CONTEXT.md</code>.</p>
+- Does NOT search across engine <span class="term" tabindex="0" role="note" aria-label="tenants: An isolated workspace for one domain of work (like separate apartments in one building) — it shares the building&#x27;s infrastructure but keeps its own data." data-tip="An isolated workspace for one domain of work (like separate apartments in one building) — it shares the building&#x27;s infrastructure but keeps its own data.">tenants</span> by default. OS-level corpus only unless the query names an engine (&ldquo;in JSE&rdquo;, &ldquo;for sales-enablement&rdquo;), in which case the grep extends into that engine&rsquo;s <code>knowledge/</code>, <code>engagements/</code>, and <code>CONTEXT.md</code>.</p>
 <p><strong>Invokes:</strong> None (read-only governance skill)</p>
-<p><strong>Invoked by:</strong> Manual <code>/recall &lt;query&gt;</code> invocation; auto-fire via the <code>UserPromptSubmit</code> retrieval hook&rsquo;s heuristic gate (<code>hooks/prompt-retrieval.py</code>, ~90% of retrieval) and the <code>retrieval-before-decide</code> framework pattern at architecture/methodology decision points.</p>
+<p><strong>Invoked by:</strong> Manual <code>/recall &lt;query&gt;</code> invocation; auto-fire via the <code>UserPromptSubmit</code> retrieval <span class="term" tabindex="0" role="note" aria-label="hook: A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply." data-tip="A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply.">hook</span>&rsquo;s heuristic gate (<code>hooks/prompt-retrieval.py</code>, ~90% of retrieval) and the <code>retrieval-before-decide</code> framework pattern at architecture/methodology decision points.</p>
 <hr />
 <h3 id="content-and-deliverable-production">Content and Deliverable Production<a class="anchor-link" href="#content-and-deliverable-production" title="Permalink">¶</a></h3>
 <p>Ten skills that produce client-facing or operator-facing content. framework-explainer is cross-listed from Research.</p>
@@ -437,7 +438,7 @@
 <p><strong>Triggers:</strong> &ldquo;the output is ready&rdquo;, &ldquo;HTML complete&rdquo;, &ldquo;check the render&rdquo;, &ldquo;does it look right?&rdquo;, or any variation of declaring a visual output finished.</p>
 <p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, mcp__puppeteer-mcp-claude__puppeteer_launch, mcp__puppeteer-mcp-claude__puppeteer_navigate, mcp__puppeteer-mcp-claude__puppeteer_screenshot, mcp__puppeteer-mcp-claude__puppeteer_evaluate, mcp__puppeteer-mcp-claude__puppeteer_click, mcp__puppeteer-mcp-claude__puppeteer_wait_for_selector, mcp__puppeteer-mcp-claude__puppeteer_close_browser, mcp__puppeteer-mcp-claude__puppeteer_new_page, mcp__puppeteer-mcp-claude__puppeteer_close_page, mcp__puppeteer-mcp-claude__puppeteer_get_text</code></p>
 <p><strong>Key behaviors:</strong>
-- Exists because source code review misses an entire class of visual defects. Provenance: 4 real production defects (hidden diagram via <code>display:none</code>, 14/22 broken expandables, missing syntax highlighting, non-persisting localStorage) &ndash; all invisible in source, all obvious in a browser.
+- Exists because source code review misses an entire class of visual defects. <span class="term" tabindex="0" role="note" aria-label="Provenance: Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot." data-tip="Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot.">Provenance</span>: 4 real production defects (hidden diagram via <code>display:none</code>, 14/22 broken expandables, missing syntax highlighting, non-persisting localStorage) &ndash; all invisible in source, all obvious in a browser.
 - Renders HTML via Puppeteer, takes screenshots, audits against design system specifications, fixes issues, re-screenshots in a loop until output matches intent.
 - Does not apply to pure-text outputs. Only for content that will be opened in a browser.</p>
 <p><strong>Invokes:</strong> None (verification-only)</p>
@@ -462,7 +463,7 @@
 <p><strong>Key behaviors:</strong>
 - Walks a source directory, filters to supported types (<code>.md</code>, <code>.txt</code>, <code>.pdf</code>, <code>.docx</code>), groups into batches of ~20 files, and requires operator confirmation per batch before any KB write fires.
 - Writes structured KB articles to <code>knowledge/concepts/</code> via the Claude Code SDK &ndash; same output format as <code>compile.py</code> / <code>ingest.py</code>, so retrieval works uniformly across all three input classes. Idempotent state tracking (hash + mtime) skips already-ingested files on re-runs.
-- Handles the third input class alongside <code>scripts/ingest.py</code> (curated reference docs) and <code>scripts/compile.py</code> (daily conversation logs; pipeline: SessionEnd / PreCompact hooks -&gt; flush.py -&gt; compile.py).</p>
+- Handles the third input class alongside <code>scripts/ingest.py</code> (curated reference docs) and <code>scripts/compile.py</code> (daily conversation logs; pipeline: SessionEnd / PreCompact hooks -&gt; <span class="term" tabindex="0" role="note" aria-label="flush: The automatic capture step at session close: the conversation&#x27;s substance gets summarized into today&#x27;s daily log before it can be lost." data-tip="The automatic capture step at session close: the conversation&#x27;s substance gets summarized into today&#x27;s daily log before it can be lost.">flush</span>.py -&gt; compile.py).</p>
 <p><strong>Invokes:</strong> None (uses the Claude Code SDK via Bash)</p>
 <p><strong>Invoked by:</strong> session-orchestrator (fresh-install branch option b); manual invocation</p>
 <hr />
@@ -473,7 +474,7 @@
 <p><strong>Key behaviors:</strong>
 - Orchestrates donor substrate, does not own it: SEE research methodology (credibility-tiers, dual-source-intelligence, market-scanner) plus ODC HTML output home (comp-study report design, walkthrough style guide). Owns only the combination contract.
 - Required intake before any research dispatch: target company, audience name + role, purpose (walk-in / decision-support / engagement-prep / competitive-intel), sensitivity constraints, deploy destination, landing-page card (on by default, <strong>operator-declared at intake only &ndash; an agent may not set or flip it off on its own inference</strong>; operator can decline, and evaluator criterion C6 is conditioned on this setting so a card-less build on instruction still passes &ndash; the symmetric C6 also fails a card added when the operator declined, closing the dodge in both directions), surface depth, tone. Generic audience = push back &ndash; a briefing without an audience is just a research report.
-- Deep research via orthogonal parallel subagent dispatch (typically 6-8 threads, 80-150+ tier-coded sources), validated through render-validate and adversarial-evaluator with a bounded iteration envelope.</p>
+- Deep research via orthogonal parallel subagent dispatch (typically 6-8 threads, 80-150+ tier-coded sources), validated through render-validate and adversarial-evaluator with a bounded <span class="term" tabindex="0" role="note" aria-label="iteration envelope: A produce → review → fix loop with a hard retry limit: work that fails independent review gets the feedback and tries again, at most three times, then a human decides." data-tip="A produce → review → fix loop with a hard retry limit: work that fails independent review gets the feedback and tries again, at most three times, then a human decides.">iteration envelope</span>.</p>
 <p><strong>Invokes:</strong> depth-governor, market-scanner, findings-formatter, section-construction, render-validate, adversarial-evaluator</p>
 <p><strong>Invoked by:</strong> phase-controller (via skill chain); operator-initiated</p>
 <hr />
@@ -680,7 +681,7 @@
 <p><strong>Key behaviors:</strong>
 - Layer 1 (Activity Log at <code>logs/activity-log.md</code>): always on, records every file operation with user attribution and engine tagging. Action types: Created, Updated, Deleted, Invoked, Researched.
 - Layer 2 (Intelligence Log at <code>logs/intelligence-log.md</code>): selective, records insights that would change how you approach similar work. Nine categories from Strategy Shift to Methodology Learning.
-- Pre-work log check protocol: before starting work that continues a thread, scan both logs for recent entries in the relevant engine and category. This is how institutional memory survives context compaction.</p>
+- Pre-work log check protocol: before starting work that continues a thread, scan both logs for recent entries in the relevant engine and category. This is how institutional memory survives context <span class="term" tabindex="0" role="note" aria-label="compaction: What happens when the AI&#x27;s working memory fills up: older conversation gets summarized or dropped. Anything important must already be saved to disk." data-tip="What happens when the AI&#x27;s working memory fills up: older conversation gets summarized or dropped. Anything important must already be saved to disk.">compaction</span>.</p>
 <p><strong>Invokes:</strong> None</p>
 <p><strong>Invoked by:</strong> Every skill in EngineOS. All skills must append to the activity log after completing work and selectively log to the intelligence log when trigger conditions are met.</p>
 <hr />
@@ -710,7 +711,7 @@
 <p><strong>Invoked by:</strong> Manual invocation only. Not invoked by other skills.</p>
 <hr />
 <h4 id="kb-health">kb-health<a class="anchor-link" href="#kb-health" title="Permalink">¶</a></h4>
-<p><strong>One-liner:</strong> The fireable second-brain health check &ndash; one argless script run composing live KB stats, graph health (broken links / orphan concepts / index-desync), state checks (uncompiled + stale daily logs), and the five pipeline vital signs (flush, retrieval, usage, reviewer, compile-guard) into one honest report with an actionable fix-list.</p>
+<p><strong>One-liner:</strong> The fireable second-brain health check &ndash; one argless script run composing live KB stats, graph health (broken links / <span class="term" tabindex="0" role="note" aria-label="orphan: A note no other note links to — unreachable by browsing the graph, so effectively invisible until something points at it." data-tip="A note no other note links to — unreachable by browsing the graph, so effectively invisible until something points at it.">orphan</span> concepts / index-desync), state checks (uncompiled + stale daily logs), and the five pipeline vital signs (flush, retrieval, usage, reviewer, compile-guard) into one honest report with an actionable fix-list.</p>
 <p><strong>Triggers:</strong> &ldquo;check the second brain&rdquo;, &ldquo;KB health&rdquo;, &ldquo;how&rsquo;s the knowledge base&rdquo;, &ldquo;run kb-health&rdquo;, a 🧠 SessionStart flag on cached-verdict degradation, or before making any &ldquo;by the numbers&rdquo; claim about the second brain (explainer refreshes, showcase pages).</p>
 <p><strong>Allowed tools:</strong> <code>Bash, Read, Grep, Glob</code></p>
 <p><strong>Key behaviors:</strong>
@@ -774,7 +775,7 @@ depth  output sanity adversarial
 </section>
 
 </main>
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" aria-label="Back to top">↑</button>
 <script>
 function toggleTheme(){
   var d=document.documentElement;

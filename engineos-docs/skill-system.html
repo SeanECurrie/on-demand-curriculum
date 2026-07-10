@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Skill System — EngineOS Docs</title>
   <meta name="description" content="EngineOS ships 38 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run c">
-  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
+  <link rel="stylesheet" href="assets/style.css?v=cc39fe20">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -18,6 +18,7 @@
 <div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
+    <div class="brandmark" aria-hidden="true">E</div>
     <div class="sidebar-title">EngineOS · Docs</div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -45,8 +46,8 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
-  <div class="nav-group-label">Live</div>
-  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
+  
+  
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
@@ -57,20 +58,20 @@
 </header>
 <section class="content">
 <div class="intro-card">
-<p>This document covers the machinery: discovery, anatomy, access control, categories, forced chains, and concrete traces from operator prompt to disk output. For the flat catalog with one-liners, see <a href="skills-reference.html">skills-reference.md</a>. For the enforcement architecture that makes chains non-optional, see <a href="governance.html">governance.md</a>.</p>
+<p>This document covers the machinery: discovery, anatomy, access control, categories, forced chains, and concrete traces from <span class="term" tabindex="0" role="note" aria-label="operator: The human running the system. Every consequential decision routes through them — the system proposes; the operator rules." data-tip="The human running the system. Every consequential decision routes through them — the system proposes; the operator rules.">operator</span> prompt to disk output. For the flat catalog with one-liners, see <a href="skills-reference.html">skills-reference.md</a>. For the enforcement architecture that makes chains non-optional, see <a href="governance.html">governance.md</a>.</p>
 </div>
 <hr />
 <h2 id="discovery">Discovery<a class="anchor-link" href="#discovery" title="Permalink">¶</a></h2>
 <div class="intro-card">
-<p>Skills are <strong>discovered, not configured</strong>. Claude Code scans <code>.claude/skills/*/SKILL.md</code> at session start and learns what exists from each skill&rsquo;s YAML description. <strong>Passive loading</strong> keeps all 38 descriptions visible (~2% of context); <strong>full loading</strong> only fires when a skill is actually invoked. The practical effect: EngineOS carries 38 skills without paying the context cost of 38 skills. A session that uses 3 skills loads 3, not 33. <!-- census-ok: illustrative --></p>
+<p><span class="term" tabindex="0" role="note" aria-label="Skills: A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it." data-tip="A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it.">Skills</span> are <strong>discovered, not configured</strong>. Claude Code scans <code>.claude/skills/*/SKILL.md</code> at session start and learns what exists from each skill&rsquo;s YAML description. <strong>Passive loading</strong> keeps all 38 descriptions visible (~2% of context); <strong>full loading</strong> only fires when a skill is actually invoked. The practical effect: EngineOS carries 38 skills without paying the context cost of 38 skills. A session that uses 3 skills loads 3, not 33. <!-- census-ok: illustrative --></p>
 </div>
 <p>The two phases in detail:</p>
-<p><strong>Passive loading (~2% of context):</strong> Skill descriptions from YAML frontmatter load at session start. Claude Code sees the name and a one-line summary for all 38 skills. This is the index &ndash; enough to know what exists, not enough to execute.</p>
+<p><strong>Passive loading (~2% of context):</strong> Skill descriptions from YAML <span class="term" tabindex="0" role="note" aria-label="frontmatter: A small structured header at the top of a file (title, type, summary) that machines can read reliably." data-tip="A small structured header at the top of a file (title, type, summary) that machines can read reliably.">frontmatter</span> load at session start. Claude Code sees the name and a one-line summary for all 38 skills. This is the index &ndash; enough to know what exists, not enough to execute.</p>
 <p><strong>Full loading (on invocation):</strong> When a skill is invoked by name, its full SKILL.md loads into context. The complete methodology, phase structure, integration points, anti-patterns, and self-tests become available.</p>
 <p>This is the Tier 3 context budget model from CLAUDE.md. A session that uses 3 skills loads 3, not 38. <!-- census-ok: illustrative --> A research session loads depth-governor, market-scanner, and findings-formatter. A CRM audit loads attio-mapper, attio-optimizer, and attio-refiner. Skills the session never touches stay at their 2% description footprint.</p>
 <p>The practical effect: EngineOS carries 38 skills without paying the context cost of 38 skills. A focused session consumes context proportional to its actual work, not proportional to the system&rsquo;s total capability.</p>
 <h3 id="passive-retrieval-via-userpromptsubmit-hook">Passive Retrieval via UserPromptSubmit Hook<a class="anchor-link" href="#passive-retrieval-via-userpromptsubmit-hook" title="Permalink">¶</a></h3>
-<p>Native skill discovery is the routing layer for <em>capability</em> loading &ndash; which procedure should fire for a given prompt. A parallel mechanism handles <em>context</em> loading: the <code>UserPromptSubmit</code> hook (<code>hooks/prompt-retrieval.py</code>, added 2026-06-04 per D32) silently injects relevant prior context from the second brain into the prompt before any skill loads. A heuristic gate (trigger words, question-form starts, minimum prompt length) decides whether to fire. When it fires, it searches the same six-surface priority corpus as the <code>recall</code> skill &ndash; intelligence log, knowledge index, KB concepts/connections, recent daily logs, recent run-plans, methodology &ndash; and injects up to 1,024 characters of top-3 matches with a ≤1-second budget.</p>
+<p>Native skill discovery is the routing layer for <em>capability</em> loading &ndash; which procedure should fire for a given prompt. A parallel mechanism handles <em>context</em> loading: the <code>UserPromptSubmit</code> <span class="term" tabindex="0" role="note" aria-label="hook: A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply." data-tip="A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply.">hook</span> (<code>hooks/prompt-retrieval.py</code>, added 2026-06-04 per D32) silently injects relevant prior context from the <span class="term" tabindex="0" role="note" aria-label="second brain: The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later." data-tip="The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later.">second brain</span> into the prompt before any skill loads. A heuristic <span class="term" tabindex="0" role="note" aria-label="gate: A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing." data-tip="A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing.">gate</span> (trigger words, question-form starts, minimum prompt length) decides whether to fire. When it fires, it searches the same six-surface priority corpus as the <code>recall</code> skill &ndash; <span class="term" tabindex="0" role="note" aria-label="intelligence log: The selective journal of strategic moments — insights and lessons, not routine actions (those go in the activity log)." data-tip="The selective journal of strategic moments — insights and lessons, not routine actions (those go in the activity log).">intelligence log</span>, knowledge index, <span class="term" tabindex="0" role="note" aria-label="KB: The library of distilled notes (one concept per file) that the system builds from its own work sessions." data-tip="The library of distilled notes (one concept per file) that the system builds from its own work sessions.">KB</span> concepts/connections, recent <span class="term" tabindex="0" role="note" aria-label="daily logs: A per-day journal of work sessions, captured automatically when a session ends." data-tip="A per-day journal of work sessions, captured automatically when a session ends.">daily logs</span>, recent <span class="term" tabindex="0" role="note" aria-label="run-plans: A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped." data-tip="A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped.">run-plans</span>, methodology &ndash; and injects up to 1,024 characters of top-3 matches with a ≤1-second budget.</p>
 <p>The hook complements native discovery without replacing it. Discovery answers &ldquo;which skill should run.&rdquo; The retrieval hook answers &ldquo;what does the corpus already know that the operator hasn&rsquo;t said.&rdquo; Together they front-load both capability and context before the model decides what to do. When the hook misses or the operator wants a deeper sweep, the <code>recall</code> skill (Read-only, manual invocation) handles the unbounded version of the same search. Append-only health records at <code>scripts/retrieval-health.jsonl</code> make the hook&rsquo;s behavior auditable &ndash; the operator runs <code>scripts/retrieval-review.py</code> periodically to keep, tune, or kill the gate.</p>
 <hr />
 <h2 id="anatomy-of-a-skill">Anatomy of a Skill<a class="anchor-link" href="#anatomy-of-a-skill" title="Permalink">¶</a></h2>
@@ -84,7 +85,7 @@
 <li><strong><code>allowed-tools</code></strong> &ndash; The access control boundary. This field restricts which tools the skill can use when loaded.</li>
 </ul>
 <p>Here are three real frontmatter blocks, side by side, showing how access control varies by skill category:</p>
-<p><strong>Governance skill (depth-governor) &ndash; read-only:</strong></p>
+<p><strong><span class="term" tabindex="0" role="note" aria-label="Governance: The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships." data-tip="The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships.">Governance</span> skill (depth-governor) &ndash; read-only:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="nn">---</span>
 <span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
 <span class="w">  </span><span class="no">Mandatory 30-second depth classification before starting any</span>
@@ -113,11 +114,11 @@
 <span class="nn">---</span>
 </code></pre></div>
 
-<p>The depth-governor can observe and classify but cannot modify files. The phase-controller can write run plans and invoke other skills. The attio-mapper can read from Attio&rsquo;s MCP endpoint but has no general write access &ndash; it generates schema caches through a controlled process, not ad-hoc edits.</p>
+<p>The depth-governor can observe and classify but cannot modify files. The phase-controller can write run plans and invoke other skills. The attio-mapper can read from Attio&rsquo;s <span class="term" tabindex="0" role="note" aria-label="MCP: Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database)." data-tip="Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database).">MCP</span> endpoint but has no general write access &ndash; it generates schema caches through a controlled process, not ad-hoc edits.</p>
 <h3 id="body-structure">Body Structure<a class="anchor-link" href="#body-structure" title="Permalink">¶</a></h3>
 <p>After the frontmatter, a skill&rsquo;s body typically includes:</p>
 <ul>
-<li><strong>Provenance</strong> &ndash; Which source engine(s) the skill was adapted from</li>
+<li><strong><span class="term" tabindex="0" role="note" aria-label="Provenance: Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot." data-tip="Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot.">Provenance</span></strong> &ndash; Which source engine(s) the skill was adapted from</li>
 <li><strong>When to Use / When NOT to Use</strong> &ndash; Invocation boundaries</li>
 <li><strong>Methodology</strong> &ndash; Phased workflow with explicit steps</li>
 <li><strong>Integration points</strong> &ndash; How this skill connects to other skills</li>
@@ -185,7 +186,7 @@
 </thead>
 <tbody>
 <tr>
-<td>adversarial-evaluator</td>
+<td><span class="term" tabindex="0" role="note" aria-label="adversarial-evaluator: An independent AI reviewer that scores finished work against written criteria — it can read and test, but cannot edit, so it has no stake in passing its own work." data-tip="An independent AI reviewer that scores finished work against written criteria — it can read and test, but cannot edit, so it has no stake in passing its own work.">adversarial-evaluator</span></td>
 <td><code>Read, Bash, Glob, Grep, WebSearch, mcp__brightdata__search_engine, mcp__brightdata__scrape_as_markdown</code> (no Write/Edit)</td>
 </tr>
 <tr>
@@ -508,11 +509,11 @@
 </tr>
 <tr>
 <td><strong>adversarial-evaluator</strong></td>
-<td>Spawns an independent subagent with no access to the executor&rsquo;s context. Scores deliverables against structured criteria as JSON. Tool-asymmetric: Read/Bash/search for verification, no Write &ndash; it cannot fix what it finds.</td>
+<td>Spawns an independent <span class="term" tabindex="0" role="note" aria-label="subagent: A separate AI instance dispatched to do one job and report back — with its own fresh working memory, not a copy of the main conversation." data-tip="A separate AI instance dispatched to do one job and report back — with its own fresh working memory, not a copy of the main conversation.">subagent</span> with no access to the executor&rsquo;s context. Scores deliverables against structured criteria as JSON. Tool-asymmetric: Read/Bash/search for verification, no Write &ndash; it cannot fix what it finds.</td>
 </tr>
 <tr>
 <td><strong>audit-logging</strong></td>
-<td>Two-layer logging: Activity Log (breadcrumb trail of file operations) and Intelligence Log (strategic moments with engine tagging).</td>
+<td>Two-layer logging: <span class="term" tabindex="0" role="note" aria-label="Activity Log: The mechanical breadcrumb trail: one line per file operation, written automatically by a hook." data-tip="The mechanical breadcrumb trail: one line per file operation, written automatically by a hook.">Activity Log</span> (breadcrumb trail of file operations) and Intelligence Log (strategic moments with engine tagging).</td>
 </tr>
 </tbody>
 </table>
@@ -565,7 +566,7 @@
 </tr>
 <tr>
 <td><strong>pages-deploy</strong></td>
-<td>Deploys content to a PUBLIC GitHub Pages site in one governed motion: clone → stage → scrub gate → commit/push → propagation poll. The public sibling of gated-deploy — git-only, no Cloudflare token is ever loaded, so it structurally cannot touch gated surfaces. Crystallized 2026-07-03 (D60) from ~40 hand-cycled reps the transcript-mining diagnostic surfaced.</td>
+<td>Deploys content to a PUBLIC GitHub Pages site in one governed motion: clone → stage → <span class="term" tabindex="0" role="note" aria-label="scrub gate: An automated check that scans everything about to be published for credentials and private names, and blocks the publish if it finds any." data-tip="An automated check that scans everything about to be published for credentials and private names, and blocks the publish if it finds any.">scrub gate</span> → commit/push → propagation poll. The public sibling of gated-deploy — git-only, no Cloudflare token is ever loaded, so it structurally cannot touch gated surfaces. Crystallized 2026-07-03 (D60) from ~40 hand-cycled reps the transcript-mining diagnostic surfaced.</td>
 </tr>
 </tbody>
 </table>
@@ -596,7 +597,7 @@
 <p><strong>The chains are not suggestions.</strong> Phase-controller Rule 1: <em>&ldquo;Every skill in the chain gets invoked. Not referenced, not &lsquo;kept in mind&rsquo; — actually loaded and executed.&rdquo;</em> Rule 4: <em>&ldquo;Gates are non-negotiable — but the operator may pre-authorize collapse.&rdquo;</em> (Work does not proceed past a gate without the operator&rsquo;s explicit approval; when the operator&rsquo;s own prompt pre-approves scope, plan, and deliverables, internal sub-phase gates collapse into logged self-reviews — Gate 0 and Gate Final never collapse.) This is what turns skills from a library into an operating system.</p>
 </div>
 <h3 id="the-iteration-envelope">The Iteration Envelope<a class="anchor-link" href="#the-iteration-envelope" title="Permalink">¶</a></h3>
-<p>Production chains (BL, EW, EN, CP, RE) wrap their produce-and-evaluate steps in an <strong>iteration envelope</strong> &ndash; an evaluator-optimizer loop:</p>
+<p>Production chains (BL, EW, EN, CP, RE) wrap their produce-and-evaluate steps in an <strong><span class="term" tabindex="0" role="note" aria-label="iteration envelope: A produce → review → fix loop with a hard retry limit: work that fails independent review gets the feedback and tries again, at most three times, then a human decides." data-tip="A produce → review → fix loop with a hard retry limit: work that fails independent review gets the feedback and tries again, at most three times, then a human decides.">iteration envelope</span></strong> &ndash; an evaluator-optimizer loop:</p>
 <div class="highlight"><pre><span></span><code>OUTSIDE ENVELOPE (runs once):
   depth-governor, brainstorming, writing-plans, operator approval
 
@@ -780,7 +781,7 @@ attio-qualify    --&gt; ICP classification on new/updated contacts
 
 <hr />
 <h3 id="ew-engine-work-chain">EW (Engine Work) Chain<a class="anchor-link" href="#ew-engine-work-chain" title="Permalink">¶</a></h3>
-<p>For work within a specific engine tenant &ndash; research, deliverables, client tasks. Structurally similar to CP but with mandatory brainstorming and engine context loading.</p>
+<p>For work within a specific engine <span class="term" tabindex="0" role="note" aria-label="tenant: An isolated workspace for one domain of work (like separate apartments in one building) — it shares the building&#x27;s infrastructure but keeps its own data." data-tip="An isolated workspace for one domain of work (like separate apartments in one building) — it shares the building&#x27;s infrastructure but keeps its own data.">tenant</span> &ndash; research, deliverables, client tasks. Structurally similar to CP but with mandatory brainstorming and engine context loading.</p>
 <div class="highlight"><pre><span></span><code> 1. phase-controller            --&gt; classify as EW, build run plan
  2. depth-governor              --&gt; classify topics for the engine work
  3. brainstorming [MANDATORY]   --&gt; scope the work, define success criteria
@@ -1041,7 +1042,7 @@ audit-logging:
 
 <p><strong>Written to disk:</strong> Synthesis report in engine&rsquo;s analysis directory. KB file updates via content-updater. Source logged in references. Context file updated with thread reference. Profile files if operator confirms. Activity + intelligence log entries.</p>
 <hr />
-<h3 id="6-recall-manual-second-brain-lookup">6. &ldquo;/recall <query>&rdquo; &ndash; Manual second-brain lookup<a class="anchor-link" href="#6-recall-manual-second-brain-lookup" title="Permalink">¶</a></h3>
+<h3 id="6-recall-query-manual-second-brain-lookup">6. <code>/recall &lt;query&gt;</code> &ndash; Manual second-brain lookup<a class="anchor-link" href="#6-recall-query-manual-second-brain-lookup" title="Permalink">¶</a></h3>
 <div class="highlight"><pre><span></span><code>Operator: &quot;/recall credibility tiers&quot;
          |
          v
@@ -1133,7 +1134,7 @@ recall fires (Read-only, no run plan required)
 </section>
 
 </main>
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" aria-label="Back to top">↑</button>
 <script>
 function toggleTheme(){
   var d=document.documentElement;

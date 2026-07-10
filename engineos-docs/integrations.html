@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Integrations — EngineOS Docs</title>
   <meta name="description" content="EngineOS integrates with external systems through a layered architecture: MCP (Model Context Protocol) servers provide tool-level access, skills encode domain logic and workflow orchestration, and dir">
-  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
+  <link rel="stylesheet" href="assets/style.css?v=cc39fe20">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -18,6 +18,7 @@
 <div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
+    <div class="brandmark" aria-hidden="true">E</div>
     <div class="sidebar-title">EngineOS · Docs</div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -45,8 +46,8 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
-  <div class="nav-group-label">Live</div>
-  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
+  
+  
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
@@ -59,11 +60,11 @@
 <hr />
 <h2 id="integration-philosophy">Integration Philosophy<a class="anchor-link" href="#integration-philosophy" title="Permalink">¶</a></h2>
 <p>Three principles govern how EngineOS connects to external systems.</p>
-<p><strong>Domain-scoped MCP access.</strong> Every skill declares an <code>allowed-tools</code> frontmatter block that restricts which MCP tools it can invoke. An integration skill gets its domain-specific MCP tools and nothing else. A research skill gets Bright Data and Context7. A governance skill gets no MCP access at all &ndash; read-only filesystem tools only. This prevents cross-domain tool bleed and makes each skill&rsquo;s external surface area inspectable from its frontmatter.</p>
+<p><strong>Domain-scoped <span class="term" tabindex="0" role="note" aria-label="MCP: Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database)." data-tip="Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database).">MCP</span> access.</strong> Every <span class="term" tabindex="0" role="note" aria-label="skill: A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it." data-tip="A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it.">skill</span> declares an <code>allowed-tools</code> <span class="term" tabindex="0" role="note" aria-label="frontmatter: A small structured header at the top of a file (title, type, summary) that machines can read reliably." data-tip="A small structured header at the top of a file (title, type, summary) that machines can read reliably.">frontmatter</span> block that restricts which MCP tools it can invoke. An integration skill gets its domain-specific MCP tools and nothing else. A research skill gets Bright Data and Context7. A <span class="term" tabindex="0" role="note" aria-label="governance: The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships." data-tip="The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships.">governance</span> skill gets no MCP access at all &ndash; read-only filesystem tools only. This prevents cross-domain tool bleed and makes each skill&rsquo;s external surface area inspectable from its frontmatter.</p>
 <p><strong>Safety rules from <code>.claude/rules/integrations.md</code>.</strong> Four rules apply to all integration work:
 - Verify a single record before running batch operations.
 - Check the Attio playbook for known MCP bugs before operations.
-- Log all integration operations to the activity log with the tool name.
+- Log all integration operations to the <span class="term" tabindex="0" role="note" aria-label="activity log: The mechanical breadcrumb trail: one line per file operation, written automatically by a hook." data-tip="The mechanical breadcrumb trail: one line per file operation, written automatically by a hook.">activity log</span> with the tool name.
 - Credentials via environment variables (Attio) or engine-level config files (Notion) &ndash; never hardcoded, never logged.</p>
 <p><strong>The mapper-to-operator-to-executor pipeline.</strong> The integration architecture follows a consistent pattern across both domains:</p>
 <ol>
@@ -71,7 +72,7 @@
 <li><strong>Operator-facing skills</strong> consume the playbook to audit, classify, or refine &ndash; producing analysis and approved action plans.</li>
 <li><strong>Write skills</strong> execute approved operations against the external system.</li>
 </ol>
-<p>No write skill runs without a playbook from the mapper. No bulk mutation runs without operator approval. The mapper is the foundation; everything downstream depends on it.</p>
+<p>No write skill runs without a playbook from the mapper. No bulk mutation runs without <span class="term" tabindex="0" role="note" aria-label="operator: The human running the system. Every consequential decision routes through them — the system proposes; the operator rules." data-tip="The human running the system. Every consequential decision routes through them — the system proposes; the operator rules.">operator</span> approval. The mapper is the foundation; everything downstream depends on it.</p>
 <hr />
 <h2 id="attio-crm-suite-5-skills">Attio CRM Suite (5 Skills)<a class="anchor-link" href="#attio-crm-suite-5-skills" title="Permalink">¶</a></h2>
 <h3 id="the-pipeline">The Pipeline<a class="anchor-link" href="#the-pipeline" title="Permalink">¶</a></h3>
@@ -145,7 +146,7 @@ attio-mapper ──&gt; attio-qualify
 <p><strong>Key behaviors:</strong>
 - Domain-first company strategy: extract domains from emails, skip generic domains (gmail, outlook, etc.), search by domain not name, create company with domain only (Attio auto-enriches), rely on automatic person-to-company association.
 - Three-tier field mapping: explicit (user-provided or CSV format spec), cached (prior mapping decisions), heuristic (confidence scoring with auto-accept at 0.82+, confirm at 0.65+, skip below).
-- Mandatory pre-import approval gate: presents a full summary of what will be created/updated/skipped and waits for explicit confirmation before any write.
+- Mandatory pre-import approval <span class="term" tabindex="0" role="note" aria-label="gate: A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing." data-tip="A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing.">gate</span>: presents a full summary of what will be created/updated/skipped and waits for explicit confirmation before any write.
 - Checkpoint saves for large imports (&gt;50 records): progress saved every 25 records, supports resumption.</p>
 <p><strong>MCP tools used:</strong>
 - <code>mcp__attio-mcp__records_search_advanced</code>, <code>records_get_details</code>, <code>records_list</code>, <code>records_create</code>, <code>records_update</code>, <code>records_add_to_list</code>, <code>lists_list</code>, <code>lists_get_entries</code>, <code>objects_list_attributes</code></p>
@@ -169,7 +170,7 @@ attio-mapper ──&gt; attio-qualify
 <p><strong>Operator says: &ldquo;Audit the CRM.&rdquo;</strong></p>
 <ol>
 <li>
-<p><strong>Phase-controller classifies</strong> the request as a substantive operation and creates a run plan.</p>
+<p><strong>Phase-controller classifies</strong> the request as a substantive operation and creates a <span class="term" tabindex="0" role="note" aria-label="run plan: A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped." data-tip="A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped.">run plan</span>.</p>
 </li>
 <li>
 <p><strong>attio-optimizer fires.</strong> First checks <code>schemas/_meta.json</code> &ndash; if schemas are &gt;14 days stale, it recommends running <code>attio-mapper</code> first. Assuming schemas are fresh:
@@ -229,7 +230,7 @@ attio-mapper ──&gt; attio-qualify
 </tbody>
 </table>
 <p><strong>Why the direct API layer exists:</strong> MCP one-by-one operations take ~60-90 minutes for bulk work (150+ records). The direct API suite completes the same work in ~3-5 minutes. Beyond performance, several Attio operations simply fail through MCP &ndash; select field updates report success but don&rsquo;t persist, list operations throw validation errors, and record-reference writes return 400. The direct API scripts use the correct Attio REST API patterns that MCP doesn&rsquo;t implement.</p>
-<p><strong>Provenance note:</strong> The <code>scripts/attio/</code> direct-API layer (8 files, ~97KB) was restored to EngineOS under D26 after the Act 3 lift regression discovered the original SEE-source suite had been missed during the initial OS build. The restoration recovered the production REST client that the audit/optimize/ops chain depends on for the operations MCP cannot complete.</p>
+<p><strong><span class="term" tabindex="0" role="note" aria-label="Provenance: Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot." data-tip="Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot.">Provenance</span> note:</strong> The <code>scripts/attio/</code> direct-API layer (8 files, ~97KB) was restored to EngineOS under D26 after the Act 3 lift regression discovered the original SEE-source suite had been missed during the initial OS build. The restoration recovered the production REST client that the audit/optimize/ops chain depends on for the operations MCP cannot complete.</p>
 <p><strong>Authentication:</strong> All scripts use <code>process.env.ATTIO_API_KEY</code> exclusively. No file-based credential fallbacks, no config files for credentials.</p>
 <p><strong>Design contract:</strong> Zero npm dependencies. Engine-agnostic &ndash; no workspace-specific field names or values hardcoded. The scripts are the MCP workaround layer; when Attio fixes their MCP server upstream, these workarounds can be retired.</p>
 <hr />
@@ -501,7 +502,7 @@ attio-mapper ──&gt; attio-qualify
 </section>
 
 </main>
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" aria-label="Back to top">↑</button>
 <script>
 function toggleTheme(){
   var d=document.documentElement;

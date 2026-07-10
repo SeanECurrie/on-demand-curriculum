@@ -1238,3 +1238,276 @@ main {
   .intro-card p { font-size: 16px; }
   .tech-detail { padding: 14px 16px; margin: 8px 0 18px; }
 }
+
+/* ─── 2026-07-10 Design Upgrade — portfolio + console lessons folded back ───
+   Source specs: engines/job-search/arsenal/portfolio/_review/portfolio-design-
+   language-2026-07-08.md + console/DESIGN-INPUTS-2026-07-07-odc-playbook.md.
+   Run plan: run-plans/2026-07-10-docs-design-upgrade.md.
+   Discipline: subtle-first — brand gradient at the brandmark + active nav only;
+   gold is ATTENTION and appears at most once per page; docs stay a light-first
+   reading surface (no glass/dark-cockpit port). */
+
+:root {
+  --brand-teal: #5cb5a4;        /* console --teal: system/ok/alive */
+  --brand-teal-ink: #356e64;    /* teal as text on light surfaces — 5.4:1 on stone-100 (AA + margin) */
+  --brand-cyan: #7cd0ec;        /* AMBIENT/BRAND light only — never a status */
+  --brand-grad: linear-gradient(135deg, #7cd0ec, #5cb5a4);
+  --gold-attn: #b08423;         /* house gold — BORDERS/RAILS ONLY on light (3.4:1 = UI pass, text fail) */
+  --gold-text: #8a6716;         /* gold as TEXT on light — 5.2:1 white / 4.8:1 stone-100 (AA + margin;
+                                   the 2026-07-10 adversarial review caught #b08423-as-text at 3.4:1) */
+  --pill-ok-border: rgba(92,181,164,.55);
+  --pill-ok-bg: rgba(92,181,164,.10);
+  --pill-warn-border: rgba(176,132,35,.55);
+  --pill-warn-bg: rgba(176,132,35,.10);
+  --pill-na-border: rgba(122,136,144,.45);
+  --pill-na-bg: rgba(122,136,144,.08);
+  --tip-bg: var(--color-stone-900);
+  --tip-text: #f5f5f4;
+}
+[data-theme="dark"] {
+  --brand-teal-ink: #59d4c0;    /* console dark-HUD teal for text on dark */
+  --gold-attn: #cba24a;         /* console gold glows correctly on dark */
+  --gold-text: #cba24a;         /* 6.4:1 on dark surfaces — text-safe as-is */
+  --pill-ok-border: rgba(89,212,192,.5);
+  --pill-ok-bg: rgba(89,212,192,.12);
+  --pill-warn-border: rgba(203,160,74,.5);
+  --pill-warn-bg: rgba(203,160,74,.12);
+  --tip-bg: #f5f5f4;
+  --tip-text: #1c1917;
+}
+
+/* Brandmark — the cyan→teal gradient tile (the one console-identifying element) */
+.brandmark {
+  width: 26px; height: 26px; flex: 0 0 26px;
+  border-radius: 7px;
+  background: var(--brand-grad);
+  color: #0b1417;
+  font-family: var(--font-mono);
+  font-size: 14px; font-weight: 800;
+  display: inline-flex; align-items: center; justify-content: center;
+  letter-spacing: -0.5px;
+}
+.sidebar-header { display: flex; align-items: center; gap: 10px; }
+.sidebar-title { flex: 1; }
+
+/* Active nav — gradient wash + teal rail (console .ni.on, translated light) */
+.nav-item { transition: background-color .15s, color .15s, border-color .15s; }
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(124,208,236,.14), rgba(92,181,164,.10));
+  border-left-color: var(--brand-teal);
+  color: var(--brand-teal-ink);
+}
+.nav-item.active .nav-num { color: var(--brand-teal-ink); }
+.nav-item:hover { color: var(--brand-teal-ink); }
+
+/* Hover color-life on cards (extends the existing lift) */
+.doc-card:hover { border-color: var(--brand-teal); }
+.doc-card:hover .doc-card__title { color: var(--brand-teal-ink); }
+.doc-card__title { transition: color .15s; }
+
+/* ── Glossary term tooltips (Learn-mode port, D62/D64 lineage) ──
+   Wrapped by build-docs.py: <span class="term" tabindex="0" data-tip="…">.
+   Hover AND keyboard focus; CSS-off degrade = plain text with no artifacts. */
+.term {
+  border-bottom: 1px dashed var(--brand-teal);
+  cursor: help;
+  position: relative;
+}
+.term:focus-visible { outline: 2px solid var(--brand-teal); outline-offset: 2px; }
+.term::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 0; bottom: calc(100% + 8px);
+  z-index: 40;
+  width: max-content; max-width: 340px;
+  background: var(--tip-bg); color: var(--tip-text);
+  font-size: 13px; font-weight: 400; line-height: 1.5;
+  font-family: var(--font-body);
+  text-transform: none; letter-spacing: normal; white-space: normal;
+  padding: 10px 12px; border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.18);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .15s;
+}
+.term:hover::after, .term:focus::after, .term:focus-visible::after {
+  opacity: 1; visibility: visible;
+}
+@media (max-width: 720px) {
+  .term::after { max-width: 82vw; }
+}
+
+/* ── Semantic pills (console .dc-chip register: mono + pill radius +
+      meaning-tinted border — never a flat gray fill) ── */
+.pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .04em;
+  padding: 1px 9px 2px;
+  border-radius: 999px;
+  border: 1px solid var(--pill-na-border);
+  background: var(--pill-na-bg);
+  color: var(--text-secondary);
+  vertical-align: 1px;
+}
+.pill--ok   { border-color: var(--pill-ok-border);   background: var(--pill-ok-bg);   color: var(--brand-teal-ink); }
+.pill--warn { border-color: var(--pill-warn-border); background: var(--pill-warn-bg); color: var(--gold-text); }
+
+/* ── Diagram kit — CSS-drawn connective diagrams (no chart libs, no images).
+      ODC ritual: titled, labeled nodes, and an INTERPRETATION caption.
+      Meaning must survive grayscale: shape + label carry it, tint assists. ── */
+.diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin: 8px 0 22px;
+}
+.diagram .dg-title {
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+.dg-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; justify-content: center; }
+.dg-node {
+  flex: 1 1 130px; min-width: 120px; max-width: 250px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+}
+.dg-node .dg-node__t {
+  display: block;
+  font-weight: 700; font-size: 14px;
+  color: var(--text-heading);
+}
+.dg-node .dg-node__s {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px; line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+.dg-node--os {
+  flex: 1 1 100%; max-width: none;
+  border: 2px solid var(--brand-teal);
+  background: linear-gradient(135deg, rgba(124,208,236,.07), rgba(92,181,164,.06));
+}
+.dg-node--accent { border-left: 3px solid var(--brand-teal); }
+.dg-node--store  { border-style: dashed; }
+.dg-flow {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700;
+  color: var(--brand-teal-ink);
+  padding: 6px 0;
+  gap: 8px;
+}
+.dg-flow .dg-flow__label {
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-secondary);
+}
+.dg-arrow-r { color: var(--brand-teal-ink); font-weight: 700; padding: 0 4px; align-self: center; }
+.dg-caption {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-subtle);
+  font-size: 13.5px; font-style: italic;
+  color: var(--text-secondary);
+}
+.dg-caption strong {
+  font-family: var(--font-mono);
+  font-style: normal; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--gold-text);
+  margin-right: 6px;
+}
+.dg-lanes { display: flex; gap: 14px; flex-wrap: wrap; }
+.dg-lane { flex: 1 1 260px; min-width: 240px; }
+.dg-lane .dg-lane__h {
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--brand-teal-ink);
+  text-align: center; margin-bottom: 8px;
+}
+.dg-lane .dg-node { max-width: none; margin-bottom: 0; }
+.dg-vflow {
+  text-align: center;
+  color: var(--brand-teal-ink);
+  font-weight: 700; font-size: 14px;
+  padding: 3px 0;
+}
+.dg-vflow .dg-flow__label { display: inline; margin-left: 8px; }
+@media (max-width: 720px) {
+  .dg-row { flex-direction: column; }
+  .dg-node { max-width: none; }
+}
+
+/* ── Landing: what-changed strip + reader paths ── */
+.whats-new {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold-attn);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 18px 0 6px;
+  text-align: left;
+}
+.whats-new .wn-label {
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--gold-text);
+  margin-bottom: 8px;
+}
+.whats-new ul { list-style: none; padding: 0; margin: 0; }
+.whats-new li {
+  font-size: 13.5px; color: var(--text-body);
+  padding: 2px 0;
+}
+.whats-new li .wn-date {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-secondary);
+  margin-right: 10px;
+}
+.reader-paths { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0 26px; }
+.reader-path {
+  flex: 1 1 220px;
+  display: block;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 13px 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .15s, transform .15s;
+}
+.reader-path:hover {
+  border-color: var(--brand-teal);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.reader-path .rp-q {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
+  color: var(--brand-teal-ink);
+  margin-bottom: 4px;
+}
+.reader-path .rp-a { display: block; font-size: 13.5px; color: var(--text-body); }
+
+/* Reduced motion: kill it all (console law; was missing from this sheet) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

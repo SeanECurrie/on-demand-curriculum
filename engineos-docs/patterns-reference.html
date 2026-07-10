@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Patterns Reference — EngineOS Docs</title>
   <meta name="description" content="Every pattern in this library comes from a real production incident. Nothing is hypothetical. Each pattern encodes a failure mode that was observed in actual work, analyzed to find its root cause, and">
-  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
+  <link rel="stylesheet" href="assets/style.css?v=cc39fe20">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -18,6 +18,7 @@
 <div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
+    <div class="brandmark" aria-hidden="true">E</div>
     <div class="sidebar-title">EngineOS · Docs</div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -45,8 +46,8 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
-  <div class="nav-group-label">Live</div>
-  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
+  
+  
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
@@ -57,7 +58,7 @@
 </header>
 <section class="content">
 <h2 id="what-patterns-are-in-engineos">What Patterns Are in EngineOS<a class="anchor-link" href="#what-patterns-are-in-engineos" title="Permalink">¶</a></h2>
-<p>The pattern format is consistent: provenance header (source project, last verified date, staleness status), problem statement, step-by-step solution, when to use, when not to use, concrete example from real work, variations, and origin story. Every pattern traces back to a specific engagement, session, or test that produced it.</p>
+<p>The pattern format is consistent: <span class="term" tabindex="0" role="note" aria-label="provenance: Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot." data-tip="Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot.">provenance</span> header (source project, last verified date, staleness status), problem statement, step-by-step solution, when to use, when not to use, concrete example from real work, variations, and origin story. Every pattern traces back to a specific engagement, session, or test that produced it.</p>
 <p><strong>Breakdown:</strong> 58 problem patterns, 5 deliverable patterns, 9 framework patterns.</p>
 <p><strong>Source distribution:</strong></p>
 <table>
@@ -87,7 +88,7 @@
 <tr>
 <td>EngineOS testing arc</td>
 <td>3</td>
-<td>Governance and validation patterns from adversarial cowork testing (March 2026). <!-- census-ok: Act-3 consolidation provenance --></td>
+<td><span class="term" tabindex="0" role="note" aria-label="Governance: The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships." data-tip="The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships.">Governance</span> and validation patterns from adversarial cowork testing (March 2026). <!-- census-ok: Act-3 consolidation provenance --></td>
 </tr>
 <tr>
 <td>EngineOS cowork sessions</td>
@@ -124,7 +125,7 @@
 </tr>
 <tr>
 <td>mcp-silent-failure-detection</td>
-<td>MCP tools return HTTP 200 while silently failing to persist data, especially for select fields, multi-selects, and relationship fields that require specific data wrappers.</td>
+<td><span class="term" tabindex="0" role="note" aria-label="MCP: Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database)." data-tip="Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database).">MCP</span> tools return HTTP 200 while silently failing to persist data, especially for select fields, multi-selects, and relationship fields that require specific data wrappers.</td>
 </tr>
 <tr>
 <td>verify-single-before-batch</td>
@@ -132,7 +133,7 @@
 </tr>
 <tr>
 <td>parallel-agents-need-background-mode</td>
-<td>Dispatching multiple parallel subagents without <code>run_in_background: true</code> blocks the parent until the slowest finishes; the operator sees silence that looks identical to &ldquo;stuck&rdquo; for 17+ minutes.</td>
+<td>Dispatching multiple parallel <span class="term" tabindex="0" role="note" aria-label="subagents: A separate AI instance dispatched to do one job and report back — with its own fresh working memory, not a copy of the main conversation." data-tip="A separate AI instance dispatched to do one job and report back — with its own fresh working memory, not a copy of the main conversation.">subagents</span> without <code>run_in_background: true</code> blocks the parent until the slowest finishes; the <span class="term" tabindex="0" role="note" aria-label="operator: The human running the system. Every consequential decision routes through them — the system proposes; the operator rules." data-tip="The human running the system. Every consequential decision routes through them — the system proposes; the operator rules.">operator</span> sees silence that looks identical to &ldquo;stuck&rdquo; for 17+ minutes.</td>
 </tr>
 <tr>
 <td>background-agent-completion-under-usage-limit</td>
@@ -206,7 +207,7 @@
 </tr>
 <tr>
 <td>content-excitement-outpaces-infrastructure</td>
-<td>During high-momentum sessions producing significant findings, infrastructure (CONTEXT.md, run plans, logs) falls behind the content work. Pause for infrastructure discipline after every significant pivot.</td>
+<td>During high-momentum sessions producing significant findings, infrastructure (CONTEXT.md, <span class="term" tabindex="0" role="note" aria-label="run plans: A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped." data-tip="A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped.">run plans</span>, logs) falls behind the content work. Pause for infrastructure discipline after every significant pivot.</td>
 </tr>
 </tbody>
 </table>
@@ -302,7 +303,7 @@
 </tr>
 <tr>
 <td>custom-skills-over-mcp</td>
-<td><strong>SUPERSEDED.</strong> Dec 2025 advice to prefer custom skills over MCP servers; contradicted by current ecosystem practice where MCP tools are actively used for Attio and Notion. Retained for historical reference.</td>
+<td><strong>SUPERSEDED.</strong> Dec 2025 advice to prefer custom <span class="term" tabindex="0" role="note" aria-label="skills: A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it." data-tip="A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it.">skills</span> over MCP servers; contradicted by current ecosystem practice where MCP tools are actively used for Attio and Notion. Retained for historical reference.</td>
 </tr>
 </tbody>
 </table>
@@ -422,7 +423,7 @@
 </tr>
 <tr>
 <td>local-gguf-embeddings</td>
-<td>Run GGUF embedding models locally for agent memory search so private conversations and agent memory never leave your infrastructure.</td>
+<td>Run GGUF <span class="term" tabindex="0" role="note" aria-label="embedding: A list of numbers an AI model produces to represent a text&#x27;s meaning, so &#x27;similar meaning&#x27; can be computed as &#x27;nearby numbers&#x27;." data-tip="A list of numbers an AI model produces to represent a text&#x27;s meaning, so &#x27;similar meaning&#x27; can be computed as &#x27;nearby numbers&#x27;.">embedding</span> models locally for agent memory search so private conversations and agent memory never leave your infrastructure.</td>
 </tr>
 </tbody>
 </table>
@@ -577,11 +578,11 @@
 </tr>
 <tr>
 <td>retrieval-before-decide</td>
-<td>Before recommending or implementing in a domain where EngineOS has prior intelligence, query the second brain first via <code>/recall</code> or the UserPromptSubmit retrieval hook &ndash; internal-archive lookup fails reliably under mid-task focus even when &ldquo;research before agreeing&rdquo; is followed for external sources.</td>
+<td>Before recommending or implementing in a domain where EngineOS has prior intelligence, query the <span class="term" tabindex="0" role="note" aria-label="second brain: The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later." data-tip="The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later.">second brain</span> first via <code>/recall</code> or the UserPromptSubmit retrieval <span class="term" tabindex="0" role="note" aria-label="hook: A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply." data-tip="A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply.">hook</span> &ndash; internal-archive lookup fails reliably under mid-task focus even when &ldquo;research before agreeing&rdquo; is followed for external sources.</td>
 </tr>
 <tr>
 <td>session-end-audit-before-flush</td>
-<td>Before <code>/exit</code> on any substantial session, audit second-brain coverage and close gaps manually; flush.py&rsquo;s 30-turn / 15K-char window misses the substance of marathon multi-day sessions, so the discipline closes what the hook architecture structurally cannot.</td>
+<td>Before <code>/exit</code> on any substantial session, audit second-brain coverage and close gaps manually; <span class="term" tabindex="0" role="note" aria-label="flush: The automatic capture step at session close: the conversation&#x27;s substance gets summarized into today&#x27;s daily log before it can be lost." data-tip="The automatic capture step at session close: the conversation&#x27;s substance gets summarized into today&#x27;s daily log before it can be lost.">flush</span>.py&rsquo;s 30-turn / 15K-char window misses the substance of marathon multi-day sessions, so the discipline closes what the hook architecture structurally cannot.</td>
 </tr>
 <tr>
 <td>meta-section-as-system-showcase</td>
@@ -605,7 +606,7 @@
 </tr>
 <tr>
 <td>engagement-artifact-structure</td>
-<td>Name=identity, state=field: per-engagement artifacts keep a stable name while Phase ⊥ Status ⊥ Version fields carry state; iterate within a stage, SNAP across the gate; every engagement gets a CONTEXT.md front door (D46).</td>
+<td>Name=identity, state=field: per-engagement artifacts keep a stable name while Phase ⊥ Status ⊥ Version fields carry state; iterate within a stage, SNAP across the <span class="term" tabindex="0" role="note" aria-label="gate: A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing." data-tip="A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing.">gate</span>; every engagement gets a CONTEXT.md front door (D46).</td>
 </tr>
 <tr>
 <td>transcript-mining-diagnostic</td>
@@ -617,7 +618,7 @@
 </tr>
 <tr>
 <td>federated-reviewer</td>
-<td>A ladder of reviewers at increasing independence (same-context self-check → independent-context evaluator → outside reviewer) with verdict routing and reviewer-health telemetry &ndash; liveness instrumented in <code>scripts/reviewer-health.jsonl</code>; impact routes to Layer 5 + the intelligence log (D36).</td>
+<td>A ladder of reviewers at increasing independence (same-context self-check → independent-context evaluator → outside reviewer) with verdict routing and reviewer-health telemetry &ndash; <span class="term" tabindex="0" role="note" aria-label="liveness: Proof that a component actually ran recently — a heartbeat, distinct from whether it found anything." data-tip="Proof that a component actually ran recently — a heartbeat, distinct from whether it found anything.">liveness</span> instrumented in <code>scripts/reviewer-health.jsonl</code>; impact routes to Layer 5 + the <span class="term" tabindex="0" role="note" aria-label="intelligence log: The selective journal of strategic moments — insights and lessons, not routine actions (those go in the activity log)." data-tip="The selective journal of strategic moments — insights and lessons, not routine actions (those go in the activity log).">intelligence log</span> (D36).</td>
 </tr>
 <tr>
 <td>private-gated-static-hosting</td>
@@ -720,14 +721,14 @@
 <p><strong>Category:</strong> Deliverables | <strong>Type:</strong> Deliverable</p>
 <p><strong>The Problem:</strong> Bulk destructive operations (delete, archive, overwrite) can fail catastrophically when applied to many records. A wrong page ID, untested code path, or silent API failure distributes damage across the entire batch before verification runs. The default &ldquo;run the whole thing and verify after&rdquo; structure means the damage is done by the time you discover the problem.</p>
 <p><strong>The Incident:</strong> During the April 2026 JSE pipeline reset, 55 Notion Pipeline rows needed to be archived via a newly-built <code>archive_page()</code> API wrapper &ndash; a 3-line method that had never been exercised against real data. Running the archive on all 55 without validation would have risked: an API token without archive access (some APIs return success on wrong permissions), a wrong database ID (archives from the wrong DB), an untested code path (the method was brand new), and cascade-failure invisibility (if row 1 fails, the loop might silently continue past it).</p>
-<p>The solution was a canary pattern built into <code>bulk-archive-pipeline.py</code>: (1) access probe via read-only <code>get_page()</code> to verify credentials, (2) archive one canary row selected for lowest risk (empty orphan, zero data loss if wrong), (3) independent re-fetch to verify <code>archived: true</code> in the response (not trusting the archive call&rsquo;s own success signal), (4) hard pause via <code>sys.exit(0)</code> so the operator can eyeball the result in Notion&rsquo;s UI, (5) explicit <code>--continue</code> flag to re-run for the remaining batch, (6) per-record logging during batch, (7) final database re-query to confirm zero rows remain.</p>
+<p>The solution was a canary pattern built into <code>bulk-archive-pipeline.py</code>: (1) access probe via read-only <code>get_page()</code> to verify credentials, (2) archive one canary row selected for lowest risk (empty <span class="term" tabindex="0" role="note" aria-label="orphan: A note no other note links to — unreachable by browsing the graph, so effectively invisible until something points at it." data-tip="A note no other note links to — unreachable by browsing the graph, so effectively invisible until something points at it.">orphan</span>, zero data loss if wrong), (3) independent re-fetch to verify <code>archived: true</code> in the response (not trusting the archive call&rsquo;s own success signal), (4) hard pause via <code>sys.exit(0)</code> so the operator can eyeball the result in Notion&rsquo;s UI, (5) explicit <code>--continue</code> flag to re-run for the remaining batch, (6) per-record logging during batch, (7) final database re-query to confirm zero rows remain.</p>
 <p><strong>The Solution:</strong> Separate access-probe from destructive action. Archive one canary, verify via independent fetch, hard-pause. Use a continuation flag for the batch. Log per-record. Final re-query confirms end-state.</p>
 <p><strong>The Lesson:</strong> The first destructive operation should prove the mechanism works; the batch should only run after the proof.</p>
 <hr />
 <h3 id="8-culmination-test-design">8. Culmination Test Design<a class="anchor-link" href="#8-culmination-test-design" title="Permalink">¶</a></h3>
 <p><strong>Category:</strong> Governance &amp; Validation | <strong>Type:</strong> Problem</p>
 <p><strong>The Problem:</strong> When multiple fixes need validation, testing each independently gives false confidence. Each fix passes its dedicated test in a controlled environment. The fixes interact badly when combined &ndash; ordering dependencies, shared state assumptions, cascading triggers. Nobody designs a single test exercising all fixes simultaneously because each piece was individually &ldquo;validated.&rdquo;</p>
-<p><strong>The Incident:</strong> After the J2 and J3 testing arc surfaced 5 fixes (D22 for phase-controller enforcement, D20 for intelligence log write path, D21 for activity log hook, D23 for stop hook paths, F4 for render verification), the O1 culmination test was designed to exercise all 5 simultaneously under realistic operating conditions.</p>
+<p><strong>The Incident:</strong> After the J2 and J3 testing arc surfaced 5 fixes (D22 for phase-controller enforcement, D20 for intelligence log write path, D21 for <span class="term" tabindex="0" role="note" aria-label="activity log: The mechanical breadcrumb trail: one line per file operation, written automatically by a hook." data-tip="The mechanical breadcrumb trail: one line per file operation, written automatically by a hook.">activity log</span> hook, D23 for stop hook paths, F4 for render verification), the O1 culmination test was designed to exercise all 5 simultaneously under realistic operating conditions.</p>
 <p>The test was a real task: transform <code>methodology/factory-pattern.md</code> into an interactive HTML walkthrough for the ODC engine. Not a synthetic exercise. Each fix mapped to a specific pass/fail criterion: run plan file exists (D22), skill chain matches plan (D22), intelligence entry or &ldquo;no triggers fired&rdquo; note (D20), activity log entries with real file paths (D21), no stop hook errors (D23), and QA scorecard includes render verification (F4). An escalation protocol defined consequences: if D22 failed a third time, the enforcement approach itself was fundamentally wrong and required a different mechanism, not another iteration.</p>
 <p>Result: O1 passed G1-G5. G6 passed with 8 browser screenshots. A new finding emerged &ndash; subagent operations are invisible to hooks &ndash; which became its own tracking item. All 5 original fixes were validated in combination, under conditions none of them had been tested in individually.</p>
 <p><strong>The Solution:</strong> After a batch of related fixes, design one test that exercises all of them under realistic conditions. Give each fix explicit pass/fail criteria. Include an escalation protocol for repeated failures. Track systemic signals beyond binary pass/fail.</p>
@@ -763,7 +764,7 @@
 </section>
 
 </main>
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" aria-label="Back to top">↑</button>
 <script>
 function toggleTheme(){
   var d=document.documentElement;

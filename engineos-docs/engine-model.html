@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Engine Model — EngineOS Docs</title>
   <meta name="description" content="Engines are the reason EngineOS exists. The OS layer (Layer 1) holds shared capabilities -- skills, methodology, governance, design system, operator identity. Engines (Layer 2) are the domain-specific">
-  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
+  <link rel="stylesheet" href="assets/style.css?v=cc39fe20">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -18,6 +18,7 @@
 <div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
+    <div class="brandmark" aria-hidden="true">E</div>
     <div class="sidebar-title">EngineOS · Docs</div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -45,8 +46,8 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
-  <div class="nav-group-label">Live</div>
-  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
+  
+  
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
@@ -56,11 +57,11 @@
   <p class="subhead">Engines are the reason EngineOS exists. The OS layer (Layer 1) holds shared capabilities -- skills, methodology, governance, design system, operator identity. Engines (Layer 2) are the domain-specific workspaces where those capabilities get applied to real problems. A job search, a client engagement, a curriculum deliv</p>
 </header>
 <section class="content">
-<p>This document explains how engines work, what they inherit, what they own, and where the known engine sources currently stand. There are 4 tenants in <code>engines/</code> &ndash; two active (job-search, job-search-secondary), one portfolio (on-demand-curriculum), and one test stub (sales-enablement) &ndash; five engines still operating at their Desktop source locations, and one former engine slot (DCC:FALLOUT4) retired and reclassified into the personal <code>sandbox/</code> tier (D44; the lifecycle case study below).</p>
+<p>This document explains how engines work, what they inherit, what they own, and where the known engine sources currently stand. There are 4 <span class="term" tabindex="0" role="note" aria-label="tenants: An isolated workspace for one domain of work (like separate apartments in one building) — it shares the building&#x27;s infrastructure but keeps its own data." data-tip="An isolated workspace for one domain of work (like separate apartments in one building) — it shares the building&#x27;s infrastructure but keeps its own data.">tenants</span> in <code>engines/</code> &ndash; two active (job-search, job-search-secondary), one portfolio (on-demand-curriculum), and one test stub (sales-enablement) &ndash; five engines still operating at their Desktop source locations, and one former engine slot (DCC:FALLOUT4) retired and reclassified into the personal <code>sandbox/</code> tier (D44; the lifecycle case study below).</p>
 <hr />
 <h2 id="what-engines-are">What Engines Are<a class="anchor-link" href="#what-engines-are" title="Permalink">¶</a></h2>
 <p>An engine is a Layer 2 tenant at <code>engines/&lt;engine-name&gt;/</code>. The term &ldquo;tenant&rdquo; is deliberate: engines are isolated from each other but share a common platform. They are peers &ndash; no engine outranks another &ndash; and none is a peer to the OS itself. The OS serves engines; engines do not modify the OS.</p>
-<p>Each engine is a self-contained domain workspace. It has its own engagement data, its own knowledge bases, its own CONTEXT.md tracking session state, and (optionally) its own domain-specific skills that encode workflows unique to that domain. What it does not have is its own copy of the shared infrastructure. Governance, methodology, patterns, design system, operator identity, and the 38 OS-level skills are inherited from Layer 1.</p>
+<p>Each engine is a self-contained domain workspace. It has its own engagement data, its own knowledge bases, its own CONTEXT.md tracking session state, and (optionally) its own domain-specific <span class="term" tabindex="0" role="note" aria-label="skills: A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it." data-tip="A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it.">skills</span> that encode workflows unique to that domain. What it does not have is its own copy of the shared infrastructure. <span class="term" tabindex="0" role="note" aria-label="Governance: The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships." data-tip="The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships.">Governance</span>, methodology, patterns, design system, <span class="term" tabindex="0" role="note" aria-label="operator: The human running the system. Every consequential decision routes through them — the system proposes; the operator rules." data-tip="The human running the system. Every consequential decision routes through them — the system proposes; the operator rules.">operator</span> identity, and the 38 OS-level skills are inherited from Layer 1.</p>
 <p>This separation serves two goals:</p>
 <ol>
 <li>
@@ -114,7 +115,7 @@
 <td><code>.claude/rules/</code></td>
 </tr>
 <tr>
-<td>Enforcement hooks</td>
+<td>Enforcement <span class="term" tabindex="0" role="note" aria-label="hooks: A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply." data-tip="A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply.">hooks</span></td>
 <td>8 events wired (PreToolUse, PostToolUse, Stop, PostCompact, SessionStart, SessionEnd, PreCompact, UserPromptSubmit) carrying ten wirings incl. both Bash matchers</td>
 <td><code>hooks/</code> (wired in <code>.claude/settings.json</code>)</td>
 </tr>
@@ -134,13 +135,13 @@
 <td><code>registry/</code></td>
 </tr>
 <tr>
-<td>Second brain (capture + retrieval)</td>
-<td>KB articles, daily logs, intelligence log, concepts, flush/compile pipeline, <code>/recall</code> skill, prompt-retrieval hook</td>
+<td><span class="term" tabindex="0" role="note" aria-label="Second brain: The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later." data-tip="The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later.">Second brain</span> (capture + retrieval)</td>
+<td><span class="term" tabindex="0" role="note" aria-label="KB: The library of distilled notes (one concept per file) that the system builds from its own work sessions." data-tip="The library of distilled notes (one concept per file) that the system builds from its own work sessions.">KB</span> articles, <span class="term" tabindex="0" role="note" aria-label="daily logs: A per-day journal of work sessions, captured automatically when a session ends." data-tip="A per-day journal of work sessions, captured automatically when a session ends.">daily logs</span>, <span class="term" tabindex="0" role="note" aria-label="intelligence log: The selective journal of strategic moments — insights and lessons, not routine actions (those go in the activity log)." data-tip="The selective journal of strategic moments — insights and lessons, not routine actions (those go in the activity log).">intelligence log</span>, concepts, <span class="term" tabindex="0" role="note" aria-label="flush: The automatic capture step at session close: the conversation&#x27;s substance gets summarized into today&#x27;s daily log before it can be lost." data-tip="The automatic capture step at session close: the conversation&#x27;s substance gets summarized into today&#x27;s daily log before it can be lost.">flush</span>/compile pipeline, <code>/recall</code> skill, prompt-retrieval hook</td>
 <td><code>knowledge/</code>, <code>daily/</code>, <code>logs/</code>, <code>scripts/</code>, <code>.claude/skills/recall/</code></td>
 </tr>
 </tbody>
 </table>
-<p>The governance stack deserves special mention. Phase-controller, the 8 wired hook events, and all 8 rules apply to work inside any engine. When you write a deliverable in the job search engine, the PreToolUse hook checks for an active run plan scope-matched to <code>engines/job-search/</code>. When you start a session touching ODC files, the session-orchestrator detects the engine context from the path and loads accordingly. The governance is the same everywhere &ndash; that is the point.</p>
+<p>The governance stack deserves special mention. Phase-controller, the 8 wired hook events, and all 8 rules apply to work inside any engine. When you write a deliverable in the job search engine, the PreToolUse hook checks for an active <span class="term" tabindex="0" role="note" aria-label="run plan: A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped." data-tip="A plan for one piece of work, saved as a file on disk — what was asked, how it will be judged, and a log of what actually happened. It survives even if the AI&#x27;s working memory is wiped.">run plan</span> scope-matched to <code>engines/job-search/</code>. When you start a session touching ODC files, the session-orchestrator detects the engine context from the path and loads accordingly. The governance is the same everywhere &ndash; that is the point.</p>
 <p>Engines also inherit the second brain transparently. The <code>/recall</code> skill, the SessionStart context injection, and the UserPromptSubmit retrieval hook all surface prior intelligence regardless of which engine the work is happening in &ndash; engine-tagged log entries and KB articles are filterable but not siloed. See <a href="second-brain.html">Second Brain</a> for the full capture + retrieval pipeline.</p>
 <p>See <a href="governance.html">Governance Stack</a> for how phase-controller, hooks, and rules enforce discipline across all engines.</p>
 <h3 id="owned-by-each-engine-domain-specific">Owned by Each Engine (Domain-Specific)<a class="anchor-link" href="#owned-by-each-engine-domain-specific" title="Permalink">¶</a></h3>
@@ -220,7 +221,7 @@
 <p>Four engines have migrated to EngineOS tenants. They range from a fully self-contained active engine (JSE) to a sibling tenant scoped to a second operator (job-search-secondary) to a test configuration validating OS capabilities (SEE).</p>
 <h3 id="job-search-engine-jse-active">Job Search Engine (JSE) &ndash; Active<a class="anchor-link" href="#job-search-engine-jse-active" title="Permalink">¶</a></h3>
 <p><strong>Location:</strong> <code>engines/job-search/</code>
-<strong>Status:</strong> Self-contained after 5-phase migration. The most data-rich tenant.
+<strong>Status:</strong> <span class="pill pill--ok">ACTIVE</span> Self-contained after 5-phase migration. The most data-rich tenant.
 <strong>Real use:</strong> The operator&rsquo;s live job search, in active daily execution (targeting, applications, and response processing).</p>
 <p>The JSE is the system&rsquo;s proof that EngineOS works as a daily operating environment. It runs a 9-lane pipeline architecture with tiered compensation strategy ($80K-$220K+ across 4 tiers), maintains live Notion integration (3 databases: Pipeline, Contacts, Outreach), and has a Node.js DOCX build pipeline for resume generation.</p>
 <p><strong>10 domain skills</strong> at <code>engines/job-search/.claude/skills/</code>: <!-- census-ok: table tally, rows below --></p>
@@ -254,7 +255,7 @@
 </tr>
 <tr>
 <td><code>materials-qa</code></td>
-<td>8-phase quality gate for all external materials. Fact-checking, inflation detection, cross-document consistency. Complements the OS qa-pipeline.</td>
+<td>8-phase quality <span class="term" tabindex="0" role="note" aria-label="gate: A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing." data-tip="A checkpoint where work stops and waits for the human operator&#x27;s explicit approval before continuing.">gate</span> for all external materials. Fact-checking, inflation detection, cross-document consistency. Complements the OS qa-pipeline.</td>
 </tr>
 <tr>
 <td><code>html-deliverable-generator</code></td>
@@ -277,10 +278,10 @@
 <p><strong>What makes JSE notable as a tenant:</strong>
 - It carried the governance innovations (phase-controller, depth governor, sanity-check) that became EngineOS&rsquo;s governance stack. The JSE was the first engine to enforce skill chains mechanically.
 - Its Desktop source location (<code>~/Desktop/JobSearchEngine/</code>) now holds 15 symlinks pointing back to the tenant &ndash; the migration inverted the dependency.
-- It has its own activity log (94+ entries) and intelligence log (30+ strategic insights) &ndash; engine-local logs that predate the OS-level logging consolidation. The OS logging spec now routes new entries to root <code>logs/</code> with the canonical 6-column schema (Date, Engine, Action, File, Skill, User) per <code>.claude/rules/logging.md</code>; engine-local logs are legacy.</p>
+- It has its own <span class="term" tabindex="0" role="note" aria-label="activity log: The mechanical breadcrumb trail: one line per file operation, written automatically by a hook." data-tip="The mechanical breadcrumb trail: one line per file operation, written automatically by a hook.">activity log</span> (94+ entries) and intelligence log (30+ strategic insights) &ndash; engine-local logs that predate the OS-level logging consolidation. The OS logging spec now routes new entries to root <code>logs/</code> with the canonical 6-column schema (Date, Engine, Action, File, Skill, User) per <code>.claude/rules/logging.md</code>; engine-local logs are legacy.</p>
 <h3 id="job-search-engine-second-operator-job-search-secondary-active">Job Search Engine &ndash; Second Operator (job-search-secondary) &ndash; Active<a class="anchor-link" href="#job-search-engine-second-operator-job-search-secondary-active" title="Permalink">¶</a></h3>
 <p><strong>Location:</strong> <code>engines/job-search-secondary/</code>
-<strong>Status:</strong> Bootstrapped 2026-06-04. Sibling tenant to JSE.
+<strong>Status:</strong> <span class="pill pill--ok">ACTIVE</span> Bootstrapped 2026-06-04. Sibling tenant to JSE.
 <strong>Real use:</strong> A live job search, run as a second operator inside EngineOS.</p>
 <p>The second-operator tenant is the first proof that the engine model supports multiple instances of the same engine type. It is a peer to <code>engines/job-search/</code> (the primary operator&rsquo;s), not a child of it. Mechanical isolation comes from the PreToolUse scope-matching hook: writes to <code>engines/job-search-secondary/...</code> require an active run plan at this tenant&rsquo;s scope (or root), and writes targeting the primary operator&rsquo;s JSE will fail and force the agent to redirect.</p>
 <p><strong>0 tenant-local skills.</strong> This tenant inherits all 10 JSE domain skills from <code>engines/job-search/.claude/skills/</code> &ndash; <code>target-builder</code>, <code>contact-profiler</code>, <code>positioning-engine</code>, <code>outreach-builder</code>, <code>resume-generator</code>, <code>materials-qa</code>, <code>html-deliverable-generator</code>, <code>interview-processor</code>, <code>go-deeper</code>, <code>response-intake</code>. If a skill needs adaptation for the second operator&rsquo;s shape, the convention is to capture the gap as an intelligence-log entry and propose OS-level (or JSE-level) changes via a separate run plan rather than fork the skill locally.</p>
@@ -291,7 +292,7 @@
 - It validates that domain skills generalize across operators when they were built to read from configurable evidence and profile sources rather than hardcoding to a single person.</p>
 <h3 id="on-demand-curriculum-odc-portfolio">On-Demand Curriculum (ODC) &ndash; Portfolio<a class="anchor-link" href="#on-demand-curriculum-odc-portfolio" title="Permalink">¶</a></h3>
 <p><strong>Location:</strong> <code>engines/on-demand-curriculum/</code>
-<strong>Status:</strong> Portfolio engine. 8 completed outputs. Stable, available for new work.
+<strong>Status:</strong> <span class="pill">PORTFOLIO</span> 8 completed outputs. Stable, available for new work.
 <strong>Real use:</strong> Produces interactive HTML walkthroughs and structured documentation &ndash; including the documentation you are reading right now.</p>
 <p>ODC is an interactive curriculum delivery engine. It takes a person, a topic, and an operator brief, and produces large-format, single-file HTML walkthroughs tailored to the specific recipient. The operator is the proxy for all intake &ndash; the engine talks to the operator, not end users.</p>
 <p><strong>2 domain skills</strong> at <code>engines/on-demand-curriculum/.claude/skills/</code>: <!-- census-ok: table tally, rows below --></p>
@@ -320,7 +321,7 @@
 - The pipeline-start skill is a domain-specific orchestrator that parallels phase-controller at the OS level but is tuned for curriculum delivery workflows. It handles the 6-type classification that determines which skill chain runs.</p>
 <h3 id="sales-enablement-engine-see-test-configuration">Sales Enablement Engine (SEE) &ndash; Test Configuration<a class="anchor-link" href="#sales-enablement-engine-see-test-configuration" title="Permalink">¶</a></h3>
 <p><strong>Location:</strong> <code>engines/sales-enablement/</code>
-<strong>Status:</strong> Test stub (validation configuration), not an active engagement tenant. All production capabilities lifted to OS.
+<strong>Status:</strong> <span class="pill pill--warn">TEST STUB</span> Validation configuration, not an active engagement tenant. All production capabilities lifted to OS.
 <strong>Real use:</strong> Validates that EngineOS can serve a real SEE engagement using OS-level skills.</p>
 <p>The SEE is the ecosystem&rsquo;s original engine and its most prolific OS donor: 49 skills and 37 patterns <!-- census-ok: historical lift record --> were lifted from SEE source to EngineOS Layer 1 during the build. As a tenant, the SEE is deliberately lightweight. It carries no domain skills of its own because every capability it needs now lives at the OS level.</p>
 <p><strong>0 domain skills.</strong> Everything is inherited. <!-- census-ok: definitional for the SEE test stub --></p>
@@ -399,11 +400,11 @@
 <p>The test when standing up new work: <strong>is this a durable domain with its own workflows (engine), a bounded professional engagement (project), or personal play (sandbox)?</strong> The three tiers exist so each answer has a home with the right governance weight.</p>
 <hr />
 <h2 id="provenance-where-capabilities-came-from">Provenance &ndash; Where Capabilities Came From<a class="anchor-link" href="#provenance-where-capabilities-came-from" title="Permalink">¶</a></h2>
-<p>EngineOS was not designed top-down. It was built bottom-up from an ecosystem audit that read 11 source projects, produced 89 finding files and 7 cross-cutting analyses, and traced each capability to its origin through skill genealogy. The build principle was <strong>best-version-wins compositing</strong>: when multiple engines carried a capability, the most mature version was lifted, preserving provenance.</p>
+<p>EngineOS was not designed top-down. It was built bottom-up from an ecosystem audit that read 11 source projects, produced 89 finding files and 7 cross-cutting analyses, and traced each capability to its origin through skill genealogy. The build principle was <strong>best-version-wins compositing</strong>: when multiple engines carried a capability, the most mature version was lifted, preserving <span class="term" tabindex="0" role="note" aria-label="provenance: Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot." data-tip="Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot.">provenance</span>.</p>
 <p>The capability registry (<code>registry/capabilities.md</code>) tracks the source of every OS-level capability with stable identifiers. Here is the source distribution across major capability domains:</p>
 <h3 id="governance">Governance<a class="anchor-link" href="#governance" title="Permalink">¶</a></h3>
 <p><strong>Primary source: JSE.</strong> Genuine innovation with no predecessor.</p>
-<p>The governance stack &ndash; phase-controller, depth governor, output self-test, sanity-check &ndash; originated in the JSE. No earlier engine had forced skill chains, disk-persisted run plans, or binary quality gates. The JSE built these because it needed them: a live job search with real stakes and no room for sloppy outputs. Phase-controller&rsquo;s 11 forcing function rules, the iteration envelope (produce-evaluate-retry, max 3), and contract hardening (Step 2.5) were all JSE innovations.</p>
+<p>The governance stack &ndash; phase-controller, depth governor, output self-test, sanity-check &ndash; originated in the JSE. No earlier engine had forced skill chains, disk-persisted run plans, or binary quality gates. The JSE built these because it needed them: a live job search with real stakes and no room for sloppy outputs. Phase-controller&rsquo;s 11 forcing function rules, the <span class="term" tabindex="0" role="note" aria-label="iteration envelope: A produce → review → fix loop with a hard retry limit: work that fails independent review gets the feedback and tries again, at most three times, then a human decides." data-tip="A produce → review → fix loop with a hard retry limit: work that fails independent review gets the feedback and tries again, at most three times, then a human decides.">iteration envelope</span> (produce-evaluate-retry, max 3), and contract hardening (Step 2.5) were all JSE innovations.</p>
 <p>Supporting contributions: WondaKB (content-updater routing), SEE (audit-trail logging, session orientation patterns).</p>
 <h3 id="research">Research<a class="anchor-link" href="#research" title="Permalink">¶</a></h3>
 <p><strong>Primary source: JSE, drawing from SEE + ODC.</strong></p>
@@ -427,7 +428,7 @@
 <p>The memory architecture methodology (2-layer logging model) drew from SEE + WondaKB operational logging patterns, formalized through Grafana/Datadog/Azure/OpenTelemetry external research on tenant-tagged logging.</p>
 <hr />
 <h2 id="how-domain-skills-differ-from-os-skills">How Domain Skills Differ from OS Skills<a class="anchor-link" href="#how-domain-skills-differ-from-os-skills" title="Permalink">¶</a></h2>
-<p>Both OS-level and domain-level skills use the same technical format: a <code>SKILL.md</code> file with YAML frontmatter (description, allowed-tools) and markdown body (trigger, instructions, output spec). Native discovery surfaces both. The differences are in scope and governance:</p>
+<p>Both OS-level and domain-level skills use the same technical format: a <code>SKILL.md</code> file with YAML <span class="term" tabindex="0" role="note" aria-label="frontmatter: A small structured header at the top of a file (title, type, summary) that machines can read reliably." data-tip="A small structured header at the top of a file (title, type, summary) that machines can read reliably.">frontmatter</span> (description, allowed-tools) and markdown body (trigger, instructions, output spec). Native discovery surfaces both. The differences are in scope and governance:</p>
 <table>
 <thead>
 <tr>
@@ -480,7 +481,7 @@
 </section>
 
 </main>
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" aria-label="Back to top">↑</button>
 <script>
 function toggleTheme(){
   var d=document.documentElement;

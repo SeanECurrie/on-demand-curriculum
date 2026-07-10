@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Overview — EngineOS Docs</title>
   <meta name="description" content="EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS — shared skills, methodology, patterns, enforcement rules, operator identity, and a design syste">
-  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
+  <link rel="stylesheet" href="assets/style.css?v=cc39fe20">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -18,6 +18,7 @@
 <div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
+    <div class="brandmark" aria-hidden="true">E</div>
     <div class="sidebar-title">EngineOS · Docs</div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -45,8 +46,8 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
-  <div class="nav-group-label">Live</div>
-  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
+  
+  
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
@@ -57,7 +58,7 @@
 </header>
 <section class="content">
 <div class="intro-card">
-<p>It is not a prompt library. It is not a collection of skills taped together. It is an operating system with <strong>mechanical enforcement</strong>, <strong>adversarial quality evaluation</strong>, <strong>disk-persisted governance</strong>, and a <strong>methodology layer distilled from 105+ days of production work</strong> across 11 projects.</p>
+<p>It is not a prompt library. It is not a collection of <span class="term" tabindex="0" role="note" aria-label="skills: A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it." data-tip="A packaged instruction set the AI loads on demand — like an app it opens only when the task calls for it.">skills</span> taped together. It is an operating system with <strong>mechanical enforcement</strong>, <strong>adversarial quality evaluation</strong>, <strong>disk-persisted <span class="term" tabindex="0" role="note" aria-label="governance: The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships." data-tip="The rules and machinery that keep the AI&#x27;s work disciplined: what needs a plan, what needs approval, what gets checked before it ships.">governance</span></strong>, and a <strong>methodology layer distilled from 105+ days of production work</strong> across 11 projects.</p>
 <p>EngineOS is operator-agnostic. The <code>operator/</code> directory personalizes the system at runtime through a structured 37-question intake. The OS and its engines work for anyone; nothing assumes a specific person until <code>operator/PROFILE.md</code> exists.</p>
 </div>
 <hr />
@@ -93,7 +94,7 @@
 <td><code>.claude/rules/</code></td>
 </tr>
 <tr>
-<td>Hooks</td>
+<td><span class="term" tabindex="0" role="note" aria-label="Hooks: A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply." data-tip="A small script that runs automatically at fixed moments (before a file write, at session start) — enforcement that doesn&#x27;t depend on the AI choosing to comply.">Hooks</span></td>
 <td>8 wired events (PreToolUse, PostToolUse, Stop, PostCompact, SessionStart, PreCompact, SessionEnd, UserPromptSubmit) across 7 <code>.sh</code> + 6 <code>.py</code> scripts</td>
 <td><code>hooks/</code> + <code>.claude/settings.json</code></td>
 </tr>
@@ -113,7 +114,7 @@
 <td><code>principles/</code></td>
 </tr>
 <tr>
-<td>Engine tenants</td>
+<td>Engine <span class="term" tabindex="0" role="note" aria-label="tenants: An isolated workspace for one domain of work (like separate apartments in one building) — it shares the building&#x27;s infrastructure but keeps its own data." data-tip="An isolated workspace for one domain of work (like separate apartments in one building) — it shares the building&#x27;s infrastructure but keeps its own data.">tenants</span></td>
 <td>4 in-repo (remaining sources at Desktop, mapped in <code>registry/engines.md</code>)</td>
 <td><code>engines/</code></td>
 </tr>
@@ -128,7 +129,7 @@
 <td><code>projects/</code></td>
 </tr>
 <tr>
-<td>KB articles</td>
+<td><span class="term" tabindex="0" role="note" aria-label="KB: The library of distilled notes (one concept per file) that the system builds from its own work sessions." data-tip="The library of distilled notes (one concept per file) that the system builds from its own work sessions.">KB</span> articles</td>
 <td>544 (443 concepts + 101 connections)</td>
 <td><code>knowledge/</code></td>
 </tr>
@@ -154,7 +155,7 @@
 </tr>
 <tr>
 <td>OS subsystems</td>
-<td>2 cross-cutting (Second Brain, People Profiling)</td>
+<td>2 cross-cutting (<span class="term" tabindex="0" role="note" aria-label="Second Brain: The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later." data-tip="The system&#x27;s persistent memory: notes, logs, and lessons saved as plain files, captured automatically and searchable later.">Second Brain</span>, People Profiling)</td>
 <td><code>knowledge/</code> + <code>people/</code></td>
 </tr>
 </tbody>
@@ -278,7 +279,7 @@
 <td><a href="engine-model.html">Engine Model</a></td>
 </tr>
 <tr>
-<td>How memory capture and retrieval work (KB, daily logs, /recall, retrieval hooks)</td>
+<td>How memory capture and retrieval work (KB, <span class="term" tabindex="0" role="note" aria-label="daily logs: A per-day journal of work sessions, captured automatically when a session ends." data-tip="A per-day journal of work sessions, captured automatically when a session ends.">daily logs</span>, /recall, retrieval hooks)</td>
 <td><a href="second-brain.html">Second Brain</a></td>
 </tr>
 <tr>
@@ -350,13 +351,13 @@
 <h2 id="provenance">Provenance<a class="anchor-link" href="#provenance" title="Permalink">¶</a></h2>
 <p>EngineOS was not designed top-down. It was built from a three-act ecosystem audit (March 2026):</p>
 <ul>
-<li><strong>Act 1</strong> mapped the ecosystem structure across 11 projects on the operator&rsquo;s Desktop.</li>
+<li><strong>Act 1</strong> mapped the ecosystem structure across 11 projects on the <span class="term" tabindex="0" role="note" aria-label="operator: The human running the system. Every consequential decision routes through them — the system proposes; the operator rules." data-tip="The human running the system. Every consequential decision routes through them — the system proposes; the operator rules.">operator</span>&rsquo;s Desktop.</li>
 <li><strong>Act 2</strong> read every line of every file across those 11 projects. 89 finding files and 7 cross-cutting analyses.</li>
 <li><strong>Act 3</strong> built EngineOS from that evidence, using a &ldquo;best-version-wins&rdquo; compositing methodology — the strongest version of each capability was traced to its source via skill genealogy.</li>
 </ul>
 <p>The primary donors: SEE (operator identity, CRM integration, engagement workflows), JSE (governance stack, phase control, depth governance), ODC (methodology layer, editorial standards), WondaKB (multi-user architecture, Notion integration), MLR (QA pipeline, enterprise CSS), Restaurant (transcript innovations).</p>
 <p>The audit evidence lives at <code>~/Desktop/ecosystem-audit-act-2/findings/</code>. The build record is at <code>~/Desktop/ecosystem-audit-act-3/docs/build-log.md</code>.</p>
-<p>The substrate has continued to evolve since the initial build: a substrate-tightening operation (D25, April 2026) tested the governance stack against real failures and added the evidence-first-reporting rule plus sanity-check #11; a re-lift audit (D26) restored capabilities missed by the initial Act 3 pass; and the second-brain capture+retrieval layer (D29-D32, June 2026) added marathon-session capture caps with a shared hook module, retry+observability infrastructure, and a three-layer retrieval architecture (SessionStart injection, UserPromptSubmit mid-work hook, manual <code>/recall</code> escalation) over a six-surface corpus. The arc since D32 (June-July 2026): the Bash-governance pair (D34/D35), reviewer telemetry (D36), the people-profiling subsystem recovery and six-axis standard, the private-gated-hosting capability (D41), the engagement-workup playbook (D42) and SME-iteration loop (D48), the personal sandbox tier with its promotion path (D44/D45), the session-orchestrator&rsquo;s Full-Breadth Start (D50), the second-brain health process (D51), the census single-sourcing + living health dashboard that keep these very pages true (D52), and the usage-economy disciplines + telemetry economy lens that keep a session&rsquo;s cost legible (D53/D54) — each recorded in <code>DECISIONS.md</code> and reflected across these pages. Early July 2026 added the between-sessions layer and the operator&rsquo;s daily surface: the autonomous gardener + OS CI self-testing (D55/D56), retrieval measured rather than assumed (D57, settled by D63&rsquo;s BM25 ruling), the KB index as a derived artifact (D58), commit-per-arc history discipline (D59), the transcript-mining diagnostic package — tool-surface hygiene, <code>safe-replace.py</code>, the <code>pages-deploy</code> skill (D60) — the read-only EngineOS Console cockpit (D62, reshaped by D64 into a glass sidebar/detail app with a 3D knowledge-graph globe), and the house frontend-design method (D65). See <a href="second-brain.html">Second Brain</a> for the retrieval and capture pipeline.</p>
+<p>The substrate has continued to evolve since the initial build: a substrate-tightening operation (D25, April 2026) tested the governance stack against real failures and added the evidence-first-reporting rule plus sanity-check #11; a re-lift audit (D26) restored capabilities missed by the initial Act 3 pass; and the second-brain capture+retrieval layer (D29-D32, June 2026) added marathon-session capture caps with a shared hook module, retry+observability infrastructure, and a three-layer retrieval architecture (SessionStart injection, UserPromptSubmit mid-work hook, manual <code>/recall</code> escalation) over a six-surface corpus. The arc since D32 (June-July 2026): the Bash-governance pair (D34/D35), reviewer telemetry (D36), the people-profiling subsystem recovery and six-axis standard, the private-gated-hosting capability (D41), the engagement-workup playbook (D42) and SME-iteration loop (D48), the personal sandbox tier with its promotion path (D44/D45), the session-orchestrator&rsquo;s Full-Breadth Start (D50), the second-brain health process (D51), the <span class="term" tabindex="0" role="note" aria-label="census: A placeholder in the docs (like a count of skills) that gets filled in from the actual files on disk at build time — so published numbers cannot silently go stale." data-tip="A placeholder in the docs (like a count of skills) that gets filled in from the actual files on disk at build time — so published numbers cannot silently go stale.">census</span> single-sourcing + living health dashboard that keep these very pages true (D52), and the usage-economy disciplines + telemetry economy lens that keep a session&rsquo;s cost legible (D53/D54) — each recorded in <code>DECISIONS.md</code> and reflected across these pages. Early July 2026 added the between-sessions layer and the operator&rsquo;s daily surface: the autonomous gardener + OS CI self-testing (D55/D56), retrieval measured rather than assumed (D57, settled by D63&rsquo;s <span class="term" tabindex="0" role="note" aria-label="BM25: A classic keyword-ranking algorithm for search — the battle-tested way to find documents matching your words, no AI required." data-tip="A classic keyword-ranking algorithm for search — the battle-tested way to find documents matching your words, no AI required.">BM25</span> ruling), the KB index as a derived artifact (D58), commit-per-arc history discipline (D59), the transcript-mining diagnostic package — tool-surface hygiene, <code>safe-replace.py</code>, the <code>pages-deploy</code> skill (D60) — the read-only EngineOS Console cockpit (D62, reshaped by D64 into a glass sidebar/detail app with a 3D knowledge-graph globe), and the house frontend-design method (D65). See <a href="second-brain.html">Second Brain</a> for the retrieval and capture pipeline.</p>
 <hr />
 <h2 id="what-this-documentation-is-not">What This Documentation Is Not<a class="anchor-link" href="#what-this-documentation-is-not" title="Permalink">¶</a></h2>
 <p>This documentation explains EngineOS to humans. It does not replace the operational files that serve the system at runtime:</p>
@@ -370,7 +371,7 @@
 </section>
 
 </main>
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" aria-label="Back to top">↑</button>
 <script>
 function toggleTheme(){
   var d=document.documentElement;

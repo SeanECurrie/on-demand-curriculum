@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Design System — EngineOS Docs</title>
   <meta name="description" content="The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two prod">
-  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
+  <link rel="stylesheet" href="assets/style.css?v=cc39fe20">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -18,6 +18,7 @@
 <div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
+    <div class="brandmark" aria-hidden="true">E</div>
     <div class="sidebar-title">EngineOS · Docs</div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -45,8 +46,8 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
-  <div class="nav-group-label">Live</div>
-  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
+  
+  
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
@@ -58,10 +59,10 @@
 <section class="content">
 <h2 id="overview">Overview<a class="anchor-link" href="#overview" title="Permalink">¶</a></h2>
 <p>Engines producing HTML link this stylesheet. Engine-specific visual additions go in engine-level CSS that follows or imports the shared file. No engine duplicates tokens defined at the OS layer.</p>
-<p>The system ships with five companion reference documents: <code>color-tokens.md</code> (full token inventory), <code>typography.md</code> (type scales and spacing), <code>accessibility.md</code> (verified contrast tables), <code>pdf-pipeline.md</code> (Chrome headless generation), and <code>render-validate-pipeline.md</code> (6-step visual QA). This document synthesizes all six sources into one architectural reference.</p>
+<p>The system ships with five companion reference documents: <code>color-tokens.md</code> (full token inventory), <code>typography.md</code> (type scales and spacing), <code>accessibility.md</code> (verified contrast tables), <code>pdf-pipeline.md</code> (Chrome <span class="term" tabindex="0" role="note" aria-label="headless: Running without a visible interface — a program (or the AI itself) executing in the background with no one watching a screen." data-tip="Running without a visible interface — a program (or the AI itself) executing in the background with no one watching a screen.">headless</span> generation), and <code>render-validate-pipeline.md</code> (6-step visual QA). This document synthesizes all six sources into one architectural reference.</p>
 <hr />
 <h2 id="the-house-deliverable-style-navygold">The House Deliverable Style (navy/gold)<a class="anchor-link" href="#the-house-deliverable-style-navygold" title="Permalink">¶</a></h2>
-<p>The enterprise stylesheet below is the <em>walkthrough/showcase</em> lineage. Client deliverables ship in a second, newer identity: the <strong>house navy/gold report page</strong> — white page on warm-gray canvas, navy <code>#1f3a5f</code> + gold <code>#b08423</code> spine, finding-panels, tier badges, the claims-confidence bar, and the per-section engagement loop. It evolved across the June 2026 client arc (an investor-diligence engagement, a client intake-response engagement, a comp-benchmarking engagement, a go-to-market launch engagement) and was enforced through operator feedback and exemplars before it had a home in this directory; as of 2026-07-02 it is captured at the source level in <strong><code>design-system/house-style.md</code></strong> (identity, signature components, the de-AI rules, and the clone-and-prune build motion). The operational ship-gate is <code>templates/house-deliverable-component-checklist.md</code>. When producing a client deliverable, that pair — not the enterprise stylesheet alone — is the standard.</p>
+<p>The enterprise stylesheet below is the <em>walkthrough/showcase</em> lineage. Client deliverables ship in a second, newer identity: the <strong>house navy/gold report page</strong> — white page on warm-gray canvas, navy <code>#1f3a5f</code> + gold <code>#b08423</code> spine, finding-panels, tier badges, the claims-confidence bar, and the per-section engagement loop. It evolved across the June 2026 client arc (an investor-diligence engagement, a client intake-response engagement, a comp-benchmarking engagement, a go-to-market launch engagement) and was enforced through <span class="term" tabindex="0" role="note" aria-label="operator: The human running the system. Every consequential decision routes through them — the system proposes; the operator rules." data-tip="The human running the system. Every consequential decision routes through them — the system proposes; the operator rules.">operator</span> feedback and exemplars before it had a home in this directory; as of 2026-07-02 it is captured at the source level in <strong><code>design-system/house-style.md</code></strong> (identity, signature components, the de-AI rules, and the clone-and-prune build motion). The operational ship-gate is <code>templates/house-deliverable-component-checklist.md</code>. When producing a client deliverable, that pair — not the enterprise stylesheet alone — is the standard.</p>
 <hr />
 <h2 id="7-layer-css-architecture">7-Layer CSS Architecture<a class="anchor-link" href="#7-layer-css-architecture" title="Permalink">¶</a></h2>
 <p>The stylesheet is organized into seven layers, ordered by specificity and dependency. Each layer builds on the one before it. The layering exists for three reasons: it enforces a single source of truth for design tokens (Layer 1), it separates concerns cleanly enough that an engine can use Layer 2 for reports without pulling in Layer 3&rsquo;s interactive components, and it keeps print/dark/responsive overrides isolated from the base visual system.</p>
@@ -500,7 +501,7 @@
 <tr>
 <td><code>--space-2</code></td>
 <td>8px</td>
-<td>Compact padding (checkbox internal, code inline)</td>
+<td><span class="term" tabindex="0" role="note" aria-label="Compact: What happens when the AI&#x27;s working memory fills up: older conversation gets summarized or dropped. Anything important must already be saved to disk." data-tip="What happens when the AI&#x27;s working memory fills up: older conversation gets summarized or dropped. Anything important must already be saved to disk.">Compact</span> padding (checkbox internal, code inline)</td>
 </tr>
 <tr>
 <td><code>--space-3</code></td>
@@ -633,7 +634,7 @@
 </table>
 <p>Known failure pairings that must not be used: light blue (#60a5fa) on white (3.1:1), light green (#4ade80) on white (2.3:1), yellow (#fbbf24) on white (1.9:1), gray (#525252) on dark surface (#262626, 2.4:1).</p>
 <p><strong>Console HUD palette (2026-07-07, <code>accessibility.md</code> §1.2.1):</strong> the console&rsquo;s dark-terminal palette got its own verified table, with ratios computed against the <em>worst (lightest) surface each token sits on</em> rather than a single background. Tokens that cannot clear 4.5:1 are demoted to strokes/fills-only (never on a <code>color:</code> property) — and that split is <strong>mechanically enforced</strong>: <code>console/ci-lint.py contrast</code> (os-ci case <code>m22</code>) fails the build if a demoted token appears on text or any text token drops below threshold on any HUD surface. The section exists because verification caught the first lift&rsquo;s secondary-text tokens measuring 4.31–4.48:1 on panel surfaces — re-lifted with margin, then locked with the lint.</p>
-<p>The console also contributed an information-design principle worth stating generally: <strong>judgment stays visually separate from fact.</strong> Every instrument shows three distinct things — the raw number, the printed threshold it was judged against, and the OK/WARN/BAD verdict — so a reader can disagree with the verdict while still trusting the data that prompted it. And every number carries its <strong>provenance inline</strong> (where it came from), rather than hiding sourcing in documentation. Both apply to any data-bearing deliverable, not just the console.</p>
+<p>The console also contributed an information-design principle worth stating generally: <strong>judgment stays visually separate from fact.</strong> Every instrument shows three distinct things — the raw number, the printed threshold it was judged against, and the OK/WARN/BAD verdict — so a reader can disagree with the verdict while still trusting the data that prompted it. And every number carries its <strong><span class="term" tabindex="0" role="note" aria-label="provenance: Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot." data-tip="Where a number or claim came from — its source, attached to it, so it can be checked and can&#x27;t quietly rot.">provenance</span> inline</strong> (where it came from), rather than hiding sourcing in documentation. Both apply to any data-bearing deliverable, not just the console.</p>
 <h3 id="focus-states">Focus States<a class="anchor-link" href="#focus-states" title="Permalink">¶</a></h3>
 <p>All interactive elements have visible focus indicators: 2px solid <code>--color-blue-500</code> with 2px offset. Applied to checkboxes (<code>:focus-visible</code>), notes inputs (<code>:focus</code>), expandable triggers, copy buttons, and sidebar nav items. Focus must be visible in both light and dark mode.</p>
 <h3 id="touch-targets">Touch Targets<a class="anchor-link" href="#touch-targets" title="Permalink">¶</a></h3>
@@ -713,7 +714,7 @@
 </li>
 </ol>
 <p><strong>The variety rule:</strong> In any output with more than three major diagrams, each should use a different visual pattern. If three diagrams are all left-to-right box-and-arrow layouts, at least two are almost certainly using the wrong pattern for their concept.</p>
-<p><strong>Fallback:</strong> If Puppeteer MCP is unavailable, degrade to manual verification (operator opens the file and provides screenshots). Never degrade to skipping verification.</p>
+<p><strong>Fallback:</strong> If Puppeteer <span class="term" tabindex="0" role="note" aria-label="MCP: Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database)." data-tip="Model Context Protocol — the standard plug that connects the AI to external tools and services (a CRM, a scraper, a database).">MCP</span> is unavailable, degrade to manual verification (operator opens the file and provides screenshots). Never degrade to skipping verification.</p>
 <hr />
 <h2 id="source-files">Source Files<a class="anchor-link" href="#source-files" title="Permalink">¶</a></h2>
 <table>
@@ -760,7 +761,7 @@
 </section>
 
 </main>
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" aria-label="Back to top">↑</button>
 <script>
 function toggleTheme(){
   var d=document.documentElement;

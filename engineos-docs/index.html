@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>EngineOS — System Documentation</title>
   <meta name="description" content="Living documentation rebuilt from disk truth.">
-  <link rel="stylesheet" href="assets/style.css?v=b15512e1">
+  <link rel="stylesheet" href="assets/style.css?v=cc39fe20">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
 <body>
@@ -18,6 +18,7 @@
 <div class="sidebar-overlay" onclick="toggleNav()"></div>
 <aside class="sidebar">
   <div class="sidebar-header">
+    <div class="brandmark" aria-hidden="true">E</div>
     <div class="sidebar-title">EngineOS · Docs</div>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -45,8 +46,8 @@
   <a class="nav-item" href="templates-reference.html"><span class="nav-num">13</span>Templates Reference</a>
   <div class="nav-group-label">Reference</div>
   <a class="nav-item" href="faq.html"><span class="nav-num">14</span>FAQ</a>
-  <div class="nav-group-label">Live</div>
-  <a class="nav-item" href="dashboard.html"><span class="nav-num">⚡</span>Health Dashboard</a>
+  
+  
   <div class="sidebar-sub">Rebuild: <code>uv run scripts/build-docs.py</code><br>Drift check: <code>uv run scripts/docs-staleness.py</code></div>
 </aside>
 <main>
@@ -66,6 +67,14 @@
     <div class="stat-card" title="knowledge/"><span class="num">544</span><span class="label">KB articles</span></div>
     <div class="stat-card" title="DECISIONS.md"><span class="num">65</span><span class="label">Decisions</span></div>
   </div>
+  <div class="whats-new">
+    <div class="wn-label">What changed in this build</div>
+    <ul>
+      <li><span class="wn-date">2026-07-09</span>fold 4 console-surfaced concepts into public docs</li>
+      <li><span class="wn-date">2026-07-09</span>living-docs refresh + public redeploy 2026-07-09</li>
+      <li><span class="wn-date">2026-07-06</span>refresh second-brain.md retrieval narrative for D63 (fts default)</li>
+    </ul>
+  </div>
 </header>
 <section class="section" id="sections">
   <div class="section-header">
@@ -73,6 +82,11 @@
     <h2 style="margin:0;">All Sections</h2>
     <span class="section-tag">Index</span>
   </div>
+<div class="reader-paths">
+  <a class="reader-path" href="overview.html"><span class="rp-q">New to EngineOS?</span><span class="rp-a">Start with the Overview, then the FAQ — plain-language answers first.</span></a>
+  <a class="reader-path" href="architecture.html"><span class="rp-q">Technical reader?</span><span class="rp-a">Architecture, then Governance — the two-layer model and the enforcement stack.</span></a>
+  <a class="reader-path" href="skills-reference.html"><span class="rp-q">Looking something up?</span><span class="rp-a">The reference catalogs — every skill, pattern, and template, indexed.</span></a>
+</div>
   <p>Source markdown lives at <code>docs/source/*.md</code>. This site rebuilds from those sources via <code>uv run scripts/build-docs.py</code>. Drift is detected by <code>uv run scripts/docs-staleness.py</code>.</p>
 <h3 class="group-label">Open</h3>
 <div class="card-grid">
@@ -97,7 +111,7 @@
 </div>
 <h3 class="group-label">Memory</h3>
 <div class="card-grid">
-  <a class="doc-card" href="second-brain.html"><div class="doc-card__num">10</div><div class="doc-card__title">Second Brain</div><div class="doc-card__blurb">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 544-article knowledge base (443 concepts + 101 connections), 50 daily logs, 231 run plans, 24 methodology docs. Until</div></a>
+  <a class="doc-card" href="second-brain.html"><div class="doc-card__num">10</div><div class="doc-card__title">Second Brain</div><div class="doc-card__blurb">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 544-article knowledge base (443 concepts + 101 connections), 50 daily logs, 234 run plans, 24 methodology docs. Until</div></a>
 </div>
 <h3 class="group-label">Infrastructure</h3>
 <div class="card-grid">
@@ -110,10 +124,10 @@
   <a class="doc-card" href="faq.html"><div class="doc-card__num">14</div><div class="doc-card__title">FAQ</div><div class="doc-card__blurb">Questions a developer, systems architect, or technical reviewer would actually ask about EngineOS.</div></a>
 </div>
 </section>
-<footer class="footer"><p>Living-docs subsystem · <a href="overview.html">D33 architecture</a> · <a href="dashboard.html">living health dashboard</a> · <a href="https://github.com/SeanECurrie/on-demand-curriculum">repo</a></p></footer>
+<footer class="footer"><p>Living-docs subsystem · <a href="overview.html">D33 architecture</a> · <a href="https://github.com/SeanECurrie/on-demand-curriculum">repo</a></p></footer>
 
 </main>
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" aria-label="Back to top">↑</button>
 <script>
 function toggleTheme(){
   var d=document.documentElement;
