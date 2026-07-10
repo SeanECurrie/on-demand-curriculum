@@ -51,7 +51,7 @@
 </aside>
 <main>
 <header class="hero" id="s08">
-  <div class="eyebrow">EngineOS System Documentation · Section 08 · Built 2026-07-03</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 08 · Built 2026-07-10</div>
   <h1>Methodology</h1>
   <p class="subhead">EngineOS encodes quality methodology as infrastructure, not documentation. 24 methodology docs live at methodology/ and are protected by an immutability rule -- modification requires operator approval. These are not style guides. They are formalized approaches proven across 105+ days of production work across 11 projec</p>
 </header>
@@ -478,7 +478,7 @@
 </tbody>
 </table>
 <p>Stopping rule: when surfaces 1-2 yield 3+ strong hits, do not sweep the lower surfaces. The discipline that pairs with the manual escalation layer is the <code>retrieval-before-decide</code> framework pattern &ndash; query the second brain before deciding in a domain where prior intelligence likely exists. Health is measured via <code>scripts/retrieval-health.jsonl</code> (one record per <code>UserPromptSubmit</code> invocation); the operator runs <code>scripts/retrieval-review.py</code> after ~10 sessions to make the keep / tune / kill decision per D32. Healthy gate hit rate band: 10-60%.</p>
-<p>Why not a vector DB at current scale: external research synthesis confirms structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision at personal-KB scale (&lt;500 articles; the corpus is at 454 and growing). Vector / GraphRAG / Mem0-style production frameworks are appropriate beyond ~2000 articles. <!-- census-ok: D32 thresholds --> Phase C is deferred with explicit revisit conditions in D32.</p>
+<p>Why not a vector DB at current scale: external research synthesis confirms structured markdown index + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision at personal-KB scale (&lt;500 articles; the corpus is at 539 and growing). Vector / GraphRAG / Mem0-style production frameworks are appropriate beyond ~2000 articles. <!-- census-ok: D32 thresholds --> Phase C is deferred with explicit revisit conditions in D32.</p>
 <h3 id="research-cadence">Research Cadence<a class="anchor-link" href="#research-cadence" title="Permalink">¶</a></h3>
 <p>Intelligence decays. A finding from 30 days ago may be stale. A finding from 90 days ago may be dangerous to act on. Scheduled research sweeps prevent staleness from accumulating silently.</p>
 <p>Three staleness thresholds determine when a finding can no longer be trusted at face value:</p>
@@ -547,8 +547,8 @@
 <h2 id="cross-references">Cross-References<a class="anchor-link" href="#cross-references" title="Permalink">¶</a></h2>
 <ul>
 <li><strong>Governance enforcement layer:</strong> See <a href="governance.html">governance.md</a> for how the phase-controller, hooks, and rules mechanically enforce these methodologies.</li>
-<li><strong>Skill system:</strong> See <a href="skills-reference.html">skills-reference.md</a> for the 37 skills that execute methodology (depth-governor enforces depth assessment, findings-formatter applies structured findings, output-self-test runs binary gates, recall escalates manual retrieval).</li>
-<li><strong>Pattern library:</strong> See <a href="patterns-reference.html">patterns-reference.md</a> for the 87 patterns that encode recurring solutions, including methodology-adjacent patterns like <code>planning-skip-on-confidence</code>, <code>path-search-discipline</code>, and <code>retrieval-before-decide</code>.</li>
+<li><strong>Skill system:</strong> See <a href="skills-reference.html">skills-reference.md</a> for the 38 skills that execute methodology (depth-governor enforces depth assessment, findings-formatter applies structured findings, output-self-test runs binary gates, recall escalates manual retrieval).</li>
+<li><strong>Pattern library:</strong> See <a href="patterns-reference.html">patterns-reference.md</a> for the 88 patterns that encode recurring solutions, including methodology-adjacent patterns like <code>planning-skip-on-confidence</code>, <code>path-search-discipline</code>, and <code>retrieval-before-decide</code>.</li>
 <li><strong>Methodology index:</strong> See <a href="methodology-index.html">methodology-index.md</a> for the full index of all 20 documents with companion skills and loading triggers.</li>
 <li><strong>Second brain operational reference:</strong> See <a href="second-brain.html">second-brain.md</a> for the deep walkthrough of the capture/retrieval system (flush.py, compile.py, the three retrieval layers, health monitoring, kill/keep decision cadence).</li>
 </ul>

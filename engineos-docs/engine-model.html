@@ -51,7 +51,7 @@
 </aside>
 <main>
 <header class="hero" id="s04">
-  <div class="eyebrow">EngineOS System Documentation · Section 04 · Built 2026-07-03</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 04 · Built 2026-07-10</div>
   <h1>Engine Model</h1>
   <p class="subhead">Engines are the reason EngineOS exists. The OS layer (Layer 1) holds shared capabilities -- skills, methodology, governance, design system, operator identity. Engines (Layer 2) are the domain-specific workspaces where those capabilities get applied to real problems. A job search, a client engagement, a curriculum deliv</p>
 </header>
@@ -60,7 +60,7 @@
 <hr />
 <h2 id="what-engines-are">What Engines Are<a class="anchor-link" href="#what-engines-are" title="Permalink">¶</a></h2>
 <p>An engine is a Layer 2 tenant at <code>engines/&lt;engine-name&gt;/</code>. The term &ldquo;tenant&rdquo; is deliberate: engines are isolated from each other but share a common platform. They are peers &ndash; no engine outranks another &ndash; and none is a peer to the OS itself. The OS serves engines; engines do not modify the OS.</p>
-<p>Each engine is a self-contained domain workspace. It has its own engagement data, its own knowledge bases, its own CONTEXT.md tracking session state, and (optionally) its own domain-specific skills that encode workflows unique to that domain. What it does not have is its own copy of the shared infrastructure. Governance, methodology, patterns, design system, operator identity, and the 37 OS-level skills are inherited from Layer 1.</p>
+<p>Each engine is a self-contained domain workspace. It has its own engagement data, its own knowledge bases, its own CONTEXT.md tracking session state, and (optionally) its own domain-specific skills that encode workflows unique to that domain. What it does not have is its own copy of the shared infrastructure. Governance, methodology, patterns, design system, operator identity, and the 38 OS-level skills are inherited from Layer 1.</p>
 <p>This separation serves two goals:</p>
 <ol>
 <li>
@@ -85,7 +85,7 @@
 <tbody>
 <tr>
 <td>Skills</td>
-<td>37</td>
+<td>38</td>
 <td><code>.claude/skills/</code></td>
 </tr>
 <tr>
@@ -95,7 +95,7 @@
 </tr>
 <tr>
 <td>Patterns</td>
-<td>87 (64 problem · 6 deliverable · 17 framework)</td>
+<td>88 (64 problem · 6 deliverable · 18 framework)</td>
 <td><code>patterns/</code></td>
 </tr>
 <tr>
@@ -221,9 +221,9 @@
 <h3 id="job-search-engine-jse-active">Job Search Engine (JSE) &ndash; Active<a class="anchor-link" href="#job-search-engine-jse-active" title="Permalink">¶</a></h3>
 <p><strong>Location:</strong> <code>engines/job-search/</code>
 <strong>Status:</strong> Self-contained after 5-phase migration. The most data-rich tenant.
-<strong>Real use:</strong> The operator&rsquo;s live job search, Phase 2 (Targeting) in active execution.</p>
+<strong>Real use:</strong> The operator&rsquo;s live job search, in active daily execution (targeting, applications, and response processing).</p>
 <p>The JSE is the system&rsquo;s proof that EngineOS works as a daily operating environment. It runs a 9-lane pipeline architecture with tiered compensation strategy ($80K-$220K+ across 4 tiers), maintains live Notion integration (3 databases: Pipeline, Contacts, Outreach), and has a Node.js DOCX build pipeline for resume generation.</p>
-<p><strong>9 domain skills</strong> at <code>engines/job-search/.claude/skills/</code>: <!-- census-ok: table tally, rows below --></p>
+<p><strong>10 domain skills</strong> at <code>engines/job-search/.claude/skills/</code>: <!-- census-ok: table tally, rows below --></p>
 <table>
 <thead>
 <tr>
@@ -268,6 +268,10 @@
 <td><code>go-deeper</code></td>
 <td>The go-deeper motion (2026-06-16): per-target deepening after the first pass &ndash; affinity signals, evidence-to-JD overlap, tracker card enrichment.</td>
 </tr>
+<tr>
+<td><code>response-intake</code></td>
+<td>Intakes application-response emails (rejections, screener invites, follow-ups) into structured intelligence: classifies the response, writes a durable intake file, flips the tracker stage safely, and captures resume-tuning signals from ATS-driven rejections.</td>
+</tr>
 </tbody>
 </table>
 <p><strong>What makes JSE notable as a tenant:</strong>
@@ -279,7 +283,7 @@
 <strong>Status:</strong> Bootstrapped 2026-06-04. Sibling tenant to JSE.
 <strong>Real use:</strong> A live job search, run as a second operator inside EngineOS.</p>
 <p>The second-operator tenant is the first proof that the engine model supports multiple instances of the same engine type. It is a peer to <code>engines/job-search/</code> (the primary operator&rsquo;s), not a child of it. Mechanical isolation comes from the PreToolUse scope-matching hook: writes to <code>engines/job-search-secondary/...</code> require an active run plan at this tenant&rsquo;s scope (or root), and writes targeting the primary operator&rsquo;s JSE will fail and force the agent to redirect.</p>
-<p><strong>0 tenant-local skills.</strong> This tenant inherits all 9 JSE domain skills from <code>engines/job-search/.claude/skills/</code> &ndash; <code>target-builder</code>, <code>contact-profiler</code>, <code>positioning-engine</code>, <code>outreach-builder</code>, <code>resume-generator</code>, <code>materials-qa</code>, <code>html-deliverable-generator</code>, <code>interview-processor</code>, <code>go-deeper</code>. If a skill needs adaptation for the second operator&rsquo;s shape, the convention is to capture the gap as an intelligence-log entry and propose OS-level (or JSE-level) changes via a separate run plan rather than fork the skill locally.</p>
+<p><strong>0 tenant-local skills.</strong> This tenant inherits all 10 JSE domain skills from <code>engines/job-search/.claude/skills/</code> &ndash; <code>target-builder</code>, <code>contact-profiler</code>, <code>positioning-engine</code>, <code>outreach-builder</code>, <code>resume-generator</code>, <code>materials-qa</code>, <code>html-deliverable-generator</code>, <code>interview-processor</code>, <code>go-deeper</code>, <code>response-intake</code>. If a skill needs adaptation for the second operator&rsquo;s shape, the convention is to capture the gap as an intelligence-log entry and propose OS-level (or JSE-level) changes via a separate run plan rather than fork the skill locally.</p>
 <p><strong>Shared build pipeline.</strong> The Node.js <code>_build/</code> pipeline used by <code>resume-generator</code> lives at <code>engines/job-search/_build/</code> and is referenced by absolute path. Tenant-scoped outputs land in <code>engines/job-search-secondary/arsenal/</code>.</p>
 <p><strong>What makes the second-operator tenant notable:</strong>
 - It is the first sibling-tenant configuration in EngineOS. Same engine type (JSE), different operator profile, mechanically isolated data, shared skill surface.
@@ -470,7 +474,7 @@
 <li><a href="governance.html">Governance Stack</a> &ndash; how phase-controller, hooks, and rules apply across engines</li>
 <li><a href="integrations.html">Integrations</a> &ndash; Attio and Notion capabilities inherited by engines</li>
 <li><a href="methodology.html">Methodology</a> &ndash; the 24 docs engines inherit and the conditions for domain-specific variants</li>
-<li><a href="skills-reference.html">Skills Reference</a> &ndash; catalog of all 37 OS skills and 11 domain skills (9 JSE + 2 ODC) <!-- census-ok: sum of the tenant tallies above, verified 2026-07-02 --></li>
+<li><a href="skills-reference.html">Skills Reference</a> &ndash; catalog of all 38 OS skills and 12 domain skills (10 JSE + 2 ODC) <!-- census-ok: sum of the tenant tallies above, verified 2026-07-09 --></li>
 <li><a href="second-brain.html">Second Brain</a> &ndash; capture + retrieval pipeline engines inherit from Layer 1</li>
 </ul>
 </section>

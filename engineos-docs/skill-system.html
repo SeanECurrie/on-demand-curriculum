@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Skill System — EngineOS Docs</title>
-  <meta name="description" content="EngineOS ships 37 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run c">
+  <meta name="description" content="EngineOS ships 38 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run c">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -51,9 +51,9 @@
 </aside>
 <main>
 <header class="hero" id="s05">
-  <div class="eyebrow">EngineOS System Documentation · Section 05 · Built 2026-07-03</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 05 · Built 2026-07-10</div>
   <h1>Skill System</h1>
-  <p class="subhead">EngineOS ships 37 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run controller. The system&#x27;s value isn&#x27;t in any single skill — it&#x27;s in the composition: how skills chain together, how access</p>
+  <p class="subhead">EngineOS ships 38 skills at .claude/skills/. Individually, each is a SKILL.md file with YAML frontmatter and structured methodology. Collectively, they compose into typed workflows enforced by a run controller. The system&#x27;s value isn&#x27;t in any single skill — it&#x27;s in the composition: how skills chain together, how access</p>
 </header>
 <section class="content">
 <div class="intro-card">
@@ -62,13 +62,13 @@
 <hr />
 <h2 id="discovery">Discovery<a class="anchor-link" href="#discovery" title="Permalink">¶</a></h2>
 <div class="intro-card">
-<p>Skills are <strong>discovered, not configured</strong>. Claude Code scans <code>.claude/skills/*/SKILL.md</code> at session start and learns what exists from each skill&rsquo;s YAML description. <strong>Passive loading</strong> keeps all 37 descriptions visible (~2% of context); <strong>full loading</strong> only fires when a skill is actually invoked. The practical effect: EngineOS carries 37 skills without paying the context cost of 37 skills. A session that uses 3 skills loads 3, not 33. <!-- census-ok: illustrative --></p>
+<p>Skills are <strong>discovered, not configured</strong>. Claude Code scans <code>.claude/skills/*/SKILL.md</code> at session start and learns what exists from each skill&rsquo;s YAML description. <strong>Passive loading</strong> keeps all 38 descriptions visible (~2% of context); <strong>full loading</strong> only fires when a skill is actually invoked. The practical effect: EngineOS carries 38 skills without paying the context cost of 38 skills. A session that uses 3 skills loads 3, not 33. <!-- census-ok: illustrative --></p>
 </div>
 <p>The two phases in detail:</p>
-<p><strong>Passive loading (~2% of context):</strong> Skill descriptions from YAML frontmatter load at session start. Claude Code sees the name and a one-line summary for all 37 skills. This is the index &ndash; enough to know what exists, not enough to execute.</p>
+<p><strong>Passive loading (~2% of context):</strong> Skill descriptions from YAML frontmatter load at session start. Claude Code sees the name and a one-line summary for all 38 skills. This is the index &ndash; enough to know what exists, not enough to execute.</p>
 <p><strong>Full loading (on invocation):</strong> When a skill is invoked by name, its full SKILL.md loads into context. The complete methodology, phase structure, integration points, anti-patterns, and self-tests become available.</p>
-<p>This is the Tier 3 context budget model from CLAUDE.md. A session that uses 3 skills loads 3, not 37. <!-- census-ok: illustrative --> A research session loads depth-governor, market-scanner, and findings-formatter. A CRM audit loads attio-mapper, attio-optimizer, and attio-refiner. Skills the session never touches stay at their 2% description footprint.</p>
-<p>The practical effect: EngineOS carries 37 skills without paying the context cost of 37 skills. A focused session consumes context proportional to its actual work, not proportional to the system&rsquo;s total capability.</p>
+<p>This is the Tier 3 context budget model from CLAUDE.md. A session that uses 3 skills loads 3, not 38. <!-- census-ok: illustrative --> A research session loads depth-governor, market-scanner, and findings-formatter. A CRM audit loads attio-mapper, attio-optimizer, and attio-refiner. Skills the session never touches stay at their 2% description footprint.</p>
+<p>The practical effect: EngineOS carries 38 skills without paying the context cost of 38 skills. A focused session consumes context proportional to its actual work, not proportional to the system&rsquo;s total capability.</p>
 <h3 id="passive-retrieval-via-userpromptsubmit-hook">Passive Retrieval via UserPromptSubmit Hook<a class="anchor-link" href="#passive-retrieval-via-userpromptsubmit-hook" title="Permalink">¶</a></h3>
 <p>Native skill discovery is the routing layer for <em>capability</em> loading &ndash; which procedure should fire for a given prompt. A parallel mechanism handles <em>context</em> loading: the <code>UserPromptSubmit</code> hook (<code>hooks/prompt-retrieval.py</code>, added 2026-06-04 per D32) silently injects relevant prior context from the second brain into the prompt before any skill loads. A heuristic gate (trigger words, question-form starts, minimum prompt length) decides whether to fire. When it fires, it searches the same six-surface priority corpus as the <code>recall</code> skill &ndash; intelligence log, knowledge index, KB concepts/connections, recent daily logs, recent run-plans, methodology &ndash; and injects up to 1,024 characters of top-3 matches with a ≤1-second budget.</p>
 <p>The hook complements native discovery without replacing it. Discovery answers &ldquo;which skill should run.&rdquo; The retrieval hook answers &ldquo;what does the corpus already know that the operator hasn&rsquo;t said.&rdquo; Together they front-load both capability and context before the model decides what to do. When the hook misses or the operator wants a deeper sweep, the <code>recall</code> skill (Read-only, manual invocation) handles the unbounded version of the same search. Append-only health records at <code>scripts/retrieval-health.jsonl</code> make the hook&rsquo;s behavior auditable &ndash; the operator runs <code>scripts/retrieval-review.py</code> periodically to keep, tune, or kill the gate.</p>
@@ -144,8 +144,8 @@
 <tbody>
 <tr>
 <td><strong>Read-only</strong></td>
-<td><code>Read, Glob, Grep</code> (+ <code>Bash</code> where the body emits reviewer telemetry)</td>
-<td>Can observe and report. Cannot modify files. Cannot invoke other skills. output-self-test and sanity-check carry Bash solely for the mechanical reviewer-health emit (frontmatter aligned to their own instructions, 2026-07-02).</td>
+<td><code>Read, Glob, Grep</code> (+ <code>Bash</code> where the body emits reviewer telemetry or runs a local script)</td>
+<td>Can observe and report. Cannot modify files. Cannot invoke other skills. output-self-test and sanity-check carry Bash solely for the mechanical reviewer-health emit (frontmatter aligned to their own instructions, 2026-07-02); recall carries Bash solely for the Phase C index escalation (<code>retrieval-query.py</code>, on-device).</td>
 <td>depth-governor, output-self-test, sanity-check, recall</td>
 </tr>
 <tr>
@@ -281,6 +281,10 @@
 <td><code>Read, Glob, Grep, Bash</code></td>
 </tr>
 <tr>
+<td>pages-deploy</td>
+<td><code>Read, Grep, Glob, Bash</code> (git-only; no Cloudflare token is ever loaded)</td>
+</tr>
+<tr>
 <td>people-curator</td>
 <td><code>Read, Write, Edit, Bash, Glob, Grep, Skill</code></td>
 </tr>
@@ -302,7 +306,7 @@
 </tr>
 <tr>
 <td>recall</td>
-<td><code>Read, Glob, Grep</code></td>
+<td><code>Bash, Read, Grep, Glob</code> (Bash added 2026-07-03 solely for the Phase C index escalation)</td>
 </tr>
 <tr>
 <td>render-validate</td>
@@ -546,7 +550,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="hosting-1-skill">Hosting (1 skill)<a class="anchor-link" href="#hosting-1-skill" title="Permalink">¶</a></h3>
+<h3 id="hosting-2-skills">Hosting (2 skills)<a class="anchor-link" href="#hosting-2-skills" title="Permalink">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -558,6 +562,10 @@
 <tr>
 <td><strong>gated-deploy</strong></td>
 <td>Re-deploys content to an EXISTING Cloudflare-Access-gated site through a Pages:Edit-only token that provably cannot touch the gate (church/state by token boundary). Crystallized from 3 real reps (D41 doctrine). Content path only; gate creation stays the operator&rsquo;s by-hand setup.</td>
+</tr>
+<tr>
+<td><strong>pages-deploy</strong></td>
+<td>Deploys content to a PUBLIC GitHub Pages site in one governed motion: clone → stage → scrub gate → commit/push → propagation poll. The public sibling of gated-deploy — git-only, no Cloudflare token is ever loaded, so it structurally cannot touch gated surfaces. Crystallized 2026-07-03 (D60) from ~40 hand-cycled reps the transcript-mining diagnostic surfaced.</td>
 </tr>
 </tbody>
 </table>

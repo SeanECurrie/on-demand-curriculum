@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Second Brain — EngineOS Docs</title>
-  <meta name="description" content="EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 454-article knowledge base (371 concepts + 83 connections), 43 daily logs, 173 run plans, 24 methodology docs. Until ">
+  <meta name="description" content="EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 539-article knowledge base (438 concepts + 101 connections), 50 daily logs, 231 run plans, 24 methodology docs. Until">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -51,9 +51,9 @@
 </aside>
 <main>
 <header class="hero" id="s10">
-  <div class="eyebrow">EngineOS System Documentation · Section 10 · Built 2026-07-03</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 10 · Built 2026-07-10</div>
   <h1>Second Brain</h1>
-  <p class="subhead">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 454-article knowledge base (371 concepts + 83 connections), 43 daily logs, 173 run plans, 24 methodology docs. Until 2026-06-04, that&#x27;s all it did -- a marathon-arc audit showed zero reads of knowledge/concepts/.md across ~30 hours of su</p>
+  <p class="subhead">EngineOS captures heavily. Daily session arcs, intelligence-log strategic moments, 539-article knowledge base (438 concepts + 101 connections), 50 daily logs, 231 run plans, 24 methodology docs. Until 2026-06-04, that&#x27;s all it did -- a marathon-arc audit showed zero reads of knowledge/concepts/.md across ~30 hours of s</p>
 </header>
 <section class="content">
 <blockquote>
@@ -178,7 +178,7 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 
 <p>The prompt template signals to the SDK that these are polished references, not conversation &ndash; &ldquo;Extract concepts with the depth the source deserves.&rdquo; Use this when adding new methodology or patterns to the KB so the LLM treats them with appropriate weight.</p>
 <h3 id="daily-logs-daily">Daily Logs (<code>daily/</code>)<a class="anchor-link" href="#daily-logs-daily" title="Permalink">¶</a></h3>
-<p>Append-only per-day session arcs. As of 2026-06-23 the directory contains 35 files spanning 2026-04-12 → 2026-06-23 (with backfilled gaps). Each file has the structure:</p>
+<p>Append-only per-day session arcs. The directory currently contains 50 files spanning 2026-04-12 → present (with backfilled gaps). Each file has the structure:</p>
 <div class="highlight"><pre><span></span><code><span class="gh"># Daily Log: YYYY-MM-DD</span>
 
 <span class="gu">## Sessions</span>
@@ -206,18 +206,18 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <tbody>
 <tr>
 <td><code>knowledge/index.md</code></td>
-<td>Catalog of all KB articles with one-line summaries &ndash; the cheapest retrieval surface</td>
-<td>319 indexed articles</td>
+<td>Catalog of all KB articles with one-line summaries &ndash; the cheapest retrieval surface. <strong>GENERATED from article frontmatter since 2026-07-03 (A1)</strong> &ndash; never hand-edited</td>
+<td>539 indexed articles</td>
 </tr>
 <tr>
 <td><code>knowledge/concepts/*.md</code></td>
 <td>One-concept-per-file articles produced by compile.py and ingest.py</td>
-<td>263 files</td>
+<td>438 files</td>
 </tr>
 <tr>
 <td><code>knowledge/connections/*.md</code></td>
 <td>Cross-concept articles capturing relationships between concepts</td>
-<td>61 files</td>
+<td>101 files</td>
 </tr>
 <tr>
 <td><code>knowledge/log.md</code></td>
@@ -275,6 +275,8 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 </tbody>
 </table>
 <p>Layer 1 establishes orientation at session start. Layer 2 fills in mid-work context mechanically before the prompt reaches Tier 3 skill loading. Layer 3 escalates when the hook misses or the decision is load-bearing.</p>
+<h3 id="phase-c-the-hybrid-index-behind-layer-3-d57-2026-07-03-measured-not-default">Phase C — the hybrid index behind Layer 3 (D57, 2026-07-03; measured, not default)<a class="anchor-link" href="#phase-c-the-hybrid-index-behind-layer-3-d57-2026-07-03-measured-not-default" title="Permalink">¶</a></h3>
+<p>An optional on-device hybrid retrieval layer now sits BEHIND <code>/recall</code>: <code>scripts/retrieval-index.py</code> builds one portable, gitignored SQLite cache (<code>retrieval-index.db</code> — FTS5 BM25 + sqlite-vec dense embeddings via a local MLX bge-m3 model, reciprocal-rank fusion, mechanical &ldquo;Doc: title &gt; heading&rdquo; chunk headers) over the full corpus; <code>scripts/retrieval-query.py</code> serves queries and <code>--selftest</code> runs a pre-registered probe battery. <strong>Grep remains the default — D32 is not overridden.</strong> <code>/recall</code> escalates to the hybrid path only on weak grep yield for paraphrase-shaped queries, and every escalation logs to <code>scripts/retrieval-ab.jsonl</code> (the &ldquo;Retrieval A/B&rdquo; dashboard tile); the operator adjudicates keep/tune/kill from that ledger after 10-20 sessions. The index is a rebuildable cache — markdown stays the only source of truth; refresh is wired into session-end and the nightly Gardener. Zero API cost (fully on-device). Degrade mode: FTS5-only when the embedding model is unavailable. <strong>Day-one measurement (pre-registered battery, reported honestly per D57):</strong> the big win over naive grep is BM25 itself (paraphrase hit@5: naive-grep 0/5 — a floor, not the full six-surface /recall — vs FTS5 4/5); dense fusion added nothing yet and diluted one hit. The hybrid layer was on probation by design — and <strong>D63 (2026-07-06) closed it.</strong> The <code>recall-eval</code> harness (<code>scripts/recall-eval.py</code>, gated in os-ci as <code>m17</code>) put the first hard recall@k/MRR/nDCG numbers on the stack and confirmed BM25 (FTS5) is the best mode at our scale (Success@10 <strong>0.821</strong> vs hybrid <strong>0.786</strong>; MRR 0.640 vs 0.477) — dense RRF fusion tanks keyword queries and lifts only paraphrase recall@10. So <code>retrieval-query.py</code> now <strong>defaults to <code>--mode fts</code></strong> and <code>/recall</code> escalates via BM25; the dense path is repaired + pinned but <strong>retired</strong> as the escalation (opt-in via <code>--mode hybrid</code> for re-measurement). The harness also caught, on its first run, that the dense path had been <em>silently</em> degrading to FTS-only (a <code>transformers</code> dep drift swallowed by a broad <code>except</code>) — the exact silent-failure class a retrieval-quality ruler exists to expose.</p>
 <h3 id="layer-1-sessionstart-injection-hookssession-startpy">Layer 1 &ndash; SessionStart Injection (<code>hooks/session-start.py</code>)<a class="anchor-link" href="#layer-1-sessionstart-injection-hookssession-startpy" title="Permalink">¶</a></h3>
 <p>Fires once per session, before any user interaction. Reads two surfaces:</p>
 <ul>
@@ -357,11 +359,11 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <li>Does NOT search across engine tenants by default &ndash; OS-level corpus only unless the query names an engine.</li>
 </ul>
 <h3 id="why-no-vector-db">Why No Vector DB<a class="anchor-link" href="#why-no-vector-db" title="Permalink">¶</a></h3>
-<p>At personal-KB scale (currently 454 indexed, against a &lt;500-article research threshold), structured markdown index <!-- census-ok: D32 threshold --> + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob &ndash; zero API cost, no infrastructure, no embeddings drift.</p>
-<p>Phase C (vector DB layer) is deferred per D32 with explicit revisit conditions:</p>
+<p>At personal-KB scale (currently 539 indexed, against a &lt;500-article research threshold), structured markdown index <!-- census-ok: D32 threshold --> + ripgrep + LLM-reads-relevant-files outperforms vector retrieval on precision and is dramatically simpler. Pure Read/Grep/Glob &ndash; zero API cost, no infrastructure, no embeddings drift.</p>
+<p>D32&rsquo;s Phase C deferral carried explicit revisit conditions; <strong>as of 2026-07-03 (D57) the hybrid layer is BUILT but NOT the default</strong> — it sits behind <code>/recall</code> as a measured escalation while grep remains the answer path (see &ldquo;Phase C — the hybrid index behind Layer 3&rdquo; above). The original revisit conditions, which govern the HOOK and the eventual keep/tune/kill adjudication:</p>
 <ul>
 <li>KB exceeds 2000 articles <!-- census-ok: D32 threshold --></li>
-<li>Retrieval-health log shows gate hit rate &gt;60% sustained AND injections judged useful (justifies always-on hook with larger cap)</li>
+<li>Retrieval-health log shows gate hit rate &gt;60% sustained AND injections judged useful (justifies always-on hook with larger cap) — <em>the &gt;60% half is now firing (first gardening brief, 2026-07-03); usefulness is what the A/B ledger accumulates</em></li>
 <li>Gate hit rate &lt;10% sustained (justifies killing hook entirely; keep only <code>/recall</code>)</li>
 <li>Operator notices semantic misses that grep can&rsquo;t surface (justifies hybrid vector layer)</li>
 </ul>
@@ -384,35 +386,35 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 <td>1</td>
 <td><code>logs/intelligence-log.md</code></td>
 <td>Strategic moments, validated hypotheses, methodology lessons, anti-patterns</td>
-<td>245 curated entries, append-only</td>
+<td>311 curated entries, append-only</td>
 <td>Per-row markdown table &ndash; <code>Date \| Engine \| Category \| Entry \| Source</code></td>
 </tr>
 <tr>
 <td>2</td>
 <td><code>knowledge/index.md</code></td>
-<td>Catalog of compiled KB articles with one-line summaries</td>
-<td>319 indexed articles</td>
+<td>Catalog of compiled KB articles with one-line summaries (generated from frontmatter, A1 2026-07-03)</td>
+<td>539 indexed articles</td>
 <td>Per-row markdown table with wiki-style <code>[[...]]</code> links</td>
 </tr>
 <tr>
 <td>3</td>
 <td><code>knowledge/concepts/*.md</code> + <code>knowledge/connections/*.md</code></td>
 <td>Full compiled KB articles</td>
-<td>371 concepts + 83 connections</td>
+<td>438 concepts + 101 connections</td>
 <td>One file per concept; slug match for Layer 2, full grep for Layer 3</td>
 </tr>
 <tr>
 <td>4</td>
 <td><code>daily/*.md</code> (last 14d for Layer 2, last 30d for <code>/recall</code>)</td>
 <td>Recent session arcs, in-flight context</td>
-<td>35 files spanning 2026-04-12 → 2026-06-23</td>
+<td>50 files, 2026-04-12 → present</td>
 <td>Date-prefixed filename; first-hit per file for Layer 2</td>
 </tr>
 <tr>
 <td>5</td>
 <td><code>run-plans/*.md</code> (last 60d)</td>
 <td>Detailed plans with hardened criteria, execution evidence</td>
-<td>80 files spanning 2026-03-31 → 2026-06-23</td>
+<td>231 files, 2026-03-31 → present</td>
 <td>Date-prefixed filename; first-hit per file for Layer 2</td>
 </tr>
 <tr>
@@ -434,10 +436,13 @@ EngineOS retrieval -- top matches from the second brain (silent; ignore if not r
 uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/kb-health.py<span class="w"> </span>--verify-kb<span class="w"> </span><span class="c1"># the clearing motion: re-verify the ENTIRE KB</span>
 </code></pre></div>
 
-<p>It composes: <code>utils.compute_kb_stats()</code> (live structural truth — notes, links, broken, orphans, index-desync, merge %), <code>lint.py</code>&rsquo;s state checks (uncompiled + stale daily logs), and one-line vital signs from the five jsonl logs (flush, retrieval, usage, reviewer, compile-guard), each pointing at its deep-dive reviewer. Verdict: HEALTHY or NEEDS ATTENTION with an actionable fix-list. The conversational trigger is the <strong><code>kb-health</code> skill</strong> (&ldquo;check the second brain&rdquo;); the SessionStart hook surfaces a one-line 🧠 flag when the cached verdict degrades (silent when healthy; cache refreshed at session end alongside people-heat, capability-snapshot, and the living health dashboard).</p>
+<p>It composes: <code>utils.compute_kb_stats()</code> (live structural truth — notes, links, broken, orphans, index-desync, merge %), <code>lint.py</code>&rsquo;s state checks (uncompiled + stale daily logs), and one-line vital signs from the five jsonl logs (flush, retrieval, usage, reviewer, compile-guard), each pointing at its deep-dive reviewer. Verdict: HEALTHY or NEEDS ATTENTION with an actionable fix-list. Since 2026-07-03 it also watches <strong>hot-file size</strong>: CONTEXT.md, DECISIONS.md, and registry files that grow past the whole-file Read budget (~20k tokens) get a flag pointing at the CONTEXT-HISTORY archival pattern — the check that would have caught CONTEXT.md at 144KB before three sessions tripped over it. The conversational trigger is the <strong><code>kb-health</code> skill</strong> (&ldquo;check the second brain&rdquo;); the SessionStart hook surfaces a one-line 🧠 flag when the cached verdict degrades (silent when healthy; cache refreshed at session end alongside people-heat, capability-snapshot, and the living health dashboard).</p>
 <p>One of those five vital signs deserves its own explanation, because this page tails it without saying what it is: <strong><code>scripts/reviewer-health.jsonl</code></strong> is the telemetry of the <strong>federated-reviewer layer</strong> (<code>patterns/frameworks/federated-reviewer.md</code>, D36) — a ladder of reviewers at increasing independence (sanity-check&rsquo;s same-context self-check → output-self-test&rsquo;s binary gates → the adversarial-evaluator&rsquo;s independent context → outside reviewers). Every firing appends one record via <code>scripts/reviewer-health-emit.py</code>: reviewer, surface, verdict, flagged count, <code>leads_surfaced</code>. Read it as a <strong>LIVENESS log, not an impact scoreboard</strong> — all-pass is its architecturally expected shape, because real catches route to the run plan&rsquo;s Layer 5 and the intelligence log (Category=Review). <code>scripts/reviewer-review.py</code> runs the periodic keep/tune/kill review over it, and kb-health tails its last record as one vital sign.</p>
 <p><strong><code>scripts/kb-stats.py</code></strong> is the single source of truth for any &ldquo;by the numbers&rdquo; claim about the second brain (<code>--json</code> for machine use). Nothing downstream hand-types a KB number — hand-typed state rots (D46; an investor-diligence engagement explainer drifted 373-vs-320-vs-actual before this existed).</p>
-<p><strong>The post-compile guard</strong> (<code>compile.py::_verify_compile_output</code> → <code>scripts/compile-verify.jsonl</code>): after every compile, mechanically verifies each touched article is index-synced (parsed-wikilink-target matching) and every emitted link resolves in the vault. Detection, not prevention — it makes the silent index-desync failure (<code>docs/known-issues/compile-index-write-desync.md</code>) loud at the moment it happens. Warnings accumulate in kb-health&rsquo;s compile-guard vital until a clean full-KB verification record supersedes them (<code>--verify-kb</code>, run only after reconciling).</p>
+<p><strong>The derived index (A1 description single-sourcing, 2026-07-03):</strong> <code>knowledge/index.md</code> is a GENERATED artifact. Every article carries <code>type:</code> + <code>description:</code> frontmatter (backfilled across the whole KB by harvesting the existing index rows verbatim); <code>scripts/generate-index.py</code> derives the index from frontmatter (<code>--check</code> verifies freshness), and compile.py, ingest.py, and query.py all regenerate it mechanically after every run — including failure paths, so a mid-run SDK death after partial article writes still lands in the index. The producer LLMs write the summary ONCE, in the article; nothing hand-writes index rows anymore. This made the historical index-desync class (<code>docs/known-issues/compile-index-write-desync.md</code> — article on disk, index row never written) impossible by construction, the same derived-over-hand-duplicated move as the D52 census tokens. Run plan: <code>run-plans/2026-07-03-a1-description-single-sourcing.md</code>; adopted from the OKF review&rsquo;s one load-bearing finding (<code>run-plans/2026-07-03-okf-adoption-review.md</code>).</p>
+<p><strong>The post-compile guard</strong> (<code>compile.py::_verify_compile_output</code> → <code>scripts/compile-verify.jsonl</code>): after every compile, mechanically verifies each touched article carries the <code>description:</code>/<code>type:</code> frontmatter the derived index needs (a missing field = an empty Summary cell, visible but useless to /recall) and every emitted link resolves in the vault. Detection, not prevention. Its former index-desync check retired with A1 (desync now impossible by construction; <code>kb-stats</code>&rsquo; index-sync stat remains as a staleness backstop). Warnings accumulate in kb-health&rsquo;s compile-guard vital until a clean full-KB verification record supersedes them (<code>--verify-kb</code>, run only after reconciling).</p>
+<p><strong>The retrieval-quality ruler: <code>scripts/recall-eval.py</code> (2026-07-06):</strong> a pre-registered eval harness (28 cases, recall@k/MRR/nDCG, gated in os-ci as <code>m17</code>) that puts hard numbers on the retrieval stack instead of vibes. It earned its keep on day one twice: it exposed that the dense/embedding path had been <em>silently</em> degrading to FTS-only (a dependency drift swallowed by a broad <code>except</code>), and after that repair it falsified the &ldquo;repair will help&rdquo; assumption — measured hybrid underperforms pure BM25 at this corpus scale, which produced D63 (see the Phase C section above). Any future retrieval change is adjudicated against this baseline, not intuition.</p>
+<p><strong>Graph diagnostics: <code>scripts/kb-graph-analysis.py</code> (2026-07-08):</strong> the second-brain graph as a <em>diagnostic instrument</em>, not decoration. A networkx pass over the wikilink graph (importing the same canonical <code>compute_kb_stats</code> walk — one implementation, no drift) computes real communities (greedy modularity, replacing an earlier keyword heuristic), islands (connected components), community-to-community structural gaps (&ldquo;blind spots&rdquo;), semantic missing-bridge candidates (on-device embedding cosine, with keyword degrade), conceptual gateways (betweenness), and a diversity band summarizing the graph&rsquo;s shape. Results are cached JSON consumed by the console&rsquo;s 3D graph globe (recent/hubs/communities/islands/bridges modes) and a diagnostics drawer. Everything it surfaces is a <em>lead the operator adjudicates</em> — nothing is ever auto-linked. This formalizes a motion the operator had been doing by eye in Obsidian: catching real KB gaps by staring at the graph&rsquo;s shape.</p>
 <p><strong>Link-truth model (2026-07-01):</strong> <code>utils.wiki_article_exists</code> resolves vault-wide — the Obsidian vault root is the repo root, so cross-layer links to <code>methodology/</code>, <code>patterns/</code>, <code>logs/</code>, engine files etc. are valid edges (hidden dot-directories excluded, matching what Obsidian indexes); <code>extract_wikilinks</code> ignores code spans and fences (Obsidian doesn&rsquo;t link inside code). All graph tools (kb-stats, kb-audit, lint) consume the ONE walk in <code>utils._walk_kb_links</code> — a single implementation, no drift.</p>
 <h3 id="capture-side-scriptshook-healthjsonl">Capture-side: <code>scripts/hook-health.jsonl</code><a class="anchor-link" href="#capture-side-scriptshook-healthjsonl" title="Permalink">¶</a></h3>
 <p>One record per <code>flush.py</code> invocation. Schema:</p>
@@ -583,6 +588,21 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <td><strong>D54</strong> &ndash; Retire the engaged-vs-cold headline; lead with the economy lens</td>
 <td>2026-07-02</td>
 <td>The engaged-vs-cold comparison is degenerate (26:1, no cold baseline), so <code>usage-review.py</code> leads with the economy lens and auto-suppresses the comparison until a real cold baseline accumulates (self-healing, never-delete). The founding footprint question is recorded unanswerable-by-observation at this ratio.</td>
+</tr>
+<tr>
+<td><strong>D57</strong> &ndash; Retrieval Phase C: hybrid index built as a measured escalation, not the default</td>
+<td>2026-07-03</td>
+<td>On-device FTS5 + dense-embedding index behind <code>/recall</code>; grep stays the step-1 default (D32 unchanged); every escalation logged to an A/B ledger for keep/tune/kill.</td>
+</tr>
+<tr>
+<td><strong>D58</strong> &ndash; KB index becomes a derived artifact (A1 description single-sourcing)</td>
+<td>2026-07-03</td>
+<td>Every article carries <code>type:</code> + <code>description:</code> frontmatter; <code>knowledge/index.md</code> is generated from it by all three producers including failure paths. The index-desync class is impossible by construction &ndash; the same derived-over-hand-duplicated move as the D52 census tokens.</td>
+</tr>
+<tr>
+<td><strong>D63</strong> &ndash; Retrieval escalation defaults to BM25 (fts); dense/hybrid retired as escalation</td>
+<td>2026-07-06</td>
+<td>The <code>recall-eval</code> harness measured fts 0.821 vs hybrid 0.786 Success@10 (and better ranking) at current corpus scale; <code>retrieval-query.py</code> defaults to <code>--mode fts</code>. The dense path stays repaired + dependency-pinned but opt-in, preserving the option to re-measure as the corpus grows.</td>
 </tr>
 </tbody>
 </table>

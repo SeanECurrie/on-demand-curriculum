@@ -51,7 +51,7 @@
 </aside>
 <main>
 <header class="hero" id="s12">
-  <div class="eyebrow">EngineOS System Documentation · Section 12 · Built 2026-07-03</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 12 · Built 2026-07-10</div>
   <h1>Design System</h1>
   <p class="subhead">The EngineOS design system provides a unified visual language across all HTML outputs produced by any engine. It is a single CSS file -- design-system/enterprise-styles.css -- composited from two production-proven sources: MLR&#x27;s enterprise stylesheet (776 lines, November 2025, battle-tested across 13 professional deliv</p>
 </header>
@@ -632,6 +632,7 @@
 </tbody>
 </table>
 <p>Known failure pairings that must not be used: light blue (#60a5fa) on white (3.1:1), light green (#4ade80) on white (2.3:1), yellow (#fbbf24) on white (1.9:1), gray (#525252) on dark surface (#262626, 2.4:1).</p>
+<p><strong>Console HUD palette (2026-07-07, <code>accessibility.md</code> §1.2.1):</strong> the console&rsquo;s dark-terminal palette got its own verified table, with ratios computed against the <em>worst (lightest) surface each token sits on</em> rather than a single background. Tokens that cannot clear 4.5:1 are demoted to strokes/fills-only (never on a <code>color:</code> property) — and that split is <strong>mechanically enforced</strong>: <code>console/ci-lint.py contrast</code> (os-ci case <code>m22</code>) fails the build if a demoted token appears on text or any text token drops below threshold on any HUD surface. The section exists because verification caught the first lift&rsquo;s secondary-text tokens measuring 4.31–4.48:1 on panel surfaces — re-lifted with margin, then locked with the lint.</p>
 <h3 id="focus-states">Focus States<a class="anchor-link" href="#focus-states" title="Permalink">¶</a></h3>
 <p>All interactive elements have visible focus indicators: 2px solid <code>--color-blue-500</code> with 2px offset. Applied to checkboxes (<code>:focus-visible</code>), notes inputs (<code>:focus</code>), expandable triggers, copy buttons, and sidebar nav items. Focus must be visible in both light and dark mode.</p>
 <h3 id="touch-targets">Touch Targets<a class="anchor-link" href="#touch-targets" title="Permalink">¶</a></h3>

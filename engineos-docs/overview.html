@@ -51,7 +51,7 @@
 </aside>
 <main>
 <header class="hero" id="s01">
-  <div class="eyebrow">EngineOS System Documentation · Section 01 · Built 2026-07-03</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 01 · Built 2026-07-10</div>
   <h1>Overview</h1>
   <p class="subhead">EngineOS is a two-layer operating system for professional work, built on Claude Code. Layer 1 is the OS — shared skills, methodology, patterns, enforcement rules, operator identity, and a design system. Layer 2 is the engines — domain-specific tenants that inherit OS capabilities and keep their own engagement data, kno</p>
 </header>
@@ -74,12 +74,12 @@
 <tbody>
 <tr>
 <td>Skills</td>
-<td>37</td>
+<td>38</td>
 <td><code>.claude/skills/</code></td>
 </tr>
 <tr>
 <td>Patterns</td>
-<td>87 (64 problem · 6 deliverable · 17 framework)</td>
+<td>88 (64 problem · 6 deliverable · 18 framework)</td>
 <td><code>patterns/</code></td>
 </tr>
 <tr>
@@ -99,7 +99,7 @@
 </tr>
 <tr>
 <td>Registered capabilities</td>
-<td>43 active (+2 pending migration)</td>
+<td>44 active (+2 pending migration)</td>
 <td><code>registry/capabilities.md</code></td>
 </tr>
 <tr>
@@ -129,12 +129,12 @@
 </tr>
 <tr>
 <td>KB articles</td>
-<td>454 (371 concepts + 83 connections)</td>
+<td>539 (438 concepts + 101 connections)</td>
 <td><code>knowledge/</code></td>
 </tr>
 <tr>
 <td>Decisions</td>
-<td>D1–D54</td>
+<td>D1–D65</td>
 <td><code>DECISIONS.md</code></td>
 </tr>
 <tr>
@@ -175,7 +175,7 @@
     skills/                 # OS-level skills
     settings.json           # Hook wiring and permissions
 
-  hooks/                    # Hook scripts (7 .sh + 6 .py) for mechanical enforcement
+  hooks/                    # Hook scripts for mechanical enforcement (counts in the Glance table)
     pre-write-governance.sh # Gates Write/Edit writes without active run plan (fails CLOSED)
     pre-bash-tripwire.sh    # DENIES rm recursive+force before it runs (D35; # eos-allow-rm escape)
     post-tool-use.sh        # Mechanical activity logging
@@ -236,6 +236,7 @@
     retrieval-health.jsonl  # Append-only retrieval health log (D30)
     attio/                  # Attio direct-API suite (8 files, restored per D26)
   knowledge/                # Second-brain KB (concepts/, connections/, index.md, log.md, qa/)
+  console/                  # The operator console (D62/D64): read-only live localhost cockpit over the instrument estate
   daily/                    # Daily session-arc logs (captured via flush.py)
   logs/                     # Two-layer: activity-log.md + intelligence-log.md
   run-plans/                # Disk-persisted governance artifacts
@@ -265,7 +266,7 @@
 <td><a href="governance.html">Governance</a></td>
 </tr>
 <tr>
-<td>What the 37 skills do and how they chain</td>
+<td>What the 38 skills do and how they chain</td>
 <td><a href="skill-system.html">Skill System</a></td>
 </tr>
 <tr>
@@ -309,11 +310,11 @@
 <tbody>
 <tr>
 <td>A specific skill</td>
-<td><a href="skills-reference.html">Skills Reference</a> — all 33 with triggers, tools, behaviors</td>
+<td><a href="skills-reference.html">Skills Reference</a> — all 38 with triggers, tools, behaviors</td>
 </tr>
 <tr>
 <td>A specific pattern</td>
-<td><a href="patterns-reference.html">Patterns Reference</a> — all 72 categorized with 10 deep examples</td>
+<td><a href="patterns-reference.html">Patterns Reference</a> — all 88 categorized with 10 deep examples</td>
 </tr>
 <tr>
 <td>Available templates</td>
@@ -321,7 +322,7 @@
 </tr>
 <tr>
 <td>Methodology docs</td>
-<td><a href="methodology-index.html">Methodology Index</a> — all 20 with coverage and companion skills</td>
+<td><a href="methodology-index.html">Methodology Index</a> — all 24 with coverage and companion skills</td>
 </tr>
 </tbody>
 </table>
@@ -355,7 +356,7 @@
 </ul>
 <p>The primary donors: SEE (operator identity, CRM integration, engagement workflows), JSE (governance stack, phase control, depth governance), ODC (methodology layer, editorial standards), WondaKB (multi-user architecture, Notion integration), MLR (QA pipeline, enterprise CSS), Restaurant (transcript innovations).</p>
 <p>The audit evidence lives at <code>~/Desktop/ecosystem-audit-act-2/findings/</code>. The build record is at <code>~/Desktop/ecosystem-audit-act-3/docs/build-log.md</code>.</p>
-<p>The substrate has continued to evolve since the initial build: a substrate-tightening operation (D25, April 2026) tested the governance stack against real failures and added the evidence-first-reporting rule plus sanity-check #11; a re-lift audit (D26) restored capabilities missed by the initial Act 3 pass; and the second-brain capture+retrieval layer (D29-D32, June 2026) added marathon-session capture caps with a shared hook module, retry+observability infrastructure, and a three-layer retrieval architecture (SessionStart injection, UserPromptSubmit mid-work hook, manual <code>/recall</code> escalation) over a six-surface corpus. The arc since D32 (June-July 2026): the Bash-governance pair (D34/D35), reviewer telemetry (D36), the people-profiling subsystem recovery and six-axis standard, the private-gated-hosting capability (D41), the engagement-workup playbook (D42) and SME-iteration loop (D48), the personal sandbox tier with its promotion path (D44/D45), the session-orchestrator&rsquo;s Full-Breadth Start (D50), the second-brain health process (D51), the census single-sourcing + living health dashboard that keep these very pages true (D52), and the usage-economy disciplines + telemetry economy lens that keep a session&rsquo;s cost legible (D53/D54) — each recorded in <code>DECISIONS.md</code> and reflected across these pages. See <a href="second-brain.html">Second Brain</a> for the retrieval and capture pipeline.</p>
+<p>The substrate has continued to evolve since the initial build: a substrate-tightening operation (D25, April 2026) tested the governance stack against real failures and added the evidence-first-reporting rule plus sanity-check #11; a re-lift audit (D26) restored capabilities missed by the initial Act 3 pass; and the second-brain capture+retrieval layer (D29-D32, June 2026) added marathon-session capture caps with a shared hook module, retry+observability infrastructure, and a three-layer retrieval architecture (SessionStart injection, UserPromptSubmit mid-work hook, manual <code>/recall</code> escalation) over a six-surface corpus. The arc since D32 (June-July 2026): the Bash-governance pair (D34/D35), reviewer telemetry (D36), the people-profiling subsystem recovery and six-axis standard, the private-gated-hosting capability (D41), the engagement-workup playbook (D42) and SME-iteration loop (D48), the personal sandbox tier with its promotion path (D44/D45), the session-orchestrator&rsquo;s Full-Breadth Start (D50), the second-brain health process (D51), the census single-sourcing + living health dashboard that keep these very pages true (D52), and the usage-economy disciplines + telemetry economy lens that keep a session&rsquo;s cost legible (D53/D54) — each recorded in <code>DECISIONS.md</code> and reflected across these pages. Early July 2026 added the between-sessions layer and the operator&rsquo;s daily surface: the autonomous gardener + OS CI self-testing (D55/D56), retrieval measured rather than assumed (D57, settled by D63&rsquo;s BM25 ruling), the KB index as a derived artifact (D58), commit-per-arc history discipline (D59), the transcript-mining diagnostic package — tool-surface hygiene, <code>safe-replace.py</code>, the <code>pages-deploy</code> skill (D60) — the read-only EngineOS Console cockpit (D62, reshaped by D64 into a glass sidebar/detail app with a 3D knowledge-graph globe), and the house frontend-design method (D65). See <a href="second-brain.html">Second Brain</a> for the retrieval and capture pipeline.</p>
 <hr />
 <h2 id="what-this-documentation-is-not">What This Documentation Is Not<a class="anchor-link" href="#what-this-documentation-is-not" title="Permalink">¶</a></h2>
 <p>This documentation explains EngineOS to humans. It does not replace the operational files that serve the system at runtime:</p>

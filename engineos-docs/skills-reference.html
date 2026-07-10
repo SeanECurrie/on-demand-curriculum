@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <title>Skills Reference — EngineOS Docs</title>
-  <meta name="description" content="EngineOS ships 37 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a">
+  <meta name="description" content="EngineOS ships 38 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, a">
   <link rel="stylesheet" href="assets/style.css?v=b15512e1">
   <script>(function(){var t=localStorage.getItem("theme")||"light";if(t==="dark")document.documentElement.setAttribute("data-theme","dark");})();</script>
 </head>
@@ -51,9 +51,9 @@
 </aside>
 <main>
 <header class="hero" id="s06">
-  <div class="eyebrow">EngineOS System Documentation · Section 06 · Built 2026-07-03</div>
+  <div class="eyebrow">EngineOS System Documentation · Section 06 · Built 2026-07-10</div>
   <h1>Skills Reference</h1>
-  <p class="subhead">EngineOS ships 37 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, and integration points.</p>
+  <p class="subhead">EngineOS ships 38 skills at .claude/skills/. Each skill is a self-contained SKILL.md file with YAML frontmatter (description, allowed-tools) and a structured body covering purpose, triggers, phases, and integration points.</p>
 </header>
 <section class="content">
 <p>Skills load passively via native discovery (descriptions only, ~2% of context). Full content loads only on invocation. Every skill declares its <code>allowed-tools</code> in frontmatter, restricting what tools it can access.</p>
@@ -176,6 +176,12 @@
 <td>Hosting</td>
 <td>Re-deploy content to an EXISTING Cloudflare-Access-gated site through a Pages:Edit-only token that provably cannot touch the gate</td>
 <td>Bash, Read</td>
+</tr>
+<tr>
+<td>pages-deploy</td>
+<td>Hosting</td>
+<td>Deploy to PUBLIC GitHub Pages in one governed motion (clone→stage→scrub gate→push→propagation poll) &ndash; the git-only public sibling of gated-deploy; structurally cannot touch gated surfaces</td>
+<td>Bash, Read, Grep, Glob</td>
 </tr>
 <tr>
 <td>attio-mapper</td>
@@ -355,10 +361,11 @@
 <p><strong>Invoked by:</strong> Manual invocation only</p>
 <hr />
 <h4 id="recall">recall<a class="anchor-link" href="#recall" title="Permalink">¶</a></h4>
-<p><strong>One-liner:</strong> Search EngineOS&rsquo;s second brain (intelligence log, knowledge index, KB concepts/connections, recent daily logs, recent run-plans, methodology) for prior context relevant to a topic. Pure Read/Grep/Glob &ndash; zero API cost.</p>
+<p><strong>One-liner:</strong> Search EngineOS&rsquo;s second brain (intelligence log, knowledge index, KB concepts/connections, recent daily logs, recent run-plans, methodology) for prior context relevant to a topic. Pure Read/Grep/Glob &ndash; zero API cost &ndash; with an optional on-device hybrid-index escalation (Bash, still zero API cost) on weak grep yield (Phase C, D57, 2026-07-03).</p>
 <p><strong>Triggers:</strong> <code>/recall &lt;query&gt;</code>, &ldquo;have we seen this&rdquo;, &ldquo;what&rsquo;s our prior thinking on X&rdquo;, &ldquo;what did we decide about&rdquo;, &ldquo;do we have notes on&rdquo;, &ldquo;remember&rdquo;, &ldquo;look up&rdquo;, &ldquo;search the second brain&rdquo;, or before making an architecture/methodology/pattern decision in a domain where prior intelligence likely exists.</p>
-<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep</code></p>
+<p><strong>Allowed tools:</strong> <code>Read, Glob, Grep, Bash</code> (Bash added 2026-07-03 solely for the Phase C hybrid escalation — <code>uv run scripts/retrieval-query.py --log</code>)</p>
 <p><strong>Key behaviors:</strong>
+- <strong>Index escalation (Phase C, D57; mode settled by D63, 2026-07-06):</strong> grep stays step 1 always; escalates to the local index (<code>scripts/retrieval-query.py</code>, on-device) only when grep yields &lt;3 strong hits AND the query is paraphrase-shaped; every escalation logs to <code>scripts/retrieval-ab.jsonl</code> with <code>--grep-hits &lt;N&gt;</code> (the grep-vs-index comparison) and <code>--useful yes|no|partial</code> (the usefulness judgment) so the operator&rsquo;s keep/tune/kill adjudication reads real signal, not just invocation counts. The escalation mode is <strong>pure BM25 (FTS5)</strong>: the <code>recall-eval</code> harness measured it beating dense-hybrid fusion at current corpus scale (Success@10 0.821 vs 0.786), so <code>--mode fts</code> is the default and the dense path is retired to opt-in (repaired + dependency-pinned for future re-measurement). Degrades to grep-only with a one-line note if the index is missing.
 - Six-surface priority order: (1) <code>logs/intelligence-log.md</code> &ndash; curated strategic moments, highest density; (2) <code>knowledge/index.md</code> &ndash; 200+ row catalog with summaries, cheapest pointer; (3) <code>knowledge/concepts/*.md</code> + <code>knowledge/connections/*.md</code> &ndash; full KB articles, grep headers and first paragraphs unless query matches main subject; (4) <code>daily/*.md</code> last 30 days &ndash; recent session arcs and work-in-flight context; (5) <code>run-plans/*.md</code> last 60 days &ndash; detailed plans with hardened criteria and execution logs; (6) <code>methodology/*.md</code> &ndash; only when query is methodology-flavored. Stopping rule: if surfaces 1-2 yield 3+ strong hits, do not exhaustively grep lower surfaces.
 - Honest &ldquo;nothing found&rdquo; on zero hits &ndash; does NOT hallucinate matches when the corpus is empty. Returns the surfaces searched and suggests rephrasing, <code>scripts/query.py</code> for LLM-ranked deeper search, or noting the gap as a candidate for a new article.
 - Does NOT invoke <code>scripts/query.py</code> (which uses Claude Agent SDK and has API cost). Recall is pure ripgrep + Read; typical invocation under 2 seconds wall-clock. The Agent SDK path remains available for synthesis-heavy queries when recall returns nothing.
@@ -605,7 +612,8 @@
 <p><strong>Key behaviors:</strong>
 - Classifies work into 7 types: Build/Audit (BL), Engine Work (EW), Engagement (EN), Research (RE), Content Production (CP), Integration (IN), Maintenance (MT). Classification takes 60 seconds maximum.
 - Produces a disk-persisted run plan with 5 layers: classification, depth/scope, skill chain (forced invocation order), hardened criteria, and execution log. The run plan IS the session state for a piece of work.
-- Forces skill invocation at every transition. Without this, the LLM defaults to &ldquo;just do the thing&rdquo; and skips depth governance, quality checks, and structured findings. This is the forcing function.</p>
+- Forces skill invocation at every transition. Without this, the LLM defaults to &ldquo;just do the thing&rdquo; and skips depth governance, quality checks, and structured findings. This is the forcing function.
+- <strong>Commit checkpoint at run completion (D59, 2026-07-03):</strong> when a run plan passes Gate Final, offer/cut a logical git commit for that arc (one commit per work thread, decision number in the message, local-only) instead of letting completed work accumulate uncommitted.</p>
 <p><strong>Invokes:</strong> depth-governor, market-scanner, research-engine, findings-formatter, campaign-builder, lead-builder, qa-pipeline, output-self-test, render-validate, adversarial-evaluator, section-construction, content-updater, audit-logging (any skill needed by the chain)</p>
 <p><strong>Invoked by:</strong> session-orchestrator (hands off to phase-controller after routing), eos-assistant (in production mode)</p>
 <hr />
@@ -616,7 +624,8 @@
 <p><strong>Key behaviors:</strong>
 - Multi-user check (dormant until profiles exist), phase detection (fresh install vs. existing operator), context staleness alerts (7-day warning, 14-day escalation).
 - Four-tier context loading: Tier 1 always (CONTEXT.md, PROFILE.md, capabilities), Tier 2 phase-hinted (active engine context, recent intelligence), Tier 3 on-demand (skill content, engine methodology), Tier 4 reference (intelligence log, patterns, methodology docs).
-- Dashboard shows engine states, active run plans, recent activity, and recent intelligence. Work routing classifies intent (engine work, OS maintenance, research, new engine, cross-engine) and hands off to phase-controller.</p>
+- Dashboard shows engine states, active run plans, recent activity, and recent intelligence. Work routing classifies intent (engine work, OS maintenance, research, new engine, cross-engine) and hands off to phase-controller.
+- Session-end protocol includes the commit checkpoint backstop (D59, 2026-07-03): completed arcs get logical git commits at close (one per work thread, local-only; skip-with-a-line when mid-arc) — the session-level twin of phase-controller&rsquo;s run-completion checkpoint. Also picks up queued console command-deck intents (D62 rung 2) at boot: queued JSON intents are surfaced and run only under normal governance, never auto-executed.</p>
 <p><strong>Invokes:</strong> profile-builder (when PROFILE.md missing), phase-controller (after routing), attio-mapper / notion-mapper (can trigger integration refresh)</p>
 <p><strong>Invoked by:</strong> First skill to run in any session. Not invoked by other skills.</p>
 <hr />
@@ -708,6 +717,7 @@
 - One command: <code>uv run python scripts/kb-health.py</code> &ndash; read-only orchestration plus one script run, zero API cost.
 - <strong>Composes, never duplicates:</strong> orchestrates <code>utils.compute_kb_stats()</code> + <code>lint.py</code> state checks + the five <code>.jsonl</code> vital signs. Deep-dive analysis stays in the dedicated reviewers (<code>health-review.py</code>, <code>retrieval-review.py</code>, <code>usage-review.py</code>, <code>reviewer-review.py</code>, <code>kb-audit.py</code>); this skill runs the composite and interprets it. (The no-duplication boundary is a hardened criterion from its build &ndash; the first pass FAILED adversarial review for three parallel graph walks and was consolidated into one <code>utils._walk_kb_links</code>.)
 - <code>--verify-kb</code> is the clearing motion after hand-reconciliation of a flagged desync.
+- <strong>Hot-file watch (2026-07-03):</strong> flags CONTEXT.md, DECISIONS.md, and registry files that grow past the whole-file Read budget (~20k tokens), pointing at the CONTEXT-HISTORY archival pattern &ndash; the check that would have caught CONTEXT.md at 144KB before three sessions tripped over it.
 - <code>kb-stats</code> is the single source for ANY &ldquo;by the numbers&rdquo; claim about the KB &ndash; hand-typed numbers on health surfaces are the exact rot class this skill exists to prevent (D51, born from the 373-vs-320-vs-actual-387 explainer drift).</p>
 <p><strong>Invokes:</strong> None (runs scripts; read-only otherwise).</p>
 <p><strong>Invoked by:</strong> Operator health triggers; the SessionStart hook&rsquo;s 🧠 flag surface (cache refreshed at session end). See <a href="second-brain.html">Second Brain</a> → Observability. (D51)</p>
