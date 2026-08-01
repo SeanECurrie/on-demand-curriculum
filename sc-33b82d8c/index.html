@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Skill Capital — The $700 Play + Full Findings</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b23; --panel2:#1b212b; --line:#232a35;
+    --text:#d7dce3; --dim:#8b93a0; --bright:#f4f6f8; --gold:#e8b64c;
+    --green:#34d399; --amber:#fbbf77; --red:#f87171; --blue:#7aa6ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.6}
+
+  .layout{display:flex;min-height:100vh}
+  aside.snav{width:212px;flex:0 0 212px;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:22px 14px;background:#10141a}
+  aside.snav .brand{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:16px;line-height:1.5}
+  aside.snav a{display:block;font-size:12.5px;color:var(--dim);text-decoration:none;padding:6px 9px;border-radius:6px;margin-bottom:2px;line-height:1.4}
+  aside.snav a:hover{color:var(--gold);background:var(--panel)}
+  aside.snav a.hot{color:var(--bright);font-weight:600}
+  aside.snav .grp{font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:#5d6572;margin:14px 0 5px 9px}
+  main{flex:1;min-width:0}
+  .wrap{max-width:900px;margin:0 auto;padding:28px 26px 130px}
+
+  header.hero{padding:26px 0 6px}
+  .kicker{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+  h1{font-size:30px;line-height:1.15;color:var(--bright);letter-spacing:-.4px;margin-bottom:12px}
+  .lede{font-size:16px;color:#aeb6c2;max-width:70ch}
+  .lede b{color:var(--bright)}
+  .howto{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:13px 17px;margin:18px 0;font-size:13.5px;color:#aeb6c2}
+  .howto b{color:var(--bright)}
+
+  section{margin:46px 0}
+  h2{font-size:22px;color:var(--bright);margin-bottom:6px;letter-spacing:-.2px}
+  h2 .n{color:var(--gold);margin-right:8px;font-variant-numeric:tabular-nums}
+  .sub{color:var(--dim);font-size:14px;margin-bottom:18px;max-width:75ch}
+  h3{font-size:16px;color:var(--bright);margin:22px 0 10px}
+  p{margin-bottom:12px;max-width:78ch}
+  p b, li b{color:var(--bright)}
+  ul.pts{margin:0 0 14px 20px}
+  ul.pts li{margin-bottom:8px;max-width:75ch}
+  ol.pts{margin:0 0 14px 22px}
+  ol.pts li{margin-bottom:10px;max-width:75ch}
+
+  .stat-row{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+  .stat{flex:1 1 170px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .stat .v{font-size:21px;font-weight:700;color:var(--gold);letter-spacing:-.3px}
+  .stat .l{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--dim);margin-top:3px;line-height:1.45}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+  th{color:var(--dim);text-transform:uppercase;font-size:10.5px;letter-spacing:1px;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  td b{color:var(--bright)}
+  .tablewrap{overflow-x:auto}
+
+  .callout{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:16px 0}
+  .callout.gold{border-left:3px solid var(--gold)}
+  .callout.red{border-left:3px solid var(--red)}
+  .callout.green{border-left:3px solid var(--green)}
+  .callout .t{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px}
+
+  .day{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;gap:13px;align-items:flex-start}
+  .day input[type=checkbox]{width:17px;height:17px;accent-color:var(--gold);margin-top:3px;flex:0 0 auto;cursor:pointer}
+  .day .dtag{font-size:10.5px;font-weight:700;letter-spacing:1px;color:var(--gold);text-transform:uppercase;white-space:nowrap;padding-top:2px;flex:0 0 76px}
+  .day .dbody{font-size:13.5px;color:#aeb6c2;line-height:1.55}
+  .day .dbody b{color:var(--bright)}
+  .day.done{opacity:.55}
+  .day.done .dbody{text-decoration:line-through;text-decoration-color:#5d6572;text-decoration-thickness:1px}
+
+  .group-h{display:flex;align-items:baseline;gap:10px;margin:26px 0 12px;border-bottom:1px solid var(--line);padding-bottom:8px;flex-wrap:wrap}
+  .group-h h3{margin:0;font-size:17px}
+  .group-h .gsub{color:var(--dim);font-size:12.5px}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+  .cred{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 15px;display:flex;flex-direction:column;gap:8px}
+  .cred.bought{border-color:rgba(232,182,76,.55);box-shadow:0 0 0 1px rgba(232,182,76,.2)}
+  .cred .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .cred .name{font-weight:650;color:var(--bright);font-size:14.5px;line-height:1.35}
+  .cred .src{font-size:10px;color:var(--dim);border:1px solid var(--line);border-radius:4px;padding:1px 5px;white-space:nowrap}
+  .chip{font-size:10.5px;font-weight:700;letter-spacing:.6px;padding:3px 8px;border-radius:10px;white-space:nowrap}
+  .chip.moves{background:rgba(52,211,153,.15);color:var(--green)}
+  .chip.marginal{background:rgba(251,191,119,.14);color:var(--amber)}
+  .chip.noise{background:rgba(248,113,113,.13);color:var(--red)}
+  .chip.cond{background:rgba(122,166,255,.14);color:var(--blue)}
+  .chip.play{background:rgba(232,182,76,.16);color:var(--gold)}
+  .cred .econ{font-size:12.5px;color:var(--gold);font-weight:600}
+  .cred .why{font-size:13px;color:#aeb6c2;line-height:1.5}
+  .cred .axes{font-size:12px;color:var(--dim);line-height:1.5;border-top:1px dashed var(--line);padding-top:7px}
+  .cred .axes b{color:var(--text);font-weight:600}
+
+  .fb{display:flex;gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:9px;margin-top:2px;flex-wrap:wrap}
+  .fb button{background:var(--panel2);border:1px solid var(--line);color:var(--dim);font-size:12px;padding:4px 10px;border-radius:12px;cursor:pointer;font-family:inherit}
+  .fb button:hover{border-color:var(--gold)}
+  .fb button.sel-in{background:rgba(52,211,153,.18);color:var(--green);border-color:var(--green)}
+  .fb button.sel-maybe{background:rgba(251,191,119,.16);color:var(--amber);border-color:var(--amber)}
+  .fb button.sel-out{background:rgba(248,113,113,.15);color:var(--red);border-color:var(--red)}
+  .fb input[type=text]{flex:1 1 120px;background:var(--bg);border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:12.5px;padding:5px 8px;font-family:inherit;min-width:110px}
+
+  .notes{margin-top:16px}
+  .notes label{display:block;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  .notes textarea{width:100%;min-height:70px;background:var(--panel);border:1px solid var(--line);border-radius:8px;color:var(--text);font-family:inherit;font-size:13.5px;line-height:1.5;padding:10px 12px;resize:vertical}
+  .notes textarea:focus{outline:none;border-color:var(--gold)}
+
+  .srcgrp{margin-bottom:18px}
+  .srcgrp h3{margin-bottom:6px}
+  .srcgrp .file{font-size:12px;color:var(--blue);margin-bottom:6px}
+  .srcgrp ul{margin-left:20px;font-size:13px;color:#aeb6c2}
+  .srcgrp li{margin-bottom:4px}
+  .srcgrp code{color:var(--blue);font-size:12px}
+
+  .dock{position:fixed;bottom:0;left:0;right:0;background:rgba(14,17,22,.95);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px 22px;display:flex;gap:12px;align-items:center;z-index:60}
+  .dock .status{font-size:12px;color:var(--dim);flex:1}
+  .dock button{background:var(--gold);color:#1a1408;border:none;font-weight:700;font-size:13.5px;padding:9px 18px;border-radius:8px;cursor:pointer;font-family:inherit}
+  .dock button.ghost{background:transparent;color:var(--dim);border:1px solid var(--line);font-weight:500}
+  .dock button:hover{filter:brightness(1.08)}
+
+  .foot{margin-top:50px;color:#5d6572;font-size:12px;border-top:1px solid var(--line);padding-top:16px;line-height:1.7}
+  @media (max-width:920px){
+    aside.snav{display:none}
+    h1{font-size:25px}
+    .cards{grid-template-columns:1fr}
+    .day{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="snav">
+  <div class="brand">Skill Capital<br>review + battle plan</div>
+  <div class="grp">The Play</div>
+  <a href="#play" class="hot">⚡ The $700 / 2-week plan</a>
+  <a href="#reason">How the plan was derived</a>
+  <div class="grp">Findings</div>
+  <a href="#f1">1 · Market truth</a>
+  <a href="#f2">2 · Your corpus</a>
+  <a href="#f3">3 · The frame</a>
+  <a href="#f4">4 · Recognition tiers</a>
+  <a href="#f5">5 · The full shelf</a>
+  <a href="#f6">6 · Evidenced skips</a>
+  <a href="#f7">7 · Open items</a>
+  <div class="grp">Closing</div>
+  <a href="#p2">Considerations</a>
+  <a href="#sources">Sources</a>
+  <a href="#global">Your notes</a>
+</aside>
+<main>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">Skill Capital · the committed play + full findings · Sean is the client</div>
+  <h1>The $700 Play, and Everything Behind It</h1>
+  <p class="lede">The spend is committed. This page leads with <b>the two-week battle plan</b>, then shows its full derivation, then the complete research findings that produced it (seven briefs, a 141-card JD corpus, a 31-posting market sample, adversarial evaluation PASS 7/7). Verdict buttons and note boxes throughout; day checkboxes on the plan double as your progress tracker.</p>
+  <div class="howto"><b>How to use this:</b> the plan is live — check days off as you complete them (it saves locally). Vote 🔥/🤔/❌ on any credential, scribble in any notes box, and <b>Copy my feedback</b> in the bottom bar compiles everything (votes, notes, AND plan progress) into paste-able markdown for our chat.</div>
+</header>
+
+<!-- ============ THE PLAY ============ -->
+<section id="play">
+  <h2><span class="n">⚡</span>The $700 / two-week battle plan</h2>
+  <p class="sub">Committed spend, ~6 focused hours/day, built for a power-consumer. Free stack rides along. Day 1 is non-negotiable: slow fuses and the booked exam date before any coursework.</p>
+
+  <h3>The spend, fully allocated</h3>
+  <div class="tablewrap"><table>
+    <tr><th>What</th><th>Cost</th><th>Why it makes the cut</th></tr>
+    <tr><td><b>Gainsight L1 Associate Admin</b></td><td>$70</td><td>The one CS-platform cert with hiring-side signal; your core lane</td></tr>
+    <tr><td><b>Salesforce Platform Administrator exam</b></td><td>$200</td><td>"Salesforce Certified" — the top recruiter token in your market; 14-16 of your JDs name the tool</td></tr>
+    <tr><td>SF retake insurance</td><td>$100</td><td>Held in reserve; rolls to Tableau DS if you pass clean</td></tr>
+    <tr><td><b>Google PM Certificate</b></td><td>$49</td><td>The CAPM feeder; satisfies its 23-education-hour prereq</td></tr>
+    <tr><td><b>CAPM exam</b> (w/ PMI membership math)</td><td>~$280</td><td>The only cert name your role class literally prints in JDs ("PMP or CAPM")</td></tr>
+    <tr><td><b>Total</b></td><td><b>~$700</b></td><td>Free riders: HubSpot ×2 · CCEP · Pendo sandbox + cert · Trailhead · free SF Dev org</td></tr>
+  </table></div>
+
+  <h3>The days</h3>
+  <div class="day" data-day="d1"><input type="checkbox"><span class="dtag">Day 1</span><div class="dbody"><b>Fire every slow fuse before studying anything:</b> email training@gainsight.com for the training environment (lead time) · create the free Salesforce Dev org · create the free Pendo sandbox (500 MAU, no card) · <b>book the Salesforce exam for Day 13-15, today</b> — the booked date is the commitment device. Then knock out <b>HubSpot Service Hub</b> (~2h) before dinner. First credential, day one.</div></div>
+  <div class="day" data-day="d23"><input type="checkbox"><span class="dtag">Days 2-3</span><div class="dbody"><b>The name blitz:</b> HubSpot RevOps (~4h), then Pendo — Academy admin track while instrumenting <b>your own apply-tracker or console</b>: guides, adoption analytics, an NPS survey on software you own. Finish the Pendo cert. Three names + a live artifact by Wednesday.</div></div>
+  <div class="day" data-day="d45"><input type="checkbox"><span class="dtag">Days 4-5</span><div class="dbody"><b>Gainsight:</b> L1 course + exam ($70). If the training env landed, configure a health scorecard mirroring the early-warning system you built by hand at Coding Temple — "I built this manually; here it is in the tool" is an interview weapon.</div></div>
+  <div class="day" data-day="d67"><input type="checkbox"><span class="dtag">Days 6-7</span><div class="dbody"><b>CCEP</b> (~$0 — verify at enroll; ~20h, spills into spare evening hours): the credential that names your job family. Any slack: start Trailhead's Admin trailmix.</div></div>
+  <div class="day" data-day="d814"><input type="checkbox"><span class="dtag">Days 8-14</span><div class="dbody"><b>The big token — Salesforce, all six hours, every day:</b> Trailhead Admin path interleaved with the Dev-org build (rebuild the apply-tracker pipeline as a Salesforce app: custom objects, flows, a dashboard — Loom it). The build IS the exam prep. Sit the exam on the date you booked Day 1. Walk out <b>Salesforce Certified</b> with a real org to point at.</div></div>
+  <div class="day" data-day="w3"><input type="checkbox"><span class="dtag">Week 3+</span><div class="dbody"><b>The glide path:</b> Google PM certificate at your speed (~a week for you, not the advertised month) → CAPM exam booked ~week 5 (~$280, already earmarked) · finish CCEP loose ends · if the SF retake $100 went unused, Tableau DS after publishing a cohort-health dashboard on Tableau Public.</div></div>
+
+  <h3>What the resume gains — all ledger-legal, all full-chest</h3>
+  <p>By day 14: <b>Salesforce Certified Platform Administrator · Gainsight L1 Associate Admin · Pendo (certified + deployed on your own product) · CCEP · HubSpot Service Hub + RevOps</b> — plus two living artifacts (the SF org, the instrumented app). CAPM lands ~3 weeks behind. Every claim clears the 30-hour doctrine honestly: by the time the words go on the page, "hell yeah I own this" is simply true.</p>
+  <div class="callout red"><div class="t">Deliberately not bought</div>
+  <p style="margin:0"><b>CCMP</b> (the §4 recognition crack stands — recruiters know Prosci, not CCMP) · <b>WalkMe/SAP</b> (hands-on unverified = doctrine-fail until the errand runs) · everything on the §6 NOISE list. The $700 buys only things that clear all the axes.</p></div>
+  <div class="notes"><label>Your notes on the plan</label><textarea data-note="plan" placeholder="swaps you want, pace concerns, day-1 blockers..."></textarea></div>
+</section>
+
+<!-- ============ REASONING ============ -->
+<section id="reason">
+  <h2><span class="n">⚙</span>How the plan was derived — the full thought process</h2>
+  <p class="sub">Every allocation decision, with the tradeoffs shown. This is the part you can attack.</p>
+  <ol class="pts">
+    <li><b>The constraint set:</b> $700 committed (not advisory — spend it well, don't re-litigate it) · 2-3 weeks · ~6 hrs/day = <b>84-126 total hours</b> · goals in your words: new resume-claimable names, confidence selling yourself, invigoration and knowledge. Free courses allowed on top.</li>
+    <li><b>The window math forced a one-big-exam rule.</b> CAPM (feeder + prep ≈ 55-80h) and Salesforce Admin (org build + prep ≈ 50-80h) each fit the window alone; both together = 105-160h — over budget unless everything goes perfectly. Promising two exams in two weeks is how plans fail. So: one exam inside the window, the second staged immediately after with money already committed, so it can't silently die.</li>
+    <li><b>Why Salesforce got the in-window slot over CAPM:</b> four reasons. (a) Your joy criterion — mastery through building; the Dev-org build is construction, CAPM is memorization. (b) The org build produces an artifact CAPM can't. (c) "Salesforce Certified" ties CAPM on recognition but ALSO resolves the ecosystem-lane open question by simply existing. (d) The build doubles as exam prep — no wasted hours. CAPM isn't demoted, it's sequenced: its feeder starts week 3, exam ~week 5, dollars already allocated.</li>
+    <li><b>Why the blitz week comes first, not the big exam:</b> momentum economics. Four credential names + a live artifact inside five days converts enthusiasm into evidence immediately (your invigoration goal), de-risks the plan (if week 2 slips, week 1's wins already happened), and the blitz items have hard external dependencies (Gainsight env lead time, CCEP price check) that need firing early anyway.</li>
+    <li><b>The Day-1 slow-fuse principle:</b> every item with lead time or scheduling friction (Gainsight env email, sandbox/org creation, the exam booking) fires before any coursework. The booked SF exam date is a deliberate commitment device — an unbooked exam is a wish.</li>
+    <li><b>The $100 retake line is insurance, not pessimism:</b> the SF exam was revised Dec 2025 (prep material can be stale against the new outline); $100 reserved means a bad day costs a week, not the plan. Pass clean and it rolls to Tableau DS — after its artifact, per brief C's artifact-first verdict.</li>
+    <li><b>PMI membership math on CAPM:</b> join ($99ish) + member exam ($225) ≈ non-member $300 but adds retake discount + PDU resources — roughly cost-neutral with better downside. The ~$280 line reflects it.</li>
+    <li><b>What was rejected for this window and why:</b> CCMP — $1.6K wouldn't fit $700 anyway, and the recognition crack (§4) is unresolved · WalkMe/SAP exam ($230-276) — would fit, but hands-on access is unverified, which fails your 30-hour doctrine; a cert without loggable hours is exactly what you said you won't stand on · ServiceNow — 150-250h doesn't fit any 2-week window and the experience gate stands · everything in §6.</li>
+    <li><b>Ledger discipline on timing:</b> nothing goes on the resume until its credential/artifact exists — which in this plan means most additions land within days of each other in week 1-2, not at some far horizon. The plan IS the claim-sequencing your doctrine demands, compressed.</li>
+  </ol>
+  <div class="notes"><label>Your notes on the reasoning</label><textarea data-note="reason" placeholder="disagree with a tradeoff? want CAPM first? attack it here..."></textarea></div>
+</section>
+
+<!-- ============ F1 ============ -->
+<section id="f1">
+  <h2><span class="n">1</span>What the market actually says about credentials</h2>
+  <p class="sub">Primary-source JD sampling (31 live postings, brief E) + hiring-side research across all seven briefs.</p>
+  <div class="stat-row">
+    <div class="stat"><div class="v">87.5%</div><div class="l">of neutrally-sampled JDs in your role classes mention NO certification (14 of 16)</div></div>
+    <div class="stat"><div class="v">~10 of 12</div><div class="l">cert mentions that ARE there say "a plus," not "required"</div></div>
+    <div class="stat"><div class="v">0</div><div class="l">AI certifications named in ANY sampled posting, incl. AI-adoption roles</div></div>
+    <div class="stat"><div class="v">1 class</div><div class="l">of true hard gates: vendor-platform certs (ServiceNow CIS/CSA at consultancies)</div></div>
+  </div>
+  <ul class="pts">
+    <li><b>Certs are tiebreakers, never gates</b> in your role classes. Where cert language exists it ranks candidates, it does not filter them. Most-named classes: PM certs ("PMP or CAPM a plus" on live implementation JDs) and Salesforce (one $100-120K CSM posting literally titled "Salesforce Certified"; another funds cert acquisition within 6 months of hire).</li>
+    <li><b>Tool names outrank cert names at the first gate</b> (brief G): zero of 12 customer-education postings required any DAP/LMS certification, but the tool names (Pendo, Docebo, Skilljar) are what recruiters keyword-scan.</li>
+    <li><b>The CS-industry cert complex is manufactured demand:</b> CCSM/SuccessCOACHING appear constantly in vendor marketing, almost never in employer language (1 "a plus" in 10 sampled CSM postings).</li>
+    <li><b>Keyword currency is role-class-dependent:</b> Zapier/Make/Airtable scored zero mentions in customer-education JDs but carry real currency in ops/implementation JD language.</li>
+  </ul>
+  <div class="notes"><label>Your notes on §1</label><textarea data-note="s1" placeholder="reactions, disagreements, things to dig deeper on..."></textarea></div>
+</section>
+
+<!-- ============ F2 ============ -->
+<section id="f2">
+  <h2><span class="n">2</span>What your own corpus demands, and the framing it overturned</h2>
+  <p class="sub">55 full JDs with required/preferred keyword extraction + lexicon sweep of 86 more cards + your claims ledger + your rejection corpus.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Demand signal</th><th>Count</th><th>Your ledger position today</th></tr>
+    <tr><td><b>Project management (formal)</b></td><td><b>18 of 55 JDs, 16 as REQUIRED</b> — the #1 credentialable demand</td><td>T1 practice; PMP/cert = hard-line unclaimable</td></tr>
+    <tr><td><b>Salesforce</b></td><td>14-16 JDs (6 required)</td><td>T2 with ratified anchor; certs unclaimable</td></tr>
+    <tr><td>Customer success (platform implicit)</td><td>16 JDs</td><td>practice-claimed; Gainsight T3</td></tr>
+    <tr><td>LMS (category + named)</td><td>~9 across corpus</td><td>T2 category / T3 named platforms</td></tr>
+    <tr><td>Instructional design + adult learning</td><td>5 + 3</td><td>T2 practice, no credential</td></tr>
+    <tr><td>Change management</td><td>4</td><td>T2 practice; Prosci unclaimable</td></tr>
+    <tr><td>SQL / data</td><td>4 (all required)</td><td><b>T1 — already claimable; needs an artifact, not a cert</b></td></tr>
+  </table></div>
+  <div class="callout gold"><div class="t">The finding that overturned the intake</div>
+  <p style="margin:0">You opened this project saying "I can't say I've worked with HubSpot or Salesforce." <b>Your own ledger disagreed:</b> HubSpot is T1 (daily driver), Salesforce T2 with a ratified if-asked anchor. The genuinely unclaimable class is narrower: <b>held certifications</b> (the hard line) and <b>named-console depth</b> (T3: Gainsight, BI tools, named LMS, Zendesk). Exactly what funded money and funded hours convert. Rule extracted: check the ledger before accepting a gap framing, including your own.</p></div>
+  <p><b>Rejection cross-check:</b> nothing in your reject corpus is cert-shaped. Fast ATS-suspected rejects clustered on technical-<i>titled</i> roles; slow ones are pipeline-clears. No rejection evidence suggests a certification would have flipped any outcome to date.</p>
+  <div class="notes"><label>Your notes on §2</label><textarea data-note="s2" placeholder="..."></textarea></div>
+</section>
+
+<!-- ============ F3 ============ -->
+<section id="f3">
+  <h2><span class="n">3</span>The evaluation frame — your axes, your doctrine</h2>
+  <p class="sub">This evolved mid-project, driven by you. It governs every verdict on this page, including the battle plan.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Axis</th><th>The question</th></tr>
+    <tr><td><b>1 · First-gate recognition</b></td><td>Will a generalist staffing recruiter recognize the name when keyword-scanning or hearing it on a screen? (Your funnel: 0 interviews from 47+ cold applies; the recruiter gate is the wall.)</td></tr>
+    <tr><td><b>2 · Claim licensing</b></td><td>Does it put the exact tool/cert name legitimately on the page and in your mouth?</td></tr>
+    <tr><td><b>3 · The 30-hour bar</b> (often dominant)</td><td>Your doctrine: ~30 real hands-on hours = full-chest claiming on a live call. No hours, no claim, regardless of ability. So: is hands-on access even AVAILABLE to an individual, and what do 30 hours produce?</td></tr>
+    <tr><td><b>4 · Interview survivability</b></td><td>Does 30 hours + the artifact hold up with someone who actually knows the tool?</td></tr>
+    <tr><td><b>5 · Joy = mastery toward the goal</b></td><td>Your correction, verbatim spirit: the joy is in the goal, the work, and the mastery — never the content. A course qualifies by being legit and effective, not fun.</td></tr>
+  </table></div>
+  <div class="callout"><div class="t">The founding case: Crawford</div>
+  <p style="margin:0 0 8px">The engine's record + your clarification: the Airtable loss didn't happen on the resume. It happened <b>on the screening call</b> — the recruiter couldn't evaluate capability, only comfort, and your comfort was honestly capped because you hadn't technically logged the hours. "If I did take a 30 hour course I would just gone for it."</p>
+  <p style="margin:0">Implication that reshaped everything: <b>the highest-value purchases are permission slips</b> — cheap, legit ways to log the hours that make the honest claim available. The paper is secondary. Your doctrine and the market's cert-silence (§1) agree completely.</p></div>
+  <div class="notes"><label>Your notes on §3</label><textarea data-note="s3" placeholder="..."></textarea></div>
+</section>
+
+<!-- ============ F4 ============ -->
+<section id="f4">
+  <h2><span class="n">4</span>Recognition tiers — what the recruiter layer actually knows</h2>
+  <p class="sub">Every researched name, ranked by axis 1 alone. Note the pattern: best evidence-fit skews low; best recognition sits exactly where the battle plan spends.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Recognition at the recruiter layer</th><th>Names</th></tr>
+    <tr><td><b>Universally legible</b> (keyword-searched)</td><td>PMP · "Salesforce Certified" · CAPM (rides PMP's brand) · Scrum/CSM · "SAP Certified" (prefix)</td></tr>
+    <tr><td><b>Legible inside their niche</b></td><td>Gainsight (CS recruiters) · Prosci (enterprise/consulting) · Tableau · Pendo/Docebo/Skilljar (customer-ed hiring, as TOOL names)</td></tr>
+    <tr><td><b>Weakly / not legible to intermediaries</b></td><td>CCMP · CCEP · HubSpot Academy certs · ATD-anything · Whatfix</td></tr>
+  </table></div>
+  <div class="callout red"><div class="t">The crack this put in the earlier recommendation</div>
+  <p style="margin:0">v1.2 recommended CCMP (~$1.6K) as "Prosci's vocabulary at a third of the price." On YOUR axes that weakens badly: <b>Prosci owns the brand recruiters recognize; CCMP is equivalent and recognitionally invisible.</b> The demand evidence (4 of 55 JDs) still doesn't support Prosci at $5K. Unresolved by design — and the $700 plan spends zero here.</p></div>
+  <div class="notes"><label>Your notes on §4</label><textarea data-note="s4" placeholder="..."></textarea></div>
+</section>
+
+<!-- ============ F5 ============ -->
+<section id="f5">
+  <h2><span class="n">5</span>The full shelf — every credential researched, with verdicts</h2>
+  <p class="sub">Gold-ringed cards are IN the $700 play. Verdict chips reflect the evidence at THIS role class and YOUR axes; source tags cite the brief holding every citation. Vote and annotate as you read.</p>
+  <div id="shelf"></div>
+  <div class="notes"><label>Your notes on §5 (the shelf overall)</label><textarea data-note="s5" placeholder="patterns you see, groups to prioritize, anything missing..."></textarea></div>
+</section>
+
+<!-- ============ F6 ============ -->
+<section id="f6">
+  <h2><span class="n">6</span>The evidenced skips — money the research saved</h2>
+  <p class="sub">NOISE at every budget. Each verdict carries its evidence in the briefs.</p>
+  <ul class="pts">
+    <li><b>Prosci ($4,500-5,000):</b> buyers are dedicated OCM/ERP-transformation/gov roles; fewer than 30% of even those postings require any cert. Your corpus mentions it approximately once.</li>
+    <li><b>CCSM / SuccessCOACHING / Cisco CS certs:</b> near-absent from employer language despite heavy vendor marketing. Manufactured demand.</li>
+    <li><b>IDOL ($4,997) · university ID certificates ($2,175-5,880) · CPTD · Canvas CCTA:</b> they certify a floor your 3-year instruction record already exceeds.</li>
+    <li><b>Salesforce Associate ($75):</b> ecosystem insiders discount it themselves.</li>
+    <li><b>Looker certification:</b> retired April 2022. Nothing exists to buy.</li>
+    <li><b>Instructor-led vendor courses (~$2,700 class):</b> free equivalents exist for every one we checked.</li>
+    <li><b>ALL AI certifications:</b> your instinct, market-vindicated — zero named in any sampled JD, including AI-adoption roles. Your living AI evidence is the strongest signal in that lane; a certificate would dilute it.</li>
+  </ul>
+  <div class="notes"><label>Your notes on §6</label><textarea data-note="s6" placeholder="any skip you want re-argued?"></textarea></div>
+</section>
+
+<!-- ============ F7 ============ -->
+<section id="f7">
+  <h2><span class="n">7</span>Open and unverified items</h2>
+  <ul class="pts">
+    <li><b>WalkMe hands-on access for individuals: UNVERIFIED.</b> The free Digital Adoption Institute is closed to non-customers (verified on-page); the SAP-badged exam is open ($230-276) but individual Editor hands-on is unchecked — doctrine-conditional. One errand resolves it.</li>
+    <li><b>CCEP enrollment price today</b> (historically ~$0; confirm at enroll — it's a Day 6 checkpoint in the plan) and its expiry terms.</li>
+    <li><b>The Salesforce-ecosystem lane decision</b> — partly self-resolving now: the plan produces the Admin cert regardless, which keeps the partner/ISV lane open without a separate ruling.</li>
+    <li><b>Tableau Desktop Specialist price conflict</b> ($75 post-migration claim vs $100 Pearson store) — carried, not smoothed.</li>
+    <li><b>Gainsight training-environment lead time</b> (by request, training@gainsight.com) — the plan fires this email Day 1 for exactly this reason.</li>
+    <li><b>Docebo:</b> JD-frequent but structurally closed to individuals. Watch-item.</li>
+  </ul>
+  <div class="notes"><label>Your notes on §7</label><textarea data-note="s7" placeholder="..."></textarea></div>
+</section>
+
+<!-- ============ PART II ============ -->
+<section id="p2">
+  <h2><span class="n">II</span>Considerations beyond the plan</h2>
+  <p class="sub">Superseded and standing items, kept honest.</p>
+  <ul class="pts">
+    <li><b>The v1.2 composition sketches (stacks A/B/C) are SUPERSEDED by the committed $700 play</b> — which is, in effect, a leaner Stack A re-sequenced around your window, your doctrine, and the recognition tiers. Kept in DECISION-SURFACE.md as history.</li>
+    <li><b>The "package what you own" motion stands, unscheduled:</b> portfolio-grade artifacts for the T1 stack (HubSpot/Make/Zapier/Airtable) aimed at ops/implementation-lane gates. $0. It's the natural follow-on once the plan's weeks complete — or a rainy-day track alongside.</li>
+    <li><b>Budget headroom:</b> the $700 is the spend; your parents' remaining ceiling stays banked. The research's standing answer for headroom is unchanged: it buys focused hours, and the hours are the product.</li>
+    <li><b>Re-run trigger stands:</b> +20 carded JDs, a lane shift, or a live target naming a ranked-down cert reopens the analysis.</li>
+  </ul>
+  <div class="notes"><label>Your notes on Part II</label><textarea data-note="p2" placeholder="..."></textarea></div>
+</section>
+
+<!-- ============ SOURCES ============ -->
+<section id="sources">
+  <h2><span class="n">§</span>Sources</h2>
+  <p class="sub">Every verdict traces to a brief in <code style="color:var(--blue)">projects/skill-capital/02-needle-evidence/</code>, each carrying tiered inline citations (T1 primary/official · T2 independent trade press · T3 community, bias-labeled · T4 vendor marketing, never load-bearing alone; load-bearing verdicts ≥2 independent sources). Key named sources per brief:</p>
+
+  <div class="srcgrp"><h3>Brief A — Project management</h3><div class="file">A-project-management.md</div>
+    <ul><li>PMI CAPM certification page (T1): <code>pmi.org/certifications/certified-associate-capm</code> — prereqs, fees, renewal</li>
+    <li>scrum.org PSM-I page (T1); Scrum Alliance renewal terms (T1): <code>scrumalliance.org/get-certified/renewing-certifications</code></li>
+    <li>Live JD verbatims (T1): Steer Health <code>apply.workable.com/steer-health/j/9E528412FF</code>, Humanly (Ashby), Brightflag — all printing "PMP or CAPM"</li>
+    <li>Coursera CAPM guide (T2); ThinkLouder CSM cost comparison (T2); CrucialExams on CompTIA policy change (T2); r/PMCareers threads (T3)</li>
+    <li>PRINCE2 US decline data (T3, corroborated): <code>qualifynation.com</code>, <code>woloyem.com</code></li></ul></div>
+
+  <div class="srcgrp"><h3>Brief B — Salesforce + HubSpot</h3><div class="file">B-salesforce-hubspot.md</div>
+    <ul><li>Salesforce official (T1): <code>help.salesforce.com</code> pricing + maintenance schedule; Trailhead exam guide (post-Dec-2025 revision: 60 scored Q, 105 min, 68% pass); <code>developer.salesforce.com/signup</code> free Dev org (relaunched Mar 2025)</li>
+    <li>Salesforce Ben + Apex Hours (T2) — pricing-change and exam-revision coverage</li>
+    <li>r/salesforce + Ask a Manager practitioner commentary on cert-vs-experience for CS hiring (T3, attributed)</li>
+    <li>HubSpot Academy official cert pages + HubSpot Community "nice-to-have" thread (T1/T3)</li></ul></div>
+
+  <div class="srcgrp"><h3>Brief C — Gainsight + BI</h3><div class="file">C-cs-platform-bi.md</div>
+    <ul><li>Gainsight University cert tiers + pricing (T1); training-env access via <code>training@gainsight.com</code> (community-confirmed, T3)</li>
+    <li>r/CustomerSuccess multi-cert-holder + CS-Ops hirer commentary (T3, the "only cert that ever helped" / "pure tiebreaker" quotes)</li>
+    <li>Tableau/Pearson VUE store (T1 — the $75-vs-$100 conflict is carried from these two surfaces); Microsoft PL-300 page (T1)</li>
+    <li>Looker cert retirement: Looker Community announcement + Credly badge status (T1/T2)</li></ul></div>
+
+  <div class="srcgrp"><h3>Brief D — Trainer lane + change management</h3><div class="file">D-trainer-changemgmt.md</div>
+    <ul><li>ATD (<code>td.org</code>) APTD/CPTD eligibility + fees (T1); IDOL Academy + university certificate pricing (T1)</li>
+    <li>Prosci pricing triangulated three ways (T1/T2); <code>ocmsolution.com</code> analysis: &lt;30% of even OCM postings require any cert (T2)</li>
+    <li>Skilljar/Gainsight CCEP program pages (T1 — ~$0, verify at enroll)</li>
+    <li>Corpus zero-count for trainer credentials (T1, our own 141-card data)</li></ul></div>
+
+  <div class="srcgrp"><h3>Brief E — Live-market cert language</h3><div class="file">E-market-cert-language.md</div>
+    <ul><li>31 sampled live postings, every one listed with company/role/URL in-file (T1 primary) — canonical ATS surfaces (Greenhouse/Lever/Ashby/Workable/SmartRecruiters)</li>
+    <li>The 87.5% figure = the neutrally-sourced 16-posting subset (14 cert-silent); the deliberately cert-targeted half is tallied separately and never used as a prevalence estimate</li>
+    <li>Named findings: ListEngage ("Salesforce certifications a plus or ability to obtain within six months"), the "Salesforce Certified"-titled CSM posting, ServiceNow CIS/CSA requirements at AHEAD/TTEC Digital/Cprime</li></ul></div>
+
+  <div class="srcgrp"><h3>Brief F — ServiceNow</h3><div class="file">F-servicenow-path.md</div>
+    <ul><li>ServiceNow official KBs (T1): <code>KB0011560</code> (individual exam eligibility), <code>KB0011554</code>, <code>KB0011172</code>, <code>KB0012109</code> — 2026 exam pricing/policy rebuild, free CIS-DF window through Dec 2026</li>
+    <li>RiseUp with ServiceNow handbook placement disclaimer (T1, against interest); Bloomberg reporting on RiseUp retrenchment (T2)</li>
+    <li>r/servicenow break-in threads incl. the documented CSA-only glut ("100+ applicants per junior req", May 2026) (T3)</li></ul></div>
+
+  <div class="srcgrp"><h3>Brief G — Enterprise adoption + LMS</h3><div class="file">G-enterprise-adoption-lms.md</div>
+    <ul><li>Pendo (T1): <code>support.pendo.io</code> Pendo Free article (2026-05-28, free-forever 500-MAU tier) + <code>pendo.io</code> Academy/cert pages (4 independent pricing corroborations)</li>
+    <li>WalkMe (T1/T4): <code>walkme.com/training</code> scraped 07-30 — DAI restricted to customers/partners; SAP path (T1): <code>learning.sap.com</code> journey + <code>training.sap.com</code> CER001 exam pricing ($230/$276)</li>
+    <li>Skilljar Academy catalog (T1): <code>walkthrough.skilljar.com</code>; Whatfix University (T1): <code>university.whatfix.com</code>; Docebo University FAQ (T1): <code>docebo.com/university/certifications</code></li>
+    <li>Fresh 12-posting customer-ed/enablement JD sample, all enumerated in-file (T1; snippet-verified entries flagged ⚠)</li></ul></div>
+
+  <div class="srcgrp"><h3>Internal primary data</h3><div class="file">01-gap-demand-evidence.md · 00-corpus-counts.txt · arsenal/tool-claims-ledger-2026-07-22.md</div>
+    <ul><li>The 55-JD structured keyword extraction (<code>targets/pipeline/2026-07-22-jd-keywords.json</code>) + 86-card lexicon sweep — every demand count traces to enumerated card IDs</li>
+    <li>The claims ledger (T-tier definitions, hard line) · the rejection corpus (<code>inbox/responses/</code>) · funnel telemetry (0/47 cold-portal conversations)</li>
+    <li>Adversarial evaluation: PASS 7/7, with independent recounts against the source JSON and 3/3 external fact re-verifications (CAPM prereqs via PMI, SF exam pricing, Looker retirement)</li></ul></div>
+  <div class="notes"><label>Your notes on sources</label><textarea data-note="sources" placeholder="anything you want re-verified firsthand?"></textarea></div>
+</section>
+
+<!-- ============ GLOBAL ============ -->
+<section id="global">
+  <h2><span class="n">✎</span>Anything else</h2>
+  <div class="notes"><label>Global notes — anything the sections didn't catch</label><textarea data-note="global" placeholder="the big-picture reaction, what you want next, what's wrong with all of this..." style="min-height:110px"></textarea></div>
+</section>
+
+<div class="foot">
+  Built 2026-07-30 · run plan <b>2026-07-30-skill-capital-review-instrument.md</b> · decision history in <b>DECISION-SURFACE.md</b> (v1.2 stacks now superseded by the committed play) · all feedback stays in this browser until you copy it out.
+</div>
+
+</div><!-- /wrap -->
+</main>
+</div><!-- /layout -->
+
+<div class="dock">
+  <div class="status" id="save-status">Nothing entered yet — plan progress and feedback save locally as you go.</div>
+  <button class="ghost" id="clear-btn" title="Erase all locally saved feedback">Reset feedback</button>
+  <button id="copy-btn">📋 Copy my feedback</button>
+</div>
+
+<script>
+const IN_PLAY = ["gs-l1","sf-admin","sf-devorg","hubspot-free","pm-google","pm-capm","ed-ccep","dap-pendo"];
+const CREDS = [
+ {id:"pm-google", g:"Project Management", gsub:"Brief A · your #1 credentialable demand: 18/55 JDs, 16 required", name:"Google PM Certificate", verdict:"marginal", vlabel:"MARGINAL alone", econ:"$49-98 · ~1 month advertised, ~1 week at your pace", why:"Cheapest legitimate feeder for CAPM (satisfies its 23-education-hour prereq). Alone, weak signal; as step one of the CAPM play, earns its week. IN THE PLAY: week 3.", axes:"<b>Susie:</b> Google brand mildly legible · <b>License:</b> modest · <b>30-hr:</b> yes, structured · <b>Survives:</b> n/a alone", src:"A"},
+ {id:"pm-capm", g:"Project Management", name:"CAPM exam", verdict:"moves", vlabel:"MOVES (modestly)", econ:"~$280 w/ PMI membership math · exam ~week 5", why:"The only credential your role-class JDs print by name (\"PMP or CAPM a plus\" on live implementation postings). No experience prereq. Renewal 15 PDUs/3yr. IN THE PLAY: staged after the window, dollars committed now so it can't silently die.", axes:"<b>Susie:</b> universally legible (rides PMP) · <b>License:</b> a legal resume token · <b>30-hr:</b> cleared via study + documented real project · <b>Survives:</b> with the charter/WBS artifact, yes", src:"A"},
+ {id:"pm-psm", g:"Project Management", name:"PSM-I (Scrum.org)", verdict:"marginal", vlabel:"MARGINAL", econ:"$200 · lifetime, no renewal", why:"Respected and cheap, but agile vocabulary is not what CS/onboarding JDs ask for. Not in the $700; a future flex add.", axes:"<b>Susie:</b> Scrum legible · <b>License:</b> narrow · <b>30-hr:</b> light · <b>Survives:</b> fine", src:"A"},
+ {id:"pm-rest", g:"Project Management", name:"CSM · Project+ · PRINCE2", verdict:"noise", vlabel:"NOISE", econ:"$500+ / varies", why:"CSM = PSM-I's signal at 2-3x price plus a renewal treadmill. Project+ wrong channel. PRINCE2 wrong continent (UK vacancies down 62% since 2023).", axes:"Skipped on evidence; see brief A.", src:"A"},
+ {id:"sf-devorg", g:"Salesforce + HubSpot", gsub:"Brief B · Salesforce in 14-16 of your JDs; employers want EXPERIENCE, which the cert alone doesn't satisfy", name:"Salesforce free Dev-org build", verdict:"moves", vlabel:"MOVES — the real gap-closer", econ:"$0 · 20-30h · PLAY: days 8-14", why:"Dev orgs are free and current. JDs at Salesforce-USING companies ask for \"experience with Salesforce\" — hands-on org reps satisfy that; the cert doesn't. Rebuild the apply-tracker pipeline as a Salesforce app, Loom it, own it. The build doubles as exam prep.", axes:"<b>Susie:</b> puts the word legitimately on the page · <b>License:</b> upgrades your T2 anchor to hands-on · <b>30-hr:</b> exactly what it logs · <b>Survives:</b> it IS the artifact", src:"B"},
+ {id:"sf-admin", g:"Salesforce + HubSpot", name:"Salesforce Platform Administrator cert", verdict:"moves", vlabel:"IN PLAY — the big token", econ:"$200 + $100 retake reserve · exam booked Day 1, sat ~Day 14", why:"\"Salesforce Certified\" is the top recruiter token in your market, and holding it quietly resolves the ecosystem-lane question by existing. Exam revised Dec 2025 (60 scored Q, 105 min, 68% pass) — prep against the NEW outline. Free Trailhead; free annual maintenance badge.", axes:"<b>Susie:</b> top-tier token · <b>License:</b> strong · <b>30-hr:</b> cleared via the org build · <b>Survives:</b> with org reps, yes", src:"B"},
+ {id:"hubspot-free", g:"Salesforce + HubSpot", name:"HubSpot Academy certs (Service Hub, RevOps)", verdict:"marginal", vlabel:"MARGINAL but free", econ:"$0 · ~7h · PLAY: days 1-2", why:"A verification pixel on a tool you already run daily (T1). \"Nice-to-have, not must-have\" per HubSpot's own community. In the play as day-one wins: first credentials on the board within 24 hours.", axes:"<b>Susie:</b> weakly legible · <b>License:</b> already held (T1) · <b>30-hr:</b> long since logged · <b>Survives:</b> trivially", src:"B"},
+ {id:"gs-l1", g:"CS Platform + BI", gsub:"Brief C · Gainsight named in 3-4 JDs; implicit in 16 CS JDs", name:"Gainsight L1 Associate Admin", verdict:"moves", vlabel:"IN PLAY", econ:"$70 · 10-15h · PLAY: days 4-5", why:"The one CS-platform cert with hiring-side signal (\"the only cert that ever helped\"; \"pure tiebreaker\"). L2/L3 org-gated — skip. Training env requested Day 1; configure the health scorecard you built by hand at Coding Temple, in the tool that productizes it.", axes:"<b>Susie:</b> legible to CS recruiters · <b>License:</b> Gainsight T3→T2 · <b>30-hr:</b> via the training env · <b>Survives:</b> with the scorecard artifact, yes", src:"C"},
+ {id:"bi-tableau", g:"CS Platform + BI", name:"Tableau Desktop Specialist", verdict:"cond", vlabel:"CONDITIONAL — artifact first", econ:"$75-100 (price conflict carried) · never expires", why:"Named-BI demand in your corpus is nearly absent; the CAPABILITY (dashboards, 8 JDs) is what's asked and you build them daily. Publish a cohort-health dashboard on Tableau Public ($0) first; the cert caps it — funded by the SF retake $100 if unused.", axes:"<b>Susie:</b> Tableau legible · <b>License:</b> T3→T2 with artifact · <b>30-hr:</b> loggable free · <b>Survives:</b> artifact-dependent", src:"C"},
+ {id:"bi-rest", g:"CS Platform + BI", name:"PL-300 (Power BI) · Looker", verdict:"noise", vlabel:"HOLD / NOISE", econ:"$165/yr · —", why:"Power BI: zero corpus mentions + Windows-only authoring (you're on macOS). Looker: certification retired April 2022 — nothing exists to buy.", axes:"Hold unless a live target names Power BI.", src:"C"},
+ {id:"ed-ccep", g:"Customer Education / Trainer", gsub:"Brief D · your job-family lane; credentials near-zero in employer language, but one names the family itself", name:"CCEP (Certified Customer Education Professional)", verdict:"moves", vlabel:"IN PLAY (weakly-moves, ~$0)", econ:"~$0 (verify at enroll) · ~20h · PLAY: days 6-7", why:"The only credential naming your exact job family. Honest weakness: no independent hiring-side source says it ever moved a hire — the ~$0 economics carry it. Pairs later with shipping a public course (17 combined corpus mentions for that capability vs 0 for any trainer credential).", axes:"<b>Susie:</b> not legible · <b>License:</b> names the family · <b>30-hr:</b> cleared by the coursework · <b>Survives:</b> via eventual shipped course", src:"D"},
+ {id:"ed-aptd", g:"Customer Education / Trainer", name:"APTD (ATD)", verdict:"cond", vlabel:"CONDITIONAL HOLD", econ:"$525-800", why:"Buy only if a specific live target names ATD. Otherwise it certifies a floor your 3-year instruction record already exceeds.", axes:"<b>Susie:</b> not legible outside L&D · rest: see brief D.", src:"D"},
+ {id:"cm-ccmp", g:"Change Management", gsub:"Briefs D+E · 4/55 corpus JDs; see §4's recognition crack", name:"CCMP (ACMP)", verdict:"cond", vlabel:"CONDITIONAL — weakened", econ:"~$1,100-1,650 incl. prep", why:"The old Stack-B bet, now carrying the §4 crack: Prosci owns the recognizable brand; CCMP is equivalent and invisible to recruiters. Not in the $700. Unresolved by design.", axes:"<b>Susie:</b> weak (that's the problem) · <b>License:</b> vocabulary yes · <b>30-hr:</b> structured yes · <b>Survives:</b> with your practice evidence, yes", src:"D+E"},
+ {id:"cm-prosci", g:"Change Management", name:"Prosci", verdict:"noise", vlabel:"NOISE at $5K", econ:"$4,500-5,000 · 3 days", why:"The brand recruiters know, at a price the demand evidence (4/55) cannot carry. Buyers are dedicated OCM/ERP roles. Revive only if a gate names it — ideally employer-funded.", axes:"See §6.", src:"D"},
+ {id:"sn-path", g:"ServiceNow", gsub:"Brief F · the market's only cert-GATED implementation ladder — with a catch", name:"CSA → CIS-CSM path", verdict:"cond", vlabel:"HOLD AT $0", econ:"~$750 exams · courses/PDI/CIS-DF free thru Dec 2026 · 150-250h", why:"Individually accessible and genuinely cert-gated — but behind the cert gate sits an EXPERIENCE gate (RiseUp's own handbook disclaims placement; Bloomberg documented retrenchment; entry rung $60-90K; documented CSA-only glut). Flip condition: a warm channel into a partner's CSM practice. Doesn't fit any 2-week window regardless.", axes:"<b>Susie:</b> legible in-ecosystem · <b>License:</b> real · <b>30-hr:</b> free PDI · <b>Survives:</b> the experience gate is the question", src:"F"},
+ {id:"dap-pendo", g:"Enterprise Adoption + LMS", gsub:"Brief G · tool names >> cert names at this gate; 0/12 postings required any DAP/LMS cert", name:"Pendo (sandbox + free Academy admin cert)", verdict:"moves", vlabel:"IN PLAY — swept all four axes", econ:"$0 · free-forever 500-MAU sandbox · PLAY: days 2-3", why:"Most-named tool in the fresh 12-posting customer-ed/enablement sample (5/12). The 30 hours are loggable on software you already own — instrument your own apps with real adoption analytics, guides, NPS. Free admin certification on top. Live, demo-able artifact by day 3.", axes:"<b>Susie:</b> keyword-hit in your target JDs · <b>License:</b> \"I run Pendo on my own product\" · <b>30-hr:</b> real hands-on, free · <b>Survives:</b> the artifact is live and yours", src:"G"},
+ {id:"dap-walkme", g:"Enterprise Adoption + LMS", name:"WalkMe via SAP path", verdict:"cond", vlabel:"CONDITIONAL — unverified hands-on", econ:"free SAP Learning + $230-276 exam", why:"Biggest brand in the category; the exam yields an \"SAP Certified Associate\" prefix — top-tier token. But the famous free institute is closed to individuals, and non-customer Editor hands-on is UNVERIFIED — doctrine-conditional until that errand runs. Not in the $700 for exactly that reason.", axes:"<b>Susie:</b> SAP prefix = excellent · <b>License:</b> pending hands-on · <b>30-hr:</b> UNVERIFIED · <b>Survives:</b> unknown", src:"G"},
+ {id:"dap-skilljar", g:"Enterprise Adoption + LMS", name:"Skilljar Academy certs", verdict:"marginal", vlabel:"MARGINAL — high recognition/hour", econ:"$0 · 3-6h realistic", why:"Category-leader name, free certs, now \"Skilljar by Gainsight\" (chains with Gainsight L1 into one ecosystem story). Ceiling: no product sandbox — licenses \"Skilljar-certified,\" never \"I've run Skilljar.\" A cheap add-on any spare evening.", axes:"<b>Susie:</b> legible in customer-ed hiring · <b>License:</b> partial · <b>30-hr:</b> not clearable (no sandbox) · <b>Survives:</b> concept-level only", src:"G"},
+ {id:"dap-whatfix", g:"Enterprise Adoption + LMS", name:"Whatfix University", verdict:"marginal", vlabel:"MARGINAL — cheap third leg", econ:"$0 · self-signup, hands-on-assessed", why:"The only DAP with true open-door hands-on certification. Smaller name; wins no gates alone; licenses the category phrase honestly.", axes:"<b>Susie:</b> weak · <b>License:</b> category-level · <b>30-hr:</b> clearable · <b>Survives:</b> yes at category level", src:"G"},
+ {id:"dap-docebo", g:"Enterprise Adoption + LMS", name:"Docebo (+ the rest of the LMS field)", verdict:"noise", vlabel:"LOCKED / NOISE", econ:"—", why:"Docebo: JD-frequent (3/12) but structurally closed to individuals (no trial, admin-experience prereq, credit-priced exam). Watch-item. Userpilot/LearnUpon/WorkRamp/Absorb/Intellum/Thought Industries all fail the hands-on axis.", axes:"Fails axis 3 across the board.", src:"G"}
+];
+
+const VLABEL = {moves:"moves", marginal:"marginal", noise:"noise", cond:"cond"};
+const state = JSON.parse(localStorage.getItem("skillCapitalReview_v1") || "{}");
+state.votes = state.votes || {}; state.vnotes = state.vnotes || {}; state.notes = state.notes || {}; state.plan = state.plan || {};
+
+function save(){ localStorage.setItem("skillCapitalReview_v1", JSON.stringify(state)); updateStatus(); }
+function updateStatus(){
+  const nv = Object.keys(state.votes).length;
+  const nn = Object.values(state.notes).filter(x=>x&&x.trim()).length + Object.values(state.vnotes).filter(x=>x&&x.trim()).length;
+  const nd = Object.values(state.plan).filter(Boolean).length;
+  const bits = [];
+  if(nd) bits.push(`${nd}/6 plan blocks done`);
+  if(nv) bits.push(`${nv} verdict${nv==1?"":"s"}`);
+  if(nn) bits.push(`${nn} note${nn==1?"":"s"}`);
+  document.getElementById("save-status").textContent = bits.length ? "Saved locally: " + bits.join(", ") + ". Copy when ready." : "Nothing entered yet — plan progress and feedback save locally as you go.";
+}
+
+function renderShelf(){
+  const host = document.getElementById("shelf");
+  let curGroup = null, groupDiv = null;
+  CREDS.forEach(c => {
+    if(c.g !== curGroup){
+      curGroup = c.g;
+      const gh = document.createElement("div"); gh.className = "group-h";
+      gh.innerHTML = `<h3>${c.g}</h3>` + (c.gsub ? `<span class="gsub">${c.gsub}</span>` : "");
+      host.appendChild(gh);
+      groupDiv = document.createElement("div"); groupDiv.className = "cards"; host.appendChild(groupDiv);
+    }
+    const el = document.createElement("div"); el.className = "cred" + (IN_PLAY.includes(c.id) ? " bought" : ""); el.dataset.id = c.id;
+    const chipCls = IN_PLAY.includes(c.id) ? "play" : VLABEL[c.verdict];
+    el.innerHTML = `
+      <div class="top"><span class="name">${c.name}</span><span class="chip ${chipCls}">${c.vlabel}</span></div>
+      <div class="econ">${c.econ} <span class="src">brief ${c.src}</span></div>
+      <div class="why">${c.why}</div>
+      <div class="axes">${c.axes}</div>
+      <div class="fb">
+        <button data-vote="in">🔥 in</button><button data-vote="maybe">🤔 maybe</button><button data-vote="out">❌ out</button>
+        <input type="text" placeholder="note..." data-vnote="${c.id}">
+      </div>`;
+    el.querySelectorAll("[data-vote]").forEach(b => b.addEventListener("click", () => {
+      state.votes[c.id] = state.votes[c.id] === b.dataset.vote ? undefined : b.dataset.vote;
+      if(state.votes[c.id] === undefined) delete state.votes[c.id];
+      paintVotes(el, c.id); save();
+    }));
+    const inp = el.querySelector(`[data-vnote]`);
+    inp.value = state.vnotes[c.id] || "";
+    inp.addEventListener("input", () => { state.vnotes[c.id] = inp.value; save(); });
+    groupDiv.appendChild(el);
+    paintVotes(el, c.id);
+  });
+}
+function paintVotes(el, id){
+  el.querySelectorAll("[data-vote]").forEach(b => {
+    b.className = "";
+    if(state.votes[id] === b.dataset.vote) b.classList.add("sel-" + b.dataset.vote);
+  });
+}
+
+document.querySelectorAll(".day").forEach(d => {
+  const cb = d.querySelector("input[type=checkbox]");
+  const key = d.dataset.day;
+  cb.checked = !!state.plan[key];
+  d.classList.toggle("done", cb.checked);
+  cb.addEventListener("change", () => { state.plan[key] = cb.checked; d.classList.toggle("done", cb.checked); save(); });
+});
+
+document.querySelectorAll("textarea[data-note]").forEach(t => {
+  t.value = state.notes[t.dataset.note] || "";
+  t.addEventListener("input", () => { state.notes[t.dataset.note] = t.value; save(); });
+});
+
+const SECTION_NAMES = {plan:"⚡ The plan",reason:"⚙ The reasoning",s1:"§1 Market truth",s2:"§2 Your corpus",s3:"§3 The frame",s4:"§4 Recognition",s5:"§5 The shelf",s6:"§6 Skips",s7:"§7 Open items",p2:"Part II Considerations",sources:"Sources",global:"Global"};
+const DAY_NAMES = {d1:"Day 1 (fuses + booking + HubSpot SH)",d23:"Days 2-3 (RevOps + Pendo)",d45:"Days 4-5 (Gainsight L1)",d67:"Days 6-7 (CCEP)",d814:"Days 8-14 (Salesforce build + exam)",w3:"Week 3+ (Google PM → CAPM)"};
+function buildFeedback(){
+  const lines = ["# Skill Capital review feedback (Sean, " + new Date().toISOString().slice(0,10) + ")",""];
+  const done = Object.entries(state.plan).filter(([k,v])=>v);
+  if(done.length){
+    lines.push("## Battle plan progress");
+    done.forEach(([k]) => lines.push(`- [x] ${DAY_NAMES[k]||k}`));
+    lines.push("");
+  }
+  const votes = Object.entries(state.votes);
+  if(votes.length){
+    lines.push("## Credential verdicts");
+    votes.forEach(([id,v]) => {
+      const c = CREDS.find(x=>x.id===id);
+      const note = (state.vnotes[id]||"").trim();
+      lines.push(`- **${c ? c.name : id}**: ${v.toUpperCase()}${note ? " — " + note : ""}`);
+    });
+    lines.push("");
+  }
+  Object.entries(state.vnotes).forEach(([id,n]) => {
+    if(n && n.trim() && !state.votes[id]){
+      const c = CREDS.find(x=>x.id===id);
+      lines.push(`- note on **${c ? c.name : id}** (no verdict): ${n.trim()}`);
+    }
+  });
+  const noteEntries = Object.entries(state.notes).filter(([k,v])=>v&&v.trim());
+  if(noteEntries.length){
+    lines.push("## Section notes");
+    noteEntries.forEach(([k,v]) => { lines.push(`### ${SECTION_NAMES[k]||k}`); lines.push(v.trim()); lines.push(""); });
+  }
+  if(lines.length <= 2) lines.push("(no feedback entered yet)");
+  return lines.join("\n");
+}
+document.getElementById("copy-btn").addEventListener("click", async () => {
+  const text = buildFeedback();
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; } catch(e){
+    const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
+    ta.select(); try { ok = document.execCommand("copy"); } catch(e2){} ta.remove();
+  }
+  document.getElementById("save-status").textContent = ok ? "✓ Feedback copied — paste it into our chat." : "Copy blocked by browser — select text manually.";
+});
+document.getElementById("clear-btn").addEventListener("click", () => {
+  if(confirm("Erase all locally saved feedback and plan progress on this page?")){
+    state.votes = {}; state.vnotes = {}; state.notes = {}; state.plan = {}; save();
+    document.querySelectorAll("textarea[data-note], input[data-vnote]").forEach(x=>x.value="");
+    document.querySelectorAll(".day").forEach(d=>{ d.querySelector("input").checked=false; d.classList.remove("done"); });
+    document.querySelectorAll(".cred").forEach(el => paintVotes(el, el.dataset.id));
+  }
+});
+
+renderShelf(); updateStatus();
+</script>
+</body>
+</html>
