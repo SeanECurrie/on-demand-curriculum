@@ -131,19 +131,17 @@
 <div class="layout">
 <aside class="snav">
   <div class="brand">Skill Capital<br>review + battle plan</div>
-  <div class="grp">The Play</div>
+  <div class="grp">The Answer</div>
   <a href="#play" class="hot">⚡ The $700 / 2-week plan</a>
-  <a href="#reason">How the plan was derived</a>
-  <a href="#land">Everything considered</a>
-  <div class="grp">Findings</div>
-  <a href="#f1">1 · Market truth</a>
-  <a href="#f2">2 · Your corpus</a>
-  <a href="#f3">3 · The frame</a>
-  <a href="#f4">4 · Recognition tiers</a>
-  <a href="#f5">5 · The full shelf</a>
-  <a href="#f6">6 · Evidenced skips</a>
-  <a href="#f7">7 · Open items</a>
-  <div class="grp">Closing</div>
+  <a href="#reason">⚙ How it was derived</a>
+  <div class="grp">The Story</div>
+  <a href="#ch1">Ch 1 · Day one: the mining</a>
+  <a href="#ch2">Ch 2 · The fan-out (A-E)</a>
+  <a href="#ch3">Ch 3 · Your questions (F, G, axes)</a>
+  <a href="#ch4">Ch 4 · The filter: 40→20→8</a>
+  <div class="grp">Reference</div>
+  <a href="#f5">▦ The shelf (vote here)</a>
+  <a href="#f7">Open items</a>
   <a href="#p2">Considerations</a>
   <a href="#sources">Sources</a>
   <a href="#global">Your notes</a>
@@ -154,7 +152,7 @@
 <header class="hero">
   <div class="kicker">Skill Capital · the committed play + full findings · Sean is the client</div>
   <h1>The $700 Play, and Everything Behind It</h1>
-  <p class="lede">The spend is committed. This page leads with <b>the two-week battle plan</b>, then shows its full derivation, then the complete research findings that produced it (seven briefs, a 141-card JD corpus, a 31-posting market sample, adversarial evaluation PASS 7/7). Verdict buttons and note boxes throughout; day checkboxes on the plan double as your progress tracker.</p>
+  <p class="lede">The spend is committed. The answer sits on top: <b>the two-week battle plan</b> and its derivation. Below it, <b>the story told the way it happened</b> — day one's mining of your own corpus, the five-brief fan-out, the questions from you that bent the investigation, and the filter that took ~40 candidates down to 8. Reference sections (the votable shelf, open items, sources) close it out. Day checkboxes on the plan double as your progress tracker.</p>
   <div class="howto"><b>How to use this:</b> the plan is live — check days off as you complete them (it saves locally). Vote 🔥/🤔/❌ on any credential, scribble in any notes box, and <b>Copy my feedback</b> in the bottom bar compiles everything (votes, notes, AND plan progress) into paste-able markdown for our chat.</div>
 </header>
 
@@ -207,151 +205,159 @@
   <div class="notes"><label>Your notes on the reasoning</label><textarea data-note="reason" placeholder="disagree with a tradeoff? want CAPM first? attack it here..."></textarea></div>
 </section>
 
-<!-- ============ LANDSCAPE ============ -->
-<section id="land">
-  <h2><span class="n">◎</span>Everything considered — the full research landscape</h2>
-  <p class="sub">The shelf (§5) shows the finalists. This is the whole universe each brief actually evaluated and read through — including everything that fell out before becoming a card, what got read to decide, and each brief's own strongest argument AGAINST its own pick. ~40 credentials/paths evaluated across 7 briefs; 20 reached the shelf; 8 reached the play.</p>
+<!-- ============ CH1 ============ -->
+<section id="ch1">
+  <h2><span class="n">Ch 1</span>Day one — mining what we already owned</h2>
+  <p class="sub">Before any external research, the project spent its first hours inside the engine's own data. Everything that surfaced later was nominated here.</p>
 
-  <div class="callout"><div class="t">Brief A — Project management · "Which PM credential changes hiring outcomes for CS/onboarding/implementation roles — and does any beat no-credential-plus-practice-evidence?"</div>
-    <p><b>Evaluated (7):</b> <b>CAPM</b> · <b>Google PM Certificate</b> · <b>PSM-I</b> · CSM (Scrum Alliance — same signal as PSM-I at 2-3x price + $100/2yr renewal treadmill) · CompTIA Project+ (~$358 — IT/gov recognition channel, 0 corpus mentions, lost its good-for-life status Oct 2025) · PRINCE2 Foundation ($600-750 — UK public-sector credential, US recognition minimal, UK vacancies down 62% since 2023) · <b>PMP as strategic backdrop</b> (not a candidate now: requires 36 documented months — but your 15 yrs kitchen leadership + 3 yrs SaaS onboarding is plausibly documentable later; CAPM doesn't feed PMP eligibility but the study substrate overlaps).</p>
-    <p><b>What got read:</b> PMI official docs, r/PMCareers + r/projectmanagement + r/scrum + r/pmp threads (2024-2026, upvote-weighted), Scrum Alliance/scrum.org official terms, UK postings-market analysis, and three live implementation JDs printing "PMP or CAPM" verbatim. Key texture: a career-changer passed CAPM in ~a week of memorization after the Google cert — cheap to get, and HMs know it's knowledge-only; "certs open doors, don't award jobs" recurred across every thread.</p>
-    <p style="margin:0"><b>The brief's own counter-argument:</b> your funnel says the surface CAPM improves (cold ATS) is the surface that doesn't convert for you; one CS hiring manager was quoted saying "PMs have no place in CS" to a CSM holding a PMP (countered in-thread). Forced to one play, the funnel evidence favors practice-proof over paper — the rebuttal being that 16/55 REQUIRED-flag JDs make the skills-line gap real and the plays aren't exclusive.</p></div>
-
-  <div class="callout"><div class="t">Brief B — Salesforce + HubSpot · "Does the Admin cert change outcomes for non-admin roles — or do employers want experience the cert doesn't provide?"</div>
-    <p><b>Evaluated (6):</b> <b>SF Platform Administrator cert</b> (via a three-class analysis: companies that USE Salesforce — cert doesn't move screening, experience-language dominates, even Salesforce's own CSM postings ask for hands-on not certs · Salesforce-ECOSYSTEM partners/ISVs — cert genuinely gates, sometimes required · actual admin roles — saturated market, "cert is the floor not the differentiator") · SF Associate ($75 — rejected: ecosystem insiders discount it themselves: "I don't put too much value on the Associate") · <b>free Dev-org build</b> (the actual experience-gap closer) · <b>HubSpot Academy certs</b> · Attio (confirmed: no cert program exists) · vendor-neutral "CRM administration" credential (searched: none exists with market weight).</p>
-    <p><b>What got read:</b> help.salesforce.com + Trailhead official pricing/exam docs (post-Dec-2025 revision), Salesforce Ben + Apex Hours trade press, an ex-Salesforce Principal CSM and a CS hiring manager on r/CustomerSuccess ("the worst CSM I've worked with out of close to 1000 had multiple certs"), Ask a Manager practitioner threads, HubSpot's own community ("nice-to-have, not must-have").</p>
-    <p style="margin:0"><b>The brief's own counter-argument:</b> hire-fast screens are keyword-binary and silent rejections are unmeasurable — the $200 token may be cheap insurance even where evidence says marginal. (The play resolves this by taking both: the build AND the cert.)</p></div>
-
-  <div class="callout"><div class="t">Brief C — CS platforms + BI · "Does a platform cert differentiate, or only hands-on org experience?"</div>
-    <p><b>Evaluated (10):</b> <b>Gainsight L1</b> ($70) · Gainsight L2 ($125 — practical exam IN a live org, effectively org-gated) · L3 ($300 — 6 months hands-on recommended) · Gainsight Pulse+ CS professional certs ($250-300 each / $900yr — direct testimony they don't move searches) · ChurnZero certs (customer-only until late 2026; their LinkedIn Learning badge = soft) · Totango Creator Campus (free courses, no market-weight credential) · Vitally + Planhat (no meaningful public certification found) · <b>Tableau Desktop Specialist</b> · PL-300 Power BI ($165 — most substantive BI credential, wrong tool: 0 corpus mentions, Windows-only authoring) · Looker (retired April 2022 — nothing exists).</p>
-    <p><b>What got read:</b> education.gainsight.com program pages, a Gainsight community thread on training-env access, the r/CustomerSuccess thread with both a hiring-side voice ("cert = tiebreaker... big companies love certs though") and a triple-cert holder ("the only one that has ever been useful in my job search is the Admin"), Pearson/Tableau store pages (the $75-vs-$100 conflict), learn.microsoft.com, Credly retirement notices. Corpus tool-count table: Gainsight 4, ChurnZero/Vitally/Planhat 1 each, Totango 0, Tableau 1, Power BI 0 — vs the dashboards CAPABILITY at 8.</p>
-    <p style="margin:0"><b>The brief's own counter-argument:</b> credentials are 6-second-legible where a portfolio link needs a click cold screeners never make — if strategy tilts back to high-volume cold ATS at big companies, cert-first beats artifact-first. The funnel truth (humans produce 100% of your screens) is what breaks the tie toward artifacts.</p></div>
-
-  <div class="callout"><div class="t">Brief D — Trainer lane + change management · "Do L&D credentials add signal on top of practice that already exceeds their eligibility bars?"</div>
-    <p><b>Evaluated (13):</b> <b>CCEP</b> (~$0) · APTD ($525-800 — conditional hold) · CPTD ($975-1,350 + 5-yr experience framing fight) · ATD certificate courses ($2,000-3,700, non-certification) · IDOL Academy ($4,997 career-changer product — you already have the career) · UW-Stout ID certificate ($5,880, 9 months) · Oregon State (~$2,175-2,455) · Docebo University free tier + Pro cert (opaque credit pricing, admin-reps presumed) · Absorb Academy (customer-admins only) · WorkRamp (no individual credential found) · Canvas CCTA (~$2,500, higher-ed market) · <b>Prosci</b> ($4,500-5,000) · ACMP CCMP + APMG route (~half Prosci) · the $0 alternative (ADKAR fluency + framing existing adoption wins in CM vocabulary).</p>
-    <p><b>What got read:</b> td.org official handbooks, IDOL/university program pages, r/instructionaldesign (portfolio-beats-certificate consensus; IDOL "AI use &amp; outdated information" complaints), r/changemanagement pricing confirmations, the ocmsolution analysis (&lt;30% of even dedicated CM postings require any cert), Indeed's ~784 Prosci postings (essentially all in the dedicated-CM job family, not yours). Decisive corpus fact: <b>0 of 141 cards name any trainer/LMS credential</b>; Prosci appears once, "preferred," on a single AI-enablement card.</p>
-    <p style="margin:0"><b>The brief's own counter-argument:</b> even free CCEP's ~20 hours might be better spent shipping one public course on a free LMS instance — which evidences LMS + instructional design + training delivery (17 combined corpus mentions vs 0 for any credential). The steelman FOR buying anyway: corporate HR keyword filters are dumber than the corpus suggests — but that supports at most the APTD-on-trigger hold, never a 4-figure purchase.</p></div>
-
-  <div class="callout"><div class="t">Brief E — The live-market sweep · "What did our corpus miss?"</div>
-    <p><b>What was done:</b> 31 live postings sampled across your five role classes (every one enumerated with company/role/URL in the brief), split honestly between cert-targeted queries (to enumerate what exists) and neutral queries (to estimate the true base rate — the 87.5% figure comes only from the neutral subset).</p>
-    <p><b>Certs discovered that weren't on the radar:</b> SACP (KnowBe4, security-awareness — in a requirements list) · Relativity RCA · ENP (emergency-number, RapidSOS) · CMRP (GHX) · plus confirmation targets: a "Salesforce Certified"-titled $100-120K CSM role, ListEngage's obtain-within-6-months clause, Kojo's honest phrasing ("PMP, CSM or other PM certification is a plus, not required — what matters more is that you've run a real methodology under a live deadline"). Also surfaced: <b>the build-side pattern</b> — education roles at CoLab and Augury exist to BUILD customer certification programs, making cert-program design itself a sellable skill you already have receipts for.</p>
-    <p style="margin:0"><b>What it killed:</b> CCSM/SuccessCOACHING and Cisco CS certs (1 "a plus" in 10 CSM postings vs heavy vendor marketing = manufactured demand) and every AI certification (zero named anywhere, including by AI-adoption roles themselves).</p></div>
-
-  <div class="callout"><div class="t">Brief F — ServiceNow · "The one cert-gated ladder: can an outsider actually buy in?"</div>
-    <p><b>Evaluated:</b> CSA ($300) · CIS-CSM ($450) · CIS-DF prereq (free through Dec 2026) · the $2,700 instructor-led course (unnecessary — on-demand equivalents free) · free Personal Developer Instance · the RiseUp with ServiceNow workforce program · entry-market economics ($60-90K entry rung vs $100-140K experienced).</p>
-    <p><b>What got read:</b> four official ServiceNow KBs (including KB0011560 confirming individuals can sit the exams — no partner requirement), the RiseUp handbook (which disclaims job placement — testimony against interest), Bloomberg's reporting on RiseUp graduates struggling, r/servicenow break-in threads including the documented CSA-only glut ("100+ applicants per junior req," May 2026).</p>
-    <p style="margin:0"><b>The verdict's shape:</b> the cert gate is real AND purchasable — but behind it sits an experience gate money can't buy. Hold the option at $0 (free courses + PDI); the flip condition is a warm channel into a partner's CSM practice, where your 3 yrs of SaaS implementation + CIS-CSM is exactly the career-switcher wedge the community endorses.</p></div>
-
-  <div class="callout"><div class="t">Brief G — Enterprise adoption + LMS · your question, researched on your four axes</div>
-    <p><b>Evaluated (12):</b> <b>Pendo</b> (Free 500-MAU sandbox + Academy cert) · <b>WalkMe</b> (famous free institute now closed to individuals; SAP path = free learning journeys + $230-276 C_WME exam, hands-on unverified) · <b>Skilljar Academy</b> certs (free, "by Gainsight" halo, no sandbox) · <b>Whatfix University</b> (only DAP with open hands-on-assessed certs) · Docebo Pro (watch-item: no trial, ~3-months-admin prereq, credit-priced exam) · Appcues Academy + 14-day trial (free Credly garnish) · Litmos (real trial, wrong vocabulary) · Absorb · LearnUpon · WorkRamp · Intellum · Thought Industries (all demo-gated, no individual credential, ≤1 JD mention each).</p>
-    <p><b>What got read:</b> every vendor credential surface scraped directly (walkme.com/training, support.pendo.io, university.whatfix.com, docebo.com/university, walkthrough.skilljar.com, litmos.com, docs.appcues.com), SAP learning/pricing pages, and a fresh 12-posting JD sample with a full tool-name tally: <b>Pendo 5 · Docebo 3 · Gainsight 3 · WalkMe 3 · Skilljar 2 · Articulate 2 · Zapier/Make/Airtable 0</b> — and half the US postings name no tool at all, where a category claim suffices.</p>
-    <p style="margin:0"><b>The brief's own honest flags:</b> small n (12), directional not statistical; the Pendo admin-cert exam fee is unpublished (every Pendo credential to date has been free); WalkMe's "10 practice hours" claim is SAP's own marketing, uncorroborated — which is exactly why it sits outside the $700.</p></div>
-
-  <div class="callout gold"><div class="t">What never reached any brief — excluded at P1, with reasons</div>
-    <p style="margin:0"><b>All AI certifications</b> (your ruling, then market-vindicated by E's zero-count) · <b>SQL/data certs</b> (SQL is T1-claimable already; the gap is an artifact, not a credential) · <b>Excel/productivity certs</b> (T2 practice, no demand signal) · <b>bootcamp-class reskilling programs</b> (you possess the career they sell) · <b>Six Sigma/ITIL</b> (0 corpus presence in your role classes). The full demand table that drove these exclusions is §2; the raw counts live in <code style="color:var(--blue)">02-needle-evidence/00-corpus-counts.txt</code>.</p></div>
-
-  <div class="notes"><label>Your notes on the landscape</label><textarea data-note="land" placeholder="anything here you want promoted to the shelf, re-researched, or argued with..."></textarea></div>
-</section>
-
-<!-- ============ F1 ============ -->
-<section id="f1">
-  <h2><span class="n">1</span>What the market actually says about credentials</h2>
-  <p class="sub">Primary-source JD sampling (31 live postings, brief E) + hiring-side research across all seven briefs.</p>
-  <div class="stat-row">
-    <div class="stat"><div class="v">87.5%</div><div class="l">of neutrally-sampled JDs in your role classes mention NO certification (14 of 16)</div></div>
-    <div class="stat"><div class="v">~10 of 12</div><div class="l">cert mentions that ARE there say "a plus," not "required"</div></div>
-    <div class="stat"><div class="v">0</div><div class="l">AI certifications named in ANY sampled posting, incl. AI-adoption roles</div></div>
-    <div class="stat"><div class="v">1 class</div><div class="l">of true hard gates: vendor-platform certs (ServiceNow CIS/CSA at consultancies)</div></div>
-  </div>
+  <h3>The starting materials (and where they came from)</h3>
   <ul class="pts">
-    <li><b>Certs are tiebreakers, never gates</b> in your role classes. Where cert language exists it ranks candidates, it does not filter them. Most-named classes: PM certs ("PMP or CAPM a plus" on live implementation JDs) and Salesforce (one $100-120K CSM posting literally titled "Salesforce Certified"; another funds cert acquisition within 6 months of hire).</li>
-    <li><b>Tool names outrank cert names at the first gate</b> (brief G): zero of 12 customer-education postings required any DAP/LMS certification, but the tool names (Pendo, Docebo, Skilljar) are what recruiters keyword-scan.</li>
-    <li><b>The CS-industry cert complex is manufactured demand:</b> CCSM/SuccessCOACHING appear constantly in vendor marketing, almost never in employer language (1 "a plus" in 10 sampled CSM postings).</li>
-    <li><b>Keyword currency is role-class-dependent:</b> Zapier/Make/Airtable scored zero mentions in customer-education JDs but carry real currency in ops/implementation JD language.</li>
+    <li><b>The 141-card JD corpus.</b> Every job the engine has ever carded — live, applied, dead, and rejected. The dead and rejected cards matter: a JD you bounced off is still demand evidence. Inside it sits the highest-quality asset: <b>a structured keyword extraction of 55 full JD texts</b>, with per-term required-vs-preferred flags. That extraction wasn't built for this project — it's a byproduct of the July 22 tailored-resume engine, where twelve agents pulled keywords from every fresh JD to tailor resumes. Skill Capital inherited it as a ready-made demand dataset.</li>
+    <li><b>The 86-card lexicon sweep.</b> The cards outside the 55-JD extraction only carry summarized text, so a keyword lexicon was swept over their stored fields instead. Honest instrument note that carried through every later count: <b>S1 (the 55 full texts) and S2 (the 86 summaries) were never conflated</b> — S2 counts are floors, not totals, and every table marks which instrument produced which number.</li>
+    <li><b>The tool-claims ledger.</b> The document that governs what your resume may claim: T1 daily drivers (claim anywhere) · T2 used-in-anger (claim with an anchor phrase) · T3 learnable-in-days (skills lines only, never experience bullets) · and the hard line (no certs not held, no invented years). Built July 22 from the same resume engine.</li>
+    <li><b>The rejection corpus + funnel telemetry.</b> Nine processed response emails with classifications, and the number that frames everything: <b>0 conversations from 47+ cold applications; every human screen ever came through a recruiter relationship.</b></li>
   </ul>
-  <div class="notes"><label>Your notes on §1</label><textarea data-note="s1" placeholder="reactions, disagreements, things to dig deeper on..."></textarea></div>
-</section>
 
-<!-- ============ F2 ============ -->
-<section id="f2">
-  <h2><span class="n">2</span>What your own corpus demands, and the framing it overturned</h2>
-  <p class="sub">55 full JDs with required/preferred keyword extraction + lexicon sweep of 86 more cards + your claims ledger + your rejection corpus.</p>
+  <h3>The first hour: your framing gets overturned</h3>
+  <p>The project opened with your words: <i>"think like not being able to say I've worked with HubSpot or Salesforce."</i> Standard procedure (recall-before-advising) sent the first pass into the ledger before taking that framing at face value — and the ledger disagreed with you. <b>HubSpot was already T1</b>: your daily driver, claimable anywhere, no restrictions. <b>Salesforce was already T2</b>, with a ratified anchor phrase ("Daily hands-on is HubSpot and Attio; I produced a deep Salesforce-ecosystem competitive analysis and know the object model; console fluency is days, not weeks"). The tools you named as your gap were the tools you were already licensed to claim.</p>
+  <p>What the ledger showed instead: the genuinely unclaimable territory was <b>narrower and sharper</b> — (1) held certifications, a binary you can't soften, and (2) the entire T3 tier: named consoles you could learn in days but couldn't yet put in an experience bullet — Gainsight, Tableau/Power BI, named LMS platforms, Zendesk, Jira/Monday, Gong. That redirect, in the first hour, reshaped the whole project: <b>fund the conversion of hard-line and T3 items, don't fund what's already claimable.</b> (The rule this produced — check the ledger before accepting a gap framing, including your own — is now a permanent concept in the second brain.)</p>
+
+  <h3>The demand mining — what the corpus actually asks for</h3>
+  <p>With the target class defined, the mining ran mechanically: term frequency across S1 with required/preferred flags, the S2 lexicon sweep as a floor, and one deliberate weighting — <b>revealed preference</b>: demand was read against the jobs you actually apply to, not raw counts (a skill demanded only by jobs you skip is not a gap). The results, with the surprise at the top:</p>
   <div class="tablewrap"><table>
-    <tr><th>Demand signal</th><th>Count</th><th>Your ledger position today</th></tr>
-    <tr><td><b>Project management (formal)</b></td><td><b>18 of 55 JDs, 16 as REQUIRED</b> — the #1 credentialable demand</td><td>T1 practice; PMP/cert = hard-line unclaimable</td></tr>
-    <tr><td><b>Salesforce</b></td><td>14-16 JDs (6 required)</td><td>T2 with ratified anchor; certs unclaimable</td></tr>
-    <tr><td>Customer success (platform implicit)</td><td>16 JDs</td><td>practice-claimed; Gainsight T3</td></tr>
-    <tr><td>LMS (category + named)</td><td>~9 across corpus</td><td>T2 category / T3 named platforms</td></tr>
-    <tr><td>Instructional design + adult learning</td><td>5 + 3</td><td>T2 practice, no credential</td></tr>
-    <tr><td>Change management</td><td>4</td><td>T2 practice; Prosci unclaimable</td></tr>
-    <tr><td>SQL / data</td><td>4 (all required)</td><td><b>T1 — already claimable; needs an artifact, not a cert</b></td></tr>
+    <tr><th>Signal</th><th>Count</th><th>What it nominated</th></tr>
+    <tr><td><b>Project management (formal)</b></td><td><b>18/55, 16 REQUIRED</b> — the shock #1; nobody expected PM to outrank Salesforce</td><td>→ Brief A (PM credentials)</td></tr>
+    <tr><td><b>Salesforce</b></td><td>14-16 JDs (6 required)</td><td>→ Brief B (the cert-vs-experience question)</td></tr>
+    <tr><td>Customer success 16 · Gainsight 4 · dashboards-capability 8 (vs Tableau 1, Power BI 0)</td><td>platform implicit in the whole CS lane; BI demand is capability-language, not tool-language</td><td>→ Brief C (CS platforms + BI)</td></tr>
+    <tr><td>Instructional design 5 · adult learning 3 · LMS ~9 · change management 4</td><td>the trainer-lms lane's vocabulary + the one $5K question (Prosci)</td><td>→ Brief D (trainer + change mgmt)</td></tr>
+    <tr><td><i>"What is our corpus blind to?"</i></td><td>a corpus of jobs YOU chose can't see demand classes you never carded</td><td>→ Brief E (the adversarial live-market sweep)</td></tr>
   </table></div>
-  <div class="callout gold"><div class="t">The finding that overturned the intake</div>
-  <p style="margin:0">You opened this project saying "I can't say I've worked with HubSpot or Salesforce." <b>Your own ledger disagreed:</b> HubSpot is T1 (daily driver), Salesforce T2 with a ratified if-asked anchor. The genuinely unclaimable class is narrower: <b>held certifications</b> (the hard line) and <b>named-console depth</b> (T3: Gainsight, BI tools, named LMS, Zendesk). Exactly what funded money and funded hours convert. Rule extracted: check the ledger before accepting a gap framing, including your own.</p></div>
-  <p><b>Rejection cross-check:</b> nothing in your reject corpus is cert-shaped. Fast ATS-suspected rejects clustered on technical-<i>titled</i> roles; slow ones are pipeline-clears. No rejection evidence suggests a certification would have flipped any outcome to date.</p>
-  <div class="notes"><label>Your notes on §2</label><textarea data-note="s2" placeholder="..."></textarea></div>
+
+  <h3>Excluded on day one, before any brief — with the reasons</h3>
+  <ul class="pts">
+    <li><b>All AI certifications</b> — your ruling at intake ("I'm forget of that"), held provisionally with an evidence bar: include only if external evidence was overwhelming AND cheap/fast. (Brief E later vindicated the exclusion outright: zero AI certs named in any sampled posting, including by AI-adoption roles themselves.)</li>
+    <li><b>SQL / data certs</b> — SQL appears in 4 JDs, all required, but it's already T1 on your ledger. The gap is a public artifact, not a credential. Money can't buy what's already owned.</li>
+    <li><b>Six Sigma, ITIL, Excel/productivity certs</b> — zero presence in your role classes' corpus language.</li>
+    <li><b>Bootcamp-class reskilling programs</b> — they sell entry into a career you already hold; you'd be buying your own floor.</li>
+  </ul>
+  <p><b>One more day-one check:</b> the rejection corpus was grepped for cert-shaped failure — none exists. Your fast ATS-suspected rejects clustered on technical-<i>titled</i> roles (a title problem), your slow rejects are pipeline-clears (a timing artifact). No rejection to date would plausibly have flipped on a certification. That set the honest ceiling on the whole project before a dollar was discussed.</p>
+  <div class="notes"><label>Your notes on Chapter 1</label><textarea data-note="s2" placeholder="..."></textarea></div>
 </section>
 
-<!-- ============ F3 ============ -->
-<section id="f3">
-  <h2><span class="n">3</span>The evaluation frame — your axes, your doctrine</h2>
-  <p class="sub">This evolved mid-project, driven by you. It governs every verdict on this page, including the battle plan.</p>
+<!-- ============ CH2 ============ -->
+<section id="ch2">
+  <h2><span class="n">Ch 2</span>The fan-out — five briefs, one evening</h2>
+  <p class="sub">Five research agents launched in parallel, one per nomination, each under the same discipline: tier every source (vendor placement claims = T4 marketing, never load-bearing), two independent sources per verdict, 2024+ recency. Each digest below: why the brief existed, everything it evaluated, what it read, and its own strongest argument against its own pick.</p>
+
+  <div class="callout"><div class="t">Brief A — Project management · nominated by the shock #1 (18/55, 16 required)</div>
+    <p><b>The question:</b> which PM credential changes hiring outcomes for CS/onboarding/implementation roles — and does any beat "no credential + strong practice evidence"?</p>
+    <p><b>Evaluated (7):</b> <b>CAPM</b> · <b>Google PM Certificate</b> · <b>PSM-I</b> · CSM (Scrum Alliance — same signal as PSM-I at 2-3x price plus a $100-every-2-years renewal treadmill and a mandatory 2-day course) · CompTIA Project+ (~$358 — recognition lives in IT support/government, 0 corpus mentions, and its one historical edge, good-for-life status, died Oct 2025) · PRINCE2 Foundation ($600-750 — UK public-sector credential; even in its home market, PRINCE2-tagged vacancies are down 62% since 2023) · <b>PMP, examined as strategic backdrop</b>: it's what JDs respect most ("PMP or CAPM" — PMP always first) but requires 36 documented months leading projects. The brief noted your 15 years of kitchen leadership (openings, launches, buildouts) + 3 years of SaaS onboarding is plausibly documentable later, and that CAPM's study substrate overlaps PMP's heavily even though it doesn't feed eligibility.</p>
+    <p><b>What got read:</b> PMI's official pages (the T1 anchor for the no-experience-required fact), scrum.org and Scrum Alliance official terms, four separate Reddit communities upvote-weighted (r/PMCareers, r/projectmanagement, r/scrum, r/pmp), UK postings-market analyses, and three live implementation JDs printing "PMP or CAPM" verbatim (Steer Health, Humanly, Brightflag). Texture that shaped the verdict: a career-changer reported passing CAPM in about a week of memorization after the Google cert — evidence it's cheap to get AND that hiring managers know it's knowledge-only; "certs open doors, don't award jobs" recurred in every single thread; and CAPM's entry-level branding was flagged as reading <i>junior</i> on an 18-year operator's resume unless kept to the skills line.</p>
+    <p style="margin:0"><b>Its own counter-argument:</b> your funnel says the surface CAPM improves — cold ATS — is the surface that has never once converted for you. The honest alternative it named: $0 and the same 60-100 hours spent on one more shipped artifact plus channel work. The rebuttal: 16 REQUIRED flags make the gap real, the fix is cheap, and the plays aren't exclusive.</p></div>
+
+  <div class="callout"><div class="t">Brief B — Salesforce + HubSpot · nominated by the #2 demand signal and your own intake framing</div>
+    <p><b>The question:</b> does the Admin cert change outcomes for NON-admin roles — or do employers want "experience with Salesforce," which a cert doesn't provide?</p>
+    <p><b>Evaluated (6):</b> <b>the Platform Administrator cert</b> — answered through a three-class analysis that became the brief's spine: <i>Class 1</i>, companies that merely USE Salesforce (the bulk of your corpus): the cert doesn't move screening — JDs say "experience with," ops roles say "cert a plus," and even Salesforce's own CSM postings ask for hands-on Service Cloud, not credentials; <i>Class 2</i>, Salesforce-ECOSYSTEM partners and ISVs: the cert genuinely gates — postings found requiring Admin 201 outright, and ecosystem hirers saying "we require the admin cert at a minimum"; <i>Class 3</i>, actual admin roles: saturated — "holding the admin cert will not give you an edge," cert-without-org-experience a known weak signal even there. Also evaluated: <b>the free Dev-org build</b> (relaunched March 2025, full-featured — the thing that actually satisfies "experience with") · <b>the Associate cert</b> ($75 — rejected on insiders' own words: "I don't put too much value on the Associate") · <b>HubSpot Academy certs</b> (free, expiring 13-25 months, "nice-to-have not must-have" per HubSpot's own community — a verification pixel on your real daily use) · Attio (confirmed: no certification program exists) · any vendor-neutral CRM-admin credential (searched: none with market weight).</p>
+    <p><b>What got read:</b> help.salesforce.com and Trailhead official docs (including the December 2025 exam revision — 60 scored questions, 105 minutes, 68% pass — with the warning that older prep material may not match), Salesforce Ben and Apex Hours trade coverage of the pricing overhaul, an ex-Salesforce Principal CSM ("you definitely don't need any certifications... experience with Salesforce itself is going to be enough"), a CS hiring manager's brutal line ("the worst CSM I've worked with, out of close to 1000, had multiple certs"), and community pass-time reports that produced the 50-80-hour estimate for someone with your CRM fluency but zero console reps.</p>
+    <p style="margin:0"><b>Its own counter-argument:</b> screens are keyword-binary and silent rejections are unmeasurable — $200 may be cheap insurance even where the evidence reads marginal. (The final play took both horns: the build for the experience, the cert for the token.)</p></div>
+
+  <div class="callout"><div class="t">Brief C — CS platforms + BI · nominated by the T3 console tier and the CS lane's implicit platform expectation</div>
+    <p><b>The question:</b> does a platform certification differentiate, or does only hands-on org experience count?</p>
+    <p><b>Evaluated (10):</b> the full <b>Gainsight ladder</b> — L1 Associate ($70, 36 questions, unproctored, four short prep courses) · L2 Specialist ($125 — the exam is literally configuration tasks in a live org over an 8-hour window, effectively org-gated) · L3 Expert ($300, six months hands-on recommended) · plus Gainsight's Pulse+ professional certs ($250-300 each, $900/year — killed by direct testimony: a triple-cert holder reporting "the only one that has ever been useful in my job search is the Admin") · <b>the competitor platform class</b>, checked one by one: ChurnZero (certs are customer-only until an L3 ships late 2026; their LinkedIn Learning badge is soft) · Totango (free Creator Campus, no market-weight credential) · Vitally and Planhat (no meaningful public certification found — weak-framed as searched, not exhaustive) · and <b>the BI trio</b>: Tableau Desktop Specialist ($75-100 — the price conflict between the Pearson store and post-migration claims was carried openly, never smoothed) · Microsoft PL-300 ($165 — genuinely the most substantive BI credential, free annual renewal, but certifying a tool with zero corpus mentions on an OS you don't run) · Looker (retired April 2022 — nothing exists to buy).</p>
+    <p><b>What got read:</b> Gainsight's education pages and the community thread that surfaced the training-environment path (a laid-off admin routed to training@gainsight.com by staff — obtainable but human-gated, which matters most for L2), the r/CustomerSuccess thread carrying both the hiring-side view ("cert = tiebreaker... big companies love certs though") and the triple-cert-holder testimony, Microsoft's official PL-300 pages, Credly's retirement notices. Corpus grounding: Gainsight 4 mentions, each competitor ≤1, Tableau 1 preferred, Power BI 0 — against the dashboards <i>capability</i> at 8 JDs with 3 required. The brief's structural finding: <b>demand here is capability-shaped, not tool-shaped, and a public artifact dominates any single cert</b> — which is where the Tableau-Public-dashboard-first ordering came from.</p>
+    <p style="margin:0"><b>Its own counter-argument:</b> certs are legible in the six seconds a screener gives a resume line; a portfolio link requires a click cold-channel screeners may never make. If you return to high-volume cold ATS at big companies, cert-first beats artifact-first. Your funnel truth is what broke the tie.</p></div>
+
+  <div class="callout"><div class="t">Brief D — Trainer lane + change management · nominated by the trainer-lms lane vocabulary and the one $5K question</div>
+    <p><b>The question:</b> do L&D credentials add signal on top of practice evidence that already exceeds their own eligibility bars?</p>
+    <p><b>Evaluated (13):</b> the ATD family — APTD ($525-800 exam; its eligibility bar of 3 years + 28 PD hours is a bar you clear on walking in) · CPTD ($975-1,350 plus a 5-year-experience framing fight) · ATD's non-certification certificate courses ($2,000-3,700) — plus IDOL Academy ($4,997 — a career-changer trade school; you already hold the career it changes people into; community reviews mixed, including "AI use &amp; outdated information" complaints) · UW-Stout's graduate ID certificate ($5,880, nine months) · Oregon State's (~$2,175-2,455) · <b>the named-LMS credential hunt</b>: Docebo University (free tier real; the Pro cert priced in unpublished "learning credits" and presuming admin reps) · Absorb Academy (customer-admins only) · WorkRamp (no individual credential found) · Canvas CCTA (~$2,500, higher-ed market) · and the discovery of the brief: <b>Skilljar's academy — now folded into Gainsight University — runs the CCEP</b>, the Certified Customer Education Professional: four courses plus assessment, open to anyone, historically free, and the only credential anywhere whose <i>title names your target job family</i>. Then <b>change management</b>: Prosci ($4,500-5,000, triangulated three independent ways) · ACMP CCMP ($595-795 application + ~$500-2,135 prereq training) · the APMG route (~half of Prosci) · and the $0 alternative (ADKAR fluency + reframing your existing adoption wins in CM vocabulary).</p>
+    <p><b>What got read:</b> td.org's official handbooks and fee schedules, every program's own pricing pages, r/instructionaldesign's portfolio-beats-certificate consensus, r/changemanagement's individual-payer pricing confirmations, the ocmsolution analysis showing fewer than 30% of even dedicated change-management postings require any certification, and Indeed's ~784 Prosci-mentioning postings — essentially all in the dedicated-CM job family, not yours. The decisive corpus fact stood over everything: <b>zero of your 141 cards name any trainer or LMS credential</b>; Prosci appears exactly once, as "preferred," on one AI-enablement card.</p>
+    <p style="margin:0"><b>Its own counter-argument:</b> even the free CCEP's ~20 hours might be better spent shipping one public course on a free LMS instance — which evidences LMS + instructional design + training delivery at once (17 combined corpus mentions for those capabilities vs 0 for any credential). The steelman for buying anyway — corporate HR filters are dumber than the corpus suggests — supports at most the APTD-on-trigger hold, never a four-figure purchase.</p></div>
+
+  <div class="callout"><div class="t">Brief E — The live-market sweep · nominated by the question a self-selected corpus can't answer</div>
+    <p><b>The question:</b> what certification demand exists in the wild that our corpus — jobs YOU chose to card — is structurally blind to?</p>
+    <p><b>What was done:</b> 31 live postings sampled across your five role classes, each enumerated with company, role, comp, and URL in the brief. The sampling was deliberately split: half from cert-targeted queries (to enumerate what exists), half from neutral queries (to estimate the true base rate) — and the two halves were never mixed. That honesty is why the headline number holds: <b>in the neutral subset, 14 of 16 postings carried zero certification language — 87.5% cert-silent</b> — and of the 12 cert mentions across the whole sample, roughly 10 were "a plus," never required.</p>
+    <p><b>What it discovered that nobody had on the radar:</b> the vendor/domain cert class that actually gates — <b>ServiceNow CSA + CIS required at implementation consultancies</b> (AHEAD, TTEC Digital, Cprime — the only hard gates in the entire sample), Relativity RCA, ENP (emergency-number software), CMRP, SACP (KnowBe4, sitting inside a requirements list). Confirmation gold: a $100-120K CSM posting with "Salesforce Certified" in its <i>title</i>, ListEngage's "ability to obtain Salesforce certifications within six months of hire" (employers pricing certs as learnable on the job), and Kojo's unusually honest phrasing: "PMP, CSM, or other certification is a plus, not required — what matters more is that you've run a real methodology under a live deadline." It also surfaced <b>the build-side pattern</b>: education roles at CoLab and Augury exist to BUILD customer certification programs — cert-program design is itself a sellable skill you already have receipts for.</p>
+    <p style="margin:0"><b>What it killed:</b> CCSM/SuccessCOACHING and Cisco's CS certs — one "a plus" mention in ten CSM postings against heavy vendor marketing: manufactured demand. And every AI certification: zero named anywhere, including by the AI-adoption roles themselves — your day-one exclusion, market-vindicated.</p></div>
+
+  <div class="notes"><label>Your notes on Chapter 2</label><textarea data-note="land" placeholder="..."></textarea></div>
+</section>
+
+<!-- ============ CH3 ============ -->
+<section id="ch3">
+  <h2><span class="n">Ch 3</span>Your questions bend the investigation</h2>
+  <p class="sub">The research didn't run on rails. Three of your interventions redirected it — two opened new fronts, one rebuilt the scoring system itself.</p>
+
+  <h3>"Are there any credible implementation things?" → Brief F</h3>
+  <p>Brief E had flagged ServiceNow as the market's one true cert gate and parked it. Your question un-parked it. Brief F priced the path end-to-end for an individual: <b>CSA $300 + CIS-CSM $450, with the courses, the CIS-DF prerequisite (free through December 2026), and a full Personal Developer Instance all $0</b> — and the $2,700 instructor-led course exposed as unnecessary. It verified individuals can sit the exams (ServiceNow's own KB, no partner requirement), then asked the question that decided everything: <b>do consultancies hire cert-holders without org experience?</b> The answer came from unusually strong sources: ServiceNow's own RiseUp handbook <i>disclaiming job placement</i> (a vendor testifying against its own marketing), Bloomberg's reporting on RiseUp's retrenchment as graduates struggled, and the documented CSA-only glut ("100+ applicants per junior req"). Verdict: behind the purchasable cert gate sits an experience gate money can't buy — hold the option at $0; the flip condition is a warm channel into a partner's CSM practice, where your implementation history + CIS-CSM is exactly the career-switcher wedge the community endorses.</p>
+
+  <h3>"What about enterprise customer education — LMS experience, adoption tools?" → Brief G</h3>
+  <p>This front <b>never existed in the corpus</b> — it exists because you asked. Brief G swept the digital-adoption-platform class (WalkMe, Pendo, Whatfix, Appcues, Userpilot) and the enterprise LMS field (Skilljar, Docebo, Absorb, WorkRamp, Intellum, Thought Industries, LearnUpon, Litmos), scraping every vendor's credential surface directly and pulling a fresh 12-posting JD sample of your exact role class. Its two structural findings: <b>tool names beat cert names at the first gate</b> (zero postings required any DAP/LMS certification, but recruiters keyword the tool names — and Pendo is the most-named tool in the class, 5 of 12), and <b>hands-on access is the great divider</b> — Pendo's free-forever sandbox and Whatfix's open certification pass your doctrine; WalkMe's famous free institute is now closed to individuals (its open path runs through SAP with hands-on unverified), and Docebo is structurally sealed (no trial, admin-experience prereq, opaque credit pricing). It also caught the Zapier/Make/Airtable zero-count in this class — your automation names hold currency in ops/implementation JDs, not customer-education ones. Keyword currency is role-class-dependent.</p>
+
+  <h3>The Crawford clarification → the scoring system gets rebuilt</h3>
+  <p>Mid-project, you corrected the record on the loss that started all of this: the Airtable failure didn't happen on the resume — <b>it happened on the screening call</b>, where your comfort was honestly capped because you hadn't technically logged the hours. "If I did take a 30 hour course I would just gone for it." That produced the four-axis frame that re-scored every candidate already researched:</p>
   <div class="tablewrap"><table>
     <tr><th>Axis</th><th>The question</th></tr>
-    <tr><td><b>1 · First-gate recognition</b></td><td>Will a generalist staffing recruiter recognize the name when keyword-scanning or hearing it on a screen? (Your funnel: 0 interviews from 47+ cold applies; the recruiter gate is the wall.)</td></tr>
-    <tr><td><b>2 · Claim licensing</b></td><td>Does it put the exact tool/cert name legitimately on the page and in your mouth?</td></tr>
-    <tr><td><b>3 · The 30-hour bar</b> (often dominant)</td><td>Your doctrine: ~30 real hands-on hours = full-chest claiming on a live call. No hours, no claim, regardless of ability. So: is hands-on access even AVAILABLE to an individual, and what do 30 hours produce?</td></tr>
-    <tr><td><b>4 · Interview survivability</b></td><td>Does 30 hours + the artifact hold up with someone who actually knows the tool?</td></tr>
-    <tr><td><b>5 · Joy = mastery toward the goal</b></td><td>Your correction, verbatim spirit: the joy is in the goal, the work, and the mastery — never the content. A course qualifies by being legit and effective, not fun.</td></tr>
+    <tr><td><b>1 · First-gate recognition</b></td><td>Does a generalist staffing recruiter recognize the name? (Your wall: 0 interviews from 47+ cold applies.)</td></tr>
+    <tr><td><b>2 · Claim licensing</b></td><td>Does it put the exact name legitimately on the page and in your mouth?</td></tr>
+    <tr><td><b>3 · The 30-hour bar</b> (often dominant)</td><td>Your doctrine: ~30 real hands-on hours = full-chest claiming on a live call. Is hands-on access even AVAILABLE, and what do the hours produce?</td></tr>
+    <tr><td><b>4 · Interview survivability</b></td><td>Does 30 hours + the artifact hold up with someone who knows the tool?</td></tr>
   </table></div>
-  <div class="callout"><div class="t">The founding case: Crawford</div>
-  <p style="margin:0 0 8px">The engine's record + your clarification: the Airtable loss didn't happen on the resume. It happened <b>on the screening call</b> — the recruiter couldn't evaluate capability, only comfort, and your comfort was honestly capped because you hadn't technically logged the hours. "If I did take a 30 hour course I would just gone for it."</p>
-  <p style="margin:0">Implication that reshaped everything: <b>the highest-value purchases are permission slips</b> — cheap, legit ways to log the hours that make the honest claim available. The paper is secondary. Your doctrine and the market's cert-silence (§1) agree completely.</p></div>
-  <div class="notes"><label>Your notes on §3</label><textarea data-note="s3" placeholder="..."></textarea></div>
+  <p>The re-scoring had immediate casualties and promotions: <b>CCMP weakened badly</b> (recruiters recognize Prosci, not its cheaper equivalent — the recognition crack, still open) · <b>WalkMe went doctrine-conditional</b> (a cert without loggable hours is exactly what you said you won't stand on) · <b>Pendo swept all four axes</b> and jumped the queue. Then your final correction sealed the fifth criterion: <b>joy = the goal, the work, and the mastery — never the content.</b> A course qualifies by being legit and effective, not fun — which re-framed the whole purchase as permission slips: cheap, legitimate ways to log the hours that make honest claims available.</p>
+  <div class="notes"><label>Your notes on Chapter 3</label><textarea data-note="s3" placeholder="..."></textarea></div>
 </section>
 
-<!-- ============ F4 ============ -->
-<section id="f4">
-  <h2><span class="n">4</span>Recognition tiers — what the recruiter layer actually knows</h2>
-  <p class="sub">Every researched name, ranked by axis 1 alone. Note the pattern: best evidence-fit skews low; best recognition sits exactly where the battle plan spends.</p>
+<!-- ============ CH4 ============ -->
+<section id="ch4">
+  <h2><span class="n">Ch 4</span>The filter — forty to twenty to eight</h2>
+  <p class="sub">How the universe narrowed, gate by gate.</p>
+
+  <div class="bar-row"><div class="bar-label"><span><b>Evaluated across the 7 briefs</b> — everything in Ch 2-3</span><span>~40</span></div><div class="bar"><div class="fill" style="width:100%"></div></div></div>
+  <div class="bar-row"><div class="bar-label"><span><b>Reached the shelf</b> — survived the existence gates</span><span>20</span></div><div class="bar"><div class="fill" style="width:50%"></div></div></div>
+  <div class="bar-row" style="margin-bottom:16px"><div class="bar-label"><span><b>Reached the play</b> — survived the axes + the window</span><span>8</span></div><div class="bar"><div class="fill gold" style="width:20%"></div></div></div>
+
+  <h3>Gate 1 — does it exist, can you buy it, is the price sane?</h3>
+  <p>Killed here: Looker (cert retired 2022) · ChurnZero (customer-only) · Absorb/WorkRamp/Intellum/Thought Industries/LearnUpon (no individual credential) · Docebo Pro (opaque pricing, admin prereq — watch-item) · Vitally/Planhat (nothing found) · WalkMe's original free institute (closed to individuals — the SAP path survived to the shelf).</p>
+
+  <h3>Gate 2 — does any demand evidence support it?</h3>
+  <p>Killed here, with the receipts in §Skips below: Prosci ($5K vs one "preferred" mention in 141 cards) · CCSM/SuccessCOACHING (manufactured demand) · CPTD/IDOL/university certs/Canvas CCTA (certify a floor you exceed) · Project+ and PRINCE2 (wrong channel, wrong continent) · CSM at its price · SF Associate (discounted by the ecosystem itself) · PL-300 (zero corpus mentions, wrong OS) · Pulse+ CS certs (direct testimony: don't move searches).</p>
+
+  <h3>Gate 3 — the axes (arrived mid-project, re-scored everything)</h3>
+  <p>Recognition tiers, the axis-1 ranking that reshaped the endgame — note that the best recognition sits exactly where the play spends:</p>
   <div class="tablewrap"><table>
     <tr><th>Recognition at the recruiter layer</th><th>Names</th></tr>
-    <tr><td><b>Universally legible</b> (keyword-searched)</td><td>PMP · "Salesforce Certified" · CAPM (rides PMP's brand) · Scrum/CSM · "SAP Certified" (prefix)</td></tr>
-    <tr><td><b>Legible inside their niche</b></td><td>Gainsight (CS recruiters) · Prosci (enterprise/consulting) · Tableau · Pendo/Docebo/Skilljar (customer-ed hiring, as TOOL names)</td></tr>
-    <tr><td><b>Weakly / not legible to intermediaries</b></td><td>CCMP · CCEP · HubSpot Academy certs · ATD-anything · Whatfix</td></tr>
+    <tr><td><b>Universally legible</b></td><td>PMP · "Salesforce Certified" · CAPM (rides PMP's brand) · Scrum/CSM · "SAP Certified" (prefix)</td></tr>
+    <tr><td><b>Legible inside their niche</b></td><td>Gainsight (CS recruiters) · Prosci (enterprise) · Tableau · Pendo/Docebo/Skilljar (customer-ed hiring, as TOOL names)</td></tr>
+    <tr><td><b>Weakly legible to intermediaries</b></td><td>CCMP · CCEP · HubSpot Academy certs · ATD-anything · Whatfix</td></tr>
   </table></div>
-  <div class="callout red"><div class="t">The crack this put in the earlier recommendation</div>
-  <p style="margin:0">v1.2 recommended CCMP (~$1.6K) as "Prosci's vocabulary at a third of the price." On YOUR axes that weakens badly: <b>Prosci owns the brand recruiters recognize; CCMP is equivalent and recognitionally invisible.</b> The demand evidence (4 of 55 JDs) still doesn't support Prosci at $5K. Unresolved by design — and the $700 plan spends zero here.</p></div>
-  <div class="notes"><label>Your notes on §4</label><textarea data-note="s4" placeholder="..."></textarea></div>
+  <p>Casualties at this gate: <b>CCMP</b> (conditional, the recognition crack) · <b>WalkMe/SAP</b> (doctrine-conditional on unverified hands-on) · <b>ServiceNow</b> (the experience gate + no 2-week window fits 150-250 hours). Survivors ranked up: Pendo (all four axes), the Salesforce build+cert pair, CAPM.</p>
+
+  <h3>Gate 4 — your constraints: $700, two weeks, six hours a day</h3>
+  <p>The window math (84-126 total hours) forced the one-big-exam rule; your joy criterion picked Salesforce's build over CAPM's memorization for the in-window slot; the blitz-first sequencing came from momentum economics and slow fuses. Full derivation in <a href="#reason" style="color:var(--gold)">⚙ the reasoning</a>; the eight survivors are the gold-ringed cards in <a href="#shelf-sec" style="color:var(--gold)">the shelf</a>, and the answer is <a href="#play" style="color:var(--gold)">⚡ the plan</a> at the top of this page.</p>
+
+  <h3>The evidenced skips — money the filter saved</h3>
+  <ul class="pts">
+    <li><b>Prosci ($4,500-5,000):</b> buyers are dedicated OCM/ERP/gov roles; &lt;30% of even those require any cert; 1/141 corpus incidence.</li>
+    <li><b>CCSM / SuccessCOACHING / Cisco CS certs:</b> 1 "a plus" in 10 CSM postings vs heavy marketing — manufactured demand.</li>
+    <li><b>IDOL ($4,997) · university ID certs ($2,175-5,880) · CPTD · Canvas CCTA (~$2,500):</b> certify a floor your 3-year instruction record exceeds.</li>
+    <li><b>Salesforce Associate ($75):</b> ecosystem insiders discount it themselves.</li>
+    <li><b>Looker:</b> retired April 2022 — nothing exists to buy.</li>
+    <li><b>Instructor-led vendor courses (~$2,700 class):</b> free equivalents exist for every one checked.</li>
+    <li><b>ALL AI certifications:</b> your instinct, market-vindicated — zero named in any sampled JD.</li>
+  </ul>
+  <div class="notes"><label>Your notes on Chapter 4</label><textarea data-note="s4" placeholder="..."></textarea></div>
 </section>
 
 <!-- ============ F5 ============ -->
-<section id="f5">
-  <h2><span class="n">5</span>The full shelf — every credential researched, with verdicts</h2>
+<section id="f5"><a id="shelf-sec"></a>
+  <h2><span class="n">▦</span>Reference — the shelf: every finalist, with verdicts</h2>
   <p class="sub">Gold-ringed cards are IN the $700 play. Verdict chips reflect the evidence at THIS role class and YOUR axes; source tags cite the brief holding every citation. Vote and annotate as you read.</p>
   <div id="shelf"></div>
   <div class="notes"><label>Your notes on §5 (the shelf overall)</label><textarea data-note="s5" placeholder="patterns you see, groups to prioritize, anything missing..."></textarea></div>
 </section>
 
-<!-- ============ F6 ============ -->
-<section id="f6">
-  <h2><span class="n">6</span>The evidenced skips — money the research saved</h2>
-  <p class="sub">NOISE at every budget. Each verdict carries its evidence in the briefs.</p>
-  <ul class="pts">
-    <li><b>Prosci ($4,500-5,000):</b> buyers are dedicated OCM/ERP-transformation/gov roles; fewer than 30% of even those postings require any cert. Your corpus mentions it approximately once.</li>
-    <li><b>CCSM / SuccessCOACHING / Cisco CS certs:</b> near-absent from employer language despite heavy vendor marketing. Manufactured demand.</li>
-    <li><b>IDOL ($4,997) · university ID certificates ($2,175-5,880) · CPTD · Canvas CCTA:</b> they certify a floor your 3-year instruction record already exceeds.</li>
-    <li><b>Salesforce Associate ($75):</b> ecosystem insiders discount it themselves.</li>
-    <li><b>Looker certification:</b> retired April 2022. Nothing exists to buy.</li>
-    <li><b>Instructor-led vendor courses (~$2,700 class):</b> free equivalents exist for every one we checked.</li>
-    <li><b>ALL AI certifications:</b> your instinct, market-vindicated — zero named in any sampled JD, including AI-adoption roles. Your living AI evidence is the strongest signal in that lane; a certificate would dilute it.</li>
-  </ul>
-  <div class="notes"><label>Your notes on §6</label><textarea data-note="s6" placeholder="any skip you want re-argued?"></textarea></div>
-</section>
-
 <!-- ============ F7 ============ -->
 <section id="f7">
-  <h2><span class="n">7</span>Open and unverified items</h2>
+  <h2><span class="n">…</span>Reference — open and unverified items</h2>
   <ul class="pts">
     <li><b>WalkMe hands-on access for individuals: UNVERIFIED.</b> The free Digital Adoption Institute is closed to non-customers (verified on-page); the SAP-badged exam is open ($230-276) but individual Editor hands-on is unchecked — doctrine-conditional. One errand resolves it.</li>
     <li><b>CCEP enrollment price today</b> (historically ~$0; confirm at enroll — it's a Day 6 checkpoint in the plan) and its expiry terms.</li>
@@ -544,7 +550,7 @@ document.querySelectorAll("textarea[data-note]").forEach(t => {
   t.addEventListener("input", () => { state.notes[t.dataset.note] = t.value; save(); });
 });
 
-const SECTION_NAMES = {plan:"⚡ The plan",reason:"⚙ The reasoning",land:"◎ Everything considered",s1:"§1 Market truth",s2:"§2 Your corpus",s3:"§3 The frame",s4:"§4 Recognition",s5:"§5 The shelf",s6:"§6 Skips",s7:"§7 Open items",p2:"Part II Considerations",sources:"Sources",global:"Global"};
+const SECTION_NAMES = {plan:"⚡ The plan",reason:"⚙ The reasoning",s2:"Ch1 Day one",land:"Ch2 The fan-out",s3:"Ch3 Your questions",s4:"Ch4 The filter",s1:"(archived) market truth",s6:"(archived) skips",s5:"▦ The shelf",s7:"Open items",p2:"Considerations",sources:"Sources",global:"Global"};
 const DAY_NAMES = {d1:"Day 1 (fuses + booking + HubSpot SH)",d23:"Days 2-3 (RevOps + Pendo)",d45:"Days 4-5 (Gainsight L1)",d67:"Days 6-7 (CCEP)",d814:"Days 8-14 (Salesforce build + exam)",w3:"Week 3+ (Google PM → CAPM)"};
 function buildFeedback(){
   const lines = ["# Skill Capital review feedback (Sean, " + new Date().toISOString().slice(0,10) + ")",""];
