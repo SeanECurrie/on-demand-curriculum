@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Give Claude a Job, Not a Chat</title>
+<meta name="description" content="A plain-language walkthrough of the mission prompt — how non-technical people get real, repeating work out of Claude. Built from a real client engagement.">
+<style>
+:root{
+  --navy:#16324f; --navy-deep:#0f2338; --gold:#b8860b; --gold-text:#8a6708; --gold-soft:#f4ead1;
+  --ink:#1f2933; --muted:#4d5b68; --line:#e3e8ee; --bg:#ffffff; --wash:#f7f9fb;
+  --good:#2e7d32; --good-bg:#e9f3ea; --bad:#a33d2e; --bad-bg:#f8ece9; --card-r:10px;
+  --hl-goal:#dbe9f7; --hl-fact:#e9f3ea; --hl-rail:#f8ece9; --hl-fall:#f4ead1;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,'Times New Roman',serif;color:var(--ink);background:var(--bg);line-height:1.65;font-size:17px}
+.sans{font-family:'Helvetica Neue',Arial,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px}
+
+header{background:var(--navy);color:#fff;padding:58px 0 50px;position:relative}
+header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--gold)}
+h1{font-size:40px;font-weight:normal;line-height:1.18;max-width:680px}
+.lede{margin-top:18px;font-size:19px;color:#d8e1ea;max-width:640px}
+.lede b{color:#fff}
+
+section{padding:46px 0 10px}
+h2{font-size:14px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text);margin-bottom:6px}
+h3{font-size:27px;font-weight:normal;margin-bottom:16px;line-height:1.25}
+h4{font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;color:var(--navy);margin:20px 0 6px}
+p{margin-bottom:14px;max-width:680px}
+.muted{color:var(--muted)}
+b{font-weight:700}
+
+/* chat-vs-job comparison */
+.duo{display:flex;gap:16px;margin:22px 0 10px;flex-wrap:wrap}
+.pane{flex:1;min-width:260px;border:1px solid var(--line);border-radius:var(--card-r);overflow:hidden}
+.pane .ph{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:14px;padding:11px 16px;letter-spacing:.03em}
+.pane.chat .ph{background:var(--bad-bg);color:var(--bad)}
+.pane.job .ph{background:var(--good-bg);color:var(--good)}
+.pane .pb{padding:14px 16px;font-size:15px}
+.pane .pb p{font-size:15px;margin-bottom:10px;max-width:none}
+.bubble{font-family:'Helvetica Neue',Arial,sans-serif;font-size:13.5px;background:var(--wash);border:1px solid var(--line);border-radius:12px;padding:9px 13px;margin:7px 0;color:var(--ink)}
+.bubble.you{border-top-left-radius:3px}
+.verdict{font-family:'Helvetica Neue',Arial,sans-serif;font-size:13.5px;padding:10px 16px;border-top:1px solid var(--line)}
+.pane.chat .verdict{color:var(--bad)}
+.pane.job .verdict{color:var(--good)}
+
+/* anatomy */
+.anatomy{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0 8px}
+.part{border:1px solid var(--line);border-radius:var(--card-r);padding:16px 18px}
+.part .pn{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:15px;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+.dot{width:13px;height:13px;border-radius:4px;flex:0 0 auto}
+.part p{font-size:14.5px;margin:0;max-width:none;color:#2c3844}
+.part.goal{background:var(--hl-goal)} .part.fact{background:var(--hl-fact)}
+.part.rail{background:var(--hl-rail)} .part.fall{background:var(--hl-fall)}
+.d-goal{background:#3a6ea8}.d-fact{background:var(--good)}.d-rail{background:var(--bad)}.d-fall{background:var(--gold)}
+
+/* annotated prompt */
+.promptbox{border:1px solid var(--line);border-radius:var(--card-r);background:var(--wash);margin:20px 0 8px;overflow:hidden}
+.promptbox .tt{font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);padding:10px 16px;border-bottom:1px solid var(--line);background:#fff}
+.promptbox pre{font-family:Menlo,Consolas,monospace;font-size:12.5px;line-height:1.65;padding:16px 18px;white-space:pre-wrap;word-break:break-word;overflow-x:auto}
+.hl{border-radius:3px;padding:1px 3px}
+.hl.g{background:var(--hl-goal)}.hl.f{background:var(--hl-fact)}.hl.r{background:var(--hl-rail)}.hl.b{background:var(--hl-fall)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);padding:10px 16px;border-top:1px solid var(--line);background:#fff}
+.legend span{display:flex;align-items:center;gap:6px}
+
+.trap{border:1px solid #e5c9c2;background:var(--bad-bg);border-radius:var(--card-r);padding:18px 20px;margin:22px 0;max-width:680px}
+.trap .tt2{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;color:var(--bad);font-size:15px;margin-bottom:6px}
+.trap p{font-size:15px;margin-bottom:8px;max-width:none}
+
+/* steps */
+ol.steps{list-style:none;margin:22px 0 10px;counter-reset:s}
+ol.steps>li{position:relative;padding:0 0 24px 58px;counter-increment:s}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:-2px;width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center}
+ol.steps>li:not(:last-child)::after{content:'';position:absolute;left:18.5px;top:40px;bottom:4px;width:1px;background:var(--line)}
+ol.steps .st{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:600;font-size:16.5px;color:var(--navy);margin-bottom:4px}
+ol.steps p{margin-bottom:8px;font-size:15.5px}
+
+.tip{background:var(--gold-soft);border:1px solid #e4d3a6;padding:12px 16px;border-radius:8px;font-size:14.5px;max-width:640px;margin:10px 0}
+
+/* method cards */
+.method{border:1px solid var(--line);border-radius:var(--card-r);padding:16px 18px;margin-bottom:12px;background:#fff}
+.method .mt{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:15px;color:var(--navy);margin-bottom:4px}
+.method p{font-size:14.5px;margin:0;max-width:none;color:var(--muted)}
+
+.divider{border:none;border-top:1px solid var(--line);margin:38px 0 0}
+footer{padding:34px 0 58px;color:var(--muted);font-size:14.5px}
+footer a{color:var(--navy)}
+.sig{font-family:'Helvetica Neue',Arial,sans-serif;margin-top:8px}
+
+@media(max-width:640px){
+  body{font-size:16px}
+  h1{font-size:29px}h3{font-size:23px}
+  .anatomy{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+<h1>Give Claude a job, not a chat.</h1>
+<p class="lede">Most people use AI like a very smart search box — and get search-box results. The unlock
+for real, repeating work isn't a better prompt trick. It's a different handoff: <b>a mission, written
+once, that the AI can run without you.</b> This page teaches that concept the way I teach it to real
+clients — with a real example that ran on real data.</p>
+</div></header>
+
+<section><div class="wrap">
+<h2>The problem</h2>
+<h3>Chat makes you the employee</h3>
+<p>Here's the same need — <i>"I want to know when new businesses open in my part of town"</i> — handled two ways:</p>
+<div class="duo">
+  <div class="pane chat">
+    <div class="ph">THE CHAT WAY</div>
+    <div class="pb">
+      <div class="bubble you">"Hey, can you find new business licenses in Chicago this week?"</div>
+      <div class="bubble">"Sure! Here are some I found…" <i>(from wherever, formatted however)</i></div>
+      <div class="bubble you">— next Monday — "Hey, can you do that again? Like last time?"</div>
+      <div class="bubble">"Of course! What area was it again?"</div>
+    </div>
+    <div class="verdict">You show up every week, re-explain the job, and hope this week's answer matches last week's. The AI is bright; the <i>arrangement</i> is broken.</div>
+  </div>
+  <div class="pane job">
+    <div class="ph">THE JOB WAY</div>
+    <div class="pb">
+      <p>You (or someone like me) write the job down <b>once</b>: exactly where the data lives, exactly what "new" means, what a normal week looks like, what it must never do, and what to do when something breaks.</p>
+      <p>Claude runs it on schedule. A clean email shows up Monday morning. You read it with coffee.</p>
+    </div>
+    <div class="verdict">The knowledge lives in the mission, not in your memory. Anyone — including a brand-new Claude with no history — can run it correctly, forever.</div>
+  </div>
+</div>
+</div></section>
+
+<section><div class="wrap">
+<h2>The concept</h2>
+<h3>The mission prompt has four parts</h3>
+<p>A mission prompt is not a longer chat message. It's a small employment contract, and every good one carries the same four things:</p>
+<div class="anatomy">
+  <div class="part goal"><div class="pn"><span class="dot d-goal"></span>The goal</div><p>What done looks like, concretely. Not "keep me updated" — "every Monday at 8 AM, email me a digest of new business licenses in these ten zip codes."</p></div>
+  <div class="part fact"><div class="pn"><span class="dot d-fact"></span>The seeded facts</div><p>Things a human verified <i>once</i> so the AI never has to guess: where the data actually lives, which field is trustworthy, what normal volume looks like. This is where most of the value hides.</p></div>
+  <div class="part rail"><div class="pn"><span class="dot d-rail"></span>The guardrails</div><p>The nevers, written down: never email anyone else, never connect a new service silently, never deliver numbers you haven't sanity-checked. Trust comes from limits, not promises.</p></div>
+  <div class="part fall"><div class="pn"><span class="dot d-fall"></span>The fallback</div><p>What to do when something breaks: <i>say so, plainly, and stop</i> — never work around a wall silently. A system that admits confusion is a system you can leave alone.</p></div>
+</div>
+</div></section>
+
+<section><div class="wrap">
+<h2>A real one</h2>
+<h3>The Monday-morning license digest</h3>
+<p>A real engagement from this summer: a Chicago client whose work depends on knowing when new businesses
+open in their neighborhoods. The old way was somebody remembering to go look. The mission below did exactly
+that in a <b>live test-fire on real city data</b> — it pulled a week from the City of Chicago's public
+records, sanity-checked it, and formatted it into one scannable email: 105 licenses issued, 13
+applications found, verified, delivered.</p>
+<p>Here's a condensed slice of the actual mission, color-coded to the four parts:</p>
+
+<div class="promptbox">
+<div class="tt">From the real mission prompt (condensed; client details removed)</div>
+<pre><span class="hl g">Every Monday at 8:00 AM, build my Chicago business-license digest and email it to me.</span>
+
+<span class="hl f">Fetch from the City of Chicago "Business Licenses" dataset — public, free, no login:
+data.cityofchicago.org/resource/r5kz-chrr.json. Expect roughly 70–120 licenses and
+5–18 applications in a normal week (a real run measured 105 and 13).</span>
+
+<span class="hl f">THE FIELD TRAP: "newly issued" means the field date_issued. Do NOT use
+license_start_date — the city future-dates and back-dates it (51 of 86 records
+diverged in a tested week). The wrong field silently poisons the digest.</span>
+
+<span class="hl f">The window is 8 days on purpose — the city posts records 2–3 days late, and a
+7-day window would drop them into a permanent blind spot. Do not "correct" this.</span>
+
+Sanity-check before delivering: <span class="hl r">if you see 0 results, or thousands — do NOT send.</span>
+Report plainly what you found and what you tried.
+
+RULES: <span class="hl r">never send to any other address · never connect a new service without
+saying what and why · never deliver numbers you haven't checked.</span>
+
+<span class="hl b">End every run with a plain-words note: the counts, whether they passed the check,
+and whether the email went out. If you hit a wall, name it — never work around
+it silently.</span></pre>
+<div class="legend">
+<span><span class="dot d-goal"></span>goal</span>
+<span><span class="dot d-fact"></span>seeded fact</span>
+<span><span class="dot d-rail"></span>guardrail</span>
+<span><span class="dot d-fall"></span>fallback</span>
+</div>
+</div>
+
+<div class="trap">
+<div class="tt2">Look closely at the field trap — that's the whole philosophy in one paragraph.</div>
+<p>An AI asked casually for "new licenses" would grab the obvious-looking date field and be wrong —
+quietly, plausibly, every single week. A <b>human</b> caught that trap once, by checking the data by
+hand: 51 of 86 records had misleading dates. Then the human wrote the trap <i>into the mission</i>,
+and now no run can ever fall into it again — not even a brand-new AI with no memory of the discovery.</p>
+<p><b>That's what AI enablement actually is.</b> Not prompt tricks. A person who verifies reality once,
+then encodes what they learned so the machine stays right without them.</p>
+</div>
+</div></section>
+
+<section><div class="wrap">
+<h2>The setup, honestly</h2>
+<h3>What it actually takes</h3>
+<p>No code, no engineer, no new software purchase. If you have a Claude account, the whole thing is a
+few minutes of clicking — which is exactly the point: <b>the tool is usually already in the building.
+The missing piece is the handoff.</b></p>
+<ol class="steps">
+<li><div class="st">Connect the delivery route</div><p>In the Claude desktop app: Settings → Connectors → Gmail. Thirty seconds. This is how the result reaches an inbox instead of living in a chat window.</p></li>
+<li><div class="st">Open Scheduled tasks</div><p>Sidebar → Scheduled → New task. This is the difference between "asking every time" and "runs without you."</p></li>
+<li><div class="st">Paste the mission</div><p>The entire job — goal, seeded facts, guardrails, fallback — goes in as one block. The person never needs to read it, let alone write it. That's what they have me for.</p></li>
+<li><div class="st">Verify the first run together</div><p>The one step I never skip: the human confirms the first real output is right before anyone trusts the schedule. Automation earns trust with a supervised rep — same as any new hire.</p></li>
+</ol>
+<div class="tip"><b>Honest note:</b> steps 1–3 are about three minutes of clicking. Step 4 is where an
+enablement person earns their keep — and it's also where most "AI rollouts" quietly fail, because
+nobody owns it.</div>
+</div></section>
+
+<section><div class="wrap">
+<h2>The handoff craft</h2>
+<h3>How you give this to a real person</h3>
+<p>The mission prompt is half the job. The other half is the handoff — because the person receiving
+this isn't technical, doesn't want to be, and shouldn't have to be. What the client actually received
+was a single friendly page, and its parts are a repeatable method:</p>
+<div class="method"><div class="mt">A picture before any instructions</div><p>A three-box diagram — public records → your Claude → your inbox — with one line under it: "Your part in this diagram: nothing." People relax when they can see the shape of the thing.</p></div>
+<div class="method"><div class="mt">A real sample, up front</div><p>The actual email from the test run, shown before asking them to do anything. Nobody sets up what they can't picture receiving.</p></div>
+<div class="method"><div class="mt">One button, not a tutorial</div><p>The mission is a copy button. "Peek at what you're pasting (you never need to read it)" — curiosity welcomed, reading optional.</p></div>
+<div class="method"><div class="mt">The weirdness, pre-explained</div><p>"Some entries say REDACTED FOR PRIVACY — that's the city masking home addresses, not a glitch." Every oddity they'll ever see, named before they see it. Confusion you prevent is trust you keep.</p></div>
+<div class="method"><div class="mt">A change process in plain words</div><p>"Want it Fridays too? More zip codes? Just tell the task in plain words." The mission carries a section telling Claude how to accept upgrades cleanly — so the system grows without me standing next to it.</p></div>
+<p>Scale that method from one busy person to a whole workforce and you have an AI adoption program:
+<b>verify reality once, encode it into missions, hand each one over with craft, and own the supervised
+first rep.</b> The tools change; that method doesn't.</p>
+</div></section>
+
+<hr class="divider">
+<footer><div class="wrap">
+<p>Built by <b>Sean Currie</b> — Chicago. Teacher first (three years of technical instruction), builder
+second (this page, the mission it teaches, and the system that produced both). The engagement described
+is real; client details are removed.</p>
+<p class="sig">More live samples: <a href="../fresha/">a SaaS product walkthrough</a> ·
+<a href="../engineos-docs/">documentation for an AI operating system</a> ·
+<a href="../portfolio/">portfolio</a> · sean.ec@gmail.com</p>
+</div></footer>
+
+</body>
+</html>
